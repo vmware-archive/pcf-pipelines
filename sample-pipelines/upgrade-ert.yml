@@ -31,10 +31,9 @@ jobs:
 - name: ert-upload
   plan:
   - aggregate:
-    get:
-    - pivnet-elastic-runtime
-    - concourse-tasks-bundle
-    - tool-om
+    - get: pivnet-elastic-runtime
+    - get: concourse-tasks-bundle
+    - get: tool-om
   - task: upload-product
     file: concourse-tasks-bundle/upload-product/task.yml
     params:
@@ -45,10 +44,9 @@ jobs:
 - name: ert-stage
   plan:
   - aggregate:
-    get:
-    - pivnet-elastic-runtime
-    - concourse-tasks-bundle
-    - tool-om
+    - get: pivnet-elastic-runtime
+    - get: concourse-tasks-bundle
+    - get: tool-om
   - task: stage-product
     file: concourse-tasks-bundle/stage-product/task.yml
     params:
