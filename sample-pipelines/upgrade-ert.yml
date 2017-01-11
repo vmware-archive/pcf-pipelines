@@ -1,0 +1,58 @@
+groups:
+- name: ert-upgrade
+  jobs:
+  - ert-upload
+  - ert-stage
+
+resources:
+- name: concourse-tasks-bundle
+  type: git
+  source:
+    uri: https://github.com/c0-ops/concourse-tasks-bundle.git
+    branch: master
+
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
+- name: pivnet-elastic-runtime
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: elastic-runtime
+    product_version: {{ert_major_minor_version}}
+    sort_by: semver
+
+jobs:
+- name: ert-upload
+  plan:
+  - aggregate:
+    get:
+    - pivnet-elastic-runtime
+    - concourse-tasks-bundle
+    - tool-om
+  - task: upload-product
+    file: concourse-tasks-bundle/upload-product/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
+- name: ert-stage
+  plan:
+  - aggregate:
+    get:
+    - pivnet-elastic-runtime
+    - concourse-tasks-bundle
+    - tool-om
+  - task: stage-product
+    file: concourse-tasks-bundle/stage-product/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      PRODUCT_NAME: {{product_name}}
