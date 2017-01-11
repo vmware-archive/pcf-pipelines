@@ -16,4 +16,4 @@ params:
   OPSMAN_URI:
 
 run:
-  path: concourse-tasks-bundle/stage-product/task.sh
+  path: concourse-tasks-bundle/upload-product/task.sh
