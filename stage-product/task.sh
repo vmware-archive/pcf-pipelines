@@ -1,6 +1,10 @@
 #!/bin/bash -exu
 
 function main() {
+
+  chmod +x tool-om/om-linux
+  CMD_PATH="tool-om/om-linux"
+
   local cwd
   cwd="${1}"
 
@@ -9,7 +13,7 @@ function main() {
     version="$(ls -1 *.pivotal | sed "s/"${PRODUCT}"-\(.*\).pivotal/\1/")"
   popd
 
-  om --target "${OPSMAN_URI}" \
+  ./${CMD_PATH} --target "${OPSMAN_URI}" \
      --skip-ssl-validation \
      --username "${OPSMAN_USERNAME}" \
      --password "${OPSMAN_PASSWORD}" \
