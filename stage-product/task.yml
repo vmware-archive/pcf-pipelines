@@ -8,7 +8,7 @@ image_resource:
 inputs:
   - name: concourse-tasks-bundle
   - name: tool-om
-  - name: {{pivnet_product_name}}
+  - name: pivnet-product
 
 params:
   OPSMAN_USERNAME:
