@@ -8,7 +8,7 @@ image_resource:
 inputs:
   - name: concourse-tasks-bundle
   - name: tool-om
-  - name: pivnet-elastic-runtime
+  - name: {{pivnet_product_name}}
 
 params:
   OPSMAN_USERNAME:
