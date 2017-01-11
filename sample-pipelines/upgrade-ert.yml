@@ -4,12 +4,22 @@ groups:
   - ert-upload
   - ert-stage
 
+resource_types:
+
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+
 resources:
 - name: concourse-tasks-bundle
   type: git
   source:
-    uri: https://github.com/c0-ops/concourse-tasks-bundle.git
+    uri: git@github.com:c0-ops/concourse-tasks-bundle.git
     branch: master
+    private_key: {{github_private_key}}
 
 - name: tool-om
   type: github-release
@@ -20,7 +30,6 @@ resources:
 
 - name: pivnet-elastic-runtime
   type: pivnet
-  check_every: 4h
   source:
     api_token: {{pcf_pivnet_token}}
     product_slug: elastic-runtime
@@ -32,6 +41,9 @@ jobs:
   plan:
   - aggregate:
     - get: pivnet-elastic-runtime
+      params:
+        globs:
+        - "*pivotal"
     - get: concourse-tasks-bundle
     - get: tool-om
   - task: upload-product
@@ -45,6 +57,10 @@ jobs:
   plan:
   - aggregate:
     - get: pivnet-elastic-runtime
+      passed: [ert-upload]
+      params:
+        globs:
+        - "*pivotal"
     - get: concourse-tasks-bundle
     - get: tool-om
   - task: stage-product
