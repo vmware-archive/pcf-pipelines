@@ -71,7 +71,7 @@ jobs:
       params:
         globs:
           - om-linux
-  
+
   - task: stage-product
     file: concourse-tasks-bundle/stage-product/task.yml
     params:
@@ -79,3 +79,19 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       PRODUCT_NAME: {{opsman_product_name}}
+
+- name: apply-changes-{{pivnet_product_name}}
+  plan:
+  - aggregate:
+    - get: concourse-tasks-bundle
+    - get: tool-om
+      params:
+        globs:
+          - om-linux
+
+  - task: apply-changes
+    file: concourse-tasks-bundle/apply-changes/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
