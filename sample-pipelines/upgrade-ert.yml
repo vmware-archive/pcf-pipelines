@@ -1,8 +1,8 @@
 groups:
 - name: ert-upgrade
   jobs:
-  - {{pivnet_product_name}}-upload
-  - {{pivnet_product_name}}-stage
+  - upload-{{pivnet_product_name}}
+  - stage-{{pivnet_product_name}}
 
 resource_types:
 
@@ -28,7 +28,7 @@ resources:
     repository: om
     access_token: {{github_token}}
 
-- name: {{pivnet_product_name}}
+- name: pivnet-product
   type: pivnet
   source:
     api_token: {{pcf_pivnet_token}}
@@ -37,10 +37,10 @@ resources:
     sort_by: semver
 
 jobs:
-- name: {{pivnet_product_name}}-upload
+- name: upload-{{pivnet_product_name}}
   plan:
   - aggregate:
-    - get: {{pivnet_product_name}}
+    - get: pivnet-product
       params:
         globs:
         - "*pivotal"
@@ -58,20 +58,24 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       PIVNET_PRODUCT_NAME: {{pivnet_product_name}}
 
-- name: {{pivnet_product_name}}-stage
+- name: stage-{{pivnet_product_name}}
   plan:
   - aggregate:
-    - get: {{pivnet_product_name}}
-      passed: [{{pivnet_product_name}}-upload]
+    - get: pivnet-product
+      passed: [upload-{{pivnet_product_name}}]
       params:
         globs:
         - "*pivotal"
     - get: concourse-tasks-bundle
     - get: tool-om
+      params:
+        globs:
+          - om-linux
+  
   - task: stage-product
     file: concourse-tasks-bundle/stage-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      PRODUCT_NAME: {{product_name}}
+      PRODUCT_NAME: {{opsman_product_name}}
