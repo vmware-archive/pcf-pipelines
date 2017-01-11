@@ -1,8 +1,8 @@
 groups:
 - name: ert-upgrade
   jobs:
-  - ert-upload
-  - ert-stage
+  - {{pivnet_product_name}}-upload
+  - {{pivnet_product_name}}-stage
 
 resource_types:
 
@@ -28,36 +28,41 @@ resources:
     repository: om
     access_token: {{github_token}}
 
-- name: pivnet-elastic-runtime
+- name: {{pivnet_product_name}}
   type: pivnet
   source:
     api_token: {{pcf_pivnet_token}}
-    product_slug: elastic-runtime
+    product_slug: {{pivnet_product_name}}
     product_version: {{ert_major_minor_version}}
     sort_by: semver
 
 jobs:
-- name: ert-upload
+- name: {{pivnet_product_name}}-upload
   plan:
   - aggregate:
-    - get: pivnet-elastic-runtime
+    - get: {{pivnet_product_name}}
       params:
         globs:
         - "*pivotal"
     - get: concourse-tasks-bundle
     - get: tool-om
+      params:
+        globs:
+          - om-linux
+
   - task: upload-product
     file: concourse-tasks-bundle/upload-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
+      PIVNET_PRODUCT_NAME: {{pivnet_product_name}}
 
-- name: ert-stage
+- name: {{pivnet_product_name}}-stage
   plan:
   - aggregate:
-    - get: pivnet-elastic-runtime
-      passed: [ert-upload]
+    - get: {{pivnet_product_name}}
+      passed: [{{pivnet_product_name}}-upload]
       params:
         globs:
         - "*pivotal"

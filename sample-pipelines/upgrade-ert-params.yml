@@ -3,5 +3,10 @@ pcf_pivnet_token: xxxxxxxxxxxxxxxxxxxxxx
 opsman_admin_username: admin
 opsman_admin_password: secret
 opsman_uri: blah.com
-product_name: cf
+opsman_product_name: cf
+pivnet_product_name: elastic-runtime
 github_token: yyyyyyyyyyyyyyyyy
+github_private_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+    asdfasdfasdfasdfasdfasd
+  -----END RSA PRIVATE KEY-----
