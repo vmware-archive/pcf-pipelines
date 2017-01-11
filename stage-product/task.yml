@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: pivotalcfreleng/golang}
+
+inputs:
+  - name: pcf-releng-ci
+    path: go/src/github.com/pivotal-cf/pcf-releng-ci
+  - name: environment
+  - name: product
+
+params:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  OPSMAN_URL_SUFFIX:
+  USE_OPTIONAL_OPSMAN:
+  PRODUCT: cf
+
+run:
+  path: go/src/github.com/pivotal-cf/pcf-releng-ci/tasks/om/stage-product/task.sh
