@@ -9,7 +9,7 @@ function main() {
   cwd="${1}"
 
   local product
-  product="$(ls -1 "${cwd}"/product/*.pivotal)"
+  product="$(ls -1 "${cwd}"/${PIVNET_PRODUCT_NAME}/*.pivotal)"
 
   ./${CMD_PATH} --target "${OPSMAN_URI}" \
      --skip-ssl-validation \

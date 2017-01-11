@@ -14,6 +14,7 @@ params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_URI:
+  PIVNET_PRODUCT_NAME:
 
 run:
   path: concourse-tasks-bundle/upload-product/task.sh
