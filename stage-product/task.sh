@@ -9,8 +9,8 @@ function main() {
   cwd="${1}"
 
   local version
-  pushd "${cwd}/product"
-    version="$(ls -1 *.pivotal | sed "s/"${PRODUCT}"-\(.*\).pivotal/\1/")"
+  pushd "${cwd}/pivnet-product"
+    version="$(ls -1 *.pivotal | sed "s/"${PRODUCT_NAME}"-\(.*\).pivotal/\1/")"
   popd
 
   ./${CMD_PATH} --target "${OPSMAN_URI}" \
