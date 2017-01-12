@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: pivotalcfreleng/golang}
+
+inputs:
+  - name: pcf-releng-ci
+    path: go/src/github.com/pivotal-cf/pcf-releng-ci
+  - name: ert-product
+
+outputs:
+  - name: stemcell
+
+params:
+  IAAS_TYPE:
+  PRODUCT:
+
+run:
+  path: go/src/github.com/pivotal-cf/pcf-releng-ci/tasks/future/download-bosh-io-stemcell/task.sh
