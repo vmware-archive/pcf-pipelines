@@ -14,8 +14,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/cheggaaa/pb"
 	"github.com/c0-ops/concourse-tasks-bundle/download-bosh-io-stemcell/content"
+	"github.com/cheggaaa/pb"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -25,6 +25,7 @@ var (
 	productName string
 	iaasType    string
 	downloadDir string
+	Version     string
 )
 
 const routines = 20

@@ -14,14 +14,11 @@ function main() {
     product_name="cf"
   fi
 
-  export GOPATH="${cwd}/go"
-  pushd "${GOPATH}/src/github.com/pivotal-cf/pcf-releng-ci/tasks/future/download-bosh-io-stemcell" > /dev/null
-    go run main.go \
-      --iaas-type "${IAAS_TYPE}" \
-      --product-file "${product_file}" \
-      --product-name "${product_name}" \
-      --download-dir "${cwd}/stemcell"
-  popd > /dev/null
+  ./download-bosh-io-stemcell \
+    --iaas-type "${IAAS_TYPE}" \
+    --product-file "${product_file}" \
+    --product-name "${product_name}" \
+    --download-dir "${cwd}/stemcell"
 }
 
 main "${PWD}"

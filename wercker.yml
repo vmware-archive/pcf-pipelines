@@ -53,16 +53,24 @@ crosscompile:
           export WERCKER_GITHUB_CREATE_RELEASE_ID=`versioning bump_patch`
 
     - script:
-        name: compile built in product plugins
+        name: compile built in go binaries 
         code: |
           COMMIT=`git rev-parse HEAD | cut -c1-6`
           VERSION=${WERCKER_GITHUB_CREATE_RELEASE_ID}-${COMMIT}
           GOOS=linux go build -o download-bosh-io-stemcell -ldflags "-s -w -X main.Version=${VERSION}" ./download-bosh-io-stemcell/main.go
 
     - script:
+        name: create tarball of task bundle 
+        code: |
+          COMMIT=`git rev-parse HEAD | cut -c1-6`
+          VERSION=${WERCKER_GITHUB_CREATE_RELEASE_ID}-${COMMIT}
+          mkdir bundle
+          tar -cvzf --exclude='./bundle' bundle/tasks-${VERSION}.tgz .
+
+    - script:
         name: add repo to artifact
         code: |
-          cp -R ./ ${WERCKER_OUTPUT_DIR}
+          cp -R ./bundle ${WERCKER_OUTPUT_DIR}
 
 deploy-pre-release:
   steps:
