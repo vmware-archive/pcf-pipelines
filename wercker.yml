@@ -72,6 +72,7 @@ crosscompile:
         name: add tarball to artifact
         code: |
           cp -R ./bundle ${WERCKER_OUTPUT_DIR}
+          cp -R version.txt ${WERCKER_OUTPUT_DIR}
 
 deploy-pre-release:
   steps:
@@ -95,8 +96,7 @@ deploy-pre-release:
     - script:
         name: set release id variable for version
         code: |
-          go get github.com/xchapter7x/versioning
-          export WERCKER_GITHUB_CREATE_RELEASE_ID=`versioning bump_patch`-`git rev-parse HEAD | cut -c1-6`
+          export WERCKER_GITHUB_CREATE_RELEASE_ID=$(cat version.txt)
           ls -lha
 
     - github-create-release:
