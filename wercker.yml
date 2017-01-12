@@ -65,7 +65,8 @@ crosscompile:
           COMMIT=`git rev-parse HEAD | cut -c1-6`
           VERSION=${WERCKER_GITHUB_CREATE_RELEASE_ID}-${COMMIT}
           mkdir bundle
-          tar --exclude=bundle -cvzf bundle/tasks-${VERSION}.tgz apply-changes download-bosh-io-stemcell stage-product upload-product 
+          echo ${VERSION} > version.txt
+          tar --exclude=bundle -cvzf bundle/tasks-bundle.tgz apply-changes download-bosh-io-stemcell stage-product upload-product version.txt
 
     - script:
         name: add tarball to artifact
@@ -106,7 +107,7 @@ deploy-pre-release:
 
     - github-upload-asset:
         token: $GITHUB_TOKEN
-        file: tasks-${VERSION}.tgz
+        file: tasks-bundle.tgz
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip
 
