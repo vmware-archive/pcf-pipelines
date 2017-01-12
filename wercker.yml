@@ -57,7 +57,7 @@ crosscompile:
         code: |
           COMMIT=`git rev-parse HEAD | cut -c1-6`
           VERSION=${WERCKER_GITHUB_CREATE_RELEASE_ID}-${COMMIT}
-          GOOS=linux go build -o download-bosh-io-stemcell -ldflags "-s -w -X main.Version=${VERSION}" ./download-bosh-io-stemcell/main.go
+          GOOS=linux go build -o download-bosh-io-stemcell/download-bosh-io-stemcell -ldflags "-s -w -X main.Version=${VERSION}" ./download-bosh-io-stemcell/main.go
 
     - script:
         name: create tarball of task bundle 
@@ -68,7 +68,7 @@ crosscompile:
           tar -cvzf --exclude='./bundle' bundle/tasks-${VERSION}.tgz .
 
     - script:
-        name: add repo to artifact
+        name: add tarball to artifact
         code: |
           cp -R ./bundle ${WERCKER_OUTPUT_DIR}
 
@@ -100,13 +100,13 @@ deploy-pre-release:
     - github-create-release:
         token: $GITHUB_TOKEN
         tag: $WERCKER_GITHUB_CREATE_RELEASE_ID
-        title: ert-plugin $WERCKER_GITHUB_CREATE_RELEASE_ID
+        title: concourse-tasks-bundle $WERCKER_GITHUB_CREATE_RELEASE_ID
         draft: true
         prerelease: ${IS_PRE_RELEASE}
 
     - github-upload-asset:
         token: $GITHUB_TOKEN
-        file: ert-1-8-linux
+        file: tasks-${VERSION}.tgz
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip
 
