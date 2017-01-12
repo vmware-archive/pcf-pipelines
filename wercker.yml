@@ -108,7 +108,7 @@ deploy-pre-release:
 
     - github-upload-asset:
         token: $GITHUB_TOKEN
-        file: tasks-bundle.tgz
+        file: bundle/tasks-bundle.tgz
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip
 
