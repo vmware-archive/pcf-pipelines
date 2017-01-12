@@ -97,6 +97,7 @@ deploy-pre-release:
         code: |
           go get github.com/xchapter7x/versioning
           export WERCKER_GITHUB_CREATE_RELEASE_ID=`versioning bump_patch`-`git rev-parse HEAD | cut -c1-6`
+          ls -lha
 
     - github-create-release:
         token: $GITHUB_TOKEN
