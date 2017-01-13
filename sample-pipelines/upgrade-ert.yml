@@ -6,21 +6,19 @@ groups:
   - apply-changes-{{pivnet_product_name}}
 
 resource_types:
-
 - name: pivnet
   type: docker-image
   source:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
 
-
 resources:
 - name: concourse-tasks-bundle
-  type: git
+  type: github-release
   source:
-    uri: git@github.com:c0-ops/concourse-tasks-bundle.git
-    branch: master
-    private_key: {{github_private_key}}
+    user: c0-ops 
+    repository: concourse-tasks-bundle 
+    access_token: {{github_token}} 
 
 - name: tool-om
   type: github-release
@@ -46,10 +44,28 @@ jobs:
         globs:
         - "*pivotal"
     - get: concourse-tasks-bundle
+      params:
+        globs:
+        - tasks-bundle.tgz 
     - get: tool-om
       params:
         globs:
-          - om-linux
+        - om-linux
+
+  - task: unpack-tasks
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/cflinuxfs2 
+      inputs:
+      - name: concourse-tasks-bundle
+      run:
+        path: tar 
+        args:
+        - -xvzf
+        - concourse-tasks-bundle/tasks-bundle.tgz 
 
   - task: upload-product
     file: concourse-tasks-bundle/upload-product/task.yml
@@ -68,11 +84,29 @@ jobs:
         globs:
         - "*pivotal"
     - get: concourse-tasks-bundle
+      params:
+        globs:
+        - tasks-bundle.tgz 
       passed: [upload-{{pivnet_product_name}}]
     - get: tool-om
       params:
         globs:
-          - om-linux
+        - om-linux
+
+  - task: unpack-tasks
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/cflinuxfs2 
+      inputs:
+      - name: concourse-tasks-bundle
+      run:
+        path: tar 
+        args:
+        - -xvzf
+        - concourse-tasks-bundle/tasks-bundle.tgz 
 
   - task: stage-product
     file: concourse-tasks-bundle/stage-product/task.yml
@@ -86,11 +120,29 @@ jobs:
   plan:
   - aggregate:
     - get: concourse-tasks-bundle
+      params:
+        globs:
+        - tasks-bundle.tgz 
       passed: [stage-{{pivnet_product_name}}]
     - get: tool-om
       params:
         globs:
-          - om-linux
+        - om-linux
+
+  - task: unpack-tasks
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/cflinuxfs2 
+      inputs:
+      - name: concourse-tasks-bundle
+      run:
+        path: tar 
+        args:
+        - -xvzf
+        - concourse-tasks-bundle/tasks-bundle.tgz 
 
   - task: apply-changes
     file: concourse-tasks-bundle/apply-changes/task.yml

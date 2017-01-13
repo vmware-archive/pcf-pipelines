@@ -6,7 +6,3 @@ opsman_uri: blah.com
 opsman_product_name: cf
 pivnet_product_name: elastic-runtime
 github_token: yyyyyyyyyyyyyyyyy
-github_private_key: |
-  -----BEGIN RSA PRIVATE KEY-----
-    asdfasdfasdfasdfasdfasd
-  -----END RSA PRIVATE KEY-----
