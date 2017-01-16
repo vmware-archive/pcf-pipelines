@@ -14,7 +14,7 @@ function main() {
     product_name="cf"
   fi
 
-  ./download-bosh-io-stemcell \
+  ./download-bosh-io-stemcell/download-bosh-io-stemcell \
     --iaas-type "${IAAS_TYPE}" \
     --product-file "${product_file}" \
     --product-name "${product_name}" \
