@@ -7,14 +7,13 @@ image_resource:
 
 inputs:
   - name: concourse-tasks-bundle 
-  - name: pivnet-product
-
-outputs:
+  - name: tool-om 
   - name: stemcell
 
 params:
-  IAAS_TYPE:
-  PRODUCT:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  OPSMAN_URI:
 
 run:
-  path: concourse-tasks-bundle/download-bosh-io-stemcell/task.sh
+  path: concourse-tasks-bundle/upload-stemcell/task.sh
