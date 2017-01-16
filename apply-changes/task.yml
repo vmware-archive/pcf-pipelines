@@ -6,7 +6,6 @@ image_resource:
   source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
-  - name: concourse-tasks-bundle
   - name: tool-om
 
 params:
