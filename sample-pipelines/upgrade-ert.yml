@@ -1,7 +1,6 @@
 groups:
 - name: ert-upgrade
   jobs:
-  - testing-{{pivnet_product_name}}
   - upload-{{pivnet_product_name}}
   - stage-{{pivnet_product_name}}
   - apply-changes-{{pivnet_product_name}}
