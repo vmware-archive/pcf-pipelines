@@ -1,0 +1,25 @@
+# groups:
+# - name: opsmngr-upgrade
+#   jobs:
+
+resources:
+- name: concourse-tasks-bundle
+  type: github-release
+  source:
+    user: c0-ops
+    repository: concourse-tasks-bundle
+    access_token: {{github_token}}
+
+jobs:
+- name: export-opsmgr
+  plan:
+  - aggregate:
+    - get: concourse-tasks-bundle
+
+  - task: export-opsmgr-task
+    file: concourse-tasks-bundle/export-opsmgr-settings/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_SETTINGS_FILENAME: installation.zip

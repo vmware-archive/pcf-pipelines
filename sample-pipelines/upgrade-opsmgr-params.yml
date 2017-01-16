@@ -1,0 +1,4 @@
+opsman_admin_username: admin
+opsman_admin_password: secret
+opsman_uri: https://blah.com
+github_token: yyyyyyyyyyyyyyyyy
