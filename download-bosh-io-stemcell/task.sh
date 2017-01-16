@@ -5,7 +5,7 @@ function main() {
   cwd="${1}"
 
   local product_file
-  product_file="$(ls -1 ${cwd}/ert-product/*.pivotal)"
+  product_file="$(ls -1 ${cwd}/pivnet-product/*.pivotal)"
 
   local product_name
   if [[ -n ${PRODUCT} ]]; then
