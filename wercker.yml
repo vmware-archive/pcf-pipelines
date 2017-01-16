@@ -25,7 +25,7 @@ build:
   after-steps:
     - slack-notifier:
         url: $SLACK_URL
-        channel: customer0 
+        channel: customer0
         username: robo-wercker
         notify_on: failed
         branch: master
@@ -53,20 +53,20 @@ crosscompile:
           export WERCKER_GITHUB_CREATE_RELEASE_ID=`versioning bump_patch`
 
     - script:
-        name: compile built in go binaries 
+        name: compile built in go binaries
         code: |
           COMMIT=`git rev-parse HEAD | cut -c1-6`
           VERSION=${WERCKER_GITHUB_CREATE_RELEASE_ID}-${COMMIT}
           GOOS=linux go build -o download-bosh-io-stemcell/download-bosh-io-stemcell -ldflags "-s -w -X main.Version=${VERSION}" ./download-bosh-io-stemcell/main.go
 
     - script:
-        name: create tarball of task bundle 
+        name: create tarball of task bundle
         code: |
           COMMIT=`git rev-parse HEAD | cut -c1-6`
           VERSION=${WERCKER_GITHUB_CREATE_RELEASE_ID}-${COMMIT}
           mkdir bundle
           echo ${VERSION} > version.txt
-          tar --exclude=bundle -cvzf bundle/tasks-bundle.tgz apply-changes download-bosh-io-stemcell stage-product upload-product version.txt
+          tar --exclude=bundle -cvzf bundle/tasks-bundle.tgz apply-changes download-bosh-io-stemcell stage-product upload-product export-opsmgr-settings version.txt
 
     - script:
         name: add tarball to artifact
@@ -77,7 +77,7 @@ crosscompile:
   after-steps:
     - slack-notifier:
         url: $SLACK_URL
-        channel: customer0 
+        channel: customer0
         username: robo-wercker
         notify_on: failed
         branch: master
@@ -128,7 +128,7 @@ deploy-pre-release:
   after-steps:
     - slack-notifier:
         url: $SLACK_URL
-        channel: customer0 
+        channel: customer0
         username: robo-wercker
         notify_on: failed
         branch: master
