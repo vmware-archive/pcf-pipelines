@@ -1,6 +1,7 @@
 groups:
 - name: ert-upgrade
   jobs:
+  - testing-{{pivnet_product_name}}
   - upload-{{pivnet_product_name}}
   - stage-{{pivnet_product_name}}
   - apply-changes-{{pivnet_product_name}}
@@ -13,7 +14,7 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: concourse-tasks-bundle
+- name: task-bundle-release 
   type: github-release
   source:
     user: c0-ops 
@@ -39,14 +40,14 @@ jobs:
 - name: upload-{{pivnet_product_name}}
   plan:
   - aggregate:
+    - get: task-bundle-release
+      params:
+        globs:
+        - tasks-bundle.tgz 
     - get: pivnet-product
       params:
         globs:
         - "*pivotal"
-    - get: concourse-tasks-bundle
-      params:
-        globs:
-        - tasks-bundle.tgz 
     - get: tool-om
       params:
         globs:
@@ -60,12 +61,16 @@ jobs:
         source:
           repository: cloudfoundry/cflinuxfs2 
       inputs:
-      - name: concourse-tasks-bundle
+      - name: task-bundle-release
+      outputs:
+      - name: concourse-tasks-bundle 
       run:
         path: tar 
         args:
+        - -C 
+        - concourse-tasks-bundle
         - -xvzf
-        - concourse-tasks-bundle/tasks-bundle.tgz 
+        - task-bundle-release/tasks-bundle.tgz 
 
   - task: upload-product
     file: concourse-tasks-bundle/upload-product/task.yml
@@ -83,7 +88,7 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: concourse-tasks-bundle
+    - get: task-bundle-release
       params:
         globs:
         - tasks-bundle.tgz 
@@ -101,12 +106,16 @@ jobs:
         source:
           repository: cloudfoundry/cflinuxfs2 
       inputs:
-      - name: concourse-tasks-bundle
+      - name: task-bundle-release
+      outputs:
+      - name: concourse-tasks-bundle 
       run:
         path: tar 
         args:
+        - -C 
+        - concourse-tasks-bundle
         - -xvzf
-        - concourse-tasks-bundle/tasks-bundle.tgz 
+        - task-bundle-release/tasks-bundle.tgz 
 
   - task: stage-product
     file: concourse-tasks-bundle/stage-product/task.yml
@@ -119,7 +128,7 @@ jobs:
 - name: apply-changes-{{pivnet_product_name}}
   plan:
   - aggregate:
-    - get: concourse-tasks-bundle
+    - get: task-bundle-release
       params:
         globs:
         - tasks-bundle.tgz 
@@ -137,12 +146,16 @@ jobs:
         source:
           repository: cloudfoundry/cflinuxfs2 
       inputs:
-      - name: concourse-tasks-bundle
+      - name: task-bundle-release
+      outputs:
+      - name: concourse-tasks-bundle 
       run:
         path: tar 
         args:
+        - -C 
+        - concourse-tasks-bundle
         - -xvzf
-        - concourse-tasks-bundle/tasks-bundle.tgz 
+        - task-bundle-release/tasks-bundle.tgz 
 
   - task: apply-changes
     file: concourse-tasks-bundle/apply-changes/task.yml
