@@ -66,7 +66,14 @@ crosscompile:
           VERSION=${WERCKER_GITHUB_CREATE_RELEASE_ID}-${COMMIT}
           mkdir bundle
           echo ${VERSION} > version.txt
-          tar --exclude=bundle -cvzf bundle/tasks-bundle.tgz apply-changes download-bosh-io-stemcell stage-product upload-product export-opsmgr-settings import-opsmgr-settings version.txt
+          tar --exclude=bundle -cvzf bundle/tasks-bundle.tgz apply-changes \
+          download-bosh-io-stemcell \
+          stage-product \
+          upload-product \
+          upload-stemcell \
+          export-opsmgr-settings \
+          import-opsmgr-settings \
+          version.txt
 
     - script:
         name: add tarball to artifact
