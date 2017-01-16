@@ -138,7 +138,7 @@ jobs:
       params:
         globs:
         - tasks-bundle.tgz 
-      passed: [stage-{{pivnet_product_name}}]
+          passed: [stage-{{pivnet_product_name}}]
     - get: tool-om
       params:
         globs:
@@ -166,9 +166,8 @@ jobs:
   - task: download-stemcell
     file: concourse-tasks-bundle/download-bosh-io-stemcell/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+      PRODUCT: {{opsman_product_name}}
+      IAAS_TYPE: {{iaas_type}}
 
   - task: upload-stemcell
     file: concourse-tasks-bundle/upload-stemcell/task.yml
