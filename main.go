@@ -18,6 +18,7 @@ var Version = "v0.0.0"
 
 func main() {
 	app := cli.NewApp()
+	app.Version = Version
 	app.Name = "the-tool"
 	app.Usage = "generates versioned and prescribed concourse pipeline yamls"
 	app.Commands = []cli.Command{
