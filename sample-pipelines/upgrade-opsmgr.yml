@@ -38,7 +38,6 @@ jobs:
         args:
         - "Placeholder for task that will 1) extract current OpsMgr VM info and 2) stop it"
 
-
 - name: setup-updated-opsmgr-vm
   plan:
   - get: concourse-tasks-bundle
@@ -57,9 +56,8 @@ jobs:
 
 - name: import-opsmgr
   plan:
-  - aggregate:
-    - get: concourse-tasks-bundle
-      passed: [setup-updated-opsmgr-vm]
+  - get: concourse-tasks-bundle
+    passed: [setup-updated-opsmgr-vm]
   - task: import-opsmgr-task
     file: concourse-tasks-bundle/import-opsmgr-settings/task.yml
     params:
@@ -68,3 +66,14 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
+
+- name: trigger-installations
+  plan:
+  - get: concourse-tasks-bundle
+    passed: [import-opsmgr]
+  - task: apply-changes-task
+    file: concourse-tasks-bundle/apply-changes/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
