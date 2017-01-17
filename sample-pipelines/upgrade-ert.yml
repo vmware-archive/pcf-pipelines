@@ -30,6 +30,7 @@ resources:
 
 - name: pivnet-product
   type: pivnet
+  check_every: {{poll_interval}} 
   source:
     api_token: {{pcf_pivnet_token}}
     product_slug: {{pivnet_product_name}}
@@ -45,6 +46,7 @@ jobs:
         globs:
         - tasks-bundle.tgz 
     - get: pivnet-product
+      trigger: true
       params:
         globs:
         - "*pivotal"
@@ -84,6 +86,7 @@ jobs:
   plan:
   - aggregate:
     - get: pivnet-product
+      trigger: true
       passed: [upload-{{pivnet_product_name}}]
       params:
         globs:
@@ -130,6 +133,7 @@ jobs:
   plan:
   - aggregate:
     - get: pivnet-product
+      trigger: true
       passed: [stage-{{pivnet_product_name}}]
       params:
         globs:
@@ -138,7 +142,7 @@ jobs:
       params:
         globs:
         - tasks-bundle.tgz 
-          passed: [stage-{{pivnet_product_name}}]
+      passed: [stage-{{pivnet_product_name}}]
     - get: tool-om
       params:
         globs:
