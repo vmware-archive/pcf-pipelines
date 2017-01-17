@@ -13,9 +13,7 @@ resources:
 jobs:
 - name: export-opsmgr
   plan:
-  - aggregate:
-    - get: concourse-tasks-bundle
-
+  - get: concourse-tasks-bundle
   - task: export-opsmgr-task
     file: concourse-tasks-bundle/export-opsmgr-settings/task.yml
     params:
@@ -24,11 +22,44 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
 
+- name: stop-exiting-opsmgr-vm
+  plan:
+  - get: concourse-tasks-bundle
+    passed: [export-opsmgr]
+  - task: placeholder-for-stopping-current-opsmgr-vm
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/cflinuxfs2
+      run:
+        path: echo
+        args:
+        - "Placeholder for task that will 1) extract current OpsMgr VM info and 2) stop it"
+
+
+- name: setup-updated-opsmgr-vm
+  plan:
+  - get: concourse-tasks-bundle
+    passed: [stop-exiting-opsmgr-vm]
+  - task: placeholder-for-updated-opsmgr-vm
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: cloudfoundry/cflinuxfs2
+      run:
+        path: echo
+        args:
+        - "Placeholder for task that will 1) download new OM VM file and 2) start VM up"
+
 - name: import-opsmgr
   plan:
   - aggregate:
     - get: concourse-tasks-bundle
-
+      passed: [setup-updated-opsmgr-vm]
   - task: import-opsmgr-task
     file: concourse-tasks-bundle/import-opsmgr-settings/task.yml
     params:
