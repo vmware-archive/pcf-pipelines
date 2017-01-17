@@ -9,7 +9,7 @@ inputs:
   - name: concourse-tasks-bundle
 
 outputs:
-  - name: output
+  - name: opsmgr-settings
 
 params:
   OPSMAN_USERNAME:

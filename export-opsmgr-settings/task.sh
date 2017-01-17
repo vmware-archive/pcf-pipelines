@@ -10,9 +10,8 @@ function main() {
   curl -o "${OPSMAN_SETTINGS_FILENAME}" "${OPSMAN_URI}/api/v0/installation_asset_collection" -X GET -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/x-www-form-urlencoded" --insecure -vv --max-time 5400
   echo "Successfully downloaded ${OPSMAN_SETTINGS_FILENAME}. Return code [$?]."
   ls -la
-  mv "${OPSMAN_SETTINGS_FILENAME}" ./output
-  echo "${OPSMAN_SETTINGS_FILENAME} moved to output directory."
-  find .
+  mv "${OPSMAN_SETTINGS_FILENAME}" ./opsmgr-settings
+  echo "${OPSMAN_SETTINGS_FILENAME} moved to opsmgr-settings directory."
 }
 
 echo "Running export OpsMgr task..."
