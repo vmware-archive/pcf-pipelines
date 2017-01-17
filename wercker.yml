@@ -61,10 +61,17 @@ crosscompile:
           GOOS=darwin go build -o the-tool-osx -ldflags "-s -w -X main.Version=${VERSION}" ./main.go
           GOOS=windows go build -o the-tool-win -ldflags "-s -w -X main.Version=${VERSION}" ./main.go
 
+
+    - script:
+        name: store version 
+        code: |
+          echo ${WERCKER_GITHUB_CREATE_RELEASE_ID}-${COMMIT} > version.txt
+
     - script:
         name: add artifact
         code: |
           cp -R ./the-tool* ${WERCKER_OUTPUT_DIR}
+          cp version.txt ${WERCKER_OUTPUT_DIR}
 
   after-steps:
     - slack-notifier:
