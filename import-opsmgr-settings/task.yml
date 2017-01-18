@@ -7,15 +7,10 @@ image_resource:
 
 inputs:
   - name: concourse-tasks-bundle
-
-outputs:
-  - name: output
+  - name: opsmgr-settings
 
 params:
-  OPSMAN_USERNAME:
-  OPSMAN_PASSWORD:
   OPSMAN_URI:
-  OPSMAN_SETTINGS_FILENAME:
   OPSMAN_PASSPHRASE:
 
 run:
