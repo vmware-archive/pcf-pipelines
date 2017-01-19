@@ -6,56 +6,23 @@ image_resource:
   source: {repository: cftoolsmiths/deploy-pcf-vsphere-1.9}
 
 inputs:
-  - name: toolsmiths-shared-scripts
-  # - name: pivnet-downloads
-
+  - name: pivnet-opsmgr
 run:
-  path: /bin/bash
-  args:
-  - '-c'
-  - |
-    export GOVC_RESOURCE_POOL=/${GOVC_DATACENTER}/host/${GOVC_CLUSTER}/Resources/${ENV_NAME}
-    export CURR_DIR=$(pwd)
-    export OPSMAN_NAME=OpsMan-${OPSMGR_VERSION}
-
-    # cd toolsmiths-shared-scripts/deploy_pcf
-    # erb opsman_settings.json.erb > opsman_settings.json
-
-    govc ls /${GOVC_DATACENTER}/vm/${ENV_NAME}/* | xargs -I{} govc vm.destroy "{}"
-    govc ls /${GOVC_DATACENTER}/vm/${ENV_NAME}_templates/* | xargs -I{} govc vm.destroy "{}"
-    govc ls /${GOVC_DATACENTER}/vm/${ENV_NAME}_vms/* | xargs -I{} govc vm.destroy "{}"
-
-    govc import.ova --options=opsman_settings.json --name=${OPSMAN_NAME} -k=true --folder=/${GOVC_DATACENTER}/vm/${ENV_NAME} ${CURR_DIR}/pivnet/.
-
-    govc vm.change -c=2 -vm /${GOVC_DATACENTER}/vm/${ENV_NAME}/${OPSMAN_NAME}
-    govc vm.power -on=true /${GOVC_DATACENTER}/vm/${ENV_NAME}/${OPSMAN_NAME}
+  path: concourse-tasks-bundle/deploy-opsmgr-vm/task.sh
 
 params:
-  ENV_NAME: opsmgr1
-  OPSMGR_VERSION: 1.9.1
-  GOVC_URL: c0-lab01-vcsa01.lab01.c0.pivotal.io
-  GOVC_USERNAME: administrator@lab01.c0.pivotal.io
-  GOVC_PASSWORD: mylabP@33w0rd!
-  GOVC_DATACENTER: Datacenter
-  GOVC_CLUSTER: A-Cluster
-  GOVC_DATASTORE: c0-ds03
-  OPSMAN_IP: 10.194.50.200
-  NETMASK: 255.255.255.0
-  GATEWAY: 10.194.50.1
-  DNS: 10.194.8.150
-  NTP: 10.194.8.150
-
-
-  # ENV_NAME: pez101
-  # OPSMGR_VERSION: 1.9
-  # GOVC_URL: vcsa-01.haas-101.pez.pivotal.io
-  # GOVC_USERNAME: administrator@vsphere.local
-  # GOVC_PASSWORD: 5m07nIzioKTS!
-  # GOVC_DATACENTER: Datacenter
-  # GOVC_CLUSTER: Cluster
-  # GOVC_DATASTORE: LUN01
-  # OPSMAN_IP: 10.193.165.200
-  # NETMASK: 255.255.255.0
-  # GATEWAY: 10.193.165.1
-  # DNS: 10.193.165.2
-  # NTP: 10.193.165.2
+  GOVC_URL:
+  GOVC_USERNAME:
+  GOVC_PASSWORD:
+  GOVC_DATACENTER:
+  GOVC_CLUSTER:
+  GOVC_DATASTORE:
+  OPSMAN_IP:
+  NETMASK:
+  GATEWAY:
+  DNS:
+  NTP:
+  OPSMAN_ADMIN_PASSWORD:
+  OPSMAN_NETWORK:
+  GOVC_RESOURCE_POOL:
+  OPSMAN_VM_FOLDER:
