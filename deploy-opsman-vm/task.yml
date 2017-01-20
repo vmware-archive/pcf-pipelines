@@ -7,6 +7,8 @@ image_resource:
 
 inputs:
   - name: pivnet-opsmgr
+  - name: concourse-tasks-bundle
+
 run:
   path: concourse-tasks-bundle/deploy-opsmgr-vm/task.sh
 
