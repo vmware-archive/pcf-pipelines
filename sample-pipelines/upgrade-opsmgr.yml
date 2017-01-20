@@ -22,37 +22,50 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
 
-- name: stop-exiting-opsmgr-vm
-  plan:
-  - get: concourse-tasks-bundle
-    passed: [export-opsmgr]
-  - task: placeholder-for-stopping-current-opsmgr-vm
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: cloudfoundry/cflinuxfs2
-      run:
-        path: echo
-        args:
-        - "Placeholder for task that will 1) extract current OpsMgr VM info and 2) stop it"
+# stopping existing opsmanager from setup-updated-opsmgr-vm
+# - name: stop-exiting-opsmgr-vm
+#   plan:
+#   - get: concourse-tasks-bundle
+#     passed: [export-opsmgr]
+#   - task: placeholder-for-stopping-current-opsmgr-vm
+#     config:
+#       platform: linux
+#       image_resource:
+#         type: docker-image
+#         source:
+#           repository: cloudfoundry/cflinuxfs2
+#       run:
+#         path: echo
+#         args:
+#         - "Placeholder for task that will 1) extract current OpsMgr VM info and 2) stop it"
 
 - name: setup-updated-opsmgr-vm
   plan:
   - get: concourse-tasks-bundle
     passed: [stop-exiting-opsmgr-vm]
-  - task: placeholder-for-updated-opsmgr-vm
+  - task: deploy-opsman-vm
+    file: concourse-tasks-bundle/deploy-opsman-vm/task.yml
+    params:
+      GOVC_USERNAME: {{govc_username}}
+      GOVC_PASSWORD: {{govc_password}}
+      GOVC_DATACENTER: {{govc_datacenter}}
+      GOVC_CLUSTER: {{govc_cluster}}
+      GOVC_DATASTORE: {{govc_datacenter}}
+      OPSMAN_IP: {{opsman_ip}}
+      NETMASK: {{netmask}}
+      GATEWAY: {{gateway}}
+      DNS: {{dns}}
+      NTP: {{ntp}}
+      OPSMAN_NETWORK: {{opsman_network}}
+      GOVC_RESOURCE_POOL: {{govc_resource_pool}}
+      OPSMAN_VM_FOLDER: {{opsman_vm_folder}}
+      OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
     config:
       platform: linux
       image_resource:
         type: docker-image
         source:
           repository: cloudfoundry/cflinuxfs2
-      run:
-        path: echo
-        args:
-        - "Placeholder for task that will 1) download new OM VM file and 2) start VM up"
 
 - name: import-opsmgr
   plan:
