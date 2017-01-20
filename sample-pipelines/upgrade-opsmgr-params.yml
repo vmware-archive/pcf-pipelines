@@ -3,3 +3,17 @@ opsman_admin_password: secret
 opsman_uri: https://blah.com
 opsman_passphrase: secret
 github_token: yyyyyyyyyyyyyyyyy
+govc_url: https://blah.com
+govc_username: user
+govc_password: hispwd
+govc_datacenter:
+govc_cluster: a-cluster
+govc_datastore: datastore
+opsman_ip: 10.84.32.61
+netmask: 255.255.255.0
+gateway: 10.85.15.1
+dns: 10.87.8.10,10.87.8.11
+ntp: 10.85.15.10
+opsman_network: pl77
+govc_resource_pool: the-pool
+opsman_vm_folder: /vm/omsmgr
