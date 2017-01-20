@@ -73,6 +73,7 @@ crosscompile:
           upload-stemcell \
           export-opsmgr-settings \
           import-opsmgr-settings \
+          deploy-opsman-vm \
           version.txt
 
     - script:
