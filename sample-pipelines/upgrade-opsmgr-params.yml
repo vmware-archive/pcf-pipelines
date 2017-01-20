@@ -7,8 +7,8 @@ pivnet_token: asdfasdhkjl
 vcenter_url: https://blah.com
 vcenter_username: user
 vcenter_password: hispwd
-vcenter_datacenter: c0-lab01-vcsa01.lab01.c0.pivotal.io
-vcenter_cluster: a-cluster
+vcenter_datacenter: Datacenter-name
+vcenter_cluster: cluster-name
 vcenter_datastore: datastore
 vcenter_resource_pool: the-pool
 opsman_vm_folder: /vm/omsmgr
