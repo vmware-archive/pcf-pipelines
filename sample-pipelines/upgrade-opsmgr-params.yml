@@ -6,7 +6,7 @@ github_token: yyyyyyyyyyyyyyyyy
 govc_url: https://blah.com
 govc_username: user
 govc_password: hispwd
-govc_datacenter:
+govc_datacenter: c0-lab01-vcsa01.lab01.c0.pivotal.io
 govc_cluster: a-cluster
 govc_datastore: datastore
 opsman_ip: 10.84.32.61
