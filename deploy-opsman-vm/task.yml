@@ -10,7 +10,7 @@ inputs:
   - name: concourse-tasks-bundle
 
 run:
-  path: concourse-tasks-bundle/deploy-opsmgr-vm/task.sh
+  path: concourse-tasks-bundle/deploy-opsman-vm/task.sh
 
 params:
   GOVC_URL:
