@@ -12,7 +12,7 @@ function main() {
     "IPAllocationPolicy":"dhcpPolicy",
     "IPProtocol":"IPv4",
     "NetworkMapping": [{
-      "Name":"Network 1",
+      "Name":"VM Network",
       "Network":"${OPSMAN_NETWORK}"
     }],
     "PropertyMapping":[
