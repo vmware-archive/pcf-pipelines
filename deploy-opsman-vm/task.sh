@@ -29,7 +29,7 @@ function main() {
   }' > ./opsman_settings.json
 
   echo "Importing OVA of new OpsMgr VM..."
-  govc import.ova --options=opsman_settings.json --name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} --folder=/${GOVC_DATACENTER}/vm/${OPSMAN_VM_FOLDER} ${CURR_DIR}/pivnet-opsmgr/pcf-vsphere-1.9.2.ova
+  govc import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${CURR_DIR}/pivnet-opsmgr/pcf-vsphere-1.9.2.ova
 
   echo "Setting CPUs on new OpsMgr VM..."
   govc vm.change -c=2 -vm /${GOVC_DATACENTER}/vm/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
