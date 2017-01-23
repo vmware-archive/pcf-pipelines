@@ -36,12 +36,11 @@ function main() {
 
   echo "Setting CPUs on new OpsMgr VM..."
   govc vm.change -c=2 -k=true -vm /${GOVC_DATACENTER}/vm/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
-  echo "Done..."
-  #
-  # echo "Shutting down OLD OpsMgr VM..."
+
+  echo "Shutting down OLD OpsMgr VM..."
   govc vm.power -off=true -vm.ip=${OPSMAN_IP}
-  #
-  # echo "Starting OpsMgr VM..."
+
+  echo "Starting OpsMgr VM..."
   govc vm.power -on=true /${GOVC_DATACENTER}/vm/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
 }
 
