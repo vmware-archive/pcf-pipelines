@@ -1,4 +1,4 @@
-#!/bin/bash -exu
+#!/bin/bash -eu
 
 # function main() {
 #   echo "Upgrading buildpacks"

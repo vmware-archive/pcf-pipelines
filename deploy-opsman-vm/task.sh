@@ -1,4 +1,4 @@
-#!/bin/bash -exu
+#!/bin/bash -eu
 
 function main() {
   export CURR_DIR=$(pwd)

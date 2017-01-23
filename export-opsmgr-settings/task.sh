@@ -1,4 +1,4 @@
-#!/bin/bash -exu
+#!/bin/bash -eu
 
 function main() {
   echo "Targeting OpsMgr instance ${OPSMAN_URI}"
