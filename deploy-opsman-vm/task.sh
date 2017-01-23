@@ -28,16 +28,20 @@ function main() {
     "WaitForIP":false
   }' > ./opsman_settings.json
 
+  cat ./opsman_settings.json
+
   echo "Importing OVA of new OpsMgr VM..."
+  echo "Running govc import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${CURR_DIR}/pivnet-opsmgr/pcf-vsphere-1.9.2.ova"
   govc import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${CURR_DIR}/pivnet-opsmgr/pcf-vsphere-1.9.2.ova
 
   echo "Setting CPUs on new OpsMgr VM..."
-  govc vm.change -c=2 -vm /${GOVC_DATACENTER}/vm/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
-
-  echo "Shutting down OLD OpsMgr VM..."
+  govc vm.change -c=2 -k=true -vm /${GOVC_DATACENTER}/vm/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
+  echo "Done..."
+  #
+  # echo "Shutting down OLD OpsMgr VM..."
   govc vm.power -off=true -vm.ip=${OPSMAN_IP}
-
-  echo "Starting OpsMgr VM..."
+  #
+  # echo "Starting OpsMgr VM..."
   govc vm.power -on=true /${GOVC_DATACENTER}/vm/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
 }
 
