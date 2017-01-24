@@ -12,5 +12,4 @@ function main() {
    cf create-buildpack $BUILDPACK_NAME buildpack/*.zip 11 --enable
 }
 
-echo "Running import OpsMgr task..."
 main "${PWD}"
