@@ -14,12 +14,11 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: task-bundle-release 
-  type: github-release
+- name: pcf-pipelines
+  type: git
   source:
-    user: c0-ops 
-    repository: concourse-tasks-bundle 
-    access_token: {{github_token}} 
+    uri: https://github.com/c0-ops/pcf-pipelines
+    branch: master
 
 - name: tool-om
   type: github-release
@@ -41,10 +40,7 @@ jobs:
 - name: upload-{{pivnet_product_name}}
   plan:
   - aggregate:
-    - get: task-bundle-release
-      params:
-        globs:
-        - tasks-bundle.tgz 
+    - get: pcf-pipelines
     - get: pivnet-product
       trigger: true
       params:
@@ -55,27 +51,8 @@ jobs:
         globs:
         - om-linux
 
-  - task: unpack-tasks
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: cloudfoundry/cflinuxfs2 
-      inputs:
-      - name: task-bundle-release
-      outputs:
-      - name: concourse-tasks-bundle 
-      run:
-        path: tar 
-        args:
-        - -C 
-        - concourse-tasks-bundle
-        - -xvzf
-        - task-bundle-release/tasks-bundle.tgz 
-
   - task: upload-product
-    file: concourse-tasks-bundle/upload-product/task.yml
+    file: pcf-pipelines/tasks/upload-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
@@ -85,96 +62,52 @@ jobs:
 - name: stage-{{pivnet_product_name}}
   plan:
   - aggregate:
+    - get: pcf-pipelines
+      passed: [upload-{{pivnet_product_name}}]
     - get: pivnet-product
       trigger: true
       passed: [upload-{{pivnet_product_name}}]
       params:
         globs:
         - "*pivotal"
-    - get: task-bundle-release
-      params:
-        globs:
-        - tasks-bundle.tgz 
-      passed: [upload-{{pivnet_product_name}}]
     - get: tool-om
       params:
         globs:
         - om-linux
 
-  - task: unpack-tasks
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: cloudfoundry/cflinuxfs2 
-      inputs:
-      - name: task-bundle-release
-      outputs:
-      - name: concourse-tasks-bundle 
-      run:
-        path: tar 
-        args:
-        - -C 
-        - concourse-tasks-bundle
-        - -xvzf
-        - task-bundle-release/tasks-bundle.tgz 
-
   - task: stage-product
-    file: concourse-tasks-bundle/stage-product/task.yml
+    file: pcf-pipelines/tasks/stage-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       PRODUCT_NAME: {{opsman_product_name}}
 
-
 - name: stage-stemcell-{{pivnet_product_name}}
   plan:
   - aggregate:
+    - get: pcf-pipelines
+      passed: [stage-{{pivnet_product_name}}]
     - get: pivnet-product
       trigger: true
       passed: [stage-{{pivnet_product_name}}]
       params:
         globs:
         - "*pivotal"
-    - get: task-bundle-release
-      params:
-        globs:
-        - tasks-bundle.tgz 
       passed: [stage-{{pivnet_product_name}}]
     - get: tool-om
       params:
         globs:
         - om-linux
 
-  - task: unpack-tasks
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: cloudfoundry/cflinuxfs2 
-      inputs:
-      - name: task-bundle-release
-      outputs:
-      - name: concourse-tasks-bundle 
-      run:
-        path: tar 
-        args:
-        - -C 
-        - concourse-tasks-bundle
-        - -xvzf
-        - task-bundle-release/tasks-bundle.tgz 
-
   - task: download-stemcell
-    file: concourse-tasks-bundle/download-bosh-io-stemcell/task.yml
+    file: pcf-pipelines/tasks/download-bosh-io-stemcell/task.yml
     params:
       PRODUCT: {{opsman_product_name}}
       IAAS_TYPE: {{iaas_type}}
 
   - task: upload-stemcell
-    file: concourse-tasks-bundle/upload-stemcell/task.yml
+    file: pcf-pipelines/tasks/upload-stemcell/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
@@ -183,37 +116,15 @@ jobs:
 - name: apply-changes-{{pivnet_product_name}}
   plan:
   - aggregate:
-    - get: task-bundle-release
-      params:
-        globs:
-        - tasks-bundle.tgz 
+    - get: pcf-pipelines
       passed: [stage-stemcell-{{pivnet_product_name}}]
     - get: tool-om
       params:
         globs:
         - om-linux
 
-  - task: unpack-tasks
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: cloudfoundry/cflinuxfs2 
-      inputs:
-      - name: task-bundle-release
-      outputs:
-      - name: concourse-tasks-bundle 
-      run:
-        path: tar 
-        args:
-        - -C 
-        - concourse-tasks-bundle
-        - -xvzf
-        - task-bundle-release/tasks-bundle.tgz 
-
   - task: apply-changes
-    file: concourse-tasks-bundle/apply-changes/task.yml
+    file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
