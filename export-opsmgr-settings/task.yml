@@ -3,10 +3,11 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: pivotalservices/docker-concourse-cf-tools}
+  source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
   - name: concourse-tasks-bundle
+  - name: tool-om
 
 outputs:
   - name: opsmgr-settings
