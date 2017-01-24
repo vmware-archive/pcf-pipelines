@@ -10,7 +10,8 @@ function main() {
    cf api $PCF_API_URI --skip-ssl-validation
    cf login -u $PCF_USERNAME -p $PCF_PASSWORD -o $PCF_ORG -s $PCF_SPACE
    COUNT=`cf buildpacks | grep --regexp=".zip" --count`
-   cf create-buildpack $BUILDPACK_PREFIX-buildpack ./$BUILDPACK_PREFIX-buildpack-latest/*.zip $COUNT+1 --enable
+   NEW_POSITION=`expr $COUNT + 1`
+   cf create-buildpack $BUILDPACK_PREFIX-buildpack ./$BUILDPACK_PREFIX-buildpack-latest/*.zip $NEW_POSITION --enable
 }
 
 echo "Running import OpsMgr task..."
