@@ -6,8 +6,8 @@ image_resource:
   source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
-  - name: java-buildpack-latest
-  - name: concourse-tasks-bundle
+  - name: buildpack
+  - name: pcf-pipelines
 
 params:
   PCF_API_URI:
@@ -15,6 +15,7 @@ params:
   PCF_USERNAME:
   PCF_PASSWORD:
   PCF_SPACE:
-  BUILDPACK_PREFIX:
+  BUILDPACK_NAME:
+
 run:
-  path: ./concourse-tasks-bundle/upgrade-buildpack/task.sh
+  path: pcf-pipelines/upgrade-buildpack/task.sh

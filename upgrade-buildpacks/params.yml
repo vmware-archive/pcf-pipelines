@@ -1,0 +1,7 @@
+pcf_pivnet_token: CHANGEME
+poll_interval: 1h
+pcf_api_uri: CHANGEME
+pcf_username: CHANGEME
+pcf_password: CHANGEME
+pcf_org: CHANGEME
+pcf_space: CHANGEME
