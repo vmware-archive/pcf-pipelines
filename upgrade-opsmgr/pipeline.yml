@@ -6,13 +6,12 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: task-bundle-release
-  type: github-release
+- name: pcf-pipelines
+  type: git
   source:
-    user: c0-ops
-    repository: concourse-tasks-bundle
-    access_token: {{github_token}}
-    drafts: true
+    uri: https://github.com/c0-ops/pcf-pipelines
+    branch: master
+
 - name: pivnet-opsmgr
   type: pivnet
   source:
@@ -24,33 +23,14 @@ jobs:
 - name: upgrade-opsmgr
   plan:
   - aggregate:
-    - get: task-bundle-release
+    - get: pcf-pipelines
     - get: pivnet-opsmgr
       params:
         globs:
         - "*.ova"
 
-  - task: unpack-tasks
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: cloudfoundry/cflinuxfs2
-      inputs:
-      - name: task-bundle-release
-      outputs:
-      - name: concourse-tasks-bundle
-      run:
-        path: tar
-        args:
-        - -C
-        - concourse-tasks-bundle
-        - -xvzf
-        - task-bundle-release/tasks-bundle.tgz
-
   - task: export-opsmgr
-    file: concourse-tasks-bundle/export-opsmgr-settings/task.yml
+    file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
@@ -58,7 +38,7 @@ jobs:
       OPSMAN_SETTINGS_FILENAME: installation.zip
 
   - task: deploy-opsman-vm
-    file: concourse-tasks-bundle/deploy-opsman-vm/task.yml
+    file: pcf-pipelines/tasks/deploy-opsman-vm/task.yml
     params:
       GOVC_USERNAME: {{vcenter_username}}
       GOVC_PASSWORD: {{vcenter_password}}
@@ -76,7 +56,7 @@ jobs:
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
 
   - task: import-opsmgr
-    file: concourse-tasks-bundle/import-opsmgr-settings/task.yml
+    file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
@@ -86,7 +66,7 @@ jobs:
 
       # todo discuss the order for calling this task
   # - task: apply-changes
-  #   file: concourse-tasks-bundle/apply-changes/task.yml
+  #   file: pcf-pipelines/tasks/apply-changes/task.yml
   #   params:
   #     OPSMAN_USERNAME: {{opsman_admin_username}}
   #     OPSMAN_PASSWORD: {{opsman_admin_password}}

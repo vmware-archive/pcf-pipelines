@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: cloudfoundry/cflinuxfs2}
+
+inputs:
+  - name: pcf-pipelines
+  - name: tool-om
+  - name: pivnet-product
+
+params:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  OPSMAN_URI:
+  PIVNET_PRODUCT_NAME:
+
+run:
+  path: pcf-pipelines/tasks/upload-product/task.sh

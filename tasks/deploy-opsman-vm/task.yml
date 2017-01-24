@@ -1,0 +1,30 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: cftoolsmiths/deploy-pcf-vsphere-1.9}
+
+inputs:
+  - name: pivnet-opsmgr
+  - name: pcf-pipelines
+
+run:
+  path: pcf-pipelines/tasks/deploy-opsman-vm/task.sh
+
+params:
+  GOVC_URL:
+  GOVC_USERNAME:
+  GOVC_PASSWORD:
+  GOVC_DATACENTER:
+  GOVC_CLUSTER:
+  GOVC_DATASTORE:
+  OPSMAN_IP:
+  NETMASK:
+  GATEWAY:
+  DNS:
+  NTP:
+  OPSMAN_ADMIN_PASSWORD:
+  OPSMAN_NETWORK:
+  GOVC_RESOURCE_POOL:
+  OPSMAN_VM_FOLDER:
