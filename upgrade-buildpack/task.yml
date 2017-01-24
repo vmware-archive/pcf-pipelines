@@ -7,6 +7,7 @@ image_resource:
 
 inputs:
   - name: java-buildpack-latest
+  - name: concourse-tasks-bundle
 
 params:
   PCF_API_URI:
@@ -14,5 +15,6 @@ params:
   PCF_USERNAME:
   PCF_PASSWORD:
   PCF_SPACE:
+  BUILDPACK_PREFIX:
 run:
-  path: concourse-tasks-bundle/import-opsmgr-settings/task.sh
+  path: ./concourse-tasks-bundle/upgrade-buildpack/task.sh

@@ -1,17 +1,16 @@
 #!/bin/bash -eu
 
-# function main() {
-#   echo "Upgrading buildpacks"
-#   cf api $API_URI
-#   cf login -u $USERNAME -p $PASSWORD -o $ORGANIZATION -s $SPACE
-#   cf update-buildpack -p .
-# }
-#
-# echo "Running import OpsMgr task..."
-# main "${PWD}"
+function main() {
+   echo "get cf cli"
+   wget -O cf-cli.deb "https://cli.run.pivotal.io/stable?release=debian64&source=github"
+   dpkg -i cf-cli.deb
+   cf --version
 
-cf api $PCF_API_URI --skip-ssl-validation
+   echo "Upgrading buildpacks"
+   cf api $PCF_API_URI --skip-ssl-validation
+   cf login -u $PCF_USERNAME -p $PCF_PASSWORD -o $PCF_ORG -s $PCF_SPACE
+   cf create-buildpack $BUILDPACK_PREFIX-buildpack ./$BUILDPACK_PREFIX-buildpack-latest/*.zip 11 --enable
+}
 
-cf login -u $PCF_USERNAME -p $PCF_PASSWORD -o $PCF_ORG -s $PCF_SPACE
-
-cf apps
+echo "Running import OpsMgr task..."
+main "${PWD}"
