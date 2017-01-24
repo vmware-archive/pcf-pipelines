@@ -41,12 +41,14 @@ echo -e \
     - get: task-bundle-release\n\
       version: { tag: 'v0.0.11' }" #todo remove specific tag
 for param in "$@"; do
-  echo -e "  - get: ${param}-buildpack-latest"
+  echo -e \
+"    - get: ${param}-buildpack-latest\n\
+      trigger: true"
   if [ "${param}" == "Java" ]; then
     echo -e \
-"    params:\n\
-      globs:\n\
-      - \"*offline*\""
+"     params:\n\
+        globs:\n\
+        - \"*offline*\""
   fi
 done
 
