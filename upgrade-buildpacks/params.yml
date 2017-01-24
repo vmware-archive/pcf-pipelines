@@ -1,5 +1,6 @@
-pcf_pivnet_token: CHANGEME
 poll_interval: 1h
+
+pcf_pivnet_token: CHANGEME
 pcf_api_uri: CHANGEME
 pcf_username: CHANGEME
 pcf_password: CHANGEME
