@@ -41,7 +41,7 @@ function main() {
   govc vm.power -off=true -k=true -vm.ip=${OPSMAN_IP}
 
   echo "Starting OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
-  govc vm.power -on=true /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
+  govc vm.power -k=true -on=true /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
 
 }
 
