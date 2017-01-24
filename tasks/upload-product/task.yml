@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: cloudfoundry/cflinuxfs2}
+
+inputs:
+  - name: concourse-tasks-bundle
+  - name: tool-om
+  - name: pivnet-product
+
+params:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  OPSMAN_URI:
+  PIVNET_PRODUCT_NAME:
+
+run:
+  path: concourse-tasks-bundle/upload-product/task.sh

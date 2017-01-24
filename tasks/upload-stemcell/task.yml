@@ -1,0 +1,19 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: cloudfoundry/cflinuxfs2}
+
+inputs:
+  - name: concourse-tasks-bundle 
+  - name: tool-om 
+  - name: stemcell
+
+params:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  OPSMAN_URI:
+
+run:
+  path: concourse-tasks-bundle/upload-stemcell/task.sh

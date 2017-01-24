@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: pivotalservices/docker-concourse-cf-tools}
+
+inputs:
+  - name: concourse-tasks-bundle
+
+outputs:
+  - name: opsmgr-settings
+
+params:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  OPSMAN_URI:
+  OPSMAN_SETTINGS_FILENAME:
+
+run:
+  path: concourse-tasks-bundle/export-opsmgr-settings/task.sh
