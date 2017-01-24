@@ -1,0 +1,250 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:c0-ops/pcf-pipelines.git
+    branch: master
+
+- name: binary-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: Binary*
+
+- name: dotnet-core-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: Net*
+
+- name: go-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: Go*
+
+- name: java-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: Java*
+
+- name: nodejs-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: NodeJS*
+
+- name: php-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: PHP*
+
+- name: python-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: Python*
+
+- name: ruby-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: Ruby*
+
+- name: staticfile-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: Staticfile*
+
+- name: tc-buildpack
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: buildpacks
+    product_version: tc*
+
+jobs:
+- name: update-binary-buildpack
+  plan:
+  - get: buildpack
+    resource: binary-buildpack
+    trigger: true
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: binary_buildpack_latest
+
+- name: update-dotnet-buildpack
+  plan:
+  - get: buildpack
+    resource: dotnet-core-buildpack
+    trigger: true
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: dotnet_core_buildpack_offline_latest
+
+- name: update-go-buildpack
+  plan:
+  - get: buildpack
+    resource: go-buildpack
+    trigger: true
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: go_buildpack_latest
+
+- name: update-java-buildpack
+  plan:
+  - get: buildpack
+    resource: java-buildpack
+    trigger: true
+    params:
+      globs:
+      - "*offline*"
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: java_buildpack_offline_latest
+
+- name: update-nodejs-buildpack
+  plan:
+  - get: buildpack
+    resource: nodejs-buildpack
+    trigger: true
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: nodejs_buildpack_latest
+
+- name: update-php-buildpack
+  plan:
+  - get: buildpack
+    resource: php-buildpack
+    trigger: true
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: php_buildpack_latest
+
+- name: update-python-buildpack
+  plan:
+  - get: buildpack
+    resource: python-buildpack
+    trigger: true
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: python_buildpack_latest
+
+- name: update-ruby-buildpack
+  plan:
+  - get: buildpack
+    resource: ruby-buildpack
+    trigger: true
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: ruby_buildpack_latest
+
+- name: update-staticfile-buildpack
+  plan:
+  - get: buildpack
+    resource: staticfile-buildpack
+    trigger: true
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: staticfile_buildpack_latest
+
+- name: update-tcserver-buildpack
+  plan:
+  - get: buildpack
+    resource: tc-buildpack
+    trigger: true
+    params:
+      globs:
+      - "*offline*"
+  - task: update
+    file: pcf-pipelines/upgrade-buildpack/task.yml
+    params:
+      PCF_API_URI: {{pcf_api_uri}}
+      PCF_ORG: {{pcf_org}}
+      PCF_USERNAME: {{pcf_username}}
+      PCF_PASSWORD: {{pcf_password}}
+      PCF_SPACE: {{pcf_space}}
+      BUILDPACK_NAME: tc_buildpack_latest
