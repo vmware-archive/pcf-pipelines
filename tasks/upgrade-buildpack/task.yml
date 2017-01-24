@@ -6,8 +6,8 @@ image_resource:
   source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
-  - name: buildpack
-  - name: pcf-pipelines
+- name: buildpack
+- name: pcf-pipelines
 
 params:
   PCF_API_URI:
