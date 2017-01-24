@@ -1,2 +1,8 @@
-pcf_pivnet_token: CHANGEME
-poll_interval: 1h
+github_token: xxxx
+pcf_api_uri: api.run.pivotal.io
+pcf_username: myusername
+pcf_password: mypassword
+pcf_org: myorg
+pcf_space: myspace
+poll_interval: 30s
+pcf_pivnet_token: xxxx
