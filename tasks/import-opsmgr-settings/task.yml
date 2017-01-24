@@ -6,7 +6,7 @@ image_resource:
   source: {repository: pivotalservices/docker-concourse-cf-tools}
 
 inputs:
-  - name: concourse-tasks-bundle
+  - name: pcf-pipelines
   - name: opsmgr-settings
 
 params:
@@ -14,4 +14,4 @@ params:
   OPSMAN_PASSPHRASE:
 
 run:
-  path: concourse-tasks-bundle/import-opsmgr-settings/task.sh
+  path: pcf-pipelines/tasks/import-opsmgr-settings/task.sh

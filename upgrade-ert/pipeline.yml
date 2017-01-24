@@ -36,6 +36,15 @@ resources:
     product_version: {{ert_major_minor_version}}
     sort_by: semver
 
+- name: stemcell-downloader
+  type: github-release
+  source:
+    user: c0-ops
+    repository: pcf-product-stemcell-downloader
+    access_token: {{github-token}}
+    globs:
+    - stemcell-downloader-linux
+
 jobs:
 - name: upload-{{pivnet_product_name}}
   plan:
@@ -88,6 +97,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       passed: [stage-{{pivnet_product_name}}]
+    - get: stemcell-downloader
     - get: pivnet-product
       trigger: true
       passed: [stage-{{pivnet_product_name}}]

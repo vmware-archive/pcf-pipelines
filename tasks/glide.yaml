@@ -1,6 +1,0 @@
-package: .
-import:
-- package: github.com/cheggaaa/pb
-- package: gopkg.in/yaml.v2
-- package: github.com/onsi/ginkgo
-- package: github.com/onsi/gomega

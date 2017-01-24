@@ -6,7 +6,8 @@ image_resource:
   source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
-  - name: concourse-tasks-bundle 
+  - name: stemcell-downloader
+  - name: pcf-pipelines
   - name: pivnet-product
 
 outputs:
@@ -17,4 +18,4 @@ params:
   PRODUCT:
 
 run:
-  path: concourse-tasks-bundle/download-bosh-io-stemcell/task.sh
+  path: pcf-pipelines/tasks/download-bosh-io-stemcell/task.sh

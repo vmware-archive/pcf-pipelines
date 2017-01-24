@@ -6,7 +6,7 @@ image_resource:
   source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
-  - name: concourse-tasks-bundle 
+  - name: pcf-pipelines
   - name: tool-om 
   - name: stemcell
 
@@ -16,4 +16,4 @@ params:
   OPSMAN_URI:
 
 run:
-  path: concourse-tasks-bundle/upload-stemcell/task.sh
+  path: pcf-pipelines/tasks/upload-stemcell/task.sh

@@ -6,7 +6,7 @@ image_resource:
   source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
-  - name: concourse-tasks-bundle
+  - name: pcf-pipelines
   - name: tool-om
 
 params:
@@ -15,4 +15,4 @@ params:
   OPSMAN_URI:
 
 run:
-  path: concourse-tasks-bundle/apply-changes/task.sh
+  path: pcf-pipelines/tasks/apply-changes/task.sh
