@@ -6,6 +6,13 @@ resource_types:
     tag: latest-final
 
 resources:
+- name: cf-cli
+  type: s3
+  source:
+    bucket: cf-cli-releases
+    region_name: us-west-1
+    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
+
 - name: pcf-pipelines
   type: git
   source:
@@ -95,9 +102,11 @@ resources:
 jobs:
 - name: update-binary-buildpack
   plan:
-  - get: buildpack
-    resource: binary-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: binary-buildpack
+      trigger: true
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -110,9 +119,11 @@ jobs:
 
 - name: update-dotnet-buildpack
   plan:
-  - get: buildpack
-    resource: dotnet-core-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: dotnet-core-buildpack
+      trigger: true
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -125,9 +136,11 @@ jobs:
 
 - name: update-go-buildpack
   plan:
-  - get: buildpack
-    resource: go-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: go-buildpack
+      trigger: true
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -140,12 +153,14 @@ jobs:
 
 - name: update-java-buildpack
   plan:
-  - get: buildpack
-    resource: java-buildpack
-    trigger: true
-    params:
-      globs:
-      - "*offline*"
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: java-buildpack
+      trigger: true
+      params:
+        globs:
+        - "*offline*"
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -158,9 +173,11 @@ jobs:
 
 - name: update-nodejs-buildpack
   plan:
-  - get: buildpack
-    resource: nodejs-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: nodejs-buildpack
+      trigger: true
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -173,9 +190,11 @@ jobs:
 
 - name: update-php-buildpack
   plan:
-  - get: buildpack
-    resource: php-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: php-buildpack
+      trigger: true
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -188,9 +207,11 @@ jobs:
 
 - name: update-python-buildpack
   plan:
-  - get: buildpack
-    resource: python-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: python-buildpack
+      trigger: true
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -203,9 +224,11 @@ jobs:
 
 - name: update-ruby-buildpack
   plan:
-  - get: buildpack
-    resource: ruby-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: ruby-buildpack
+      trigger: true
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -218,9 +241,11 @@ jobs:
 
 - name: update-staticfile-buildpack
   plan:
-  - get: buildpack
-    resource: staticfile-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: staticfile-buildpack
+      trigger: true
   - task: update
     file: pcf-pipelines/upgrade-buildpack/task.yml
     params:
@@ -233,9 +258,11 @@ jobs:
 
 - name: update-tcserver-buildpack
   plan:
-  - get: buildpack
-    resource: tc-buildpack
-    trigger: true
+  - aggregate:
+    - get: cf-cli
+    - get: buildpack
+      resource: tc-buildpack
+      trigger: true
     params:
       globs:
       - "*offline*"
