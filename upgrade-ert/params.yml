@@ -1,7 +1,7 @@
-pcf_pivnet_token: xxxxxxxxxxxxxxxxxxxxxx
-opsman_admin_username: admin
-opsman_admin_password: secret
-opsman_uri: blah.com
+pcf_pivnet_token: CHANGEME
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
+opsman_uri: CHANGEME
 github_token: yyyyyyyyyyyyyyyyy
 iaas_type: gcp
 poll_interval: 1h
