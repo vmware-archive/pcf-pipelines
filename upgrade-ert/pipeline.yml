@@ -1,10 +1,4 @@
-groups:
-- name: ert-upgrade
-  jobs:
-  - upload-{{pivnet_product_name}}
-  - stage-{{pivnet_product_name}}
-  - stage-stemcell-{{pivnet_product_name}}
-  - apply-changes-{{pivnet_product_name}}
+groups: []
 
 resource_types:
 - name: pivnet
