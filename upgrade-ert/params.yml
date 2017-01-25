@@ -6,5 +6,5 @@ opsman_uri: blah.com
 opsman_product_name: cf
 pivnet_product_name: elastic-runtime
 github_token: yyyyyyyyyyyyyyyyy
-iaas_type: gcp 
+iaas_type: gcp
 poll_interval: 1h
