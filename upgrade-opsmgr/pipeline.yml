@@ -31,6 +31,8 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: tool-om
+      globs: om-linux
     - get: pivnet-opsmgr
       params:
         globs:
