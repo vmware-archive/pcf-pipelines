@@ -26,8 +26,8 @@ resources:
   check_every: {{poll_interval}}
   source:
     api_token: {{pcf_pivnet_token}}
-    product_slug: {{pivnet_product_name}}
-    product_version: {{ert_major_minor_version}}
+    product_slug: elastic-runtime
+    product_version: 1.9.*
     sort_by: semver
 
 - name: stemcell-downloader
@@ -40,7 +40,7 @@ resources:
     - stemcell-downloader-linux
 
 jobs:
-- name: upload-{{pivnet_product_name}}
+- name: upload
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -53,23 +53,22 @@ jobs:
       params:
         globs:
         - om-linux
-
-  - task: upload-product
+  - task: upload
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      PIVNET_PRODUCT_NAME: {{pivnet_product_name}}
+      PIVNET_PRODUCT_NAME: elastic-runtime
 
-- name: stage-{{pivnet_product_name}}
+- name: stage
   plan:
   - aggregate:
     - get: pcf-pipelines
-      passed: [upload-{{pivnet_product_name}}]
+      passed: [upload]
     - get: pivnet-product
       trigger: true
-      passed: [upload-{{pivnet_product_name}}]
+      passed: [upload]
       params:
         globs:
         - "*pivotal"
@@ -77,27 +76,26 @@ jobs:
       params:
         globs:
         - om-linux
-  - task: stage-product
+  - task: stage
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      PRODUCT_NAME: {{opsman_product_name}}
+      PRODUCT_NAME: cf
 
-- name: stage-stemcell-{{pivnet_product_name}}
+- name: upload-stemcell
   plan:
   - aggregate:
     - get: pcf-pipelines
-      passed: [stage-{{pivnet_product_name}}]
+      passed: [stage]
     - get: stemcell-downloader
     - get: pivnet-product
       trigger: true
-      passed: [stage-{{pivnet_product_name}}]
+      passed: [stage]
       params:
         globs:
         - "*pivotal"
-      passed: [stage-{{pivnet_product_name}}]
     - get: tool-om
       params:
         globs:
@@ -105,7 +103,7 @@ jobs:
   - task: download-stemcell
     file: pcf-pipelines/tasks/download-bosh-io-stemcell/task.yml
     params:
-      PRODUCT: {{opsman_product_name}}
+      PRODUCT: cf
       IAAS_TYPE: {{iaas_type}}
   - task: upload-stemcell
     file: pcf-pipelines/tasks/upload-stemcell/task.yml
@@ -114,11 +112,11 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
 
-- name: apply-changes-{{pivnet_product_name}}
+- name: apply-changes
   plan:
   - aggregate:
     - get: pcf-pipelines
-      passed: [stage-stemcell-{{pivnet_product_name}}]
+      passed: [upload-stemcell]
     - get: tool-om
       params:
         globs:
