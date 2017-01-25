@@ -21,7 +21,7 @@ resources:
     repository: om
     access_token: {{github_token}}
 
-- name: pivnet-product
+- name: elastic-runtime
   type: pivnet
   check_every: {{poll_interval}}
   source:
@@ -45,6 +45,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-product
+      resource: elastic-runtime
       trigger: true
       params:
         globs:
