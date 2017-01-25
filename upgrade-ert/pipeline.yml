@@ -101,12 +101,12 @@ jobs:
       params:
         globs:
         - om-linux
-  - task: download-stemcell
+  - task: download-from-bosh-io
     file: pcf-pipelines/tasks/download-bosh-io-stemcell/task.yml
     params:
       PRODUCT: cf
       IAAS_TYPE: {{iaas_type}}
-  - task: upload-stemcell
+  - task: upload-to-opsmgr
     file: pcf-pipelines/tasks/upload-stemcell/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
