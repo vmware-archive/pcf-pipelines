@@ -12,7 +12,7 @@ function main() {
      --skip-ssl-validation \
      --username "${OPSMAN_USERNAME}" \
      --password "${OPSMAN_PASSWORD}" \
-     import-installation --installation "./opsmgr-settings"
+     import-installation --installation "./opsmgr-settings" --decryption-passphrase "${OPSMAN_PASSWORD}"
 
    echo "${OPSMAN_SETTINGS_FILENAME} Imported opsmgr-settings to ${OPSMAN_URI}."
 }

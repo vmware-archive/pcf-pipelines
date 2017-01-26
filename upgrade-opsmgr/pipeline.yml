@@ -9,7 +9,7 @@ resources:
 - name: tool-om
   type: github-release
   source:
-    user: c0-ops
+    user: pivotal-cf
     repository: om
     access_token: {{github_token}}
 
