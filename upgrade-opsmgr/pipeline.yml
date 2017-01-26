@@ -6,6 +6,13 @@ resource_types:
     tag: latest-final
 
 resources:
+- name: tool-om
+  type: github-release
+  source:
+    user: c0-ops
+    repository: om
+    access_token: {{github_token}}
+
 - name: pcf-pipelines
   type: git
   source:
@@ -24,6 +31,8 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: tool-om
+      globs: om-linux
     - get: pivnet-opsmgr
       params:
         globs:
@@ -44,8 +53,9 @@ jobs:
       GOVC_PASSWORD: {{vcenter_password}}
       GOVC_DATACENTER: {{vcenter_datacenter}}
       GOVC_CLUSTER: {{vcenter_cluster}}
-      GOVC_DATASTORE: {{vcenter_datacenter}}
+      GOVC_DATASTORE: {{vcenter_datastore}}
       GOVC_RESOURCE_POOL: {{vcenter_resource_pool}}
+      GOVC_URL: {{vcenter_url}}
       OPSMAN_IP: {{opsman_ip}}
       NETMASK: {{netmask}}
       GATEWAY: {{gateway}}
