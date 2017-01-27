@@ -6,6 +6,8 @@ resource_name: CHANGEME
 # on your Pivotal Network profile page:
 # https://network.pivotal.io/users/dashboard/edit-profile
 pcf_pivnet_token: CHANGEME
+# The minor product version to track, as a regexp. To track 1.7 of a product, this would be '1.7.*'
+product_version: CHANGEME
 
 # Operations Manager
 # ------------------------------
