@@ -1,0 +1,90 @@
+groups: []
+
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:c0-ops/pcf-pipelines
+    branch: master
+    private_key: {{git_private_key}}
+
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+
+- name: {{resource_name}}
+  type: pivnet
+  check_every: {{poll_interval}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: {{product_slug}}
+    product_version: 1.7.*
+    sort_by: semver
+
+- name: stemcell-downloader
+  type: github-release
+  source:
+    user: c0-ops
+    repository: pcf-product-stemcell-downloader
+    access_token: {{github_token}}
+    globs:
+    - stemcell-downloader-linux
+
+jobs:
+- name: upgrade-{{resource_name}}
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-product
+      resource: {{resource_name}}
+      trigger: true
+      params:
+        globs:
+        - "*pivotal"
+    - get: tool-om
+      params:
+        globs:
+        - om-linux
+    - get: stemcell-downloader
+      params:
+        globs: [stemcell-downloader-linux]
+  - task: upload-product
+    file: pcf-pipelines/tasks/upload-product/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      PIVNET_PRODUCT_NAME: {{product_slug}}
+  - task: stage-product
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      PRODUCT_NAME: {{product_name}}
+  - task: download-stemcell
+    file: pcf-pipelines/tasks/download-bosh-io-stemcell/task.yml
+    params:
+      PRODUCT: {{metadata_basename}}
+      IAAS_TYPE: {{iaas_type}}
+  - task: upload-stemcell
+    file: pcf-pipelines/tasks/upload-stemcell/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+  - task: apply-changes
+    file: pcf-pipelines/tasks/apply-changes/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
