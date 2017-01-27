@@ -1,0 +1,53 @@
+# Resource
+# ------------------------------
+# The name of the resource to be displayed in the pipeline, e.g. 'rabbitmq'
+resource_name: CHANGEME
+# The token used to download the product file from Pivotal Network. Find this
+# on your Pivotal Network profile page:
+# https://network.pivotal.io/users/dashboard/edit-profile
+pcf_pivnet_token: CHANGEME
+
+# Operations Manager
+# ------------------------------
+# Credentials for Operations Manager. These are used for uploading, staging,
+# and deploying the product file on Operations Manager.
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
+opsman_uri: CHANGEME
+
+# Stemcell Downloader
+# ------------------------------
+# TODO: Remove this when the stemcell downloader is freely available.
+# The token used to download the stemcell downloader from GitHub.
+github_token: CHANGEME
+# The IaaS name for which stemcell to download. See
+# https://github.com/c0-ops/pcf-product-stemcell-downloader/ for the list of
+# allowed IaaS names.
+iaas_type: CHANGEME
+# The interval to check Pivotal Network for updates to the product file.
+poll_interval: 1h
+# The basename of the metadata file for the product without the file extension.
+# This will be used for figuring out which stemcell the product needs.
+#
+# For rabbitmq this is 'p_rabbitmq', from the file 'metadata/p_rabbitmq.yml'.
+#
+# This can be found in the .pivotal file with the following:
+# `unzip -l p-rabbitmq-1.7.9.pivotal | grep metadata`
+metadata_basename: CHANGEME
+
+# om-linux
+# ------------------------------
+# The name of the product on Pivotal Network. This is used to configure the
+# resource that will fetch the product file.
+#
+# This can be found in the URL of the product page, e.g. for rabbitmq the URL
+# is https://network.pivotal.io/products/pivotal-rabbitmq-service, and the
+# product slug is 'pivotal-rabbitmq-service'.
+product_slug: CHANGEME
+# The name of the product file found in the metadata file for the product. This
+# will be used for staging the file in Operations Manager.
+#
+# This can be found in the .pivotal file's manifest for the product. This can
+# be found in the .pivotal file with the following:
+# `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | head`
+product_name: CHANGEME
