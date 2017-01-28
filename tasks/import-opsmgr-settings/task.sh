@@ -1,6 +1,9 @@
 #!/bin/bash -eu
 
 function main() {
+  echo "Wait for OpsMgr to be start"
+  sleep 3m
+
   echo "Importing ${OPSMAN_SETTINGS_FILENAME} file from OpsMgr"
   curl -vv -k "${OPSMAN_URI}/api/v0/installation_asset_collection" -X POST \
    -F "installation[file]=@./opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}" \
