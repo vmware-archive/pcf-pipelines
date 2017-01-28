@@ -3,30 +3,33 @@
 function main() {
   export CURR_DIR=$(pwd)
   export OPSMGR_VERSION=$(cat ./pivnet-opsmgr/metadata.json | jq '.Release.Version' | sed -e 's/^"//' -e 's/"$//')
-
   export OPSMAN_NAME=OpsManager-${OPSMGR_VERSION}-$(date +"%Y%m%d%H%S")
 
-  echo '
-  {
-    "DiskProvisioning":"thin",
-    "IPAllocationPolicy":"dhcpPolicy",
-    "IPProtocol":"IPv4",
-    "NetworkMapping": [{
-      "Name":"VM Network",
-      "Network":"${OPSMAN_NETWORK}"
-    }],
-    "PropertyMapping":[
-      {"Key":"ip0","Value":"${OPSMAN_IP}"},
-      {"Key":"netmask0","Value":"${NETMASK}"},
-      {"Key":"gateway","Value":"${GATEWAY}"},
-      {"Key":"DNS","Value":"${DNS}"},
-      {"Key":"ntp_servers","Value":"${NTP}"},
-      {"Key":"admin_password","Value":"${OPSMAN_ADMIN_PASSWORD}"}
-    ],
-    "PowerOn":false,
-    "InjectOvfEnv":false,
-    "WaitForIP":false
-  }' > ./opsman_settings.json
+IAAS_CONFIGURATION=$(cat <<-EOF
+{
+  "DiskProvisioning":"thin",
+  "IPAllocationPolicy":"dhcpPolicy",
+  "IPProtocol":"IPv4",
+  "NetworkMapping": [{
+    "Name":"Network 1",
+    "Network":"$OPSMAN_NETWORK"
+  }],
+  "PropertyMapping":[
+    {"Key":"ip0","Value":"$OPSMAN_IP"},
+    {"Key":"netmask0","Value":"$NETMASK"},
+    {"Key":"gateway","Value":"$GATEWAY"},
+    {"Key":"DNS","Value":"$DNS"},
+    {"Key":"ntp_servers","Value":"$NTP"},
+    {"Key":"admin_password","Value":"$OPSMAN_ADMIN_PASSWORD"}
+  ],
+  "PowerOn":false,
+  "InjectOvfEnv":false,
+  "WaitForIP":false
+}
+EOF
+)
+  echo $IAAS_CONFIGURATION > ./opsman_settings.json
+
 
   cat ./opsman_settings.json
 
