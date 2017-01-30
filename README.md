@@ -68,7 +68,7 @@ be supplied by alternative means for airgapped environments.
 This segment details several possible offline configurations for resources leveraged in our reference pipelines
 
 #### Github Release Resource
-** switch to using an internal github enterprise **
+**switch to using an internal github enterprise**
 
 Steps:
 - clone the public release
@@ -88,4 +88,33 @@ Steps:
     access_token: {{github_enterprise_token}}
     github_api_url: {{github_enterprise_url}}
 
+```
+
+---
+
+
+#### Github Release Resource
+**switch to using an internal/external s3 compatible store**
+
+Pre-Reqs:
+- access to an s3 compatible store
+
+Steps:
+- setup a versioned s3 bucket
+- Download asset from github release page
+- upload asset into bucket 
+  - make sure the filename matches what was in the github release or change the rest of the pipeline to match
+- replace github-release resource with s3 resource in pipeline yaml (as shown below)
+
+```
+#sample yaml snippet
+- name: my-release-binary
+  type: s3
+  source: 
+    bucket: releases
+    regexp: {{s3_filepath}}
+    access_key_id: {{s3_access_key}}
+    secret_access_key: {{s3_secret}}
+    region_name: {{s3_region}}
+    endpoint: {{s3_endpoint}}
 ```
