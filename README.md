@@ -62,3 +62,30 @@ should be declared in a generic way so they can be used by multiple pipelines.
 Tasks should not use `wget` or `curl` to retrieve resources; doing so means the
 resource cannot be cached, cannot be pinned to a particular version, and cannot
 be supplied by alternative means for airgapped environments.
+
+### Offline configurations
+
+This segment details several possible offline configurations for resources leveraged in our reference pipelines
+
+#### Github Release Resource
+** switch to using an internal github enterprise **
+
+Steps:
+- clone the public release
+- create a repo on your enterprise github
+- add enterprise github as a new remote
+- push public repo to enterprise github remote
+	- (https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
+- add github_api_url values to pipeline yaml and params yaml
+
+```
+#sample yaml snippet
+- name: my-release-binary 
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_enterprise_token}}
+    github_api_url: {{github_enterprise_url}}
+
+```
