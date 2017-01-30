@@ -93,15 +93,15 @@ Steps:
 ---
 
 
-#### Github Release Resource
+#### Github Release Resource or Pivnet resource
 **switch to using an internal/external s3 compatible store**
 
 Pre-Reqs:
 - access to an s3 compatible store
 
 Steps:
-- setup a versioned s3 bucket
-- Download asset from github release page
+- setup a versioned s3 bucket (each resource should have its own bucket)
+- download asset from github release page or pivotal network
 - upload asset into bucket 
   - make sure the filename matches what was in the github release or change the rest of the pipeline to match
 - replace github-release resource with s3 resource in pipeline yaml (as shown below)
@@ -122,8 +122,8 @@ Steps:
 ---
 
 #### Git resource
-- Clone or fork repository to a local git server
-- Modify all git resources in yaml with your local git uri(s)
+- clone or fork repository to a local git server
+- modify all git resources in yaml with your local git uri(s)
 
 ``` 
 #sample yaml snippet
