@@ -1,19 +1,14 @@
 #!/bin/bash -eu
 
 function main() {
-    chmod +x tool-om/om-linux
-    CMD_PATH="tool-om/om-linux"
+  echo "Wait for OpsMgr to be start"
+  sleep 3m
 
-    local cwd
-     cwd="${1}"
-
-     ./${CMD_PATH} --target "${OPSMAN_URI}" \
-        --skip-ssl-validation \
-        --username "${OPSMAN_USERNAME}" \
-        --password "${OPSMAN_PASSWORD}" \
-        import-installation --installation "./opsmgr-settings" --decryption-passphrase "${OPSMAN_PASSWORD}"
-
-     echo "${OPSMAN_SETTINGS_FILENAME} Imported opsmgr-settings to ${OPSMAN_URI}."
+  echo "Importing ${OPSMAN_SETTINGS_FILENAME} file from OpsMgr"
+  curl -vv -k "${OPSMAN_URI}/api/v0/installation_asset_collection" -X POST \
+   -F "installation[file]=@./opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}" \
+   -F "passphrase=${OPSMAN_PASSWORD}"
+   echo "Successfully uploaded opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}. Return code [$?]."
  }
 
  echo "Running import OpsMgr task..."
