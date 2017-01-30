@@ -118,3 +118,19 @@ Steps:
     region_name: {{s3_region}}
     endpoint: {{s3_endpoint}}
 ```
+
+---
+
+#### Git resource
+- Clone or fork repository to a local git server
+- Modify all git resources in yaml with your local git uri(s)
+
+``` 
+#sample yaml snippet
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@mylocalgit.company.com:c0-ops/pcf-pipelines
+    branch: master
+```
+
