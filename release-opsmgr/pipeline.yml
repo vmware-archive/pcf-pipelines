@@ -1,0 +1,29 @@
+resources:
+- name: pcf-pipelines-release
+  type: github-release
+  source:
+    user: c0-ops
+    repository: pcf-pipelines
+    access_token: {{github_token}}
+
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:c0-ops/pcf-pipelines
+    branch: master
+    private_key: {{git_private_key}}
+
+jobs:
+- name: create-opsmgr-release
+  plan:
+    - get: pcf-pipelines
+    - task: create-release-version
+      file: pcf-pipelines/tasks/create-release-version/task.yml
+      params:
+        OPSMAN_RELEASE_NAME: {{opsman_release_name}}
+        OPSMAN_RELEASE_TAG: {{opsman_release_tag}}
+
+    - put: pcf-pipelines-release
+      params:
+        name: opsmgr-release-version/opsman_release_name.txt
+        tag: opsmgr-release-version/opsman_release_tag.txt
