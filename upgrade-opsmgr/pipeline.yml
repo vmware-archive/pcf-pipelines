@@ -6,6 +6,13 @@ resource_types:
     tag: latest-final
 
 resources:
+- name: govc
+  type: github-release
+  source:
+    user: vmware
+    repository: govmomi
+    access_token: {{github_token}}
+
 - name: tool-om
   type: github-release
   source:
@@ -32,6 +39,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: govc
     - get: tool-om
       globs: om-linux
     - get: pivnet-opsmgr
@@ -75,7 +83,7 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
-  
+
       # todo discuss the order for calling this task
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
