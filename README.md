@@ -63,11 +63,13 @@ Tasks should not use `wget` or `curl` to retrieve resources; doing so means the
 resource cannot be cached, cannot be pinned to a particular version, and cannot
 be supplied by alternative means for airgapped environments.
 
-### Offline configurations
+---
+
+# Offline configurations
 
 This segment details several possible offline configurations for resources leveraged in our reference pipelines
 
-#### Github Release Resource
+## Github Release Resource
 **switch to using an internal github enterprise**
 
 Steps:
@@ -93,7 +95,7 @@ Steps:
 ---
 
 
-#### Github Release Resource or Pivnet resource
+## Github Release Resource or Pivnet resource
 **switch to using an internal/external s3 compatible store**
 
 Pre-Reqs:
@@ -121,7 +123,7 @@ Steps:
 
 ---
 
-#### Git resource
+## Git resource
 - clone or fork repository to a local git server
 - modify all git resources in yaml with your local git uri(s)
 
@@ -136,7 +138,7 @@ Steps:
 
 ---
 
-#### Docker Images
+## Docker Images
 **switch to using a non-docker hub enabled setup for offline**
 
 Pre-Reqs:
