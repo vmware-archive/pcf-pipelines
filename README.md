@@ -69,7 +69,7 @@ be supplied by alternative means for airgapped environments.
 
 This segment details several possible offline configurations for resources leveraged in our reference pipelines
 
-## Github Release Resource
+## Github Release Resource (using github enterprise)
 **switch to using an internal github enterprise**
 
 Steps:
@@ -95,7 +95,7 @@ Steps:
 ---
 
 
-## Github Release Resource or Pivnet resource
+## Github Release Resource or Pivnet resource (using s3)
 **switch to using an internal/external s3 compatible store**
 
 Pre-Reqs:
@@ -123,7 +123,7 @@ Steps:
 
 ---
 
-## Git resource
+## Git resource (using a local git)
 - clone or fork repository to a local git server
 - modify all git resources in yaml with your local git uri(s)
 
@@ -138,7 +138,7 @@ Steps:
 
 ---
 
-## Docker Images
+## Docker Images (using private registry)
 **switch to using a non-docker hub enabled setup for offline**
 
 Pre-Reqs:
@@ -177,7 +177,7 @@ image_resource:
 
 ---
 
-## Docker Images
+## Docker Images (using git)
 **switch to using a non docker hub enabled setup without a private docker
 repository**
 
