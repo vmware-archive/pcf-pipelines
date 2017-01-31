@@ -8,6 +8,16 @@ resource_types:
     tag: latest-final
 
 resources:
+## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
+## If a change is detected earlier the pipeline will start but be held up waiting for the time
+## resource to become available.
+## Also uncomment the fetching of the resource in the plan below.
+#- name: run-time-window
+#  type: time
+#  source:
+#    start: 12:00 AM
+#    stop: 1:00 AM
+#    location: America/Chicago
 - name: pcf-pipelines
   type: git
   source:
@@ -44,6 +54,8 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+## Uncomment to limit when the pipeline can run
+#   - get: run-time-window
     - get: pivnet-product
       resource: elastic-runtime
       trigger: true
