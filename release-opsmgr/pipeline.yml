@@ -1,4 +1,14 @@
 resources:
+  ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
+  ## If a change is detected earlier the pipeline will start but be held up waiting for the time
+  ## resource to become available.
+  ## Also uncomment the fetching of the resource in the plan below.
+  #- name: run-time-window
+  #  type: time
+  #  source:
+  #    start: 12:00 AM
+  #    stop: 1:00 AM
+  #    location: America/Chicago
 - name: opsmgr-pipeline-pivnet
   type: pivnet
   source:
@@ -24,6 +34,8 @@ resources:
 jobs:
 - name: create-opsmgr-release
   plan:
+## Uncomment to limit when the pipeline can run
+#   - get: run-time-window
     - get: pcf-pipelines
     - task: create-release-version
       file: pcf-pipelines/tasks/create-release-version/task.yml
