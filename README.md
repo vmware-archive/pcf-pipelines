@@ -62,3 +62,75 @@ should be declared in a generic way so they can be used by multiple pipelines.
 Tasks should not use `wget` or `curl` to retrieve resources; doing so means the
 resource cannot be cached, cannot be pinned to a particular version, and cannot
 be supplied by alternative means for airgapped environments.
+
+### Offline configurations
+
+This segment details several possible offline configurations for resources leveraged in our reference pipelines
+
+#### Github Release Resource
+**switch to using an internal github enterprise**
+
+Steps:
+- clone the public release
+- create a repo on your enterprise github
+- add enterprise github as a new remote
+- push public repo to enterprise github remote
+	- (https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
+- add github_api_url values to pipeline yaml and params yaml
+
+```
+#sample yaml snippet
+- name: my-release-binary 
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_enterprise_token}}
+    github_api_url: {{github_enterprise_url}}
+
+```
+
+---
+
+
+#### Github Release Resource or Pivnet resource
+**switch to using an internal/external s3 compatible store**
+
+Pre-Reqs:
+- access to an s3 compatible store
+
+Steps:
+- setup a versioned s3 bucket (each resource should have its own bucket)
+- download asset from github release page or pivotal network
+- upload asset into bucket 
+  - make sure the filename matches what was in the github release or change the rest of the pipeline to match
+- replace github-release resource with s3 resource in pipeline yaml (as shown below)
+
+```
+#sample yaml snippet
+- name: my-release-binary
+  type: s3
+  source: 
+    bucket: releases
+    regexp: {{s3_filepath}}
+    access_key_id: {{s3_access_key}}
+    secret_access_key: {{s3_secret}}
+    region_name: {{s3_region}}
+    endpoint: {{s3_endpoint}}
+```
+
+---
+
+#### Git resource
+- clone or fork repository to a local git server
+- modify all git resources in yaml with your local git uri(s)
+
+``` 
+#sample yaml snippet
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@mylocalgit.company.com:c0-ops/pcf-pipelines
+    branch: master
+```
+
