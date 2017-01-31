@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -u
 
 function main() {
   export CURR_DIR=$(pwd)
@@ -45,7 +45,7 @@ EOF
   echo "Starting OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
   # govc vm.power -k=true -on=true /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
 
-OUTPUT=$(govc vm.info -vm.ip=${OPSMAN_IP} -k=true)
+OUTPUT=$(govc vm.info -vm.ip=${OPSMAN_IP} -k=true 2>&1)
 echo ">>> $OUTPUT <<<"
 
   # make sure that vm and ops manager app is up
