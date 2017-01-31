@@ -39,13 +39,13 @@ jobs:
         globs:
         - "*.ova"
 
-  - task: export-opsmgr
-    file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
-    params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_SETTINGS_FILENAME: installation.zip
+  # - task: export-opsmgr
+  #   file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
+  #   params:
+  #     OPSMAN_USERNAME: {{opsman_admin_username}}
+  #     OPSMAN_PASSWORD: {{opsman_admin_password}}
+  #     OPSMAN_URI: {{opsman_uri}}
+  #     OPSMAN_SETTINGS_FILENAME: installation.zip
 
   - task: deploy-opsman-vm
     file: pcf-pipelines/tasks/deploy-opsman-vm/task.yml
@@ -67,19 +67,19 @@ jobs:
       OPSMAN_VM_FOLDER: {{opsman_vm_folder}}
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
 
-  - task: import-opsmgr
-    file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
-    params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_SETTINGS_FILENAME: installation.zip
-      OPSMAN_PASSPHRASE: {{opsman_passphrase}}
-
-      # todo discuss the order for calling this task
-  - task: apply-changes
-    file: pcf-pipelines/tasks/apply-changes/task.yml
-    params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+  # - task: import-opsmgr
+  #   file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
+  #   params:
+  #     OPSMAN_USERNAME: {{opsman_admin_username}}
+  #     OPSMAN_PASSWORD: {{opsman_admin_password}}
+  #     OPSMAN_URI: {{opsman_uri}}
+  #     OPSMAN_SETTINGS_FILENAME: installation.zip
+  #     OPSMAN_PASSPHRASE: {{opsman_passphrase}}
+  #
+  #     # todo discuss the order for calling this task
+  # - task: apply-changes
+  #   file: pcf-pipelines/tasks/apply-changes/task.yml
+  #   params:
+  #     OPSMAN_USERNAME: {{opsman_admin_username}}
+  #     OPSMAN_PASSWORD: {{opsman_admin_password}}
+  #     OPSMAN_URI: {{opsman_uri}}
