@@ -180,18 +180,19 @@ image_resource:
 ## Docker Images (using git)
 **switch to using a non docker hub enabled setup without a private docker
 repository**
+**this is for running tasks in the absence of dockerhub access (this is not for use w/ resources only task base images)**
 
 Pre-Reqs:
 - Git
 
 Steps:
+- obtain RootFS using `docker archive` for the docker image cloudfoundry/cflinuxfs2
 - store your rootfs in git 
+- create git repo with archive tgz in it
+- configure tasks to pull rootfs from git using the `image` element instead of `image_resource`.
   - docs: 
     - (https://concourse.ci/task-step.html#task-image)
     - (https://concourse.ci/running-tasks.html#task-config-image)
-- configure resources to pull rootfs from git 
-- configure tasks to use your docker-image containing the git output as an input
-  element in your task
 
 ```
 # sample yaml snippet
