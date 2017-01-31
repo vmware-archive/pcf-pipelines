@@ -167,5 +167,58 @@ resource_types:
 # this example is for a task.yml
 image_resource:
   type: docker-image
-  source: {repository: myregistrydomain.com:5000/cloudfoundry/cflinuxfs2}
+  source:
+    repository: my.local.registry:8080/my/image
+    insecure_registries: ["my.local.registry:8080"]
+    username: myuser
+    password: mypass
+    email: x@x.com
+```
+
+---
+
+## Docker Images
+**switch to using a non docker hub enabled setup without a private docker
+repository**
+
+Pre-Reqs:
+- Git
+
+Steps:
+- store your rootfs in git 
+  - docs: 
+    - (https://concourse.ci/task-step.html#task-image)
+    - (https://concourse.ci/running-tasks.html#task-config-image)
+- configure resources to pull rootfs from git w/ output to a docker-image
+  resource
+- configure tasks to use your docker-image containing the git output as an input
+  element in your task
+
+```
+# sample yaml snippet
+resources:
+- name: my-project
+  type: git
+  source: {uri: https://github.com/my-user/my-project}
+
+- name: my-task-image
+  type: docker-image
+  source: {repository: my-user/my-repo}
+
+jobs:
+- name: build-task-image
+  plan:
+  - get: my-project
+  - put: my-task-image
+    params: {build: my-project/ci/images/my-task}
+
+- name: use-task-image
+  plan:
+  - get: my-task-image
+    passed: [build-task-image]
+  - get: my-project
+    passed: [build-task-image]
+  - task: use-task-image
+    image: my-task-image
+    file: my-project/ci/tasks/my-task.yml
 ```
