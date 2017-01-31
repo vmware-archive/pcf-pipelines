@@ -63,11 +63,13 @@ Tasks should not use `wget` or `curl` to retrieve resources; doing so means the
 resource cannot be cached, cannot be pinned to a particular version, and cannot
 be supplied by alternative means for airgapped environments.
 
-### Offline configurations
+---
+
+# Offline configurations
 
 This segment details several possible offline configurations for resources leveraged in our reference pipelines
 
-#### Github Release Resource
+## Github Release Resource (using github enterprise)
 **switch to using an internal github enterprise**
 
 Steps:
@@ -93,7 +95,7 @@ Steps:
 ---
 
 
-#### Github Release Resource or Pivnet resource
+## Github Release Resource or Pivnet resource (using s3)
 **switch to using an internal/external s3 compatible store**
 
 Pre-Reqs:
@@ -121,7 +123,7 @@ Steps:
 
 ---
 
-#### Git resource
+## Git resource (using a local git)
 - clone or fork repository to a local git server
 - modify all git resources in yaml with your local git uri(s)
 
@@ -134,3 +136,89 @@ Steps:
     branch: master
 ```
 
+---
+
+## Docker Images (using private registry)
+**switch to using a non-docker hub enabled setup for offline**
+
+Pre-Reqs:
+- local docker registry
+  - for a way to deploy a BOSH managed docker registry see:
+    (https://github.com/enaml-ops/omg-product-bundle/tree/master/products/dockerregistry)
+
+Steps:
+- docker pull from docker hub or desired rootfs source
+- docker push to local docker registry
+- add full local url to docker container repo in pipeline yaml
+
+```
+#sample yaml snippet
+
+# this example is for a pipeline docker resource
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: myregistrydomain.com:5000/pivotalcf/pivnet-resource
+    tag: latest-final
+
+# or
+
+# this example is for a task.yml
+image_resource:
+  type: docker-image
+  source:
+    repository: my.local.registry:8080/my/image
+    insecure_registries: ["my.local.registry:8080"]
+    username: myuser
+    password: mypass
+    email: x@x.com
+```
+
+---
+
+## Docker Images (using git)
+**switch to using a non docker hub enabled setup without a private docker
+repository**
+
+Pre-Reqs:
+- Git
+
+Steps:
+- store your rootfs in git 
+  - docs: 
+    - (https://concourse.ci/task-step.html#task-image)
+    - (https://concourse.ci/running-tasks.html#task-config-image)
+- configure resources to pull rootfs from git w/ output to a docker-image
+  resource
+- configure tasks to use your docker-image containing the git output as an input
+  element in your task
+
+```
+# sample yaml snippet
+resources:
+- name: my-project
+  type: git
+  source: {uri: https://github.com/my-user/my-project}
+
+- name: my-task-image
+  type: docker-image
+  source: {repository: my-user/my-repo}
+
+jobs:
+- name: build-task-image
+  plan:
+  - get: my-project
+  - put: my-task-image
+    params: {build: my-project/ci/images/my-task}
+
+- name: use-task-image
+  plan:
+  - get: my-task-image
+    passed: [build-task-image]
+  - get: my-project
+    passed: [build-task-image]
+  - task: use-task-image
+    image: my-task-image
+    file: my-project/ci/tasks/my-task.yml
+```
