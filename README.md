@@ -189,8 +189,7 @@ Steps:
   - docs: 
     - (https://concourse.ci/task-step.html#task-image)
     - (https://concourse.ci/running-tasks.html#task-config-image)
-- configure resources to pull rootfs from git w/ output to a docker-image
-  resource
+- configure resources to pull rootfs from git 
 - configure tasks to use your docker-image containing the git output as an input
   element in your task
 
@@ -201,24 +200,11 @@ resources:
   type: git
   source: {uri: https://github.com/my-user/my-project}
 
-- name: my-task-image
-  type: docker-image
-  source: {repository: my-user/my-repo}
-
 jobs:
-- name: build-task-image
-  plan:
-  - get: my-project
-  - put: my-task-image
-    params: {build: my-project/ci/images/my-task}
-
 - name: use-task-image
   plan:
-  - get: my-task-image
-    passed: [build-task-image]
   - get: my-project
-    passed: [build-task-image]
   - task: use-task-image
-    image: my-task-image
+    image: my-project/my-rootfs.tgz 
     file: my-project/ci/tasks/my-task.yml
 ```
