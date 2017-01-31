@@ -1,4 +1,12 @@
 resources:
+- name: opsmgr-pipeline-pivnet
+  type: pivnet
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: ops-manager-upgrade-pipeline
+    endpoint: https://pivnet-integration.cfapps.io
+    bucket: pivotal-network-staging
+
 - name: pcf-pipelines-release
   type: github-release
   source:
@@ -27,3 +35,14 @@ jobs:
       params:
         name: opsmgr-release-version/opsman_release_name.txt
         tag: opsmgr-release-version/opsman_release_tag.txt
+
+    - get: pcf-pipelines-release
+      version: { tag: 'v0.0.0' }
+      params:
+        include_source_zip: true
+
+    - put: opsmgr-pipeline-pivnet
+      params:
+        metadata_file: relative/path/to/some-metadata-file
+        file_glob: relative/path/to/some-source-files/*
+        s3_filepath_prefix: P-MySQL

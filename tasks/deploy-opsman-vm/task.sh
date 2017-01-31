@@ -30,7 +30,6 @@ EOF
 )
   echo $IAAS_CONFIGURATION > ./opsman_settings.json
 
-
   cat ./opsman_settings.json
 
   echo "Importing OVA of new OpsMgr VM..."
@@ -45,6 +44,37 @@ EOF
 
   echo "Starting OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
   govc vm.power -k=true -on=true /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
+
+  # make sure that vm and ops manager app is up
+  started=false
+  timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
+  while ! $started; do
+      OUTPUT=$(govc vm.info -vm.ip=${OPSMAN_IP} -k=true 2>&1)
+      if [[ $SECONDS -gt $timeout ]]; then
+        echo "Timed out waiting for VM to start."
+        exit 1
+      fi
+
+      if [[ $OUTPUT == *"no such VM"* ]]; then
+        echo "...VM is not running! $OUTPUT"
+      else
+        echo "...VM is running! $OUTPUT"
+        timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
+        while [[ $started ]]; do
+          HTTP_OUTPUT=$(curl --write-out %{http_code} --silent --output /dev/null ${OPSMAN_IP})
+          if [[ $HTTP_OUTPUT == *"302"* || $HTTP_OUTPUT == *"301"* ]]; then
+            echo "Site is started! $OUTPUT >>> $HTTP_OUTPUT"
+            break
+          else
+            if [[ $SECONDS -gt $timeout ]]; then
+              echo "Timed out waiting for ops manager site to start."
+              exit 1
+            fi
+          fi
+        done
+        break
+      fi
+  done
 
 }
 
