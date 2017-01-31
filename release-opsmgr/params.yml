@@ -1,3 +1,4 @@
+opsman_timeout: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_uri: http://example.com
