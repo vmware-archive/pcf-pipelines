@@ -134,3 +134,36 @@ Steps:
     branch: master
 ```
 
+---
+
+#### Docker Images
+**switch to using a non-docker hub enabled setup for offline**
+
+Pre-Reqs:
+- local docker registry
+  - for a way to deploy a BOSH managed docker registry see:
+    (https://github.com/enaml-ops/omg-product-bundle/tree/master/products/dockerregistry)
+
+Steps:
+- docker pull from docker hub or desired rootfs source
+- docker push to local docker registry
+- add full local url to docker container repo in pipeline yaml
+
+```
+#sample yaml snippet
+
+# this example is for a pipeline docker resource
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: myregistrydomain.com:5000/pivotalcf/pivnet-resource
+    tag: latest-final
+
+# or
+
+# this example is for a task.yml
+image_resource:
+  type: docker-image
+  source: {repository: myregistrydomain.com:5000/cloudfoundry/cflinuxfs2}
+```
