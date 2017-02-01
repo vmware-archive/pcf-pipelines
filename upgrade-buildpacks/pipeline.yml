@@ -28,6 +28,7 @@ resources:
   source:
     uri: git@github.com:c0-ops/pcf-pipelines.git
     branch: master
+    private_key: {{git_private_key}}
 
 - name: binary-buildpack
   type: pivnet
@@ -118,7 +119,7 @@ jobs:
       resource: binary-buildpack
       trigger: true
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -135,7 +136,7 @@ jobs:
       resource: dotnet-core-buildpack
       trigger: true
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -154,7 +155,7 @@ jobs:
       resource: go-buildpack
       trigger: true
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -174,7 +175,7 @@ jobs:
         globs:
         - "*offline*"
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -191,7 +192,7 @@ jobs:
       resource: nodejs-buildpack
       trigger: true
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -208,7 +209,7 @@ jobs:
       resource: php-buildpack
       trigger: true
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -225,7 +226,7 @@ jobs:
       resource: python-buildpack
       trigger: true
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -242,7 +243,7 @@ jobs:
       resource: ruby-buildpack
       trigger: true
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -259,7 +260,7 @@ jobs:
       resource: staticfile-buildpack
       trigger: true
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
@@ -279,7 +280,7 @@ jobs:
       globs:
       - "*offline*"
   - task: update
-    file: pcf-pipelines/upgrade-buildpack/task.yml
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       PCF_API_URI: {{pcf_api_uri}}
       PCF_ORG: {{pcf_org}}
