@@ -34,7 +34,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: Binary*
 
@@ -42,7 +42,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: Net*
 
@@ -50,7 +50,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: Go*
 
@@ -58,7 +58,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: Java*
 
@@ -66,7 +66,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: NodeJS*
 
@@ -74,7 +74,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: PHP*
 
@@ -82,7 +82,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: Python*
 
@@ -90,7 +90,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: Ruby*
 
@@ -98,7 +98,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: Staticfile*
 
@@ -106,7 +106,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: buildpacks
     product_version: tc*
 
@@ -121,11 +121,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: binary_buildpack_latest
 
 - name: update-dotnet-buildpack
@@ -138,11 +138,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: dotnet_core_buildpack_offline_latest
 
 - name: update-go-buildpack
@@ -157,11 +157,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: go_buildpack_latest
 
 - name: update-java-buildpack
@@ -177,11 +177,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: java_buildpack_offline_latest
 
 - name: update-nodejs-buildpack
@@ -194,11 +194,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: nodejs_buildpack_latest
 
 - name: update-php-buildpack
@@ -211,11 +211,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: php_buildpack_latest
 
 - name: update-python-buildpack
@@ -228,11 +228,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: python_buildpack_latest
 
 - name: update-ruby-buildpack
@@ -245,11 +245,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: ruby_buildpack_latest
 
 - name: update-staticfile-buildpack
@@ -262,11 +262,11 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: staticfile_buildpack_latest
 
 - name: update-tcserver-buildpack
@@ -282,9 +282,9 @@ jobs:
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
-      PCF_API_URI: {{pcf_api_uri}}
-      PCF_ORG: {{pcf_org}}
-      PCF_USERNAME: {{pcf_username}}
-      PCF_PASSWORD: {{pcf_password}}
-      PCF_SPACE: {{pcf_space}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_ORG: {{cf_org}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: tc_buildpack_latest
