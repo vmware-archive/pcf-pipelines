@@ -1,10 +1,10 @@
 poll_interval: 1h
 
-pcf_pivnet_token: CHANGEME
-pcf_api_uri: CHANGEME
-pcf_username: CHANGEME
-pcf_password: CHANGEME
-pcf_org: CHANGEME
-pcf_space: CHANGEME
+pivnet_token: CHANGEME
+cf_api_uri: CHANGEME
+cf_user: CHANGEME
+cf_password: CHANGEME
+cf_org: CHANGEME
+cf_space: CHANGEME
 
 git_private_key: CHANGEME
