@@ -6,7 +6,7 @@ image_resource:
   source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
-  - name: aws-cli
+  - name: terraform
   - name: pcf-pipelines
 
 run:
@@ -14,12 +14,12 @@ run:
 
 params:
   AWS_SECRET_ACCESS_KEY:
-  AWS_ACCESS_KEY_ID:  
-  OPSMAN_TIMEOUT:
-  OPSMAN_IP:
-  NETMASK:
-  GATEWAY:
-  DNS:
-  NTP:
-  OPSMAN_ADMIN_PASSWORD:
-  OPSMAN_NETWORK:
+  AWS_ACCESS_KEY_ID:
+  AMI:
+  INSTANCE_TYPE:
+  KEY_NAME:
+  SUBNET_ID:
+  AWS_INSTANCE:
+  AWS_INSTANCE_NAME:
+  REGION:
+  SECURITY_GROUP:

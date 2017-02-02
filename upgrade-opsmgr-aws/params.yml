@@ -1,0 +1,15 @@
+terraform-resources: CHANGEME
+security_group: CHANGEME
+aws_access_key_id: CHANGEME
+aws_secret_access_key: CHANGEME
+ami: CHANGEME
+instance_type: CHANGEME
+key_name: CHANGEME
+subnet_id: CHANGEME
+aws_instance: CHANGEME
+aws_instance_name: CHANGEME
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
+opsman_uri: http://example.com
+opsman_passphrase: CHANGEME
+github_token: CHANGEME

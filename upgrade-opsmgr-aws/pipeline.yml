@@ -6,13 +6,13 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: aws-cli
+- name: terraform
   type: s3
   source:
-    bucket: amazon-ecs-cli
-    regexp: ecs-cli-linux-amd64-latest
-    access_key_id: {{aws_access_key}}
-    secret_access_key: {{aws_secret}}
+    bucket: {{terraform-resources}}
+    regexp: terraform
+    access_key_id: {{aws_access_key_id}}
+    secret_access_key: {{aws_secret_access_key}}
 
   ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
   ## If a change is detected earlier the pipeline will start but be held up waiting for the time
@@ -38,13 +38,6 @@ resources:
     branch: master
     private_key: {{git_private_key}}
 
-- name: pivnet-opsmgr
-  type: pivnet
-  source:
-    api_token: {{pcf_pivnet_token}}
-    product_slug: ops-manager
-    sort_by: semver
-
 jobs:
 - name: upgrade-opsmgr
   plan:
@@ -52,13 +45,9 @@ jobs:
 ## Uncomment to limit when the pipeline can run
 #   - get: run-time-window
     - get: pcf-pipelines
-    - get: aws-cli
+    - get: terraform
     - get: tool-om
       globs: om-linux
-    - get: pivnet-opsmgr
-      params:
-        globs:
-        - "*.ova"
 
   - task: export-opsmgr
     file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
@@ -73,15 +62,16 @@ jobs:
     params:
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
+      AMI: {{omsman_ami}}
+      INSTANCE_TYPE: {{instance_type}}
+      KEY_NAME: {{key_name}}
+      SUBNET_ID: {{subnet_id}}
+      AWS_INSTANCE: {{aws_instance}}
+      AWS_INSTANCE_NAME: {{aws_instance_name}}
       OPSMAN_TIMEOUT: {{opsman_timeout}}
-      OPSMAN_IP: {{opsman_ip}}
-      NETMASK: {{netmask}}
-      GATEWAY: {{gateway}}
-      DNS: {{dns}}
-      NTP: {{ntp}}
-      OPSMAN_NETWORK: {{opsman_network}}
-      OPSMAN_VM_FOLDER: {{opsman_vm_folder}}
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+      REGION: {{region}}
+      SECURITY_GROUP: {{security_group}}
 
   - task: import-opsmgr
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
