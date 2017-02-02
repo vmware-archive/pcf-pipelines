@@ -44,7 +44,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
-    product_version: Net*
+    product_version: .NET*
 
 - name: go-buildpack
   type: pivnet
@@ -133,6 +133,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: dotnet-core-buildpack
       trigger: true
@@ -152,6 +153,7 @@ jobs:
 ## Uncomment to limit when the pipeline can run
 #   - get: run-time-window
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: go-buildpack
       trigger: true
@@ -169,6 +171,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: java-buildpack
       trigger: true
@@ -189,6 +192,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: nodejs-buildpack
       trigger: true
@@ -206,6 +210,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: php-buildpack
       trigger: true
@@ -223,6 +228,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: python-buildpack
       trigger: true
@@ -240,6 +246,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: ruby-buildpack
       trigger: true
@@ -257,6 +264,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: staticfile-buildpack
       trigger: true
@@ -274,6 +282,7 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+    - get: pcf-pipelines
     - get: buildpack
       resource: tc-buildpack
       trigger: true
