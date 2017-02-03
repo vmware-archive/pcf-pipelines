@@ -2,7 +2,7 @@
 
 function main() {
 
-  chmod +x terraform/terraform
+  # chmod +x terraform/terraform
   CMD_PATH="terraform/terraform"
 
   local cwd
@@ -21,10 +21,18 @@ resource "aws_instance" "${AWS_INSTANCE}" {
   key_name = "${KEY_NAME}"
   subnet_id = "${SUBNET_ID}"
   associate_public_ip_address = "true"
-  vpc_security_group_ids = [${SECURITY_GROUP}]
+  vpc_security_group_ids = ["${SECURITY_GROUP}"]
   tags {
        Name = "${AWS_INSTANCE_NAME}"
    }
+}
+
+resource "aws_route53_record" "${ROUTE53}" {
+  zone_id = "${ROUTE53_ZONE_ID}"
+  name = "${OPSMAN_SUBDOMAIN}"
+  type = "CNAME"
+  ttl = "300"
+  records = ["\${aws_instance.${AWS_INSTANCE}.public_dns}"]
 }
 EOF
 )

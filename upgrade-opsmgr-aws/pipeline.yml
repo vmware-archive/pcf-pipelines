@@ -72,6 +72,9 @@ jobs:
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
       REGION: {{region}}
       SECURITY_GROUP: {{security_group}}
+      ROUTE53: {{route53}}
+      ROUTE53_ZONE_ID: {{route53_zone_id}}
+      OPSMAN_SUBDOMAIN: {{opsman_subdomain}}
 
   - task: import-opsmgr
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml

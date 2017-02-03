@@ -10,6 +10,8 @@ aws_instance: CHANGEME
 aws_instance_name: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
-opsman_uri: http://example.com
+opsman_subdomain: CHANGEME
 opsman_passphrase: CHANGEME
 github_token: CHANGEME
+route53: CHANGEME
+route53_zone_id: CHANGEME
