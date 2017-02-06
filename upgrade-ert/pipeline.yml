@@ -45,7 +45,7 @@ resources:
   source:
     user: c0-ops
     repository: pcf-product-stemcell-downloader
-    access_token: {{github-token}}
+    access_token: {{github_token}}
     globs:
     - stemcell-downloader-linux
 
@@ -80,6 +80,7 @@ jobs:
     - get: pcf-pipelines
       passed: [upload]
     - get: pivnet-product
+      resource: elastic-runtime
       trigger: true
       passed: [upload]
       params:
@@ -104,6 +105,7 @@ jobs:
       passed: [stage]
     - get: stemcell-downloader
     - get: pivnet-product
+      resource: elastic-runtime
       trigger: true
       passed: [stage]
       params:
