@@ -8,7 +8,6 @@ image_resource:
 inputs:
   - name: terraform
   - name: pcf-pipelines
-
 run:
   path: pcf-pipelines/tasks/deploy-opsman-vm-aws/task.sh
 
@@ -21,8 +20,10 @@ params:
   SUBNET_ID:
   AWS_INSTANCE:
   AWS_INSTANCE_NAME:
-  REGION:
+  AWS_REGION:
   SECURITY_GROUP:
   ROUTE53:
   ROUTE53_ZONE_ID:
   OPSMAN_SUBDOMAIN:
+  OPSMAN_DOMAIN:
+  OPSMAN_TIMEOUT:

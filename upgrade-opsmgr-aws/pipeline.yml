@@ -70,11 +70,12 @@ jobs:
       AWS_INSTANCE_NAME: {{aws_instance_name}}
       OPSMAN_TIMEOUT: {{opsman_timeout}}
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
-      REGION: {{region}}
+      AWS_REGION: {{aws_region}}
       SECURITY_GROUP: {{security_group}}
       ROUTE53: {{route53}}
       ROUTE53_ZONE_ID: {{route53_zone_id}}
       OPSMAN_SUBDOMAIN: {{opsman_subdomain}}
+      OPSMAN_TIMEOUT: {{opsman_timeout}}
 
   - task: import-opsmgr
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml

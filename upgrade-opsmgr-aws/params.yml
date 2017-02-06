@@ -11,7 +11,9 @@ aws_instance_name: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_subdomain: CHANGEME
+opsman_domain: CHANGEME
 opsman_passphrase: CHANGEME
 github_token: CHANGEME
 route53: CHANGEME
 route53_zone_id: CHANGEME
+aws_region: CHANGEME
