@@ -7,12 +7,11 @@ resource_types:
 
 resources:
 - name: terraform
-  type: s3
+  type: github-release
   source:
-    bucket: {{terraform-resources}}
-    regexp: terraform
-    access_key_id: {{aws_access_key_id}}
-    secret_access_key: {{aws_secret_access_key}}
+    user: dtan4
+    repository: terraforming
+    access_token: {{github_token}}
 
   ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
   ## If a change is detected earlier the pipeline will start but be held up waiting for the time
