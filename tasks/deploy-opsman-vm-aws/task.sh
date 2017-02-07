@@ -5,9 +5,11 @@ function main() {
 local cwd
 cwd="${1}"
 
-gem install terraforming --no-ri --no-rdoc
 chmod +x terraform/terraform
 CMD_PATH="terraform/terraform"
+
+chmod +x iaas-util/aws-instances
+AWS_UTIL_PATH="iaas-util/aws-instances"
 
 IAAS_CONFIGURATION=$(cat <<-EOF
 provider "aws" {
@@ -16,7 +18,7 @@ provider "aws" {
   secret_key = "${AWS_SECRET_ACCESS_KEY}"
 }
 
-resource "aws_instance" "${AWS_INSTANCE}" {
+resource "aws_instance" "ops-manager-to-provision" {
   ami = "${AMI}"
   instance_type = "${INSTANCE_TYPE}"
   key_name = "${KEY_NAME}"
@@ -34,23 +36,24 @@ resource "aws_route53_record" "${ROUTE53}" {
   name = "${OPSMAN_SUBDOMAIN}"
   type = "CNAME"
   ttl = "300"
-  records = ["\${aws_instance.${AWS_INSTANCE}.public_dns}"]
+  records = ["\${aws_instance.ops-manager-to-provision.public_dns}"]
 }
 EOF
 )
   echo $IAAS_CONFIGURATION > ./opsman_settings.tf
 
+  read OLD_OPSMAN_INSTANCE ERR < <(./${AWS_UTIL_PATH} "${AWS_INSTANCE_NAME}")
+
+  if [ -n "$OLD_OPSMAN_INSTANCE" ]
+  then
+    echo "Destroying old Ops Manager instance. ${OLD_OPSMAN_INSTANCE}"
+    ./${CMD_PATH} import aws_instance.ops-manager-to-purge ${OLD_OPSMAN_INSTANCE}
+    ./${CMD_PATH} destroy -state=./terraform.tfstate -target=aws_instance.ops-manager-to-purge -force
+    rm ./terraform.tfstate
+  fi
+
+  echo "Provisioning Ops Manager"
   cat ./opsman_settings.tf
-
-  echo "Destroying current Ops Manager..."
-  terraforming ec2 --tfstate > ./terraform.tfstate
-  terraforming r53r --tfstate --merge ./terraform.tfstate --overwrite
-  RESOURCE_TO_DESTROY="aws_instance.${AWS_INSTANCE}"
-  ./${CMD_PATH} destroy -target=$RESOURCE_TO_DESTROY -force
-
-  rm ./terraform.tfstate
-
-  echo "Creating Ops Manager instance in AWS..."
   ./${CMD_PATH} apply
 
 # verify that ops manager started

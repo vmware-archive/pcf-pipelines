@@ -6,7 +6,6 @@ ami: CHANGEME
 instance_type: CHANGEME
 key_name: CHANGEME
 subnet_id: CHANGEME
-aws_instance: CHANGEME
 aws_instance_name: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
@@ -17,3 +16,4 @@ github_token: CHANGEME
 route53: CHANGEME
 route53_zone_id: CHANGEME
 aws_region: CHANGEME
+vpc_id: CHANGEME

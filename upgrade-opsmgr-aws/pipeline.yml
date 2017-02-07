@@ -6,13 +6,21 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: terraform
-  type: github-release
-  source:
-    user: dtan4
-    repository: terraforming
-    access_token: {{github_token}}
+- name: iaas-util
+   type: s3
+   source:
+     bucket: {{terraform-resources}}
+     regexp: aws-instances
+     access_key_id: {{aws_access_key_id}}
+     secret_access_key: {{aws_secret_access_key}}
 
+- name: terraform
+   type: s3
+   source:
+     bucket: {{terraform-resources}}
+     regexp: terraform
+     access_key_id: {{aws_access_key_id}}
+     secret_access_key: {{aws_secret_access_key}}
   ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
   ## If a change is detected earlier the pipeline will start but be held up waiting for the time
   ## resource to become available.
@@ -43,6 +51,7 @@ jobs:
   - aggregate:
 ## Uncomment to limit when the pipeline can run
 #   - get: run-time-window
+    - get: iaas-util
     - get: pcf-pipelines
     - get: terraform
     - get: tool-om
@@ -65,7 +74,6 @@ jobs:
       INSTANCE_TYPE: {{instance_type}}
       KEY_NAME: {{key_name}}
       SUBNET_ID: {{subnet_id}}
-      AWS_INSTANCE: {{aws_instance}}
       AWS_INSTANCE_NAME: {{aws_instance_name}}
       OPSMAN_TIMEOUT: {{opsman_timeout}}
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
@@ -75,6 +83,7 @@ jobs:
       ROUTE53_ZONE_ID: {{route53_zone_id}}
       OPSMAN_SUBDOMAIN: {{opsman_subdomain}}
       OPSMAN_TIMEOUT: {{opsman_timeout}}
+      VPC_ID: {{vpc_id}}
 
   - task: import-opsmgr
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml

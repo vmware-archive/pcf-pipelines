@@ -8,6 +8,7 @@ image_resource:
 inputs:
   - name: terraform
   - name: pcf-pipelines
+  - name: iaas-util
 run:
   path: pcf-pipelines/tasks/deploy-opsman-vm-aws/task.sh
 
@@ -27,3 +28,4 @@ params:
   OPSMAN_SUBDOMAIN:
   OPSMAN_DOMAIN:
   OPSMAN_TIMEOUT:
+  VPC_ID:
