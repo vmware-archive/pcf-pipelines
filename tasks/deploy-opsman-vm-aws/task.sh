@@ -31,7 +31,7 @@ resource "aws_instance" "ops-manager-to-provision" {
    }
 }
 
-resource "aws_route53_record" "${ROUTE53}" {
+resource "aws_route53_record" "dns-record-to-provision" {
   zone_id = "${ROUTE53_ZONE_ID}"
   name = "${OPSMAN_SUBDOMAIN}"
   type = "CNAME"
