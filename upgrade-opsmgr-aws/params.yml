@@ -17,3 +17,4 @@ route53: CHANGEME
 route53_zone_id: CHANGEME
 aws_region: CHANGEME
 vpc_id: CHANGEME
+opsman_uri: CHANGEME

@@ -7,20 +7,21 @@ resource_types:
 
 resources:
 - name: iaas-util
-   type: s3
-   source:
-     bucket: {{terraform-resources}}
-     regexp: aws-instances
-     access_key_id: {{aws_access_key_id}}
-     secret_access_key: {{aws_secret_access_key}}
+  type: s3
+  source:
+    bucket: {{terraform-resources}}
+    versioned_file: aws-instances
+    access_key_id: {{aws_access_key_id}}
+    secret_access_key: {{aws_secret_access_key}}
 
 - name: terraform
-   type: s3
-   source:
-     bucket: {{terraform-resources}}
-     regexp: terraform
-     access_key_id: {{aws_access_key_id}}
-     secret_access_key: {{aws_secret_access_key}}
+  type: s3
+  source:
+    bucket: {{terraform-resources}}
+    versioned_file: terraform
+    region_name: {{aws_region}}
+    access_key_id: {{aws_access_key_id}}
+    secret_access_key: {{aws_secret_access_key}}
   ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
   ## If a change is detected earlier the pipeline will start but be held up waiting for the time
   ## resource to become available.
@@ -70,7 +71,7 @@ jobs:
     params:
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
-      AMI: {{omsman_ami}}
+      AMI: {{ami}}
       INSTANCE_TYPE: {{instance_type}}
       KEY_NAME: {{key_name}}
       SUBNET_ID: {{subnet_id}}
@@ -83,6 +84,7 @@ jobs:
       ROUTE53_ZONE_ID: {{route53_zone_id}}
       OPSMAN_SUBDOMAIN: {{opsman_subdomain}}
       OPSMAN_TIMEOUT: {{opsman_timeout}}
+      OPSMAN_URI: {{opsman_uri}}
       VPC_ID: {{vpc_id}}
 
   - task: import-opsmgr

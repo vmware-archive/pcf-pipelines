@@ -59,18 +59,17 @@ EOF
 # verify that ops manager started
   started=false
   timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
-  export URL="https://${OPSMAN_SUBDOMAIN}.${OPSMAN_DOMAIN}"
 
-  echo "Starting Ops manager on ${URL}"
+  echo "Starting Ops manager on ${OPSMAN_URI}"
 
   timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
   while [[ $started ]]; do
-    HTTP_OUTPUT=$(curl --write-out %{http_code} --silent -k --output /dev/null ${URL})
+    HTTP_OUTPUT=$(curl --write-out %{http_code} --silent -k --output /dev/null ${OPSMAN_URI})
     if [[ $HTTP_OUTPUT == *"302"* || $HTTP_OUTPUT == *"301"* ]]; then
       echo "Site is started! $HTTP_OUTPUT"
-      break
+      # #break
     else
-      echo "Ops manager is not running on ${URL}..."
+      echo "Ops manager is not running on ${OPSMAN_URI}..."
       if [[ $SECONDS -gt $timeout ]]; then
         echo "Timed out waiting for ops manager site to start."
         exit 1
