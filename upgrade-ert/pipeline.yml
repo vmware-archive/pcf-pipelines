@@ -21,7 +21,9 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@github.com:c0-ops/pcf-pipelines
+    uri: https://github.com/c0-ops/pcf-pipelines.git
+    username: {{github_token}}
+    password: x-oauth-basic
     branch: master
 
 - name: tool-om
@@ -90,6 +92,14 @@ jobs:
       params:
         globs:
         - om-linux
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
+    timeout: 2h
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      PRODUCT_NAME: cf
   - task: stage
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
