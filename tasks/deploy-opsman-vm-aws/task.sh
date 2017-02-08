@@ -11,6 +11,9 @@ CMD_PATH="terraform/terraform"
 chmod +x iaas-util/cliaas-linux
 AWS_UTIL_PATH="iaas-util/cliaas-linux"
 
+AMI=$(grep ${AWS_REGION} pivnet-opsmgr/*AWS.yml | awk '{split($0, a); print a[2]}')
+echo "deploying ami: ${AMI} into region ${AWS_REGION}"
+
 IAAS_CONFIGURATION=$(cat <<-EOF
 provider "aws" {
   region = "${AWS_REGION}"

@@ -9,13 +9,13 @@ inputs:
   - name: terraform
   - name: pcf-pipelines
   - name: iaas-util
+  - name: pivnet-opsmgr
 run:
   path: pcf-pipelines/tasks/deploy-opsman-vm-aws/task.sh
 
 params:
   AWS_SECRET_ACCESS_KEY:
   AWS_ACCESS_KEY_ID:
-  AMI:
   INSTANCE_TYPE:
   KEY_NAME:
   SUBNET_ID:

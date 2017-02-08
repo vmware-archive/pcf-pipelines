@@ -6,6 +6,15 @@ resource_types:
     tag: latest-final
 
 resources:
+- name: pivnet-opsmgr
+  type: pivnet
+  check_every: {{check_new_opsman_every}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
+    sort_by: semver
+
 - name: iaas-util
   type: github-release
   source:
@@ -50,6 +59,11 @@ jobs:
   - aggregate:
 ## Uncomment to limit when the pipeline can run
 #   - get: run-time-window
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*AWS.yml"
     - get: iaas-util
       globs: cliaas-linux
     - get: pcf-pipelines
@@ -70,7 +84,6 @@ jobs:
     params:
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
-      AMI: {{ami}}
       INSTANCE_TYPE: {{instance_type}}
       KEY_NAME: {{key_name}}
       SUBNET_ID: {{subnet_id}}

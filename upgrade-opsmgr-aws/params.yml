@@ -2,7 +2,6 @@ terraform-resources: CHANGEME
 security_group: CHANGEME
 aws_access_key_id: CHANGEME
 aws_secret_access_key: CHANGEME
-ami: CHANGEME
 instance_type: CHANGEME
 key_name: CHANGEME
 subnet_id: CHANGEME
@@ -16,3 +15,5 @@ route53_zone_id: CHANGEME
 aws_region: CHANGEME
 vpc_id: CHANGEME
 opsman_uri: CHANGEME
+check_new_opsman_every: CHANGEME
+opsman_major_minor_version: CHANGEME
