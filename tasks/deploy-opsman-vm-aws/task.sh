@@ -69,7 +69,6 @@ EOF
       echo "Site is started! $HTTP_OUTPUT"
       break
     else
-      echo "Ops manager is not running on ${OPSMAN_URI}..."
       if [[ $SECONDS -gt $timeout ]]; then
         echo "Timed out waiting for ops manager site to start."
         exit 1
