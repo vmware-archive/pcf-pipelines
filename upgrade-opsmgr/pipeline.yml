@@ -40,7 +40,7 @@ resources:
 - name: pivnet-opsmgr
   type: pivnet
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: ops-manager
     sort_by: semver
 

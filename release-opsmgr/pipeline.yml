@@ -12,7 +12,7 @@ resources:
 - name: opsmgr-pipeline-pivnet
   type: pivnet
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: ops-manager-upgrade-pipeline
     endpoint: https://pivnet-integration.cfapps.io
     bucket: pivotal-network-staging

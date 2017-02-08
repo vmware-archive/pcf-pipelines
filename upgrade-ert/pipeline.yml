@@ -41,7 +41,7 @@ resources:
   type: pivnet
   check_every: {{poll_interval}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: elastic-runtime
     product_version: 1.9.*
     sort_by: semver
