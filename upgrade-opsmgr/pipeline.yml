@@ -70,7 +70,6 @@ jobs:
   - task: deploy-opsman-vm
     file: pcf-pipelines/tasks/deploy-opsman-vm/task.yml
     params:
-      PCF_OVA_FILE: {{pcf_ova_file}}
       OPSMAN_TIMEOUT: {{opsman_timeout}}
       GOVC_USERNAME: {{vcenter_username}}
       GOVC_PASSWORD: {{vcenter_password}}

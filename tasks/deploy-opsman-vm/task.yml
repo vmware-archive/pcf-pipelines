@@ -14,7 +14,6 @@ run:
   path: pcf-pipelines/tasks/deploy-opsman-vm/task.sh
 
 params:
-  PCF_OVA_FILE:
   OPSMAN_TIMEOUT:
   GOVC_URL:
   GOVC_USERNAME:
