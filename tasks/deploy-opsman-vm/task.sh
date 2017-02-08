@@ -13,6 +13,8 @@ function main() {
   export CURR_DIR=$(pwd)
   export OPSMGR_VERSION=$(cat ./pivnet-opsmgr/metadata.json | jq '.Release.Version' | sed -e 's/^"//' -e 's/"$//')
   export OPSMAN_NAME=OpsManager-${OPSMGR_VERSION}-$(date +"%Y%m%d%H%S")
+  export OPSMAN_PATH=`ls $CURR_DIR/pivnet-opsmgr/*.{yml,yaml,ova} $CURR_DIR/pivnet-opsmgr/*_image 2>/dev/null | grep -v metadata.yaml`
+
 
 IAAS_CONFIGURATION=$(cat <<-EOF
 {
@@ -42,8 +44,8 @@ EOF
   cat ./opsman_settings.json
 
   echo "Importing OVA of new OpsMgr VM..."
-  echo "Running govc import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${CURR_DIR}/pivnet-opsmgr/${PCF_OVA_FILE}"
-  ./${CMD_PATH} import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${CURR_DIR}/pivnet-opsmgr/${PCF_OVA_FILE}
+  echo "Running govc import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${OPSMAN_PATH}"
+  ./${CMD_PATH} import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${OPSMAN_PATH}
   #
   # echo "Setting CPUs on new OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
   ./${CMD_PATH} vm.change -c=2 -k=true -vm /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
