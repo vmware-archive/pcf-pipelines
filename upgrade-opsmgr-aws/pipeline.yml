@@ -71,6 +71,11 @@ jobs:
     - get: tool-om
       globs: om-linux
 
+  - task: get-terraform
+    file: pcf-pipelines/tasks/get-dependencies/terraform/task.yml
+    params:
+      TERRAFORM_ZIP_URL: {{terraform_zip_url}}
+
   - task: export-opsmgr
     file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
     params:
@@ -94,7 +99,6 @@ jobs:
       SECURITY_GROUP: {{security_group}}
       ROUTE53_ZONE_ID: {{route53_zone_id}}
       OPSMAN_SUBDOMAIN: {{opsman_subdomain}}
-      OPSMAN_TIMEOUT: {{opsman_timeout}}
       OPSMAN_URI: {{opsman_uri}}
       VPC_ID: {{vpc_id}}
 

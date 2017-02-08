@@ -5,8 +5,7 @@ function main() {
 local cwd
 cwd="${1}"
 
-chmod +x terraform/terraform
-CMD_PATH="terraform/terraform"
+CMD_PATH="terraform/bin/terraform"
 
 chmod +x iaas-util/cliaas-linux
 AWS_UTIL_PATH="iaas-util/cliaas-linux"

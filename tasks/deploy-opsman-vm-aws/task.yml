@@ -6,10 +6,10 @@ image_resource:
   source: {repository: cloudfoundry/cflinuxfs2}
 
 inputs:
-  - name: terraform
   - name: pcf-pipelines
   - name: iaas-util
   - name: pivnet-opsmgr
+  - name: terraform
 run:
   path: pcf-pipelines/tasks/deploy-opsman-vm-aws/task.sh
 
