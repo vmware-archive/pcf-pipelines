@@ -8,8 +8,8 @@ cwd="${1}"
 chmod +x terraform/terraform
 CMD_PATH="terraform/terraform"
 
-chmod +x iaas-util/aws-instances
-AWS_UTIL_PATH="iaas-util/aws-instances"
+chmod +x iaas-util/cliaas-linux
+AWS_UTIL_PATH="iaas-util/cliaas-linux"
 
 IAAS_CONFIGURATION=$(cat <<-EOF
 provider "aws" {

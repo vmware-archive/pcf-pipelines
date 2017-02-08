@@ -7,12 +7,10 @@ resource_types:
 
 resources:
 - name: iaas-util
-  type: s3
+  type: github-release
   source:
-    bucket: {{terraform-resources}}
-    versioned_file: aws-instances
-    access_key_id: {{aws_access_key_id}}
-    secret_access_key: {{aws_secret_access_key}}
+    user: c0-ops
+    repository: cliaas
 
 - name: terraform
   type: s3
@@ -53,6 +51,7 @@ jobs:
 ## Uncomment to limit when the pipeline can run
 #   - get: run-time-window
     - get: iaas-util
+      globs: cliaas-linux
     - get: pcf-pipelines
     - get: terraform
     - get: tool-om
