@@ -12,10 +12,8 @@ inputs:
 
 params:
   CF_API_URI:
-  CF_ORG:
   CF_USERNAME:
   CF_PASSWORD:
-  CF_SPACE:
   BUILDPACK_NAME:
 
 run:

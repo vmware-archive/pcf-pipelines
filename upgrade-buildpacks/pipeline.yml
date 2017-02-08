@@ -123,10 +123,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: binary_buildpack_latest
 
 - name: update-dotnet-buildpack
@@ -141,10 +139,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: dotnet_core_buildpack_offline_latest
 
 - name: update-go-buildpack
@@ -161,10 +157,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: go_buildpack_latest
 
 - name: update-java-buildpack
@@ -182,10 +176,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: java_buildpack_offline_latest
 
 - name: update-nodejs-buildpack
@@ -200,10 +192,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: nodejs_buildpack_latest
 
 - name: update-php-buildpack
@@ -218,10 +208,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: php_buildpack_latest
 
 - name: update-python-buildpack
@@ -236,10 +224,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: python_buildpack_latest
 
 - name: update-ruby-buildpack
@@ -254,10 +240,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: ruby_buildpack_latest
 
 - name: update-staticfile-buildpack
@@ -272,10 +256,8 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: staticfile_buildpack_latest
 
 - name: update-tcserver-buildpack
@@ -293,8 +275,6 @@ jobs:
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
-      CF_ORG: {{cf_org}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
-      CF_SPACE: {{cf_space}}
       BUILDPACK_NAME: tc_buildpack_latest

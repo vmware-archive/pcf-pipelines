@@ -6,7 +6,7 @@ chmod +x cf
 echo Using $(cf-cli/cf --version)
 
 ./cf api $CF_API_URI --skip-ssl-validation
-./cf login -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE
+./cf auth $CF_USERNAME $CF_PASSWORD
 
 COUNT=$(./cf buildpacks | grep --regexp=".zip" --count)
 NEW_POSITION=$(expr $COUNT + 1)
