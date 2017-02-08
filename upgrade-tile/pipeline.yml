@@ -71,14 +71,11 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       PRODUCT_NAME: {{product_name}}
-  - task: download-stemcell
-    file: pcf-pipelines/tasks/download-bosh-io-stemcell/task.yml
-    params:
-      PRODUCT: {{metadata_basename}}
-      IAAS_TYPE: {{iaas_type}}
   - task: upload-stemcell
     file: pcf-pipelines/tasks/upload-stemcell/task.yml
     params:
+      PRODUCT: {{metadata_basename}}
+      IAAS_TYPE: {{iaas_type}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
