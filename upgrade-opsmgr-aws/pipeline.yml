@@ -84,7 +84,7 @@ jobs:
       KEY_NAME: {{key_name}}
       SUBNET_ID: {{subnet_id}}
       AWS_INSTANCE_NAME: {{aws_instance_name}}
-      OPSMAN_TIMEOUT: {{opsman_timeout}}
+      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
       AWS_REGION: {{aws_region}}
       SECURITY_GROUP: {{security_group}}

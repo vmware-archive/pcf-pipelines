@@ -17,3 +17,4 @@ vpc_id: CHANGEME
 opsman_uri: CHANGEME
 check_new_opsman_every: CHANGEME
 opsman_major_minor_version: CHANGEME
+opsman_timeout_seconds: 360
