@@ -2,7 +2,9 @@
 
 function main() {
 
-  chmod +x govc/govc_linux_amd64
+  gunzip ./govc/govc_linux_amd64.gz
+  chmod +x ./govc/govc_linux_amd64
+
   CMD_PATH="govc/govc_linux_amd64"
 
   local cwd
