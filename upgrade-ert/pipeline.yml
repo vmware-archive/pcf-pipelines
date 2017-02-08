@@ -1,3 +1,5 @@
+# This pipeline is the same as upgrade-tile/pipeline.yml but with the tile
+# hardcoded to Elastic Runtime.
 groups: []
 
 resource_types:
@@ -18,6 +20,7 @@ resources:
 #    start: 12:00 AM
 #    stop: 1:00 AM
 #    location: America/Chicago
+
 - name: pcf-pipelines
   type: git
   source:
@@ -31,7 +34,8 @@ resources:
   source:
     user: pivotal-cf
     repository: om
-    access_token: {{github_token}}
+    username: {{github_token}}
+    password: x-oauth-basic
 
 - name: elastic-runtime
   type: pivnet
@@ -52,7 +56,7 @@ resources:
     - stemcell-downloader-linux
 
 jobs:
-- name: upload
+- name: upgrade-tile
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -68,64 +72,24 @@ jobs:
       params:
         globs:
         - om-linux
-  - task: upload
+    - get: stemcell-downloader
+      params:
+        globs: [stemcell-downloader-linux]
+  - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       PIVNET_PRODUCT_NAME: elastic-runtime
-
-- name: stage
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-      passed: [upload]
-    - get: pivnet-product
-      resource: elastic-runtime
-      trigger: true
-      passed: [upload]
-      params:
-        globs:
-        - "*pivotal"
-    - get: tool-om
-      params:
-        globs:
-        - om-linux
-  - task: wait-opsman-clear
-    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
-    timeout: 2h
-    params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-      PRODUCT_NAME: cf
-  - task: stage
+  - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       PRODUCT_NAME: cf
-
-- name: upload-stemcell
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-      passed: [stage]
-    - get: stemcell-downloader
-    - get: pivnet-product
-      resource: elastic-runtime
-      trigger: true
-      passed: [stage]
-      params:
-        globs:
-        - "*pivotal"
-    - get: tool-om
-      params:
-        globs:
-        - om-linux
-  - task: upload
+  - task: upload-stemcell
     file: pcf-pipelines/tasks/upload-stemcell/task.yml
     params:
       PRODUCT: cf
@@ -133,19 +97,10 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-
-- name: apply-changes
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-      passed: [upload-stemcell]
-    - get: tool-om
-      params:
-        globs:
-        - om-linux
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
