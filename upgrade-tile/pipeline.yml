@@ -41,7 +41,7 @@ resources:
     - stemcell-downloader-linux
 
 jobs:
-- name: upgrade-{{resource_name}}
+- name: upgrade-tile
   plan:
   - aggregate:
     - get: pcf-pipelines
