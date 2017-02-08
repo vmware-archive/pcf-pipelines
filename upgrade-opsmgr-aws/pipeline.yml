@@ -21,14 +21,6 @@ resources:
     user: c0-ops
     repository: cliaas
 
-- name: terraform
-  type: s3
-  source:
-    bucket: {{terraform-resources}}
-    versioned_file: terraform
-    region_name: {{aws_region}}
-    access_key_id: {{aws_access_key_id}}
-    secret_access_key: {{aws_secret_access_key}}
   ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
   ## If a change is detected earlier the pipeline will start but be held up waiting for the time
   ## resource to become available.
@@ -67,7 +59,6 @@ jobs:
     - get: iaas-util
       globs: cliaas-linux
     - get: pcf-pipelines
-    - get: terraform
     - get: tool-om
       globs: om-linux
 
