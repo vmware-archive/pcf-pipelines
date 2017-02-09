@@ -1,0 +1,98 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: pivnet-opsmgr
+  type: pivnet
+  check_every: {{check_new_opsman_every}}
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
+    sort_by: semver
+
+- name: iaas-util
+  type: github-release
+  source:
+    user: c0-ops
+    repository: cliaas
+
+  ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
+  ## If a change is detected earlier the pipeline will start but be held up waiting for the time
+  ## resource to become available.
+  ## Also uncomment the fetching of the resource in the plan below.
+  #- name: run-time-window
+  #  type: time
+  #  source:
+  #    start: 12:00 AM
+  #    stop: 1:00 AM
+  #    location: America/Chicago
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:c0-ops/pcf-pipelines
+    branch: master
+    private_key: {{git_private_key}}
+
+jobs:
+- name: upgrade-opsmgr
+  plan:
+  - aggregate:
+## Uncomment to limit when the pipeline can run
+#   - get: run-time-window
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*GCP.yml"
+    - get: iaas-util
+      globs: cliaas-linux
+    - get: pcf-pipelines
+    - get: tool-om
+      globs: om-linux
+
+  - task: get-terraform
+    file: pcf-pipelines/tasks/get-dependencies/terraform/task.yml
+    params:
+      TERRAFORM_ZIP_URL: {{terraform_zip_url}}
+
+  - task: export-opsmgr
+    file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_SETTINGS_FILENAME: installation.zip
+
+  - task: deploy-opsman-vm
+    file: pcf-pipelines/tasks/deploy-opsman-vm-gcp/task.yml
+    params:
+
+  - task: import-opsmgr
+    file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_SETTINGS_FILENAME: installation.zip
+      OPSMAN_PASSPHRASE: {{opsman_passphrase}}
+
+      # todo discuss the order for calling this task
+  - task: apply-changes
+    file: pcf-pipelines/tasks/apply-changes/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_TIMEOUT: {{opsman_timeout}}
