@@ -11,7 +11,7 @@ function main() {
   $pivnet login --api-token=$API_TOKEN
   $pivnet eula --eula-slug=pivotal_software_eula
 
-  for stemcell in $(cat ${cwd}/diagnostic-report/exported-diagnostic-report.json | jq --raw-output '.added_products.deployed[].stemcell' | sort -u); do
+  for stemcell in $(cat ${cwd}/diagnostic-report/exported-diagnostic-report.json | jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | .stemcell' | sort -u); do
     local stemcell_version=$(echo $stemcell | cut -d'-' -f3)
     for product_file_id in $($pivnet pfs -p stemcells -r $stemcell_version --format json | jq .[].id); do
       local product_file_name=$($pivnet product-file -p stemcells -r $stemcell_version -i $product_file_id --format=json | jq .name)
