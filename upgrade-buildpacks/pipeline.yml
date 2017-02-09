@@ -26,9 +26,10 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@github.com:c0-ops/pcf-pipelines.git
+    uri: https://github.com/c0-ops/pcf-pipelines.git
+    username: {{github_token}}
+    password: x-oauth-basic
     branch: master
-    private_key: {{git_private_key}}
 
 - name: binary-buildpack
   type: pivnet
