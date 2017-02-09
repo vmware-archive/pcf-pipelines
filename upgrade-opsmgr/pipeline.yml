@@ -75,8 +75,8 @@ jobs:
       GOVC_PASSWORD: {{vcenter_password}}
       GOVC_DATACENTER: {{vcenter_datacenter}}
       GOVC_CLUSTER: {{vcenter_cluster}}
-      GOVC_DATASTORE: {{vcenter_datastore}}
       GOVC_RESOURCE_POOL: {{vcenter_resource_pool}}
+      GOVC_DATASTORE: {{vcenter_datastore}}
       GOVC_URL: {{vcenter_url}}
       OPSMAN_IP: {{opsman_ip}}
       NETMASK: {{netmask}}
@@ -92,9 +92,9 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_PASSPHRASE: {{opsman_passphrase}}
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
-      OPSMAN_PASSPHRASE: {{opsman_passphrase}}
 
       # todo discuss the order for calling this task
   - task: apply-changes
@@ -103,3 +103,4 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_TIMEOUT: {{opsman_timeout}}

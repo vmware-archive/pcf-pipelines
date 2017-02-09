@@ -1,14 +1,24 @@
 #!/bin/bash -eu
 
 function main() {
-  echo "Wait for OpsMgr to be start"
+  local cwd
+  cwd="${1}"
 
-  echo "Importing ${OPSMAN_SETTINGS_FILENAME} file from OpsMgr"
-  curl -vv -k "${OPSMAN_URI}/api/v0/installation_asset_collection" -X POST \
-   -F "installation[file]=@./opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}" \
-   -F "passphrase=${OPSMAN_PASSWORD}"
-   echo "Successfully uploaded opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}. Return code [$?]."
+  chmod +x tool-om/om-linux
+  local om="tool-om/om-linux"
+
+  printf "Waiting for %s to come up" "$OPSMAN_URI"
+  until $(curl --output /dev/null --silent --head --fail -k ${OPSMAN_URI}); do
+    printf '.'
+    sleep 5
+  done
+  printf '\n'
+
+  $om --target "${OPSMAN_URI}" \
+      --skip-ssl-validation \
+      import-installation \
+      --installation "${cwd}/opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}" \
+      --decryption-passphrase "${OPSMAN_PASSPHRASE}"
  }
 
- echo "Running import OpsMgr task..."
  main "${PWD}"
