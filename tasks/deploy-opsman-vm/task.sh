@@ -1,4 +1,4 @@
-#!/bin/bash -u
+#!/bin/bash -eu
 
 function main() {
 
@@ -59,6 +59,7 @@ EOF
   # make sure that vm and ops manager app is up
   started=false
   timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
+  set +e
   while ! $started; do
       OUTPUT=$(./${CMD_PATH} vm.info -vm.ip=${OPSMAN_IP} -k=true 2>&1)
 
@@ -76,7 +77,7 @@ EOF
           HTTP_OUTPUT=$(curl --write-out %{http_code} --silent --output /dev/null ${OPSMAN_IP})
           if [[ $HTTP_OUTPUT == *"302"* || $HTTP_OUTPUT == *"301"* ]]; then
             echo "Site is started! $OUTPUT >>> $HTTP_OUTPUT"
-            break
+            exit 0
           else
             if [[ $SECONDS -gt $timeout ]]; then
               echo "Timed out waiting for ops manager site to start."
@@ -87,7 +88,7 @@ EOF
         break
       fi
   done
-
+  set -e
 }
 
 echo "Running deploy of OpsMgr VM task..."
