@@ -92,9 +92,9 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_PASSPHRASE: {{opsman_passphrase}}
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
-      OPSMAN_PASSPHRASE: {{opsman_passphrase}}
 
       # todo discuss the order for calling this task
   - task: apply-changes

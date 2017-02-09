@@ -18,7 +18,7 @@ function main() {
      --skip-ssl-validation \
      import-installation \
      --installation "${cwd}/opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}" \
-     --decryption-passphrase "${DECRYPTION_PASSPHRASE}"
+     --decryption-passphrase "${OPSMAN_PASSPHRASE}"
  }
 
  main "${PWD}"
