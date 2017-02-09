@@ -77,7 +77,7 @@ EOF
           HTTP_OUTPUT=$(curl --write-out %{http_code} --silent --output /dev/null ${OPSMAN_IP})
           if [[ $HTTP_OUTPUT == *"302"* || $HTTP_OUTPUT == *"301"* ]]; then
             echo "Site is started! $OUTPUT >>> $HTTP_OUTPUT"
-            break
+            exit 0
           else
             if [[ $SECONDS -gt $timeout ]]; then
               echo "Timed out waiting for ops manager site to start."
