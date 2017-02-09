@@ -19,4 +19,5 @@ gateway: CHANGEME
 dns: CHANGEME
 ntp: CHANGEME
 opsman_network: CHANGEME
+iaas_type: CHANGEME
 terraform_zip_url: https://releases.hashicorp.com/terraform/0.8.6/terraform_0.8.6_linux_amd64.zip

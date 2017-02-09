@@ -30,6 +30,13 @@ resources:
     repository: om
     access_token: {{github_token}}
 
+- name: tool-pivnet-cli
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pivnet-cli
+    access_token: {{github_token}}
+
 - name: pcf-pipelines
   type: git
   source:
@@ -54,6 +61,10 @@ jobs:
     - get: govc
     - get: tool-om
       globs: om-linux
+    - get: tool-pivnet-cli
+      params:
+        globs:
+        - "pivnet-linux-amd64-*"
     - get: pivnet-opsmgr
       params:
         globs:
@@ -95,6 +106,19 @@ jobs:
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
+
+  - task: download-stemcells
+    file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
+    params:
+      API_TOKEN: {{pivnet_token}}
+      IAAS_TYPE: {{iaas_type}}
+
+  - task: restore-stemcells
+    file: pcf-pipelines/tasks/restore-stemcells/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
 
       # todo discuss the order for calling this task
   - task: apply-changes

@@ -8,16 +8,12 @@ image_resource:
 inputs:
   - name: pcf-pipelines
   - name: tool-om
-
-outputs:
-  - name: opsmgr-settings
-  - name: diagnostic-report
+  - name: stemcells
 
 params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_URI:
-  OPSMAN_SETTINGS_FILENAME:
 
 run:
-  path: pcf-pipelines/tasks/export-opsmgr-settings/task.sh
+  path: pcf-pipelines/tasks/restore-stemcells/task.sh
