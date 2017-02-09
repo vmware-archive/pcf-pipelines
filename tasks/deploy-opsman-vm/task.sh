@@ -1,4 +1,4 @@
-#!/bin/bash -u
+#!/bin/bash -eu
 
 function main() {
 
@@ -59,6 +59,7 @@ EOF
   # make sure that vm and ops manager app is up
   started=false
   timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
+  set +e
   while ! $started; do
       OUTPUT=$(./${CMD_PATH} vm.info -vm.ip=${OPSMAN_IP} -k=true 2>&1)
 
@@ -87,7 +88,7 @@ EOF
         break
       fi
   done
-
+  set -e
 }
 
 echo "Running deploy of OpsMgr VM task..."
