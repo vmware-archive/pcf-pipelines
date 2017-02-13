@@ -5,8 +5,8 @@ function main() {
   cwd="${1}"
   mkdir -p ${cwd}/stemcells
 
-  chmod +x tool-pivnet-cli/pivnet-linux-amd64-0.0.48
-  local pivnet="tool-pivnet-cli/pivnet-linux-amd64-0.0.48"
+  local pivnet=`ls tool-pivnet-cli/pivnet-linux-* 2>/dev/null`
+  chmod +x $pivnet
 
   $pivnet login --api-token=$API_TOKEN
   $pivnet eula --eula-slug=pivotal_software_eula
