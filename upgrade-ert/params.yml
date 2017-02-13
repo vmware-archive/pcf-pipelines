@@ -5,3 +5,4 @@ opsman_uri: CHANGEME
 github_token: yyyyyyyyyyyyyyyyy
 iaas_type: gcp
 poll_interval: 1h
+opsman_timeout_seconds: 5m
