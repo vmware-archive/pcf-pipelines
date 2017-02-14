@@ -67,13 +67,20 @@ jobs:
     params:
       TERRAFORM_ZIP_URL: {{terraform_zip_url}}
 
-  - task: export-opsmgr
-    file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
-    params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_SETTINGS_FILENAME: installation.zip
+  - aggregate:
+    - task: export-opsmgr-settings
+      file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
+      params:
+        OPSMAN_USERNAME: {{opsman_admin_username}}
+        OPSMAN_PASSWORD: {{opsman_admin_password}}
+        OPSMAN_URI: {{opsman_uri}}
+        OPSMAN_SETTINGS_FILENAME: installation.zip
+    - task: exported-opsmgr-diagnostic-report
+      file: pcf-pipelines/tasks/export-opsmgr-diagnostic-report/task.yml
+      params:
+        OPSMAN_USERNAME: {{opsman_admin_username}}
+        OPSMAN_PASSWORD: {{opsman_admin_password}}
+        OPSMAN_URI: {{opsman_uri}}
 
   - task: deploy-opsman-vm
     file: pcf-pipelines/tasks/deploy-opsman-vm-aws/task.yml
@@ -101,6 +108,19 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
+
+  - task: download-stemcells
+    file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
+    params:
+      API_TOKEN: {{pivnet_token}}
+      IAAS_TYPE: {{iaas_type}}
+
+  - task: restore-stemcells
+    file: pcf-pipelines/tasks/restore-stemcells/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
 
       # todo discuss the order for calling this task
   - task: apply-changes
