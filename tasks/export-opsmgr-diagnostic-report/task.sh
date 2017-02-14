@@ -8,13 +8,12 @@ function main() {
   local cwd
   cwd="${1}"
 
-  ./${CMD_PATH} --target "${OPSMAN_URI}" \
+   ./${CMD_PATH} --target "${OPSMAN_URI}" \
      --skip-ssl-validation \
      --username "${OPSMAN_USERNAME}" \
      --password "${OPSMAN_PASSWORD}" \
-     --request-timeout 6000 \
-     export-installation \
-     --output-file "${cwd}/opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}"
+     curl --path /api/v0/diagnostic_report \
+     > "${cwd}/diagnostic-report/exported-diagnostic-report.json"
 }
 
 main "${PWD}"

@@ -10,13 +10,12 @@ inputs:
   - name: tool-om
 
 outputs:
-  - name: opsmgr-settings
+  - name: diagnostic-report
 
 params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_URI:
-  OPSMAN_SETTINGS_FILENAME:
 
 run:
-  path: pcf-pipelines/tasks/export-opsmgr-settings/task.sh
+  path: pcf-pipelines/tasks/export-opsmgr-diagnostic-report/task.sh
