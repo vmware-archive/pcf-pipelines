@@ -20,3 +20,4 @@ check_new_opsman_every: CHANGEME
 opsman_major_minor_version: CHANGEME
 opsman_timeout_seconds: 1200
 iaas_type: aws
+terraform_zip_url: https://releases.hashicorp.com/terraform/0.8.6/terraform_0.8.6_linux_amd64.zip
