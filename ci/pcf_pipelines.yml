@@ -3,7 +3,7 @@ resources:
   type: git
   source:
     uri: https://github.com/c0-ops/pcf-pipelines.git
-    branch: ci
+    branch: master
 
 jobs:
 - name: update-upgrade-ert
