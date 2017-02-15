@@ -1,0 +1,59 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cflinuxfs2
+
+inputs:
+- name: pcf-pipelines
+
+params:
+  PIVNET_TOKEN:
+  OPSMAN_ADMIN_USERNAME:
+  OPSMAN_ADMIN_PASSWORD:
+  OPSMAN_URI:
+  GITHUB_TOKEN:
+  IAAS_TYPE:
+  POLL_INTERVAL:
+  OPSMAN_TIMEOUT_SECONDS:
+  ATC_EXTERNAL_URL:
+  ATC_BASIC_AUTH_USERNAME:
+  ATC_BASIC_AUTH_PASSWORD:
+
+run:
+  path: bash
+  args:
+  - -cx
+  - |
+    curl \
+      --insecure \
+      --output fly \
+      "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"
+
+    chmod +x fly
+
+    ./fly --target self login \
+      --insecure \
+      --concourse-url "${ATC_EXTERNAL_URL}" \
+      --username "${ATC_BASIC_AUTH_USERNAME}" \
+      --password "${ATC_BASIC_AUTH_PASSWORD}" \
+      --team-name validation
+
+    cat > params.yml <<EOF
+      pivnet_token: "${PIVNET_TOKEN}"
+      opsman_admin_username: "${OPSMAN_ADMIN_USERNAME}"
+      opsman_admin_password: "${OPSMAN_ADMIN_PASSWORD}"
+      opsman_uri: "${OPSMAN_URI}"
+      github_token: "${GITHUB_TOKEN}"
+      iaas_type: "${IAAS_TYPE}"
+      poll_interval: "${POLL_INTERVAL}"
+      opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
+    EOF
+
+    ./fly --target self set-pipeline \
+      --non-interactive \
+      --pipeline upgrade-ert \
+      --config pcf-pipelines/upgrade-ert/pipeline.yml \
+      --load-vars-from params.yml

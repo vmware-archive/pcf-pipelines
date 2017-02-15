@@ -1,0 +1,26 @@
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: https://github.com/c0-ops/pcf-pipelines.git
+    branch: ci
+
+jobs:
+- name: update-upgrade-ert
+  plan:
+  - get: pcf-pipelines
+    trigger: true
+  - task: update-upgrade-ert
+    file: pcf-pipelines/ci/tasks/update_upgrade_ert.yml
+    params:
+      PIVNET_TOKEN: {{pivnet_token}}
+      OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      GITHUB_TOKEN: {{github_token}}
+      IAAS_TYPE: {{iaas_type}}
+      POLL_INTERVAL: {{pivnet_poll_interval}}
+      OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
+      ATC_EXTERNAL_URL: {{atc_external_url}}
+      ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+      ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
