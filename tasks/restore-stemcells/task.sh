@@ -21,6 +21,11 @@ function main() {
   chmod +x tool-om/om-linux
   local om="tool-om/om-linux"
 
+  if [ -n "$(find ${cwd}/stemcells/ -prune -empty)" ]; then
+    echo "No stemcells found."
+    exit 0
+  fi
+
   for stemcell in ${cwd}/stemcells/*.tgz; do
     printf "Uploading %s to %s ...\n" "${stemcell}" "${OPSMAN_URI}"
     $om --target "${OPSMAN_URI}" \
