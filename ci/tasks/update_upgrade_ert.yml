@@ -25,7 +25,7 @@ params:
 run:
   path: bash
   args:
-  - -cx
+  - -ce
   - |
     curl \
       --insecure \
