@@ -15,6 +15,7 @@ route53_zone_id: CHANGEME
 aws_region: CHANGEME
 vpc_id: CHANGEME
 opsman_uri: CHANGEME
+opsman_uri_new: CHANGEME
 check_new_opsman_every: CHANGEME
 opsman_major_minor_version: CHANGEME
 opsman_timeout_seconds: 1200

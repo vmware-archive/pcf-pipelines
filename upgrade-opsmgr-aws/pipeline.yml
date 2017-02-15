@@ -39,6 +39,13 @@ resources:
     repository: om
     access_token: {{github_token}}
 
+- name: tool-pivnet-cli
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pivnet-cli
+    access_token: {{github_token}}
+
 - name: pcf-pipelines
   type: git
   source:
@@ -62,6 +69,10 @@ jobs:
     - get: pcf-pipelines
     - get: tool-om
       globs: om-linux
+    - get: tool-pivnet-cli
+      params:
+        globs:
+        - "pivnet-linux-amd64-*"
 
   - task: get-terraform
     file: pcf-pipelines/tasks/get-dependencies/terraform/task.yml
@@ -98,7 +109,7 @@ jobs:
       SECURITY_GROUP: {{security_group}}
       ROUTE53_ZONE_ID: {{route53_zone_id}}
       OPSMAN_SUBDOMAIN: {{opsman_subdomain}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_URI: {{opsman_uri_new}}
       VPC_ID: {{vpc_id}}
 
   - task: import-opsmgr
@@ -106,7 +117,7 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_URI: {{opsman_uri_new}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
 
@@ -121,7 +132,7 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_URI: {{opsman_uri_new}}
 
       # todo discuss the order for calling this task
   - task: apply-changes
@@ -129,5 +140,5 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_URI: {{opsman_uri_new}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
