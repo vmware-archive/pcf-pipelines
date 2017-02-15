@@ -6,10 +6,19 @@ resources:
     branch: master
 
 jobs:
+- name: test
+  plan:
+  - get: pcf-pipelines
+    trigger: true
+  - task: test
+    file: pcf-pipelines/ci/tasks/test.yml
+
 - name: update-upgrade-ert
   plan:
   - get: pcf-pipelines
     trigger: true
+    passed:
+    - test
   - task: update-upgrade-ert
     file: pcf-pipelines/ci/tasks/update_upgrade_ert.yml
     params:
