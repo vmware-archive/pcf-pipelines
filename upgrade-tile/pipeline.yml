@@ -37,8 +37,6 @@ resources:
   type: git
   source:
     uri: https://github.com/c0-ops/pcf-pipelines.git
-    username: {{github_token}}
-    password: x-oauth-basic
     branch: master
 
 - name: tool-om
