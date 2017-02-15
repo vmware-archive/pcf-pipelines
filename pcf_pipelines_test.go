@@ -64,6 +64,8 @@ var _ = Describe("pcf-pipelines", func() {
 			It("specifies all and only the params that the pipeline's tasks expect", func() {
 				for _, job := range config.Jobs {
 					for _, task := range allTasksInPlan(&job.Plan, []atc.PlanConfig{}) {
+						failMessage := fmt.Sprintf("Found error in the following pipeline:\n    %s\n\nin the following task's params:\n    %s\n", pipelinePath, task.Name())
+
 						var configParams []string
 						for k := range task.Params {
 							configParams = append(configParams, k)
@@ -81,34 +83,24 @@ var _ = Describe("pcf-pipelines", func() {
 							err = yaml.Unmarshal(bs, &taskConfig)
 							Expect(err).NotTo(HaveOccurred())
 
-							var taskParams []string
-							for k := range taskConfig.Params {
-								taskParams = append(taskParams, k)
+							for expected := range taskConfig.Params {
+								Expect(configParams).To(ContainElement(expected), failMessage)
 							}
 
-							for _, expected := range taskParams {
-								Expect(configParams).To(ContainElement(expected), fmt.Sprintf("Found error in the following pipeline:\n    %s\n\nin reference to the following task:\n    %s\n", pipelinePath, taskPath))
-							}
-
-							var extras []string
 							for _, configParam := range configParams {
-								found := false
+								var found bool
 
-								for _, taskParam := range taskParams {
+								for taskParam := range taskConfig.Params {
 									if configParam == taskParam {
 										found = true
 										break
 									}
 								}
 
-								if found {
-									continue
+								if !found {
+									Expect(configParams).NotTo(ContainElement(configParam), failMessage)
 								}
-
-								extras = append(extras, configParam)
 							}
-
-							Expect(extras).To(BeEmpty(), fmt.Sprintf("Found error in the following pipeline:\n    %s\n\nin reference to the following task:\n    %s\n", pipelinePath, taskPath))
 						}
 					}
 				}
