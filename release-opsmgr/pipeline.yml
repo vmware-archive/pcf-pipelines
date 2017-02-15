@@ -41,7 +41,7 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@github.com:c0-ops/pcf-pipelines
+    uri: https://github.com/c0-ops/pcf-pipelines
     branch: master
 
 jobs:
