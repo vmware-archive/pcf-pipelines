@@ -10,6 +10,8 @@ inputs:
 - name: pcf-pipelines
 
 params:
+  PIPELINE_NAME:
+  PIPELINE_PATH:
   PIVNET_TOKEN:
   OPSMAN_ADMIN_USERNAME:
   OPSMAN_ADMIN_PASSWORD:
@@ -50,10 +52,13 @@ run:
       iaas_type: "${IAAS_TYPE}"
       pivnet_poll_interval: "${PIVNET_POLL_INTERVAL}"
       opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
+      cf_api_uri:
+      cf_user:
+      cf_password:
     EOF
 
     ./fly --target self set-pipeline \
       --non-interactive \
-      --pipeline upgrade-ert \
-      --config pcf-pipelines/upgrade-ert/pipeline.yml \
+      --pipeline ${PIPELINE_NAME} \
+      --config ${PIPELINE_PATH} \
       --load-vars-from params.yml

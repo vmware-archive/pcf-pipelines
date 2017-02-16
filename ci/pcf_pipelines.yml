@@ -19,9 +19,34 @@ jobs:
     trigger: true
     passed:
     - test
-  - task: update-upgrade-ert
-    file: pcf-pipelines/ci/tasks/update_upgrade_ert.yml
+  - task: update-pipeline
+    file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
+      PIPELINE_NAME: upgrade-ert
+      PIPELINE_PATH: pcf-pipelines/upgrade-ert/pipeline.yml
+      PIVNET_TOKEN: {{pivnet_token}}
+      OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      GITHUB_TOKEN: {{github_token}}
+      IAAS_TYPE: {{iaas_type}}
+      PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
+      OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
+      ATC_EXTERNAL_URL: {{atc_external_url}}
+      ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+      ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+
+- name: update-upgrade-buildpacks
+  plan:
+  - get: pcf-pipelines
+    trigger: true
+    passed:
+    - test
+  - task: update-pipeline
+    file: pcf-pipelines/ci/tasks/update_pipeline.yml
+    params:
+      PIPELINE_NAME: upgrade-buildpacks
+      PIPELINE_PATH: pcf-pipelines/upgrade-buildpacks/pipeline.yml
       PIVNET_TOKEN: {{pivnet_token}}
       OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
