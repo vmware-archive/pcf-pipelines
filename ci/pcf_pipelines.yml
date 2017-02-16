@@ -1,9 +1,35 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
 resources:
 - name: pcf-pipelines
   type: git
   source:
     uri: https://github.com/c0-ops/pcf-pipelines.git
     branch: master
+
+- name: pivnet-release
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    access_key_id: {{pivnet_aws_access_key}}
+    secret_access_key: {{pivnet_aws_secret_key}}
+
+- name: version
+  type: semver
+  source:
+    driver: git
+    initial_version: 1.0.0
+    uri: https://github.com/c0-ops/pcf-pipelines
+    username: {{github_token}}
+    password: x-oauth-basic
+    branch: version
+    file: version
 
 jobs:
 - name: test
@@ -59,3 +85,36 @@ jobs:
       CF_API_URI: {{cf_api_uri}}
       CF_USER: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
+
+- name: rc
+  plan:
+  - get: pcf-pipelines
+    trigger: true
+    passed:
+    - update-upgrade-ert
+    - update-upgrade-buildpacks
+  - put: version
+    params: {pre: rc}
+
+- name: publish-release
+  plan:
+  - aggregate:
+    - get: version
+      passed: [rc]
+      params: {bump: final}
+    - get: pcf-pipelines
+      passed:
+      - rc
+  - task: create-pivnet-metadata
+    file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
+  - task: create-release
+    file: pcf-pipelines/ci/tasks/create_release.yml
+  - put: pivnet-release
+    params:
+      metadata_file: pivnet-metadata/metadata.yml
+      file_glob: pcf-pipelines-release-files/*
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+  - put: version
+    params:
+      bump: major
+      pre: rc

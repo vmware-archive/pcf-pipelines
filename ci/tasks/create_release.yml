@@ -1,0 +1,36 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: busybox
+
+inputs:
+- name: pcf-pipelines
+
+outputs:
+- name: pcf-pipelines-release-files
+
+run:
+  path: sh
+  args:
+  - -ce
+  - |
+    tar \
+      --exclude .git \
+      --exclude ci \
+      --exclude "*.go" \
+      --create \
+      --gzip \
+      --file pcf-pipelines-release-files/pcf-pipelines.tgz \
+      pcf-pipelines
+
+    tar \
+      --exclude .git \
+      --exclude ci \
+      --exclude "*.go" \
+      --create \
+      --bzip2 \
+      --file pcf-pipelines-release-files/pcf-pipelines.bz2 \
+      pcf-pipelines

@@ -1,0 +1,34 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: busybox
+    version: latest
+
+inputs:
+- name: version
+
+outputs:
+- name: pivnet-metadata
+
+run:
+  path: sh
+  args:
+  - -ce
+  - |
+    version=v$(cat version/version)
+    release_date=$(date +%Y-%m-%d)
+
+    cat >> pivnet-metadata/metadata.yml <<EOF
+    ---
+    release:
+      version: "${version}"
+      release_date: "${release_date}"
+      description: |
+        Concourse Pipeline Templates and Scripts for PCF Platform Ops Automation
+      availability: Admins Only
+      release_type: Beta Release
+      eula_slug: "pivotal_beta_eula"
+    EOF
