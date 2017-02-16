@@ -31,6 +31,13 @@ resources:
     branch: version
     file: version
 
+- name: cf-cli
+  type: s3
+  source:
+    bucket: cf-cli-releases
+    region_name: us-west-1
+    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
+
 jobs:
 - name: test
   plan:
@@ -105,6 +112,7 @@ jobs:
     - get: pcf-pipelines
       passed:
       - rc
+    - get: cf-cli
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
   - task: create-release

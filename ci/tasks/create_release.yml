@@ -8,6 +8,7 @@ image_resource:
 
 inputs:
 - name: pcf-pipelines
+- name: cf-cli
 
 outputs:
 - name: pcf-pipelines-release-files
@@ -34,3 +35,8 @@ run:
       --bzip2 \
       --file pcf-pipelines-release-files/pcf-pipelines.bz2 \
       pcf-pipelines
+
+    tar \
+      --extract \
+      --directory pcf-pipelines-release-files \
+      --file cf-cli/*.tgz
