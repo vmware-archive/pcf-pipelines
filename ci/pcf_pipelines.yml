@@ -28,7 +28,7 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       GITHUB_TOKEN: {{github_token}}
       IAAS_TYPE: {{iaas_type}}
-      POLL_INTERVAL: {{pivnet_poll_interval}}
+      PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
       OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
       ATC_EXTERNAL_URL: {{atc_external_url}}
       ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}

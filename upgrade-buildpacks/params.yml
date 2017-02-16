@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-poll_interval: 1h
+pivnet_poll_interval: 1h
 
 pivnet_token: CHANGEME
 cf_api_uri: CHANGEME

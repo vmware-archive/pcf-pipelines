@@ -51,7 +51,7 @@ resources:
 
 - name: elastic-runtime
   type: pivnet
-  check_every: {{poll_interval}}
+  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime

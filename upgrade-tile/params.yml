@@ -41,7 +41,7 @@ github_token: CHANGEME
 # allowed IaaS names.
 iaas_type: CHANGEME
 # The interval to check Pivotal Network for updates to the product file.
-poll_interval: 1h
+pivnet_poll_interval: 1h
 # The basename of the metadata file for the product without the file extension.
 # This will be used for figuring out which stemcell the product needs.
 #

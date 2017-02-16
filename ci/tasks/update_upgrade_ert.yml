@@ -16,7 +16,7 @@ params:
   OPSMAN_URI:
   GITHUB_TOKEN:
   IAAS_TYPE:
-  POLL_INTERVAL:
+  PIVNET_POLL_INTERVAL:
   OPSMAN_TIMEOUT_SECONDS:
   ATC_EXTERNAL_URL:
   ATC_BASIC_AUTH_USERNAME:
@@ -48,7 +48,7 @@ run:
       opsman_uri: "${OPSMAN_URI}"
       github_token: "${GITHUB_TOKEN}"
       iaas_type: "${IAAS_TYPE}"
-      poll_interval: "${POLL_INTERVAL}"
+      pivnet_poll_interval: "${PIVNET_POLL_INTERVAL}"
       opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
     EOF
 
