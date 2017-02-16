@@ -24,7 +24,7 @@ resources:
   type: pivnet
   check_every: {{check_new_opsman_every}}
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: ops-manager
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
@@ -108,4 +108,4 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_TIMEOUT: {{opsman_timeout}}
+      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}

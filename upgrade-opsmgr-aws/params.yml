@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-terraform-resources: CHANGEME
+pivnet_token: CHANGEME
 security_group: CHANGEME
 aws_access_key_id: CHANGEME
 aws_secret_access_key: CHANGEME

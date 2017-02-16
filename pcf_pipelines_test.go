@@ -16,9 +16,9 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("pcf-pipelines", func() {
-	placeholderRegexp := regexp.MustCompile("{{[a-zA-Z0-9-_]+}}")
+var placeholderRegexp = regexp.MustCompile("{{([a-zA-Z0-9-_]+)}}")
 
+var _ = Describe("pcf-pipelines", func() {
 	cwd, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("failed to get working dir: %s", err)
@@ -50,18 +50,21 @@ var _ = Describe("pcf-pipelines", func() {
 		pipelinePath := path
 
 		Context(fmt.Sprintf("pipeline at %s", pipelinePath), func() {
-			var config atc.Config
+			var configBytes []byte
 
 			BeforeEach(func() {
-				configBytes, err := ioutil.ReadFile(pipelinePath)
-				Expect(err).NotTo(HaveOccurred())
-
-				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("example"))
-				err = yaml.Unmarshal(cleanConfigBytes, &config)
-				Expect(err).NotTo(HaveOccurred())
+				var readErr error
+				configBytes, readErr = ioutil.ReadFile(pipelinePath)
+				Expect(readErr).NotTo(HaveOccurred())
 			})
 
 			It("specifies all and only the params that the pipeline's tasks expect", func() {
+				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("example"))
+
+				var config atc.Config
+				err = yaml.Unmarshal(cleanConfigBytes, &config)
+				Expect(err).NotTo(HaveOccurred())
+
 				for _, job := range config.Jobs {
 					for _, task := range allTasksInPlan(&job.Plan, []atc.PlanConfig{}) {
 						failMessage := fmt.Sprintf("Found error in the following pipeline:\n    %s\n\nin the following task's params:\n    %s\n", pipelinePath, task.Name())
@@ -83,27 +86,55 @@ var _ = Describe("pcf-pipelines", func() {
 							err = yaml.Unmarshal(bs, &taskConfig)
 							Expect(err).NotTo(HaveOccurred())
 
-							for expected := range taskConfig.Params {
-								Expect(configParams).To(ContainElement(expected), failMessage)
+							var taskParams []string
+							for k := range taskConfig.Params {
+								taskParams = append(taskParams, k)
 							}
 
-							for _, configParam := range configParams {
-								var found bool
-
-								for taskParam := range taskConfig.Params {
-									if configParam == taskParam {
-										found = true
-										break
-									}
-								}
-
-								if !found {
-									Expect(configParams).NotTo(ContainElement(configParam), failMessage)
-								}
-							}
+							assertUnorderedEqual(taskParams, configParams, failMessage)
 						}
 					}
 				}
+			})
+
+			It("has a params file with all and only the params that the pipeline specifies", func() {
+				paramsPath := filepath.Join(filepath.Dir(pipelinePath), "params.yml")
+				_, err := os.Lstat(paramsPath)
+				Expect(err).NotTo(HaveOccurred())
+
+				bs, err := ioutil.ReadFile(paramsPath)
+				Expect(err).NotTo(HaveOccurred())
+
+				paramsMap := map[string]interface{}{}
+				err = yaml.Unmarshal(bs, paramsMap)
+				Expect(err).NotTo(HaveOccurred())
+
+				var params []string
+				for k := range paramsMap {
+					params = append(params, k)
+				}
+
+				matches := placeholderRegexp.FindAllStringSubmatch(string(configBytes), -1)
+
+				uniqueMatches := map[string]struct{}{}
+				for _, match := range matches {
+					uniqueMatches[match[1]] = struct{}{}
+				}
+
+				var placeholders []string
+				for match := range uniqueMatches {
+					placeholders = append(placeholders, match)
+				}
+
+				failMessage := fmt.Sprintf(`
+Found error with the following pipeline:
+    %s
+
+in the following params template:
+    %s
+`, pipelinePath, paramsPath)
+
+				assertUnorderedEqual(placeholders, params, failMessage)
 			})
 		})
 	}
@@ -135,4 +166,25 @@ func taskConfigsForJob(job atc.JobConfig) []atc.PlanConfig {
 	}
 
 	return tasks
+}
+
+func assertUnorderedEqual(left, right []string, failMessage string) {
+	for _, l := range left {
+		Expect(right).To(ContainElement(l), failMessage)
+	}
+
+	for _, r := range right {
+		var found bool
+
+		for _, l := range left {
+			if r == l {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			Expect(right).NotTo(ContainElement(r), failMessage)
+		}
+	}
 }
