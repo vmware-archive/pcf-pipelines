@@ -9,6 +9,7 @@ image_resource:
 inputs:
 - name: pcf-pipelines
 - name: cf-cli
+- name: om
 
 outputs:
 - name: pcf-pipelines-release-files
@@ -40,3 +41,5 @@ run:
       --extract \
       --directory pcf-pipelines-release-files \
       --file cf-cli/*.tgz
+
+    cp om/om-linux pcf-pipelines-release-files

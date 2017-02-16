@@ -38,6 +38,13 @@ resources:
     region_name: us-west-1
     regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
 
+- name: om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
 jobs:
 - name: test
   plan:
@@ -113,6 +120,8 @@ jobs:
       passed:
       - rc
     - get: cf-cli
+    - get: om
+      globs: om-linux
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
   - task: create-release
