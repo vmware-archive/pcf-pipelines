@@ -42,7 +42,7 @@ run:
       --concourse-url "${ATC_EXTERNAL_URL}" \
       --username "${ATC_BASIC_AUTH_USERNAME}" \
       --password "${ATC_BASIC_AUTH_PASSWORD}" \
-      --team-name validation
+      --team-name "${ATC_TEAM_NAME}"
 
     cat > params.yml <<EOF
       pivnet_token: "${PIVNET_TOKEN}"

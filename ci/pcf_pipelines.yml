@@ -27,6 +27,7 @@ jobs:
       ATC_EXTERNAL_URL: {{atc_external_url}}
       ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
       ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+      ATC_TEAM_NAME: {{atc_team_name}}
 
       PIVNET_TOKEN: {{pivnet_token}}
       OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
@@ -51,6 +52,7 @@ jobs:
       ATC_EXTERNAL_URL: {{atc_external_url}}
       ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
       ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+      ATC_TEAM_NAME: {{atc_team_name}}
 
       PIVNET_TOKEN: {{pivnet_token}}
       PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
