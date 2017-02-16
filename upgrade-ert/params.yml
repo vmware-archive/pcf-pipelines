@@ -19,4 +19,4 @@ opsman_uri: CHANGEME
 github_token: yyyyyyyyyyyyyyyyy
 iaas_type: gcp
 pivnet_poll_interval: 1h
-opsman_timeout_seconds: 5m
+opsman_timeout_seconds: 300
