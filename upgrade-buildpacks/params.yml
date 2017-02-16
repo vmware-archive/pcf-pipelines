@@ -18,6 +18,3 @@ pivnet_token: CHANGEME
 cf_api_uri: CHANGEME
 cf_user: CHANGEME
 cf_password: CHANGEME
-cf_org: CHANGEME
-cf_space: CHANGEME
-
