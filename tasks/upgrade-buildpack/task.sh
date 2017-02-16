@@ -17,7 +17,7 @@
 tar -xvf cf-cli/*.tgz cf
 chmod +x cf
 
-echo Using $(cf-cli/cf --version)
+echo Using $(cf --version)
 
 ./cf api $CF_API_URI --skip-ssl-validation
 ./cf auth $CF_USERNAME $CF_PASSWORD
