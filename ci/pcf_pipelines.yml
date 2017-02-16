@@ -24,6 +24,10 @@ jobs:
     params:
       PIPELINE_NAME: upgrade-ert
       PIPELINE_PATH: pcf-pipelines/upgrade-ert/pipeline.yml
+      ATC_EXTERNAL_URL: {{atc_external_url}}
+      ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+      ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+
       PIVNET_TOKEN: {{pivnet_token}}
       OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
       OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
@@ -32,9 +36,6 @@ jobs:
       IAAS_TYPE: {{iaas_type}}
       PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
       OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
-      ATC_EXTERNAL_URL: {{atc_external_url}}
-      ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
-      ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
 
 - name: update-upgrade-buildpacks
   plan:
@@ -47,14 +48,12 @@ jobs:
     params:
       PIPELINE_NAME: upgrade-buildpacks
       PIPELINE_PATH: pcf-pipelines/upgrade-buildpacks/pipeline.yml
-      PIVNET_TOKEN: {{pivnet_token}}
-      OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-      GITHUB_TOKEN: {{github_token}}
-      IAAS_TYPE: {{iaas_type}}
-      PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
-      OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
       ATC_EXTERNAL_URL: {{atc_external_url}}
       ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
       ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+
+      PIVNET_TOKEN: {{pivnet_token}}
+      PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
+      CF_API_URI: {{cf_api_uri}}
+      CF_USER: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}

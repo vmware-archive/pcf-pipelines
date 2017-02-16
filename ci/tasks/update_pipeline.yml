@@ -52,9 +52,9 @@ run:
       iaas_type: "${IAAS_TYPE}"
       pivnet_poll_interval: "${PIVNET_POLL_INTERVAL}"
       opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
-      cf_api_uri:
-      cf_user:
-      cf_password:
+      cf_api_uri: "${CF_API_URI}"
+      cf_user: "${CF_USER}"
+      cf_password: "${CF_PASSWORD}"
     EOF
 
     ./fly --target self set-pipeline \
