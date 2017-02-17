@@ -31,4 +31,4 @@ params:
   BUILDPACK_NAME:
 
 run:
-  path: pcf-pipelines/tasks/upgrade-buildpack/task.sh
+  path: pcf-pipelines/tasks/stage-buildpack/task.sh

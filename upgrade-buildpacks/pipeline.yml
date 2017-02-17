@@ -124,7 +124,7 @@ resources:
     product_version: tc*
 
 jobs:
-- name: update-binary-buildpack
+- name: stage-binary-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -133,15 +133,34 @@ jobs:
     - get: buildpack
       resource: binary-buildpack
       trigger: true
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: binary_buildpack_latest
 
-- name: update-dotnet-buildpack
+- name: promote-binary-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: go-buildpack
+      passed: [stage-binary-buildpack]
+      trigger: false
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: binary_buildpack_latest
+      TARGET_BUILDPACK_NAME: binary_buildpack
+
+- name: stage-dotnet-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -150,34 +169,70 @@ jobs:
     - get: buildpack
       resource: dotnet-core-buildpack
       trigger: true
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: dotnet_core_buildpack_offline_latest
 
-- name: update-go-buildpack
+- name: promote-dotnet-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
-## Uncomment to limit when the pipeline can run
-#   - get: run-time-window
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: dotnet-buildpack
+      passed: [stage-dotnet-buildpack]
+      trigger: false
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: dotnet_core_buildpack_offline_latest
+      TARGET_BUILDPACK_NAME: dotnet_core_buildpack_offline
+
+- name: stage-go-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
     - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       resource: go-buildpack
       trigger: true
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: go_buildpack_latest
 
-- name: update-java-buildpack
+- name: promote-go-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: go-buildpack
+      passed: [stage-go-buildpack]
+      trigger: false
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: go_buildpack_latest
+      TARGET_BUILDPACK_NAME: go_buildpack
+
+- name: stage-java-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -189,15 +244,37 @@ jobs:
       params:
         globs:
         - "*offline*"
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: java_buildpack_offline_latest
 
-- name: update-nodejs-buildpack
+- name: promote-java-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: java-buildpack
+      passed: [stage-java-buildpack]
+      trigger: false
+      params:
+        globs:
+        - "*offline*"
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: java_buildpack_offline_latest
+      TARGET_BUILDPACK_NAME: java_buildpack_offline
+
+- name: stage-nodejs-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -206,15 +283,34 @@ jobs:
     - get: buildpack
       resource: nodejs-buildpack
       trigger: true
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: nodejs_buildpack_latest
 
-- name: update-php-buildpack
+- name: promote-nodejs-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: nodejs-buildpack
+      passed: [stage-nodejs-buildpack]
+      trigger: false
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: nodejs_buildpack_latest
+      TARGET_BUILDPACK_NAME: nodejs_buildpack
+
+- name: stage-php-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -223,15 +319,34 @@ jobs:
     - get: buildpack
       resource: php-buildpack
       trigger: true
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: php_buildpack_latest
 
-- name: update-python-buildpack
+- name: promote-php-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: php-buildpack
+      passed: [stage-php-buildpack]
+      trigger: false
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: php_buildpack_latest
+      TARGET_BUILDPACK_NAME: php_buildpack
+
+- name: stage-python-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -240,15 +355,34 @@ jobs:
     - get: buildpack
       resource: python-buildpack
       trigger: true
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: python_buildpack_latest
 
-- name: update-ruby-buildpack
+- name: promote-python-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: python-buildpack
+      passed: [stage-python-buildpack]
+      trigger: false
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: python_buildpack_latest
+      TARGET_BUILDPACK_NAME: python_buildpack
+
+- name: stage-ruby-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -257,15 +391,34 @@ jobs:
     - get: buildpack
       resource: ruby-buildpack
       trigger: true
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: ruby_buildpack_latest
 
-- name: update-staticfile-buildpack
+- name: promote-ruby-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: ruby-buildpack
+      passed: [stage-ruby-buildpack]
+      trigger: false
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: ruby_buildpack_latest
+      TARGET_BUILDPACK_NAME: ruby_buildpack
+
+- name: stage-staticfile-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -274,15 +427,34 @@ jobs:
     - get: buildpack
       resource: staticfile-buildpack
       trigger: true
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: staticfile_buildpack_latest
 
-- name: update-tcserver-buildpack
+- name: promote-staticfile-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: staticfile-buildpack
+      passed: [stage-staticfile-buildpack]
+      trigger: false
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: staticfile_buildpack_latest
+      TARGET_BUILDPACK_NAME: staticfile_buildpack
+
+- name: stage-tcserver-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
@@ -294,10 +466,32 @@ jobs:
       params:
         globs:
         - "*offline*"
-  - task: update
-    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
+  - task: stage
+    file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
       CF_API_URI: {{cf_api_uri}}
       CF_USERNAME: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       BUILDPACK_NAME: tc_buildpack_latest
+
+- name: promote-tcserver-buildpack
+  serial_groups: [cc-api]
+  plan:
+  - aggregate:
+    - get: cf-cli
+    - get: pcf-pipelines
+    - get: buildpack
+      resource: tc-buildpack
+      passed: [stage-tcserver-buildpack]
+      trigger: false
+      params:
+        globs:
+        - "*offline*"
+  - task: promote
+    file: pcf-pipelines/tasks/promote-buildpack/task.yml
+    params:
+      CF_API_URI: {{cf_api_uri}}
+      CF_USERNAME: {{cf_user}}
+      CF_PASSWORD: {{cf_password}}
+      SOURCE_BUILDPACK_NAME: tc_buildpack_latest
+      TARGET_BUILDPACK_NAME: tc_buildpack
