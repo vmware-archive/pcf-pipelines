@@ -148,7 +148,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
-      resource: go-buildpack
+      resource: binary-buildpack
       passed: [stage-binary-buildpack]
       trigger: false
   - task: promote
@@ -184,7 +184,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
-      resource: dotnet-buildpack
+      resource: dotnet-core-buildpack
       passed: [stage-dotnet-buildpack]
       trigger: false
   - task: promote
