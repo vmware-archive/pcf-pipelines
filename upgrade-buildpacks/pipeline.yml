@@ -291,9 +291,9 @@ jobs:
     - get: buildpack
       resource: tc-buildpack
       trigger: true
-    params:
-      globs:
-      - "*offline*"
+      params:
+        globs:
+        - "*offline*"
   - task: update
     file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
