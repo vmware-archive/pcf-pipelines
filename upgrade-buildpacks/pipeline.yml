@@ -146,7 +146,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-binary-buildpack]
     - get: pcf-pipelines
+      passed: [stage-binary-buildpack]
     - get: buildpack
       resource: binary-buildpack
       passed: [stage-binary-buildpack]
@@ -182,7 +184,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-dotnet-buildpack]
     - get: pcf-pipelines
+      passed: [stage-dotnet-buildpack]
     - get: buildpack
       resource: dotnet-core-buildpack
       passed: [stage-dotnet-buildpack]
@@ -218,7 +222,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-go-buildpack]
     - get: pcf-pipelines
+      passed: [stage-go-buildpack]
     - get: buildpack
       resource: go-buildpack
       passed: [stage-go-buildpack]
@@ -257,7 +263,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-java-buildpack]
     - get: pcf-pipelines
+      passed: [stage-java-buildpack]
     - get: buildpack
       resource: java-buildpack
       passed: [stage-java-buildpack]
@@ -296,7 +304,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-nodejs-buildpack]
     - get: pcf-pipelines
+      passed: [stage-nodejs-buildpack]
     - get: buildpack
       resource: nodejs-buildpack
       passed: [stage-nodejs-buildpack]
@@ -332,7 +342,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-php-buildpack]
     - get: pcf-pipelines
+      passed: [stage-php-buildpack]
     - get: buildpack
       resource: php-buildpack
       passed: [stage-php-buildpack]
@@ -368,7 +380,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-python-buildpack]
     - get: pcf-pipelines
+      passed: [stage-python-buildpack]
     - get: buildpack
       resource: python-buildpack
       passed: [stage-python-buildpack]
@@ -404,7 +418,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-ruby-buildpack]
     - get: pcf-pipelines
+      passed: [stage-ruby-buildpack]
     - get: buildpack
       resource: ruby-buildpack
       passed: [stage-ruby-buildpack]
@@ -440,7 +456,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-staticfile-buildpack]
     - get: pcf-pipelines
+      passed: [stage-staticfile-buildpack]
     - get: buildpack
       resource: staticfile-buildpack
       passed: [stage-staticfile-buildpack]
@@ -479,7 +497,9 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
+      passed: [stage-tcserver-buildpack]
     - get: pcf-pipelines
+      passed: [stage-tcserver-buildpack]
     - get: buildpack
       resource: tc-buildpack
       passed: [stage-tcserver-buildpack]
