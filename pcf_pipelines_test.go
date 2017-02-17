@@ -67,7 +67,7 @@ var _ = Describe("pcf-pipelines", func() {
 
 				for _, job := range config.Jobs {
 					for _, task := range allTasksInPlan(&job.Plan, []atc.PlanConfig{}) {
-						failMessage := fmt.Sprintf("Found error in the following pipeline:\n    %s\n\nin the following task's params:\n    %s\n", pipelinePath, task.Name())
+						failMessage := fmt.Sprintf("Found error in the following pipeline:\n    %s\n\nin the following task's params:\n    %s/%s\n", pipelinePath, job.Name, task.Name())
 
 						var configParams []string
 						for k := range task.Params {
