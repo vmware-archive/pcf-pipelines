@@ -15,6 +15,7 @@
 opsman_timeout_seconds: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
+opsman_major_minor_version: 1.9.*
 opsman_uri: http://example.com
 opsman_passphrase: CHANGEME
 github_token: CHANGEME

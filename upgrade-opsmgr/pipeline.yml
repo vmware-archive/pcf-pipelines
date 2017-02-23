@@ -62,6 +62,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
 jobs:
