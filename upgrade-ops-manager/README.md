@@ -26,8 +26,6 @@ larger btrfs store size.
 The size of the installation.zip file is based on how many tiles you have installed at the time. Dependng on the number
 of tiles installed this setting could need to be as big as 50G. In a future release the size of this file should be decreasing.
 
-    '''
     properties:
           garden:
             garden.btrfs_store_size_mb: 
-    '''
