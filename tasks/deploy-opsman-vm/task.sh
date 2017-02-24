@@ -58,8 +58,8 @@ EOF
   cat ./opsman_settings.json
 
   echo "Importing OVA of new OpsMgr VM..."
-  echo "Running govc import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${OPSMAN_PATH}"
-  ./${CMD_PATH} import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${OPSMAN_PATH}
+  echo "Running govc import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${OPSMAN_PATH}"
+  ./${CMD_PATH} import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${OPSMAN_PATH}
   #
   # echo "Setting CPUs on new OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
   ./${CMD_PATH} vm.change -c=2 -k=true -vm /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
