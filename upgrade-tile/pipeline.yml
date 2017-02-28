@@ -44,8 +44,7 @@ resources:
   source:
     user: pivotal-cf
     repository: om
-    username: {{github_token}}
-    password: x-oauth-basic
+    access_token: {{github_token}}
 
 - name: {{resource_name}}
   type: pivnet
