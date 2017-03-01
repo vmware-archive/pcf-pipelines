@@ -17,27 +17,20 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: cloudfoundry/cflinuxfs2}
+  source:
+    repository: cloudfoundry/cflinuxfs2
 
 inputs:
-  - name: pcf-pipelines
-  - name: iaas-util
   - name: pivnet-opsmgr
-  - name: terraform
-run:
-  path: pcf-pipelines/tasks/deploy-opsman-vm-aws/task.sh
+
+outputs:
+  - name: create-vm-config
 
 params:
-  AWS_SECRET_ACCESS_KEY:
   AWS_ACCESS_KEY_ID:
-  INSTANCE_TYPE:
-  KEY_NAME:
-  SUBNET_ID:
-  AWS_INSTANCE_NAME:
+  AWS_SECRET_ACCESS_KEY:
   AWS_REGION:
-  SECURITY_GROUP:
-  ROUTE53_ZONE_ID:
-  OPSMAN_SUBDOMAIN:
-  OPSMAN_URI:
-  OPSMAN_TIMEOUT:
-  VPC_ID:
+  AWS_VPC_ID:
+
+run:
+  path: pcf-pipelines/tasks/create-replace-vm-config-aws/task.sh

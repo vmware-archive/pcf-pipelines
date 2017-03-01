@@ -29,7 +29,7 @@ resources:
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
-- name: iaas-util
+- name: tool-cliaas
   type: github-release
   source:
     user: c0-ops
@@ -88,11 +88,6 @@ jobs:
         globs:
         - "pivnet-linux-amd64-*"
 
-  - task: get-terraform
-    file: pcf-pipelines/tasks/get-dependencies/terraform/task.yml
-    params:
-      TERRAFORM_ZIP_URL: {{terraform_zip_url}}
-
   - aggregate:
     - task: export-opsmgr-settings
       file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
@@ -108,29 +103,25 @@ jobs:
         OPSMAN_PASSWORD: {{opsman_admin_password}}
         OPSMAN_URI: {{opsman_uri}}
 
-  - task: deploy-opsman-vm
-    file: pcf-pipelines/tasks/deploy-opsman-vm-aws/task.yml
+  - task: create-replace-vm-config-aws
+    file: pcf-pipelines/tasks/create-replace-vm-config-aws/task.yml
     params:
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
-      INSTANCE_TYPE: {{instance_type}}
-      KEY_NAME: {{key_name}}
-      SUBNET_ID: {{subnet_id}}
-      AWS_INSTANCE_NAME: {{aws_instance_name}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
       AWS_REGION: {{aws_region}}
-      SECURITY_GROUP: {{security_group}}
-      ROUTE53_ZONE_ID: {{route53_zone_id}}
-      OPSMAN_SUBDOMAIN: {{opsman_subdomain}}
-      OPSMAN_URI: {{opsman_uri_new}}
-      VPC_ID: {{vpc_id}}
+      AWS_VPC_ID: {{aws_vpc_id}}
 
-  - task: import-opsmgr
+  - task: replace-opsman-vm
+    file: pcf-pipelines/tasks/replace-opsman-vm/task.yml
+    params:
+      VM_IDENTIFIER: {{existing_opsman_vm_name}}
+
+  - task: import-opsmgr-settings
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri_new}}
+      OPSMAN_URI: {{opsman_uri}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
 
@@ -138,20 +129,19 @@ jobs:
     file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
     params:
       API_TOKEN: {{pivnet_token}}
-      IAAS_TYPE: {{iaas_type}}
+      IAAS_TYPE: aws
 
   - task: restore-stemcells
     file: pcf-pipelines/tasks/restore-stemcells/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri_new}}
+      OPSMAN_URI: {{opsman_uri}}
 
-      # todo discuss the order for calling this task
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri_new}}
+      OPSMAN_URI: {{opsman_uri}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}

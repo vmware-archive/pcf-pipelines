@@ -12,24 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Resource configuration
+---
+platform: linux
 
-check_new_opsman_every: CHANGEME
-github_token: CHANGEME
-opsman_major_minor_version: CHANGEME
-pivnet_token: CHANGEME
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cflinuxfs2
 
-# Task configuration
+inputs:
+  - name: tool-cliaas
 
-aws_access_key_id: CHANGEME
-aws_secret_access_key: CHANGEME
-aws_region: CHANGEME
-aws_vpc_id: CHANGEME
+params:
+  VM_IDENTIFIER:
 
-existing_opsman_vm_name: CHANGEME
-
-opsman_admin_password: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_passphrase: CHANGEME
-opsman_timeout_seconds: 1200
-opsman_uri: CHANGEME
+run:
+  path: pcf-pipelines/tasks/replace-opsman-vm/task.sh

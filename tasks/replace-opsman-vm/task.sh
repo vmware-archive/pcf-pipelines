@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Resource configuration
+set -eu
 
-check_new_opsman_every: CHANGEME
-github_token: CHANGEME
-opsman_major_minor_version: CHANGEME
-pivnet_token: CHANGEME
+root=$PWD
 
-# Task configuration
+export PATH=$root/tool-cliaas:$PATH
 
-aws_access_key_id: CHANGEME
-aws_secret_access_key: CHANGEME
-aws_region: CHANGEME
-aws_vpc_id: CHANGEME
+chmod +x tool-cliaas/cliaas-linux
 
-existing_opsman_vm_name: CHANGEME
-
-opsman_admin_password: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_passphrase: CHANGEME
-opsman_timeout_seconds: 1200
-opsman_uri: CHANGEME
+cliaas-linux replace-vm \
+  --config replace-vm-config/config.yml \
+  --identifier $VM_IDENTIFIER
