@@ -61,7 +61,7 @@ resources:
 - name: stemcell-downloader
   type: github-release
   source:
-    user: c0-ops
+    user: pivotal-cf
     repository: pcf-product-stemcell-downloader
     access_token: {{github_token}}
     globs:

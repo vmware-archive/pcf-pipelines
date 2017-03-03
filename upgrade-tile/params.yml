@@ -38,7 +38,7 @@ opsman_timeout_seconds: CHANGEME
 # The token used to download the stemcell downloader from GitHub.
 github_token: CHANGEME
 # The IaaS name for which stemcell to download. See
-# https://github.com/c0-ops/pcf-product-stemcell-downloader/ for the list of
+# https://github.com/pivotal-cf/pcf-product-stemcell-downloader/ for the list of
 # allowed IaaS names.
 iaas_type: CHANGEME
 # The interval to check Pivotal Network for updates to the product file.
