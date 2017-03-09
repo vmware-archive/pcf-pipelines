@@ -21,10 +21,16 @@ image_resource:
     repository: cloudfoundry/cflinuxfs2
 
 inputs:
-  - name: tool-cliaas
+  - name: pivnet-opsmgr
+
+outputs:
+  - name: create-vm-config
 
 params:
-  VM_IDENTIFIER:
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+  AWS_REGION:
+  AWS_VPC_ID:
 
 run:
-  path: pcf-pipelines/tasks/replace-opsman-vm/task.sh
+  path: pcf-pipelines/tasks/create-cliaas-config-aws/task.sh

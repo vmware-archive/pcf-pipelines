@@ -23,5 +23,5 @@ export PATH=$root/tool-cliaas:$PATH
 chmod +x tool-cliaas/cliaas-linux
 
 cliaas-linux replace-vm \
-  --config replace-vm-config/config.yml \
+  --config cliaas-config/config.yml \
   --identifier $VM_IDENTIFIER

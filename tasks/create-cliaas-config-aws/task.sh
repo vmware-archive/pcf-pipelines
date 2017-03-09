@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-platform: linux
+set -eu
 
-image_resource:
-  type: docker-image
-  source:
-    repository: cloudfoundry/cflinuxfs2
+AMI=$(grep ${AWS_REGION} pivnet-opsmgr/*AWS.yml | awk '{split($0, a); print a[2]}')
 
-inputs:
-  - name: pivnet-opsmgr
-
-outputs:
-  - name: create-vm-config
-
-params:
-  AWS_ACCESS_KEY_ID:
-  AWS_SECRET_ACCESS_KEY:
-  AWS_REGION:
-  AWS_VPC_ID:
-
-run:
-  path: pcf-pipelines/tasks/create-replace-vm-config-aws/task.sh
+cat > cliaas-config/config.yml <<EOF
+aws:
+  access_key_id: ${AWS_ACCESS_KEY_ID}
+  secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+  region: ${AWS_REGION}
+  vpc: ${AWS_VPC_ID}
+  ami: ${AMI}
+EOF

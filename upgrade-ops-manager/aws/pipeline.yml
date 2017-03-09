@@ -113,8 +113,8 @@ jobs:
         OPSMAN_PASSWORD: {{opsman_admin_password}}
         OPSMAN_URI: {{opsman_uri}}
 
-  - task: create-replace-vm-config-aws
-    file: pcf-pipelines/tasks/create-replace-vm-config-aws/task.yml
+  - task: create-cliaas-config
+    file: pcf-pipelines/tasks/create-cliaas-config-aws/task.yml
     params:
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
@@ -122,7 +122,7 @@ jobs:
       AWS_VPC_ID: {{aws_vpc_id}}
 
   - task: replace-opsman-vm
-    file: pcf-pipelines/tasks/replace-opsman-vm/task.yml
+    file: pcf-pipelines/tasks/replace-vm/task.yml
     params:
       VM_IDENTIFIER: {{existing_opsman_vm_name}}
 
