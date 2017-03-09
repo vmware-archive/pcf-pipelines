@@ -80,14 +80,15 @@ jobs:
         globs:
         - "*AWS.yml"
     - get: tool-cliaas
-      globs: cliaas-linux
+      params:
+        globs: [linux]
     - get: pcf-pipelines-tarball
     - get: tool-om
-      globs: om-linux
+      params:
+        globs: [linux]
     - get: tool-pivnet-cli
       params:
-        globs:
-        - "pivnet-linux-amd64-*"
+        globs: [linux]
 
   - task: tarball-unpack
     config:
