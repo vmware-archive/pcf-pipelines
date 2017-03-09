@@ -34,7 +34,6 @@ opsman_timeout_seconds: CHANGEME
 
 # Stemcell Downloader
 # ------------------------------
-# TODO: Remove this when the stemcell downloader is freely available.
 # The token used to download the stemcell downloader from GitHub.
 github_token: CHANGEME
 # The IaaS name for which stemcell to download. See
