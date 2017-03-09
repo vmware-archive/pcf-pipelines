@@ -20,3 +20,5 @@ github_token: yyyyyyyyyyyyyyyyy
 iaas_type: gcp
 pivnet_poll_interval: 1h
 opsman_timeout_seconds: 300
+#please replace this with the pivnet version your pipeline is compatible with
+pipeline_version_compatibility: __PIPELINE_VERSION_COMPATIBILITY__

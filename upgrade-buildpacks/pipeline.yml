@@ -37,11 +37,12 @@ resources:
     region_name: us-west-1
     regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
 
-- name: pcf-pipelines
-  type: git
+- name: pcf-pipelines-tarball
+  type: pivnet
   source:
-    uri: https://github.com/c0-ops/pcf-pipelines.git
-    branch: master
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: {{pipeline_version_compatibility}}
 
 - name: binary-buildpack
   type: pivnet
@@ -129,10 +130,19 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: binary-buildpack
       trigger: true
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -145,12 +155,21 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-binary-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-binary-buildpack]
     - get: buildpack
       resource: binary-buildpack
       passed: [stage-binary-buildpack]
       trigger: false
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -163,10 +182,19 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: dotnet-core-buildpack
       trigger: true
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -179,12 +207,21 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-dotnet-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-dotnet-buildpack]
     - get: buildpack
       resource: dotnet-core-buildpack
       passed: [stage-dotnet-buildpack]
       trigger: false
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -197,10 +234,19 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: go-buildpack
       trigger: true
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -213,12 +259,21 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-go-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-go-buildpack]
     - get: buildpack
       resource: go-buildpack
       passed: [stage-go-buildpack]
       trigger: false
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -231,13 +286,22 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: java-buildpack
       trigger: true
       params:
         globs:
         - "*offline*"
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -250,7 +314,7 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-java-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-java-buildpack]
     - get: buildpack
       resource: java-buildpack
@@ -259,6 +323,15 @@ jobs:
       params:
         globs:
         - "*offline*"
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -271,10 +344,19 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: nodejs-buildpack
       trigger: true
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -287,12 +369,21 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-nodejs-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-nodejs-buildpack]
     - get: buildpack
       resource: nodejs-buildpack
       passed: [stage-nodejs-buildpack]
       trigger: false
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -305,10 +396,19 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: php-buildpack
       trigger: true
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -321,12 +421,21 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-php-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-php-buildpack]
     - get: buildpack
       resource: php-buildpack
       passed: [stage-php-buildpack]
       trigger: false
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -339,10 +448,19 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: python-buildpack
       trigger: true
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -355,12 +473,21 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-python-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-python-buildpack]
     - get: buildpack
       resource: python-buildpack
       passed: [stage-python-buildpack]
       trigger: false
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -373,10 +500,19 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: ruby-buildpack
       trigger: true
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -389,12 +525,21 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-ruby-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-ruby-buildpack]
     - get: buildpack
       resource: ruby-buildpack
       passed: [stage-ruby-buildpack]
       trigger: false
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -407,10 +552,19 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: staticfile-buildpack
       trigger: true
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -423,12 +577,21 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-staticfile-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-staticfile-buildpack]
     - get: buildpack
       resource: staticfile-buildpack
       passed: [stage-staticfile-buildpack]
       trigger: false
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -441,13 +604,22 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: buildpack
       resource: tc-buildpack
       trigger: true
       params:
         globs:
         - "*offline*"
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -460,7 +632,7 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-tcserver-buildpack]
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
       passed: [stage-tcserver-buildpack]
     - get: buildpack
       resource: tc-buildpack
@@ -469,6 +641,15 @@ jobs:
       params:
         globs:
         - "*offline*"
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:

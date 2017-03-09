@@ -35,11 +35,12 @@ resources:
 #    stop: 1:00 AM
 #    location: America/Chicago
 
-- name: pcf-pipelines
-  type: git
+- name: pcf-pipelines-tarball
+  type: pivnet
   source:
-    uri: https://github.com/c0-ops/pcf-pipelines.git
-    branch: master
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: {{pipeline_version_compatibility}}
 
 - name: tool-om
   type: github-release
@@ -71,7 +72,7 @@ jobs:
 - name: upgrade-tile
   plan:
   - aggregate:
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
 ## Uncomment to limit when the pipeline can run
 #   - get: run-time-window
     - get: pivnet-product
@@ -87,6 +88,13 @@ jobs:
     - get: stemcell-downloader
       params:
         globs: [stemcell-downloader-linux]
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:

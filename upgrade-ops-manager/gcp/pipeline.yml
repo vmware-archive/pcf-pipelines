@@ -52,11 +52,12 @@ resources:
     repository: om
     access_token: {{github_token}}
 
-- name: pcf-pipelines
-  type: git
+- name: pcf-pipelines-tarball
+  type: pivnet
   source:
-    uri: https://github.com/c0-ops/pcf-pipelines
-    branch: master
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: {{pipeline_version_compatibility}}
 
 jobs:
 - name: upgrade-opsmgr
@@ -71,9 +72,17 @@ jobs:
         - "*GCP.yml"
     - get: iaas-util
       globs: cliaas-linux
-    - get: pcf-pipelines
+    - get: pcf-pipelines-tarball
     - get: tool-om
       globs: om-linux
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
 
   - task: get-terraform
     file: pcf-pipelines/tasks/get-dependencies/terraform/task.yml

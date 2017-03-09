@@ -68,3 +68,5 @@ product_slug: CHANGEME
 # be found in the .pivotal file with the following:
 # `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | head`
 product_name: CHANGEME
+
+pipeline_version_compatibility: __PIPELINE_VERSION_COMPATIBILITY__

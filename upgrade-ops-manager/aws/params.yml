@@ -33,3 +33,6 @@ opsman_admin_username: CHANGEME
 opsman_passphrase: CHANGEME
 opsman_timeout_seconds: 1200
 opsman_uri: CHANGEME
+
+#please replace this with the pivnet version your pipeline is compatible with
+pipeline_version_compatibility: __PIPELINE_VERSION_COMPATIBILITY__
