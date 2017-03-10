@@ -27,7 +27,7 @@ run:
     mv om/om-linux .
 
     echo "pinning pipeline params to current version..."
-    find ./pcf-pipelines -type f -name "params.yml" -exec sed -i '' s/__PIPELINE_VERSION_COMPATIBILITY__/${version}/g {} +
+    find ./pcf-pipelines -type f -name "params.yml" -exec sed -i s/__PIPELINE_VERSION_COMPATIBILITY__/${version}/g {} +
 
     tar \
       --exclude .git* \
