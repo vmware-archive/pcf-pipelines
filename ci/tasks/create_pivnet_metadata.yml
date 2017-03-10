@@ -13,6 +13,9 @@ inputs:
 outputs:
 - name: pivnet-metadata
 
+params:
+  AVAILABILITY: Admins Only
+
 run:
   path: sh
   args:
@@ -28,7 +31,7 @@ run:
       release_date: "${release_date}"
       description: |
         Concourse Pipeline Templates and Scripts for PCF Platform Ops Automation
-      availability: Admins Only
+      availability: $AVAILABILITY
       release_type: Beta Release
       eula_slug: "pivotal_beta_eula"
     EOF

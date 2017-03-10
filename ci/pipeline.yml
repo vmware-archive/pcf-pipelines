@@ -78,6 +78,8 @@ jobs:
   
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
+    params:
+      AVAILABILITY: Admins Only
   
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
@@ -146,6 +148,8 @@ jobs:
         globs: [om-linux]
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
+    params:
+      AVAILABILITY: All Users
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
   - put: pivnet-release
