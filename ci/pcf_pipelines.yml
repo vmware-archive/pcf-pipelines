@@ -63,22 +63,13 @@ jobs:
   - task: test
     file: pcf-pipelines/ci/tasks/test.yml
 
-- name: rc
-  plan:
-  - get: pcf-pipelines
-    trigger: true
-    passed:
-    - test 
-  - put: version
-    params: {pre: rc}
-
 - name: publish-rc
   plan:
   - aggregate:
     - get: version
-      passed: [rc]
+      params: {pre: rc}
     - get: pcf-pipelines
-      passed: [rc]
+      passed: [test]
     - get: cf-cli
     - get: om
       params:
@@ -89,6 +80,9 @@ jobs:
   
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
+
+  - put: version
+    params: {pre: rc}
 
   - put: pivnet-rc
     params:
