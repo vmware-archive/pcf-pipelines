@@ -24,6 +24,8 @@ run:
 
     tar --extract --file cf-cli/*.tgz
 
+    mv om/om-linux .
+
     tar \
       --exclude .git \
       --exclude ci \
@@ -33,4 +35,4 @@ run:
       --file pcf-pipelines-release-files/pcf-pipelines-$version.tgz \
       pcf-pipelines \
       cf \
-      om/om-linux
+      om-linux
