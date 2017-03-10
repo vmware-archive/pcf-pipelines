@@ -31,8 +31,12 @@ var _ = Describe("pcf-pipelines", func() {
 		if err != nil {
 			return err
 		}
+		validFilenames := map[string]bool{
+			"pipeline.yml":      true,
+			"pcf_pipelines.yml": true,
+		}
 
-		if filepath.Base(path) == "pipeline.yml" {
+		if _, ok := validFilenames[filepath.Base(path)]; ok {
 			relPipelinePath, err := filepath.Rel(cwd, path)
 			if err != nil {
 				return err
@@ -96,37 +100,38 @@ var _ = Describe("pcf-pipelines", func() {
 					}
 				}
 			})
+			Context("customer facing pipeline", func() {
+				if filepath.Dir(pipelinePath) != "ci" {
+					It("has a params file with all and only the params that the pipeline specifies", func() {
+						paramsPath := filepath.Join(filepath.Dir(pipelinePath), "params.yml")
+						_, err := os.Lstat(paramsPath)
+						Expect(err).NotTo(HaveOccurred())
 
-			It("has a params file with all and only the params that the pipeline specifies", func() {
-				paramsPath := filepath.Join(filepath.Dir(pipelinePath), "params.yml")
-				_, err := os.Lstat(paramsPath)
-				Expect(err).NotTo(HaveOccurred())
+						bs, err := ioutil.ReadFile(paramsPath)
+						Expect(err).NotTo(HaveOccurred())
 
-				bs, err := ioutil.ReadFile(paramsPath)
-				Expect(err).NotTo(HaveOccurred())
+						paramsMap := map[string]interface{}{}
+						err = yaml.Unmarshal(bs, paramsMap)
+						Expect(err).NotTo(HaveOccurred())
 
-				paramsMap := map[string]interface{}{}
-				err = yaml.Unmarshal(bs, paramsMap)
-				Expect(err).NotTo(HaveOccurred())
+						var params []string
+						for k := range paramsMap {
+							params = append(params, k)
+						}
 
-				var params []string
-				for k := range paramsMap {
-					params = append(params, k)
-				}
+						matches := placeholderRegexp.FindAllStringSubmatch(string(configBytes), -1)
 
-				matches := placeholderRegexp.FindAllStringSubmatch(string(configBytes), -1)
+						uniqueMatches := map[string]struct{}{}
+						for _, match := range matches {
+							uniqueMatches[match[1]] = struct{}{}
+						}
 
-				uniqueMatches := map[string]struct{}{}
-				for _, match := range matches {
-					uniqueMatches[match[1]] = struct{}{}
-				}
+						var placeholders []string
+						for match := range uniqueMatches {
+							placeholders = append(placeholders, match)
+						}
 
-				var placeholders []string
-				for match := range uniqueMatches {
-					placeholders = append(placeholders, match)
-				}
-
-				failMessage := fmt.Sprintf(`
+						failMessage := fmt.Sprintf(`
 Found error with the following pipeline:
     %s
 
@@ -134,7 +139,9 @@ in the following params template:
     %s
 `, pipelinePath, paramsPath)
 
-				assertUnorderedEqual(placeholders, params, failMessage)
+						assertUnorderedEqual(placeholders, params, failMessage)
+					})
+				}
 			})
 		})
 	}
