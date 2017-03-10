@@ -10,7 +10,7 @@ inputs:
 - name: tarball
 
 outputs:
-- name: unpacked-tarball
+- name: unpacked_tarball
 
 run: 
  path: sh
