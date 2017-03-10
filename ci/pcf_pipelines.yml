@@ -87,7 +87,7 @@ jobs:
       file_glob: pcf-pipelines-release-files/*
       s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
 
-- name: fly-pipeline-smokes 
+- name: update-pipelines
   plan:
   - aggregate:
     - get: version
@@ -124,10 +124,10 @@ jobs:
   plan:
   - aggregate:
     - get: version
-      passed: [fly-pipeline-smokes]
+      passed: [update-pipelines]
       params: {bump: final}
     - get: pcf-pipelines
-      passed: [fly-pipeline-smokes]
+      passed: [update-pipelines]
     - get: cf-cli
     - get: om
       params:
