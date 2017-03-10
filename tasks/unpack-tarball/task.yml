@@ -10,11 +10,11 @@ inputs:
 - name: tarball
 
 outputs:
-- name: unpacked-tarballs
+- name: unpacked-tarball
 
 run: 
  path: sh
  args:
  - -c
  - |
-   tar -C unpacked-tarballs -xvf tarball/*.tgz
+   tar -C unpacked-tarball -xvf tarball/*.tgz
