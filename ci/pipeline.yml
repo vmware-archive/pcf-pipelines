@@ -106,7 +106,7 @@ jobs:
         globs: [om-linux]
 
   - task: unpack-rc
-    file: pcf-pipelines/tasks/unpack-tarball.yml
+    file: pcf-pipelines/tasks/unpack-tarball/task.yml
     input_mapping:
       tarball: pivnet-rc
 
