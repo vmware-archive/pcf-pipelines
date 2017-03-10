@@ -128,11 +128,19 @@ jobs:
       PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
 
   - task: update-upgrade-opsman-aws
-    file: pcf-pipelines/ci/tasks/update_pipeline.yml
+    file: pcf-pipelines/ci/tasks/update_upgrade_opsman_aws.yml
     params:
       <<: *update_pipeline_params
-      PIPELINE_NAME: upgrade-opsman-aws
       PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
+      AWS_SECRET_ACCESS_KEY: {{upgrade_opsman_aws_aws_secret_access_key}}
+      AWS_REGION: {{upgrade_opsman_aws_aws_region}}
+      AWS_VPC_ID: {{upgrade_opsman_aws_aws_vpc_id}}
+      AWS_ACCESS_KEY_ID: {{upgrade_opsman_aws_aws_access_key_id}}
+      EXISTING_OPSMAN_VM_NAME: {{upgrade_opsman_aws_existing_opsman_vm_name}}
+      OPSMAN_URI: {{upgrade_opsman_aws_opsman_uri}}
+      OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_PASSPHRASE: {{opsman_admin_password}}
 
 - name: publish-release
   plan:
@@ -167,10 +175,6 @@ update_pipeline_params: &update_pipeline_params
   ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
   ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
   ATC_TEAM_NAME: {{atc_team_name}}
-  AWS_SECRET_ACCESS_KEY: {{upgrade_opsman_aws_secret_access_key}}
-  AWS_REGION: {{upgrade_opsman_aws_region}}
-  AWS_VPC_ID: {{upgrade_opsman_aws_vpc_id}}
-  AWS_ACCESS_KEY_ID: {{upgrade_opsman_aws_access_key_id}}
   IAAS_TYPE: {{iaas_type}}
   PIVNET_TOKEN: {{pivnet_token}}
   PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
@@ -178,7 +182,6 @@ update_pipeline_params: &update_pipeline_params
   CF_USER: {{cf_user}}
   CF_PASSWORD: {{cf_password}}
   CHECK_NEW_OPSMAN_EVERY: 24h
-  EXISTING_OPSMAN_VM_NAME: {{upgrade_opsman_existing_opsman_vm_name}}
   OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
   OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
   OPSMAN_URI: {{opsman_uri}}
