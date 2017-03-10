@@ -110,31 +110,29 @@ jobs:
 
   - task: unpack-rc
     file: pcf-pipelines/tasks/unpack-tarball/task.yml
-    input_mapping:
-      tarball: pivnet-rc
-    output_mapping:
-      unpacked_tarball: pcf-pipelines-release
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: release }
 
   - task: update-ert-pipeline
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       <<: *update_pipeline_params
       PIPELINE_NAME: upgrade-ert
-      PIPELINE_PATH: pcf-pipelines-release/upgrade-ert/pipeline.yml
+      PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
 
   - task: update-buildpacks-pipeline
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       <<: *update_pipeline_params
       PIPELINE_NAME: upgrade-buildpacks
-      PIPELINE_PATH: pcf-pipelines-release/upgrade-buildpacks/pipeline.yml
+      PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
 
   - task: update-upgrade-opsman-aws
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       <<: *update_pipeline_params
       PIPELINE_NAME: upgrade-opsman-aws
-      PIPELINE_PATH: pcf-pipelines-release/upgrade-ops-manager/aws/pipeline.yml
+      PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
 
 - name: publish-release
   plan:
