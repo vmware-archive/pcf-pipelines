@@ -121,7 +121,7 @@ Steps:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@mylocalgit.company.com:c0-ops/pcf-pipelines
+    uri: git@mylocalgit.company.com:pivotal-cf/pcf-pipelines
     branch: master
 ```
 

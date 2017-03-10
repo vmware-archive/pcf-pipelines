@@ -32,7 +32,7 @@ resources:
 - name: iaas-util
   type: github-release
   source:
-    user: c0-ops
+    user: pivotal-cf 
     repository: cliaas
 
   ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.

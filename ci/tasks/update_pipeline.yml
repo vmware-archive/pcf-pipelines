@@ -8,6 +8,7 @@ image_resource:
 
 inputs:
 - name: pcf-pipelines
+- name: version
 
 params:
   PIPELINE_NAME:
@@ -36,6 +37,7 @@ run:
       "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"
 
     chmod +x fly
+    PIPELINE_VERSION=v$(cat version/version)
 
     ./fly --target self login \
       --insecure \
@@ -63,6 +65,7 @@ run:
       upgrade_opsman_aws_region: "${AWS_REGION}"
       upgrade_opsman_aws_vpc_id: "${AWS_VPC_ID}"
       upgrade_opsman_existing_opsman_vm_name: "${EXISTING_OPSMAN_VM_NAME}"
+      pipeline_version_compatibility: "${PIPELINE_VERSION}" 
     EOF
 
     ./fly --target self set-pipeline \

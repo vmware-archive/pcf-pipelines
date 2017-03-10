@@ -9,7 +9,7 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/c0-ops/pcf-pipelines.git
+    uri: https://github.com/pivotal-cf/pcf-pipelines.git
     branch: master
 
 - name: pivnet-release
@@ -25,7 +25,7 @@ resources:
   source:
     driver: git
     initial_version: 1.0.0
-    uri: https://github.com/c0-ops/pcf-pipelines
+    uri: https://github.com/pivotal-cf/pcf-pipelines
     username: {{github_token}}
     password: x-oauth-basic
     branch: version
@@ -53,13 +53,53 @@ jobs:
   - task: test
     file: pcf-pipelines/ci/tasks/test.yml
 
-- name: update-upgrade-ert
+- name: rc
   plan:
   - get: pcf-pipelines
     trigger: true
     passed:
-    - test
-  - task: update-pipeline
+    - test 
+  - put: version
+    params: {pre: rc}
+
+- name: publish-rc
+  plan:
+  - aggregate:
+    - get: version
+      passed: [rc]
+    - get: pcf-pipelines
+      trigger: false 
+      passed: [rc]
+    - get: cf-cli
+    - get: om
+      params:
+        globs: [om-linux]
+  
+  - task: create-pivnet-metadata
+    file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
+  
+  - task: create-release
+    file: pcf-pipelines/ci/tasks/create_release.yml
+
+  - put: pivnet-release
+    params:
+      metadata_file: pivnet-metadata/metadata.yml
+      file_glob: pcf-pipelines-release-files/*
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
+- name: fly-pipeline-smokes 
+  plan:
+  - aggregate:
+    - get: version
+      passed: [publish-rc]
+    - get: pcf-pipelines
+      trigger: true 
+      passed: [publish-rc]
+    - get: cf-cli
+    - get: om
+      params:
+        globs: [om-linux]
+  - task: update-ert-pipeline
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       PIPELINE_NAME: upgrade-ert
@@ -78,13 +118,7 @@ jobs:
       PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
       OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
 
-- name: update-upgrade-buildpacks
-  plan:
-  - get: pcf-pipelines
-    trigger: true
-    passed:
-    - test
-  - task: update-pipeline
+  - task: update-buildpacks-pipeline
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       PIPELINE_NAME: upgrade-buildpacks
@@ -100,13 +134,7 @@ jobs:
       CF_USER: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
 
-- name: update-upgrade-opsman-aws
-  plan:
-  - get: pcf-pipelines
-    trigger: true
-    passed:
-    - test
-  - task: update-pipeline
+  - task: update-upgrade-opsman-aws
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       PIPELINE_NAME: upgrade-ops-mgr-aws
@@ -125,25 +153,14 @@ jobs:
       OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
       CHECK_NEW_OPSMAN_EVERY: 1d
 
-- name: rc
-  plan:
-  - get: pcf-pipelines
-    trigger: true
-    passed:
-    - update-upgrade-ert
-    - update-upgrade-buildpacks
-  - put: version
-    params: {pre: rc}
-
 - name: publish-release
   plan:
   - aggregate:
     - get: version
-      passed: [rc]
+      passed: [fly-pipeline-smokes]
       params: {bump: final}
     - get: pcf-pipelines
-      passed:
-      - rc
+      passed: [fly-pipeline-smokes]
     - get: cf-cli
     - get: om
       params:
