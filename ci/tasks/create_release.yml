@@ -22,25 +22,15 @@ run:
   - |
     version=v$(cat version/version)
 
+    tar --extract --file cf-cli/*.tgz
+
     tar \
       --exclude .git \
       --exclude ci \
       --exclude "*.go" \
       --create \
       --gzip \
-      --file pcf-pipelines-release-files/pcf-pipelines-$version.tar \
-      pcf-pipelines
-
-    gunzip cf-cli/*.tgz
-
-    tar \
-      --concatenate \
-      --file pcf-pipelines-release-files/pcf-pipelines-$version.tar \
-      cf-cli/*.tar
-
-    tar \
-      --append
-      --file pcf-pipelines-release-files/pcf-pipelines-$version.tar \
+      --file pcf-pipelines-release-files/pcf-pipelines-$version.tgz \
+      pcf-pipelines \
+      cf-cli/cf \
       om/om-linux
-
-    gzip pcf-pipelines-release-files/pcf-pipelines-$version.tar
