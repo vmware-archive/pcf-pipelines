@@ -119,6 +119,7 @@ jobs:
       CF_USER: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       CHECK_NEW_OPSMAN_EVERY: 1d
+      EXISTING_OPSMAN_VM_NAME: {{upgrade_opsman_existing_opsman_vm_name}} 
       OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
       OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
       OPSMAN_URI: {{opsman_uri}}
@@ -146,6 +147,7 @@ jobs:
       CF_USER: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       CHECK_NEW_OPSMAN_EVERY: 1d
+      EXISTING_OPSMAN_VM_NAME: {{upgrade_opsman_existing_opsman_vm_name}} 
       OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
       OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
       OPSMAN_URI: {{opsman_uri}}
@@ -173,6 +175,7 @@ jobs:
       CF_USER: {{cf_user}}
       CF_PASSWORD: {{cf_password}}
       CHECK_NEW_OPSMAN_EVERY: 1d
+      EXISTING_OPSMAN_VM_NAME: {{upgrade_opsman_existing_opsman_vm_name}} 
       OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
       OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
       OPSMAN_URI: {{opsman_uri}}

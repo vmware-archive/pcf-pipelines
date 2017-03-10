@@ -34,6 +34,7 @@ params:
   AWS_ACCESS_KEY_ID:
   OPSMAN_MAJOR_MINOR_VERSION:
   CHECK_NEW_OPSMAN_EVERY:
+  EXISTING_OPSMAN_VM_NAME:
 
 run:
   path: bash
@@ -70,11 +71,12 @@ run:
       cf_password: "${CF_PASSWORD}"
       check_new_opsman_every: "${CHECK_NEW_OPSMAN_EVERY}"
       opsman_major_minor_version: "${OPSMAN_MAJOR_MINOR_VERSION}"
-      upgrade_opsman_aws_access_key_id: "${AWS_ACCESS_KEY_ID}"
-      upgrade_opsman_aws_secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
-      upgrade_opsman_aws_region: "${AWS_REGION}"
-      upgrade_opsman_aws_vpc_id: "${AWS_VPC_ID}"
-      upgrade_opsman_existing_opsman_vm_name: "${EXISTING_OPSMAN_VM_NAME}"
+      aws_secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+      aws_access_key_id: "${AWS_ACCESS_KEY_ID}"
+      aws_region: "${AWS_REGION}"
+      aws_vpc_id: "${AWS_VPC_ID}"
+      existing_opsman_vm_name: "${EXISTING_OPSMAN_VM_NAME}"
+      opsman_passphrase: "${OPSMAN_ADMIN_PASSWORD}"
       pipeline_version_compatibility: "${PIPELINE_VERSION}" 
     EOF
 
