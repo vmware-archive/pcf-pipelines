@@ -69,6 +69,7 @@ jobs:
     - get: version
       params: {pre: rc}
     - get: pcf-pipelines
+      trigger: true
       passed: [test]
     - get: cf-cli
     - get: om
