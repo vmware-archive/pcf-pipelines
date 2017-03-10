@@ -17,4 +17,4 @@ run:
  args:
  - -c
  - |
-   tar -C unpacked-tarball -xvf tarball/*.tgz
+   tar -C unpacked_tarball -xvf tarball/*.tgz
