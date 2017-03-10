@@ -20,7 +20,7 @@ resources:
     access_key_id: {{pivnet_aws_access_key}}
     secret_access_key: {{pivnet_aws_secret_key}}
     availability: "Admins Only"
-    product_version: "*rc*"
+    product_version: .*-rc\.\d+
 
 - name: pivnet-release
   type: pivnet
