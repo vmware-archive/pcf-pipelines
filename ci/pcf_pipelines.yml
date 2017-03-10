@@ -12,6 +12,16 @@ resources:
     uri: https://github.com/pivotal-cf/pcf-pipelines.git
     branch: master
 
+- name: pivnet-rc
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    access_key_id: {{pivnet_aws_access_key}}
+    secret_access_key: {{pivnet_aws_secret_key}}
+    availability: "Admins Only"
+    product_version: "*rc*"
+
 - name: pivnet-release
   type: pivnet
   source:
@@ -80,7 +90,7 @@ jobs:
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
 
-  - put: pivnet-release
+  - put: pivnet-rc
     params:
       metadata_file: pivnet-metadata/metadata.yml
       file_glob: pcf-pipelines-release-files/*
@@ -92,32 +102,40 @@ jobs:
     - get: version
       passed: [publish-rc]
     - get: pcf-pipelines
+      passed: [publish-rc]
+    - get: pivnet-rc
       trigger: true 
       passed: [publish-rc]
     - get: cf-cli
     - get: om
       params:
         globs: [om-linux]
+
+  - task: unpack-rc
+    file: pcf-pipelines/tasks/unpack-tarball.yml
+    input_mapping:
+      tarball: pivnet-rc
+
   - task: update-ert-pipeline
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       <<: *update_pipeline_params
       PIPELINE_NAME: upgrade-ert
-      PIPELINE_PATH: pcf-pipelines/upgrade-ert/pipeline.yml
+      PIPELINE_PATH: unpacked-tarballs/pcf-pipelines/upgrade-ert/pipeline.yml
 
   - task: update-buildpacks-pipeline
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       <<: *update_pipeline_params
       PIPELINE_NAME: upgrade-buildpacks
-      PIPELINE_PATH: pcf-pipelines/upgrade-buildpacks/pipeline.yml
+      PIPELINE_PATH: unpacked-tarballs/pcf-pipelines/upgrade-buildpacks/pipeline.yml
 
   - task: update-upgrade-opsman-aws
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       <<: *update_pipeline_params
       PIPELINE_NAME: upgrade-opsman-aws
-      PIPELINE_PATH: pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
+      PIPELINE_PATH: unpacked-tarballs/pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
 
 - name: publish-release
   plan:
