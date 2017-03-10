@@ -117,7 +117,7 @@ jobs:
     file: pcf-pipelines/ci/tasks/update_pipeline.yml
     params:
       <<: *update_pipeline_params
-      PIPELINE_NAME: upgrade-ops-mgr-aws
+      PIPELINE_NAME: upgrade-opsman-aws
       PIPELINE_PATH: pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
 
 - name: publish-release
