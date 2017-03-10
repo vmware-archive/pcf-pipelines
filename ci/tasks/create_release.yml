@@ -27,7 +27,7 @@ run:
     mv om/om-linux .
 
     tar \
-      --exclude .git \
+      --exclude .git* \
       --exclude ci \
       --exclude "*.go" \
       --create \
