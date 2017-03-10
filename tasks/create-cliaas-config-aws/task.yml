@@ -22,6 +22,7 @@ image_resource:
 
 inputs:
   - name: pivnet-opsmgr
+  - name: pcf-pipelines
 
 outputs:
   - name: create-vm-config

@@ -23,6 +23,7 @@ image_resource:
 inputs:
   - name: tool-cliaas
   - name: cliaas-config
+  - name: pcf-pipelines
 
 params:
   VM_IDENTIFIER:
