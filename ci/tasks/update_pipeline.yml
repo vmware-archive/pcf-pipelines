@@ -7,7 +7,7 @@ image_resource:
     repository: cloudfoundry/cflinuxfs2
 
 inputs:
-- name: pcf-pipelines-release
+- name: release
 - name: version
 
 params:
