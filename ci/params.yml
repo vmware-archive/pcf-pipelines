@@ -17,8 +17,9 @@ pivnet_aws_secret_key:
 pivnet_poll_interval:
 pivnet_s3_filepath_prefix:
 pivnet_token:
-upgrade_opsman_aws_access_key_id:
-upgrade_opsman_aws_region:
-upgrade_opsman_aws_secret_access_key:
-upgrade_opsman_aws_vpc_id:
-upgrade_opsman_existing_opsman_vm_name:
+upgrade_opsman_aws_aws_access_key_id:
+upgrade_opsman_aws_aws_region:
+upgrade_opsman_aws_aws_secret_access_key:
+upgrade_opsman_aws_aws_vpc_id:
+upgrade_opsman_aws_existing_opsman_vm_name:
+upgrade_opsman_aws_opsman_uri:
