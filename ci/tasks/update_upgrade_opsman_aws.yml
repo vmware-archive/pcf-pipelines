@@ -1,0 +1,80 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cflinuxfs2
+
+inputs:
+- name: release
+- name: version
+
+params:
+  PIPELINE_PATH:
+  PIVNET_TOKEN:
+  OPSMAN_ADMIN_USERNAME:
+  OPSMAN_ADMIN_PASSWORD:
+  OPSMAN_URI:
+  GITHUB_TOKEN:
+  OPSMAN_TIMEOUT_SECONDS:
+  ATC_EXTERNAL_URL:
+  ATC_BASIC_AUTH_USERNAME:
+  ATC_BASIC_AUTH_PASSWORD:
+  ATC_TEAM_NAME:
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+  AWS_REGION:
+  AWS_VPC_ID:
+  OPSMAN_MAJOR_MINOR_VERSION:
+  CHECK_NEW_OPSMAN_EVERY:
+  EXISTING_OPSMAN_VM_NAME:
+
+run:
+  path: bash
+  args:
+  - -ce
+  - |
+    curl \
+      --silent \
+      --insecure \
+      --output fly \
+      "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"
+
+    chmod +x fly
+    PIPELINE_VERSION=v$(cat version/version)
+
+    ./fly --target self login \
+      --insecure \
+      --concourse-url "${ATC_EXTERNAL_URL}" \
+      --username "${ATC_BASIC_AUTH_USERNAME}" \
+      --password "${ATC_BASIC_AUTH_PASSWORD}" \
+      --team-name "${ATC_TEAM_NAME}"
+
+    cat > params.yml <<EOF
+      check_new_opsman_every: "${CHECK_NEW_OPSMAN_EVERY}"
+      github_token: "${GITHUB_TOKEN}"
+      opsman_major_minor_version: "${OPSMAN_MAJOR_MINOR_VERSION}"
+      pivnet_token: "${PIVNET_TOKEN}"
+
+      aws_secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+      aws_access_key_id: "${AWS_ACCESS_KEY_ID}"
+      aws_region: "${AWS_REGION}"
+      aws_vpc_id: "${AWS_VPC_ID}"
+
+      existing_opsman_vm_name: "${EXISTING_OPSMAN_VM_NAME}"
+
+      opsman_admin_username: "${OPSMAN_ADMIN_USERNAME}"
+      opsman_admin_password: "${OPSMAN_ADMIN_PASSWORD}"
+      opsman_passphrase: "${OPSMAN_ADMIN_PASSWORD}"
+      opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
+      opsman_uri: "${OPSMAN_URI}"
+
+      pipeline_version_compatibility: "${PIPELINE_VERSION}" 
+    EOF
+
+    ./fly --target self set-pipeline \
+      --non-interactive \
+      --pipeline upgrade-opsman-aws \
+      --config ${PIPELINE_PATH} \
+      --load-vars-from params.yml
