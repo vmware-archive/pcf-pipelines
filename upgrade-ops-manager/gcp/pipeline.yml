@@ -34,6 +34,7 @@ resources:
   source:
     user: pivotal-cf 
     repository: cliaas
+    access_token: {{github_token}}
 
   ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
   ## If a change is detected earlier the pipeline will start but be held up waiting for the time
