@@ -24,7 +24,7 @@ opsman_timeout_seconds: 360
 terraform_zip_url: https://releases.hashicorp.com/terraform/0.8.6/terraform_0.8.6_linux_amd64.zip
 
 
-enable_automatic_updates: false
+enable_automatic_updates: true 
 automatic_updates_time_window_start: "12:00 AM"
 automatic_updates_time_window_stop: "11:59 PM"
 automatic_updates_time_window_timezone: America/Chicago
