@@ -23,3 +23,5 @@ upgrade_opsman_aws_aws_secret_access_key:
 upgrade_opsman_aws_aws_vpc_id:
 upgrade_opsman_aws_existing_opsman_vm_name:
 upgrade_opsman_aws_opsman_uri:
+upgrade_opsman_aws_opsman_admin_username:
+upgrade_opsman_aws_opsman_admin_password:
