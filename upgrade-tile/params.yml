@@ -68,10 +68,4 @@ product_slug: CHANGEME
 # `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | head`
 product_name: CHANGEME
 
-enable_automatic_updates: false
-automatic_updates_time_window_start: 12:00AM
-automatic_updates_time_window_stop: 11:59PM
-automatic_updates_time_window_timezone: America/Chicago
-automatic_updates_time_window_interval: 30m
-
 pipeline_version_compatibility: __PIPELINE_VERSION_COMPATIBILITY__
