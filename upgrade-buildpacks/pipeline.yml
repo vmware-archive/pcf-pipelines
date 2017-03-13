@@ -20,16 +20,13 @@ resource_types:
     tag: latest-final
 
 resources:
-## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
-## If a change is detected earlier the pipeline will start but be held up waiting for the time
-## resource to become available.
-## Also uncomment the fetching of the resource in the plan below.
-#- name: run-time-window
-#  type: time
-#  source:
-#    start: 12:00 AM
-#    stop: 1:00 AM
-#    location: America/Chicago
+- name: run-time-window
+  type: time
+  source:
+    start: {{automatic_updates_time_window_start}}
+    stop: {{automatic_updates_time_window_stop}}
+    location: America/Chicago
+
 - name: cf-cli
   type: s3
   source:
@@ -125,6 +122,11 @@ resources:
     product_version: "tc Server*"
 
 jobs:
+- name: time-window-gate
+  plan:
+  - get: run-time-window
+    trigger: true
+
 - name: stage-binary-buildpack
   serial_groups: [cc-api]
   plan:
@@ -133,7 +135,8 @@ jobs:
     - get: pcf-pipelines-tarball
     - get: buildpack
       resource: binary-buildpack
-      trigger: true
+      passed: [time-window-gate]
+      trigger: {{enable_automatic_updates}} 
 
   - task: tarball-unpack
     config:
