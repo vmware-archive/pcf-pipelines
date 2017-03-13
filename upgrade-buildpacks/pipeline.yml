@@ -23,6 +23,7 @@ resources:
 - name: run-time-window
   type: time
   source:
+    interval: {{automatic_updates_time_window_interval}}
     start: {{automatic_updates_time_window_start}}
     stop: {{automatic_updates_time_window_stop}}
     location: {{automatic_updates_time_window_timezone}}
