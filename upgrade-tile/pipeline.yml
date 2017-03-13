@@ -96,6 +96,14 @@ jobs:
       platform: linux
       image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
       run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
+
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
