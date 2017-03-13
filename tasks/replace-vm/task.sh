@@ -24,4 +24,4 @@ chmod +x tool-cliaas/cliaas-linux
 
 cliaas-linux replace-vm \
   --config cliaas-config/config.yml \
-  --identifier $VM_IDENTIFIER
+  --identifier "$VM_IDENTIFIER"
