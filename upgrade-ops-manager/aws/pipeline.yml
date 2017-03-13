@@ -72,6 +72,7 @@ jobs:
     trigger: {{enable_automatic_updates}} 
 
 - name: upgrade-opsmgr
+  serial: true
   plan:
   - aggregate:
     - get: run-time-window
