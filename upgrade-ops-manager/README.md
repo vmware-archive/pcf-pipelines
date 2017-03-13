@@ -19,3 +19,13 @@ Required Scopes and authorities are :
 - scope (list):  opsman.admin
 - authorized grant types (list):  client_credentials
 - authorities (list):  opsman.admin
+
+# Concourse worker considerations
+Due to the size of current Ops Manager installation.zip files you will need to modify the worker vm to allow
+larger btrfs store size.
+The size of the installation.zip file is based on how many tiles you have installed at the time. Dependng on the number
+of tiles installed this setting could need to be as big as 50G. In a future release the size of this file should be decreasing.
+
+    properties:
+          garden:
+            garden.btrfs_store_size_mb: 
