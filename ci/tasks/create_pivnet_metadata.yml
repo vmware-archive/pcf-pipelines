@@ -34,4 +34,7 @@ run:
       availability: $AVAILABILITY
       release_type: Beta Release
       eula_slug: "pivotal_beta_eula"
+      user_group_ids:
+      - 6   # Pivotal Internal Early Access
+      - 159 # C[0] PCF Automation Pipelines Access
     EOF
