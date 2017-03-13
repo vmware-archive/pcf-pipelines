@@ -35,6 +35,7 @@ IAAS_CONFIGURATION=$(cat <<-EOF
   "DiskProvisioning":"thin",
   "IPAllocationPolicy":"dhcpPolicy",
   "IPProtocol":"IPv4",
+  "Name": "$OPSMAN_NAME",
   "NetworkMapping": [{
     "Name":"Network 1",
     "Network":"$OPSMAN_NETWORK"
@@ -58,17 +59,17 @@ EOF
   cat ./opsman_settings.json
 
   echo "Importing OVA of new OpsMgr VM..."
-  echo "Running govc import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${OPSMAN_PATH}"
-  ./${CMD_PATH} import.ova -options=opsman_settings.json -name=${OPSMAN_NAME} -k=true -u=${GOVC_URL} -ds=${GOVC_DATASTORE} -dc=${GOVC_DATACENTER} -pool=${GOVC_RESOURCE_POOL} -folder=/${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER} ${OPSMAN_PATH}
+  echo "Running govc import.ova -options=opsman_settings.json -k=true ${OPSMAN_PATH}"
+  ./${CMD_PATH} import.ova -options=opsman_settings.json -k=true ${OPSMAN_PATH}
   #
   # echo "Setting CPUs on new OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
-  ./${CMD_PATH} vm.change -c=2 -k=true -vm /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
+  ./${CMD_PATH} vm.change -c=2 -k=true -vm=${OPSMAN_NAME}
   #
   # echo "Shutting down OLD OpsMgr VM... ${OPSMAN_IP}"
   ./${CMD_PATH} vm.power -off=true -k=true -vm.ip=${OPSMAN_IP}
   #
   # echo "Starting OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
-  ./${CMD_PATH} vm.power -k=true -on=true /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}
+  ./${CMD_PATH} vm.power -k=true -on=true vm=${OPSMAN_NAME}
 
   # make sure that vm and ops manager app is up
   started=false
