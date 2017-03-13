@@ -25,7 +25,7 @@ inputs:
   - name: pcf-pipelines
 
 outputs:
-  - name: create-vm-config
+  - name: cliaas-config
 
 params:
   AWS_ACCESS_KEY_ID:
