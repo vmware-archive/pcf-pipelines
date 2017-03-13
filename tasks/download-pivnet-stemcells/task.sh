@@ -26,7 +26,7 @@ function main() {
   $pivnet eula --eula-slug=pivotal_software_eula
 
   for stemcell in $(cat ${cwd}/diagnostic-report/exported-diagnostic-report.json | jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | .stemcell' | sort -u); do
-    local stemcell_version=$(echo $stemcell | cut -d'-' -f3)
+    local stemcell_version=$(echo $stemcell | grep -Eo "[0-9]+(\.[0-9]+)?")
     let version=$(echo $stemcell_version | cut -d'.' -f1)
     let patch=$(echo $stemcell_version | cut -d'.' -f2)
     while [[ $($pivnet pfs -p stemcells -r $stemcell_version) == *"release not found"* ]]; do
