@@ -22,5 +22,13 @@ check_new_opsman_every: CHANGEME
 opsman_major_minor_version: CHANGEME
 opsman_timeout_seconds: 360
 terraform_zip_url: https://releases.hashicorp.com/terraform/0.8.6/terraform_0.8.6_linux_amd64.zip
+
+
+enable_automatic_updates: false
+automatic_updates_time_window_start: 12:00AM
+automatic_updates_time_window_stop: 11:59PM
+
+
+
 #please replace this with the pivnet version your pipeline is compatible with
 pipeline_version_compatibility: __PIPELINE_VERSION_COMPATIBILITY__
