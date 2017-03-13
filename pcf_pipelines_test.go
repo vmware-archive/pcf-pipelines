@@ -59,7 +59,7 @@ var _ = Describe("pcf-pipelines", func() {
 			})
 
 			It("specifies all and only the params that the pipeline's tasks expect", func() {
-				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
+				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("example"))
 
 				var config atc.Config
 				err = yaml.Unmarshal(cleanConfigBytes, &config)
