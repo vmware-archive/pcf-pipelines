@@ -19,6 +19,10 @@ github_token: CHANGEME
 opsman_major_minor_version: CHANGEME
 pivnet_token: CHANGEME
 
+enable_automatic_updates: false
+automatic_updates_time_window_start: 12:00AM
+automatic_updates_time_window_stop: 11:59PM
+
 # Task configuration
 
 aws_access_key_id: CHANGEME
