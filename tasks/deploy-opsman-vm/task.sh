@@ -69,7 +69,7 @@ EOF
   ./${CMD_PATH} vm.power -off=true -k=true -vm.ip=${OPSMAN_IP}
   #
   # echo "Starting OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
-  ./${CMD_PATH} vm.power -k=true -on=true vm=${OPSMAN_NAME}
+  ./${CMD_PATH} vm.power -k=true -on=true ${OPSMAN_NAME}
 
   # make sure that vm and ops manager app is up
   started=false
