@@ -72,7 +72,7 @@ run:
 
       pipeline_version_compatibility: "${PIPELINE_VERSION}" 
 
-      enable_automatic_updates: false
+      enable_automatic_updates: true
       automatic_updates_time_window_start: "12:00 AM"
       automatic_updates_time_window_stop: "11:59 PM"
       automatic_updates_time_window_timezone: America/Chicago
