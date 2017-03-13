@@ -24,6 +24,7 @@ opsman_timeout_seconds: 300
 enable_automatic_updates: false
 automatic_updates_time_window_start: 12:00AM
 automatic_updates_time_window_stop: 11:59PM
+automatic_updates_time_window_timezone: America/Chicago
 
 #please replace this with the pivnet version your pipeline is compatible with
 pipeline_version_compatibility: __PIPELINE_VERSION_COMPATIBILITY__

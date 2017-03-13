@@ -29,7 +29,7 @@ resources:
   source:
     start: {{automatic_updates_time_window_start}}
     stop: {{automatic_updates_time_window_stop}}
-    location: America/Chicago
+    location: {{automatic_updates_time_window_timezone}}
 
 - name: pcf-pipelines-tarball
   type: pivnet
