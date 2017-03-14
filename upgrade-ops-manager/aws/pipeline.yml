@@ -36,16 +36,13 @@ resources:
     repository: cliaas
     access_token: {{github_token}}
 
-# Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
-# If a change is detected earlier the pipeline will start but be held up waiting for the time
-# resource to become available.
-# Also uncomment the fetching of the resource in the plan below.
-#- name: run-time-window
-#  type: time
-#  source:
-#    start: 12:00 AM
-#    stop: 1:00 AM
-#    location: America/Chicago
+- name: run-time-window
+  type: time
+  source:
+    interval: {{automatic_updates_time_window_interval}}
+    start: {{automatic_updates_time_window_start}}
+    stop: {{automatic_updates_time_window_stop}}
+    location: {{automatic_updates_time_window_timezone}}
 
 - name: tool-om
   type: github-release
@@ -69,14 +66,20 @@ resources:
     product_version: {{pipeline_version_compatibility}}
 
 jobs:
+- name: time-window-gate
+  plan:
+  - get: run-time-window
+    trigger: {{enable_automatic_updates}} 
+
 - name: upgrade-opsmgr
   serial: true
   plan:
   - aggregate:
-# Uncomment to limit when the pipeline can run.
-#   - get: run-time-window
+    - get: run-time-window
+      passed: [time-window-gate]
+      trigger: true 
     - get: pivnet-opsmgr
-      trigger: false
+      trigger: true 
       params:
         globs:
         - "*AWS.yml"
