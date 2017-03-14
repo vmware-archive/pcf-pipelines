@@ -115,6 +115,7 @@ jobs:
     - get: version
       passed: [publish-rc]
     - get: pcf-pipelines
+      resource: pcf-pipelines-release
       passed: [publish-rc]
     - get: pivnet-rc
       trigger: true 
@@ -172,6 +173,7 @@ jobs:
       passed: [update-pipelines]
       params: {bump: final}
     - get: pcf-pipelines
+      resource: pcf-pipelines-release
       passed: [update-pipelines]
     - get: cf-cli
     - get: om
