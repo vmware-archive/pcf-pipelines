@@ -9,6 +9,12 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
+    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    branch: master
+
+- name: pcf-pipelines-release
+  type: git
+  source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
     private_key: {{git_private_key}}
@@ -80,7 +86,7 @@ jobs:
   - task: stamp-release-version
     file: pcf-pipelines/ci/tasks/stamp_release_version.yml
 
-  - put: pcf-pipelines
+  - put: pcf-pipelines-release
     params:
       repository: pcf-pipelines-release
       tag: version/version
@@ -175,7 +181,7 @@ jobs:
   - task: stamp-release-version
     file: pcf-pipelines/ci/tasks/stamp_release_version.yml
 
-  - put: pcf-pipelines
+  - put: pcf-pipelines-release
     params:
       repository: pcf-pipelines-release
       tag: version/version
