@@ -29,7 +29,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: pcf-automation
-    product_version: v4.0.0-rc.16
+    product_version: v4.0.0-rc.17
 
 - name: tool-om
   type: github-release
