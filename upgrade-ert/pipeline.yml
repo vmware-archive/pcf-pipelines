@@ -70,7 +70,7 @@ jobs:
   plan:
   - get: schedule
     trigger: true
-  - get: pivnet-opsmgr
+  - get: pivnet-product
 
 - name: upgrade-tile
   plan:
