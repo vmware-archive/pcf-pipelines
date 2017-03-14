@@ -20,14 +20,6 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: run-time-window
-  type: time
-  source:
-    interval: {{automatic_updates_time_window_interval}}
-    start: {{automatic_updates_time_window_start}}
-    stop: {{automatic_updates_time_window_stop}}
-    location: {{automatic_updates_time_window_timezone}}
-
 - name: cf-cli
   type: s3
   source:
@@ -122,24 +114,42 @@ resources:
     product_slug: buildpacks
     product_version: "tc Server*"
 
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
 jobs:
-- name: time-window-gate
+- name: regulator
   plan:
-  - get: run-time-window
-    trigger: {{enable_automatic_updates}} 
+  - aggregate:
+    - get: schedule
+      trigger: true
+    - get: binary-buildpack
+    - get: dotnet-core-buildpack
+    - get: go-buildpack
+    - get: java-buildpack
+    - get: nodejs-buildpack
+    - get: php-buildpack
+    - get: python-buildpack
+    - get: ruby-buildpack
+    - get: staticfile-buildpack
+    - get: tc-buildpack
 
 - name: stage-binary-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: run-time-window
-      passed: [time-window-gate]
-      trigger: true 
     - get: cf-cli
     - get: pcf-pipelines-tarball
     - get: buildpack
       resource: binary-buildpack
       trigger: true 
+      passed: [regulator]
 
   - task: tarball-unpack
     config:
@@ -191,6 +201,7 @@ jobs:
     - get: pcf-pipelines-tarball
     - get: buildpack
       resource: dotnet-core-buildpack
+      passed: [regulator]
       trigger: true
 
   - task: tarball-unpack
@@ -243,6 +254,7 @@ jobs:
     - get: pcf-pipelines-tarball
     - get: buildpack
       resource: go-buildpack
+      passed: [regulator]
       trigger: true
 
   - task: tarball-unpack
@@ -294,6 +306,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines-tarball
     - get: buildpack
+      passed: [regulator]
       resource: java-buildpack
       trigger: true
       params:
@@ -352,6 +365,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines-tarball
     - get: buildpack
+      passed: [regulator]
       resource: nodejs-buildpack
       trigger: true
 
@@ -404,6 +418,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines-tarball
     - get: buildpack
+      passed: [regulator]
       resource: php-buildpack
       trigger: true
 
@@ -456,6 +471,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines-tarball
     - get: buildpack
+      passed: [regulator]
       resource: python-buildpack
       trigger: true
 
@@ -508,6 +524,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines-tarball
     - get: buildpack
+      passed: [regulator]
       resource: ruby-buildpack
       trigger: true
 
@@ -560,6 +577,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines-tarball
     - get: buildpack
+      passed: [regulator]
       resource: staticfile-buildpack
       trigger: true
 
@@ -612,6 +630,7 @@ jobs:
     - get: cf-cli
     - get: pcf-pipelines-tarball
     - get: buildpack
+      passed: [regulator]
       resource: tc-buildpack
       trigger: true
       params:

@@ -27,14 +27,6 @@ resources:
     repository: govmomi
     access_token: {{github_token}}
 
-- name: run-time-window
-  type: time
-  source:
-    interval: {{automatic_updates_time_window_interval}}
-    start: {{automatic_updates_time_window_start}}
-    stop: {{automatic_updates_time_window_stop}}
-    location: {{automatic_updates_time_window_timezone}}
-
 - name: tool-om
   type: github-release
   source:
@@ -64,31 +56,37 @@ resources:
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
 jobs:
-- name: time-window-gate
+- name: regulator
   plan:
-  - get: run-time-window
-    trigger: {{enable_automatic_updates}} 
+  - get: schedule
+    trigger: true
+  - get: pivnet-opsmgr
 
 - name: upgrade-opsmgr
   plan:
   - aggregate:
-    - get: run-time-window
-      passed: [time-window-gate]
+    - get: pivnet-opsmgr
       trigger: true 
+      passed: [regulator]
+      params:
+        globs: ["*.ova"]
     - get: pcf-pipelines-tarball
     - get: govc
     - get: tool-om
       globs: om-linux
     - get: tool-pivnet-cli
       params:
-        globs:
-        - "pivnet-linux-amd64-*"
-    - get: pivnet-opsmgr
-      trigger: true 
-      params:
-        globs:
-        - "*.ova"
+        globs: ["*linux*"]
 
   - task: unpack-tarball
     config:

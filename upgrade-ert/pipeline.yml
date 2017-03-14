@@ -24,14 +24,6 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: run-time-window
-  type: time
-  source:
-    interval: {{automatic_updates_time_window_interval}}
-    start: {{automatic_updates_time_window_start}}
-    stop: {{automatic_updates_time_window_stop}}
-    location: {{automatic_updates_time_window_timezone}}
-
 - name: pcf-pipelines-tarball
   type: pivnet
   source:
@@ -64,25 +56,33 @@ resources:
     globs:
     - stemcell-downloader-linux
 
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
 jobs:
-- name: time-window-gate
+- name: regulator
   plan:
-  - get: run-time-window
-    trigger: {{enable_automatic_updates}} 
+  - get: schedule
+    trigger: true
+  - get: pivnet-opsmgr
 
 - name: upgrade-tile
   plan:
   - aggregate:
-    - get: run-time-window
-      passed: [time-window-gate]
-      trigger: true 
-    - get: pcf-pipelines-tarball
     - get: pivnet-product
       resource: elastic-runtime
       trigger: true 
+      passed: [regulator]
       params:
         globs:
         - "*pivotal"
+    - get: pcf-pipelines-tarball
     - get: tool-om
       params:
         globs:

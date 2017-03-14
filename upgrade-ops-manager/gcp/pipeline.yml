@@ -36,14 +36,6 @@ resources:
     repository: cliaas
     access_token: {{github_token}}
 
-- name: run-time-window
-  type: time
-  source:
-    interval: {{automatic_updates_time_window_interval}}
-    start: {{automatic_updates_time_window_start}}
-    stop: {{automatic_updates_time_window_stop}}
-    location: {{automatic_updates_time_window_timezone}}
-
 - name: tool-om
   type: github-release
   source:
@@ -58,19 +50,27 @@ resources:
     product_slug: pcf-automation
     product_version: {{pipeline_version_compatibility}}
 
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
 jobs:
-- name: time-window-gate
+- name: regulator
   plan:
-  - get: run-time-window
-    trigger: {{enable_automatic_updates}} 
+  - get: schedule
+    trigger: true
+  - get: pivnet-opsmgr
 
 - name: upgrade-opsmgr
   plan:
   - aggregate:
-    - get: run-time-window
-      passed: [time-window-gate]
-      trigger: true 
     - get: pivnet-opsmgr
+      passed: [regulator]
       trigger: true 
       params:
         globs:
