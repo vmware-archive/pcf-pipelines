@@ -18,6 +18,3 @@ pivnet_token: CHANGEME
 cf_api_uri: CHANGEME
 cf_user: CHANGEME
 cf_password: CHANGEME
-
-#please replace this with the pivnet version your pipeline is compatible with
-pipeline_version_compatibility: __PIPELINE_VERSION_COMPATIBILITY__

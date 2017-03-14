@@ -6,6 +6,7 @@ cf_user:
 fly_basic_auth_password:
 fly_basic_auth_username:
 github_token:
+git_private_key:
 iaas_type:
 opsman_admin_password:
 opsman_admin_username:

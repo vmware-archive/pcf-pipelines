@@ -9,8 +9,9 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
+    private_key: {{git_private_key}}
 
 - name: pivnet-rc
   type: pivnet
@@ -75,17 +76,26 @@ jobs:
     - get: om
       params:
         globs: [om-linux]
-  
+
+  - task: stamp-release-version
+    file: pcf-pipelines/ci/tasks/stamp_release_version.yml
+
+  - put: pcf-pipelines
+    params:
+      repository: pcf-pipelines-release
+      tag: version/version
+      tag_prefix: v
+
+  - put: version
+    params: {pre: rc}
+
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
     params:
       AVAILABILITY: Admins Only
-  
+
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
-
-  - put: version
-    params: {pre: rc}
 
   - put: pivnet-rc
     params:
@@ -161,10 +171,26 @@ jobs:
     - get: om
       params:
         globs: [om-linux]
+
+  - task: stamp-release-version
+    file: pcf-pipelines/ci/tasks/stamp_release_version.yml
+
+  - put: pcf-pipelines
+    params:
+      repository: pcf-pipelines-release
+      tag: version/version
+      tag_prefix: v
+
+  - put: version
+    params:
+      bump: major
+      pre: rc
+
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
     params:
       AVAILABILITY: All Users
+
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
   - put: pivnet-release
@@ -172,10 +198,6 @@ jobs:
       metadata_file: pivnet-metadata/metadata.yml
       file_glob: pcf-pipelines-release-files/*
       s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
-  - put: version
-    params:
-      bump: major
-      pre: rc
 
 update_pipeline_params: &update_pipeline_params
   ATC_EXTERNAL_URL: {{atc_external_url}}
