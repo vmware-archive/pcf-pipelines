@@ -71,6 +71,7 @@ jobs:
   - get: schedule
     trigger: true
   - get: elastic-runtime
+    params: { globs: [] }
 
 - name: upgrade-tile
   plan:

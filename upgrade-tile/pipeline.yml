@@ -69,6 +69,7 @@ jobs:
   - get: schedule
     trigger: true
   - get: {{resource_name}}
+    params: { globs: [] }
 
 - name: upgrade-tile
   plan:

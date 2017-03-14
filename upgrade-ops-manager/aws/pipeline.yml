@@ -72,6 +72,7 @@ jobs:
   - get: schedule
     trigger: true
   - get: pivnet-opsmgr
+    params: { globs: [] }
 
 - name: upgrade-opsmgr
   serial: true
