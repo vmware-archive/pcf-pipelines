@@ -70,7 +70,7 @@ jobs:
   plan:
   - get: schedule
     trigger: true
-  - get: pivnet-product
+  - get: elastic-runtime
 
 - name: upgrade-tile
   plan:

@@ -68,7 +68,7 @@ jobs:
   plan:
   - get: schedule
     trigger: true
-  - get: pivnet-product
+  - get: {{resource_name}}
 
 - name: upgrade-tile
   plan:
