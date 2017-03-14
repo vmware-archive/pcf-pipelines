@@ -102,6 +102,13 @@ jobs:
     params:
       TERRAFORM_ZIP_URL: {{terraform_zip_url}}
 
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
   - task: export-opsmgr
     file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
     params:
