@@ -27,9 +27,10 @@ run:
 
     version=v$(cat version/version)
 
-    files=$(grep -r -l pcf-pipelines-tarball pcf-pipelines-release)
+    files=$(find pcf-pipelines-release -type f -name pipeline.yml -exec grep -l "pcf-pipelines-tarball" {} \;)
     for f in "${files[@]}"; do
-      sed -i "/product_slug: pcf-automation/ {N; s/\(product_slug: pcf-automation.*product_version: v4.0.0-rc.14
+      sed -i "/product_slug: pcf-automation/ {N; s/\(product_slug: pcf-automation.*product_version: \).*/\1${version}/g}" $f
+    done
 
     cd pcf-pipelines-release
 
