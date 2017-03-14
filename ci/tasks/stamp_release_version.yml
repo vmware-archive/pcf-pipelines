@@ -35,4 +35,8 @@ run:
     cd pcf-pipelines-release
 
     git add -A
-    git commit -m "Bump pcf-pipelines-tarball version to ${version}"
+    git commit --file - <<EOF
+    Bump pcf-pipelines-tarball version to ${version}
+
+    [ci skip]
+    EOF
