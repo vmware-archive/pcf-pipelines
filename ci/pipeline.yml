@@ -34,7 +34,7 @@ resources:
   type: semver
   source:
     driver: git
-    initial_version: 1.0.0
+    initial_version: 0.1.0-rc.1
     uri: https://github.com/pivotal-cf/pcf-pipelines
     username: {{github_token}}
     password: x-oauth-basic
@@ -195,7 +195,7 @@ jobs:
 
   - put: version
     params:
-      bump: major
+      bump: minor
       pre: rc
 
 update_pipeline_params: &update_pipeline_params
