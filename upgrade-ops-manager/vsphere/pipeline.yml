@@ -83,7 +83,8 @@ jobs:
     - get: pcf-pipelines-tarball
     - get: govc
     - get: tool-om
-      globs: om-linux
+      params:
+        globs: ["*linux*"]
     - get: tool-pivnet-cli
       params:
         globs: ["*linux*"]
