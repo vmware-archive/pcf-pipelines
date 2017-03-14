@@ -181,11 +181,6 @@ jobs:
       tag: version/version
       tag_prefix: v
 
-  - put: version
-    params:
-      bump: major
-      pre: rc
-
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
     params:
@@ -198,6 +193,11 @@ jobs:
       metadata_file: pivnet-metadata/metadata.yml
       file_glob: pcf-pipelines-release-files/*
       s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
+  - put: version
+    params:
+      bump: major
+      pre: rc
 
 update_pipeline_params: &update_pipeline_params
   ATC_EXTERNAL_URL: {{atc_external_url}}
