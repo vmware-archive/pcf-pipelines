@@ -74,7 +74,11 @@ jobs:
 - name: upgrade-tile
   plan:
   - aggregate:
-    - get: pcf-pipelines-tarball
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+
     - get: pivnet-product
       resource: {{resource_name}}
       passed: [regulator]
@@ -89,14 +93,6 @@ jobs:
     - get: stemcell-downloader
       params:
         globs: [stemcell-downloader-linux]
-
-  - task: tarball-unpack
-    config:
-      inputs: [ { name: pcf-pipelines-tarball } ]
-      outputs: [ { name: pcf-pipelines } ]
-      platform: linux
-      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
-      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
@@ -134,3 +130,18 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+
+unpack_tarball_config: &unpack_tarball_config
+  config:
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: cloudfoundry/cflinuxfs2
+    inputs:
+    - name: pcf-pipelines-tarball
+    outputs:
+    - name: pcf-pipelines
+    run:
+     path: sh
+     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]

@@ -78,24 +78,12 @@ jobs:
         - "*GCP.yml"
     - get: iaas-util
       globs: cliaas-linux
-    - get: pcf-pipelines-tarball
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: tool-om
       globs: om-linux
-
-  - task: unpack-tarball
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: cloudfoundry/cflinuxfs2
-      inputs:
-      - name: pcf-pipelines-tarball
-      outputs:
-      - name: pcf-pipelines
-      run:
-       path: sh
-       args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]
 
   - task: get-terraform
     file: pcf-pipelines/tasks/get-dependencies/terraform/task.yml
@@ -138,3 +126,18 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+
+unpack_tarball_config: &unpack_tarball_config
+  config:
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: cloudfoundry/cflinuxfs2
+    inputs:
+    - name: pcf-pipelines-tarball
+    outputs:
+    - name: pcf-pipelines
+    run:
+     path: sh
+     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]
