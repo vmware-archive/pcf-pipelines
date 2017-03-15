@@ -9,6 +9,7 @@ image_resource:
 inputs:
 - name: pcf-pipelines
 - name: cf-cli
+- name: cliaas 
 - name: om
 - name: version
 
@@ -24,6 +25,7 @@ run:
 
     tar --extract --file cf-cli/*.tgz
 
+    mv cliaas/cliaas-linux .
     mv om/om-linux .
 
     tar \
@@ -35,4 +37,5 @@ run:
       --file pcf-pipelines-release-files/pcf-pipelines-$version.tgz \
       pcf-pipelines \
       cf \
+      cliaas-linux \
       om-linux

@@ -61,6 +61,13 @@ resources:
     repository: om
     access_token: {{github_token}}
 
+- name: cliaas
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: cliaas 
+    access_token: {{github_token}}
+
 jobs:
 - name: test
   plan:
@@ -78,6 +85,9 @@ jobs:
       trigger: true
       passed: [test]
     - get: cf-cli
+    - get: cliaas 
+      params:
+        globs: [cliaas-linux]
     - get: om
       params:
         globs: [om-linux]
@@ -120,6 +130,9 @@ jobs:
       trigger: true 
       passed: [publish-rc]
     - get: cf-cli
+    - get: cliaas 
+      params:
+        globs: [cliaas-linux]
     - get: om
       params:
         globs: [om-linux]
@@ -175,6 +188,9 @@ jobs:
       resource: pcf-pipelines-release
       passed: [update-pipelines]
     - get: cf-cli
+    - get: cliaas 
+      params:
+        globs: [cliaas-linux]
     - get: om
       params:
         globs: [om-linux]
