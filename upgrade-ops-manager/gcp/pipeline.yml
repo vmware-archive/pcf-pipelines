@@ -29,13 +29,6 @@ resources:
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
-- name: iaas-util
-  type: github-release
-  source:
-    user: pivotal-cf 
-    repository: cliaas
-    access_token: {{github_token}}
-
 - name: tool-om
   type: github-release
   source:
@@ -76,8 +69,6 @@ jobs:
       params:
         globs:
         - "*GCP.yml"
-    - get: iaas-util
-      globs: cliaas-linux
     - do:
       - get: pcf-pipelines-tarball
       - task: unpack-tarball
@@ -85,17 +76,20 @@ jobs:
     - get: tool-om
       globs: om-linux
 
-  - task: get-terraform
-    file: pcf-pipelines/tasks/get-dependencies/terraform/task.yml
-    params:
-      TERRAFORM_ZIP_URL: {{terraform_zip_url}}
-
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
+
+  - task: tarball-unpack
+    config:
+      inputs: [ { name: pcf-pipelines-tarball } ]
+      outputs: [ { name: pcf-pipelines } ]
+      platform: linux
+      image_resource: { type: docker-image, source: {repository: cloudfoundry/cflinuxfs2} }
+      run: { path: tar, args: [ "-xvzf", "pcf-pipelines-tarball/pcf-pipelines.tgz" ] }
 
   - task: export-opsmgr
     file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
@@ -108,6 +102,11 @@ jobs:
   - task: deploy-opsman-vm
     file: pcf-pipelines/tasks/deploy-opsman-vm-gcp/task.yml
     params:
+      OPSMAN_PROJECT: {{opsman_project}}
+      OPSMAN_ZONE: {{opsman_zone}}
+      OPSMAN_DISKIMAGE_NAME: {{opsman_diskimage_name}}
+      OPSMAN_GCP_CREDFILE_CONTENTS: {{opsman_gcp_credfile_contents}}
+      OPSMAN_VM_IDENTIFIER: {{opsman_vm_identifier}}
 
   - task: import-opsmgr
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml

@@ -16,9 +16,15 @@ pivnet_token: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_passphrase: CHANGEME
-github_token: CHANGEME
 opsman_uri: CHANGEME
 check_new_opsman_every: CHANGEME
 opsman_major_minor_version: CHANGEME
 opsman_timeout_seconds: 360
-terraform_zip_url: https://releases.hashicorp.com/terraform/0.8.6/terraform_0.8.6_linux_amd64.zip
+
+github_token: CHANGEME
+opsman_project: CHANGEME
+opsman_zone: CHANGEME
+opsman_diskimage_name: CHANGEME
+opsman_gcp_credfile_contents: CHANGEME
+opsman_vm_identifier: CHANGEME
+
