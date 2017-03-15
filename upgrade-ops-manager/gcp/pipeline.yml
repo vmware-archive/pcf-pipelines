@@ -41,7 +41,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: pcf-automation
-    product_version: v0.2.0-rc.7
+    product_version: v0.2.0-rc.8
 
 - name: schedule
   type: time
