@@ -95,15 +95,6 @@ jobs:
   - task: stamp-release-version
     file: pcf-pipelines/ci/tasks/stamp_release_version.yml
 
-  - put: pcf-pipelines-release
-    params:
-      repository: pcf-pipelines-release
-      tag: version/version
-      tag_prefix: v
-
-  - put: version
-    params: {pre: rc}
-
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
     params:
@@ -111,6 +102,20 @@ jobs:
 
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
+
+  - put: pcf-pipelines-release
+    params:
+      repository: pcf-pipelines-release
+
+  - put: pcf-pipelines-release
+    params:
+      repository: pcf-pipelines-release
+      tag: version/version
+      tag_prefix: v
+      only_tag: true
+
+  - put: version
+    params: {pre: rc}
 
   - put: pivnet-rc
     params:
@@ -198,12 +203,6 @@ jobs:
   - task: stamp-release-version
     file: pcf-pipelines/ci/tasks/stamp_release_version.yml
 
-  - put: pcf-pipelines-release
-    params:
-      repository: pcf-pipelines-release
-      tag: version/version
-      tag_prefix: v
-
   - task: create-pivnet-metadata
     file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
     params:
@@ -211,6 +210,18 @@ jobs:
 
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
+
+  - put: pcf-pipelines-release
+    params:
+      repository: pcf-pipelines-release
+
+  - put: pcf-pipelines-release
+    params:
+      repository: pcf-pipelines-release
+      tag: version/version
+      tag_prefix: v
+      only_tag: true
+
   - put: pivnet-release
     params:
       metadata_file: pivnet-metadata/metadata.yml
