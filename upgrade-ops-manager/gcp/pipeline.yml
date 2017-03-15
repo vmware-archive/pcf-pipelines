@@ -36,6 +36,13 @@ resources:
     repository: om
     access_token: {{github_token}}
 
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
 - name: pcf-pipelines-tarball
   type: pivnet
   source:
