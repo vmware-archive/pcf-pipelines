@@ -22,9 +22,9 @@ opsman_major_minor_version: CHANGEME
 opsman_timeout_seconds: 360
 
 github_token: CHANGEME
-opsman_project: CHANGEME
-opsman_zone: CHANGEME
-opsman_diskimage_name: CHANGEME
+opsman_gcp_project: CHANGEME
+opsman_gcp_zone: CHANGEME
+opsman_gcp_diskimage_name: CHANGEME
 opsman_gcp_credfile_contents: CHANGEME
-opsman_vm_identifier: CHANGEME
+opsman_gcp_vm_identifier: CHANGEME
 
