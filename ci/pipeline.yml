@@ -161,6 +161,13 @@ jobs:
       PIPELINE_NAME: upgrade-buildpacks
       PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
 
+  - task: update-opsman-gcp-pipeline
+    file: pcf-pipelines/ci/tasks/update_pipeline.yml
+    params:
+      <<: *update_pipeline_params
+      PIPELINE_NAME: upgrade-opsman-gcp
+      PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
+
   - task: update-upgrade-opsman-aws
     file: pcf-pipelines/ci/tasks/update_upgrade_opsman_aws.yml
     params:
