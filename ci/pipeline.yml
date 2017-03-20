@@ -5,6 +5,12 @@ resource_types:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
 
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+
 resources:
 - name: pcf-pipelines
   type: git
@@ -68,15 +74,27 @@ resources:
     repository: cliaas 
     access_token: {{github_token}}
 
+- name: slack
+  type: slack-notification
+  source:
+    url: {{slack_webhook_url}}
+
 jobs:
 - name: test
+  on_failure:
+    <<: *notify_slack
   plan:
   - get: pcf-pipelines
     trigger: true
+  - get: pivnet-release
+    params:
+      globs: []
   - task: test
     file: pcf-pipelines/ci/tasks/test.yml
 
 - name: publish-rc
+  on_failure:
+    <<: *notify_slack
   plan:
   - aggregate:
     - get: version
@@ -124,6 +142,8 @@ jobs:
       s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
 
 - name: update-pipelines
+  on_failure:
+    <<: *notify_slack
   plan:
   - aggregate:
     - get: version
@@ -207,6 +227,8 @@ jobs:
       CHECK_NEW_OPSMAN_EVERY: 24h
 
 - name: publish-release
+  on_failure:
+    <<: *notify_slack
   plan:
   - aggregate:
     - get: version
@@ -274,3 +296,8 @@ update_pipeline_params: &update_pipeline_params
   OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
   OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
   GITHUB_TOKEN: {{github_token}}
+
+notify_slack: &notify_slack
+  put: slack
+  params:
+    text: "Build failed: $ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_ID"

@@ -18,6 +18,7 @@ pivnet_aws_secret_key:
 pivnet_poll_interval:
 pivnet_s3_filepath_prefix:
 pivnet_token:
+slack_webhook_url:
 upgrade_opsman_aws_aws_access_key_id:
 upgrade_opsman_aws_aws_region:
 upgrade_opsman_aws_aws_secret_access_key:
