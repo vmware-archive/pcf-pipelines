@@ -272,6 +272,33 @@ jobs:
       metadata_file: pivnet-metadata/metadata.yml
       file_glob: pcf-pipelines-release-files/*
       s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+    on_success:
+      do:
+      - task: create-slack-notification
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: concourse/buildroot
+              tag: curl
+          inputs:
+          - name: pivnet-release
+          outputs:
+          - name: notification-text
+          run:
+            path: sh
+            args:
+            - -ce
+            - |
+              release_id=$(cat pivnet-release/metadata.json | jq .Release.ID)
+              cat > notification-text/text <<EOF
+                Deployed pcf-pipelines final release to https://network.pivotal.io/products/pcf-automation#/releases/$release_id
+              EOF
+      - put: slack
+        params:
+          text: notification-text/text
+          silent: true
 
   - put: version
     params:
