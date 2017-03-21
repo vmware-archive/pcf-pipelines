@@ -37,6 +37,7 @@ run:
       --create \
       --gzip \
       --file pcf-pipelines-release-tarball/pcf-pipelines-$version.tgz \
+      --dereference \
       pcf-pipelines \
       cf \
       cliaas-linux \
