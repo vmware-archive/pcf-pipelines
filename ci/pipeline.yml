@@ -232,7 +232,7 @@ jobs:
     - task: create-pivnet-metadata
       file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
       params:
-        AVAILABILITY: Admins Only
+        AVAILABILITY: Selected User Groups Only
     - task: create-release-tarball
       file: pcf-pipelines/ci/tasks/create_release.yml
     - put: pivnet-release
