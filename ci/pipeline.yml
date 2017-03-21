@@ -297,7 +297,7 @@ jobs:
               EOF
       - put: slack
         params:
-          text: notification-text/text
+          text_file: notification-text/text
           silent: true
 
   - put: version
