@@ -71,7 +71,7 @@ resources:
   type: github-release
   source:
     user: pivotal-cf
-    repository: cliaas 
+    repository: cliaas
     access_token: {{github_token}}
 
 - name: slack
@@ -103,7 +103,7 @@ jobs:
       trigger: true
       passed: [test]
     - get: cf-cli
-    - get: cliaas 
+    - get: cliaas
       params:
         globs: [cliaas-linux]
     - get: om
@@ -152,10 +152,10 @@ jobs:
       resource: pcf-pipelines-release
       passed: [publish-rc]
     - get: pivnet-rc
-      trigger: true 
+      trigger: true
       passed: [publish-rc]
     - get: cf-cli
-    - get: cliaas 
+    - get: cliaas
       params:
         globs: [cliaas-linux]
     - get: om
@@ -238,7 +238,7 @@ jobs:
       resource: pcf-pipelines-release
       passed: [update-pipelines]
     - get: cf-cli
-    - get: cliaas 
+    - get: cliaas
       params:
         globs: [cliaas-linux]
     - get: om

@@ -9,7 +9,7 @@ image_resource:
 inputs:
 - name: pcf-pipelines
 - name: cf-cli
-- name: cliaas 
+- name: cliaas
 - name: om
 - name: version
 
