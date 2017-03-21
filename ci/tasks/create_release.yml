@@ -34,7 +34,7 @@ run:
       --exclude "*.go" \
       --create \
       --gzip \
-      --file pcf-pipelines-release-files/pcf-pipelines-$version.tgz \
+      --file pcf-pipelines-release-tarball/pcf-pipelines-$version.tgz \
       stamped-pcf-pipelines \
       cf \
       cliaas-linux \
