@@ -37,7 +37,7 @@ run:
       --create \
       --gzip \
       --file pcf-pipelines-release-tarball/pcf-pipelines-$version.tgz \
-      pcf-pipelines-release \
+      pcf-pipelines \
       cf \
       cliaas-linux \
       om-linux
