@@ -297,4 +297,4 @@ update_pipeline_params: &update_pipeline_params
 notify_slack: &notify_slack
   put: slack
   params:
-    text: "Build failed: $ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_ID"
+    text: "Build failed: $ATC_EXTERNAL_URL/builds/$BUILD_ID"
