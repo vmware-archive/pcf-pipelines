@@ -37,4 +37,6 @@ run:
     git add -A
     git commit --file - <<EOF
     Bump pcf-pipelines-tarball version to ${version}
+
+    [ci skip]
     EOF
