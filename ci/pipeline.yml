@@ -241,6 +241,7 @@ jobs:
         metadata_file: pivnet-metadata/metadata.yml
         file_glob: pcf-pipelines-release-tarball/*.tgz
         s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
   on_failure:
     <<: *notify_slack
   on_success:
