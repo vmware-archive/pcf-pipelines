@@ -28,6 +28,8 @@ run:
     mv cliaas/cliaas-linux .
     mv om/om-linux .
 
+    mv pcf-pipelines-release pcf-pipelines
+
     tar \
       --exclude .git* \
       --exclude ci \
