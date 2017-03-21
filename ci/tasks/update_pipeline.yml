@@ -65,7 +65,6 @@ run:
       opsman_passphrase: "${OPSMAN_ADMIN_PASSWORD}"
       opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
       opsman_uri: "${OPSMAN_URI}"
-      pipeline_version_compatibility: "${PIPELINE_VERSION}" 
       pivnet_poll_interval: "${PIVNET_POLL_INTERVAL}"
       pivnet_token: "${PIVNET_TOKEN}"
       enable_automatic_updates: false

@@ -70,8 +70,6 @@ run:
       opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
       opsman_uri: "${OPSMAN_URI}"
 
-      pipeline_version_compatibility: "${PIPELINE_VERSION}" 
-
       enable_automatic_updates: true
       automatic_updates_time_window_start: "12:00 AM"
       automatic_updates_time_window_stop: "11:59 PM"
