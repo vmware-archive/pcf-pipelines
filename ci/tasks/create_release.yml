@@ -7,14 +7,14 @@ image_resource:
     repository: busybox
 
 inputs:
-- name: pcf-pipelines
+- name: pcf-pipelines-release
 - name: cf-cli
 - name: cliaas
 - name: om
 - name: version
 
 outputs:
-- name: pcf-pipelines-release-files
+- name: pcf-pipelines-release-tarball
 
 run:
   path: sh
@@ -35,7 +35,7 @@ run:
       --create \
       --gzip \
       --file pcf-pipelines-release-files/pcf-pipelines-$version.tgz \
-      pcf-pipelines \
+      stamped-pcf-pipelines \
       cf \
       cliaas-linux \
       om-linux

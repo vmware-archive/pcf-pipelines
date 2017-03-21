@@ -97,8 +97,6 @@ jobs:
     <<: *notify_slack
   plan:
   - aggregate:
-    - get: version
-      params: {pre: rc}
     - get: pcf-pipelines
       trigger: true
       passed: [test]
@@ -110,36 +108,34 @@ jobs:
       params:
         globs: [om-linux]
 
-  - task: stamp-release-version
-    file: pcf-pipelines/ci/tasks/stamp_release_version.yml
-
-  - task: create-pivnet-metadata
-    file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
-    params:
-      AVAILABILITY: Admins Only
-
-  - task: create-release
-    file: pcf-pipelines/ci/tasks/create_release.yml
-
-  - put: pcf-pipelines-release
-    params:
-      repository: pcf-pipelines-release
-
-  - put: pcf-pipelines-release
-    params:
-      repository: pcf-pipelines-release
-      tag: version/version
-      tag_prefix: v
-      only_tag: true
-
   - put: version
     params: {pre: rc}
 
-  - put: pivnet-rc
-    params:
-      metadata_file: pivnet-metadata/metadata.yml
-      file_glob: pcf-pipelines-release-files/*
-      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+  - do:
+    - task: stamp-release-version
+      file: pcf-pipelines/ci/tasks/stamp_release_version.yml
+    - put: pcf-pipelines-release
+      params:
+        repository: stamped-pcf-pipelines
+    - put: pcf-pipelines-release
+      params:
+        repository: stamped-pcf-pipelines
+        tag: version/version
+        tag_prefix: v
+        only_tag: true
+
+  - do:
+    - task: create-pivnet-metadata
+      file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
+      params:
+        AVAILABILITY: Admins Only
+    - task: create-release-tarball
+      file: pcf-pipelines/ci/tasks/create_release.yml
+    - put: pivnet-rc
+      params:
+        metadata_file: pivnet-metadata/metadata.yml
+        file_glob: pcf-pipelines-release-tarball/*.tgz
+        s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
 
 - name: update-pipelines
   on_failure:
@@ -204,8 +200,6 @@ jobs:
       CHECK_NEW_OPSMAN_EVERY: 24h
 
 - name: publish-release
-  on_failure:
-    <<: *notify_slack
   plan:
   - aggregate:
     - get: version
@@ -222,65 +216,64 @@ jobs:
       params:
         globs: [om-linux]
 
-  - task: stamp-release-version
-    file: pcf-pipelines/ci/tasks/stamp_release_version.yml
+  - do:
+    - task: stamp-release-version
+      file: pcf-pipelines/ci/tasks/stamp_release_version.yml
+    - put: pcf-pipelines-release
+      params:
+        repository: stamped-pcf-pipelines
+    - put: pcf-pipelines-release
+      params:
+        repository: stamped-pcf-pipelines
+        tag: version/version
+        tag_prefix: v
+        only_tag: true
 
-  - task: create-pivnet-metadata
-    file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
-    params:
-      AVAILABILITY: Selected User Groups Only
-
-  - task: create-release
-    file: pcf-pipelines/ci/tasks/create_release.yml
-
-  - put: pcf-pipelines-release
-    params:
-      repository: pcf-pipelines-release
-
-  - put: pcf-pipelines-release
-    params:
-      repository: pcf-pipelines-release
-      tag: version/version
-      tag_prefix: v
-      only_tag: true
-
-  - put: pivnet-release
-    params:
-      metadata_file: pivnet-metadata/metadata.yml
-      file_glob: pcf-pipelines-release-files/*
-      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
-    on_success:
-      do:
-      - task: create-slack-notification
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source:
-              repository: concourse/buildroot
-              tag: curl
-          inputs:
-          - name: pivnet-release
-          outputs:
-          - name: notification-text
-          run:
-            path: sh
-            args:
-            - -ce
-            - |
-              release_id=$(cat pivnet-release/metadata.json | jq .Release.ID)
-              cat > notification-text/text <<EOF
-                Deployed pcf-pipelines final release to https://network.pivotal.io/products/pcf-automation#/releases/$release_id
-              EOF
-      - put: slack
-        params:
-          text_file: notification-text/text
-          silent: true
-
-  - put: version
-    params:
-      bump: minor
-      pre: rc
+  - do:
+    - task: create-pivnet-metadata
+      file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
+      params:
+        AVAILABILITY: Admins Only
+    - task: create-release-tarball
+      file: pcf-pipelines/ci/tasks/create_release.yml
+    - put: pivnet-release
+      params:
+        metadata_file: pivnet-metadata/metadata.yml
+        file_glob: pcf-pipelines-release-tarball/*.tgz
+        s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+  on_failure:
+    <<: *notify_slack
+  on_success:
+    do:
+    - task: create-slack-notification
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: concourse/buildroot
+            tag: curl
+        inputs:
+        - name: pivnet-release
+        outputs:
+        - name: notification-text
+        run:
+          path: sh
+          args:
+          - -ce
+          - |
+            release_id=$(cat pivnet-release/metadata.json | jq .Release.ID)
+            cat > notification-text/text <<EOF
+              Deployed pcf-pipelines final release to https://network.pivotal.io/products/pcf-automation#/releases/$release_id
+            EOF
+    - put: slack
+      params:
+        text_file: notification-text/text
+        silent: true
+    - put: version
+      params:
+        bump: minor
+        pre: rc
 
 update_pipeline_params: &update_pipeline_params
   ATC_EXTERNAL_URL: {{atc_external_url}}

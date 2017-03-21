@@ -11,7 +11,7 @@ inputs:
 - name: version
 
 outputs:
-- name: pcf-pipelines-release
+- name: stamped-pcf-pipelines
 
 run:
   path: bash
@@ -23,16 +23,16 @@ run:
     git config --global user.name "CI Bot"
     git config --global user.email "c0-coreteam+pcf-pipelines-ci@pivotal.io"
 
-    git clone pcf-pipelines pcf-pipelines-release
+    git clone pcf-pipelines stamped-pcf-pipelines
 
     version=v$(cat version/version)
 
-    files=$(find pcf-pipelines-release -type f -name pipeline.yml -exec grep -l "pcf-pipelines-tarball" {} \;)
+    files=$(find stamped-pcf-pipelines -type f -name pipeline.yml -exec grep -l "pcf-pipelines-tarball" {} \;)
     for f in "${files[@]}"; do
       sed -i "/product_slug: pcf-automation/ {N; s/\(product_slug: pcf-automation.*product_version: \).*/\1${version}/g}" $f
     done
 
-    cd pcf-pipelines-release
+    cd stamped-pcf-pipelines
 
     git add -A
     git commit --file - <<EOF
