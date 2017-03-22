@@ -96,7 +96,6 @@ jobs:
     params:
       OPSMAN_PROJECT: {{opsman_gcp_project}}
       OPSMAN_ZONE: {{opsman_gcp_zone}}
-      OPSMAN_DISKIMAGE_NAME: {{opsman_gcp_diskimage_name}}
       OPSMAN_GCP_CREDFILE_CONTENTS: {{opsman_gcp_credfile_contents}}
       OPSMAN_VM_IDENTIFIER: {{opsman_gcp_vm_identifier}}
 
