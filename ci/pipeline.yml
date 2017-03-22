@@ -162,19 +162,37 @@ jobs:
     input_mapping: { tarball: pivnet-rc }
     output_mapping: { unpacked_tarball: release }
 
-  - task: update-ert-pipeline
-    file: pcf-pipelines/ci/tasks/update_ert_pipeline.yml
-    params:
-      <<: *update_pipeline_params
-      PIPELINE_NAME: upgrade-ert
-      PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
+  - do:
+    - task: create-update-ert-config
+      file: pcf-pipelines/ci/tasks/create_update_ert_config.yml
+      params:
+        <<: *update_pipeline_params
+    - task: update-ert-pipeline
+      input_mapping: { config: update_ert_config }
+      file: pcf-pipelines/ci/tasks/update_pipeline.yml
+      params:
+        PIPELINE_NAME: upgrade-ert
+        PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
+        ATC_EXTERNAL_URL: {{atc_external_url}}
+        ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+        ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+        ATC_TEAM_NAME: {{atc_team_name}}
 
-  - task: update-buildpacks-pipeline
-    file: pcf-pipelines/ci/tasks/update_buildpacks_pipeline.yml
-    params:
-      <<: *update_pipeline_params
-      PIPELINE_NAME: upgrade-buildpacks
-      PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
+  - do:
+    - task: create-update-buildpacks-config
+      file: pcf-pipelines/ci/tasks/create_update_buildpacks_config.yml
+      params:
+        <<: *update_pipeline_params
+    - task: update-buildpacks-pipeline
+      input_mapping: { config: update_buildpacks_config }
+      file: pcf-pipelines/ci/tasks/update_pipeline.yml
+      params:
+        PIPELINE_NAME: upgrade-buildpacks
+        PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
+        ATC_EXTERNAL_URL: {{atc_external_url}}
+        ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+        ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+        ATC_TEAM_NAME: {{atc_team_name}}
 
   - do:
     - task: create-upgrade-opsman-aws-config
@@ -282,10 +300,6 @@ jobs:
         pre: rc
 
 update_pipeline_params: &update_pipeline_params
-  ATC_EXTERNAL_URL: {{atc_external_url}}
-  ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
-  ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
-  ATC_TEAM_NAME: {{atc_team_name}}
   IAAS_TYPE: {{iaas_type}}
   PIVNET_TOKEN: {{pivnet_token}}
   PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
