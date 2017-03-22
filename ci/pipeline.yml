@@ -163,14 +163,14 @@ jobs:
     output_mapping: { unpacked_tarball: release }
 
   - task: update-ert-pipeline
-    file: pcf-pipelines/ci/tasks/update_pipeline.yml
+    file: pcf-pipelines/ci/tasks/update_ert_pipeline.yml
     params:
       <<: *update_pipeline_params
       PIPELINE_NAME: upgrade-ert
       PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
 
   - task: update-buildpacks-pipeline
-    file: pcf-pipelines/ci/tasks/update_pipeline.yml
+    file: pcf-pipelines/ci/tasks/update_buildpacks_pipeline.yml
     params:
       <<: *update_pipeline_params
       PIPELINE_NAME: upgrade-buildpacks

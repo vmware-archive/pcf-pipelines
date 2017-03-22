@@ -1,0 +1,76 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cflinuxfs2
+
+inputs:
+- name: release
+- name: version
+
+params:
+  PIPELINE_NAME:
+  PIPELINE_PATH:
+  PIVNET_TOKEN:
+  OPSMAN_ADMIN_USERNAME:
+  OPSMAN_ADMIN_PASSWORD:
+  OPSMAN_URI:
+  GITHUB_TOKEN:
+  IAAS_TYPE:
+  PIVNET_POLL_INTERVAL:
+  OPSMAN_TIMEOUT_SECONDS:
+  ATC_EXTERNAL_URL:
+  ATC_BASIC_AUTH_USERNAME:
+  ATC_BASIC_AUTH_PASSWORD:
+  ATC_TEAM_NAME:
+  CF_API_URI:
+  CF_USER:
+  CF_PASSWORD:
+  OPSMAN_MAJOR_MINOR_VERSION:
+  CHECK_NEW_OPSMAN_EVERY:
+
+run:
+  path: bash
+  args:
+  - -ce
+  - |
+    curl \
+      --silent \
+      --insecure \
+      --output fly \
+      "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"
+
+    chmod +x fly
+    PIPELINE_VERSION=v$(cat version/version)
+
+    ./fly --target self login \
+      --insecure \
+      --concourse-url "${ATC_EXTERNAL_URL}" \
+      --username "${ATC_BASIC_AUTH_USERNAME}" \
+      --password "${ATC_BASIC_AUTH_PASSWORD}" \
+      --team-name "${ATC_TEAM_NAME}"
+
+    cat > params.yml <<EOF
+      cf_api_uri: "${CF_API_URI}"
+      cf_password: "${CF_PASSWORD}"
+      cf_user: "${CF_USER}"
+      check_new_opsman_every: "${CHECK_NEW_OPSMAN_EVERY}"
+      github_token: "${GITHUB_TOKEN}"
+      iaas_type: "${IAAS_TYPE}"
+      opsman_admin_password: "${OPSMAN_ADMIN_PASSWORD}"
+      opsman_admin_username: "${OPSMAN_ADMIN_USERNAME}"
+      opsman_major_minor_version: "${OPSMAN_MAJOR_MINOR_VERSION}"
+      opsman_passphrase: "${OPSMAN_ADMIN_PASSWORD}"
+      opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
+      opsman_uri: "${OPSMAN_URI}"
+      pivnet_poll_interval: "${PIVNET_POLL_INTERVAL}"
+      pivnet_token: "${PIVNET_TOKEN}"
+    EOF
+
+    ./fly --target self set-pipeline \
+      --non-interactive \
+      --pipeline ${PIPELINE_NAME} \
+      --config ${PIPELINE_PATH} \
+      --load-vars-from params.yml
