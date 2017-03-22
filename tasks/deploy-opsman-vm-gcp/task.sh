@@ -15,26 +15,29 @@
 # limitations under the License.
 
 function main() {
-  chmod +x pcf-pipelines/cliaas-linux
-  CLIAAS_PATH="pcf-pipelines/cliaas-linux"
-  TMP_CREDFILE="/tmp/gcp-creds.json"
-  CLIAAS_CONFIG="config.yml"
-  OPSMAN_DISKIMAGE_NAME=$(grep ${OPSMAN_ZONE} pivnet-opsmgr/*GCP.yml | awk '{split($0, a); print a[2]}')
+  cliaas_path="pcf-pipelines/cliaas-linux"
 
-  echo "deploying vm w/ disk-image: ${OPSMAN_DISKIMAGE_NAME} into region ${OPSMAN_ZONE}"
-  echo "${OPSMAN_GCP_CREDFILE_CONTENTS}" > ${TMP_CREDFILE}
-cat > ${CLIAAS_CONFIG} <<EOF
+  chmod +x $cliaas_path
+
+  tmp_credfile="/tmp/gcp-creds.json"
+  cliaas_config="config.yml"
+  opsman_diskimage_name=$(grep ${OPSMAN_ZONE} pivnet-opsmgr/*GCP.yml | awk '{split($0, a); print a[2]}')
+
+  echo "deploying vm w/ disk-image: ${opsman_diskimage_name} into region ${OPSMAN_ZONE}"
+  echo "${OPSMAN_GCP_CREDFILE_CONTENTS}" > ${tmp_credfile}
+
+  cat > ${cliaas_config} <<EOF
 gcp:
-  credfile: ${TMP_CREDFILE} 
+  credfile: ${tmp_credfile}
   project: ${OPSMAN_PROJECT} 
   zone: ${OPSMAN_ZONE} 
-  disk_image_url: https://storage.googleapis.com/${OPSMAN_DISKIMAGE_NAME}
+  disk_image_url: https://storage.googleapis.com/${opsman_diskimage_name}
 EOF
 
   echo "Provisioning New Ops Manager"
-  ./${CLIAAS_PATH} -c ${CLIAAS_CONFIG} replace-vm -i ${OPSMAN_VM_IDENTIFIER}
+  ./${cliaas_path} -c ${cliaas_config} replace-vm -i ${OPSMAN_VM_IDENTIFIER}
 
   echo "cleanup"
-  rm -f ${TMP_CREDFILE}
+  rm -f ${tmp_credfile}
 }
 main
