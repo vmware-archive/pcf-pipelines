@@ -86,9 +86,6 @@ jobs:
   plan:
   - get: pcf-pipelines
     trigger: true
-  - get: pivnet-release
-    params:
-      globs: []
   - task: test
     file: pcf-pipelines/ci/tasks/test.yml
 
