@@ -161,7 +161,7 @@ jobs:
     - get: cf-cli
     - get: buildpack
       resource: binary-buildpack
-      trigger: true 
+      trigger: true
       passed: [regulator]
 
   - task: stage
