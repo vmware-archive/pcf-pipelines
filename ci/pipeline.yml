@@ -219,6 +219,13 @@ jobs:
         ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
         ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
         ATC_TEAM_NAME: {{atc_team_name}}
+    - task: trigger-buildpacks-pipelines
+      file: pcf-pipelines/ci/tasks/trigger_buildpacks_pipelines.yml
+      params:
+        ATC_EXTERNAL_URL: {{atc_external_url}}
+        ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+        ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+        ATC_TEAM_NAME: {{atc_team_name}}
 
   - do:
     - task: create-upgrade-opsman-aws-config
