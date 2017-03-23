@@ -9,13 +9,13 @@ image_resource:
 inputs:
 - name: pcf-pipelines
 - name: atc
-  path: go/github.com/concourse/atc
+  path: /go/github.com/concourse/atc
 - name: ginkgo
-  path: go/github.com/onsi/ginkgo
+  path: /go/github.com/onsi/ginkgo
 - name: gomega
-  path: go/github.com/onsi/gomega
+  path: /go/github.com/onsi/gomega
 - name: yaml
-  path: go/github.com/gopkg.in/yaml.v2
+  path: /go/github.com/gopkg.in/yaml.v2
 
 run:
   path: bash
