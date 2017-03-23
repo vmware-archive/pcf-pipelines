@@ -181,11 +181,6 @@ jobs:
         passed: [stage-binary-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: binary-buildpack
-      passed: [stage-binary-buildpack]
-      trigger: false
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -224,11 +219,6 @@ jobs:
         passed: [stage-dotnet-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: dotnet-core-buildpack
-      passed: [stage-dotnet-buildpack]
-      trigger: false
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -267,11 +257,6 @@ jobs:
         passed: [stage-go-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: go-buildpack
-      passed: [stage-go-buildpack]
-      trigger: false
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -313,14 +298,6 @@ jobs:
         passed: [stage-java-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: java-buildpack
-      passed: [stage-java-buildpack]
-      trigger: false
-      params:
-        globs:
-        - "*offline*"
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -359,11 +336,6 @@ jobs:
         passed: [stage-nodejs-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: nodejs-buildpack
-      passed: [stage-nodejs-buildpack]
-      trigger: false
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -402,11 +374,6 @@ jobs:
         passed: [stage-php-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: php-buildpack
-      passed: [stage-php-buildpack]
-      trigger: false
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -445,11 +412,6 @@ jobs:
         passed: [stage-python-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: python-buildpack
-      passed: [stage-python-buildpack]
-      trigger: false
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -488,11 +450,6 @@ jobs:
         passed: [stage-ruby-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: ruby-buildpack
-      passed: [stage-ruby-buildpack]
-      trigger: false
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -531,11 +488,6 @@ jobs:
         passed: [stage-staticfile-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: staticfile-buildpack
-      passed: [stage-staticfile-buildpack]
-      trigger: false
-
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -577,13 +529,6 @@ jobs:
         passed: [stage-tcserver-buildpack]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: buildpack
-      resource: tc-buildpack
-      passed: [stage-tcserver-buildpack]
-      trigger: false
-      params:
-        globs:
-        - "*offline*"
 
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
