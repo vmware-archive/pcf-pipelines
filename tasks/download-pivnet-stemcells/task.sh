@@ -40,7 +40,7 @@ function main() {
   for stemcell in "${stemcells[@]}"; do
     local stemcell_version
     stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
-    download_stemcell_version
+    download_stemcell_version $stemcell_version
   done
 }
 
@@ -50,6 +50,9 @@ function abort() {
 }
 
 function download_stemcell_version() {
+  local stemcell_version
+  stemcell_version="$1"
+
   # ensure the stemcell version found in the manifest exists on pivnet
   if [[ $($pivnet pfs -p stemcells -r "$stemcell_version") == *"release not found"* ]]; then
     abort "Could not find the required stemcell version ${stemcell_version}. This version might not be published on PivNet yet, try again later."
