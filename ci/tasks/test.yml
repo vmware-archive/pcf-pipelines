@@ -23,6 +23,7 @@ run:
   - -ce
   - |
     export GOPATH=$PWD/go
+    export PATH=$GOPATH/bin:$PATH
 
     go install github.com/onsi/ginkgo/ginkgo
 
