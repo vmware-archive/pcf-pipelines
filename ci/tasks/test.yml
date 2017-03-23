@@ -22,7 +22,7 @@ run:
   args:
   - -ce
   - |
-    export GOPATH=$HOME/go
+    export GOPATH=$PWD/go
 
     go install github.com/onsi/ginkgo/ginkgo
 
