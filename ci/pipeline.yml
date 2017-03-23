@@ -85,12 +85,6 @@ resources:
     uri: https://github.com/onsi/ginkgo
     branch: master
 
-- name: atc
-  type: git
-  source:
-    uri: https://github.com/concourse/atc
-    branch: master
-
 - name: gomega
   type: git
   source:
@@ -113,7 +107,6 @@ jobs:
       trigger: true
     - get: ginkgo
     - get: gomega
-    - get: atc
     - get: yaml
   - task: test
     file: pcf-pipelines/ci/tasks/test.yml

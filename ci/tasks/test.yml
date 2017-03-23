@@ -8,8 +8,6 @@ image_resource:
 
 inputs:
 - name: pcf-pipelines
-- name: atc
-  path: go/src/github.com/concourse/atc
 - name: ginkgo
   path: go/src/github.com/onsi/ginkgo
 - name: gomega
@@ -26,6 +24,8 @@ run:
     export PATH=$GOPATH/bin:$PATH
 
     go install github.com/onsi/ginkgo/ginkgo
+
+    go get github.com/concourse/atc
 
     pushd pcf-pipelines
       ginkgo -p -r -randomizeAllSpecs
