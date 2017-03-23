@@ -23,22 +23,10 @@ function main() {
   local diag_report="${cwd}/diagnostic-report/exported-diagnostic-report.json"
   local pivnet=$(ls tool-pivnet-cli/pivnet-linux-* 2>/dev/null)
 
-  login_to_pivnet
-  download_stemcells_for_deployed_products
-}
-
-function abort() {
-  echo "$1"
-  exit 1
-}
-
-function login_to_pivnet() {
   chmod +x "$pivnet"
   $pivnet login --api-token="$API_TOKEN"
   $pivnet eula --eula-slug=pivotal_software_eula >/dev/null
-}
 
-function download_stemcells_for_deployed_products() {
   # get the deduplicated stemcell filename for each deployed release (skipping p-bosh)
   local stemcells=($( (jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | .stemcell' | sort -u) < "$diag_report"))
   if [ ${#stemcells[@]} -eq 0 ]; then
@@ -54,6 +42,11 @@ function download_stemcells_for_deployed_products() {
     stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
     download_stemcell_version
   done
+}
+
+function abort() {
+  echo "$1"
+  exit 1
 }
 
 function download_stemcell_version() {
