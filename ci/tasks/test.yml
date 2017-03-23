@@ -8,16 +8,21 @@ image_resource:
 
 inputs:
 - name: pcf-pipelines
+- name: atc
+  path: go/github.com/concourse/atc
+- name: ginkgo
+  path: go/github.com/onsi/ginkgo
+- name: gomega
+  path: go/github.com/onsi/gomega
+- name: yaml
+  path: go/github.com/gopkg.in/yaml.v2
 
 run:
   path: bash
   args:
   - -ce
   - |
-    go get github.com/onsi/ginkgo/ginkgo
-    go get github.com/concourse/atc
-    go get github.com/onsi/gomega
-    go get gopkg.in/yaml.v2
+    go install github.com/onsi/ginkgo/ginkgo
 
     pushd pcf-pipelines
       ginkgo -p -r -randomizeAllSpecs

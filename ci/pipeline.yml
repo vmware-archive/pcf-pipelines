@@ -79,13 +79,42 @@ resources:
   source:
     url: {{slack_webhook_url}}
 
+- name: ginkgo
+  type: git
+  source:
+    uri: https://github.com/onsi/ginkgo
+    branch: master
+
+- name: atc
+  type: git
+  source:
+    uri: https://github.com/concourse/atc
+    branch: master
+
+- name: gomega
+  type: git
+  source:
+    uri: https://github.com/onsi/gomega
+    branch: master
+
+- name: yaml
+  type: git
+  source:
+    uri: https://gopkg.in/yaml.v2
+    branch: master
+
 jobs:
 - name: test
   on_failure:
     <<: *notify_slack
   plan:
-  - get: pcf-pipelines
-    trigger: true
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+    - get: ginkgo
+    - get: gomega
+    - get: atc
+    - get: yaml
   - task: test
     file: pcf-pipelines/ci/tasks/test.yml
 
