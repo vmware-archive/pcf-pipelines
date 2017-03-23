@@ -23,6 +23,6 @@ $ cd ci
 $ fly -t local set-pipeline -p pcf-aws-prepare -c pcfaws_terraform_pipeline.yml --load-vars-from pcfaws_terraform_params.yml
 
 # unpause your pipeline
-fly -t local unpause-pipeline -p pcf-aws-prepare
+$ fly -t local unpause-pipeline -p pcf-aws-prepare
 
 ```
