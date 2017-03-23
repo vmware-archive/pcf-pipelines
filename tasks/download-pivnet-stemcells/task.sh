@@ -20,8 +20,8 @@ function main() {
 
   local cwd=$PWD
   local download_dir="${cwd}/stemcells"
-  local diag_report=${DIAG_REPORT:- "${cwd}/diagnostic-report/exported-diagnostic-report.json"}
-  local pivnet=${PIVNET:- $(ls tool-pivnet-cli/pivnet-linux-* 2>/dev/null)}
+  local diag_report=${DIAG_REPORT:-"${cwd}/diagnostic-report/exported-diagnostic-report.json"}
+  local pivnet=${PIVNET:-$(ls tool-pivnet-cli/pivnet-linux-* 2>/dev/null)}
 
   login_to_pivnet
   download_stemcells_for_deployed_products
