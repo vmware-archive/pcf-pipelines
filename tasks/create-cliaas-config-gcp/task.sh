@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-pivnet_token: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_admin_password: CHANGEME
-opsman_passphrase: CHANGEME
-opsman_uri: CHANGEME
-check_new_opsman_every: CHANGEME
-opsman_major_minor_version: CHANGEME
-opsman_timeout_seconds: 360
-github_token: CHANGEME
-existing_opsman_vm_name: CHANGEME
-opsman_gcp_project: CHANGEME
-opsman_gcp_zone: CHANGEME
-opsman_gcp_credfile_contents: CHANGEME
+set -eu
+
+cat > cliaas-config/gcpcreds.json <<EOF
+${OPSMAN_GCP_CREDFILE_CONTENTS}
+EOF
+
+cat > cliaas-config/config.yml <<EOF
+gcp:
+  credfile: cliaas-config/gcpcreds.json
+  zone: ${OPSMAN_ZONE}
+  project: ${OPSMAN_PROJECT}
+EOF

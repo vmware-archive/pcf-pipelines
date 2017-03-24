@@ -12,16 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-pivnet_token: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_admin_password: CHANGEME
-opsman_passphrase: CHANGEME
-opsman_uri: CHANGEME
-check_new_opsman_every: CHANGEME
-opsman_major_minor_version: CHANGEME
-opsman_timeout_seconds: 360
-github_token: CHANGEME
-existing_opsman_vm_name: CHANGEME
-opsman_gcp_project: CHANGEME
-opsman_gcp_zone: CHANGEME
-opsman_gcp_credfile_contents: CHANGEME
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cflinuxfs2
+
+inputs:
+  - name: pcf-pipelines
+
+outputs:
+  - name: cliaas-config
+
+params:
+  OPSMAN_PROJECT:
+  OPSMAN_ZONE:
+  OPSMAN_GCP_CREDFILE_CONTENTS:
+
+run:
+  path: pcf-pipelines/tasks/create-cliaas-config-gcp/task.sh
