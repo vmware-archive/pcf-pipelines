@@ -35,7 +35,7 @@ gcp:
 EOF
 
   echo "Provisioning New Ops Manager"
-  ./${cliaas_path} -c ${cliaas_config} replace-vm -i ${OPSMAN_VM_IDENTIFIER}
+  ./${cliaas_path} -c ${cliaas_config} replace-vm -i ${EXISTING_OPSMAN_VM_NAME}
 
   echo "cleanup"
   rm -f ${tmp_credfile}
