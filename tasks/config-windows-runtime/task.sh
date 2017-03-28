@@ -1,8 +1,7 @@
 #!/bin/bash -e
 
-chmod +x om-cli/om-linux
-
-CMD=./om-cli/om-linux
+chmod +x tool-om/om-linux
+CMD_PATH="./tool-om/om-linux"
 
 function fn_ert_balanced_azs {
   local azs_csv=$1
@@ -48,7 +47,7 @@ TILE_RESOURCES=$(cat <<-EOF
 EOF
 )
 
-$CMD --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
+$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-properties "$TILE_PROPERTIES" \
 	--product-network "$TILE_NETWORK" \
