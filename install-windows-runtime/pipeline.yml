@@ -25,7 +25,7 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    url: https://github.com/wjk940/pcf-pipelines
+    uri: https://github.com/wjk940/pcf-pipelines
     branch: master
 
 - name: tool-om
