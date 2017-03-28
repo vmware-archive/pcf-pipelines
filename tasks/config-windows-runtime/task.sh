@@ -48,7 +48,7 @@ TILE_RESOURCES=$(cat <<-EOF
 EOF
 )
 
-$CMD --target https://$OPS_MGR_HOST --username $OPS_MGR_USR --password $OPS_MGR_PWD --skip-ssl-validation \
+$CMD --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-properties "$TILE_PROPERTIES" \
 	--product-network "$TILE_NETWORK" \

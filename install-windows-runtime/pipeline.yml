@@ -83,20 +83,20 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URL: {{opsman_url}}
+      OPSMAN_URI: {{opsman_url}}
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URL: {{opsman_url}}
+      OPSMAN_URI: {{opsman_url}}
       PIVNET_PRODUCT_NAME: {{product_slug}}
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URL: {{opsman_url}}
+      OPSMAN_URI: {{opsman_url}}
       PRODUCT_NAME: {{product_name}}
 #  - task: upload-stemcell
 #    file: pcf-pipelines/tasks/upload-stemcell/task.yml
@@ -105,13 +105,13 @@ jobs:
 #      IAAS_TYPE: {{iaas_type}}
 #      OPSMAN_USERNAME: {{opsman_admin_username}}
 #      OPSMAN_PASSWORD: {{opsman_admin_password}}
-#      OPSMAN_URL: {{opsman_url}}
+#      OPSMAN_URI: {{opsman_url}}
   - task: configure-tile
     file: pcf-pipelines/tasks/config-windows-runtime/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URL: {{opsman_url}}
+      OPSMAN_URI: {{opsman_url}}
       PRODUCT_NAME: {{product_name}}
       EXECUTOR_DISK_CAPACITY: {{executor_disk_capacity}}
       EXECUTOR_MEMORY_CAPACITY: {{executor_memory_capacity}}
@@ -124,7 +124,7 @@ jobs:
 #    params:
 #      OPSMAN_USERNAME: {{opsman_admin_username}}
 #      OPSMAN_PASSWORD: {{opsman_admin_password}}
-#      OPSMAN_URL: {{opsman_url}}
+#      OPSMAN_URI: {{opsman_url}}
 #      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 #unpack_tarball_config: &unpack_tarball_config
