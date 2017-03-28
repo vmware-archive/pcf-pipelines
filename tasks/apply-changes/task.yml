@@ -27,7 +27,7 @@ params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_URI:
-  OPSMAN_TIMEOUT:  
+  OPSMAN_TIMEOUT:
 
 run:
   path: pcf-pipelines/tasks/apply-changes/task.sh
