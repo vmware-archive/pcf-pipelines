@@ -45,6 +45,7 @@ params:
   NETWORKING_POINT_OF_ENTRY:
   TERMINATE_AT_ROUTER_SSL_CIPHERS:
   TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE:
+  TERMINATE_AT_ROUTER_SSL_RSA_KEY: 
 
 run:
   path: pcf-pipelines/tasks/config-isolation-segment/task.sh
