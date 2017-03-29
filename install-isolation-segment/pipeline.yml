@@ -104,8 +104,6 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
       PRODUCT_NAME: {{product_name}}
-      EXECUTOR_DISK_CAPACITY: {{executor_disk_capacity}}
-      EXECUTOR_MEMORY_CAPACITY: {{executor_memory_capacity}}
       TILE_SINGLETON_AVAILABILITY_ZONE: {{tile_singleton_availability_zone}}
       TILE_OTHER_AVAILABILITY_ZONES: {{tile_other_availability_zones}}
       TILE_NETWORK: {{tile_network}}
