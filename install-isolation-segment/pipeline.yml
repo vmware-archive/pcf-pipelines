@@ -1,0 +1,146 @@
+# Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+groups: []
+
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: https://github.com/wjk940/pcf-pipelines
+    branch: master
+
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
+- name: {{product_name}}
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: {{product_slug}}
+    product_version: {{product_version}}
+    sort_by: semver
+
+- name: stemcell-downloader
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pcf-product-stemcell-downloader
+    access_token: {{github_token}}
+    globs:
+    - stemcell-downloader-linux
+
+jobs:
+- name: install-tile
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-product
+      resource: {{product_name}}
+      trigger: true 
+      params:
+        globs:
+        - "*pivotal"
+    - get: tool-om
+      params:
+        globs:
+        - om-linux
+    - get: stemcell-downloader
+      params:
+        globs: [stemcell-downloader-linux]
+
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+  - task: upload-tile
+    file: pcf-pipelines/tasks/upload-product/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      PIVNET_PRODUCT_NAME: {{product_slug}}
+  - task: stage-tile
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      PRODUCT_NAME: {{product_name}}
+  - task: upload-stemcell
+    file: pcf-pipelines/tasks/upload-windows-stemcell/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+  - task: configure-tile
+    file: pcf-pipelines/tasks/config-windows-runtime/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      PRODUCT_NAME: {{product_name}}
+      EXECUTOR_DISK_CAPACITY: {{executor_disk_capacity}}
+      EXECUTOR_MEMORY_CAPACITY: {{executor_memory_capacity}}
+      TILE_SINGLETON_AVAILABILITY_ZONE: {{tile_singleton_availability_zone}}
+      TILE_OTHER_AVAILABILITY_ZONES: {{tile_other_availability_zones}}
+      TILE_NETWORK: {{tile_network}}
+      ISOLATED_ROUTER_COUNT: {{isolated_router_count}}
+      ISOLATED_DIEGO_CELL_COUNT: {{isolated_diego_cell_count}}
+      CELL_EXECUTOR_DISK_CAPACITY: {{cell_executor_disk_capacity}}
+      CELL_EXECUTOR_MEMORY_CAPACITY: {{cell_executor_memory_capacity}}
+      CELL_GARDEN_NETWORK_MTU: {{cell_garden_network_mtu}}
+      CELL_GARDEN_NETWORK_POOL: {{cell_garden_network_pool}}
+      CELL_INSECURE_DOCKER_REGISTRY_LIST: {{cell_insecure_docker_registry_list}}
+      CELL_PLACEMENT_TAG: {{cell_placement_tag}}
+      ISOLATED_ROUTER_STATIC_IPS: {{isolated_router_static_ips}}
+      NETWORKING_POINT_OF_ENTRY: {{networking_point_of_entry}}
+      TERMINATE_AT_ROUTER_SSL_CIPHERS: {{terminate_at_router_ssl_ciphers}}
+      TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE: {{terminate_at_router_ssl_rsa_certificate}}
+      TERMINATE_AT_ROUTER_SSL_RSA_KEY:  {{terminate_at_router_ssl_rsa_key}}
+  - task: apply-changes
+    file: pcf-pipelines/tasks/apply-changes/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+
+#unpack_tarball_config: &unpack_tarball_config
+#  config:
+#    platform: linux
+#    image_resource:
+#      type: docker-image
+#      source:
+#        repository: cloudfoundry/cflinuxfs2
+#    inputs:
+#    - name: pcf-pipelines-tarball
+#    outputs:
+#    - name: pcf-pipelines
+#    run:
+#     path: sh
+#     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]
