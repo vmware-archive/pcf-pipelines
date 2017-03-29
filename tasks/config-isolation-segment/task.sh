@@ -78,8 +78,12 @@ TILE_RESOURCES=$(cat <<-EOF
 EOF
 )
 
+#	--product-properties "$TILE_PROPERTIES" \
+echo $TILE_NETWORK
+echo $TILE_PROPERTIES
+echo $TILE_RESOURCES
+
 $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
 	configure-product --product-name "${PRODUCT_NAME}" \
-	--product-properties "$TILE_PROPERTIES" \
 	--product-network "$TILE_NETWORK" \
 	--product-resources "$TILE_RESOURCES"
