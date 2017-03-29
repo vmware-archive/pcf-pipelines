@@ -28,13 +28,13 @@ EOF
 TILE_PROPERTIES=$(cat <<-EOF
 {
   ".isolated_diego_cell.executor_disk_capacity": {
-    "value": $CELL_EXECUTOR_DISK_CAPACITY
+    "value": ${CELL_EXECUTOR_DISK_CAPACITY:-null}
   },
   ".isolated_diego_cell.executor_memory_capacity": {
-    "value": $CELL_EXECUTOR_MEMORY_CAPACITY
+    "value": ${CELL_EXECUTOR_MEMORY_CAPACITY:-null}
   },
   ".isolated_diego_cell.garden_network_mtu": {
-    "value": $CELL_GARDEN_NETWORK_MTU
+    "value": ${CELL_GARDEN_NETWORK_MTU:-null}
   },
   ".isolated_diego_cell.garden_network_pool": {
     "value": "$CELL_GARDEN_NETWORK_POOL"
@@ -46,7 +46,7 @@ TILE_PROPERTIES=$(cat <<-EOF
     "value": "$CELL_PLACEMENT_TAG"
   },
   ".isolated_router.static_ips": {
-    "value": $ISOLATED_ROUTER_STATIC_IPS
+    "value": ${ISOLATED_ROUTER_STATIC_IPS:-null}
   },
   ".properties.networking_point_of_entry": {
     "value": "$NETWORKING_POINT_OF_ENTRY"
