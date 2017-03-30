@@ -30,6 +30,25 @@ $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PA
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-network "$TILE_NETWORK"
 
+TILE_RESOURCES=$(cat <<-EOF
+{
+  "isolated_router": {
+    "instance_type": {"id": "automatic"},
+    "instances" : $ISOLATED_ROUTER_COUNT
+  },
+  "isolated_diego_cell": {
+    "instance_type": {"id": "automatic"},
+    "instances" : $ISOLATED_DIEGO_CELL_COUNT
+  }
+}
+EOF
+)
+
+echo "Configuring ${PRODUCT_NAME} resources"
+$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
+	configure-product --product-name "${PRODUCT_NAME}" \
+	--product-resources "$TILE_RESOURCES"
+
 TILE_PROPERTIES=$(cat <<-EOF
 {
   ".isolated_diego_cell.executor_disk_capacity": {
@@ -130,25 +149,6 @@ echo "Configuring ${PRODUCT_NAME} SSL"
 $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-properties "$CF_SSL_TERM_PROPERTIES"
-
-TILE_RESOURCES=$(cat <<-EOF
-{
-  "isolated_router": {
-    "instance_type": {"id": "automatic"},
-    "instances" : $ISOLATED_ROUTER_COUNT
-  },
-  "isolated_diego_cell": {
-    "instance_type": {"id": "automatic"},
-    "instances" : $ISOLATED_DIEGO_CELL_COUNT
-  }
-}
-EOF
-)
-
-echo "Configuring ${PRODUCT_NAME} resources"
-$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
-	configure-product --product-name "${PRODUCT_NAME}" \
-	--product-resources "$TILE_RESOURCES"
 
 #remove after debugging complete
 echo $TILE_NETWORK
