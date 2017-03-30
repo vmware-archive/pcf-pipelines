@@ -74,61 +74,64 @@ jobs:
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
       PIVNET_PRODUCT_NAME: {{product_slug}}
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
       PRODUCT_NAME: {{product_name}}
   - task: upload-stemcell
     file: pcf-pipelines/tasks/upload-stemcell/task.yml
     params:
-      PRODUCT: {{metadata_basename}}
       IAAS_TYPE: {{iaas_type}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      PRODUCT: {{metadata_basename}}
   - task: configure-tile
     file: pcf-pipelines/tasks/config-isolation-segment/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_url}}
-      PRODUCT_NAME: {{product_name}}
-      TILE_SINGLETON_AVAILABILITY_ZONE: {{tile_singleton_availability_zone}}
-      TILE_OTHER_AVAILABILITY_ZONES: {{tile_other_availability_zones}}
-      TILE_NETWORK: {{tile_network}}
-      ISOLATED_ROUTER_COUNT: {{isolated_router_count}}
-      ISOLATED_DIEGO_CELL_COUNT: {{isolated_diego_cell_count}}
+      APPS_DOMAIN: {{apps_domain}}
       CELL_EXECUTOR_DISK_CAPACITY: {{cell_executor_disk_capacity}}
       CELL_EXECUTOR_MEMORY_CAPACITY: {{cell_executor_memory_capacity}}
       CELL_GARDEN_NETWORK_MTU: {{cell_garden_network_mtu}}
       CELL_GARDEN_NETWORK_POOL: {{cell_garden_network_pool}}
       CELL_INSECURE_DOCKER_REGISTRY_LIST: {{cell_insecure_docker_registry_list}}
       CELL_PLACEMENT_TAG: {{cell_placement_tag}}
+      ISOLATED_DIEGO_CELL_COUNT: {{isolated_diego_cell_count}}
+      ISOLATED_ROUTER_COUNT: {{isolated_router_count}}
       ISOLATED_ROUTER_STATIC_IPS: {{isolated_router_static_ips}}
       NETWORKING_POINT_OF_ENTRY: {{networking_point_of_entry}}
+      OPS_MGR_GENERATE_SSL_ENDPOINT: {{ops_mgr_generate_ssl_endpoint}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      PRODUCT_NAME: {{product_name}}
+      SYSTEM_DOMAIN: {{system_domain}}
       TERMINATE_AT_ROUTER_SSL_CIPHERS: {{terminate_at_router_ssl_ciphers}}
       TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE: {{terminate_at_router_ssl_rsa_certificate}}
       TERMINATE_AT_ROUTER_SSL_RSA_KEY:  {{terminate_at_router_ssl_rsa_key}}
+      TILE_NETWORK: {{tile_network}}
+      TILE_OTHER_AVAILABILITY_ZONES: {{tile_other_availability_zones}}
+      TILE_SINGLETON_AVAILABILITY_ZONE: {{tile_singleton_availability_zone}}
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_url}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
 
 #unpack_tarball_config: &unpack_tarball_config
 #  config:

@@ -25,6 +25,11 @@ TILE_NETWORK=$(cat <<-EOF
 EOF
 )
 
+echo "Configuring ${PRODUCT_NAME} network"
+$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
+	configure-product --product-name "${PRODUCT_NAME}" \
+	--product-network "$TILE_NETWORK"
+
 TILE_PROPERTIES=$(cat <<-EOF
 {
   ".isolated_diego_cell.executor_disk_capacity": {
@@ -47,22 +52,83 @@ TILE_PROPERTIES=$(cat <<-EOF
   },
   ".isolated_router.static_ips": {
     "value": ${ISOLATED_ROUTER_STATIC_IPS:-null}
-  },
+  }
+}
+EOF
+)
+
+echo "Configuring ${PRODUCT_NAME} properties"
+$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
+	configure-product --product-name "${PRODUCT_NAME}" \
+	--product-properties "$TILE_PROPERTIES"
+
+if [[ "$NETWORKING_POINT_OF_ENTRY" == "terminate_at_router" ]]; then
+  if [[ -z "$TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE" ]]; then
+  DOMAINS=$(cat <<-EOF
+    {"domains": ["*.$SYSTEM_DOMAIN", "*.$APPS_DOMAIN", "*.login.$SYSTEM_DOMAIN", "*.uaa.$SYSTEM_DOMAIN"] }
+  EOF
+  )
+  
+    CERTIFICATES=`$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation curl -p "$OPS_MGR_GENERATE_SSL_ENDPOINT" -x POST -d "$DOMAINS"`
+  
+    export SSL_CERT=`echo $CERTIFICATES | jq '.certificate' | tr -d '"'`
+    export SSL_PRIVATE_KEY=`echo $CERTIFICATES | jq '.key' | tr -d '"'`
+  
+    echo "Using self signed certificates generated using Ops Manager..."
+  
+  else
+    SSL_CERT=$TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE
+    SSL_PRIVATE_KEY=$TERMINATE_AT_ROUTER_SSL_RSA_KEY
+  fi
+
+echo "Forward SSL to Isolation Segment Router"
+CF_SSL_TERM_PROPERTIES=$(cat <<-EOF
+{
   ".properties.networking_point_of_entry": {
-    "value": "$NETWORKING_POINT_OF_ENTRY"
+    "value": "terminate_at_router"
   },
   ".properties.networking_point_of_entry.terminate_at_router.ssl_ciphers": {
     "value": "$TERMINATE_AT_ROUTER_SSL_CIPHERS"
   },
-  ".properties.networking_point_of_entry.terminate_at_router.ssl_rsa_certificate": {
+  ".properties.networking_point_of_entry.haproxy.ssl_rsa_certificate": {
     "value": {
-      "cert_pem": "$TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE",
-      "private_key_pem": "$TERMINATE_AT_ROUTER_SSL_RSA_KEY"
+      "cert_pem": "$SSL_CERT",
+      "private_key_pem": "$SSL_PRIVATE_KEY"
     }
   }
 }
 EOF
 )
+
+elif [[ "$NETWORKING_POINT_OF_ENTRY" == "terminate_at_router_ert_cert" ]]; then
+echo "Forward SSL to Isolation Segment Router with ERT Router certificates"
+
+CF_SSL_TERM_PROPERTIES=$(cat <<-EOF
+{
+  ".properties.networking_point_of_entry": {
+    "value": "terminate_at_router_ert_cert"
+  }
+}
+EOF
+)
+
+elif [[ "$NETWORKING_POINT_OF_ENTRY" == "terminate_before_router" ]]; then
+echo "Forward unencrypted traffic to Elastic Runtime Router"
+CF_SSL_TERM_PROPERTIES=$(cat <<-EOF
+{
+  ".properties.networking_point_of_entry": {
+    "value": "terminate_before_router"
+  }
+}
+EOF
+)
+
+echo "Configuring ${PRODUCT_NAME} SSL"
+$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
+	configure-product --product-name "${PRODUCT_NAME}" \
+	--product-properties "$CF_SSL_TERM_PROPERTIES"
+
+fi
 
 TILE_RESOURCES=$(cat <<-EOF
 {
@@ -78,12 +144,13 @@ TILE_RESOURCES=$(cat <<-EOF
 EOF
 )
 
+echo "Configuring ${PRODUCT_NAME} resources"
+$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
+	configure-product --product-name "${PRODUCT_NAME}" \
+	--product-resources "$TILE_RESOURCES"
+
+#remove after debugging complete
 echo $TILE_NETWORK
 echo $TILE_PROPERTIES
 echo $TILE_RESOURCES
-
-$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
-	configure-product --product-name "${PRODUCT_NAME}" \
-	--product-properties "$TILE_PROPERTIES" \
-	--product-network "$TILE_NETWORK" \
-	--product-resources "$TILE_RESOURCES"
+echo CF_SSL_TERM_PROPERTIES
