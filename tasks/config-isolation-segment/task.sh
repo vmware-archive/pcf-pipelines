@@ -64,18 +64,19 @@ $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PA
 
 if [[ "$NETWORKING_POINT_OF_ENTRY" == "terminate_at_router" ]]; then
   if [[ -z "$TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE" ]]; then
-  DOMAINS=$(cat <<-EOF
-    {"domains": ["*.$SYSTEM_DOMAIN", "*.$APPS_DOMAIN", "*.login.$SYSTEM_DOMAIN", "*.uaa.$SYSTEM_DOMAIN"] }
-  EOF
-  )
-  
-    CERTIFICATES=`$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation curl -p "$OPS_MGR_GENERATE_SSL_ENDPOINT" -x POST -d "$DOMAINS"`
-  
+    DOMAINS=$(cat <<-EOF
+{"domains": ["*.$SYSTEM_DOMAIN", "*.$APPS_DOMAIN", "*.login.$SYSTEM_DOMAIN", "*.uaa.$SYSTEM_DOMAIN"] }
+    EOF
+    )
+
+    CERTIFICATES=`$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
+      curl -p "$OPS_MGR_GENERATE_SSL_ENDPOINT" -x POST -d "$DOMAINS"`
+
     export SSL_CERT=`echo $CERTIFICATES | jq '.certificate' | tr -d '"'`
     export SSL_PRIVATE_KEY=`echo $CERTIFICATES | jq '.key' | tr -d '"'`
-  
+
     echo "Using self signed certificates generated using Ops Manager..."
-  
+
   else
     SSL_CERT=$TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE
     SSL_PRIVATE_KEY=$TERMINATE_AT_ROUTER_SSL_RSA_KEY
@@ -123,12 +124,12 @@ CF_SSL_TERM_PROPERTIES=$(cat <<-EOF
 EOF
 )
 
+fi
+
 echo "Configuring ${PRODUCT_NAME} SSL"
 $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-properties "$CF_SSL_TERM_PROPERTIES"
-
-fi
 
 TILE_RESOURCES=$(cat <<-EOF
 {
