@@ -111,7 +111,7 @@ CF_SSL_TERM_PROPERTIES=$(cat <<-EOF
   ".properties.networking_point_of_entry.terminate_at_router.ssl_ciphers": {
     "value": "$TERMINATE_AT_ROUTER_SSL_CIPHERS"
   },
-  ".properties.networking_point_of_entry.haproxy.ssl_rsa_certificate": {
+  ".properties.networking_point_of_entry.terminate_at_router.ssl_rsa_certificate": {
     "value": {
       "cert_pem": "$SSL_CERT",
       "private_key_pem": "$SSL_PRIVATE_KEY"
