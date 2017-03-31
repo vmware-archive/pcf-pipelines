@@ -81,7 +81,7 @@ $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PA
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-properties "$TILE_PROPERTIES"
 
-if [[ "$NETWORKING_POINT_OF_ENTRY" == "terminate_at_router_ert_cert" ]]; then
+if [[ "$NETWORKING_POINT_OF_ENTRY" == "terminate_at_router" ]]; then
   if [[ -z "$TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE" ]]; then
     DOMAINS=$(cat <<-EOF
 {"domains": ["*.$SYSTEM_DOMAIN", "*.$APPS_DOMAIN", "*.login.$SYSTEM_DOMAIN", "*.uaa.$SYSTEM_DOMAIN"] }
