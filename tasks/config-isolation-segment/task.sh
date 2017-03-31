@@ -145,6 +145,15 @@ EOF
 )
 
 fi
+echo "No routers configured, but need to change SSL termination to option that has no required fields"
+CF_SSL_TERM_PROPERTIES=$(cat <<-EOF
+{
+  ".properties.networking_point_of_entry": {
+    "value": "terminate_before_router"
+  }
+}
+EOF
+)
 fi
 
 echo "Configuring ${PRODUCT_NAME} SSL"
