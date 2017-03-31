@@ -81,6 +81,7 @@ $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PA
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-properties "$TILE_PROPERTIES"
 
+#if [ "$ISOLATED_ROUTER_COUNT" -gt "0" ]; then
 if [[ "$NETWORKING_POINT_OF_ENTRY" == "terminate_at_router" ]]; then
   if [[ -z "$TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE" ]]; then
     DOMAINS=$(cat <<-EOF
@@ -144,6 +145,7 @@ EOF
 )
 
 fi
+#fi
 
 echo "Configuring ${PRODUCT_NAME} SSL"
 $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
