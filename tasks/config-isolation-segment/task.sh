@@ -81,13 +81,11 @@ $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PA
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-properties "$TILE_PROPERTIES"
 
-env
-set -x
 if [[ "$NETWORKING_POINT_OF_ENTRY" == "terminate_at_router_ert_cert" ]]; then
   if [[ -z "$TERMINATE_AT_ROUTER_SSL_RSA_CERTIFICATE" ]]; then
     DOMAINS=$(cat <<-EOF
 {"domains": ["*.$SYSTEM_DOMAIN", "*.$APPS_DOMAIN", "*.login.$SYSTEM_DOMAIN", "*.uaa.$SYSTEM_DOMAIN"] }
-    EOF
+EOF
     )
 
     CERTIFICATES=`$CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
@@ -151,9 +149,3 @@ echo "Configuring ${PRODUCT_NAME} SSL"
 $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-properties "$CF_SSL_TERM_PROPERTIES"
-
-#remove after debugging complete
-echo $TILE_NETWORK
-echo $TILE_PROPERTIES
-echo $TILE_RESOURCES
-echo CF_SSL_TERM_PROPERTIES
