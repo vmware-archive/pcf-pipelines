@@ -81,49 +81,49 @@ jobs:
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
       PIVNET_PRODUCT_NAME: {{product_slug}}
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
       PRODUCT_NAME: {{product_name}}
   - task: upload-stemcell
     file: pcf-pipelines/tasks/upload-windows-stemcell/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
   - task: configure-tile
     file: pcf-pipelines/tasks/config-windows-runtime/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_url}}
-      PRODUCT_NAME: {{product_name}}
       EXECUTOR_DISK_CAPACITY: {{executor_disk_capacity}}
       EXECUTOR_MEMORY_CAPACITY: {{executor_memory_capacity}}
-      TILE_SINGLETON_AVAILABILITY_ZONE: {{tile_singleton_availability_zone}}
-      TILE_OTHER_AVAILABILITY_ZONES: {{tile_other_availability_zones}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      PRODUCT_NAME: {{product_name}}
       TILE_NETWORK: {{tile_network}}
+      TILE_OTHER_AVAILABILITY_ZONES: {{tile_other_availability_zones}}
+      TILE_SINGLETON_AVAILABILITY_ZONE: {{tile_singleton_availability_zone}}
       WINDOWS_CELL_COUNT: {{windows_cell_count}}
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_url}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
 
 #unpack_tarball_config: &unpack_tarball_config
 #  config:

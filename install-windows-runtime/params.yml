@@ -12,30 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-platform: linux
+github_token:
+iaas_type: vsphere
+metadata_basename: metadata/p-windows-runtime.yml
+pivnet_token:
+product_name: p-windows-runtime
+product_slug: runtime-for-windows
+product_version: 1.10.*
 
-image_resource:
-  type: docker-image
-  source:
-    repository: cloudfoundry/cflinuxfs2
+opsman_admin_password:
+opsman_admin_username:
+opsman_timeout_seconds:
+opsman_url:
 
-inputs:
-  - name: pcf-pipelines
-  - name: tool-om
-  - name: pivnet-product
-
-params:
-  EXECUTOR_DISK_CAPACITY:
-  EXECUTOR_MEMORY_CAPACITY:
-  OPSMAN_PASSWORD:
-  OPSMAN_URI:
-  OPSMAN_USERNAME:
-  PRODUCT_NAME:
-  TILE_NETWORK:
-  TILE_OTHER_AVAILABILITY_ZONES:
-  TILE_SINGLETON_AVAILABILITY_ZONE:
-  WINDOWS_CELL_COUNT:
-
-run:
-  path: pcf-pipelines/tasks/config-windows-runtime/task.sh
+#product-properties
+executor_disk_capacity:
+executor_memory_capacity:
+#product-network
+tile_network:
+tile_other_availability_zones:
+tile_singleton_availability_zone:
+#product-resources
+windows_cell_count:
