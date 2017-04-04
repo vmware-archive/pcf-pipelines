@@ -9,6 +9,9 @@ image_resource:
 inputs:
 - name: release
 
+outputs:
+- name: upgrade_opsman_gcp_config
+
 params:
   PIVNET_TOKEN:
   OPSMAN_ADMIN_USERNAME:
