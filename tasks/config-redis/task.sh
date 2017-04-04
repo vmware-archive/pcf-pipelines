@@ -34,25 +34,25 @@ $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PA
 TILE_PROPERTIES=$(cat <<-EOF
 {
   ".properties.metrics_disable_etcd_tls": {
-    "value": $METRICS_DISABLE_ETCD_TLS
+    "value": ${METRICS_DISABLE_ETCD_TLS:-true}
   },
   ".properties.metrics_polling_interval": {
-    "value": $METRICS_POLLING_INTERVAL
+    "value": ${METRICS_POLLING_INTERVAL:-30}
   },
   ".cf-redis-broker.redis_maxmemory": {
-    "value": "$REDIS_MAXMEMORY"
+    "value": "${REDIS_MAXMEMORY:-512MB}"
   },
   ".cf-redis-broker.service_instance_limit": {
-    "value": $SERVICE_INSTANCE_LIMIT
+    "value": ${SERVICE_INSTANCE_LIMIT:-5}
   },
   ".properties.syslog_address": {
     "value": "$SYSLOG_ADDRESS"
   },
   ".properties.syslog_port": {
-    "value": $SYSLOG_PORT
+    "value": ${SYSLOG_PORT:-null}
   },
   ".properties.syslog_transport": {
-    "value": "$SYSLOG_TRANSPORT"
+    "value": "${SYSLOG_TRANSPORT:-TCP}"
   }
 }
 EOF
