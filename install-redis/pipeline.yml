@@ -100,7 +100,7 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       PRODUCT: {{metadata_basename}}
   - task: configure-tile
-    file: pcf-pipelines/tasks/config-apm/task.yml
+    file: pcf-pipelines/tasks/config-redis/task.yml
     params:
       BACKUPS_SELECTOR_AZURE_ACCOUNT: {{backups_selector_azure_account}}
       BACKUPS_SELECTOR_AZURE_BG_SAVE_TIMEOUT: {{backups_selector_azure_bg_save_timeout}}
