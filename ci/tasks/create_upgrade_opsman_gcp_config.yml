@@ -6,9 +6,6 @@ image_resource:
   source:
     repository: cloudfoundry/cflinuxfs2
 
-inputs:
-- name: release
-
 outputs:
 - name: upgrade_opsman_gcp_config
 
