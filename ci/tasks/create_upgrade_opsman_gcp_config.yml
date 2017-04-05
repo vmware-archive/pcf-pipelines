@@ -45,5 +45,5 @@ run:
     opsman_gcp_project: "$OPSMAN_PROJECT"
     opsman_gcp_zone: "$OPSMAN_ZONE"
     opsman_gcp_diskimage_name: "$OPSMAN_DISKIMAGE_NAME"
-    opsman_gcp_credfile_contents: "$OPSMAN_GCP_CREDFILE_CONTENTS"
+    opsman_gcp_credfile_contents: $OPSMAN_GCP_CREDFILE_CONTENTS
     EOF
