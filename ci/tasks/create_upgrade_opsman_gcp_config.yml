@@ -30,20 +30,20 @@ run:
   - -ce
   - |
     cat > upgrade_opsman_gcp_config/params.yml <<EOF
-      check_new_opsman_every: "${CHECK_NEW_OPSMAN_EVERY}"
-      github_token: "${GITHUB_TOKEN}"
-      opsman_major_minor_version: "${OPSMAN_MAJOR_MINOR_VERSION}"
-      pivnet_token: "${PIVNET_TOKEN}"
-      existing_opsman_vm_name: "${EXISTING_OPSMAN_VM_NAME}"
+      check_new_opsman_every: "$CHECK_NEW_OPSMAN_EVERY"
+      github_token: "$GITHUB_TOKEN"
+      opsman_major_minor_version: "$OPSMAN_MAJOR_MINOR_VERSION"
+      pivnet_token: "$PIVNET_TOKEN"
+      existing_opsman_vm_name: "$EXISTING_OPSMAN_VM_NAME"
 
-      opsman_admin_password: "${OPSMAN_ADMIN_PASSWORD}"
-      opsman_admin_username: "${OPSMAN_ADMIN_USERNAME}"
-      opsman_passphrase: "${OPSMAN_ADMIN_PASSWORD}"
-      opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
-      opsman_uri: "${OPSMAN_URI}"
+      opsman_admin_password: "$OPSMAN_ADMIN_PASSWORD"
+      opsman_admin_username: "$OPSMAN_ADMIN_USERNAME"
+      opsman_passphrase: "$OPSMAN_ADMIN_PASSWORD"
+      opsman_timeout_seconds: "$OPSMAN_TIMEOUT_SECONDS"
+      opsman_uri: "$OPSMAN_URI"
 
-      opsman_gcp_project: "${OPSMAN_PROJECT}"
-      opsman_gcp_zone: "${OPSMAN_ZONE}"
-      opsman_gcp_diskimage_name: "${OPSMAN_DISKIMAGE_NAME}"
-      opsman_gcp_credfile_contents: "${OPSMAN_GCP_CREDFILE_CONTENTS}"
+      opsman_gcp_project: "$OPSMAN_PROJECT"
+      opsman_gcp_zone: "$OPSMAN_ZONE"
+      opsman_gcp_diskimage_name: "$OPSMAN_DISKIMAGE_NAME"
+      opsman_gcp_credfile_contents: "$OPSMAN_GCP_CREDFILE_CONTENTS"
     EOF
