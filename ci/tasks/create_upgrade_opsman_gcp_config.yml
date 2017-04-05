@@ -47,6 +47,14 @@ run:
     opsman_gcp_diskimage_name: "$OPSMAN_DISKIMAGE_NAME"
     EOF
 
+    # This is necessary to preserve the whitespace we need in the YAML document
+    # we're constructing.
+    #
+    # The way it works is by writing out the line containing the key we want to
+    # specify, which contains the YAML block scalar indicator, "|". Then we set
+    # the internal field separator to the newline character so we can then
+    # iterate on each line in the GCP credfile variable, writing each line out
+    # with two spaces in front.
     echo "opsman_gcp_credfile_contents: |" >> upgrade_opsman_gcp_config/params.yml
     IFS=$'\n'
     for line in $OPSMAN_GCP_CREDFILE_CONTENTS; do
