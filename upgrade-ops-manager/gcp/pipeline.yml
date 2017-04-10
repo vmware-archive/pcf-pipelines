@@ -124,6 +124,7 @@ jobs:
   - task: create-cliaas-config
     file: pcf-pipelines/tasks/create-cliaas-config-gcp/task.yml
     params:
+      PIVNET_IMAGE_REGION: {{pivnet_image_region}}
       OPSMAN_PROJECT: {{opsman_gcp_project}}
       OPSMAN_ZONE: {{opsman_gcp_zone}}
       OPSMAN_GCP_CREDFILE_CONTENTS: {{opsman_gcp_credfile_contents}}

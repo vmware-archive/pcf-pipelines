@@ -27,6 +27,7 @@ outputs:
   - name: cliaas-config
 
 params:
+  PIVNET_IMAGE_REGION:
   OPSMAN_PROJECT:
   OPSMAN_ZONE:
   OPSMAN_GCP_CREDFILE_CONTENTS:

@@ -20,13 +20,12 @@ cat > cliaas-config/gcpcreds.json <<EOF
 ${OPSMAN_GCP_CREDFILE_CONTENTS}
 EOF
 
-export DISK_IMAGE_URL=""
-#VHD_IMAGE_URL=$(grep ${AZURE_REGION} pivnet-opsmgr/*Azure.yml | awk '{split($0, a); print a[2]}')
+DISK_IMAGE_PATH=$(grep ${PIVNET_IMAGE_REGION} pivnet-opsmgr/*GCP.yml | awk '{split($0, a); print a[2]}')
 
 cat > cliaas-config/config.yml <<EOF
 gcp:
   credfile: cliaas-config/gcpcreds.json
   zone: ${OPSMAN_ZONE}
   project: ${OPSMAN_PROJECT}
-  disk_image_url: ${DISK_IMAGE_URL}
+  disk_image_url: ${DISK_IMAGE_PATH}
 EOF

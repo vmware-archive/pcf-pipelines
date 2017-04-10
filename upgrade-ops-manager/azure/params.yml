@@ -21,13 +21,13 @@ pivnet_token: CHANGEME
 
 # Task configuration
 azure_region: east_us
-azure_subscription_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-azure_client_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+azure_subscription_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+azure_client_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 azure_client_secret: xxxxxxxxxxx
-azure_tenant_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+azure_tenant_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 azure_resource_group_name: xxxxxxxxxx
 azure_storage_account_name: xxxxxxxxxxxxxxx
-azure_storage_account_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+azure_storage_account_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 azure_storage_container_name: xxxxxxxxxxxx
 
 existing_opsman_vm_name: CHANGEME

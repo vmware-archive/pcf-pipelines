@@ -25,3 +25,4 @@ existing_opsman_vm_name: CHANGEME
 opsman_gcp_project: CHANGEME
 opsman_gcp_zone: CHANGEME
 opsman_gcp_credfile_contents: CHANGEME
+pivnet_image_region: us
