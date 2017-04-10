@@ -1,0 +1,185 @@
+# Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: pivnet-opsmgr
+  type: pivnet
+  check_every: {{check_new_opsman_every}}
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
+    sort_by: semver
+
+- name: tool-cliaas
+  type: github-release
+  source:
+    user: pivotal-cf 
+    repository: cliaas
+    access_token: {{github_token}}
+
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
+- name: tool-pivnet-cli
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pivnet-cli
+    access_token: {{github_token}}
+
+- name: pcf-pipelines-tarball
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: v0.5.0-rc.12
+
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
+jobs:
+- name: regulator
+  plan:
+  - get: schedule
+    trigger: true
+  - get: pivnet-opsmgr
+    params: { globs: [] }
+
+- name: upgrade-opsmgr
+  serial: true
+  plan:
+  - aggregate:
+    - get: pivnet-opsmgr
+      passed: [regulator]
+      trigger: true 
+      params:
+        globs:
+        - "*Azure.yml"
+    - get: tool-cliaas
+      params:
+        globs: ["*linux*"]
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+
+    - get: tool-om
+      params:
+        globs: ["*linux*"]
+    - get: tool-pivnet-cli
+      params:
+        globs: ["*linux*"]
+
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
+  - aggregate:
+    - task: export-opsmgr-settings
+      file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
+      params:
+        OPSMAN_USERNAME: {{opsman_admin_username}}
+        OPSMAN_PASSWORD: {{opsman_admin_password}}
+        OPSMAN_URI: {{opsman_uri}}
+        OPSMAN_SETTINGS_FILENAME: installation.zip
+    - task: exported-opsmgr-diagnostic-report
+      file: pcf-pipelines/tasks/export-opsmgr-diagnostic-report/task.yml
+      params:
+        OPSMAN_USERNAME: {{opsman_admin_username}}
+        OPSMAN_PASSWORD: {{opsman_admin_password}}
+        OPSMAN_URI: {{opsman_uri}}
+
+  - task: create-cliaas-config
+    file: pcf-pipelines/tasks/create-cliaas-config-azure/task.yml
+    params:
+        AZURE_REGION: {{azure_region}}
+        AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}} 
+        AZURE_CLIENT_ID: {{azure_client_id}}
+        AZURE_CLIENT_SECRET: {{azure_client_secret}}
+        AZURE_TENANT_ID: {{azure_tenant_id}} 
+        AZURE_RESOURCE_GROUP_NAME: {{azure_resource_group_name}} 
+        AZURE_STORAGE_ACCOUNT_NAME: {{azure_storage_account_name}}
+        AZURE_STORAGE_ACCOUNT_KEY: {{azure_storage_account_key}}
+        AZURE_STORAGE_CONTAINER_NAME: {{azure_storage_container_name}}
+
+  - task: replace-opsman-vm
+    file: pcf-pipelines/tasks/replace-vm/task.yml
+    params:
+      VM_IDENTIFIER: {{existing_opsman_vm_name}}
+
+  - task: import-opsmgr-settings
+    file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_SETTINGS_FILENAME: installation.zip
+      OPSMAN_PASSPHRASE: {{opsman_passphrase}}
+
+  - task: download-stemcells
+    file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
+    params:
+      API_TOKEN: {{pivnet_token}}
+      IAAS_TYPE: aws
+
+  - task: restore-stemcells
+    file: pcf-pipelines/tasks/restore-stemcells/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
+  - task: apply-changes
+    file: pcf-pipelines/tasks/apply-changes/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+
+unpack_tarball_config: &unpack_tarball_config
+  config:
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: cloudfoundry/cflinuxfs2
+    inputs:
+    - name: pcf-pipelines-tarball
+    outputs:
+    - name: pcf-pipelines
+    run:
+     path: sh
+     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]
