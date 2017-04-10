@@ -45,6 +45,7 @@ run:
     opsman_gcp_project: "$OPSMAN_PROJECT"
     opsman_gcp_zone: "$OPSMAN_ZONE"
     opsman_gcp_diskimage_name: "$OPSMAN_DISKIMAGE_NAME"
+    pivnet_image_region: us
     EOF
 
     # This is necessary to preserve the whitespace we need in the YAML document
