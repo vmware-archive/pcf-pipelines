@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-platform: linux
+set -eu
 
-image_resource:
-  type: docker-image
-  source:
-    repository: cloudfoundry/cflinuxfs2
+VHD_IMAGE_URL=$(grep ${AZURE_REGION} pivnet-opsmgr/*Azure.yml | awk '{split($0, a); print a[2]}')
 
-inputs:
-  - name: pcf-pipelines
-
-outputs:
-  - name: cliaas-config
-
-params:
-  PIVNET_IMAGE_REGION:
-  OPSMAN_PROJECT:
-  OPSMAN_ZONE:
-  OPSMAN_GCP_CREDFILE_CONTENTS:
-
-run:
-  path: pcf-pipelines/tasks/create-cliaas-config-gcp/task.sh
+cat > cliaas-config/config.yml <<EOF
+azure:
+  vhd_image_url: {{$VHD_IMAGE_URL}}
+  subscription_id: {{$AZURE_SUBSCRIPTION_ID}}
+  client_id: {{$AZURE_CLIENT_ID}}
+  client_secret: {{$AZURE_CLIENT_SECRET}}
+  tenant_id: {{$AZURE_TENANT_ID}}
+  resource_group_name: {{$AZURE_RESOURCE_GROUP_NAME}}
+  storage_account_name: {{$AZURE_STORAGE_ACCOUNT_NAME}}
+  storage_account_key: {{$AZURE_STORAGE_ACCOUNT_KEY}}
+  storage_container_name: {{$AZURE_STORAGE_CONTAINER_NAME}}
+EOF

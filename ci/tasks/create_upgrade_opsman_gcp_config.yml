@@ -6,8 +6,8 @@ image_resource:
   source:
     repository: cloudfoundry/cflinuxfs2
 
-inputs:
-- name: release
+outputs:
+- name: upgrade_opsman_gcp_config
 
 params:
   PIVNET_TOKEN:
@@ -30,20 +30,34 @@ run:
   - -ce
   - |
     cat > upgrade_opsman_gcp_config/params.yml <<EOF
-      check_new_opsman_every: "${CHECK_NEW_OPSMAN_EVERY}"
-      github_token: "${GITHUB_TOKEN}"
-      opsman_major_minor_version: "${OPSMAN_MAJOR_MINOR_VERSION}"
-      pivnet_token: "${PIVNET_TOKEN}"
-      existing_opsman_vm_name: "${EXISTING_OPSMAN_VM_NAME}"
+    check_new_opsman_every: "$CHECK_NEW_OPSMAN_EVERY"
+    github_token: "$GITHUB_TOKEN"
+    opsman_major_minor_version: "$OPSMAN_MAJOR_MINOR_VERSION"
+    pivnet_token: "$PIVNET_TOKEN"
+    existing_opsman_vm_name: "$EXISTING_OPSMAN_VM_NAME"
 
-      opsman_admin_password: "${OPSMAN_ADMIN_PASSWORD}"
-      opsman_admin_username: "${OPSMAN_ADMIN_USERNAME}"
-      opsman_passphrase: "${OPSMAN_ADMIN_PASSWORD}"
-      opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
-      opsman_uri: "${OPSMAN_URI}"
-      
-      opsman_gcp_project: "${OPSMAN_PROJECT}"
-      opsman_gcp_zone: "${OPSMAN_ZONE}"
-      opsman_gcp_diskimage_name: "${OPSMAN_DISKIMAGE_NAME}"
-      opsman_gcp_credfile_contents: "${OPSMAN_GCP_CREDFILE_CONTENTS}"
+    opsman_admin_password: "$OPSMAN_ADMIN_PASSWORD"
+    opsman_admin_username: "$OPSMAN_ADMIN_USERNAME"
+    opsman_passphrase: "$OPSMAN_ADMIN_PASSWORD"
+    opsman_timeout_seconds: "$OPSMAN_TIMEOUT_SECONDS"
+    opsman_uri: "$OPSMAN_URI"
+
+    opsman_gcp_project: "$OPSMAN_PROJECT"
+    opsman_gcp_zone: "$OPSMAN_ZONE"
+    opsman_gcp_diskimage_name: "$OPSMAN_DISKIMAGE_NAME"
+    pivnet_image_region: us
     EOF
+
+    # This is necessary to preserve the whitespace we need in the YAML document
+    # we're constructing.
+    #
+    # The way it works is by writing out the line containing the key we want to
+    # specify, which contains the YAML block scalar indicator, "|". Then we set
+    # the internal field separator to the newline character so we can then
+    # iterate on each line in the GCP credfile variable, writing each line out
+    # with two spaces in front.
+    echo "opsman_gcp_credfile_contents: |" >> upgrade_opsman_gcp_config/params.yml
+    IFS=$'\n'
+    for line in $OPSMAN_GCP_CREDFILE_CONTENTS; do
+      echo "  $line" >> upgrade_opsman_gcp_config/params.yml
+    done

@@ -21,16 +21,22 @@ image_resource:
     repository: cloudfoundry/cflinuxfs2
 
 inputs:
+  - name: pivnet-opsmgr
   - name: pcf-pipelines
 
 outputs:
   - name: cliaas-config
 
 params:
-  PIVNET_IMAGE_REGION:
-  OPSMAN_PROJECT:
-  OPSMAN_ZONE:
-  OPSMAN_GCP_CREDFILE_CONTENTS:
+    AZURE_REGION:
+    AZURE_SUBSCRIPTION_ID:
+    AZURE_CLIENT_ID:
+    AZURE_CLIENT_SECRET:
+    AZURE_TENANT_ID:
+    AZURE_RESOURCE_GROUP_NAME:
+    AZURE_STORAGE_ACCOUNT_NAME:
+    AZURE_STORAGE_ACCOUNT_KEY:
+    AZURE_STORAGE_CONTAINER_NAME:
 
 run:
-  path: pcf-pipelines/tasks/create-cliaas-config-gcp/task.sh
+  path: pcf-pipelines/tasks/create-cliaas-config-azure/task.sh

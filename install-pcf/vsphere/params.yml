@@ -1,0 +1,198 @@
+# Pipeline resource configuration
+pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+github_token:             # GitHub token for downloading resources from GitHub
+
+# vCenter configuration
+vcenter_host:             # vCenter host or IP
+vcenter_usr:              # vCenter username. If user is tied to a domain, then escape the \, example `domain\\user`
+vcenter_pwd:              # vCenter password
+vcenter_data_center:      # vCenter datacenter
+
+# Ops Manager VM configuration
+om_vm_host:               # Optional - vCenter host to deploy Ops Manager in
+om_data_store:            # vCenter datastore name to deploy Ops Manager in
+opsman_uri:               # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
+opsman_admin_username:    # Username for Ops Manager admin account
+opsman_admin_password:    # Password for Ops Manager admin account
+opsman_timeout_seconds:   # Timeout to wait for Ops Manager to become available
+om_ssh_pwd:               # SSH password for Ops Manager (ssh user is ubuntu)
+om_decryption_pwd:        # Decryption password for Ops Manager exported settings
+om_ntp_servers:           # Comma-separated list of NTP Servers
+om_dns_servers:           # Comma-separated list of DNS Servers
+om_gateway:               # Gateway for Ops Manager network
+om_netmask:               # Netmask for Ops Manager network
+om_ip:                    # IP to assign to Ops Manager VM
+om_vm_network:            # vCenter network name to use to deploy Ops Manager in
+om_vm_name:               # Name to use for Ops Manager VM
+om_disk_type: "thin"      # Disk type for Ops Manager VM (thick|thin)
+om_vm_power_state: true   # Whether to power on Ops Manager VM after creation
+
+# vCenter Cluster or Resource Pool to use to deploy Ops Manager.
+# Possible formats:
+#   cluster:       /<Data Center Name>/host/<Cluster Name>
+#   resource pool: /<Data Center Name>/host/<Cluster Name>/Resources/<Resource Pool Name>
+om_resource_pool:
+
+ephemeral_storage_names:  # Ephemeral Storage names in vCenter for use by PCF
+persistent_storage_names: # Persistent Storage names in vCenter for use by PCF
+
+trusted_certificates:         # Trusted certificates to be deployed along with all VM's provisioned by BOSH
+generate_vm_passwords: true   # Allow BOSH to generate random passwords for each job.
+vm_disk_type: "thick"         # Disk type for BOSH provisioned VM. (thick|thin)
+
+# AZ configuration for Ops Director
+az_1_name:                    # Logical name of availability zone. No spaces or special characters.
+az_1_cluster_name:            # Name of cluster in vCenter for AZ1
+az_1_rp_name:                 # Resource pool name in vCenter for AZ1
+az_2_name:                    # Logical name of availability zone. No spaces or special characters.
+az_2_cluster_name:            # Name of cluster in vCenter for AZ2
+az_2_rp_name:                 # Resource pool name in vCenter for AZ2
+az_3_name:                    # Logical name of availability zone. No spaces or special characters.
+az_3_cluster_name:            # Name of cluster in vCenter for AZ3
+az_3_rp_name:                 # Resource pool name in vCenter for AZ3
+
+ntp_servers:                  # Comma-separated list of NTP servers to use for VMs deployed by BOSH
+ops_dir_hostname:             # Optional DNS name for Ops Director. Should be reachable from all networks.
+enable_vm_resurrector: true   # Whether to enable BOSH VM resurrector
+max_threads: 30               # Max threads count for deploying VMs
+
+# Network configuration for Ops Director
+icmp_checks_enabled: true     # Enable or disable ICMP checks
+
+infra_network_name: "INFRASTRUCTURE"
+infra_vsphere_network:        # vCenter Infrastructure network name
+infra_nw_cidr:                # Infrastructure network CIDR, ex: 10.0.0.0/22
+infra_excluded_range:         # Infrastructure network exclusion range
+infra_nw_dns:                 # Infrastructure network DNS
+infra_nw_gateway:             # Infrastructure network Gateway
+infra_nw_azs:                 # Comma seperated list of AZ's to be associated with this network
+
+deployment_network_name: "DEPLOYMENT"
+deployment_vsphere_network:   # vCenter Deployment network name
+deployment_nw_cidr:           # Deployment network CIDR, ex: 10.0.0.0/22
+deployment_excluded_range:    # Deployment network exclusion range
+deployment_nw_dns:            # Deployment network DNS
+deployment_nw_gateway:        # Deployment network Gateway
+deployment_nw_azs:            # Comma seperated list of AZ's to be associated with this network
+
+services_network_name: "SERVICES"
+services_vsphere_network:     # vCenter Services network name
+services_nw_cidr:             # Services network CIDR, ex: 10.0.0.0/22
+services_excluded_range:      # Services network exclusion range
+services_nw_dns:              # Services network DNS
+services_nw_gateway:          # Services network Gateway
+services_nw_azs:              # Comma seperated list of AZ's to be associated with this network
+
+dynamic_services_network_name: "DYNAMIC-SERVICES"
+dynamic_services_vsphere_network:     # vCenter Dynamic Services network name
+dynamic_services_nw_cidr:             # Dynamic Services network CIDR, ex: 10.0.0.0/22
+dynamic_services_excluded_range:      # Dynamic Services network exclusion range
+dynamic_services_nw_dns:              # Dynamic Services network DNS
+dynamic_services_nw_gateway:          # Dynamic Services network Gateway
+dynamic_services_nw_azs:              # Comma seperated list of AZ's to be associated with this network
+
+ert_singleton_job_az:         # AZ to use for deployment of ERT Singleton jobs
+
+loggregator_endpoint_port:    # Loggegrator Port. Default is 443
+company_name:                 # Company Name for Apps Manager
+company_proxy_domain:         # If set to a non-empty string, bypass DNS when uploading stemcells to Ops Manager
+
+## Syslog endpoint configuration goes here
+# Optional. If syslog_host is specified, syslog_port, syslog_protocol,
+# syslog_drain_buffer_size, and enable_security_event_logging must be set.
+syslog_host:
+syslog_port:
+syslog_protocol:
+enable_security_event_logging: false
+syslog_drain_buffer_size: 10000
+
+## Wildcard domain certs go here
+# Optional. Will be generated if blank using ssl_termination_point below.
+ssl_cert:
+# Optional. Will be generated if blank using ssl_termination_point below.
+ssl_private_key:
+ssl_termination_point: haproxy # (external_ssl|external_non_ssl|haproxy)
+
+## Get this from the OPS Manager API docs for your release. Possible values are
+## - /api/v0/certificates/generate (for 1.10)
+## - /api/v0/rsa_certificates (for 1.9)
+om_generate_ssl_endpoint:
+
+disable_http_proxy: false
+security_acknowledgement:  # Must be set to 'X'. See explanation here: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#app-security
+
+## TCP routing and routing services
+tcp_routing: disable                    # Enable/disable TCP routing (enable|disable)
+tcp_routing_ports:                   # A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
+route_services: disable                 # Enable/disable route services (enable|disable)
+ignore_ssl_cert_verification: false     # Whether to disable SSL cert verification for this environment
+garden_network_pool_cidr: 10.254.0.0/22 # Only change this if you need to avoid address collision with a third-party service on the same subnet.
+garden_network_mtu: 1454                # Applications Network Maximum Transmission Unit bytes
+
+# If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd, and
+# smtp_auth_mechanism must also be set.
+smtp_address:
+smtp_from:
+smtp_port:
+smtp_user:
+smtp_pwd:
+smtp_auth_mechanism: # (none|plain|cram-md5)
+
+## Authentication type needed. SAML is not presently supported.
+authentication_mode: internal # (internal|ldap) If ldap, specify ldap configuration below.
+ldap_url:
+ldap_user:
+ldap_pwd:
+search_base:
+search_filter:
+group_search_base:
+group_search_filter:
+mail_attribute_name:
+first_name_attribute:
+last_name_attribute:
+
+## Deployment domain names
+system_domain:
+apps_domain:
+
+skip_cert_verify: false       # If true, disable SSL certificate verification for this environment.
+
+disable_insecure_cookies: false # If true, disable insecure cookies on the router.
+
+default_quota_memory_limit_mb: 10240
+default_quota_max_number_services: 1000
+allow_app_ssh_access: false             # Whether to allow SSH access to application instances
+
+router_request_timeout_in_seconds: 900
+
+ha_proxy_ips:           # Comma-separated list of static IPs
+router_static_ips:      # Comma-separated list of static IPs
+tcp_router_static_ips:  # Comma-separated list of static IPs
+ssh_static_ips:         # Comma-separated list of static IPs
+
+mysql_monitor_email:    # Email address to receive MySQL monitor notifications
+mysql_backups: enable   # Whether to enable MySQL backups. (enable|disable)
+
+## Default resource configuration
+consul_server_instances: 1
+nats_instances: 1
+etcd_tls_server_instances: 1
+nfs_server_instances: 1
+mysql_proxy_instances: 1
+mysql_instances: 1
+backup_prepare_instances: 0
+ccdb_instances: 0
+uaadb_instances: 0
+uaa_instances: 1
+cloud_controller_instances: 1
+ha_proxy_instances: 0
+router_instances: 1
+mysql_monitor_instances: 1
+clock_global_instances: 1
+cloud_controller_worker_instances: 1
+diego_database_instances: 1
+diego_brain_instances: 1
+diego_cell_instances: 3
+doppler_instances: 1
+loggregator_traffic_controller_instances: 1
+tcp_router_instances: 1

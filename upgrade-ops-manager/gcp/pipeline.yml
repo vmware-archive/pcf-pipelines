@@ -55,7 +55,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: pcf-automation
-    product_version: v0.5.0-rc.3
+    product_version: v0.5.0
 
 - name: schedule
   type: time
@@ -124,6 +124,7 @@ jobs:
   - task: create-cliaas-config
     file: pcf-pipelines/tasks/create-cliaas-config-gcp/task.yml
     params:
+      PIVNET_IMAGE_REGION: {{pivnet_image_region}}
       OPSMAN_PROJECT: {{opsman_gcp_project}}
       OPSMAN_ZONE: {{opsman_gcp_zone}}
       OPSMAN_GCP_CREDFILE_CONTENTS: {{opsman_gcp_credfile_contents}}

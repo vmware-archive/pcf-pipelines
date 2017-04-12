@@ -1,0 +1,19 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: rjain/buildbox}
+
+params:
+  OPS_MGR_HOST:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
+
+inputs:
+  - name: concourse-vsphere
+  - name: om-cli
+
+run:
+  path: concourse-vsphere/tasks/disable-ert-errands/task.sh
