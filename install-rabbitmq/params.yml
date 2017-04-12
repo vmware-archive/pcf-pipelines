@@ -1,0 +1,85 @@
+# Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+github_token: 
+iaas_type: 
+metadata_basename: p-rabbitmq
+opsman_admin_password:
+opsman_admin_username:
+## Get ops_mgr_generate_ssl_endpoint from the OPS Manager API docs for your release.
+## Only used if your own certificate and private key are not provided. Possible values are
+## - /api/v0/certificates/generate (for 1.10)
+## - /api/v0/rsa_certificates (for 1.9)
+opsman_generate_ssl_endpoint: /api/v0/certificates/generate
+opsman_timeout_seconds: 300
+opsman_url:
+pivnet_token:
+product_name: p-rabbitmq
+product_slug: pivotal-rabbitmq-service
+product_version: 1.8.*
+
+#product-properties
+metrics_polling_interval:     # >= 10
+odb_az_placement: 
+odb_enable_single_node_plan: 
+odb_global_service_instance_quota:     # 0..50
+odb_marketplace_name: 
+odb_persistent_disk_type:   # see ops manager api /api/v0/disk_types for choices
+# don't override default values displayed in marketplace
+#odb_plan_description:
+#odb_plan_features:
+#odb_plan_name:
+odb_rmq_vm_type:  # see ops manager api /api/v0/vm_types for choices
+odb_solo_plan_instance_quota:  # 0..50
+rmq_broker_dns_host:
+rmq_broker_operator_set_policy_enabled: 
+rmq_broker_policy_definition:   # provide if set policy enabled is true
+rmq_domain:     # only used if certificate and private key are blank
+rmq_haproxy_static_ips:
+rmq_server_cluster_partition_handling:    # pause_minority or autoheal
+rmq_server_config:  # RabbitMQ config file contents, can be blank
+rmq_server_cookie:  # leave blank to be generated
+rmq_server_enable_tls_1: 
+#
+# comma separated list of plugins, one or more plugins allowed
+# rabbitmq_amqp1_0, rabbitmq_auth_backend_ldap, rabbitmq_auth_mechanism_ssl, 
+# rabbitmq_consistent_hash_exchange, rabbitmq_event_exchange, rabbitmq_federation, 
+# rabbitmq_federation_management, rabbitmq_jms_topic_exchange, rabbitmq_management, 
+# rabbitmq_management_visualiser, rabbitmq_mqtt, rabbitmq_shovel, rabbitmq_shovel_management, 
+# rabbitmq_stomp, rabbitmq_tracing, rabbitmq_web_stomp, rabbitmq_web_stomp_examples
+#
+rmq_server_plugins: "rabbitmq_management"
+rmq_server_ports:
+rmq_server_rsa_certificate: 
+rmq_server_rsa_private_key: 
+rmq_server_server_admin_credentials_password: 
+rmq_server_server_admin_credentials_user: 
+rmq_server_ssl_cacert: 
+rmq_server_ssl_fail_if_no_peer_cert: 
+rmq_server_ssl_verification_depth:     # default is 5
+rmq_server_ssl_verify: 
+rmq_server_static_ips:
+syslog_address:
+syslog_port:
+# syslog_transport:
+#product-network
+tile_network:
+tile_other_availability_zones:
+tile_service_network:
+tile_singleton_availability_zone:
+#product-resources
+on_demand_broker_count:     # 0 or 1, 1 is default
+rabbitmq_broker_count:      # 0 or 1, 1 is default
+rabbitmq_haproxy_count:     # >= 1, 1 is default
+rabbitmq_server_count:      # >= 1, 3 is default
