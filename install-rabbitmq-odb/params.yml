@@ -27,7 +27,7 @@ opsman_url:
 pivnet_token:
 product_name: p-rabbitmq
 product_slug: pivotal-rabbitmq-service
-product_version: 1.7.*
+product_version: 1.8.*
 
 #product-properties
 metrics_polling_interval:     # >= 10

@@ -1,0 +1,173 @@
+# Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+groups: []
+
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: https://github.com/wjk940/pcf-pipelines
+    branch: master
+
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
+- name: {{product_name}}
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: {{product_slug}}
+    product_version: {{product_version}}
+    sort_by: semver
+
+- name: stemcell-downloader
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pcf-product-stemcell-downloader
+    access_token: {{github_token}}
+    globs:
+    - stemcell-downloader-linux
+
+jobs:
+- name: install-tile
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-product
+      resource: {{product_name}}
+      trigger: true 
+      params:
+        globs:
+        - "*pivotal"
+    - get: tool-om
+      params:
+        globs:
+        - om-linux
+    - get: stemcell-downloader
+      params:
+        globs: [stemcell-downloader-linux]
+
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
+    params:
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+  - task: upload-tile
+    file: pcf-pipelines/tasks/upload-product/task.yml
+    params:
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      PIVNET_PRODUCT_NAME: {{product_slug}}
+  - task: stage-tile
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      PRODUCT_NAME: {{product_name}}
+  - task: upload-stemcell
+    file: pcf-pipelines/tasks/upload-stemcell/task.yml
+    params:
+      IAAS_TYPE: {{iaas_type}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      PRODUCT: {{metadata_basename}}
+  - task: configure-tile
+    file: pcf-pipelines/tasks/config-mysql/task.yml
+    params:
+      BACKUP_OPTIONS_ENABLE_BACKUP_ALL_MASTERS: {{backup_options_enable_backup_all_masters}}
+      BACKUP_OPTIONS_ENABLE_CRON_SCHEDULE: {{backup_options_enable_cron_schedule}}
+      BACKUP_OPTIONS: {{backup_options}}
+      BACKUPS_SELECTOR_S3_ACCESS_KEY_ID: {{backups_selector_s3_access_key_id}}
+      BACKUPS_SELECTOR_S3_BUCKET_NAME: {{backups_selector_s3_bucket_name}}
+      BACKUPS_SELECTOR_S3_ENDPOINT_URL: {{backups_selector_s3_endpoint_url}}
+      BACKUPS_SELECTOR_S3_PATH: {{backups_selector_s3_path}}
+      BACKUPS_SELECTOR_S3_SECRET_ACCESS_KEY: {{backups_selector_s3_secret_access_key}}
+      BACKUPS_SELECTOR_SCP_KEY: {{backups_selector_scp_key}}
+      BACKUPS_SELECTOR_SCP_PATH: {{backups_selector_scp_path}}
+      BACKUPS_SELECTOR_SCP_PORT: {{backups_selector_scp_port}}
+      BACKUPS_SELECTOR_SCP_SERVER: {{backups_selector_scp_server}}
+      BACKUPS_SELECTOR_SCP_USER: {{backups_selector_scp_user}}
+      BACKUPS_SELECTOR: {{backups_selector}}
+      CF_MYSQL_BROKER_BIND_HOSTNAME: {{cf_mysql_broker_bind_hostname}}
+      CF_MYSQL_BROKER_COUNT: {{cf_mysql_broker_count}}
+      CF_MYSQL_BROKER_QUOTA_ENFORCER_PAUSE: {{cf_mysql_broker_quota_enforcer_pause}}
+      MONITORING_COUNT: {{monitoring_count}}
+      MYSQL_COUNT: {{mysql_count}}
+      MYSQL_INNODB_LARGE_PREFIX_ENABLED: {{mysql_innodb_large_prefix_enabled}}
+      MYSQL_MYSQL_START_TIMEOUT: {{mysql_mysql_start_timeout}}
+      MYSQL_ROADMIN_PASSWORD: {{mysql_roadmin_password}}
+      MYSQL_SKIP_NAME_RESOLVE: {{mysql_skip_name_resolve}}
+      MYSQL_WSREP_DEBUG: {{mysql_wsrep_debug}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPTIONAL_PROTECTIONS_CANARY_POLL_FREQUENCY: {{optional_protections_canary_poll_frequency}}
+      OPTIONAL_PROTECTIONS_CANARY_WRITE_READ_DELAY: {{optional_protections_canary_write_read_delay}}
+      OPTIONAL_PROTECTIONS_NOTIFY_ONLY: {{optional_protections_notify_only}}
+      OPTIONAL_PROTECTIONS_PREVENT_AUTO_REJOIN: {{optional_protections_prevent_auto_rejoin}}
+      OPTIONAL_PROTECTIONS_RECIPIENT_EMAIL: {{optional_protections_recipient_email}}
+      OPTIONAL_PROTECTIONS_REPLICATION_CANARY: {{optional_protections_replication_canary}}
+      OPTIONAL_PROTECTIONS: {{optional_protections}}
+      PLAN_1_DESCRIPTION: {{optional_protections}}
+      PLAN_1_MAX_STORAGE_MB: {{plan_1_max_storage_mb}}
+      PLAN_1_MAX_USER_CONNECTIONS: {{plan_1_max_user_connections}}
+      PLAN_1_NAME: {{plan_1_name}}
+      PLAN_1_PRIVATE: {{plan_1_private}}
+      PRODUCT_NAME: {{product_name}}
+      PROXY_COUNT: {{proxy_count}}
+      PROXY_STATIC_IPS: {{proxy_static_ips}}
+      SERVER_ACTIVITY_LOGGING_ENABLE_AUDIT_LOGGING_EVENTS: {{server_activity_logging_enable_audit_logging_events}}
+      SERVER_ACTIVITY_LOGGING: {{server_activity_logging}}
+      TILE_NETWORK: {{tile_network}}
+      TILE_OTHER_AVAILABILITY_ZONES: {{tile_other_availability_zones}}
+      TILE_SINGLETON_AVAILABILITY_ZONE: {{tile_singleton_availability_zone}}
+  - task: apply-changes
+    file: pcf-pipelines/tasks/apply-changes/task.yml
+    params:
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+      OPSMAN_URI: {{opsman_url}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+
+#unpack_tarball_config: &unpack_tarball_config
+#  config:
+#    platform: linux
+#    image_resource:
+#      type: docker-image
+#      source:
+#        repository: cloudfoundry/cflinuxfs2
+#    inputs:
+#    - name: pcf-pipelines-tarball
+#    outputs:
+#    - name: pcf-pipelines
+#    run:
+#     path: sh
+#     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]
