@@ -72,31 +72,10 @@ TILE_PROPERTIES=$(cat <<-EOF
     "value": ${OPTIONAL_PROTECTIONS_PREVENT_AUTO_REJOIN:-true}
   },
   ".properties.optional_protections.enable.recipient_email": {
-    "value": ${OPTIONAL_PROTECTIONS_RECIPIENT_EMAIL:-null}
+    "value": "$OPTIONAL_PROTECTIONS_RECIPIENT_EMAIL"
   },
   ".properties.optional_protections.enable.replication_canary": {
     "value": ${OPTIONAL_PROTECTIONS_REPLICATION_CANARY:-true}
-  },
-  ".properties.plan_collection": {
-    "value": [
-      {
-        "name": {
-          "value": "${PLAN_1_NAME:-100mb}"
-        },
-        "description": {
-          "value": "${PLAN_1_DESCRIPTION:-100MB default}"
-        },
-        "max_storage_mb": {
-          "value": ${PLAN_1_MAX_STORAGE_MB:-100}
-        },
-        "max_user_connections": {
-          "value": ${PLAN_1_MAX_USER_CONNECTIONS:-40}
-        },
-        "private": {
-          "value": ${PLAN_1_PRIVATE:-false}
-        }
-      }
-    ]
   },
   ".properties.server_activity_logging": {
     "value": "${SERVER_ACTIVITY_LOGGING:-enable}"
@@ -110,6 +89,28 @@ TILE_PROPERTIES=$(cat <<-EOF
 }
 EOF
 )
+
+#   ".properties.plan_collection": {
+#     "value": [
+#       {
+#         "name": {
+#           "value": "${PLAN_1_NAME:-100mb}"
+#         },
+#         "description": {
+#           "value": "${PLAN_1_DESCRIPTION:-100MB default}"
+#         },
+#         "max_storage_mb": {
+#           "value": ${PLAN_1_MAX_STORAGE_MB:-100}
+#         },
+#         "max_user_connections": {
+#           "value": ${PLAN_1_MAX_USER_CONNECTIONS:-40}
+#         },
+#         "private": {
+#           "value": ${PLAN_1_PRIVATE:-false}
+#         }
+#       }
+#     ]
+#   },
 
 echo "Configuring ${PRODUCT_NAME} properties"
 $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
@@ -159,7 +160,9 @@ BACKUP_PROPERTIES=$(cat <<-EOF
     "value": "$BACKUPS_SELECTOR_S3_PATH"
   },
   ".properties.backups.enable.secret_access_key": {
-    "value": "$BACKUPS_SELECTOR_S3_SECRET_ACCESS_KEY"
+    "value": {
+      "secret": "$BACKUPS_SELECTOR_S3_SECRET_ACCESS_KEY"
+    }
   }
 }
 EOF
