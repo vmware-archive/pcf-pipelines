@@ -136,7 +136,7 @@ BACKUP_PREPARE_COUNT=1
 BACKUP_PROPERTIES=$(cat <<-EOF
 {
   ".properties.backups": {
-    "value": "$BACKUPS_SELECTOR"
+    "value": "enable"
   },
   ".properties.backup_options": {
     "value": "enable"
@@ -172,7 +172,7 @@ BACKUP_PREPARE_COUNT=1
 BACKUP_PROPERTIES=$(cat <<-EOF
 {
   ".properties.backups": {
-    "value": "$BACKUPS_SELECTOR"
+    "value": "scp"
   },
   ".properties.backup_options": {
     "value": "enable"

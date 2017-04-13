@@ -136,7 +136,7 @@ jobs:
       OPTIONAL_PROTECTIONS_RECIPIENT_EMAIL: {{optional_protections_recipient_email}}
       OPTIONAL_PROTECTIONS_REPLICATION_CANARY: {{optional_protections_replication_canary}}
       OPTIONAL_PROTECTIONS: {{optional_protections}}
-      PLAN_1_DESCRIPTION: {{optional_protections}}
+      PLAN_1_DESCRIPTION: {{plan_1_description}}
       PLAN_1_MAX_STORAGE_MB: {{plan_1_max_storage_mb}}
       PLAN_1_MAX_USER_CONNECTIONS: {{plan_1_max_user_connections}}
       PLAN_1_NAME: {{plan_1_name}}
