@@ -39,9 +39,6 @@ TILE_PROPERTIES=$(cat <<-EOF
   ".cf-mysql-broker.quota_enforcer_pause": {
     "value": ${CF_MYSQL_BROKER_QUOTA_ENFORCER_PAUSE:-30}
   },
-  ".mysql.innodb_large_prefix_enabled": {
-    "value": ${MYSQL_INNODB_LARGE_PREFIX_ENABLED:-true}
-  },
   ".mysql.mysql_start_timeout": {
     "value": ${MYSQL_MYSQL_START_TIMEOUT:-60}
   },
@@ -82,6 +79,12 @@ TILE_PROPERTIES=$(cat <<-EOF
   },
   ".properties.server_activity_logging.enable.audit_logging_events": {
     "value": "${SERVER_ACTIVITY_LOGGING_ENABLE_AUDIT_LOGGING_EVENTS:-connect,query}"
+  },
+  ".proxy.shutdown_delay": {
+    "value": ${PROXY_SHUTDOWN_DELAY:-0}
+  },
+  ".proxy.startup_delay": {
+    "value": ${PROXY_STARTUP_DELAY:-0}
   },
   ".proxy.static_ips": {
     "value": ${PROXY_STATIC_IPS:-null}

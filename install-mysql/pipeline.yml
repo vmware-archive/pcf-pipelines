@@ -121,7 +121,6 @@ jobs:
       CF_MYSQL_BROKER_QUOTA_ENFORCER_PAUSE: {{cf_mysql_broker_quota_enforcer_pause}}
       MONITORING_COUNT: {{monitoring_count}}
       MYSQL_COUNT: {{mysql_count}}
-      MYSQL_INNODB_LARGE_PREFIX_ENABLED: {{mysql_innodb_large_prefix_enabled}}
       MYSQL_MYSQL_START_TIMEOUT: {{mysql_mysql_start_timeout}}
       MYSQL_ROADMIN_PASSWORD: {{mysql_roadmin_password}}
       MYSQL_SKIP_NAME_RESOLVE: {{mysql_skip_name_resolve}}
@@ -143,6 +142,8 @@ jobs:
       PLAN_1_PRIVATE: {{plan_1_private}}
       PRODUCT_NAME: {{product_name}}
       PROXY_COUNT: {{proxy_count}}
+      PROXY_SHUTDOWN_DELAY: {{proxy_shutdown_delay}}
+      PROXY_STARTUP_DELAY: {{proxy_startup_delay}}
       PROXY_STATIC_IPS: {{proxy_static_ips}}
       SERVER_ACTIVITY_LOGGING_ENABLE_AUDIT_LOGGING_EVENTS: {{server_activity_logging_enable_audit_logging_events}}
       SERVER_ACTIVITY_LOGGING: {{server_activity_logging}}
