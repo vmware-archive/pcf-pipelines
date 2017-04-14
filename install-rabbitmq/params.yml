@@ -31,7 +31,6 @@ product_version: 1.7.*
 
 #product-properties
 metrics_polling_interval:     # >= 10
-metrics_tls_disabled:
 rmq_broker_dns_host:
 rmq_broker_operator_set_policy_enabled: 
 rmq_broker_policy_definition:   # provide if set policy enabled is true

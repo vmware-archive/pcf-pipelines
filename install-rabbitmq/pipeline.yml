@@ -103,7 +103,6 @@ jobs:
     file: pcf-pipelines/tasks/config-rabbitmq/task.yml
     params:
       METRICS_POLLING_INTERVAL: {{metrics_polling_interval}}
-      METRICS_TLS_DISABLED: {{metrics_tls_disabled}}
       OPSMAN_GENERATE_SSL_ENDPOINT: {{opsman_generate_ssl_endpoint}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}

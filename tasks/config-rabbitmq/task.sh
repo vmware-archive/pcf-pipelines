@@ -52,7 +52,7 @@ TILE_PROPERTIES=$(cat <<-EOF
     "value": ${METRICS_POLLING_INTERVAL:-30}
   },
   ".properties.metrics_tls_disabled": {
-    "value": ${METRICS_TLS_DISABLED:-true}
+    "value": false
   },
   ".properties.syslog_address": {
     "value": "$SYSLOG_ADDRESS"
