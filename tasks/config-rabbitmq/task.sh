@@ -46,8 +46,6 @@ fi
 
 PLUGINS=$(fn_json_string_array "$RMQ_SERVER_PLUGINS")
 
-metrics_tls_disabled
-
 TILE_PROPERTIES=$(cat <<-EOF
 {
   ".properties.metrics_polling_interval": {
