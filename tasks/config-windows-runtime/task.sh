@@ -41,7 +41,7 @@ TILE_RESOURCES=$(cat <<-EOF
 {
   "windows_diego_cell": {
     "instance_type": {"id": "automatic"},
-    "instances" : $WINDOWS_CELL_COUNT
+    "instances" : ${WINDOWS_CELL_COUNT:-3}
   }
 }
 EOF

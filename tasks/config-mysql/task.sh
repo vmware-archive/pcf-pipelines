@@ -223,19 +223,19 @@ TILE_RESOURCES=$(cat <<-EOF
   },
   "cf-mysql-broker": {
     "instance_type": {"id": "automatic"},
-    "instances" : $CF_MYSQL_BROKER_COUNT
+    "instances" : ${CF_MYSQL_BROKER_COUNT:-2}
   },
   "monitoring": {
     "instance_type": {"id": "automatic"},
-    "instances" : $MONITORING_COUNT
+    "instances" : ${MONITORING_COUNT:-1}
   },
   "mysql": {
     "instance_type": {"id": "automatic"},
-    "instances" : $MYSQL_COUNT
+    "instances" : ${MYSQL_COUNT:-3}
   },
   "proxy": {
     "instance_type": {"id": "automatic"},
-    "instances" : $PROXY_COUNT
+    "instances" : ${PROXY_COUNT:-2}
   }
 }
 EOF

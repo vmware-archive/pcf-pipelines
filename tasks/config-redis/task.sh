@@ -202,7 +202,7 @@ TILE_RESOURCES=$(cat <<-EOF
 {
   "dedicated-node": {
     "instance_type": {"id": "automatic"},
-    "instances" : $DEDICATED_NODE_COUNT
+    "instances" : ${DEDICATED_NODE_COUNT:-5}
   }
 }
 EOF

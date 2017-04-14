@@ -30,15 +30,16 @@ $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PA
 	configure-product --product-name "${PRODUCT_NAME}" \
 	--product-network "$TILE_NETWORK"
 
+ISOLATED_ROUTER_COUNT=${ISOLATED_ROUTER_COUNT:-0}	# convert blank to 0
 TILE_RESOURCES=$(cat <<-EOF
 {
   "isolated_router": {
     "instance_type": {"id": "automatic"},
-    "instances" : $ISOLATED_ROUTER_COUNT
+    "instances" : ${ISOLATED_ROUTER_COUNT}
   },
   "isolated_diego_cell": {
     "instance_type": {"id": "automatic"},
-    "instances" : $ISOLATED_DIEGO_CELL_COUNT
+    "instances" : ${ISOLATED_DIEGO_CELL_COUNT:-3}
   }
 }
 EOF
@@ -58,10 +59,10 @@ TILE_PROPERTIES=$(cat <<-EOF
     "value": ${CELL_EXECUTOR_MEMORY_CAPACITY:-null}
   },
   ".isolated_diego_cell.garden_network_mtu": {
-    "value": ${CELL_GARDEN_NETWORK_MTU:-null}
+    "value": ${CELL_GARDEN_NETWORK_MTU:-1454}
   },
   ".isolated_diego_cell.garden_network_pool": {
-    "value": "$CELL_GARDEN_NETWORK_POOL"
+    "value": "${CELL_GARDEN_NETWORK_POOL:-10.254.0.0/22}"
   },
   ".isolated_diego_cell.insecure_docker_registry_list": {
     "value": "$CELL_INSECURE_DOCKER_REGISTRY_LIST"

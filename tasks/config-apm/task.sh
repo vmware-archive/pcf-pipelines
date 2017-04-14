@@ -53,15 +53,15 @@ TILE_RESOURCES=$(cat <<-EOF
 {
   "elasticsearch_data": {
     "instance_type": {"id": "automatic"},
-    "instances" : $ELASTICSEARCH_DATA_COUNT
+    "instances" : ${ELASTICSEARCH_DATA_COUNT:-4}
   },
   "proxy": {
     "instance_type": {"id": "automatic"},
-    "instances" : $MYSQL_PROXY_COUNT
+    "instances" : ${MYSQL_PROXY_COUNT:-2}
   },
   "mysql": {
     "instance_type": {"id": "automatic"},
-    "instances" : $MYSQL_SERVER_COUNT
+    "instances" : ${MYSQL_SERVER_COUNT:-3}
   }
 }
 EOF
