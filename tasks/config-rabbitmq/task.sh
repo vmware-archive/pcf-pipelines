@@ -25,9 +25,6 @@ TILE_NETWORK=$(cat <<-EOF
   ],
   "network": {
     "name": "$TILE_NETWORK"
-  },
-  "service_network": {
-    "name": "$TILE_SERVICE_NETWORK"
   }
 }
 EOF
@@ -47,35 +44,17 @@ EOF
 )
 fi
 
-AZ_PLACEMENT=$(fn_json_string_array "$ODB_AZ_PLACEMENT")
 PLUGINS=$(fn_json_string_array "$RMQ_SERVER_PLUGINS")
 
+metrics_tls_disabled
 
 TILE_PROPERTIES=$(cat <<-EOF
 {
-  ".on-demand-broker.az_placement": {
-    "value": ${AZ_PLACEMENT:-null}
-  },
-  ".on-demand-broker.enable_single_node_plan": {
-    "value": ${ODB_ENABLE_SINGLE_NODE_PLAN:-false}
-  },
-  ".on-demand-broker.global_service_instance_quota": {
-    "value": ${ODB_GLOBAL_SERVICE_INSTANCE_QUOTA:-20}
-  },
-  ".on-demand-broker.marketplace_name": {
-    "value": "${ODB_MARKETPLACE_NAME:-Rabbit MQ}"
-  },
-  ".on-demand-broker.persistent_disk_type": {
-    "value": "$ODB_PERSISTENT_DISK_TYPE"
-  },
-  ".on-demand-broker.rmq_vm_type": {
-    "value": "$ODB_RMQ_VM_TYPE"
-  },
-  ".on-demand-broker.solo_plan_instance_quota": {
-    "value": ${ODB_SOLO_PLAN_INSTANCE_QUOTA:-0}
-  },
   ".properties.metrics_polling_interval": {
     "value": ${METRICS_POLLING_INTERVAL:-30}
+  },
+  ".properties.metrics_tls_disabled": {
+    "value": ${METRICS_TLS_DISABLED:-true}
   },
   ".properties.syslog_address": {
     "value": "$SYSLOG_ADDRESS"
@@ -90,7 +69,10 @@ TILE_PROPERTIES=$(cat <<-EOF
     "value": ${RMQ_BROKER_OPERATOR_SET_POLICY_ENABLED:-false}
   },
   ".rabbitmq-broker.policy_definition": {
-    "value": "$RMQ_BROKER_POLICY_DEFINITION"
+    "value": "${RMQ_BROKER_POLICY_DEFINITION:-{\"ha-mode\": \"exactly\", \"ha-params\": 2, \"ha-sync-mode\": \"automatic\"}\n"
+  },
+  ".rabbitmq-haproxy.ports": {
+    "value": "${RMQ_SERVER_PORTS:-15672, 5672, 5671, 1883, 8883, 61613, 61614, 15674}"
   },
   ".rabbitmq-haproxy.static_ips": {
     "value": ${RMQ_HAPROXY_STATIC_IPS:-null}
@@ -107,9 +89,6 @@ TILE_PROPERTIES=$(cat <<-EOF
   ".rabbitmq-server.plugins": {
     "value": $PLUGINS
   },
-  ".rabbitmq-server.ports": {
-    "value": "${RMQ_SERVER_PORTS:-15672, 5672, 5671, 1883, 8883, 61613, 61614, 15674}"
-  },
   ".rabbitmq-server.security_options": {
     "value": ${TLS1:-null}
   },
@@ -125,15 +104,6 @@ TILE_PROPERTIES=$(cat <<-EOF
 }
 EOF
 )
-#   ".on-demand-broker.plan_description": {
-#     "value": 
-#   },
-#   ".on-demand-broker.plan_features": {
-#     "value": 
-#   },
-#   ".on-demand-broker.plan_name": {
-#     "value": 
-#   },
 
 echo "Configuring ${PRODUCT_NAME} properties"
 $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PASSWORD --skip-ssl-validation \
@@ -192,10 +162,6 @@ $CMD_PATH --target $OPSMAN_URI --username $OPSMAN_USERNAME --password $OPSMAN_PA
 
 TILE_RESOURCES=$(cat <<-EOF
 {
-  "on-demand-broker": {
-    "instance_type": {"id": "automatic"},
-    "instances" : ${ON_DEMAND_BROKER_COUNT:-1}
-  },
   "rabbitmq-broker": {
     "instance_type": {"id": "automatic"},
     "instances" : ${RABBITMQ_BROKER_COUNT:-1}

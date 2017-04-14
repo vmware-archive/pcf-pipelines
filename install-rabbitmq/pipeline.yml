@@ -103,18 +103,15 @@ jobs:
     file: pcf-pipelines/tasks/config-rabbitmq/task.yml
     params:
       METRICS_POLLING_INTERVAL: {{metrics_polling_interval}}
-      ODB_AZ_PLACEMENT: {{odb_az_placement}}
-      ODB_ENABLE_SINGLE_NODE_PLAN: {{odb_enable_single_node_plan}}
-      ODB_GLOBAL_SERVICE_INSTANCE_QUOTA: {{odb_global_service_instance_quota}}
-      ODB_MARKETPLACE_NAME: {{odb_marketplace_name}}
-      ODB_PERSISTENT_DISK_TYPE: {{odb_persistent_disk_type}}
-      ODB_RMQ_VM_TYPE: {{odb_rmq_vm_type}}
-      ODB_SOLO_PLAN_INSTANCE_QUOTA: {{odb_solo_plan_instance_quota}}
+      METRICS_TLS_DISABLED: {{metrics_tls_disabled}}
       OPSMAN_GENERATE_SSL_ENDPOINT: {{opsman_generate_ssl_endpoint}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       PRODUCT_NAME: {{product_name}}
+      RABBITMQ_BROKER_COUNT: {{rabbitmq_broker_count}}
+      RABBITMQ_HAPROXY_COUNT: {{rabbitmq_haproxy_count}}
+      RABBITMQ_SERVER_COUNT: {{rabbitmq_server_count}}
       RMQ_BROKER_DNS_HOST: {{rmq_broker_dns_host}}
       RMQ_BROKER_OPERATOR_SET_POLICY_ENABLED: {{rmq_broker_operator_set_policy_enabled}} 
       RMQ_BROKER_POLICY_DEFINITION: {{rmq_broker_policy_definition}}
@@ -139,7 +136,6 @@ jobs:
       SYSLOG_PORT: {{syslog_port}}
       TILE_NETWORK: {{tile_network}}
       TILE_OTHER_AVAILABILITY_ZONES: {{tile_other_availability_zones}}
-      TILE_SERVICE_NETWORK: {{tile_service_network}}
       TILE_SINGLETON_AVAILABILITY_ZONE: {{tile_singleton_availability_zone}}
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml

@@ -31,17 +31,7 @@ product_version: 1.7.*
 
 #product-properties
 metrics_polling_interval:     # >= 10
-odb_az_placement: 
-odb_enable_single_node_plan: 
-odb_global_service_instance_quota:     # 0..50
-odb_marketplace_name: 
-odb_persistent_disk_type:   # see ops manager api /api/v0/disk_types for choices
-# don't override default values displayed in marketplace
-#odb_plan_description:
-#odb_plan_features:
-#odb_plan_name:
-odb_rmq_vm_type:  # see ops manager api /api/v0/vm_types for choices
-odb_solo_plan_instance_quota:  # 0..50
+metrics_tls_disabled:
 rmq_broker_dns_host:
 rmq_broker_operator_set_policy_enabled: 
 rmq_broker_policy_definition:   # provide if set policy enabled is true
@@ -76,10 +66,8 @@ syslog_port:
 #product-network
 tile_network:
 tile_other_availability_zones:
-tile_service_network:
 tile_singleton_availability_zone:
 #product-resources
-on_demand_broker_count:     # 0 or 1, 1 is default
 rabbitmq_broker_count:      # 0 or 1, 1 is default
 rabbitmq_haproxy_count:     # >= 1, 1 is default
 rabbitmq_server_count:      # >= 1, 3 is default

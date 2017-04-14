@@ -100,7 +100,7 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       PRODUCT: {{metadata_basename}}
   - task: configure-tile
-    file: pcf-pipelines/tasks/config-rabbitmq/task.yml
+    file: pcf-pipelines/tasks/config-rabbitmq-odb/task.yml
     params:
       METRICS_POLLING_INTERVAL: {{metrics_polling_interval}}
       ODB_AZ_PLACEMENT: {{odb_az_placement}}
@@ -110,11 +110,15 @@ jobs:
       ODB_PERSISTENT_DISK_TYPE: {{odb_persistent_disk_type}}
       ODB_RMQ_VM_TYPE: {{odb_rmq_vm_type}}
       ODB_SOLO_PLAN_INSTANCE_QUOTA: {{odb_solo_plan_instance_quota}}
+      ON_DEMAND_BROKER_COUNT: {{on_demand_broker_count}}
       OPSMAN_GENERATE_SSL_ENDPOINT: {{opsman_generate_ssl_endpoint}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_url}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       PRODUCT_NAME: {{product_name}}
+      RABBITMQ_BROKER_COUNT: {{rabbitmq_broker_count}}
+      RABBITMQ_HAPROXY_COUNT: {{rabbitmq_haproxy_count}}
+      RABBITMQ_SERVER_COUNT: {{rabbitmq_server_count}}
       RMQ_BROKER_DNS_HOST: {{rmq_broker_dns_host}}
       RMQ_BROKER_OPERATOR_SET_POLICY_ENABLED: {{rmq_broker_operator_set_policy_enabled}} 
       RMQ_BROKER_POLICY_DEFINITION: {{rmq_broker_policy_definition}}
