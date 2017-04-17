@@ -16,9 +16,9 @@ params:
 
 inputs:
   - name: pivnet-product
-  - name: concourse-vsphere
+  - name: pcf-pipelines
   - name: om-cli
   - name: pivnet-cli
 
 run:
-  path: concourse-vsphere/tasks/upload-product/task.sh
+  path: pcf-pipelines/tasks/upload-product/task.sh

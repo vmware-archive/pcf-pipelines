@@ -213,7 +213,7 @@ jobs:
       params: {globs: ["*linux_amd64*"]}
 
   - task: upload-er-tile
-    file: concourse-vsphere/tasks/upload-product-and-stemcell/task.yml
+    file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
       OPS_MGR_HOST: {{opsman_uri}}
       OPS_MGR_USR: {{opsman_admin_username}}

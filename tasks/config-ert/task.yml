@@ -87,8 +87,8 @@ params:
   TCP_ROUTER_INSTANCES:
 
 inputs:
-  - name: concourse-vsphere
+  - name: pcf-pipelines
   - name: om-cli
 
 run:
-  path: concourse-vsphere/tasks/config-ert/task.sh
+  path: pcf-pipelines/tasks/config-ert/task.sh
