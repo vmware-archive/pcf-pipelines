@@ -4,7 +4,7 @@
 
 ## Github
 - Add the following CIDR to a whitelist in your firewall: `192.30.252.0/22`
-- A github maintained list of IP Ranges for github can be found here:  https://help.github.com/articles/github-s-ip-addresses/
+- A github maintained list of IP Ranges for github can be found here:  `https://help.github.com/articles/github-s-ip-addresses/`
 
 ## S3 / CloudFront / AWS
 **The following is an example of how to pull and curate a list of IP ranges direct from Amazon**
@@ -18,7 +18,7 @@ $ cat ip-ranges.json | jq -c '.prefixes | .[] | select( .service | contains("CLO
 $ cat ip-ranges.json | jq -c '.prefixes | .[] | select( .service | contains("S3"))'
 ```
 
-- Updated list authority can be found here: https://ip-ranges.amazonaws.com/ip-ranges.json
+- Updated list authority can be found here: `https://ip-ranges.amazonaws.com/ip-ranges.json`
 
 
 ## Pivnet
@@ -33,4 +33,4 @@ $ cat ip-ranges.json | jq -c '.prefixes | .[] | select( .service | contains("S3"
 
 ## Docker
 **Docker hub does not provide a set of IPs so one must whitelist on domain**
-- https://registry.hub.docker.com
+- `https://registry.hub.docker.com`
