@@ -54,6 +54,10 @@ be supplied by alternative means for airgapped environments.
 
 ---
 
+## Firewall rules: [here](FIREWALL.md "Firewall")
+
+---
+
 # Offline configurations
 
 This segment details several possible offline configurations for resources leveraged in our reference pipelines
