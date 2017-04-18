@@ -20,3 +20,4 @@ github_token: yyyyyyyyyyyyyyyyy
 iaas_type: gcp
 pivnet_poll_interval: 1h
 opsman_timeout_seconds: 300
+major_minor_version: 1.9.*
