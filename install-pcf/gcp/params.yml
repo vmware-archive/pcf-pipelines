@@ -1,0 +1,77 @@
+# GCP project to create the infrastructure in
+gcp_project_id: CHANGEME
+
+# GCP credentials JSON. The service account must have the Editor role.
+gcp_service_account_key: |
+  CHANGEME
+
+# Identifier to prepend to GCP infrastructure names/labels
+gcp_resource_prefix: concourse-terraform
+
+# GCP region
+gcp_region: us-central1
+
+# GCP Zones
+gcp_zone_1: us-central1-a
+gcp_zone_2: us-central1-b
+gcp_zone_3: us-central1-c
+
+# GCP Interopable storage access key: https://console.cloud.google.com/storage/settings
+gcp_storage_access_key: CHANGEME
+gcp_storage_secret_key: CHANGEME
+
+# S3 configuration for storage of terraform state. Terraform state files
+# contain plaintext secrets; as such Minio is recommended to keep configuration
+# local to Concourse: https://hub.docker.com/r/minio/minio
+# docker run -e MINIO_ACCESS_KEY="example-access-key" -e MINIO_SECRET_KEY="example-secret-key" --network host minio/minio server /tmp
+s3_endpoint: s3.amazonaws.com
+s3_bucket_terraform: gcp-concourse
+s3_access_key_id: CHANGEME
+s3_secret_access_key: CHANGEME
+s3_region: CHANGEME
+
+# GitHub token with repo or public_repo scope
+github_token: CHANGEME
+
+# Pivotal Network token: https://network.pivotal.io/users/dashboard/edit-profile
+pivnet_token: CHANGEME
+
+# Operations Manager credentials to set
+pcf_opsman_admin_username: CHANGEME
+pcf_opsman_admin_password: CHANGEME
+
+# Elastic Runtime Domain
+pcf_ert_domain: CHANGEME
+
+# Elastic Runtime SQL DB credentials to set
+ert_sql_db_username: CHANGEME
+ert_sql_db_password: CHANGEME
+
+# Elastic Runtime SSL configuration
+pcf_ert_ssl_cert: |
+  CHANGEME
+pcf_ert_ssl_key: |
+  CHANGEME
+
+# PCF Operations Manager minor version to install
+opsman_major_minor_version: 1.9.*
+
+# PCF Elastic Runtime minor version to install
+ert_major_minor_version: 1.9.*
+
+# DB Creds
+db_diego_username: CHANGEME
+db_diego_password: CHANGEME
+db_notifications_username: CHANGEME 
+db_notifications_password: CHANGEME 
+db_autoscale_password: CHANGEME 
+db_autoscale_username: CHANGEME 
+db_uaa_username: CHANGEME
+db_uaa_password: CHANGEME
+db_app_usage_service_username: CHANGEME 
+db_app_usage_service_password: CHANGEME 
+db_ccdb_username: CHANGEME
+db_ccdb_password: CHANGEME
+db_routing_username: CHANGEME
+db_routing_password: CHANGEME
+

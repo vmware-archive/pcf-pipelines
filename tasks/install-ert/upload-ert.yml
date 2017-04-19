@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: virtmerlin/c0-worker
+
+inputs:
+  - name: pcf-pipelines 
+  - name: tool-om
+  - name: pivnet-elastic-runtime
+
+run:
+  path: pcf-pipelines/tasks/install-ert/upload-ert.sh
+
+params:
+  pcf_ert_domain:
+  pcf_opsman_admin:
+  pcf_opsman_admin_passwd:

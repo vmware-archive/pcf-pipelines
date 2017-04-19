@@ -1,0 +1,112 @@
+{
+  "networks_and_azs":{
+    "networks_and_azs": {
+      "singleton_availability_zone": {
+      "name": "null"
+    },
+    "other_availability_zones": [
+      {
+        "name": "null"
+      }
+    ],
+      "network": {
+        "name": "ert"
+      }
+    }
+  },
+  "properties": {
+    "properties": {
+      ".properties.networking_point_of_entry": {
+        "value": "external_ssl"
+        },
+      ".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate": {
+        "value": {
+          "cert_pem": "{{pcf_ert_ssl_cert}}",
+          "private_key_pem": "{{pcf_ert_ssl_key}}"
+          }
+      },
+      ".properties.tcp_routing": {
+        "value": "disable"
+      },
+      ".properties.route_services": {
+        "value": "enable"
+      },
+      ".ha_proxy.skip_cert_verify": {
+        "value": true
+      },
+      ".properties.route_services.enable.ignore_ssl_cert_verification": {
+        "value": true
+      },
+      ".properties.security_acknowledgement": {
+        "value": "X"
+      },
+      ".properties.mysql_backups": {
+        "value": "disable"
+      },
+      ".cloud_controller.system_domain": {
+        "value": "sys.{{pcf_ert_domain}}"
+      },
+      ".cloud_controller.apps_domain": {
+        "value": "cfapps.{{pcf_ert_domain}}"
+      },
+      ".cloud_controller.allow_app_ssh_access": {
+        "value": true
+      },
+      ".cloud_controller.security_event_logging_enabled": {
+        "value": true
+      },
+      ".router.disable_insecure_cookies": {
+        "value": false
+      },
+      ".push-apps-manager.company_name": {
+        "value": "{{terraform_prefix}}"
+      },
+      ".mysql_proxy.service_hostname": {
+        "value": "mysql-proxy-lb.sys.{{pcf_ert_domain}}"
+      },
+      ".mysql_monitor.recipient_email": {
+        "value" : "c0-coreteam@pivotal.io"
+      }
+    }
+  },
+  "jobs": {
+      "consul_server": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "nats": {"instance_type": {"id": "automatic"},"instances": 2,"elb_names": []},
+      "etcd_server": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "etcd_tls_server": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": [],"internet_connected": false,"persistent_disk":{"size_mb":"automatic"}},
+      "nfs_server": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "mysql_proxy": {"instance_type": {"id": "automatic"},"instances": 2,"elb_names": ["{{terraform_prefix}}-mysql-lb"]},
+      "mysql": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "consoledb": {"instance_type": {"id": "automatic"},"instances": 0,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "ccdb": {"instance_type": {"id": "automatic"},"instances": 0,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "uaadb": {"instance_type": {"id": "automatic"},"instances": 0,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "uaa": {"instance_type": {"id": "automatic"},"instances": 2,"elb_names": []},
+      "cloud_controller": {"instance_type": {"id": "automatic"},"instances": 2,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "ha_proxy": {"instance_type": {"id": "automatic"},"instances": 0,"elb_names": []},
+      "router": {"instance_type": {"id": "automatic"},"instances": 2,"elb_names": ["{{terraform_prefix}}-web-lb"]},
+      "mysql_monitor": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "clock_global": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "cloud_controller_worker": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": []},
+      "collector": {"instance_type": {"id": "automatic"},"instances": 0,"elb_names": []},
+      "diego_database": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "diego_brain": {"instance_type": {"id": "automatic"},"instances": 2,"elb_names": ["{{terraform_prefix}}-ssh-proxy-lb"],"persistent_disk":{"size_mb":"automatic"}},
+      "diego_cell": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": []},
+      "doppler": {"instance_type": {"id": "automatic"},"instances": 2,"elb_names": []},
+      "loggregator_trafficcontroller": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": []},
+      "tcp_router": {"instance_type": {"id": "automatic"},"instances": 2,"elb_names": ["{{terraform_prefix}}-tcp-lb"],"persistent_disk":{"size_mb":"automatic"}},
+      "backup-prepare": {"instance_type": {"id": "automatic"},"instances": 0,"elb_names": [],"persistent_disk":{"size_mb":"automatic"}},
+      "push-apps-manager": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "smoke-tests": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "notifications-ui": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "autoscaling-register-broker": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "autoscaling-destroy-broker": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "push-pivotal-account": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "mysql-rejoin-unsafe": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "autoscaling": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "bootstrap": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []},
+      "notifications": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": []}
+  },
+  "patch": {
+    "internet_connected": 0
+  }
+}

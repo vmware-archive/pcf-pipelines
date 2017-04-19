@@ -1,0 +1,25 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: virtmerlin/c0-worker-gcp
+
+inputs:
+- name: pcf-pipelines 
+
+params:
+  pcf_ert_domain:
+  pcf_opsman_admin:
+  pcf_opsman_admin_passwd:
+  gcp_proj_id:
+  gcp_region:
+  gcp_zone_1:
+  gcp_zone_2:
+  gcp_zone_3:
+  gcp_resource_prefix:
+  gcp_svc_acct_key:
+
+run:
+  path: pcf-pipelines/tasks/install-pcf-gcp/config-director.sh

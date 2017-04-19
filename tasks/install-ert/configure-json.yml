@@ -1,0 +1,51 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: virtmerlin/c0-worker
+
+inputs:
+  - name: pcf-pipelines 
+  - name: tool-om
+
+outputs:
+  - name: json_file
+
+run:
+  path: pcf-pipelines/tasks/install-ert/configure-json.sh
+
+params:
+  pcf_iaas:
+  pcf_ert_domain:
+  pcf_opsman_admin:
+  pcf_opsman_admin_passwd:
+  pcf_ert_ssl_cert:
+  pcf_ert_ssl_key:
+  terraform_template:
+  terraform_prefix:
+  # IaaS Specific for GCP only
+  gcp_proj_id:
+  gcp_region:
+  gcp_svc_acct_key:
+  gcp_storage_access_key:
+  gcp_storage_secret_key:
+  # db credentials
+  db_app_usage_service_username:
+  db_app_usage_service_password:
+  db_autoscale_username:
+  db_autoscale_password:
+  db_diego_username:
+  db_diego_password:
+  db_notifications_username:
+  db_notifications_password:
+  db_routing_username:
+  db_routing_password:
+  db_uaa_username:
+  db_uaa_password:
+  db_ccdb_username:
+  db_ccdb_password:
+  ert_sql_db_username:
+  ert_sql_db_password:
