@@ -7,11 +7,11 @@ http://docs.pivotal.io/pivotalcf/1-10/refarch/gcp/gcp_ref_arch.html
 
 ```bash
 
-# get the pipeline bits
-$ git clone git@github.com:pivotal-cf/gcp-concourse.git
+# to get the pipeline bits
+# download from pivnet 
 
 # go to the pipeline dir
-$ cd gcp-concourse 
+$ cd pcf-pipelines/install-pcf/gcp 
 
 # check the readme for pre-reqs and guidance
 $ cat README.md
