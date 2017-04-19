@@ -1,5 +1,7 @@
 # Install PCF on GCP 
 
+- compatible with PCF 1.9
+
 #### This process describes how to get the pipeline and install a PCF on a properly configured GCP
 http://docs.pivotal.io/pivotalcf/1-10/refarch/gcp/gcp_ref_arch.html
 
