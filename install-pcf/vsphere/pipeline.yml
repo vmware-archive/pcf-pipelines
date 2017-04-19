@@ -32,7 +32,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: pcf-automation
-    product_version: v0.6.0-rc.5
+    product_version: v0.6.0
 
 # - name: customer-repo
 #   type: git
