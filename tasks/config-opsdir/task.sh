@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-chmod +x om-cli/om-linux
+chmod +x tool-om/om-linux
 
-CMD=./om-cli/om-linux
+CMD=./tool-om/om-linux
 
 function fn_get_azs {
      local azs_csv=$1

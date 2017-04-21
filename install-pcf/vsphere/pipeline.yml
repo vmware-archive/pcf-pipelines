@@ -13,7 +13,7 @@ resources:
     repository: govmomi
     access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
 
-- name: om-cli
+- name: tool-om
   type: github-release
   source:
     user: pivotal-cf
@@ -62,7 +62,7 @@ jobs:
         <<: *unpack_tarball_config
     - get: govc
       params: {globs: ["*linux_amd64*"]}
-    - get: om-cli
+    - get: tool-om
       params: {globs: ["*linux*"]}
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
@@ -110,7 +110,7 @@ jobs:
         trigger: true
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: om-cli
+    - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [install-opsmgr]
 
@@ -182,7 +182,7 @@ jobs:
       - task: unpack-tarball
         <<: *unpack_tarball_config
     - get: tool-om
-      resource: om-cli
+      resource: tool-om
       params: {globs: ["*linux*"]}
       passed: [configure-ops-director]
 
@@ -206,7 +206,7 @@ jobs:
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
-    - get: om-cli
+    - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [opsman-apply-changes]
     - get: pivnet-cli
@@ -231,7 +231,7 @@ jobs:
         passed: [upload-elastic-runtime-tile]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: om-cli
+    - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [upload-elastic-runtime-tile]
 
@@ -322,7 +322,7 @@ jobs:
 #   - aggregate:
 #     - get: customer-repo
 #       trigger: true
-#     - get: om-cli
+#     - get: tool-om
 #       params: {globs: ["*linux*"]}
 #       passed: [config-elastic-runtime-tile]
 #
@@ -342,7 +342,7 @@ jobs:
         trigger: true
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: om-cli
+    - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [config-elastic-runtime-tile]
 
@@ -363,7 +363,7 @@ jobs:
         passed: [product-apply-changes]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: om-cli
+    - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [product-apply-changes]
 
@@ -383,7 +383,7 @@ jobs:
         passed: [disable-errands]
       - task: unpack-tarball
         <<: *unpack_tarball_config
-    - get: om-cli
+    - get: tool-om
       passed: [disable-errands]
       params: {globs: ["*linux*"]}
 
@@ -400,7 +400,7 @@ jobs:
 #   - aggregate:
 #     - get: customer-repo
 #       trigger: true
-#     - get: om-cli
+#     - get: tool-om
 #       params: {globs: ["*linux*"]}
 #       passed: [product-apply-changes]
 #   - task: post-step
