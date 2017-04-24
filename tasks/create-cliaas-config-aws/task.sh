@@ -18,6 +18,12 @@ set -eu
 
 ami=$(grep ${AWS_REGION} pivnet-opsmgr/*AWS.yml | awk '{split($0, a); print a[2]}')
 
+if [ -z "$ami" ]; then
+  echo Could not find AMI for AWS region \"$AWS_REGION\". Available choices are:
+  cat pivnet-opsmgr/*AWS.yml | cut -f1 -d':'
+  exit 1
+fi
+
 cat > cliaas-config/config.yml <<EOF
 aws:
   access_key_id: ${AWS_ACCESS_KEY_ID}
