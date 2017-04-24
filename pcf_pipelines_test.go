@@ -156,18 +156,6 @@ func allTasksInPlan(seq *atc.PlanSequence, tasks []atc.PlanConfig) []atc.PlanCon
 	return tasks
 }
 
-func taskConfigsForJob(job atc.JobConfig) []atc.PlanConfig {
-	tasks := []atc.PlanConfig{}
-
-	for _, planConfig := range job.Plan {
-		if planConfig.Task != "" {
-			tasks = append(tasks, planConfig)
-		}
-	}
-
-	return tasks
-}
-
 func assertUnorderedEqual(left, right []string, failMessage string) {
 	for _, l := range left {
 		Expect(right).To(ContainElement(l), failMessage)
