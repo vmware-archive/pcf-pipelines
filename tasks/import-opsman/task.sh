@@ -9,8 +9,8 @@ function setPropertyMapping() {
   if [ -e out.json ]; then
     mv out.json in.json
   fi
-  jq --arg key $1 \
-     --arg value $2 \
+  jq --arg key "$1" \
+     --arg value "$2" \
      '(.PropertyMapping[] | select(.Key == $key)).Value = $value' \
                 in.json >out.json
 }
@@ -66,18 +66,18 @@ function setPowerOn() {
 function update() {
   rm -rf out.json
 
-  setPropertyMapping ip0 $OM_IP
-  setPropertyMapping netmask0 $OM_NETMASK
-  setPropertyMapping gateway $OM_GATEWAY
-  setPropertyMapping DNS $OM_DNS_SERVERS
-  setPropertyMapping ntp_servers $OM_NTP_SERVERS
-  setPropertyMapping admin_password $OPS_MGR_SSH_PWD
-  setPropertyMapping custom_hostname $OPS_MGR_HOST
+  setPropertyMapping ip0 "$OM_IP"
+  setPropertyMapping netmask0 "$OM_NETMASK"
+  setPropertyMapping gateway "$OM_GATEWAY"
+  setPropertyMapping DNS "$OM_DNS_SERVERS"
+  setPropertyMapping ntp_servers "$OM_NTP_SERVERS"
+  setPropertyMapping admin_password "$OPS_MGR_SSH_PWD"
+  setPropertyMapping custom_hostname "$OPS_MGR_HOST"
 
-  setNetworkMapping $OM_VM_NETWORK
-  setVMName $OM_VM_NAME
-  setDiskProvision $OM_DISK_TYPE
-  setPowerOn $OM_VM_POWER_STATE
+  setNetworkMapping "$OM_VM_NETWORK"
+  setVMName "$OM_VM_NAME"
+  setDiskProvision "$OM_DISK_TYPE"
+  setPowerOn "$OM_VM_POWER_STATE"
   removeUnwantedNodes
 
   cat out.json
