@@ -21,4 +21,4 @@ inputs:
   - name: pivnet-cli
 
 run:
-  path: pcf-pipelines/tasks/upload-product/task.sh
+  path: pcf-pipelines/tasks/upload-product-and-stemcell/task.sh
