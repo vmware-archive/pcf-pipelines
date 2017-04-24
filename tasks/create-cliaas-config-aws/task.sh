@@ -16,7 +16,7 @@
 
 set -eu
 
-AMI=$(grep ${AWS_REGION} pivnet-opsmgr/*AWS.yml | awk '{split($0, a); print a[2]}')
+ami=$(grep ${AWS_REGION} pivnet-opsmgr/*AWS.yml | awk '{split($0, a); print a[2]}')
 
 cat > cliaas-config/config.yml <<EOF
 aws:
@@ -24,5 +24,5 @@ aws:
   secret_access_key: ${AWS_SECRET_ACCESS_KEY}
   region: ${AWS_REGION}
   vpc: ${AWS_VPC_ID}
-  ami: ${AMI}
+  ami: ${ami}
 EOF
