@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-chmod +x om-cli/om-linux
+chmod +x tool-om/om-linux
 
-CMD=./om-cli/om-linux
+CMD=./tool-om/om-linux
 
 until $(curl --output /dev/null -k --silent --head --fail https://$OPS_MGR_HOST/setup); do
     printf '.'

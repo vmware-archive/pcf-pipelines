@@ -17,7 +17,7 @@ params:
 inputs:
   - name: pivnet-product
   - name: pcf-pipelines
-  - name: om-cli
+  - name: tool-om
   - name: pivnet-cli
 
 run:

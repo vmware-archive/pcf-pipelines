@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-chmod +x om-cli/om-linux
+chmod +x tool-om/om-linux
 
-CMD=./om-cli/om-linux
+CMD=./tool-om/om-linux
 
 CF_RELEASE=`$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k available-products | grep cf`
 
