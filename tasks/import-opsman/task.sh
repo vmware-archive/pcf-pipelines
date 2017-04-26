@@ -16,13 +16,13 @@ del(.Deployment) |
 .DiskProvisioning = $diskType |
 .NetworkMapping[].Network = $network |
 .PowerOn = $powerOn |
-(.PropertyMapping[] | select(.Key == ip0)).Value = $ip0 |
-(.PropertyMapping[] | select(.Key == netmask0)).Value = $netmask0 |
-(.PropertyMapping[] | select(.Key == gateway)).Value = $gateway |
-(.PropertyMapping[] | select(.Key == DNS)).Value = $dns |
-(.PropertyMapping[] | select(.Key == ntp_servers)).Value = $ntpServers |
-(.PropertyMapping[] | select(.Key == admin_password)).Value = $adminPassword |
-(.PropertyMapping[] | select(.Key == custom_hostname)).Value = $customHostname
+(.PropertyMapping[] | select(.Key == "ip0")).Value = $ip0 |
+(.PropertyMapping[] | select(.Key == "netmask0")).Value = $netmask0 |
+(.PropertyMapping[] | select(.Key == "gateway")).Value = $gateway |
+(.PropertyMapping[] | select(.Key == "DNS")).Value = $dns |
+(.PropertyMapping[] | select(.Key == "ntp_servers")).Value = $ntpServers |
+(.PropertyMapping[] | select(.Key == "admin_password")).Value = $adminPassword |
+(.PropertyMapping[] | select(.Key == "custom_hostname")).Value = $customHostname
 EOF
 
 jq \
