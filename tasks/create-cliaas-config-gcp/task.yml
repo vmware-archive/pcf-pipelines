@@ -22,6 +22,7 @@ image_resource:
 
 inputs:
   - name: pcf-pipelines
+  - name: pivnet-opsmgr
 
 outputs:
   - name: cliaas-config
