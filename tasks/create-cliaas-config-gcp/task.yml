@@ -22,7 +22,6 @@ image_resource:
 
 inputs:
   - name: pcf-pipelines
-  - name: pivnet-opsmgr
 
 outputs:
   - name: cliaas-config
@@ -35,7 +34,3 @@ params:
 
 run:
   path: pcf-pipelines/tasks/create-cliaas-config-gcp/task.sh
-  args:
-    - pcf-pipelines
-    - pivnet-opsmgr
-    - cliaas-config
