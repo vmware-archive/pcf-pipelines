@@ -16,15 +16,19 @@
 
 set -eu
 
-cat > cliaas-config/gcpcreds.json <<EOF
+export PCF_PIPELINES=$1
+export PIVNET_OPSMGR=$2
+export CLIAAS_CONFIG=$3
+
+cat > ${CLIAAS_CONFIG}/gcpcreds.json <<EOF
 ${OPSMAN_GCP_CREDFILE_CONTENTS}
 EOF
 
-DISK_IMAGE_PATH=$(grep ${PIVNET_IMAGE_REGION} pivnet-opsmgr/*GCP.yml | awk '{split($0, a); print a[2]}')
+DISK_IMAGE_PATH=$(grep ${PIVNET_IMAGE_REGION} ${PIVNET_OPSMGR}/*GCP.yml | awk '{split($0, a); print a[2]}')
 
-cat > cliaas-config/config.yml <<EOF
+cat > ${CLIAAS_CONFIG}/config.yml <<EOF
 gcp:
-  credfile: cliaas-config/gcpcreds.json
+  credfile: ${CLIAAS_CONFIG}/gcpcreds.json
   zone: ${OPSMAN_ZONE}
   project: ${OPSMAN_PROJECT}
   disk_image_url: ${DISK_IMAGE_PATH}
