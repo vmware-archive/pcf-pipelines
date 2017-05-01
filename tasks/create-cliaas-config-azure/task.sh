@@ -20,13 +20,13 @@ VHD_IMAGE_URL=$(grep ${AZURE_REGION} pivnet-opsmgr/*Azure.yml | awk '{split($0, 
 
 cat > cliaas-config/config.yml <<EOF
 azure:
-  vhd_image_url: {{$VHD_IMAGE_URL}}
-  subscription_id: {{$AZURE_SUBSCRIPTION_ID}}
-  client_id: {{$AZURE_CLIENT_ID}}
-  client_secret: {{$AZURE_CLIENT_SECRET}}
-  tenant_id: {{$AZURE_TENANT_ID}}
-  resource_group_name: {{$AZURE_RESOURCE_GROUP_NAME}}
-  storage_account_name: {{$AZURE_STORAGE_ACCOUNT_NAME}}
-  storage_account_key: {{$AZURE_STORAGE_ACCOUNT_KEY}}
-  storage_container_name: {{$AZURE_STORAGE_CONTAINER_NAME}}
+  vhd_image_url: ${VHD_IMAGE_URL}
+  subscription_id: ${AZURE_SUBSCRIPTION_ID}
+  client_id: ${AZURE_CLIENT_ID}
+  client_secret: ${AZURE_CLIENT_SECRET}
+  tenant_id: ${AZURE_TENANT_ID}
+  resource_group_name: ${AZURE_RESOURCE_GROUP_NAME}
+  storage_account_name: ${AZURE_STORAGE_ACCOUNT_NAME}
+  storage_account_key: ${AZURE_STORAGE_ACCOUNT_KEY}
+  storage_container_name: ${AZURE_STORAGE_CONTAINER_NAME}
 EOF
