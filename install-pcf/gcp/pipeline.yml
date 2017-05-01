@@ -8,12 +8,12 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: pcf-pipelines-tarball
-  type: pivnet
+- name: pcf-pipelines
+  type: git
   source:
-    api_token: {{pivnet_token}}
-    product_slug: pcf-automation
-    product_version: v0.10.0
+    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    branch: master
+    username: {{github_token}}
 
 - name: tfstate
   type: s3
@@ -67,10 +67,7 @@ jobs:
   serial_groups: [terraform]
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tfstate
     - get: tfstate-version
       params:
@@ -90,10 +87,7 @@ jobs:
 
 - name: upload-opsman-image
   plan:
-  - do:
-    - get: pcf-pipelines-tarball
-    - task: unpack-tarball
-      <<: *unpack_tarball_config
+  - get: pcf-pipelines
   - get: pivnet-opsmgr
     trigger: true
     params:
@@ -110,11 +104,7 @@ jobs:
   serial_groups: [terraform]
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        passed: [upload-opsman-image]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: pivnet-opsmgr
       passed: [upload-opsman-image]
       params:
@@ -156,11 +146,7 @@ jobs:
   serial_groups: [opsman]
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        passed: [create-infrastructure]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
       params:
         globs:
@@ -193,16 +179,13 @@ jobs:
   serial_groups: [opsman]
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        trigger: true
-        passed: [configure-director]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
       params:
         globs:
         - "om-linux"
+      trigger: true
+      passed: [configure-director]
   - task: deploy-director
     file: pcf-pipelines/tasks/install-pcf-gcp/deploy-director.yml
     params:
@@ -214,17 +197,14 @@ jobs:
   serial_groups: [opsman]
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        trigger: true
-        passed: [deploy-director]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: pivnet-elastic-runtime
       params:
         globs:
         - "*pivotal"
     - get: tool-om
+      trigger: true
+      passed: [deploy-director]
       params:
         globs:
         - "om-linux"
@@ -239,13 +219,10 @@ jobs:
   serial_groups: [opsman]
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        trigger: true
-        passed: [upload-ert]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
+      trigger: true
+      passed: [upload-ert]
       params:
         globs:
         - "om-linux"
@@ -302,18 +279,3 @@ jobs:
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
-
-unpack_tarball_config: &unpack_tarball_config
-  config:
-    platform: linux
-    image_resource:
-      type: docker-image
-      source:
-        repository: cloudfoundry/cflinuxfs2
-    inputs:
-    - name: pcf-pipelines-tarball
-    outputs:
-    - name: pcf-pipelines
-    run:
-     path: sh
-     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]

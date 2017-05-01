@@ -7,22 +7,67 @@ image_resource:
     repository: busybox
 
 inputs:
-- name: pcf-pipelines-release
-- name: cf-cli
+- name: pcf-pipelines
+- name: version
+- name: yaml-patch
 - name: cliaas
 - name: om
-- name: version
+- name: cf-cli
 
 outputs:
 - name: pcf-pipelines-release-tarball
+- name: pivnet-metadata
+
+params:
+  AVAILABILITY: Admins Only
 
 run:
   path: sh
   args:
   - -ce
   - |
-    version=v$(cat version/version)
+    # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
+    # of GitHub
+    chmod +x yaml-patch/yaml_patch_linux
 
+    version=v$(cat version/version)
+    sed -i "/product_slug: pcf-automation/ {N; s/\(product_slug: pcf-automation.*product_version: \).*/\1${version}/g}" pcf-pipelines/operations/use-pivnet-release.yml
+
+    files=$(
+      find pcf-pipelines \
+      -type f \
+      -name pipeline.yml \
+      -exec grep -l "get: pcf-pipelines" {} \; |
+      grep -v ci/pipeline.yml
+    )
+
+    for f in ${files[@]}; do
+      cat $f |
+      sed -e "s/{{/'{{/g" -e "s/}}/}}'/g" | # wrap {{placeholders}} in quotes so they're valid YAML
+      ./yaml-patch/yaml_patch_linux -o pcf-pipelines/operations/use-pivnet-release.yml |
+      sed -e "s/'{{/{{/g" -e "s/}}'/}}/g" > $f.bk # unwrap "{{placeholders}}"
+      mv $f.bk $f
+    done
+
+    # Create release metadata
+    release_date=$(date +%Y-%m-%d)
+
+    cat >> pivnet-metadata/metadata.yml <<EOF
+    ---
+    release:
+      version: "${version}"
+      release_date: "${release_date}"
+      description: |
+        Concourse Pipeline Templates and Scripts for PCF Platform Ops Automation
+      availability: $AVAILABILITY
+      release_type: Beta Release
+      eula_slug: "pivotal_beta_eula"
+      user_group_ids:
+      - 6   # Pivotal Internal Early Access
+      - 159 # C[0] PCF Automation Pipelines Access
+    EOF
+
+    # Create release tarball
     tar --extract --file cf-cli/*.tgz
 
     mv cliaas/cliaas-linux .

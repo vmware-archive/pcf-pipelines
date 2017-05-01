@@ -18,3 +18,4 @@ pivnet_token: CHANGEME
 cf_api_uri: CHANGEME
 cf_user: CHANGEME
 cf_password: CHANGEME
+github_token: CHANGEME

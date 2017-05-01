@@ -15,15 +15,16 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/pivotal-cf/pcf-pipelines.git
-    branch: master
-
-- name: pcf-pipelines-release
-  type: git
-  source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
     private_key: {{git_private_key}}
+
+- name: yaml-patch
+  type: github-release
+  source:
+    user: krishicks
+    repository: yaml-patch
+    access_token: {{github_token}}
 
 - name: pivnet-rc
   type: pivnet
@@ -125,35 +126,30 @@ jobs:
     - get: om
       params:
         globs: [om-linux]
+    - get: yaml-patch
+      params:
+        globs: [linux]
 
   - put: version
     params: {pre: rc}
 
-  - do:
-    - task: stamp-release-version
-      file: pcf-pipelines/ci/tasks/stamp_release_version.yml
-    - put: pcf-pipelines-release
-      params:
-        repository: stamped-pcf-pipelines
-    - put: pcf-pipelines-release
-      params:
-        repository: stamped-pcf-pipelines
-        tag: version/version
-        tag_prefix: v
-        only_tag: true
+  - task: create-release
+    file: pcf-pipelines/ci/tasks/create_release.yml
+    params:
+      AVAILABILITY: Admins Only
 
-  - do:
-    - task: create-pivnet-metadata
-      file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
-      params:
-        AVAILABILITY: Admins Only
-    - task: create-release-tarball
-      file: pcf-pipelines/ci/tasks/create_release.yml
-    - put: pivnet-rc
-      params:
-        metadata_file: pivnet-metadata/metadata.yml
-        file_glob: pcf-pipelines-release-tarball/*.tgz
-        s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+  - put: pivnet-rc
+    params:
+      metadata_file: pivnet-metadata/metadata.yml
+      file_glob: pcf-pipelines-release-tarball/*.tgz
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
+  - put: pcf-pipelines
+    params:
+      repository: pcf-pipelines
+      tag: version/version
+      tag_prefix: v
+      only_tag: true
 
 - name: update-pipelines
   on_failure:
@@ -163,7 +159,6 @@ jobs:
     - get: version
       passed: [publish-rc]
     - get: pcf-pipelines
-      resource: pcf-pipelines-release
       passed: [publish-rc]
     - get: pivnet-rc
       trigger: true
@@ -283,7 +278,6 @@ jobs:
       passed: [update-pipelines]
       params: {bump: final}
     - get: pcf-pipelines
-      resource: pcf-pipelines-release
       passed: [update-pipelines]
     - get: cf-cli
     - get: cliaas
@@ -292,32 +286,27 @@ jobs:
     - get: om
       params:
         globs: [om-linux]
+    - get: yaml-patch
+      params:
+        globs: [linux]
 
-  - do:
-    - task: stamp-release-version
-      file: pcf-pipelines/ci/tasks/stamp_release_version.yml
-    - put: pcf-pipelines-release
-      params:
-        repository: stamped-pcf-pipelines
-    - put: pcf-pipelines-release
-      params:
-        repository: stamped-pcf-pipelines
-        tag: version/version
-        tag_prefix: v
-        only_tag: true
+  - task: create-release
+    file: pcf-pipelines/ci/tasks/create_release.yml
+    params:
+      AVAILABILITY: Selected User Groups Only
 
-  - do:
-    - task: create-pivnet-metadata
-      file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
-      params:
-        AVAILABILITY: Selected User Groups Only
-    - task: create-release-tarball
-      file: pcf-pipelines/ci/tasks/create_release.yml
-    - put: pivnet-release
-      params:
-        metadata_file: pivnet-metadata/metadata.yml
-        file_glob: pcf-pipelines-release-tarball/*.tgz
-        s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+  - put: pivnet-release
+    params:
+      metadata_file: pivnet-metadata/metadata.yml
+      file_glob: pcf-pipelines-release-tarball/*.tgz
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
+  - put: pcf-pipelines
+    params:
+      repository: pcf-pipelines
+      tag: version/version
+      tag_prefix: v
+      only_tag: true
 
   on_failure:
     <<: *notify_slack
@@ -348,6 +337,7 @@ jobs:
       params:
         text_file: notification-text/text
         silent: true
+
     - put: version
       params:
         bump: minor

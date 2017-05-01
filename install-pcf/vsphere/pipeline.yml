@@ -27,12 +27,12 @@ resources:
     repository: pivnet-cli
     access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
 
-- name: pcf-pipelines-tarball
-  type: pivnet
+- name: pcf-pipelines
+  type: git
   source:
-    api_token: {{pivnet_token}}
-    product_slug: pcf-automation
-    product_version: v0.10.0
+    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    branch: master
+    username: {{github_token}}
 
 # - name: customer-repo
 #   type: git
@@ -56,10 +56,7 @@ jobs:
 - name: install-opsmgr
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: govc
       params: {globs: ["*linux_amd64*"]}
     - get: tool-om
@@ -104,15 +101,11 @@ jobs:
 - name: configure-ops-director
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        passed: [install-opsmgr]
-        trigger: true
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [install-opsmgr]
+      trigger: true
 
   - task: config-opsdir
     file: pcf-pipelines/tasks/config-opsdir/task.yml
@@ -175,15 +168,11 @@ jobs:
 - name: opsman-apply-changes
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        trigger: true
-        passed: [configure-ops-director]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
       resource: tool-om
       params: {globs: ["*linux*"]}
+      trigger: true
       passed: [configure-ops-director]
 
   - task: apply-changes
@@ -197,17 +186,13 @@ jobs:
 - name: upload-elastic-runtime-tile
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        trigger: true
-        passed: [opsman-apply-changes]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
     - get: tool-om
       params: {globs: ["*linux*"]}
+      trigger: true
       passed: [opsman-apply-changes]
     - get: pivnet-cli
       params: {globs: ["*linux_amd64*"]}
@@ -225,14 +210,10 @@ jobs:
 - name: config-elastic-runtime-tile
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        trigger: true
-        passed: [upload-elastic-runtime-tile]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
       params: {globs: ["*linux*"]}
+      trigger: true
       passed: [upload-elastic-runtime-tile]
 
   - task: config-er-tile
@@ -336,14 +317,10 @@ jobs:
 - name: product-apply-changes
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        passed: [config-elastic-runtime-tile]
-        trigger: true
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
       params: {globs: ["*linux*"]}
+      trigger: true
       passed: [config-elastic-runtime-tile]
 
   - task: apply-changes
@@ -357,15 +334,11 @@ jobs:
 - name: disable-errands
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        trigger: true
-        passed: [product-apply-changes]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [product-apply-changes]
+      trigger: true
 
   - task: disable-ert-errands
     file: pcf-pipelines/tasks/disable-ert-errands/task.yml
@@ -377,15 +350,11 @@ jobs:
 - name: post-apply-changes
   plan:
   - aggregate:
-    - do:
-      - get: pcf-pipelines-tarball
-        trigger: true
-        passed: [disable-errands]
-      - task: unpack-tarball
-        <<: *unpack_tarball_config
+    - get: pcf-pipelines
     - get: tool-om
       passed: [disable-errands]
       params: {globs: ["*linux*"]}
+      trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
@@ -409,18 +378,3 @@ jobs:
 #       OPS_MGR_HOST: {{opsman_uri}}
 #       OPS_MGR_USR: {{opsman_admin_username}}
 #       OPS_MGR_PWD: {{opsman_admin_password}}
-
-unpack_tarball_config: &unpack_tarball_config
-  config:
-    platform: linux
-    image_resource:
-      type: docker-image
-      source:
-        repository: cloudfoundry/cflinuxfs2
-    inputs:
-    - name: pcf-pipelines-tarball
-    outputs:
-    - name: pcf-pipelines
-    run:
-     path: sh
-     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]
