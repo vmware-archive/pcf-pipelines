@@ -16,7 +16,7 @@
 
 set -eu
 
-ami=$(grep ${AWS_REGION} pivnet-opsmgr/*AWS.yml | cut -f2 -d':' | tr -d " "
+ami=$(grep ${AWS_REGION} pivnet-opsmgr/*AWS.yml | cut -f2 -d':' | tr -d " ")
 
 if [ -z "$ami" ]; then
   echo Could not find AMI for AWS region \"$AWS_REGION\". Available choices are:
