@@ -22,7 +22,7 @@ params:
   AVAILABILITY: Admins Only
 
 run:
-  path: sh
+  path: bash
   args:
   - -ce
   - |
