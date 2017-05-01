@@ -195,7 +195,7 @@ jobs:
       trigger: true
       passed: [opsman-apply-changes]
     - get: pivnet-cli
-      params: {globs: ["*linux_amd64*"]}
+      params: {globs: ["*linux-amd64*"]}
 
   - task: upload-er-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
