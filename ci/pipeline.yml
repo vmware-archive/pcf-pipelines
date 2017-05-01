@@ -347,9 +347,9 @@ update_pipeline_params: &update_pipeline_params
   IAAS_TYPE: {{iaas_type}}
   PIVNET_TOKEN: {{pivnet_token}}
   PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
-  CF_API_URI: {{cf_api_uri}}
-  CF_USER: {{cf_user}}
-  CF_PASSWORD: {{cf_password}}
+  CF_API_URI: {{aws_cf_api_uri}}
+  CF_USER: {{aws_cf_user}}
+  CF_PASSWORD: {{aws_cf_password}}
   CHECK_NEW_OPSMAN_EVERY: 24h
   OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
   OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
