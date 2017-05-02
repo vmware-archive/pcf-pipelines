@@ -282,13 +282,13 @@ jobs:
     - get: cf-cli
     - get: cliaas
       params:
-        globs: [cliaas-linux]
+        globs: ["*linux*"]
     - get: om
       params:
-        globs: [om-linux]
+        globs: ["*linux*"]
     - get: yaml-patch
       params:
-        globs: [linux]
+        globs: ["*linux*"]
 
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
