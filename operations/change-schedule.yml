@@ -1,0 +1,11 @@
+- op: replace
+  path: /resources/name=schedule
+  value:
+    name: schedule
+    type: time
+    source:
+      interval: 30m
+      start: "03:00 AM"
+      stop: "04:00 AM"
+      location: America/Los_Angeles
+      days: [Sunday, Saturday]

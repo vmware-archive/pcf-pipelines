@@ -1,8 +1,87 @@
 # PCF Pipelines
 
-This is a collection of pipelines for installing and upgrading Pivotal Cloud Foundry.
+This is a collection of [Concourse](https://concourse.ci) pipelines for
+installing and upgrading [Pivotal Cloud Foundry](https://pivotal.io/platform).
 
-## Pipelines and Tasks
+## Usage
+
+You'll need to [install a Concourse server](https://concourse.ci/installing.html)
+and get the [Fly CLI](https://concourse.ci/fly-cli.html)
+to interact with that server.
+
+Depending on where you've installed Concourse, you may need to set up
+[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
+third-party sources of pipeline dependencies.
+
+Each pipeline has an associated `params.yml` file next to it that you'll need to fill out with the appropriate values for that pipeline.
+
+After filling out your params.yml, set the pipeline:
+
+```
+fly -t yourtarget login --concourse-url https://yourtarget.example.com
+fly -t yourtarget set-pipeline \
+  --pipeline upgrade-opsman \
+  --config upgrade-ops-manager/aws/pipeline.yml \
+  --load-vars-from upgrade-ops-manager/aws/params.yml
+```
+
+## Upgrading/Extending
+
+It's possible to modify `pcf-pipelines` to suit your particular needs using
+[`yaml-patch`](https://github.com/krishicks/yaml-patch). We'll show how to
+replace the `pivnet-opsmgr` resource in the AWS Upgrade Ops Manager pipeline
+(`upgrade-ops-manager/aws/pipeline.yml`) as an example below.
+
+This example assumes you're either using AWS S3 or running your own
+S3-compatible store and plan to download the files from Pivotal Network (Pivnet)
+manually, putting them in your S3-compatible store, with a naming format like
+**ops-mgr-v1.10.0**.
+
+First, create an ops file that has the configuration of the new resource (read
+more about resources [here](https://concourse.ci/concepts.html#section_resources)).
+We'll also remove the `resource_types` section of the pipeline as the
+pivnet-opsmgr resource is the only pivnet resource in the pipeline:
+
+```
+cat > use-s3-opsmgr.yml <<EOF
+- op: replace
+  path: /resources/name=pivnet-opsmgr
+  value:
+    name: pivnet-opsmgr
+    type: s3
+    source:
+      bucket: pivnet-releases
+      regexp: ops-mgr-v([\d\.]+)
+
+- op: remove
+  path: /resource_types
+EOF
+```
+
+_Note: We use the same `pivnet-opsmgr` name so that the rest of the pipeline, which does `gets` on the resource by that name, continues working._
+
+Next, use `yaml-patch` to replace the current pivnet-opsmgr resource with your
+own:
+
+_Note: Because Concourse presently uses curly braces for `{{placeholders}}`, we
+need to wrap those placeholders in quotes to make them strings prior to parsing
+the YAML, and then unwrap the quotes after modifying the YAML. Yeah, sorry._
+
+```
+sed -e "s/{{/'{{/g" -e "s/}}/}}'/g" pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml |
+yaml-patch -o use-s3-opsmgr.yml |
+sed -e "s/'{{/{{/g" -e "s/}}'/}}/g" > upgrade-opsmgr-with-s3.yml
+```
+
+Now your pipeline has your new s3 resource in place of the pivnet resource from before.
+
+You can add as many operations as you like, chaining them with successive `-o` flags to `yaml-patch`.
+
+See [operations](tree/master/operations) for more examples of operations.
+
+## Contributing
+
+### Pipelines and Tasks
 
 The pipelines and tasks in this repo follow a simple pattern which must be adhered to:
 
@@ -31,7 +110,7 @@ out and stored elsewhere, such as in LastPass, and then supplied to `fly` via
 the `-l` flag. See the
 [fly documentation](http://concourse.ci/fly-set-pipeline.html) for more.
 
-### Pipelines
+#### Pipelines
 
 Pipelines should define jobs that encapsulate conceptual chunks of work, which
 is then split up into tasks within the job. Jobs should use `aggregate` where
@@ -40,7 +119,7 @@ possible to speed up actions like getting resources that the job requires.
 Pipelines should not declare task YAML inline; they should all exist within a
 directory under `tasks/`.
 
-### Tasks
+#### Tasks
 
 Each task has a `task.yml` and a `task.sh` file. The task YAML has an internal
 reference to its `task.sh`.
@@ -52,153 +131,15 @@ Tasks should not use `wget` or `curl` to retrieve resources; doing so means the
 resource cannot be cached, cannot be pinned to a particular version, and cannot
 be supplied by alternative means for airgapped environments.
 
----
+#### Running tests
 
-## Firewall rules: [here](FIREWALL.md "Firewall")
-
----
-
-# Offline configurations
-
-This segment details several possible offline configurations for resources leveraged in our reference pipelines
-
-## Github Release Resource (using github enterprise)
-**switch to using an internal github enterprise**
-
-Steps:
-- clone the public release
-- create a repo on your enterprise github
-- add enterprise github as a new remote
-- push public repo to enterprise github remote
-	- (https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
-- add github_api_url values to pipeline yaml and params yaml
+There are a series of tests that should be run before creating a PR or pushing
+new code. Run them with ginkgo:
 
 ```
-#sample yaml snippet
-- name: my-release-binary 
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_enterprise_token}}
-    github_api_url: {{github_enterprise_url}}
+go get github.com/onsi/ginkgo/ginkgo
+go get github.com/onsi/gomega
+go get github.com/concourse/atc
 
-```
-
----
-
-
-## Github Release Resource or Pivnet resource (using s3)
-**switch to using an internal/external s3 compatible store**
-
-Pre-Reqs:
-- access to an s3 compatible store
-
-Steps:
-- setup a versioned s3 bucket (each resource should have its own bucket)
-- download asset from github release page or pivotal network
-- upload asset into bucket 
-  - make sure the filename matches what was in the github release or change the rest of the pipeline to match
-- replace github-release resource with s3 resource in pipeline yaml (as shown below)
-
-```
-#sample yaml snippet
-- name: my-release-binary
-  type: s3
-  source: 
-    bucket: releases
-    regexp: {{s3_filepath}}
-    access_key_id: {{s3_access_key}}
-    secret_access_key: {{s3_secret}}
-    region_name: {{s3_region}}
-    endpoint: {{s3_endpoint}}
-```
-
----
-
-## Git resource (using a local git)
-- clone or fork repository to a local git server
-- modify all git resources in yaml with your local git uri(s)
-
-``` 
-#sample yaml snippet
-- name: pcf-pipelines
-  type: git
-  source:
-    uri: git@mylocalgit.company.com:pivotal-cf/pcf-pipelines
-    branch: master
-```
-
----
-
-## Docker Images (using private registry)
-**switch to using a non-docker hub enabled setup for offline**
-
-Pre-Reqs:
-- local docker registry
-  - for a way to deploy a BOSH managed docker registry see:
-    (https://github.com/enaml-ops/omg-product-bundle/tree/master/products/dockerregistry)
-
-Steps:
-- docker pull from docker hub or desired rootfs source
-- docker push to local docker registry
-- add full local url to docker container repo in pipeline yaml
-
-```
-#sample yaml snippet
-
-# this example is for a pipeline docker resource
-resource_types:
-- name: pivnet
-  type: docker-image
-  source:
-    repository: myregistrydomain.com:5000/pivotalcf/pivnet-resource
-    tag: latest-final
-
-# or
-
-# this example is for a task.yml
-image_resource:
-  type: docker-image
-  source:
-    repository: my.local.registry:8080/my/image
-    insecure_registries: ["my.local.registry:8080"]
-    username: myuser
-    password: mypass
-    email: x@x.com
-```
-
----
-
-## Docker Images (using git)
-**switch to using a non docker hub enabled setup without a private docker
-repository**
-**this is for running tasks in the absence of dockerhub access (this is not for use w/ resources only task base images)**
-
-Pre-Reqs:
-- Git
-
-Steps:
-- obtain RootFS using `docker archive` for the docker image cloudfoundry/cflinuxfs2
-- store your rootfs in git 
-- create git repo with archive tgz in it
-- configure tasks to pull rootfs from git using the `image` element instead of `image_resource`.
-  - docs: 
-    - (https://concourse.ci/task-step.html#task-image)
-    - (https://concourse.ci/running-tasks.html#task-config-image)
-
-```
-# sample yaml snippet
-resources:
-- name: my-project
-  type: git
-  source: {uri: https://github.com/my-user/my-project}
-
-jobs:
-- name: use-task-image
-  plan:
-  - get: my-project
-  - task: use-task-image
-    image: my-project/my-rootfs.tgz 
-    file: my-project/ci/tasks/my-task.yml
+ginkgo -r -p
 ```
