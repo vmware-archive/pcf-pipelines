@@ -77,7 +77,7 @@ Now your pipeline has your new s3 resource in place of the pivnet resource from 
 
 You can add as many operations as you like, chaining them with successive `-o` flags to `yaml-patch`.
 
-See [operations](tree/master/operations) for more examples of operations.
+See [operations](operations) for more examples of operations.
 
 ## Contributing
 
