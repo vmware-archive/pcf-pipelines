@@ -44,10 +44,7 @@ run:
     )
 
     for f in ${files[@]}; do
-      cat $f |
-      sed -e "s/{{/'{{/g" -e "s/}}/}}'/g" | # wrap {{placeholders}} in quotes so they're valid YAML
-      ./yaml-patch/yaml_patch_linux -o pcf-pipelines/operations/use-pivnet-release.yml |
-      sed -e "s/'{{/{{/g" -e "s/}}'/}}/g" > $f.bk # unwrap "{{placeholders}}"
+      cat $f | ./yaml-patch/yaml_patch_linux -o pcf-pipelines/operations/use-pivnet-release.yml > $f.bk
       mv $f.bk $f
     done
 
