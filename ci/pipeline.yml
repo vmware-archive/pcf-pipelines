@@ -185,7 +185,7 @@ jobs:
       input_mapping: { config: update_ert_config }
       file: pcf-pipelines/ci/tasks/update_pipeline.yml
       params:
-        PIPELINE_NAME: upgrade-ert
+        PIPELINE_NAME: lre1-aws-ert-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
         ATC_EXTERNAL_URL: {{atc_external_url}}
         ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
@@ -201,7 +201,7 @@ jobs:
       input_mapping: { config: update_buildpacks_config }
       file: pcf-pipelines/ci/tasks/update_pipeline.yml
       params:
-        PIPELINE_NAME: upgrade-buildpacks
+        PIPELINE_NAME: lre1-aws-buildpacks-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
         ATC_EXTERNAL_URL: {{atc_external_url}}
         ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
@@ -236,7 +236,7 @@ jobs:
       input_mapping: { config: upgrade_opsman_aws_config }
       file: pcf-pipelines/ci/tasks/update_pipeline.yml
       params:
-        PIPELINE_NAME: upgrade-opsman-aws
+        PIPELINE_NAME: lre1-aws-opsman-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
         ATC_EXTERNAL_URL: {{atc_external_url}}
         ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
