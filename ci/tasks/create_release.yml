@@ -26,6 +26,8 @@ run:
   args:
   - -ce
   - |
+    set -o pipefail
+
     # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
     # of GitHub
     chmod +x yaml-patch/yaml_patch_linux
