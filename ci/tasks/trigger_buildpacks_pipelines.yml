@@ -46,7 +46,7 @@ run:
     for buildpack in "${buildpacks[@]}"; do
       for step in stage promote; do
         ./fly --target self trigger-job \
-          --job upgrade-buildpacks/$step-$buildpack-buildpack \
+          --job lre1-aws-buildpacks-upgrade/$step-$buildpack-buildpack \
           --watch
       done
     done
