@@ -99,6 +99,24 @@ resources:
     branch: master
 
 jobs:
+- name: bump-patch
+  serial_groups: [version]
+  plan:
+  - put: version
+    params: {bump: patch}
+
+- name: bump-minor
+  serial_groups: [version]
+  plan:
+  - put: version
+    params: {bump: minor}
+
+- name: bump-major
+  serial_groups: [version]
+  plan:
+  - put: version
+    params: {bump: major}
+
 - name: test
   on_failure:
     <<: *notify_slack
@@ -113,6 +131,7 @@ jobs:
     file: pcf-pipelines/ci/tasks/test.yml
 
 - name: publish-rc
+  serial_groups: [version]
   on_failure:
     <<: *notify_slack
   plan:
@@ -272,6 +291,7 @@ jobs:
         ATC_TEAM_NAME: {{atc_team_name}}
 
 - name: publish-release
+  serial_groups: [version]
   plan:
   - aggregate:
     - get: version
@@ -339,9 +359,10 @@ jobs:
         silent: true
 
     - put: version
-      params:
-        bump: minor
-        pre: rc
+      params: {bump: final}
+
+    - put: version
+      params: {bump: patch, pre: rc}
 
 update_pipeline_params: &update_pipeline_params
   IAAS_TYPE: {{iaas_type}}
