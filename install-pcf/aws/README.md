@@ -1,9 +1,12 @@
 # Prepare AWS for PCF install
 ## Concourse pipeline
 
+## Notes:
+This pipeline is currently compatible with a 1.9 PCF 
+
 ## Prerequisites
 
-Before start kicking off the pipeline, there are a few parameters need to be set. Here is a sample parameters file [sample_file](params.yml.sample)
+Before start kicking off the pipeline, there are a few parameters need to be set. Here is a sample parameters file [sample_file](params.yml)
 
 * An admin account to provision AWS resources (Networks, Load Balancers ... )
 
