@@ -49,12 +49,6 @@ resources:
     product_version: 1\.9\..*
     sort_by: semver
 
-- name: ert-concourse
-  type: git
-  source:
-    uri: https://github.com/c0-ops/ert-concourse.git
-    branch: master
-
 - name: pcf-pipelines
   type: git
   source:
@@ -208,7 +202,6 @@ jobs:
     - get: pcf-pipelines 
       trigger: true
       passed: [import-stemcell]
-    - get: ert-concourse
     - get: pivnet-elastic-runtime
       passed: [import-stemcell]
       params:
@@ -219,7 +212,7 @@ jobs:
         globs:
         - "om-linux"
   - task: upload-ert
-    file: ert-concourse/ci/tasks/upload-ert.yml
+    file: pcf-pipelines/tasks/install-ert/upload-ert.yml
     params:
       pcf_ert_domain: {{ERT_DOMAIN}}
       pcf_opsman_admin: {{OPSMAN_USER}}
@@ -230,7 +223,6 @@ jobs:
   max_in_flight: 1
   plan:
   - aggregate:
-    - get: ert-concourse
     - get: tool-om
       params:
         globs:
@@ -247,7 +239,7 @@ jobs:
       ERT_DOMAIN: {{ERT_DOMAIN}}
 
   - task: configure-json
-    file: ert-concourse/ci/tasks/configure-json.yml
+    file: pcf-pipelines/tasks/install-ert/configure-json.yml
     params:
       pcf_iaas: aws
       pcf_ert_domain: {{ERT_DOMAIN}}
@@ -264,7 +256,7 @@ jobs:
       S3_ENDPOINT: {{S3_ENDPOINT}}
 
   - task: configure-ert
-    file: ert-concourse/ci/tasks/configure-ert.yml
+    file: pcf-pipelines/tasks/install-ert/configure-ert.yml
     params:
       pcf_iaas: aws
       pcf_ert_domain: {{ERT_DOMAIN}}
@@ -283,13 +275,12 @@ jobs:
     - get: pcf-pipelines 
       trigger: true
       passed: [configure-ert]
-    - get: ert-concourse
     - get: tool-om
       params:
         globs:
         - "om-linux"
   - task: deploy-ert
-    file: ert-concourse/ci/tasks/deploy-ert.yml
+    file: pcf-pipelines/tasks/install-ert/deploy-ert.yml
     params:
       pcf_ert_domain: {{ERT_DOMAIN}}
       pcf_opsman_admin: {{OPSMAN_USER}}
