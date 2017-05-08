@@ -17,11 +17,12 @@ run:
     export GOPATH=$PWD/go
     export PATH=$GOPATH/bin:$PATH
 
-    go install github.com/onsi/ginkgo/ginkgo
     go get github.com/onsi/ginkgo
     go get github.com/onsi/gomega
     go get gopkg.in/yaml.v2
     go get github.com/concourse/atc
+
+    go install github.com/onsi/ginkgo/ginkgo
 
     pushd pcf-pipelines
       ginkgo -p -r -randomizeAllSpecs
