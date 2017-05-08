@@ -1,0 +1,26 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: "rjain/buildbox"
+
+params:
+  OPS_MGR_HOST:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
+  SINGLETON_JOB_AZ:
+  OTHER_JOB_AZS:
+  NETWORK_NAME:
+  HEAP_SIZE: "4G"
+  INNODB_BUFFER_SIZE: "12G"
+  NOTIFICATIONS_EMAIL:
+
+inputs:
+  - name: pcf-pipelines
+  - name: tool-om
+
+run:
+  path: pcf-pipelines/tasks/config-pcf-metrics/task.sh

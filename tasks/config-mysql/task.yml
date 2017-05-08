@@ -1,0 +1,41 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: "rjain/buildbox"
+
+params:
+  PRODUCT_NAME:
+  OPS_MGR_HOST:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
+  SINGLETON_JOB_AZ:
+  DEPLOYMENT_NW_AZS:
+  OTHER_AZS:
+  NETWORK_NAME:
+  PLAN_NAME: "100mb"
+  PLAN_DESCRIPTION: "100MB default"
+  PLAN_MAX_STORAGE_MB: 100
+  PLAN_MAX_USER_CONNECTIONS: 40
+  PLAN_INVISIBLE: false
+  PROTECTION_EMAIL:
+  BACKUP_CRON_SCHEDULE:
+  BACKUP_SCP_HOST:
+  BACKUP_SCP_PORT:
+  BACKUP_SCP_USER:
+  BACKUP_SCP_KEY:
+  BACKUP_SCP_DESTINATION:
+  MYSQL_SERVER_INSTANCES: 3
+  BACKUP_PREPARE_INSTANCES: 1
+  MYSQL_PROXY_INSTANCES: 2
+  MONITORING_INSTANCES: 1
+  MYSQL_BROKER_INSTANCES: 2
+inputs:
+  - name: pcf-pipelines
+  - name: tool-om
+
+run:
+  path: pcf-pipelines/tasks/config-mysql/task.sh

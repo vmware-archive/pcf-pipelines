@@ -1,0 +1,36 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: "rjain/buildbox"
+
+params:
+  OPS_MGR_HOST:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
+  SINGLETON_JOB_AZ:
+  OTHER_JOB_AZS:
+  NETWORK_NAME:
+  RABBITMQ_PLUGINS: "rabbitmq_management"
+  PRIVATE_KEY_PEM:
+  CERT_PEM:
+  SSL_CA_CERT:
+  SSL_VERIFY: false
+  SSL_VERIFY_DEPTH: 5
+  SSL_FAIL_IF_NO_PEER_CERT: false
+  RABBITMQ_COOKIE:
+  RABBITMQ_CONFIG:
+  RABBITMQ_ADMIN:
+  RABBITMQ_PW:
+  SYSLOG_HOST:
+  SYSLOG_PORT:  
+
+inputs:
+  - name: pcf-pipelines
+  - name: tool-om
+
+run:
+  path: pcf-pipelines/tasks/config-rabbitmq/task.sh
