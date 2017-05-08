@@ -24,9 +24,9 @@ run:
     export PATH=$GOPATH/bin:$PATH
 
     go install github.com/onsi/ginkgo/ginkgo
-    go get github.com/Masterminds/glide
+
+    go get github.com/concourse/atc
 
     pushd pcf-pipelines
-      glide install
       ginkgo -p -r -randomizeAllSpecs
     popd
