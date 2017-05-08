@@ -80,24 +80,6 @@ resources:
   source:
     url: {{slack_webhook_url}}
 
-- name: ginkgo
-  type: git
-  source:
-    uri: https://github.com/onsi/ginkgo
-    branch: master
-
-- name: gomega
-  type: git
-  source:
-    uri: https://github.com/onsi/gomega
-    branch: master
-
-- name: yaml
-  type: git
-  source:
-    uri: https://gopkg.in/yaml.v2
-    branch: master
-
 jobs:
 - name: bump-patch
   serial_groups: [version]
@@ -124,9 +106,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: true
-    - get: ginkgo
-    - get: gomega
-    - get: yaml
   - task: test
     file: pcf-pipelines/ci/tasks/test.yml
 
