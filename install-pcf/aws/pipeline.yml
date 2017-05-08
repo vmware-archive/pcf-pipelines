@@ -254,6 +254,29 @@ jobs:
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
       TF_VAR_aws_region: {{TF_VAR_aws_region}}
       S3_ENDPOINT: {{S3_ENDPOINT}}
+      # IaaS Specific for GCP only
+      gcp_proj_id:
+      gcp_region:
+      gcp_svc_acct_key:
+      gcp_storage_access_key:
+      gcp_storage_secret_key:
+      # db credentials
+      db_app_usage_service_username: {{TF_VAR_rds_db_username_appusage}}
+      db_app_usage_service_password: {{TF_VAR_rds_db_password_appusage}}
+      db_autoscale_username: {{TF_VAR_rds_db_username_autoscale}}
+      db_autoscale_password: {{TF_VAR_rds_db_password_autoscale}}
+      db_diego_username: {{TF_VAR_rds_db_username_diego}}
+      db_diego_password: {{TF_VAR_rds_db_password_diego}}
+      db_notifications_username: {{TF_VAR_rds_db_username_notifications}}
+      db_notifications_password: {{TF_VAR_rds_db_password_notifications}}
+      db_routing_username: {{TF_VAR_rds_db_username_routing}}
+      db_routing_password: {{TF_VAR_rds_db_password_routing}}
+      db_uaa_username: {{TF_VAR_rds_db_username_uaa}}
+      db_uaa_password: {{TF_VAR_rds_db_password_uaa}}
+      db_ccdb_username: {{TF_VAR_rds_db_username_ccdb}}
+      db_ccdb_password: {{TF_VAR_rds_db_password_ccdb}}
+      ert_sql_db_username: {{TF_VAR_rds_db_username_ertsql}}
+      ert_sql_db_password: {{TF_VAR_rds_db_password_ertsql}}
 
   - task: configure-ert
     file: pcf-pipelines/tasks/install-ert/configure-ert.yml
@@ -264,6 +287,9 @@ jobs:
       pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
       pcf_ert_ssl_cert: {{ERT_SSL_CERT}}
       pcf_ert_ssl_key: {{ERT_SSL_KEY}}
+      pcf_az_1: {{TF_VAR_az1}}
+      pcf_az_2: {{TF_VAR_az2}}
+      pcf_az_3: {{TF_VAR_az3}}
       terraform_template: c0-aws-base
       terraform_prefix: {{TF_VAR_environment}}
 
