@@ -1,0 +1,342 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: v0.26.1
+
+resources:
+- name: pcfawsops-terraform-state-put
+  type: s3
+  source:
+    disable_ssl: false
+    access_key_id: {{TF_VAR_aws_access_key}}
+    secret_access_key: {{TF_VAR_aws_secret_key}}
+    endpoint: {{S3_ENDPOINT}}
+    bucket: {{S3_OUTPUT_BUCKET}}
+    versioned_file: terraform.tfstate
+
+- name: pcfawsops-terraform-state-get
+  type: s3
+  source:
+    disable_ssl: false
+    access_key_id: {{TF_VAR_aws_access_key}}
+    secret_access_key: {{TF_VAR_aws_secret_key}}
+    endpoint: {{S3_ENDPOINT}}
+    bucket: {{S3_OUTPUT_BUCKET}}
+    versioned_file: terraform.tfstate
+
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{GITHUB_TOKEN}}
+
+- name: tool-om-beta
+  type: github-release
+  source:
+    user: c0-ops
+    repository: om
+    access_token: {{GITHUB_TOKEN}}
+
+- name: pivnet-elastic-runtime
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{PIVNET_TOKEN}}
+    product_slug: elastic-runtime
+    product_version: 1\.9\..*
+    sort_by: semver
+
+- name: ert-concourse
+  type: git
+  source:
+    uri: https://github.com/c0-ops/ert-concourse.git
+    branch: master
+
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: https://github.com/pivotal-cf/pcf-pipelines
+    branch: master
+
+- name: stemcell-downloader
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pcf-product-stemcell-downloader
+    access_token: {{GITHUB_TOKEN}}
+
+jobs:
+- name: aws-pcf-prepare
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines 
+  - task: aws-pcf-prepare
+    file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws.yml
+    params:
+      TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
+      TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
+      TF_VAR_aws_key_name: {{TF_VAR_aws_key_name}}
+      TF_VAR_aws_cert_arn: {{TF_VAR_aws_cert_arn}}
+      TF_VAR_rds_db_username: {{TF_VAR_rds_db_username}}
+      TF_VAR_rds_db_password: {{TF_VAR_rds_db_password}}
+      TF_VAR_environment: {{TF_VAR_environment}}
+      TF_VAR_opsman_ami: {{TF_VAR_opsman_ami}}
+      TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
+      TF_VAR_aws_region: {{TF_VAR_aws_region}}
+      TF_VAR_az1: {{TF_VAR_az1}}
+      TF_VAR_az2: {{TF_VAR_az2}}
+      TF_VAR_az3: {{TF_VAR_az3}}
+      TF_VAR_route53_zone_id: {{ROUTE_53_ZONE_ID}}
+      TF_VAR_vpc_cidr: {{TF_VAR_vpc_cidr}}
+      TF_VAR_public_subnet_cidr_az1: {{TF_VAR_public_subnet_cidr_az1}}
+      TF_VAR_public_subnet_cidr_az2: {{TF_VAR_public_subnet_cidr_az2}}
+      TF_VAR_public_subnet_cidr_az3: {{TF_VAR_public_subnet_cidr_az3}}
+      TF_VAR_ert_subnet_cidr_az1: {{TF_VAR_ert_subnet_cidr_az1}}
+      TF_VAR_ert_subnet_cidr_az2: {{TF_VAR_ert_subnet_cidr_az2}}
+      TF_VAR_ert_subnet_cidr_az3: {{TF_VAR_ert_subnet_cidr_az3}}
+      TF_VAR_services_subnet_cidr_az1: {{TF_VAR_services_subnet_cidr_az1}}
+      TF_VAR_services_subnet_cidr_az2: {{TF_VAR_services_subnet_cidr_az2}}
+      TF_VAR_services_subnet_cidr_az3: {{TF_VAR_services_subnet_cidr_az3}}
+      TF_VAR_infra_subnet_cidr_az1: {{TF_VAR_infra_subnet_cidr_az1}}
+      TF_VAR_rds_subnet_cidr_az1: {{TF_VAR_rds_subnet_cidr_az1}}
+      TF_VAR_rds_subnet_cidr_az2: {{TF_VAR_rds_subnet_cidr_az2}}
+      TF_VAR_rds_subnet_cidr_az3: {{TF_VAR_rds_subnet_cidr_az3}}
+      TF_VAR_opsman_ip_az1: {{TF_VAR_opsman_ip_az1}}
+      TF_VAR_nat_ip_az1: {{TF_VAR_nat_ip_az1}}
+      TF_VAR_nat_ip_az2: {{TF_VAR_nat_ip_az2}}
+      TF_VAR_nat_ip_az3: {{TF_VAR_nat_ip_az3}}
+    ensure:
+      put: pcfawsops-terraform-state-put
+      params:
+        file: pcfawsops-terraform-state-put/terraform.tfstate
+
+- name: config-opsman
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines 
+      trigger: true
+      passed: [aws-pcf-prepare]
+    - get: tool-om
+  - task: config-opsman
+    file: pcf-pipelines/tasks/install-pcf-aws/config-opsman.yml
+    params:
+      ERT_DOMAIN: {{ERT_DOMAIN}}
+      OPSMAN_USER: {{OPSMAN_USER}}
+      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
+
+- name: config-director
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines 
+      trigger: true
+      passed: [config-opsman]
+    - get: pcfawsops-terraform-state-get
+    - get: tool-om-beta
+      globs: [om-linux]
+      version: { tag: '0.17-beta.0' }
+  - task: config-director
+    file: pcf-pipelines/tasks/install-pcf-aws/config-director.yml
+    params:
+      ERT_DOMAIN: {{ERT_DOMAIN}}
+      OPSMAN_USER: {{OPSMAN_USER}}
+      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
+      AWS_TEMPLATE: "c0-aws-base"
+      AWS_KEY_NAME: {{TF_VAR_aws_key_name}}
+      PEM: {{PEM}}
+      AWS_REGION: {{TF_VAR_aws_region}}
+      S3_ENDPOINT: {{S3_ENDPOINT}}
+      ert_subnet_reserved_ranges_z1: {{ert_subnet_reserved_ranges_z1}}
+      ert_subnet_reserved_ranges_z2: {{ert_subnet_reserved_ranges_z2}}
+      ert_subnet_reserved_ranges_z3: {{ert_subnet_reserved_ranges_z3}}
+      services_subnet_reserved_ranges_z1: {{services_subnet_reserved_ranges_z1}}
+      services_subnet_reserved_ranges_z2: {{services_subnet_reserved_ranges_z2}}
+      services_subnet_reserved_ranges_z3: {{services_subnet_reserved_ranges_z3}}
+      infra_subnet_reserved_ranges_z1: {{infra_subnet_reserved_ranges_z1}}
+
+- name: deploy-director
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines 
+      trigger: true
+      passed: [config-director]
+    - get: tool-om
+  - task: deploy-director
+    file: pcf-pipelines/tasks/install-pcf-aws/deploy-director.yml
+    params:
+      pcf_ert_domain: {{ERT_DOMAIN}}
+      pcf_opsman_admin: {{OPSMAN_USER}}
+      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
+
+- name: import-stemcell
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+      passed: [deploy-director]
+    - get: tool-om
+      params:
+        globs: [om-linux]
+    - get: stemcell-downloader
+      params:
+        globs: [stemcell-downloader-linux]
+    - get: pivnet-product
+      resource: pivnet-elastic-runtime
+      params:
+        globs:
+        - "*pivotal"
+  - task: upload-stemcell
+    file: pcf-pipelines/tasks/upload-stemcell/task.yml
+    params:
+      PRODUCT: cf
+      IAAS_TYPE: aws
+      OPSMAN_USERNAME: {{OPSMAN_USER}}
+      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
+      OPSMAN_URI: {{OPSMAN_URI}}
+
+- name: upload-ert
+  serial: true
+  max_in_flight: 1
+  plan:
+  - aggregate:
+    - get: pcf-pipelines 
+      trigger: true
+      passed: [import-stemcell]
+    - get: ert-concourse
+    - get: pivnet-elastic-runtime
+      passed: [import-stemcell]
+      params:
+        globs:
+        - "*pivotal"
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+  - task: upload-ert
+    file: ert-concourse/ci/tasks/upload-ert.yml
+    params:
+      pcf_ert_domain: {{ERT_DOMAIN}}
+      pcf_opsman_admin: {{OPSMAN_USER}}
+      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
+
+- name: configure-ert
+  serial: true
+  max_in_flight: 1
+  plan:
+  - aggregate:
+    - get: ert-concourse
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+    - get: pcf-pipelines 
+      trigger: true
+      passed: [upload-ert]
+    - get: pcfawsops-terraform-state-get
+
+  - task: prepare-rds
+    file: pcf-pipelines/tasks/install-pcf-aws/prepare-rds.yml
+    params:
+      PEM: {{PEM}}
+      ERT_DOMAIN: {{ERT_DOMAIN}}
+
+  - task: configure-json
+    file: ert-concourse/ci/tasks/configure-json.yml
+    params:
+      pcf_iaas: aws
+      pcf_ert_domain: {{ERT_DOMAIN}}
+      pcf_opsman_admin: {{OPSMAN_USER}}
+      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
+      pcf_ert_ssl_cert: {{ERT_SSL_CERT}}
+      pcf_ert_ssl_key: {{ERT_SSL_KEY}}
+      terraform_template: c0-aws-base
+      terraform_prefix: {{TF_VAR_environment}}
+      bucket: {{S3_OUTPUT_BUCKET}}
+      TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
+      TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
+      TF_VAR_aws_region: {{TF_VAR_aws_region}}
+      S3_ENDPOINT: {{S3_ENDPOINT}}
+
+  - task: configure-ert
+    file: ert-concourse/ci/tasks/configure-ert.yml
+    params:
+      pcf_iaas: aws
+      pcf_ert_domain: {{ERT_DOMAIN}}
+      pcf_opsman_admin: {{OPSMAN_USER}}
+      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
+      pcf_ert_ssl_cert: {{ERT_SSL_CERT}}
+      pcf_ert_ssl_key: {{ERT_SSL_KEY}}
+      terraform_template: c0-aws-base
+      terraform_prefix: {{TF_VAR_environment}}
+
+- name: deploy-ert
+  serial: true
+  max_in_flight: 1
+  plan:
+  - aggregate:
+    - get: pcf-pipelines 
+      trigger: true
+      passed: [configure-ert]
+    - get: ert-concourse
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+  - task: deploy-ert
+    file: ert-concourse/ci/tasks/deploy-ert.yml
+    params:
+      pcf_ert_domain: {{ERT_DOMAIN}}
+      pcf_opsman_admin: {{OPSMAN_USER}}
+      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
+
+- name: aws-pcf-destroy
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [deploy-ert]
+    - get: pcfawsops-terraform-state-get
+  - task: aws-pcf-destroy
+    file: pcf-pipelines/tasks/install-pcf-aws/destroy-aws.yml
+    params:
+      TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
+      TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
+      TF_VAR_aws_key_name: {{TF_VAR_aws_key_name}}
+      TF_VAR_aws_cert_arn: {{TF_VAR_aws_cert_arn}}
+      TF_VAR_rds_db_username: {{TF_VAR_rds_db_username}}
+      TF_VAR_rds_db_password: {{TF_VAR_rds_db_password}}
+      TF_VAR_environment: {{TF_VAR_environment}}
+      TF_VAR_opsman_ami: {{TF_VAR_opsman_ami}}
+      TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
+      TF_VAR_aws_region: {{TF_VAR_aws_region}}
+      TF_VAR_az1: {{TF_VAR_az1}}
+      TF_VAR_az2: {{TF_VAR_az2}}
+      TF_VAR_az3: {{TF_VAR_az3}}
+      TF_VAR_route53_zone_id: {{ROUTE_53_ZONE_ID}}
+      TF_VAR_vpc_cidr: {{TF_VAR_vpc_cidr}}
+      TF_VAR_public_subnet_cidr_az1: {{TF_VAR_public_subnet_cidr_az1}}
+      TF_VAR_public_subnet_cidr_az2: {{TF_VAR_public_subnet_cidr_az2}}
+      TF_VAR_public_subnet_cidr_az3: {{TF_VAR_public_subnet_cidr_az3}}
+      TF_VAR_ert_subnet_cidr_az1: {{TF_VAR_ert_subnet_cidr_az1}}
+      TF_VAR_ert_subnet_cidr_az2: {{TF_VAR_ert_subnet_cidr_az2}}
+      TF_VAR_ert_subnet_cidr_az3: {{TF_VAR_ert_subnet_cidr_az3}}
+      TF_VAR_services_subnet_cidr_az1: {{TF_VAR_services_subnet_cidr_az1}}
+      TF_VAR_services_subnet_cidr_az2: {{TF_VAR_services_subnet_cidr_az2}}
+      TF_VAR_services_subnet_cidr_az3: {{TF_VAR_services_subnet_cidr_az3}}
+      TF_VAR_infra_subnet_cidr_az1: {{TF_VAR_infra_subnet_cidr_az1}}
+      TF_VAR_rds_subnet_cidr_az1: {{TF_VAR_rds_subnet_cidr_az1}}
+      TF_VAR_rds_subnet_cidr_az2: {{TF_VAR_rds_subnet_cidr_az2}}
+      TF_VAR_rds_subnet_cidr_az3: {{TF_VAR_rds_subnet_cidr_az3}}
+    ensure:
+      put: pcfawsops-terraform-state-put
+      params:
+        file: pcfawsops-terraform-state-put/terraform.tfstate
+  - put: pcfawsops-terraform-state-put
+    params:
+      file: pcfawsops-terraform-state-put/terraform.tfstate
