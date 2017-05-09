@@ -28,19 +28,19 @@ EOF
 TILE_PROPERTIES=$(cat <<-EOF
 {
   ".push-apps.elasticsearch_logqueue_instance_count": {
-    "value": ${ELASTICSEARCH_LOGQUEUE_INSTANCE_COUNT:-1}
+    "value": ${ELASTICSEARCH_LOGQUEUE_INSTANCE_COUNT:-6}
   },
   ".elasticsearch_master.heap_size": {
-    "value": "$ELASTICSEARCH_MASTER_HEAP_SIZE"
+    "value": "${ELASTICSEARCH_MASTER_HEAP_SIZE:-4G}"
   },
   ".push-apps.ingestor_instance_count": {
-    "value": ${INGESTOR_INSTANCE_COUNT:-1}
+    "value": ${INGESTOR_INSTANCE_COUNT:-2}
   },
   ".mysql.innodb_buffer_size": {
-    "value": "$MYSQL_INNODB_BUFFER_SIZE"
+    "value": "{$MYSQL_INNODB_BUFFER_SIZE:-13G}"
   },
   ".push-apps.mysql_logqueue_instance_count": {
-    "value": ${MYSQL_LOGQUEUE_INSTANCE_COUNT:-1}
+    "value": ${MYSQL_LOGQUEUE_INSTANCE_COUNT:-3}
   },
   ".mysql_monitor.notifications_email": {
     "value": "$MYSQL_MONITOR_NOTIFICATIONS_EMAIL"
