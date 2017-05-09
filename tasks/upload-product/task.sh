@@ -32,9 +32,9 @@ function main() {
      --skip-ssl-validation \
      --username "${OPSMAN_USERNAME}" \
      --password "${OPSMAN_PASSWORD}" \
+     --request-timeout ${TILE_UPLOAD_TIMEOUT} \
      upload-product \
-     --product ${product} \
-     --request-timeout ${TILE_UPLOAD_TIMEOUT}
+     --product ${product}
 }
 
 main "${PWD}"
