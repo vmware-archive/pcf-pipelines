@@ -1,4 +1,5 @@
 #!/bin/bash -e
+set -xe
 
 chmod +x tool-om/om-linux
 
@@ -77,9 +78,9 @@ CF_PROPERTIES=$(cat <<-EOF
   },
   ".uaa.service_provider_key_credentials": {
     "value": {
-      "private_key_pem": $SERVICE_PROVIDER_KEY,
-      "cert_pem": $SERVICE_PROVIDER_CERT 
-     }
+     "private_key_pem": "$SERVICE_PROVIDER_KEY",
+     "cert_pem": "$SERVICE_PROVIDER_CERT"
+    }
   },
   ".cloud_controller.system_domain": {
     "value": "$SYSTEM_DOMAIN"
