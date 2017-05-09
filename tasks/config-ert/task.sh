@@ -2,8 +2,6 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source $SCRIPT_DIR/fn_ert_balanced_azs.sh
-
 chmod +x tool-om/om-linux
 
 CMD=./tool-om/om-linux
@@ -15,7 +13,7 @@ PRODUCT_VERSION=`echo $CF_RELEASE | cut -d"|" -f3 | tr -d " "`
 
 $CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k stage-product -p $PRODUCT_NAME -v $PRODUCT_VERSION
 
-ERT_AZS=$(fn_ert_balanced_azs "${DEPLOYMENT_NW_AZS}")
+ERT_AZS=$(echo $DEPLOYMENT_NW_AZS | jq --raw-input 'split(",") | map({name: .})')
 
 CF_NETWORK=$(cat <<-EOF
 {
