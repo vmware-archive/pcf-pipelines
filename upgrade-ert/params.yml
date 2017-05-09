@@ -12,11 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Pivotal Net Token to download binaries from https://network.pivotal.io
 pivnet_token: CHANGEME
+
+# Ops Manager Admin Credentials - set during the installation of Ops Manager
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
+
+# Ops Manager Url
+# eg. https://myopsman.mydomain.com
 opsman_uri: CHANGEME
+
+# A github access key to download github binary releases E.g. https://github.com/pivotal-cf/om
 github_token: yyyyyyyyyyyyyyyyy
+
+# The IaaS name for which stemcell to download. See
+# https://github.com/pivotal-cf/pcf-product-stemcell-downloader/ for the list of
+# allowed IaaS names.
 iaas_type: gcp
+
+# Interval to check on new releases from Pivotal Network
+# eg. 2h, 3h45m, 3000s
 pivnet_poll_interval: 1h
 opsman_timeout_seconds: 300

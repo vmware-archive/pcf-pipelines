@@ -40,7 +40,9 @@ github_token: CHANGEME
 # https://github.com/pivotal-cf/pcf-product-stemcell-downloader/ for the list of
 # allowed IaaS names.
 iaas_type: CHANGEME
-# The interval to check Pivotal Network for updates to the product file.
+
+# Interval to check on new releases from Pivotal Network
+# eg. 2h, 3h45m, 3000s
 pivnet_poll_interval: 1h
 # The basename of the metadata file for the product without the file extension.
 # This will be used for figuring out which stemcell the product needs.
