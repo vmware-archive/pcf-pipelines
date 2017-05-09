@@ -63,8 +63,8 @@ params:
   GENERATE_VM_PASSWORDS:
 
 inputs:
-  - name: concourse-vsphere
-  - name: om-cli
+  - name: pcf-pipelines
+  - name: tool-om
 
 run:
-  path: concourse-vsphere/tasks/config-opsdir/task.sh
+  path: pcf-pipelines/tasks/config-opsdir/task.sh

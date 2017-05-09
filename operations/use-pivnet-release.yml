@@ -1,0 +1,30 @@
+---
+- op: replace
+  path: /resources/name=pcf-pipelines
+  value:
+    name: pcf-pipelines-tarball
+    type: pivnet
+    source:
+      api_token: "{{pivnet_token}}"
+      product_slug: pcf-automation
+      product_version: ~
+
+- op: replace
+  path: /jobs/get=pcf-pipelines
+  value:
+    do:
+    - get: pcf-pipelines-tarball
+    - task: unpack-tarball
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: cloudfoundry/cflinuxfs2
+        inputs:
+        - name: pcf-pipelines-tarball
+        outputs:
+        - name: pcf-pipelines
+        run:
+         path: sh
+         args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]

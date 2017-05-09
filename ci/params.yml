@@ -1,8 +1,8 @@
 atc_external_url:
 atc_team_name:
-cf_api_uri:
-cf_password:
-cf_user:
+aws_cf_api_uri:
+aws_cf_password:
+aws_cf_user:
 fly_basic_auth_password:
 fly_basic_auth_username:
 github_token:

@@ -15,15 +15,16 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/pivotal-cf/pcf-pipelines.git
-    branch: master
-
-- name: pcf-pipelines-release
-  type: git
-  source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
     private_key: {{git_private_key}}
+
+- name: yaml-patch
+  type: github-release
+  source:
+    user: krishicks
+    repository: yaml-patch
+    access_token: {{github_token}}
 
 - name: pivnet-rc
   type: pivnet
@@ -79,25 +80,25 @@ resources:
   source:
     url: {{slack_webhook_url}}
 
-- name: ginkgo
-  type: git
-  source:
-    uri: https://github.com/onsi/ginkgo
-    branch: master
-
-- name: gomega
-  type: git
-  source:
-    uri: https://github.com/onsi/gomega
-    branch: master
-
-- name: yaml
-  type: git
-  source:
-    uri: https://gopkg.in/yaml.v2
-    branch: master
-
 jobs:
+- name: bump-patch
+  serial_groups: [version]
+  plan:
+  - put: version
+    params: {bump: patch}
+
+- name: bump-minor
+  serial_groups: [version]
+  plan:
+  - put: version
+    params: {bump: minor}
+
+- name: bump-major
+  serial_groups: [version]
+  plan:
+  - put: version
+    params: {bump: major}
+
 - name: test
   on_failure:
     <<: *notify_slack
@@ -105,13 +106,11 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: true
-    - get: ginkgo
-    - get: gomega
-    - get: yaml
   - task: test
     file: pcf-pipelines/ci/tasks/test.yml
 
 - name: publish-rc
+  serial_groups: [version]
   on_failure:
     <<: *notify_slack
   plan:
@@ -121,39 +120,34 @@ jobs:
     - get: cf-cli
     - get: cliaas
       params:
-        globs: [cliaas-linux]
+        globs: ["*linux*"]
     - get: om
       params:
-        globs: [om-linux]
+        globs: ["*linux*"]
+    - get: yaml-patch
+      params:
+        globs: ["*linux*"]
 
   - put: version
     params: {pre: rc}
 
-  - do:
-    - task: stamp-release-version
-      file: pcf-pipelines/ci/tasks/stamp_release_version.yml
-    - put: pcf-pipelines-release
-      params:
-        repository: stamped-pcf-pipelines
-    - put: pcf-pipelines-release
-      params:
-        repository: stamped-pcf-pipelines
-        tag: version/version
-        tag_prefix: v
-        only_tag: true
+  - task: create-release
+    file: pcf-pipelines/ci/tasks/create_release.yml
+    params:
+      AVAILABILITY: Admins Only
 
-  - do:
-    - task: create-pivnet-metadata
-      file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
-      params:
-        AVAILABILITY: Admins Only
-    - task: create-release-tarball
-      file: pcf-pipelines/ci/tasks/create_release.yml
-    - put: pivnet-rc
-      params:
-        metadata_file: pivnet-metadata/metadata.yml
-        file_glob: pcf-pipelines-release-tarball/*.tgz
-        s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+  - put: pivnet-rc
+    params:
+      metadata_file: pivnet-metadata/metadata.yml
+      file_glob: pcf-pipelines-release-tarball/*.tgz
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
+  - put: pcf-pipelines
+    params:
+      repository: pcf-pipelines
+      tag: version/version
+      tag_prefix: v
+      only_tag: true
 
 - name: update-pipelines
   on_failure:
@@ -163,7 +157,6 @@ jobs:
     - get: version
       passed: [publish-rc]
     - get: pcf-pipelines
-      resource: pcf-pipelines-release
       passed: [publish-rc]
     - get: pivnet-rc
       trigger: true
@@ -190,7 +183,7 @@ jobs:
       input_mapping: { config: update_ert_config }
       file: pcf-pipelines/ci/tasks/update_pipeline.yml
       params:
-        PIPELINE_NAME: upgrade-ert
+        PIPELINE_NAME: lre1-aws-ert-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
         ATC_EXTERNAL_URL: {{atc_external_url}}
         ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
@@ -206,7 +199,7 @@ jobs:
       input_mapping: { config: update_buildpacks_config }
       file: pcf-pipelines/ci/tasks/update_pipeline.yml
       params:
-        PIPELINE_NAME: upgrade-buildpacks
+        PIPELINE_NAME: lre1-aws-buildpacks-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
         ATC_EXTERNAL_URL: {{atc_external_url}}
         ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
@@ -241,7 +234,7 @@ jobs:
       input_mapping: { config: upgrade_opsman_aws_config }
       file: pcf-pipelines/ci/tasks/update_pipeline.yml
       params:
-        PIPELINE_NAME: upgrade-opsman-aws
+        PIPELINE_NAME: lre1-aws-opsman-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
         ATC_EXTERNAL_URL: {{atc_external_url}}
         ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
@@ -277,47 +270,42 @@ jobs:
         ATC_TEAM_NAME: {{atc_team_name}}
 
 - name: publish-release
+  serial_groups: [version]
   plan:
   - aggregate:
     - get: version
       passed: [update-pipelines]
       params: {bump: final}
     - get: pcf-pipelines
-      resource: pcf-pipelines-release
       passed: [update-pipelines]
     - get: cf-cli
     - get: cliaas
       params:
-        globs: [cliaas-linux]
+        globs: ["*linux*"]
     - get: om
       params:
-        globs: [om-linux]
+        globs: ["*linux*"]
+    - get: yaml-patch
+      params:
+        globs: ["*linux*"]
 
-  - do:
-    - task: stamp-release-version
-      file: pcf-pipelines/ci/tasks/stamp_release_version.yml
-    - put: pcf-pipelines-release
-      params:
-        repository: stamped-pcf-pipelines
-    - put: pcf-pipelines-release
-      params:
-        repository: stamped-pcf-pipelines
-        tag: version/version
-        tag_prefix: v
-        only_tag: true
+  - task: create-release
+    file: pcf-pipelines/ci/tasks/create_release.yml
+    params:
+      AVAILABILITY: Selected User Groups Only
 
-  - do:
-    - task: create-pivnet-metadata
-      file: pcf-pipelines/ci/tasks/create_pivnet_metadata.yml
-      params:
-        AVAILABILITY: Selected User Groups Only
-    - task: create-release-tarball
-      file: pcf-pipelines/ci/tasks/create_release.yml
-    - put: pivnet-release
-      params:
-        metadata_file: pivnet-metadata/metadata.yml
-        file_glob: pcf-pipelines-release-tarball/*.tgz
-        s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+  - put: pivnet-release
+    params:
+      metadata_file: pivnet-metadata/metadata.yml
+      file_glob: pcf-pipelines-release-tarball/*.tgz
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
+  - put: pcf-pipelines
+    params:
+      repository: pcf-pipelines
+      tag: version/version
+      tag_prefix: v
+      only_tag: true
 
   on_failure:
     <<: *notify_slack
@@ -348,18 +336,20 @@ jobs:
       params:
         text_file: notification-text/text
         silent: true
+
     - put: version
-      params:
-        bump: minor
-        pre: rc
+      params: {bump: final}
+
+    - put: version
+      params: {bump: patch, pre: rc}
 
 update_pipeline_params: &update_pipeline_params
   IAAS_TYPE: {{iaas_type}}
   PIVNET_TOKEN: {{pivnet_token}}
   PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
-  CF_API_URI: {{cf_api_uri}}
-  CF_USER: {{cf_user}}
-  CF_PASSWORD: {{cf_password}}
+  CF_API_URI: {{aws_cf_api_uri}}
+  CF_USER: {{aws_cf_user}}
+  CF_PASSWORD: {{aws_cf_password}}
   CHECK_NEW_OPSMAN_EVERY: 24h
   OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
   OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}

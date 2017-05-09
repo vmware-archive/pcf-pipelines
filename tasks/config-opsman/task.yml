@@ -13,8 +13,8 @@ params:
   OM_DECRYPTION_PWD:
 
 inputs:
-  - name: concourse-vsphere
-  - name: om-cli
+  - name: pcf-pipelines
+  - name: tool-om
 
 run:
-  path: concourse-vsphere/tasks/config-opsman/task.sh
+  path: pcf-pipelines/tasks/config-opsman/task.sh

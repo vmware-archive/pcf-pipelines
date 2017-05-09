@@ -4,31 +4,73 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: busybox
+    repository: cloudfoundry/cflinuxfs2
 
 inputs:
-- name: pcf-pipelines-release
-- name: cf-cli
+- name: pcf-pipelines
+- name: version
+- name: yaml-patch
 - name: cliaas
 - name: om
-- name: version
+- name: cf-cli
 
 outputs:
 - name: pcf-pipelines-release-tarball
+- name: pivnet-metadata
+
+params:
+  AVAILABILITY: Admins Only
 
 run:
-  path: sh
+  path: bash
   args:
   - -ce
   - |
-    version=v$(cat version/version)
+    set -o pipefail
 
+    # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
+    # of GitHub
+    chmod +x yaml-patch/yaml_patch_linux
+
+    version=v$(cat version/version)
+    sed -i "/product_slug: pcf-automation/ {N; s/\(product_slug: pcf-automation.*product_version: \).*/\1${version}/g}" pcf-pipelines/operations/use-pivnet-release.yml
+
+    files=$(
+      find pcf-pipelines \
+      -type f \
+      -name pipeline.yml \
+      -exec grep -l "get: pcf-pipelines" {} \; |
+      grep -v ci/pipeline.yml
+    )
+
+    for f in ${files[@]}; do
+      cat $f | ./yaml-patch/yaml_patch_linux -o pcf-pipelines/operations/use-pivnet-release.yml > $f.bk
+      mv $f.bk $f
+    done
+
+    # Create release metadata
+    release_date=$(date +%Y-%m-%d)
+
+    cat >> pivnet-metadata/metadata.yml <<EOF
+    ---
+    release:
+      version: "${version}"
+      release_date: "${release_date}"
+      description: |
+        Concourse Pipeline Templates and Scripts for PCF Platform Ops Automation
+      availability: $AVAILABILITY
+      release_type: Beta Release
+      eula_slug: "pivotal_beta_eula"
+      user_group_ids:
+      - 6   # Pivotal Internal Early Access
+      - 159 # C[0] PCF Automation Pipelines Access
+    EOF
+
+    # Create release tarball
     tar --extract --file cf-cli/*.tgz
 
     mv cliaas/cliaas-linux .
     mv om/om-linux .
-
-    ln -s pcf-pipelines-release pcf-pipelines
 
     tar \
       --exclude .git* \
@@ -37,7 +79,6 @@ run:
       --create \
       --gzip \
       --file pcf-pipelines-release-tarball/pcf-pipelines-$version.tgz \
-      --dereference \
       pcf-pipelines \
       cf \
       cliaas-linux \

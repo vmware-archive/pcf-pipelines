@@ -24,6 +24,7 @@ var _ = Describe("pcf-pipelines", func() {
 		log.Fatalf("failed to get working dir: %s", err)
 	}
 
+	root := filepath.Dir(cwd)
 	baseDir := filepath.Base(cwd)
 
 	var pipelinePaths []string
@@ -53,20 +54,19 @@ var _ = Describe("pcf-pipelines", func() {
 			var configBytes []byte
 
 			BeforeEach(func() {
-				var readErr error
-				configBytes, readErr = ioutil.ReadFile(pipelinePath)
-				Expect(readErr).NotTo(HaveOccurred())
+				var err error
+				configBytes, err = ioutil.ReadFile(pipelinePath)
+				Expect(err).NotTo(HaveOccurred())
 			})
 
 			It("specifies all and only the params that the pipeline's tasks expect", func() {
-				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
-
 				var config atc.Config
-				err = yaml.Unmarshal(cleanConfigBytes, &config)
+				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
+				err := yaml.Unmarshal(cleanConfigBytes, &config)
 				Expect(err).NotTo(HaveOccurred())
 
 				for _, job := range config.Jobs {
-					for _, task := range allTasksInPlan(&job.Plan, []atc.PlanConfig{}) {
+					for _, task := range allTasksInPlan(&job.Plan, nil) {
 						failMessage := fmt.Sprintf("Found error in the following pipeline:\n    %s\n\nin the following task's params:\n    %s/%s\n", pipelinePath, job.Name, task.Name())
 
 						var configParams []string
@@ -136,6 +136,93 @@ in the following params template:
 
 				assertUnorderedEqual(placeholders, params, failMessage)
 			})
+
+			It("provides all of the resources that the tasks it defines require", func() {
+				var config atc.Config
+				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
+				err := yaml.Unmarshal(cleanConfigBytes, &config)
+				Expect(err).NotTo(HaveOccurred())
+
+				for _, job := range config.Jobs {
+					tasks := allTasksInPlan(&job.Plan, nil)
+					for i, task := range tasks {
+						var inputs []atc.TaskInputConfig
+						if task.TaskConfigPath != "" {
+							var taskConfig atc.TaskConfig
+							bs, err := ioutil.ReadFile(filepath.Join(root, task.TaskConfigPath))
+							Expect(err).NotTo(HaveOccurred())
+
+							err = yaml.Unmarshal(bs, &taskConfig)
+							Expect(err).NotTo(HaveOccurred())
+
+							inputs = taskConfig.Inputs
+						}
+
+						if task.TaskConfig != nil {
+							inputs = task.TaskConfig.Inputs
+						}
+
+						for k := range task.InputMapping {
+							var validInputMapping bool
+							for _, input := range inputs {
+								if input.Name == k {
+									validInputMapping = true
+									break
+								}
+							}
+							if !validInputMapping {
+								Fail(fmt.Sprintf("invalid input mapping; task does specify an input named '%s'", k))
+							}
+						}
+
+						actuals := availableResources(&job.Plan, nil)
+
+						for j := 0; j < i; j++ {
+							upstreamTask := tasks[j]
+
+							if upstreamTask.TaskConfig != nil {
+								for _, output := range upstreamTask.TaskConfig.Outputs {
+									actuals = append(actuals, output.Name)
+								}
+							}
+
+							if upstreamTask.TaskConfigPath != "" {
+								var upstreamTaskConfig atc.TaskConfig
+								bs, err := ioutil.ReadFile(filepath.Join(root, upstreamTask.TaskConfigPath))
+								Expect(err).NotTo(HaveOccurred())
+
+								err = yaml.Unmarshal(bs, &upstreamTaskConfig)
+								Expect(err).NotTo(HaveOccurred())
+
+								for _, output := range upstreamTaskConfig.Outputs {
+									actuals = append(actuals, output.Name)
+								}
+							}
+
+							for _, v := range upstreamTask.OutputMapping {
+								actuals = append(actuals, v)
+							}
+						}
+
+					OUTER:
+						for _, input := range inputs {
+							for _, actual := range actuals {
+								if input.Name == actual {
+									continue OUTER
+								}
+
+								for k, v := range task.InputMapping {
+									if k == input.Name && v == actual {
+										continue OUTER
+									}
+								}
+							}
+
+							Fail(fmt.Sprintf("did not find matching get, put, output or input_mapping of '%s', which is required by task '%s'", input.Name, task.Name()))
+						}
+					}
+				}
+			})
 		})
 	}
 })
@@ -156,16 +243,23 @@ func allTasksInPlan(seq *atc.PlanSequence, tasks []atc.PlanConfig) []atc.PlanCon
 	return tasks
 }
 
-func taskConfigsForJob(job atc.JobConfig) []atc.PlanConfig {
-	tasks := []atc.PlanConfig{}
-
-	for _, planConfig := range job.Plan {
-		if planConfig.Task != "" {
-			tasks = append(tasks, planConfig)
+func availableResources(seq *atc.PlanSequence, resources []string) []string {
+	for _, planConfig := range *seq {
+		if planConfig.Aggregate != nil {
+			resources = append(resources, availableResources(planConfig.Aggregate, resources)...)
+		}
+		if planConfig.Do != nil {
+			resources = append(resources, availableResources(planConfig.Do, resources)...)
+		}
+		if planConfig.Get != "" {
+			resources = append(resources, planConfig.Get)
+		}
+		if planConfig.Put != "" {
+			resources = append(resources, planConfig.Put)
 		}
 	}
 
-	return tasks
+	return resources
 }
 
 func assertUnorderedEqual(left, right []string, failMessage string) {

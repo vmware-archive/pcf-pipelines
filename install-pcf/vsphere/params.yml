@@ -171,7 +171,7 @@ tcp_router_static_ips:  # Comma-separated list of static IPs
 ssh_static_ips:         # Comma-separated list of static IPs
 
 mysql_monitor_email:    # Email address to receive MySQL monitor notifications
-mysql_backups: enable   # Whether to enable MySQL backups. (enable|disable)
+mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
 
 ## Default resource configuration
 consul_server_instances: 1

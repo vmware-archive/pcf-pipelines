@@ -1,0 +1,19 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: virtmerlin/c0-worker-gcp
+
+inputs:
+- name: pcf-pipelines 
+- name: pivnet-opsmgr
+
+params:
+  GCP_PROJECT_ID:
+  GCP_REGION:
+  GCP_SERVICE_ACCOUNT_KEY:
+
+run:
+  path: pcf-pipelines/tasks/install-pcf-gcp/upload-opsman.sh

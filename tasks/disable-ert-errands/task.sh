@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-chmod +x om-cli/om-linux
-CMD=./om-cli/om-linux
+chmod +x tool-om/om-linux
+CMD=./tool-om/om-linux
 
 ERT_ERRANDS=$(cat <<-EOF
 {"errands": [

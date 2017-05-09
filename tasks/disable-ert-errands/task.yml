@@ -12,8 +12,8 @@ params:
   OPS_MGR_PWD:
 
 inputs:
-  - name: concourse-vsphere
-  - name: om-cli
+  - name: pcf-pipelines
+  - name: tool-om
 
 run:
-  path: concourse-vsphere/tasks/disable-ert-errands/task.sh
+  path: pcf-pipelines/tasks/disable-ert-errands/task.sh
