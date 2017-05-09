@@ -75,6 +75,12 @@ CF_PROPERTIES=$(cat <<-EOF
   ".properties.mysql_backups": {
     "value": "$MYSQL_BACKUPS"
   },
+  ".uaa.service_provider_key_credentials": {
+    "value": {
+      "private_key_pem": $SERVICE_PROVIDER_KEY,
+      "cert_pem": $SERVICE_PROVIDER_CERT 
+     }
+  },
   ".cloud_controller.system_domain": {
     "value": "$SYSTEM_DOMAIN"
   },

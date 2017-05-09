@@ -23,6 +23,7 @@ params:
   BACKUPS_SCP_DESTINATION:
   BACKUPS_SCP_TIMEOUT:
   BACKUPS_CRON_SCHEDULE:
+  DISABLE_TLS:  
 
 inputs:
   - name: pcf-pipelines

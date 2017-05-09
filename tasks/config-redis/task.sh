@@ -1,6 +1,6 @@
 #!/bin/bash -e
 set -xe
-mv tool-om/om-linux-* tool-om/om-linux
+#mv tool-om/om-linux-* tool-om/om-linux
 chmod +x tool-om/om-linux
 CMD=./tool-om/om-linux
 
@@ -45,7 +45,7 @@ PROPERTIES=$(cat <<-EOF
       "value": "SCP Backups"
     },
     ".properties.metrics_disable_etcd_tls": {
-      "value": false
+      "value": $DISABLE_TLS
     },
     ".properties.backups_selector.scp.server": {
       "value": "$BACKUPS_SCP_HOST"
@@ -70,7 +70,11 @@ PROPERTIES=$(cat <<-EOF
     },
     ".properties.backups_selector.scp.fingerprint": {
       "value": null
+    },
+    ".properties.metrics_disable_etcd_tls.value": {
+      "value": $DISABLE_TLS
     }
+
 }
 EOF
 )
