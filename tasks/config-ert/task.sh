@@ -22,9 +22,7 @@ CF_NETWORK=$(cat <<-EOF
   "singleton_availability_zone": {
     "name": "$ERT_SINGLETON_JOB_AZ"
   },
-  "other_availability_zones": [
-    $ERT_AZS
-  ],
+  "other_availability_zones": $ERT_AZS,
   "network": {
     "name": "$NETWORK_NAME"
   }
@@ -47,7 +45,7 @@ EOF
 
 fi
 
-. $SCRIPT_DIR/load_cf_properties.sh
+source $SCRIPT_DIR/load_cf_properties.sh
 
 CF_RESOURCES=$(cat <<-EOF
 {
