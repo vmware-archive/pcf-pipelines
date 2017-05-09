@@ -24,13 +24,17 @@ function main() {
 
   local product
   product="$(ls -1 "${cwd}"/pivnet-product/*.pivotal)"
+  if [ -z "${TILE_UPLOAD_TIMEOUT}" ]; then 
+    export TILE_UPLOAD_TIMEOUT=1800 
+  fi
 
   ./${CMD_PATH} --target "${OPSMAN_URI}" \
      --skip-ssl-validation \
      --username "${OPSMAN_USERNAME}" \
      --password "${OPSMAN_PASSWORD}" \
      upload-product \
-     --product ${product}
+     --product ${product} \
+     --request-timeout ${TILE_UPLOAD_TIMEOUT}
 }
 
 main "${PWD}"

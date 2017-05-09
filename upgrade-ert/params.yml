@@ -35,3 +35,4 @@ iaas_type: gcp
 # eg. 2h, 3h45m, 3000s
 pivnet_poll_interval: 1h
 opsman_timeout_seconds: 300
+tile_upload_timeout: 1800

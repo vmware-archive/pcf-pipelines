@@ -69,3 +69,4 @@ product_slug: CHANGEME
 # be found in the .pivotal file with the following:
 # `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | head`
 product_name: CHANGEME
+tile_upload_timeout: 1800

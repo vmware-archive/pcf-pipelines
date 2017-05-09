@@ -104,6 +104,7 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       PIVNET_PRODUCT_NAME: {{product_slug}}
+      TILE_UPLOAD_TIMEOUT: {{tile_upload_timeout}}
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:

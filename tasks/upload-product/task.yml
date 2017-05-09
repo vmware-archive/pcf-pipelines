@@ -29,6 +29,7 @@ params:
   OPSMAN_PASSWORD:
   OPSMAN_URI:
   PIVNET_PRODUCT_NAME:
+  TILE_UPLOAD_TIMEOUT:
 
 run:
   path: pcf-pipelines/tasks/upload-product/task.sh
