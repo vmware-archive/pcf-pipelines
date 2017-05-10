@@ -61,6 +61,9 @@
       ".properties.uaa.internal.password_max_retry": {
         "value": "0"
       },
+      ".properties.uaa.service_provider_key_password": {
+        "value": ""
+      },
       ".properties.uaa.apps_manager_access_token_lifetime": {
         "value": "1209600"
       },
