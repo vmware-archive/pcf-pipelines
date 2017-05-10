@@ -28,4 +28,4 @@ of tiles installed this setting could need to be as big as 50G. In a future rele
 
     properties:
           garden:
-            garden.btrfs_store_size_mb: 
+            btrfs_store_size_mb: 
