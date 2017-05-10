@@ -40,10 +40,8 @@
       ".properties.security_acknowledgement": {
         "value": "X"
       },
-      ".property.uaa": {
-        "value": {
-          "selector_option": "internal"
-        }
+      ".properties.uaa": {
+        "selector_option": "internal"
       },
       ".properties.uaa.internal.password_min_length": {
         "value": "0"
