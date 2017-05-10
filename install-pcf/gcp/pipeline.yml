@@ -1,0 +1,319 @@
+groups: []
+
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: pcf-pipelines-tarball
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: v0.6.0
+
+- name: tfstate
+  type: s3
+  source:
+    region_name: {{s3_region}}
+    bucket: {{s3_bucket_terraform}}
+    endpoint: {{s3_endpoint}}
+    regexp: "terraform/terraform-(.*).tfstate"
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+
+- name: tfstate-version
+  type: semver
+  source:
+   driver: s3
+   bucket: {{s3_bucket_terraform}}
+   key: terraform/version
+   access_key_id: {{s3_access_key_id}}
+   secret_access_key: {{s3_secret_access_key}}
+   endpoint: {{s3_endpoint}}
+   initial_version: 0.0.0
+   region_name: {{s3_region}}
+
+- name: pivnet-opsmgr
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
+    sort_by: semver
+
+- name: pivnet-elastic-runtime
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: elastic-runtime
+    product_version: {{ert_major_minor_version}}
+    sort_by: semver
+
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
+jobs:
+- name: wipe-env
+  serial_groups: [terraform]
+  plan:
+  - aggregate:
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+    - get: tfstate
+    - get: tfstate-version
+      params:
+        bump: major
+  - task: wipe
+    file: pcf-pipelines/tasks/install-pcf-gcp/wipe-env.yml
+    params:
+      GCP_PROJECT_ID: {{gcp_project_id}}
+      GCP_REGION: {{gcp_region}}
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+  - put: tfstate
+    params:
+      file: wipe-output/*.tfstate
+  - put: tfstate-version
+    params:
+      file: tfstate-version/version
+
+- name: upload-opsman-image
+  plan:
+  - do:
+    - get: pcf-pipelines-tarball
+    - task: unpack-tarball
+      <<: *unpack_tarball_config
+  - get: pivnet-opsmgr
+    trigger: true
+    params:
+      globs:
+      - "*GCP.yml"
+  - task: upload
+    file: pcf-pipelines/tasks/install-pcf-gcp/upload-opsman.yml
+    params:
+      GCP_PROJECT_ID: {{gcp_project_id}}
+      GCP_REGION: {{gcp_region}}
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+
+- name: create-infrastructure
+  serial_groups: [terraform]
+  plan:
+  - aggregate:
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [upload-opsman-image]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+    - get: pivnet-opsmgr
+      passed: [upload-opsman-image]
+      params:
+        globs:
+        - "*GCP.yml"
+    - get: tfstate-version
+      params:
+        bump: major
+  - task: create-infrastructure
+    file: pcf-pipelines/tasks/install-pcf-gcp/create-infrastructure.yml
+    params:
+      GCP_PROJECT_ID: {{gcp_project_id}}
+      GCP_REGION: {{gcp_region}}
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+      GCP_ZONE_1: {{gcp_zone_1}}
+      GCP_ZONE_2: {{gcp_zone_2}}
+      GCP_ZONE_3: {{gcp_zone_3}}
+      GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
+      PCF_ERT_DOMAIN: {{pcf_ert_domain}}
+      PCF_ERT_SSL_CERT: {{pcf_ert_ssl_cert}}
+      PCF_ERT_SSL_KEY: {{pcf_ert_ssl_key}}
+      ERT_SQL_DB_USERNAME: {{ert_sql_db_username}}
+      ERT_SQL_DB_PASSWORD: {{ert_sql_db_password}}
+    on_failure:
+      task: rollback
+      file: pcf-pipelines/tasks/install-pcf-gcp/rollback-create-infrastructure.yml
+      params:
+        GCP_PROJECT_ID: {{gcp_project_id}}
+        GCP_REGION: {{gcp_region}}
+        GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+  - put: tfstate
+    params:
+      file: create-infrastructure-output/*.tfstate
+  - put: tfstate-version
+    params:
+      file: tfstate-version/version
+
+- name: configure-director
+  serial_groups: [opsman]
+  plan:
+  - aggregate:
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [create-infrastructure]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+  - task: check-opsman-dns
+    file: pcf-pipelines/tasks/install-pcf-gcp/check-opsman-dns.yml
+    params:
+      pcf_ert_domain: {{pcf_ert_domain}}
+  - task: configure-opsman-auth
+    file: pcf-pipelines/tasks/install-pcf-gcp/config-opsman-auth.yml
+    params:
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin_username: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_password: {{pcf_opsman_admin_password}}
+  - task: configure-director
+    file: pcf-pipelines/tasks/install-pcf-gcp/config-director.yml
+    params:
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+      gcp_proj_id: {{gcp_project_id}}
+      gcp_region: {{gcp_region}}
+      gcp_zone_1: {{gcp_zone_1}}
+      gcp_zone_2: {{gcp_zone_2}}
+      gcp_zone_3: {{gcp_zone_3}}
+      gcp_resource_prefix: {{gcp_resource_prefix}}
+      gcp_svc_acct_key: {{gcp_service_account_key}}
+
+- name: deploy-director
+  serial_groups: [opsman]
+  plan:
+  - aggregate:
+    - do:
+      - get: pcf-pipelines-tarball
+        trigger: true
+        passed: [configure-director]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+  - task: deploy-director
+    file: pcf-pipelines/tasks/install-pcf-gcp/deploy-director.yml
+    params:
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin_username: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_password: {{pcf_opsman_admin_password}}
+
+- name: upload-ert
+  serial_groups: [opsman]
+  plan:
+  - aggregate:
+    - do:
+      - get: pcf-pipelines-tarball
+        trigger: true
+        passed: [deploy-director]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+    - get: pivnet-elastic-runtime
+      params:
+        globs:
+        - "*pivotal"
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+  - task: upload
+    file: pcf-pipelines/tasks/install-ert/upload-ert.yml
+    params:
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+
+- name: deploy-ert
+  serial_groups: [opsman]
+  plan:
+  - aggregate:
+    - do:
+      - get: pcf-pipelines-tarball
+        trigger: true
+        passed: [upload-ert]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+  - task: configure-json
+    file: pcf-pipelines/tasks/install-ert/configure-json.yml
+    params:
+      pcf_iaas: gcp
+      terraform_template: c0-gcp-poc
+      pcf_ert_ssl_cert: "generate"
+      pcf_ert_ssl_key: {{pcf_ert_ssl_key}} 
+      gcp_proj_id: {{gcp_project_id}}
+      gcp_region: {{gcp_region}}
+      gcp_storage_access_key: {{gcp_storage_access_key}}
+      gcp_storage_secret_key: {{gcp_storage_secret_key}}
+      gcp_svc_acct_key: {{gcp_service_account_key}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+      ert_sql_db_username: {{ert_sql_db_username}}
+      ert_sql_db_password: {{ert_sql_db_password}}
+      terraform_prefix: {{gcp_resource_prefix}}
+      db_diego_username: {{db_diego_username}}
+      db_diego_password: {{db_diego_password}}
+      db_notifications_username: {{db_notifications_username}}
+      db_notifications_password: {{db_notifications_password}}
+      db_autoscale_username: {{db_autoscale_username}} 
+      db_autoscale_password: {{db_autoscale_password}}
+      db_uaa_username: {{db_uaa_username}}
+      db_uaa_password: {{db_uaa_password}}
+      db_app_usage_service_username: {{db_app_usage_service_username}}
+      db_app_usage_service_password: {{db_app_usage_service_password}}
+      db_ccdb_username: {{db_ccdb_username}}
+      db_ccdb_password: {{db_ccdb_password}}
+      db_routing_username: {{db_routing_username}} 
+      db_routing_password: {{db_routing_password}} 
+
+  - task: configure-ert
+    file: pcf-pipelines/tasks/install-ert/configure-ert.yml
+    params:
+      pcf_iaas: gcp
+      terraform_template: c0-gcp-poc
+      pcf_ert_ssl_cert: "generate"
+      pcf_ert_ssl_key: {{pcf_ert_ssl_key}} 
+      pcf_az_1: {{gcp_zone_1}}
+      pcf_az_2: {{gcp_zone_2}}
+      pcf_az_3: {{gcp_zone_3}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+      terraform_prefix: {{gcp_resource_prefix}}
+  - task: deploy
+    file: pcf-pipelines/tasks/install-ert/deploy-ert.yml
+    params:
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+
+unpack_tarball_config: &unpack_tarball_config
+  config:
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: cloudfoundry/cflinuxfs2
+    inputs:
+    - name: pcf-pipelines-tarball
+    outputs:
+    - name: pcf-pipelines
+    run:
+     path: sh
+     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]

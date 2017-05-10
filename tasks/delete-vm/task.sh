@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,32 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-platform: linux
+set -eu
 
-image_resource:
-  type: docker-image
-  source: {repository: cloudfoundry/cflinuxfs2}
+root=$PWD
 
-inputs:
-  - name: pcf-pipelines
-  - name: iaas-util
-  - name: pivnet-opsmgr
-  - name: terraform
-run:
-  path: pcf-pipelines/tasks/deploy-opsman-vm-aws/task.sh
+export PATH=$root/tool-cliaas:$PATH
 
-params:
-  AWS_SECRET_ACCESS_KEY:
-  AWS_ACCESS_KEY_ID:
-  INSTANCE_TYPE:
-  KEY_NAME:
-  SUBNET_ID:
-  AWS_INSTANCE_NAME:
-  AWS_REGION:
-  SECURITY_GROUP:
-  ROUTE53_ZONE_ID:
-  OPSMAN_SUBDOMAIN:
-  OPSMAN_URI:
-  OPSMAN_TIMEOUT:
-  VPC_ID:
+chmod +x tool-cliaas/cliaas-linux
+
+cliaas-linux delete-vm \
+  --config cliaas-config/config.yml \
+  --identifier $VM_IDENTIFIER

@@ -54,6 +54,10 @@ be supplied by alternative means for airgapped environments.
 
 ---
 
+## Firewall rules: [here](FIREWALL.md "Firewall")
+
+---
+
 # Offline configurations
 
 This segment details several possible offline configurations for resources leveraged in our reference pipelines
@@ -121,7 +125,7 @@ Steps:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@mylocalgit.company.com:c0-ops/pcf-pipelines
+    uri: git@mylocalgit.company.com:pivotal-cf/pcf-pipelines
     branch: master
 ```
 

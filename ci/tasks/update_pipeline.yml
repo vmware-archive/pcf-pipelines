@@ -7,22 +7,16 @@ image_resource:
     repository: cloudfoundry/cflinuxfs2
 
 inputs:
-- name: pcf-pipelines
+- name: release
+- name: config
 
 params:
   PIPELINE_NAME:
   PIPELINE_PATH:
-  PIVNET_TOKEN:
-  OPSMAN_ADMIN_USERNAME:
-  OPSMAN_ADMIN_PASSWORD:
-  OPSMAN_URI:
-  GITHUB_TOKEN:
-  IAAS_TYPE:
-  PIVNET_POLL_INTERVAL:
-  OPSMAN_TIMEOUT_SECONDS:
   ATC_EXTERNAL_URL:
   ATC_BASIC_AUTH_USERNAME:
   ATC_BASIC_AUTH_PASSWORD:
+  ATC_TEAM_NAME:
 
 run:
   path: bash
@@ -44,22 +38,8 @@ run:
       --password "${ATC_BASIC_AUTH_PASSWORD}" \
       --team-name "${ATC_TEAM_NAME}"
 
-    cat > params.yml <<EOF
-      pivnet_token: "${PIVNET_TOKEN}"
-      opsman_admin_username: "${OPSMAN_ADMIN_USERNAME}"
-      opsman_admin_password: "${OPSMAN_ADMIN_PASSWORD}"
-      opsman_uri: "${OPSMAN_URI}"
-      github_token: "${GITHUB_TOKEN}"
-      iaas_type: "${IAAS_TYPE}"
-      pivnet_poll_interval: "${PIVNET_POLL_INTERVAL}"
-      opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
-      cf_api_uri: "${CF_API_URI}"
-      cf_user: "${CF_USER}"
-      cf_password: "${CF_PASSWORD}"
-    EOF
-
     ./fly --target self set-pipeline \
       --non-interactive \
-      --pipeline ${PIPELINE_NAME} \
-      --config ${PIPELINE_PATH} \
-      --load-vars-from params.yml
+      --pipeline "${PIPELINE_NAME}" \
+      --config "${PIPELINE_PATH}" \
+      --load-vars-from config/params.yml

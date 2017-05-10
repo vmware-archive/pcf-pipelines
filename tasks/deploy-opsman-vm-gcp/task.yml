@@ -21,10 +21,12 @@ image_resource:
 
 inputs:
   - name: pcf-pipelines
-  - name: iaas-util
   - name: pivnet-opsmgr
-  - name: terraform
 run:
   path: pcf-pipelines/tasks/deploy-opsman-vm-gcp/task.sh
 
 params:
+  OPSMAN_PROJECT:
+  OPSMAN_ZONE:
+  OPSMAN_GCP_CREDFILE_CONTENTS:
+  EXISTING_OPSMAN_VM_NAME:

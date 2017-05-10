@@ -22,30 +22,19 @@ resource_types:
     tag: latest-final
 
 resources:
-## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
-## If a change is detected earlier the pipeline will start but be held up waiting for the time
-## resource to become available.
-## Also uncomment the fetching of the resource in the plan below.
-#- name: run-time-window
-#  type: time
-#  source:
-#    start: 12:00 AM
-#    stop: 1:00 AM
-#    location: America/Chicago
-
-- name: pcf-pipelines
-  type: git
+- name: pcf-pipelines-tarball
+  type: pivnet
   source:
-    uri: https://github.com/c0-ops/pcf-pipelines.git
-    branch: master
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: v0.6.0
 
 - name: tool-om
   type: github-release
   source:
     user: pivotal-cf
     repository: om
-    username: {{github_token}}
-    password: x-oauth-basic
+    access_token: {{github_token}}
 
 - name: {{resource_name}}
   type: pivnet
@@ -59,22 +48,41 @@ resources:
 - name: stemcell-downloader
   type: github-release
   source:
-    user: c0-ops
+    user: pivotal-cf
     repository: pcf-product-stemcell-downloader
     access_token: {{github_token}}
     globs:
     - stemcell-downloader-linux
 
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
 jobs:
+- name: regulator
+  plan:
+  - get: schedule
+    trigger: true
+  - get: {{resource_name}}
+    params: { globs: [] }
+
 - name: upgrade-tile
   plan:
   - aggregate:
-    - get: pcf-pipelines
-## Uncomment to limit when the pipeline can run
-#   - get: run-time-window
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+
     - get: pivnet-product
       resource: {{resource_name}}
-      trigger: true
+      passed: [regulator]
+      trigger: true 
       params:
         globs:
         - "*pivotal"
@@ -85,6 +93,14 @@ jobs:
     - get: stemcell-downloader
       params:
         globs: [stemcell-downloader-linux]
+
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
@@ -114,3 +130,18 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+
+unpack_tarball_config: &unpack_tarball_config
+  config:
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: cloudfoundry/cflinuxfs2
+    inputs:
+    - name: pcf-pipelines-tarball
+    outputs:
+    - name: pcf-pipelines
+    run:
+     path: sh
+     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]

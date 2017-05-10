@@ -59,7 +59,7 @@ var _ = Describe("pcf-pipelines", func() {
 			})
 
 			It("specifies all and only the params that the pipeline's tasks expect", func() {
-				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("example"))
+				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
 
 				var config atc.Config
 				err = yaml.Unmarshal(cleanConfigBytes, &config)
@@ -128,10 +128,10 @@ var _ = Describe("pcf-pipelines", func() {
 
 				failMessage := fmt.Sprintf(`
 Found error with the following pipeline:
-    %s
+%s
 
 in the following params template:
-    %s
+%s
 `, pipelinePath, paramsPath)
 
 				assertUnorderedEqual(placeholders, params, failMessage)

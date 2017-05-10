@@ -20,16 +20,6 @@ resource_types:
     tag: latest-final
 
 resources:
-## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
-## If a change is detected earlier the pipeline will start but be held up waiting for the time
-## resource to become available.
-## Also uncomment the fetching of the resource in the plan below.
-#- name: run-time-window
-#  type: time
-#  source:
-#    start: 12:00 AM
-#    stop: 1:00 AM
-#    location: America/Chicago
 - name: cf-cli
   type: s3
   source:
@@ -37,11 +27,12 @@ resources:
     region_name: us-west-1
     regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
 
-- name: pcf-pipelines
-  type: git
+- name: pcf-pipelines-tarball
+  type: pivnet
   source:
-    uri: https://github.com/c0-ops/pcf-pipelines.git
-    branch: master
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: v0.6.0
 
 - name: binary-buildpack
   type: pivnet
@@ -123,16 +114,56 @@ resources:
     product_slug: buildpacks
     product_version: "tc Server*"
 
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
 jobs:
+- name: regulator
+  plan:
+  - aggregate:
+    - get: schedule
+      trigger: true
+    - get: binary-buildpack
+      params: { globs: [] }
+    - get: dotnet-core-buildpack
+      params: { globs: [] }
+    - get: go-buildpack
+      params: { globs: [] }
+    - get: java-buildpack
+      params: { globs: [] }
+    - get: nodejs-buildpack
+      params: { globs: [] }
+    - get: php-buildpack
+      params: { globs: [] }
+    - get: python-buildpack
+      params: { globs: [] }
+    - get: ruby-buildpack
+      params: { globs: [] }
+    - get: staticfile-buildpack
+      params: { globs: [] }
+    - get: tc-buildpack
+      params: { globs: [] }
+
 - name: stage-binary-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: cf-cli
-    - get: pcf-pipelines
     - get: buildpack
       resource: binary-buildpack
       trigger: true
+      passed: [regulator]
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -145,12 +176,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-binary-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-binary-buildpack]
-    - get: buildpack
-      resource: binary-buildpack
-      passed: [stage-binary-buildpack]
-      trigger: false
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-binary-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -163,10 +193,15 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
       resource: dotnet-core-buildpack
+      passed: [regulator]
       trigger: true
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -179,12 +214,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-dotnet-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-dotnet-buildpack]
-    - get: buildpack
-      resource: dotnet-core-buildpack
-      passed: [stage-dotnet-buildpack]
-      trigger: false
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-dotnet-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -197,10 +231,15 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
       resource: go-buildpack
+      passed: [regulator]
       trigger: true
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -213,12 +252,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-go-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-go-buildpack]
-    - get: buildpack
-      resource: go-buildpack
-      passed: [stage-go-buildpack]
-      trigger: false
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-go-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -231,13 +269,18 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
+      passed: [regulator]
       resource: java-buildpack
       trigger: true
       params:
         globs:
         - "*offline*"
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -250,15 +293,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-java-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-java-buildpack]
-    - get: buildpack
-      resource: java-buildpack
-      passed: [stage-java-buildpack]
-      trigger: false
-      params:
-        globs:
-        - "*offline*"
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-java-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -271,10 +310,15 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
+      passed: [regulator]
       resource: nodejs-buildpack
       trigger: true
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -287,12 +331,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-nodejs-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-nodejs-buildpack]
-    - get: buildpack
-      resource: nodejs-buildpack
-      passed: [stage-nodejs-buildpack]
-      trigger: false
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-nodejs-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -305,10 +348,15 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
+      passed: [regulator]
       resource: php-buildpack
       trigger: true
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -321,12 +369,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-php-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-php-buildpack]
-    - get: buildpack
-      resource: php-buildpack
-      passed: [stage-php-buildpack]
-      trigger: false
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-php-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -339,10 +386,15 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
+      passed: [regulator]
       resource: python-buildpack
       trigger: true
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -355,12 +407,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-python-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-python-buildpack]
-    - get: buildpack
-      resource: python-buildpack
-      passed: [stage-python-buildpack]
-      trigger: false
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-python-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -373,10 +424,15 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
+      passed: [regulator]
       resource: ruby-buildpack
       trigger: true
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -389,12 +445,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-ruby-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-ruby-buildpack]
-    - get: buildpack
-      resource: ruby-buildpack
-      passed: [stage-ruby-buildpack]
-      trigger: false
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-ruby-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -407,10 +462,15 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
+      passed: [regulator]
       resource: staticfile-buildpack
       trigger: true
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -423,12 +483,11 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-staticfile-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-staticfile-buildpack]
-    - get: buildpack
-      resource: staticfile-buildpack
-      passed: [stage-staticfile-buildpack]
-      trigger: false
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-staticfile-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -441,13 +500,18 @@ jobs:
   plan:
   - aggregate:
     - get: cf-cli
-    - get: pcf-pipelines
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: buildpack
+      passed: [regulator]
       resource: tc-buildpack
       trigger: true
       params:
         globs:
         - "*offline*"
+
   - task: stage
     file: pcf-pipelines/tasks/stage-buildpack/task.yml
     params:
@@ -460,15 +524,12 @@ jobs:
   - aggregate:
     - get: cf-cli
       passed: [stage-tcserver-buildpack]
-    - get: pcf-pipelines
-      passed: [stage-tcserver-buildpack]
-    - get: buildpack
-      resource: tc-buildpack
-      passed: [stage-tcserver-buildpack]
-      trigger: false
-      params:
-        globs:
-        - "*offline*"
+    - do:
+      - get: pcf-pipelines-tarball
+        passed: [stage-tcserver-buildpack]
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -480,3 +541,18 @@ cf_api_params: &cf_api_params
   CF_API_URI: {{cf_api_uri}}
   CF_USERNAME: {{cf_user}}
   CF_PASSWORD: {{cf_password}}
+
+unpack_tarball_config: &unpack_tarball_config
+  config:
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: cloudfoundry/cflinuxfs2
+    inputs:
+    - name: pcf-pipelines-tarball
+    outputs:
+    - name: pcf-pipelines
+    run:
+     path: sh
+     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]

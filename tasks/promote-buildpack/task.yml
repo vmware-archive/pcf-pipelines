@@ -21,7 +21,6 @@ image_resource:
 
 inputs:
 - name: cf-cli
-- name: buildpack
 - name: pcf-pipelines
 
 params:

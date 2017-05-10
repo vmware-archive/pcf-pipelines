@@ -27,16 +27,6 @@ resources:
     repository: govmomi
     access_token: {{github_token}}
 
-  ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
-  ## If a change is detected earlier the pipeline will start but be held up waiting for the time
-  ## resource to become available.
-  ## Also uncomment the fetching of the resource in the plan below.
-  #- name: run-time-window
-  #  type: time
-  #  source:
-  #    start: 12:00 AM
-  #    stop: 1:00 AM
-  #    location: America/Chicago
 - name: tool-om
   type: github-release
   source:
@@ -51,11 +41,12 @@ resources:
     repository: pivnet-cli
     access_token: {{github_token}}
 
-- name: pcf-pipelines
-  type: git
+- name: pcf-pipelines-tarball
+  type: pivnet
   source:
-    uri: https://github.com/c0-ops/pcf-pipelines
-    branch: master
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: v0.6.0
 
 - name: pivnet-opsmgr
   type: pivnet
@@ -65,24 +56,49 @@ resources:
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
 jobs:
+- name: regulator
+  plan:
+  - get: schedule
+    trigger: true
+  - get: pivnet-opsmgr
+    params: { globs: [] }
+
 - name: upgrade-opsmgr
   plan:
   - aggregate:
-## Uncomment to limit when the pipeline can run
-#   - get: run-time-window
-    - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      trigger: true 
+      passed: [regulator]
+      params:
+        globs: ["*.ova"]
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
     - get: govc
     - get: tool-om
-      globs: om-linux
+      params:
+        globs: ["*linux*"]
     - get: tool-pivnet-cli
       params:
-        globs:
-        - "pivnet-linux-amd64-*"
-    - get: pivnet-opsmgr
-      params:
-        globs:
-        - "*.ova"
+        globs: ["*linux*"]
+
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
 
   - aggregate:
     - task: export-opsmgr-settings
@@ -149,3 +165,18 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+
+unpack_tarball_config: &unpack_tarball_config
+  config:
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: cloudfoundry/cflinuxfs2
+    inputs:
+    - name: pcf-pipelines-tarball
+    outputs:
+    - name: pcf-pipelines
+    run:
+     path: sh
+     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]

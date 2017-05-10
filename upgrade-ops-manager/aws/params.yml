@@ -12,26 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Resource configuration
+
+check_new_opsman_every: CHANGEME
+github_token: CHANGEME
+opsman_major_minor_version: CHANGEME
 pivnet_token: CHANGEME
-security_group: CHANGEME
+
+# Task configuration
+
 aws_access_key_id: CHANGEME
 aws_secret_access_key: CHANGEME
-instance_type: CHANGEME
-key_name: CHANGEME
-subnet_id: CHANGEME
-aws_instance_name: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_admin_password: CHANGEME
-opsman_subdomain: CHANGEME
-opsman_passphrase: CHANGEME
-github_token: CHANGEME
-route53_zone_id: CHANGEME
 aws_region: CHANGEME
-vpc_id: CHANGEME
-opsman_uri: CHANGEME
-opsman_uri_new: CHANGEME
-check_new_opsman_every: CHANGEME
-opsman_major_minor_version: CHANGEME
+aws_vpc_id: CHANGEME
+
+existing_opsman_vm_name: CHANGEME
+
+opsman_admin_password: CHANGEME
+opsman_admin_username: CHANGEME
+opsman_passphrase: CHANGEME
 opsman_timeout_seconds: 1200
-iaas_type: aws
-terraform_zip_url: https://releases.hashicorp.com/terraform/0.8.6/terraform_0.8.6_linux_amd64.zip
+opsman_uri: CHANGEME

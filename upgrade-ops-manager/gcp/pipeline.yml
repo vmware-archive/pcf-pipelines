@@ -29,22 +29,13 @@ resources:
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
-- name: iaas-util
+- name: tool-cliaas
   type: github-release
   source:
-    user: c0-ops
+    user: pivotal-cf 
     repository: cliaas
+    access_token: {{github_token}}
 
-  ## Uncomment the below snippet to only let the pipeline run between midnight and 1am central time.
-  ## If a change is detected earlier the pipeline will start but be held up waiting for the time
-  ## resource to become available.
-  ## Also uncomment the fetching of the resource in the plan below.
-  #- name: run-time-window
-  #  type: time
-  #  source:
-  #    start: 12:00 AM
-  #    stop: 1:00 AM
-  #    location: America/Chicago
 - name: tool-om
   type: github-release
   source:
@@ -52,47 +43,98 @@ resources:
     repository: om
     access_token: {{github_token}}
 
-- name: pcf-pipelines
-  type: git
+- name: tool-pivnet-cli
+  type: github-release
   source:
-    uri: https://github.com/c0-ops/pcf-pipelines
-    branch: master
+    user: pivotal-cf
+    repository: pivnet-cli
+    access_token: {{github_token}}
+
+- name: pcf-pipelines-tarball
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    product_version: v0.6.0
+
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
 
 jobs:
+- name: regulator
+  plan:
+  - get: schedule
+    trigger: true
+  - get: pivnet-opsmgr
+    params: { globs: [] }
+
 - name: upgrade-opsmgr
+  serial: true
   plan:
   - aggregate:
-## Uncomment to limit when the pipeline can run
-#   - get: run-time-window
     - get: pivnet-opsmgr
-      trigger: false
+      passed: [regulator]
+      trigger: true 
       params:
         globs:
         - "*GCP.yml"
-    - get: iaas-util
-      globs: cliaas-linux
-    - get: pcf-pipelines
+    - get: tool-cliaas
+      params:
+        globs: ["*linux*"]
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-tarball
+        <<: *unpack_tarball_config
+
     - get: tool-om
-      globs: om-linux
+      params:
+        globs: ["*linux*"]
+    - get: tool-pivnet-cli
+      params:
+        globs: ["*linux*"]
 
-  - task: get-terraform
-    file: pcf-pipelines/tasks/get-dependencies/terraform/task.yml
-    params:
-      TERRAFORM_ZIP_URL: {{terraform_zip_url}}
-
-  - task: export-opsmgr
-    file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
+  - task: wait-opsman-clear
+    file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_SETTINGS_FILENAME: installation.zip
 
-  - task: deploy-opsman-vm
-    file: pcf-pipelines/tasks/deploy-opsman-vm-gcp/task.yml
+  - aggregate:
+    - task: export-opsmgr-settings
+      file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
+      params:
+        OPSMAN_USERNAME: {{opsman_admin_username}}
+        OPSMAN_PASSWORD: {{opsman_admin_password}}
+        OPSMAN_URI: {{opsman_uri}}
+        OPSMAN_SETTINGS_FILENAME: installation.zip
+    - task: exported-opsmgr-diagnostic-report
+      file: pcf-pipelines/tasks/export-opsmgr-diagnostic-report/task.yml
+      params:
+        OPSMAN_USERNAME: {{opsman_admin_username}}
+        OPSMAN_PASSWORD: {{opsman_admin_password}}
+        OPSMAN_URI: {{opsman_uri}}
+
+  - task: create-cliaas-config
+    file: pcf-pipelines/tasks/create-cliaas-config-gcp/task.yml
     params:
+      PIVNET_IMAGE_REGION: {{pivnet_image_region}}
+      OPSMAN_PROJECT: {{opsman_gcp_project}}
+      OPSMAN_ZONE: {{opsman_gcp_zone}}
+      OPSMAN_GCP_CREDFILE_CONTENTS: {{opsman_gcp_credfile_contents}}
 
-  - task: import-opsmgr
+  - task: replace-opsman-vm
+    file: pcf-pipelines/tasks/replace-vm/task.yml
+    params:
+      VM_IDENTIFIER: {{existing_opsman_vm_name}}
+
+  - task: import-opsmgr-settings
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
@@ -101,7 +143,19 @@ jobs:
       OPSMAN_SETTINGS_FILENAME: installation.zip
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
 
-      # todo discuss the order for calling this task
+  - task: download-stemcells
+    file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
+    params:
+      API_TOKEN: {{pivnet_token}}
+      IAAS_TYPE: gcp 
+
+  - task: restore-stemcells
+    file: pcf-pipelines/tasks/restore-stemcells/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
@@ -109,3 +163,18 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
+
+unpack_tarball_config: &unpack_tarball_config
+  config:
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: cloudfoundry/cflinuxfs2
+    inputs:
+    - name: pcf-pipelines-tarball
+    outputs:
+    - name: pcf-pipelines
+    run:
+     path: sh
+     args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]
