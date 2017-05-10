@@ -41,7 +41,9 @@
         "value": "X"
       },
       ".property.uaa": {
-        "selector_option": "internal"
+        "value": {
+          "selector_option": "internal"
+        }
       },
       ".properties.uaa.internal.password_min_length": {
         "value": "0"
