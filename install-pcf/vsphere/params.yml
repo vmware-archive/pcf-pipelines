@@ -107,6 +107,12 @@ syslog_protocol:
 enable_security_event_logging: false
 syslog_drain_buffer_size: 10000
 
+
+# service provider added after ert 1.10.8
+ert_service_provider_cert:
+ert_service_provider_key:
+
+
 ## Wildcard domain certs go here
 # Optional. Will be generated if blank using ssl_termination_point below.
 ssl_cert:
