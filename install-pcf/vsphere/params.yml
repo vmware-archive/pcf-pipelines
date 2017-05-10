@@ -76,7 +76,7 @@ deployment_nw_gateway:        # Deployment network Gateway
 deployment_nw_azs:            # Comma seperated list of AZ's to be associated with this network
 
 services_network_name: "SERVICES"
-service_nw:                   # Required select service network option in Ops man true or false
+is_service_network:           # Required select service network option in Ops man true or false
 services_vsphere_network:     # vCenter Services network name
 services_nw_cidr:             # Services network CIDR, ex: 10.0.0.0/22
 services_excluded_range:      # Services network exclusion range
