@@ -35,12 +35,6 @@ EOF
 
 PROPERTIES=$(cat <<-EOF
 {
-    ".elasticsearch_master.heap_size": {
-      "value": "$HEAP_SIZE"
-    },
-    ".mysql.innodb_buffer_size": {
-      "value": "$INNODB_BUFFER_SIZE"
-    },
     ".mysql_monitor.notifications_email": {
       "value": "$NOTIFICATIONS_EMAIL"
     }
