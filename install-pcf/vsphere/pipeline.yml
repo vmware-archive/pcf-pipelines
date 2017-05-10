@@ -136,6 +136,7 @@ jobs:
       DEPLOYMENT_NW_GATEWAY: {{deployment_nw_gateway}}
       DEPLOYMENT_NW_AZS: {{deployment_nw_azs}}
       SERVICES_NETWORK_NAME: {{services_network_name}}
+      IS_SERVICE_NETWORK: {{is_service_network}}
       SERVICES_VCENTER_NETWORK: {{services_vsphere_network}}
       SERVICES_NW_CIDR: {{services_nw_cidr}}
       SERVICES_EXCLUDED_RANGE: {{services_excluded_range}}
