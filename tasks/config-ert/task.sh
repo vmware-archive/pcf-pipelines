@@ -1,5 +1,5 @@
 #!/bin/bash -e
-set -xe
+
 
 chmod +x tool-om/om-linux
 
