@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+<<<<<<< HEAD
+=======
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+>>>>>>> 37713c2a8cf6a3fbb9d1cf099577085d912b8101
 
 chmod +x tool-om/om-linux
 
@@ -12,21 +16,14 @@ PRODUCT_VERSION=`echo $CF_RELEASE | cut -d"|" -f3 | tr -d " "`
 
 $CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k stage-product -p $PRODUCT_NAME -v $PRODUCT_VERSION
 
-function fn_ert_balanced_azs {
-  local azs_csv=$1
-  echo $azs_csv | awk -F "," -v braceopen='{' -v braceclose='}' -v name='"name":' -v quote='"' -v OFS='"},{"name":"' '$1=$1 {print braceopen name quote $0 quote braceclose}'
-}
-
-ERT_AZS=$(fn_ert_balanced_azs $DEPLOYMENT_NW_AZS)
+ERT_AZS=$(echo $DEPLOYMENT_NW_AZS | jq --raw-input 'split(",") | map({name: .})')
 
 CF_NETWORK=$(cat <<-EOF
 {
   "singleton_availability_zone": {
     "name": "$ERT_SINGLETON_JOB_AZ"
   },
-  "other_availability_zones": [
-    $ERT_AZS
-  ],
+  "other_availability_zones": $ERT_AZS,
   "network": {
     "name": "$NETWORK_NAME"
   }
@@ -49,6 +46,7 @@ EOF
 
 fi
 
+<<<<<<< HEAD
 
 CF_PROPERTIES=$(cat <<-EOF
 {
@@ -133,6 +131,9 @@ CF_PROPERTIES=$(cat <<-EOF
 }
 EOF
 )
+=======
+source $SCRIPT_DIR/load_cf_properties.sh
+>>>>>>> 37713c2a8cf6a3fbb9d1cf099577085d912b8101
 
 CF_RESOURCES=$(cat <<-EOF
 {

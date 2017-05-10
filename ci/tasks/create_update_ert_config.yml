@@ -44,4 +44,5 @@ run:
       opsman_uri: "${OPSMAN_URI}"
       pivnet_poll_interval: "${PIVNET_POLL_INTERVAL}"
       pivnet_token: "${PIVNET_TOKEN}"
+      tile_upload_timeout: 1800
     EOF

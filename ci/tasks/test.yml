@@ -8,12 +8,6 @@ image_resource:
 
 inputs:
 - name: pcf-pipelines
-- name: ginkgo
-  path: go/src/github.com/onsi/ginkgo
-- name: gomega
-  path: go/src/github.com/onsi/gomega
-- name: yaml
-  path: go/src/gopkg.in/yaml.v2
 
 run:
   path: bash
@@ -23,8 +17,8 @@ run:
     export GOPATH=$PWD/go
     export PATH=$GOPATH/bin:$PATH
 
-    go install github.com/onsi/ginkgo/ginkgo
-
+    go get github.com/onsi/ginkgo/ginkgo
+    go get github.com/onsi/gomega
     go get github.com/concourse/atc
 
     pushd pcf-pipelines

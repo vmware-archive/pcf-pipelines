@@ -258,6 +258,12 @@ jobs:
       db_ccdb_password: {{db_ccdb_password}}
       db_routing_username: {{db_routing_username}} 
       db_routing_password: {{db_routing_password}} 
+      # aws specific
+      bucket:
+      TF_VAR_aws_access_key:
+      TF_VAR_aws_secret_key:
+      TF_VAR_aws_region:
+      S3_ENDPOINT:
 
   - task: configure-ert
     file: pcf-pipelines/tasks/install-ert/configure-ert.yml
