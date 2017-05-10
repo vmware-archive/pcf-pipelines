@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-chmod +x om-cli/om-linux
+chmod +x tool-om/om-linux
 
-CMD=./om-cli/om-linux
+CMD=./tool-om/om-linux
 
 function fn_get_azs {
      local azs_csv=$1
@@ -92,7 +92,7 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
     },
     {
       "name": "$SERVICES_NETWORK_NAME",
-      "service_network": true,
+      "service_network": false,
       "subnets": [
         {
           "iaas_identifier": "$SERVICES_VCENTER_NETWORK",

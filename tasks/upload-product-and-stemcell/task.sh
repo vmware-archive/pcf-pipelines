@@ -7,8 +7,8 @@ fi
 PIVNET_CLI=`find ./pivnet-cli -name "*linux-amd64*"`
 chmod +x $PIVNET_CLI
 
-chmod +x om-cli/om-linux
-CMD=./om-cli/om-linux
+chmod +x tool-om/om-linux
+CMD=./tool-om/om-linux
 
 FILE_PATH=`find ./pivnet-product -name *.pivotal`
 
