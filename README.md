@@ -28,7 +28,7 @@ fly -t yourtarget set-pipeline \
 ## Upgrading/Extending
 
 It's possible to modify `pcf-pipelines` to suit your particular needs using
-[`yaml-patch`](https://github.com/krishicks/yaml-patch). We'll show how to
+[`yaml-patch`](https://github.com/krishicks/yaml-patch) (this tool is stil in its design phase). We'll show you how to
 replace the `pivnet-opsmgr` resource in the AWS Upgrade Ops Manager pipeline
 (`upgrade-ops-manager/aws/pipeline.yml`) as an example below.
 
