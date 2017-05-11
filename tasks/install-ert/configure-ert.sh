@@ -10,8 +10,6 @@ sudo chmod 755 /usr/local/bin/om-linux
 
 # Set Vars
 
-
-
 # Test if the ssl cert var from concourse is set to 'generate'.  If so, script will gen a self signed, otherwise will assume its a provided cert
 if [[ ${pcf_ert_ssl_cert} == "generate" ]]; then
   echo "=============================================================================================="
@@ -24,6 +22,7 @@ fi
 
 my_pcf_ert_ssl_cert=$(echo ${pcf_ert_ssl_cert} | sed 's/\s\+/\\\\r\\\\n/g' | sed 's/\\\\r\\\\nCERTIFICATE/ CERTIFICATE/g')
 my_pcf_ert_ssl_key=$(echo ${pcf_ert_ssl_key} | sed 's/\s\+/\\\\r\\\\n/g' | sed 's/\\\\r\\\\nRSA\\\\r\\\\nPRIVATE\\\\r\\\\nKEY/ RSA PRIVATE KEY/g')
+
 perl -pi -e "s|{{pcf_ert_ssl_cert}}|${my_pcf_ert_ssl_cert}|g" ${json_file}
 perl -pi -e "s|{{pcf_ert_ssl_key}}|${my_pcf_ert_ssl_key}|g" ${json_file}
 perl -pi -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" ${json_file}
@@ -32,7 +31,35 @@ perl -pi -e "s/{{pcf_az_2}}/${pcf_az_2}/g" ${json_file}
 perl -pi -e "s/{{pcf_az_3}}/${pcf_az_3}/g" ${json_file}
 perl -pi -e "s/{{terraform_prefix}}/${terraform_prefix}/g" ${json_file}
 
+echo "================================================================================"
+echo "Generating Self Signed Certs for signing SAML authn requests: ${pcf_ert_domain}"
+echo "================================================================================"
 
+# Using the approach in VSphere pipelines
+SYSTEM_DOMAIN=sys.${pcf_ert_domain}
+
+DOMAINS=$(cat <<-EOF
+  {"domains": ["*.${SYSTEM_DOMAIN}", "*.login.${SYSTEM_DOMAIN}", "*.uaa.${SYSTEM_DOMAIN}"] }
+EOF
+)
+
+CMD=./tool-om/om-linux
+chmod +x tool-om/om-linux
+
+OPS_MGR_HOST="https://opsman.$pcf_ert_domain"
+
+SAML_AUTHN_CERT_RAW_RESPONSE=`$CMD -t $OPS_MGR_HOST -u $pcf_opsman_admin -p $pcf_opsman_admin_passwd -k curl -p "/api/v0/rsa_certificates" -x POST -d "$DOMAINS"`
+
+saml_authn_cert=$(echo $SAML_AUTHN_CERT_RAW_RESPONSE | jq '.certificate' | tr -d '"')
+saml_authn_key=$(echo $SAML_AUTHN_CERT_RAW_RESPONSE | jq '.key' | tr -d '"')
+
+# Escape new lines once more
+saml_authn_cert_nonl=$(echo ${saml_authn_cert} | sed 's/\\n/\\\\n/g')
+saml_authn_key_nonl=$(echo ${saml_authn_key} | sed 's/\\n/\\\\n/g')
+
+perl -pi -e "s|{{saml_authn_cert}}|${saml_authn_cert_nonl}|g" ${json_file}
+
+perl -pi -e "s|{{saml_authn_key}}|${saml_authn_key_nonl}|g" ${json_file}
 
 if [[ ! -f ${json_file} ]]; then
   echo "Error: cant find file=[${json_file}]"
