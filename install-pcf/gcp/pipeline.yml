@@ -269,7 +269,6 @@ jobs:
     file: pcf-pipelines/tasks/install-ert/configure-ert.yml
     params:
       pcf_iaas: gcp
-      terraform_template: c0-gcp-poc
       pcf_ert_ssl_cert: "generate"
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}} 
       pcf_az_1: {{gcp_zone_1}}

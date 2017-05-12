@@ -290,7 +290,6 @@ jobs:
       pcf_az_1: {{TF_VAR_az1}}
       pcf_az_2: {{TF_VAR_az2}}
       pcf_az_3: {{TF_VAR_az3}}
-      terraform_template: c0-aws-base
       terraform_prefix: {{TF_VAR_environment}}
 
 - name: deploy-ert

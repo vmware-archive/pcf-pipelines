@@ -25,5 +25,4 @@ params:
   pcf_az_1:
   pcf_az_2:
   pcf_az_3:
-  terraform_template:
   terraform_prefix:
