@@ -23,7 +23,7 @@ uaac target https://${opsman_host}/uaa --skip-ssl-validation > /dev/null 2>&1
 uaac token owner get opsman ${pcf_opsman_admin} -s "" -p ${pcf_opsman_admin_passwd} > /dev/null 2>&1
 export opsman_bearer_token=$(uaac context | grep access_token | awk -F ":" '{print$2}' | tr -d ' ')
 
-cf_product_version=$(curl -s -k -X GET -H "Content-Type: application/json" -H "Authorization: Bearer ${opsman_bearer_token}" "https://${opsman_host}/api/v0/available_products" | jq ' .[] | select ( .name == "cf") | .product_version ' | tr -d '"')
+cf_product_version=$(curl -s -k -X GET -H "Content-Type: application/json" -H "Authorization: Bearer ${opsman_bearer_token}" "https://${opsman_host}/api/v0/available_products" | jq --raw-output '.[] | select ( .name == "cf") | .product_version ')
 
 ##Move 'available product to 'staged'
 

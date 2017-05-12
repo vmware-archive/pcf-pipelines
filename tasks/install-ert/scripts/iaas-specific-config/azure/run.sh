@@ -157,7 +157,7 @@ function fn_json_to_post_data {
 
    return_var=""
 
-   fn_metadata_keys_cmd="cat ${json_file} | jq .jobs | jq 'keys' | jq .[] | tr -d '\"'"
+   fn_metadata_keys_cmd="cat ${json_file} | jq --raw-output '.jobs | keys | .[]'"
    internet_connected=$(cat ${json_file} | jq .patch.internet_connected)
 
    for key in $(eval $fn_metadata_keys_cmd); do
@@ -197,7 +197,7 @@ function fn_run {
 # Auth to Opsman
 
 guid_cf=$(fn_om_linux_curl "GET" "/api/v0/staged/products" \
-            | jq '.[] | select(.type == "cf") | .guid' | tr -d '"' | grep "cf-.*")
+            | jq --raw-output '.[] | select(.type == "cf") | .guid' | grep "cf-.*")
 
 fn_opsman_auth
 csrf_token=$(fn_opsman_curl "GET" "products/${guid_cf}/resources/edit" | grep csrf-token | awk '{print$3}' | sed 's/content=\"//' | sed 's/\"$//')
