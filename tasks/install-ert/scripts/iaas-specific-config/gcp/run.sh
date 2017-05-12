@@ -21,6 +21,15 @@ gcloud_sql_instance_cmd="gcloud sql instances list --format json | jq '.[] | sel
 gcloud_sql_instance=$(eval ${gcloud_sql_instance_cmd})
 gcloud_sql_instance_ip=$(gcloud sql instances list | grep ${gcloud_sql_instance} | awk '{print$4}')
 
+perl -pi -e "s/{{gcloud_sql_instance_ip}}/${gcloud_sql_instance_ip}/g" ${json_file}
+perl_cmd="perl -pi -e \"s/{{gcloud_sql_instance_username}}/${pcf_opsman_admin}/g\" ${json_file}"
+perl_cmd=$(echo $perl_cmd | sed 's/\@/\\@/g')
+eval $perl_cmd
+
+perl_cmd="perl -pi -e \"s/{{gcloud_sql_instance_password}}/${pcf_opsman_admin_passwd}/g\" ${json_file}"
+perl_cmd=$(echo $perl_cmd | sed 's/\@/\\@/g')
+eval $perl_cmd
+
 declare -a arr=(
 "db_app_usage_service_username"
 "db_app_usage_service_password"
