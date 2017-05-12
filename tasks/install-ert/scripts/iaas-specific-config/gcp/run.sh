@@ -21,6 +21,8 @@ gcloud_sql_instance_cmd="gcloud sql instances list --format json | jq '.[] | sel
 gcloud_sql_instance=$(eval ${gcloud_sql_instance_cmd})
 gcloud_sql_instance_ip=$(gcloud sql instances list | grep ${gcloud_sql_instance} | awk '{print$4}')
 
+echo "found GCP Cloud SQL host: ${gcloud_sql_instance_ip}"
+
 declare -a arr=(
 "db_app_usage_service_username"
 "db_app_usage_service_password"
@@ -36,6 +38,7 @@ declare -a arr=(
 "db_uaa_password"
 "db_ccdb_username"
 "db_ccdb_password"
+"gcloud_sql_instance_ip"
 )
 
 echo "finding variables to replace in your json config file using the value from the env variable of the same name"
