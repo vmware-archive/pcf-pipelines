@@ -61,6 +61,12 @@
       ".properties.uaa.internal.password_max_retry": {
         "value": "0"
       },
+      ".properties.uaa.service_provider_key_credentials.cert_pem": {
+        "value": "{{pcf_ert_ssl_cert}}"
+      },
+      ".properties.uaa.service_provider_key_credentials.private_key_pem": {
+        "value": "{{pcf_ert_ssl_key}}"
+      },
       ".properties.uaa.service_provider_key_password": {
         "value": ""
       },
