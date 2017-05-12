@@ -272,8 +272,6 @@ jobs:
     file: pcf-pipelines/tasks/install-ert/configure-ert.yml
     params:
       pcf_iaas: gcp
-      pcf_ert_ssl_cert: "generate"
-      pcf_ert_ssl_key: {{pcf_ert_ssl_key}} 
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}

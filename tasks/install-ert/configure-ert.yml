@@ -20,5 +20,3 @@ params:
   pcf_ert_domain:
   pcf_opsman_admin:
   pcf_opsman_admin_passwd:
-  pcf_ert_ssl_cert:
-  pcf_ert_ssl_key:

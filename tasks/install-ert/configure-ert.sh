@@ -12,25 +12,6 @@ fi
 sudo cp tool-om/om-linux /usr/local/bin
 sudo chmod 755 /usr/local/bin/om-linux
 
-# Set Vars
-
-
-
-# Test if the ssl cert var from concourse is set to 'generate'.  If so, script will gen a self signed, otherwise will assume its a provided cert
-if [[ ${pcf_ert_ssl_cert} == "generate" ]]; then
-  echo "=============================================================================================="
-  echo "Generating Self Signed Certs for sys.${pcf_ert_domain} & cfapps.${pcf_ert_domain} ..."
-  echo "=============================================================================================="
-  pcf-pipelines/tasks/install-ert/scripts/ssl/gen_ssl_certs.sh "sys.${pcf_ert_domain}" "cfapps.${pcf_ert_domain}"
-  export pcf_ert_ssl_cert=$(cat sys.${pcf_ert_domain}.crt)
-  export pcf_ert_ssl_key=$(cat sys.${pcf_ert_domain}.key)
-fi
-
-my_pcf_ert_ssl_cert=$(echo ${pcf_ert_ssl_cert} | sed 's/\s\+/\\\\r\\\\n/g' | sed 's/\\\\r\\\\nCERTIFICATE/ CERTIFICATE/g')
-my_pcf_ert_ssl_key=$(echo ${pcf_ert_ssl_key} | sed 's/\s\+/\\\\r\\\\n/g' | sed 's/\\\\r\\\\nRSA\\\\r\\\\nPRIVATE\\\\r\\\\nKEY/ RSA PRIVATE KEY/g')
-perl -pi -e "s|{{pcf_ert_ssl_cert}}|${my_pcf_ert_ssl_cert}|g" ${json_file}
-perl -pi -e "s|{{pcf_ert_ssl_key}}|${my_pcf_ert_ssl_key}|g" ${json_file}
-
 function fn_om_linux_curl_fail {
     echo ERROR
     echo stdout:\n
