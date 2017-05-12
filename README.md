@@ -93,6 +93,12 @@ You can add as many operations as you like, chaining them with successive `-o` f
 
 See [operations](operations) for more examples of operations.
 
+## Pipeline Compatibility Across PCF Versions
+
+Our goal is to at least support the latest version of PCF with these pipelines. Currently there is no assurance of backwards compatibility, however we do keep past releases of the pipelines to ensure there is at least one version of the pipelines that would work with an older version of PCF.
+
+Compatbility is generally only an issue whenever Pivotal releases a new version of PCF software that requires additional configuration in Ops Manager. These new required fields then need to be either manually configured outside the pipeline, or supplied via a new configuration added to the pipeline itself.
+
 ## Contributing
 
 ### Pipelines and Tasks
