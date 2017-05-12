@@ -290,7 +290,6 @@ jobs:
       pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
       pcf_ert_ssl_cert: {{ERT_SSL_CERT}}
       pcf_ert_ssl_key: {{ERT_SSL_KEY}}
-      terraform_prefix: {{TF_VAR_environment}}
 
 - name: deploy-ert
   serial: true

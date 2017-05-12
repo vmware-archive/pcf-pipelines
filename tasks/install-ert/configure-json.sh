@@ -19,6 +19,9 @@ perl -pi -e "s/{{pcf_az_1}}/${pcf_az_1}/g" ${json_file}
 perl -pi -e "s/{{pcf_az_2}}/${pcf_az_2}/g" ${json_file}
 perl -pi -e "s/{{pcf_az_3}}/${pcf_az_3}/g" ${json_file}
 
+perl -pi -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" ${json_file}
+perl -pi -e "s/{{terraform_prefix}}/${terraform_prefix}/g" ${json_file}
+
 # Iaas Specific ERT  JSON Edits
 
 if [[ -e pcf-pipelines/tasks/install-ert/scripts/iaas-specific-config/${pcf_iaas}/run.sh ]]; then

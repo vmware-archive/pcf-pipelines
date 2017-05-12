@@ -277,7 +277,7 @@ jobs:
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
-      terraform_prefix: {{gcp_resource_prefix}}
+
   - task: deploy
     file: pcf-pipelines/tasks/install-ert/deploy-ert.yml
     params:
