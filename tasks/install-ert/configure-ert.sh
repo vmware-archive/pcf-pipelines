@@ -8,6 +8,12 @@ json_file="json_file/ert.json"
 sudo cp tool-om/om-linux /usr/local/bin
 sudo chmod 755 /usr/local/bin/om-linux
 
+# Check Vars
+echo "================================================================================"
+echo "Google Cloud SQL Host: ${gcloud_sql_instance_ip}"
+echo "================================================================================"
+
+
 # Set Vars
 
 
