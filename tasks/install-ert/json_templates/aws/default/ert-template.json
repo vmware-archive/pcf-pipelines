@@ -50,7 +50,7 @@
         "value": "3306"
       },
       ".properties.system_database.external.host": {
-        "value": "{{rds_host}}"
+        "value": "{{db_host}}"
       },
       ".properties.system_database.external.app_usage_service_username": {
         "value": "{{db_app_usage_service_username}}"

@@ -15,7 +15,7 @@
   "S3Endpoint": "{{s3_endpoint}}",
   "S3BucketName": "{{s3_bucket}}",
   "S3SignatureVersion": "2",
-  "DatabaseHost": "{{rds_host}}",
+  "DatabaseHost": "{{db_host}}",
   "DatabasePort": "3306",
   "DatabaseUser": "{{db_user}}",
   "Database": "{{rds_database}}",
