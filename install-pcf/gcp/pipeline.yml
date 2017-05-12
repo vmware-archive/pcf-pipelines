@@ -230,7 +230,7 @@ jobs:
     file: pcf-pipelines/tasks/install-ert/configure-json.yml
     params:
       pcf_iaas: gcp
-      terraform_template: c0-gcp-poc
+      terraform_template: default
       pcf_ert_ssl_cert: "generate"
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}} 
       gcp_proj_id: {{gcp_project_id}}
