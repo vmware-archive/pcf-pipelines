@@ -27,11 +27,7 @@ my_pcf_ert_ssl_key=$(echo ${pcf_ert_ssl_key} | sed 's/\s\+/\\\\r\\\\n/g' | sed '
 perl -pi -e "s|{{pcf_ert_ssl_cert}}|${my_pcf_ert_ssl_cert}|g" ${json_file}
 perl -pi -e "s|{{pcf_ert_ssl_key}}|${my_pcf_ert_ssl_key}|g" ${json_file}
 perl -pi -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" ${json_file}
-perl -pi -e "s/{{pcf_az_1}}/${pcf_az_1}/g" ${json_file}
-perl -pi -e "s/{{pcf_az_2}}/${pcf_az_2}/g" ${json_file}
-perl -pi -e "s/{{pcf_az_3}}/${pcf_az_3}/g" ${json_file}
 perl -pi -e "s/{{terraform_prefix}}/${terraform_prefix}/g" ${json_file}
-
 
 
 if [[ ! -f ${json_file} ]]; then

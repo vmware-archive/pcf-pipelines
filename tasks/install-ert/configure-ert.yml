@@ -22,7 +22,4 @@ params:
   pcf_opsman_admin_passwd:
   pcf_ert_ssl_cert:
   pcf_ert_ssl_key:
-  pcf_az_1:
-  pcf_az_2:
-  pcf_az_3:
   terraform_prefix:

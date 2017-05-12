@@ -15,6 +15,9 @@ if [[ ! -f ${json_file} ]]; then
   exit 1
 fi
 
+perl -pi -e "s/{{pcf_az_1}}/${pcf_az_1}/g" ${json_file}
+perl -pi -e "s/{{pcf_az_2}}/${pcf_az_2}/g" ${json_file}
+perl -pi -e "s/{{pcf_az_3}}/${pcf_az_3}/g" ${json_file}
 
 # Iaas Specific ERT  JSON Edits
 

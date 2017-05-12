@@ -2,12 +2,12 @@
   "networks_and_azs":{
     "networks_and_azs": {
       "singleton_availability_zone": {
-        "name": "{{aws_zone_1}}"
+        "name": "{{pcf_az_1}}"
       },
       "other_availability_zones": [
-        { "name": "{{aws_zone_1}}" },
-        { "name": "{{aws_zone_2}}" },
-        { "name": "{{aws_zone_3}}" }
+        { "name": "{{pcf_az_1}}" },
+        { "name": "{{pcf_az_2}}" },
+        { "name": "{{pcf_az_3}}" }
       ],
       "network": {
         "name": "deployment"

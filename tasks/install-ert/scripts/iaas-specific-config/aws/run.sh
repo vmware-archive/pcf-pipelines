@@ -35,9 +35,6 @@ cd $CWD
 # Set JSON Config Template and inster Concourse Parameter Values
 output_file_path="json_file/"
 
-perl -pi -e "s/{{aws_zone_1}}/${az1}/g" ${json_file}
-perl -pi -e "s/{{aws_zone_2}}/${az2}/g" ${json_file}
-perl -pi -e "s/{{aws_zone_3}}/${az3}/g" ${json_file}
 perl -pi -e "s/{{db_host}}/${db_host}/g" ${json_file}
 
 perl -pi -e "s/{{aws_access_key}}/${AWS_ACCESS_KEY_ID}/g" ${json_file}
