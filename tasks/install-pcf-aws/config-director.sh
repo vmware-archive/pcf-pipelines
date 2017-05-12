@@ -32,7 +32,7 @@ perl -pi -e "s/{{aws_region}}/${AWS_REGION}/g" ${json_file}
 perl -pi -e "s/{{s3_endpoint}}/${S3_ESCAPED}/g" ${json_file}
 perl -pi -e "s/{{s3_bucket}}/${s3_pcf_bosh}/g" ${json_file}
 perl -pi -e "s/{{rds_host}}/${db_host}/g" ${json_file}
-perl -pi -e "s/{{rds_user}}/${db_username}/g" ${json_file}
+perl -pi -e "s/{{db_user}}/${db_username}/g" ${json_file}
 perl -pi -e "s/{{rds_database}}/${db_database}/g" ${json_file}
 perl -pi -e "s/{{aws_az1}}/${az1}/g" ${json_file}
 perl -pi -e "s/{{aws_az2}}/${az2}/g" ${json_file}

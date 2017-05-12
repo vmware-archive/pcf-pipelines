@@ -53,59 +53,59 @@
         "value": "{{rds_host}}"
       },
       ".properties.system_database.external.app_usage_service_username": {
-        "value": "{{rds_user}}"
+        "value": "{{db_app_usage_service_username}}"
       },
       ".properties.system_database.external.app_usage_service_password": {
         "value": {
-          "secret": "{{rds_password}}"
+          "secret": "{{db_app_usage_service_password}}"
         }
       },
       ".properties.system_database.external.autoscale_username": {
-        "value": "{{rds_user}}"
+        "value": "{{db_autoscale_username}}"
       },
       ".properties.system_database.external.autoscale_password": {
         "value": {
-          "secret": "{{rds_password}}"
+          "secret": "{{db_autoscale_password}}"
         }
       },
       ".properties.system_database.external.diego_username": {
-        "value": "{{rds_user}}"
+        "value": "{{db_diego_username}}"
       },
       ".properties.system_database.external.diego_password": {
         "value": {
-          "secret": "{{rds_password}}"
+          "secret": "{{db_diego_password}}"
         }
       },
       ".properties.system_database.external.notifications_username": {
-        "value": "{{rds_user}}"
+        "value": "{{db_notifications_username}}"
       },
       ".properties.system_database.external.notifications_password": {
         "value": {
-          "secret": "{{rds_password}}"
+          "secret": "{{db_notifications_password}}"
         }
       },
       ".properties.system_database.external.routing_username": {
-        "value": "{{rds_user}}"
+        "value": "{{db_routing_username}}"
       },
       ".properties.system_database.external.routing_password": {
         "value": {
-          "secret": "{{rds_password}}"
+          "secret": "{{db_routing_password}}"
         }
       },
       ".properties.system_database.external.uaa_username": {
-        "value": "{{rds_user}}"
+        "value": "{{db_uaa_username}}"
       },
       ".properties.system_database.external.uaa_password": {
         "value": {
-          "secret": "{{rds_password}}"
+          "secret": "{{db_uaa_password}}"
         }
       },
       ".properties.system_database.external.ccdb_username": {
-        "value": "{{rds_user}}"
+        "value": "{{db_ccdb_username}}"
       },
       ".properties.system_database.external.ccdb_password": {
         "value": {
-          "secret": "{{rds_password}}"
+          "secret": "{{db_ccdb_password}}"
         }
       },
       ".cloud_controller.system_domain": {

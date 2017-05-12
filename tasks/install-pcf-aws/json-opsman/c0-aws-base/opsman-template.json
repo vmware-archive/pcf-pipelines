@@ -17,7 +17,7 @@
   "S3SignatureVersion": "2",
   "DatabaseHost": "{{rds_host}}",
   "DatabasePort": "3306",
-  "DatabaseUser": "{{rds_user}}",
+  "DatabaseUser": "{{db_user}}",
   "Database": "{{rds_database}}",
   "MaxThreads": "",
   "DirectorHostname": "",
