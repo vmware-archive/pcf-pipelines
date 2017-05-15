@@ -24,7 +24,6 @@ json_file="json_file/ert.json"
 cd $CWD
 
 # Set JSON Config Template and inster Concourse Parameter Values
-output_file_path="json_file/"
 
 perl -pi -e "s/{{db_host}}/${db_host}/g" ${json_file}
 
