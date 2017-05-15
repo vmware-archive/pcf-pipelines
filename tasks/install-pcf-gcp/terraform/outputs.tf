@@ -131,3 +131,7 @@ output "pub_ip_ssh_tcp_lb" {
 output "pub_ip_opsman" {
   value = "${google_compute_address.opsman.address}"
 }
+
+output "sql_instance_ip" {
+  value = "${google_sql_database_instance.master.ip_address.0.ip_address}"
+}
