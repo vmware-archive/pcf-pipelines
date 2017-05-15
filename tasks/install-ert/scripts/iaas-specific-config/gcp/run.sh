@@ -1,9 +1,7 @@
 #!/bin/bash
 set -e
 
-echo $gcp_svc_acct_key > /tmp/blah
-gcloud auth activate-service-account --key-file /tmp/blah
-rm -rf /tmp/blah
+gcloud auth activate-service-account --key-file <(echo "$gcp_svc_acct_key")
 
 gcloud config set project $gcp_proj_id
 gcloud config set compute/region $gcp_region
