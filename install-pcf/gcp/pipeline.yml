@@ -220,6 +220,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: pcfawsops-terraform-state-get
     - get: tool-om
       trigger: true
       passed: [upload-ert]

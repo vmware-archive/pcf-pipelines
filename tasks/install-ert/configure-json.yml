@@ -10,6 +10,7 @@ image_resource:
 inputs:
   - name: pcf-pipelines 
   - name: tool-om
+  - name: pcfawsops-terraform-state-get
 
 outputs:
   - name: json_file
