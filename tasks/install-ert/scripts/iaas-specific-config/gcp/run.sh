@@ -17,9 +17,10 @@ gcloud config set compute/region $gcp_region
 #############################################################
 # get GCP unique SQL instance ID & set params in JSON       #
 #############################################################
-gcloud_sql_instance_cmd="gcloud sql instances list --format json | jq --raw-output '.[] | select(.instance | startswith(\"${terraform_prefix}\")) | .instance'"
-gcloud_sql_instance=$(eval ${gcloud_sql_instance_cmd})
-gcloud_sql_instance_ip=$(gcloud sql instances list | grep ${gcloud_sql_instance} | awk '{print$4}')
+gcloud_sql_instance_ip=$(
+  gcloud sql instances list --format json |
+  jq --raw-output --arg prefix $terraform_prefix '.[] | select(.instance | startswith($prefix)) | .ipAddresses[0].ipAddress'
+)
 
 sed -i \
   -e "s/{{db_host}}/${gcloud_sql_instance_ip}/g" \
