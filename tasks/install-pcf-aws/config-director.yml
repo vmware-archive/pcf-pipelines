@@ -6,6 +6,7 @@ image_resource:
   source:
     repository: virtmerlin/c0-worker
 inputs:
+  - name: terraform-zip
   - name: pcf-pipelines 
   - name: pcfawsops-terraform-state-get
   - name: tool-om-beta

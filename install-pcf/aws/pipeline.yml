@@ -141,6 +141,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: terraform-zip
     - get: pcf-pipelines 
       trigger: true
       passed: [config-opsman]

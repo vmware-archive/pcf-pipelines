@@ -1,7 +1,8 @@
 #!/bin/bash
 set -ex
 
-mv /opt/terraform/terraform /usr/local/bin
+unzip terraform-zip/terraform.zip
+mv terraform-zip/terraform /usr/local/bin
 CWD=$(pwd)
 cd pcf-pipelines/tasks/install-pcf-aws/terraform/
 cp $CWD/pcfawsops-terraform-state-get/terraform.tfstate .
