@@ -151,6 +151,12 @@
       },
       ".mysql_monitor.recipient_email": {
         "value" : "c0-coreteam@pivotal.io"
+      },
+      ".uaa.service_provider_key_credentials": {
+        "value": {
+          "cert_pem": "",
+          "private_key_pem": ""
+        }
       }
     }
   },
