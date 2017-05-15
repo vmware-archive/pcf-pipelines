@@ -81,6 +81,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: terraform-zip
     - get: pcf-pipelines 
   - task: aws-pcf-prepare
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws.yml

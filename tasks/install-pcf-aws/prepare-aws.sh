@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ex
-cp /opt/terraform/terraform /usr/local/bin
+unzip terraform-zip/terraform.zip
+mv terraform-zip/terraform /usr/local/bin
 CWD=$(pwd)
 cd pcf-pipelines/tasks/install-pcf-aws/terraform/
 
