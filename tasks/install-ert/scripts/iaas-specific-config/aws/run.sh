@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-cp /opt/terraform/terraform /usr/local/bin
+export PATH=$PATH:/opt/terraform
 
 cd pcfawsops-terraform-state-get
   while read -r line
