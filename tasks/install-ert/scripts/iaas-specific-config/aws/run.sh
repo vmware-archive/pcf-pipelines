@@ -3,11 +3,6 @@ set -e
 
 export PATH=$PATH:/opt/terraform
 
-db_host=''
-aws_region=''
-aws_access_key=''
-aws_secret_key=''
-
 cd pcfawsops-terraform-state-get
   output_json=$(terraform output --json)
   db_host=$(echo $output_json | jq --raw-output '.db_host.value')
