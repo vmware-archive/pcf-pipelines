@@ -12,8 +12,6 @@ fi
 
 sed -i \
   -e "s/{{db_host}}/${db_host}/g" \
-  -e "s/{{gcloud_sql_instance_username}}/${pcf_opsman_admin}/g" \
-  -e "s/{{gcloud_sql_instance_password}}/${pcf_opsman_passwd}/g" \
   -e "s/{{gcp_storage_access_key}}/${gcp_storage_access_key}/g" \
   -e "s/{{gcp_storage_secret_key}}/${gcp_storage_secret_key}/g" \
   json_file/ert.json
