@@ -1,11 +1,6 @@
 #!/bin/bash
 set -e
 
-#Make om-linux executable
-
-sudo cp tool-om/om-linux /usr/local/bin
-sudo chmod 755 /usr/local/bin/om-linux
-
 cp /opt/terraform/terraform /usr/local/bin
 
 cd pcfawsops-terraform-state-get
