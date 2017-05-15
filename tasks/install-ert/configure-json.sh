@@ -2,20 +2,20 @@
 
 set -e
 
-json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}/${terraform_template}"
-json_file_template="${json_file_path}/ert-template.json"
-json_file="json_file/ert.json"
-
 OM_CMD=./tool-om/om-linux
 chmod +x tool-om/om-linux
 
+json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}/${terraform_template}"
+json_file_template="${json_file_path}/ert-template.json"
 
-cp ${json_file_template} ${json_file}
-
-if [[ ! -f ${json_file} ]]; then
-  echo "Error: cant find file=[${json_file}]"
+if [ ! -f "$json_file_template" ]; then
+  echo "Error: can't find file=[${json_file_template}]"
   exit 1
 fi
+
+json_file="json_file/ert.json"
+
+cp ${json_file_template} ${json_file}
 
 perl -pi -e "s/{{pcf_az_1}}/${pcf_az_1}/g" ${json_file}
 perl -pi -e "s/{{pcf_az_2}}/${pcf_az_2}/g" ${json_file}
