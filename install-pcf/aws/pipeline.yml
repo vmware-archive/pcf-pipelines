@@ -255,7 +255,6 @@ jobs:
       bucket: {{S3_OUTPUT_BUCKET}}
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
-      TF_VAR_aws_region: {{TF_VAR_aws_region}}
       S3_ENDPOINT: {{S3_ENDPOINT}}
       # IaaS Specific for GCP only
       gcp_proj_id:

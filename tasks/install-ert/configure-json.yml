@@ -39,7 +39,6 @@ params:
   bucket:
   TF_VAR_aws_access_key:
   TF_VAR_aws_secret_key:
-  TF_VAR_aws_region:
   S3_ENDPOINT:
   # db credentials
   db_app_usage_service_username:

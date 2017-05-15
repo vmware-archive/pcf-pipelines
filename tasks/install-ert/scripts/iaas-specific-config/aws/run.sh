@@ -9,22 +9,15 @@ sudo chmod 755 /usr/local/bin/om-linux
 cp /opt/terraform/terraform /usr/local/bin
 CWD=$(pwd)
 
+cd pcfawsops-terraform-state-get
+  while read -r line
+  do
+    `echo "$line" | awk '{print "export "$1"="$3}'`
+  done < <(terraform output)
 
-# Using aws admin account to copy the terraform template here
-export AWS_ACCESS_KEY_ID=${TF_VAR_aws_access_key}
-export AWS_SECRET_ACCESS_KEY=${TF_VAR_aws_secret_key}
-export AWS_DEFAULT_REGION=${TF_VAR_aws_region}
-
-#Clean AWS instances
-pip install awscli
-aws s3 cp s3://${bucket}/terraform.tfstate .
-while read -r line
-do
-  `echo "$line" | awk '{print "export "$1"="$3}'`
-done < <(terraform output)
-
-export AWS_ACCESS_KEY_ID=`terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^id | awk '{print $3}'`
-export AWS_SECRET_ACCESS_KEY=`terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^secret | awk '{print $3}'`
+  export AWS_ACCESS_KEY_ID=`terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^id | awk '{print $3}'`
+  export AWS_SECRET_ACCESS_KEY=`terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^secret | awk '{print $3}'`
+cd -
 
 json_file="json_file/ert.json"
 
