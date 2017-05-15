@@ -3,9 +3,6 @@ set -e
 
 json_file="json_file/ert.json"
 
-#############################################################
-#################### GCP Auth  & functions ##################
-#############################################################
 echo $gcp_svc_acct_key > /tmp/blah
 gcloud auth activate-service-account --key-file /tmp/blah
 rm -rf /tmp/blah
@@ -13,10 +10,6 @@ rm -rf /tmp/blah
 gcloud config set project $gcp_proj_id
 gcloud config set compute/region $gcp_region
 
-
-#############################################################
-# get GCP unique SQL instance ID & set params in JSON       #
-#############################################################
 gcloud_sql_instance_ip=$(
   gcloud sql instances list --format json |
   jq --raw-output --arg prefix $terraform_prefix '.[] | select(.instance | startswith($prefix)) | .ipAddresses[0].ipAddress'
