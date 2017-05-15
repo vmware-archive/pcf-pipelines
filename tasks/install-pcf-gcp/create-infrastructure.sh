@@ -63,7 +63,6 @@ function fn_get_ip {
 pub_ip_global_pcf=$(fn_get_ip "global-pcf")
 pub_ip_ssh_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_ssh_and_doppler=$(fn_get_ip "ssh-and-doppler")
-pub_ip_jumpbox=$(fn_get_ip "jumpbox")
 pub_ip_opsman=$(fn_get_ip "opsman")
 
 echo "Please configure DNS as follows:"
