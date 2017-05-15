@@ -20,8 +20,8 @@ gcloud config set compute/region $gcp_region
 gcloud_sql_instance_cmd="gcloud sql instances list --format json | jq --raw-output '.[] | select(.instance | startswith(\"${terraform_prefix}\")) | .instance'"
 gcloud_sql_instance=$(eval ${gcloud_sql_instance_cmd})
 gcloud_sql_instance_ip=$(gcloud sql instances list | grep ${gcloud_sql_instance} | awk '{print$4}')
-
 perl -pi -e "s/{{db_host}}/${gcloud_sql_instance_ip}/g" ${json_file}
+
 perl_cmd="perl -pi -e \"s/{{gcloud_sql_instance_username}}/${pcf_opsman_admin}/g\" ${json_file}"
 perl_cmd=$(echo $perl_cmd | sed 's/\@/\\@/g')
 eval $perl_cmd
