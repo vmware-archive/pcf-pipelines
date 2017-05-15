@@ -21,8 +21,6 @@ cd -
 
 json_file="json_file/ert.json"
 
-export S3_ESCAPED=${S3_ENDPOINT//\//\\/}
-
 cd $CWD
 
 # Set JSON Config Template and inster Concourse Parameter Values
@@ -33,5 +31,5 @@ perl -pi -e "s/{{db_host}}/${db_host}/g" ${json_file}
 perl -pi -e "s/{{aws_access_key}}/${AWS_ACCESS_KEY_ID}/g" ${json_file}
 perl -pi -e "s%{{aws_secret_key}}%${AWS_SECRET_ACCESS_KEY}%g" ${json_file}
 perl -pi -e "s/{{aws_region}}/${region}/g" ${json_file}
-perl -pi -e "s/{{s3_endpoint}}/${S3_ESCAPED}/g" ${json_file}
+perl -pi -e "s%{{s3_endpoint}}%${S3_ENDPOINT}%g" ${json_file}
 perl -pi -e "s/{{syslog_host}}/${SYSLOG_HOST}/g" ${json_file}
