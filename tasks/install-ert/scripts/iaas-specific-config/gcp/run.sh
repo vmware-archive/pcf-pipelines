@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-json_file="json_file/ert.json"
-
 echo $gcp_svc_acct_key > /tmp/blah
 gcloud auth activate-service-account --key-file /tmp/blah
 rm -rf /tmp/blah
@@ -21,4 +19,4 @@ sed -i \
   -e "s/{{gcloud_sql_instance_password}}/${pcf_opsman_passwd}/g" \
   -e "s/{{gcp_storage_access_key}}/${gcp_storage_access_key}/g" \
   -e "s/{{gcp_storage_secret_key}}/${gcp_storage_secret_key}/g" \
-  $json_file
+  json_file/ert.json
