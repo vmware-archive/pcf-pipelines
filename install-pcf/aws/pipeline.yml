@@ -239,6 +239,7 @@ jobs:
   max_in_flight: 1
   plan:
   - aggregate:
+    - get: terraform-zip
     - get: tool-om
       params:
         globs:

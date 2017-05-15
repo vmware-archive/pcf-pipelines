@@ -4,7 +4,8 @@ set -e
 echo "$PEM" > pcf.pem
 chmod 0600 pcf.pem
 
-mv /opt/terraform/terraform /usr/local/bin
+unzip terraform-zip/terraform.zip
+mv terraform-zip/terraform /usr/local/bin
 CWD=$(pwd)
 pushd $CWD
   cd pcf-pipelines/tasks/install-pcf-aws/terraform/
