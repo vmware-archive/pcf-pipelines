@@ -115,3 +115,19 @@ output "resources_bucket" {
 output "director_blobstore_bucket" {
   value = "${google_storage_bucket.director.name}"
 }
+
+output "pub_ip_global_pcf" {
+  value = "${google_compute_global_address.pcf.address}"
+}
+
+output "pub_ip_ssh_and_doppler" {
+  value = "${google_compute_address.ssh-and-doppler.address}"
+}
+
+output "pub_ip_ssh_tcp_lb" {
+  value = "${google_compute_address.cf-tcp.address}"
+}
+
+output "pub_ip_opsman" {
+  value = "${google_compute_address.opsman.address}"
+}

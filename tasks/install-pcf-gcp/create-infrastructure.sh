@@ -47,23 +47,13 @@ export GOOGLE_REGION=${GCP_REGION}
   -state-out $root/create-infrastructure-output/terraform-$version.tfstate \
   terraform-$version.tfplan
 
-echo $GCP_SERVICE_ACCOUNT_KEY > /tmp/blah
-gcloud auth activate-service-account --key-file /tmp/blah
-rm -rf /tmp/blah
-
-gcloud config set project $GCP_PROJECT_ID
-gcloud config set compute/region $GCP_REGION
-
-function fn_get_ip {
-  gcp_cmd="gcloud compute addresses list  --format json | jq '.[] | select (.name == \"${GCP_RESOURCE_PREFIX}-${1}\") | .address '"
-  api_ip=$(eval $gcp_cmd | tr -d '"')
-  echo $api_ip
-}
-
-pub_ip_global_pcf=$(fn_get_ip "global-pcf")
-pub_ip_ssh_tcp_lb=$(fn_get_ip "tcp-lb")
-pub_ip_ssh_and_doppler=$(fn_get_ip "ssh-and-doppler")
-pub_ip_opsman=$(fn_get_ip "opsman")
+cd $root/create-infrastructure-output
+  output_json=$(/opt/terraform/terraform output --json)
+  pub_ip_global_pcf=$(echo $output_json | jq --raw-output '.pub_ip_global_pcf.value')
+  pub_ip_ssh_and_doppler=$(echo $output_json | jq --raw-output '.pub_ip_ssh_and_doppler.value')
+  pub_ip_ssh_tcp_lb=$(echo $output_json | jq --raw-output '.pub_ip_ssh_tcp_lb.value')
+  pub_ip_opsman=$(echo $output_json | jq --raw-output '.pub_ip_opsman.value')
+cd -
 
 echo "Please configure DNS as follows:"
 echo "----------------------------------------------------------------------------------------------"
