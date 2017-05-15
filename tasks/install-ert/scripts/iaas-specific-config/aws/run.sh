@@ -7,7 +7,6 @@ sudo cp tool-om/om-linux /usr/local/bin
 sudo chmod 755 /usr/local/bin/om-linux
 
 cp /opt/terraform/terraform /usr/local/bin
-CWD=$(pwd)
 
 cd pcfawsops-terraform-state-get
   while read -r line
@@ -20,8 +19,6 @@ cd pcfawsops-terraform-state-get
 cd -
 
 json_file="json_file/ert.json"
-
-cd $CWD
 
 # Set JSON Config Template and inster Concourse Parameter Values
 
