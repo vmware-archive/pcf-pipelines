@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-mv /opt/terraform/terraform /usr/local/bin
+unzip terraform-zip/terraform.zip
+mv terraform-zip/terraform /usr/local/bin
 CWD=$(pwd)
 cd pcf-pipelines/tasks/install-pcf-aws/terraform/
 cp $CWD/pcfawsops-terraform-state-get/terraform.tfstate .
@@ -11,6 +12,7 @@ export AWS_DEFAULT_REGION=${TF_VAR_aws_region}
 export VPC_ID=`terraform state show aws_vpc.PcfVpc | grep ^id | awk '{print $3}'`
 
 #Clean AWS instances
+python get-pip/get-pip.py
 pip install awscli
 
 instances=$(aws ec2 describe-instances --filters Name=vpc-id,Values=$VPC_ID --output=json | jq -r '.[] | .[] | .Instances | .[] | .InstanceId')

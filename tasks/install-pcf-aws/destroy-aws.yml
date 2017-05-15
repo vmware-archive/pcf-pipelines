@@ -4,8 +4,10 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: virtmerlin/c0-worker
+    repository: cloudfoundry/cflinuxfs2
 inputs:
+  - name: get-pip
+  - name: terraform-zip
   - name: pcf-pipelines 
   - name: pcfawsops-terraform-state-get
 outputs:
