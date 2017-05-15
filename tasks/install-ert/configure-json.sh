@@ -71,6 +71,32 @@ jq \
 
 mv config.json $json_file
 
+db_creds=(
+  db_app_usage_service_username
+  db_app_usage_service_password
+  db_autoscale_username
+  db_autoscale_password
+  db_diego_username
+  db_diego_password
+  db_notifications_username
+  db_notifications_password
+  db_routing_username
+  db_routing_password
+  db_uaa_username
+  db_uaa_password
+  db_ccdb_username
+  db_ccdb_password
+)
+
+for i in "${db_creds[@]}"
+do
+   eval "templateplaceholder={{${i}}}"
+   eval "varname=\${$i}"
+   eval "varvalue=$varname"
+   echo "replacing value for ${templateplaceholder} in ${json_file} with the value of env var:${varname} "
+   sed -i -e "s/$templateplaceholder/${varvalue}/g" ${json_file}
+done
+
 # Iaas Specific ERT  JSON Edits
 
 if [[ -e pcf-pipelines/tasks/install-ert/scripts/iaas-specific-config/${pcf_iaas}/run.sh ]]; then
