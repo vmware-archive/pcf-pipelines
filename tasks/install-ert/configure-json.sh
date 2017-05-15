@@ -34,8 +34,8 @@ fi
 
 cat > filters <<'EOF'
 .properties.properties.".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate".value = {
-  "cert_pem" = $cert_pem,
-  "private_key_pem" = $private_key_pem
+  "cert_pem": $cert_pem,
+  "private_key_pem": $private_key_pem
 }
 EOF
 
