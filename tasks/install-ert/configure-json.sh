@@ -33,19 +33,17 @@ if [[ ${pcf_ert_ssl_cert} == "generate" ]]; then
   export pcf_ert_ssl_key=$(cat sys.${pcf_ert_domain}.key)
 fi
 
-SYSTEM_DOMAIN=sys.${pcf_ert_domain}
-
-OPS_MGR_HOST="https://opsman.$pcf_ert_domain"
-
-DOMAINS=$(cat <<-EOF
-  {"domains": ["*.${SYSTEM_DOMAIN}", "*.login.${SYSTEM_DOMAIN}", "*.uaa.${SYSTEM_DOMAIN}"] }
+system_domain=sys.${pcf_ert_domain}
+ops_mgr_host="https://opsman.$pcf_ert_domain"
+domains=$(cat <<-EOF
+  {"domains": ["*.${system_domain}", "*.login.${system_domain}", "*.uaa.${system_domain}"] }
 EOF
 )
 
-SAML_AUTHN_CERT_RAW_RESPONSE=`$OM_CMD -t $OPS_MGR_HOST -u $pcf_opsman_admin -p $pcf_opsman_admin_passwd -k curl -p "/api/v0/rsa_certificates" -x POST -d "$DOMAINS"`
+saml_cert_response=`$OM_CMD -t $ops_mgr_host -u $pcf_opsman_admin -p $pcf_opsman_admin_passwd -k curl -p "/api/v0/rsa_certificates" -x POST -d "$domains"`
 
-saml_authn_cert=$(echo $SAML_AUTHN_CERT_RAW_RESPONSE | jq --raw-output '.certificate')
-saml_authn_key=$(echo $SAML_AUTHN_CERT_RAW_RESPONSE | jq --raw-output '.key')
+saml_cert_pem=$(echo $saml_cert_response | jq --raw-output '.certificate')
+saml_key_pem=$(echo $saml_cert_response | jq --raw-output '.key')
 
 cat > filters <<'EOF'
 .properties.properties.".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate".value = {
@@ -53,16 +51,16 @@ cat > filters <<'EOF'
   "private_key_pem": $private_key_pem
 } |
 .properties.properties.".uaa.service_provider_key_credentials".value = {
-  "cert_pem": $saml_authn_cert_pem,
-  "private_key_pem": $saml_authn_key_pem  
+  "cert_pem": $saml_cert_pem,
+  "private_key_pem": $saml_key_pem
 }
 EOF
 
 jq \
   --arg cert_pem "$pcf_ert_ssl_cert" \
   --arg private_key_pem "$pcf_ert_ssl_key" \
-  --arg saml_authn_cert_pem "$saml_authn_cert" \
-  --arg saml_authn_key_pem "$saml_authn_key" \
+  --arg saml_cert_pem "$saml_cert_pem" \
+  --arg saml_key_pem "$saml_key_pem" \
   --from-file filters \
   $json_file > config.json
 
