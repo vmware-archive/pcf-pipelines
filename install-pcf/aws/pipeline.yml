@@ -143,7 +143,8 @@ jobs:
     - get: terraform-state
     - get: tool-om
       resource: tool-om-beta
-      globs: [om-linux]
+      params:
+        globs: ["*linux*"]
       version: { tag: '0.17-beta.0' }
   - task: config-director
     file: pcf-pipelines/tasks/install-pcf-aws/config-director.yml
