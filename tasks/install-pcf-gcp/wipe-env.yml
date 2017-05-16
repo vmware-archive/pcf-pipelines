@@ -8,7 +8,7 @@ image_resource:
 
 inputs:
 - name: pcf-pipelines 
-- name: tfstate
+- name: terraform-state
 - name: tfstate-version
 
 outputs:

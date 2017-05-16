@@ -11,5 +11,5 @@ set +e
 terraform apply
 ret_code=$?
 
-cp terraform.tfstate $CWD/pcfawsops-terraform-state-put/terraform.tfstate
+cp terraform.tfstate $CWD/terraform-state/terraform.tfstate
 exit $ret_code

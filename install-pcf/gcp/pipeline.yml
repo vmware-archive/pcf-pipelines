@@ -27,7 +27,7 @@ resources:
     branch: master
     username: {{github_token}}
 
-- name: tfstate
+- name: terraform-state
   type: s3
   source:
     region_name: {{s3_region}}
@@ -80,7 +80,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tfstate
+    - get: terraform-state
     - get: tfstate-version
       params:
         bump: major
@@ -90,7 +90,7 @@ jobs:
       GCP_PROJECT_ID: {{gcp_project_id}}
       GCP_REGION: {{gcp_region}}
       GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
-  - put: tfstate
+  - put: terraform-state
     params:
       file: wipe-output/*.tfstate
   - put: tfstate-version
@@ -147,7 +147,7 @@ jobs:
         GCP_PROJECT_ID: {{gcp_project_id}}
         GCP_REGION: {{gcp_region}}
         GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
-  - put: tfstate
+  - put: terraform-state
     params:
       file: create-infrastructure-output/*.tfstate
   - put: tfstate-version
@@ -234,7 +234,6 @@ jobs:
     - get: terraform-zip
     - get: pcf-pipelines
     - get: terraform-state
-      resource: tfstate
     - get: tool-om
       trigger: true
       passed: [upload-ert]

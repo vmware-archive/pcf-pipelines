@@ -4,7 +4,7 @@ unzip terraform-zip/terraform.zip
 mv terraform-zip/terraform /usr/local/bin
 CWD=$(pwd)
 cd pcf-pipelines/tasks/install-pcf-aws/terraform/
-cp $CWD/pcfawsops-terraform-state-get/terraform.tfstate .
+cp $CWD/terraform-state/terraform.tfstate .
 
 export AWS_ACCESS_KEY_ID=${TF_VAR_aws_access_key}
 export AWS_SECRET_ACCESS_KEY=${TF_VAR_aws_secret_key}
@@ -28,5 +28,5 @@ terraform plan
 set +e
 terraform destroy -force
 
-cd $CWD/pcfawsops-terraform-state-put
+cd $CWD/terraform-state
 touch terraform.tfstate

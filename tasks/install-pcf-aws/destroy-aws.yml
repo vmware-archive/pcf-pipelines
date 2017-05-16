@@ -9,9 +9,9 @@ inputs:
   - name: get-pip
   - name: terraform-zip
   - name: pcf-pipelines 
-  - name: pcfawsops-terraform-state-get
+  - name: terraform-state
 outputs:
-  - name: pcfawsops-terraform-state-put
+  - name: terraform-state
 params:
   TF_VAR_aws_access_key:
   TF_VAR_aws_secret_key:

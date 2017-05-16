@@ -9,7 +9,7 @@ export GOOGLE_PROJECT=${GCP_PROJECT_ID}
 export GOOGLE_REGION=${GCP_REGION}
 
 /opt/terraform/terraform destroy -force \
-  -state $root/tfstate/terraform-*.tfstate \
+  -state $root/terraform-state/terraform-*.tfstate \
   -var "gcp_proj_id=dontcare" \
   -var "gcp_region=dontcare" \
   -var "gcp_zone_1=dontcare" \

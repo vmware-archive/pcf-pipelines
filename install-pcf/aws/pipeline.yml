@@ -20,17 +20,8 @@ resources:
   source:
     url: https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip  
     filename: terraform.zip 
-- name: pcfawsops-terraform-state-put
-  type: s3
-  source:
-    disable_ssl: false
-    access_key_id: {{TF_VAR_aws_access_key}}
-    secret_access_key: {{TF_VAR_aws_secret_key}}
-    endpoint: {{S3_ENDPOINT}}
-    bucket: {{S3_OUTPUT_BUCKET}}
-    versioned_file: terraform.tfstate
 
-- name: pcfawsops-terraform-state-get
+- name: terraform-state
   type: s3
   source:
     disable_ssl: false
@@ -119,9 +110,9 @@ jobs:
       TF_VAR_nat_ip_az2: {{TF_VAR_nat_ip_az2}}
       TF_VAR_nat_ip_az3: {{TF_VAR_nat_ip_az3}}
     ensure:
-      put: pcfawsops-terraform-state-put
+      put: terraform-state
       params:
-        file: pcfawsops-terraform-state-put/terraform.tfstate
+        file: terraform-state/terraform.tfstate
 
 - name: config-opsman
   serial: true
@@ -146,7 +137,7 @@ jobs:
     - get: pcf-pipelines 
       trigger: true
       passed: [config-opsman]
-    - get: pcfawsops-terraform-state-get
+    - get: terraform-state
     - get: tool-om-beta
       globs: [om-linux]
       version: { tag: '0.17-beta.0' }
@@ -248,7 +239,6 @@ jobs:
       trigger: true
       passed: [upload-ert]
     - get: terraform-state
-      resource: pcfawsops-terraform-state-get
 
   - task: prepare-rds
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-rds.yml
@@ -333,7 +323,7 @@ jobs:
     - get: get-pip
     - get: pcf-pipelines
       passed: [deploy-ert]
-    - get: pcfawsops-terraform-state-get
+    - get: terraform-state
   - task: aws-pcf-destroy
     file: pcf-pipelines/tasks/install-pcf-aws/destroy-aws.yml
     params:
@@ -366,9 +356,9 @@ jobs:
       TF_VAR_rds_subnet_cidr_az2: {{TF_VAR_rds_subnet_cidr_az2}}
       TF_VAR_rds_subnet_cidr_az3: {{TF_VAR_rds_subnet_cidr_az3}}
     ensure:
-      put: pcfawsops-terraform-state-put
+      put: terraform-state
       params:
-        file: pcfawsops-terraform-state-put/terraform.tfstate
-  - put: pcfawsops-terraform-state-put
+        file: terraform-state/terraform.tfstate
+  - put: terraform-state
     params:
-      file: pcfawsops-terraform-state-put/terraform.tfstate
+      file: terraform-state/terraform.tfstate
