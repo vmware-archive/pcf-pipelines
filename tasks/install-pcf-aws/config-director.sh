@@ -3,9 +3,9 @@ set -ex
 
 unzip terraform-zip/terraform.zip
 mv terraform-zip/terraform /usr/local/bin
-CWD=$(pwd)
+root=$(pwd)
 cd pcf-pipelines/tasks/install-pcf-aws/terraform/
-cp $CWD/terraform-state/terraform.tfstate .
+cp $root/terraform-state/terraform.tfstate .
 
 while read -r line
 do
@@ -16,7 +16,7 @@ export AWS_ACCESS_KEY_ID=`terraform state show aws_iam_access_key.pcf_iam_user_a
 export AWS_SECRET_ACCESS_KEY=`terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^secret | awk '{print $3}'`
 export RDS_PASSWORD=`terraform state show aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
 
-cd $CWD
+cd $root
 
 sed -e "s/{{aws_vpc_id}}/${vpc_id}/g" \
   -e "s/{{aws_sg_id}}/${pcf_security_group}/g" \
