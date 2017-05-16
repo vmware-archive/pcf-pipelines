@@ -182,7 +182,6 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 - name: upload-elastic-runtime-tile
   plan:
@@ -330,7 +329,6 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 - name: disable-errands
   plan:
@@ -363,7 +361,6 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 # - name: post-install-step
 #   plan:

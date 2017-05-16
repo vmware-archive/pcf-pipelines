@@ -168,7 +168,6 @@ jobs:
       OPSMAN_URI: {{ERT_DOMAIN}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
-      OPSMAN_TIMEOUT: {{OPSMAN_TIMEOUT_SECONDS}}
 
 - name: import-stemcell
   plan:
@@ -305,7 +304,6 @@ jobs:
       OPSMAN_URI: {{ERT_DOMAIN}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
-      OPSMAN_TIMEOUT: {{OPSMAN_TIMEOUT_SECONDS}}
 
 - name: aws-pcf-destroy
   serial: true

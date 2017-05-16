@@ -192,7 +192,6 @@ jobs:
       OPSMAN_URI: {{pcf_ert_domain}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 - name: deploy-ert
   serial_groups: [opsman]
@@ -285,4 +284,3 @@ jobs:
       OPSMAN_URI: {{pcf_ert_domain}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}

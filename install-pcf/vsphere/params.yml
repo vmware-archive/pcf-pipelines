@@ -14,7 +14,6 @@ om_data_store:            # vCenter datastore name to deploy Ops Manager in
 opsman_uri:               # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
 opsman_admin_username:    # Username for Ops Manager admin account
 opsman_admin_password:    # Password for Ops Manager admin account
-opsman_timeout_seconds:   # Timeout to wait for Ops Manager to become available
 om_ssh_pwd:               # SSH password for Ops Manager (ssh user is ubuntu)
 om_decryption_pwd:        # Decryption password for Ops Manager exported settings
 om_ntp_servers:           # Comma-separated list of NTP Servers

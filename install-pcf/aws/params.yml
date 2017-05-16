@@ -61,7 +61,6 @@ ERT_DOMAIN:
 OPSMAN_USER:
 OPSMAN_PASSWORD:
 OPSMAN_URI:
-OPSMAN_TIMEOUT_SECONDS: 360 # Time to wait for OpsMgr to be ready prior to making API calls
 TILE_UPLOAD_TIMEOUT: 1800 # Time to allow for a tile upload request to live
 PIVNET_TOKEN:
 GITHUB_TOKEN:

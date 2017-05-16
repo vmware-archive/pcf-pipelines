@@ -30,7 +30,6 @@ product_version: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_uri: CHANGEME
-opsman_timeout_seconds: CHANGEME
 
 # Stemcell Downloader
 # ------------------------------

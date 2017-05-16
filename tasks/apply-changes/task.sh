@@ -14,33 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-function main() {
-  echo "Applying changes on Ops manager @ ${OPSMAN_URI}"
-  chmod +x tool-om/om-linux
-  CMD_PATH="tool-om/om-linux"
-  TIMEOUT=$((SECONDS+${OPSMAN_TIMEOUT}))
-  set +e
-  while [[ true ]]; do
+echo "Applying changes on Ops Manager @ ${OPSMAN_URI}"
+chmod +x tool-om/om-linux
 
-    ./${CMD_PATH} --target "${OPSMAN_URI}" \
-       --skip-ssl-validation \
-       --username "${OPSMAN_USERNAME}" \
-       --password "${OPSMAN_PASSWORD}" \
-       --ignore-warnings \
-       apply-changes
-
-    EXITCODE=$?
-
-    if [[ ${EXITCODE} -ne 0 && ${SECONDS} -gt ${TIMEOUT} ]]; then
-      echo "Timed out waiting for ops manager site to start."
-      exit 1
-    fi
-
-    if [[ ${EXITCODE} -eq 0 ]]; then
-      break
-    fi
-  done
-  set -e
-}
-
-main "${PWD}"
+./tool-om/om-linux \
+  --target "${OPSMAN_URI}" \
+  --skip-ssl-validation \
+  --username "${OPSMAN_USERNAME}" \
+  --password "${OPSMAN_PASSWORD}" \
+  --ignore-warnings \
+  apply-changes

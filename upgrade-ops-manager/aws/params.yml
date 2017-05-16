@@ -47,8 +47,6 @@ opsman_admin_username: CHANGEME
 # If install pipeline has been used then the passphrase is same as the admin password
 opsman_passphrase: CHANGEME
 
-opsman_timeout_seconds: 1200
-
 # Ops Manager Url
 # eg. https://myopsman.mydomain.com
 opsman_uri: CHANGEME
