@@ -4,7 +4,7 @@ set -e
 unzip terraform-zip/terraform.zip
 mv terraform-zip/terraform /usr/local/bin
 
-cd pcfawsops-terraform-state-get
+cd terraform-state
   output_json=$(terraform output --json)
   db_host=$(echo $output_json | jq --raw-output '.db_host.value')
   aws_region=$(echo $output_json | jq --raw-output '.region.value')

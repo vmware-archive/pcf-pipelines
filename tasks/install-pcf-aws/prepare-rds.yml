@@ -8,7 +8,7 @@ image_resource:
 inputs:
   - name: terraform-zip
   - name: pcf-pipelines 
-  - name: pcfawsops-terraform-state-get
+  - name: terraform-state
 params:
   PEM:
   ERT_DOMAIN:

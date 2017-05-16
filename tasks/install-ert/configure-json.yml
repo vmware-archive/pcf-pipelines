@@ -11,7 +11,7 @@ inputs:
   - name: terraform-zip
   - name: pcf-pipelines 
   - name: tool-om
-  - name: pcfawsops-terraform-state-get
+  - name: terraform-state
 
 outputs:
   - name: json_file

@@ -233,7 +233,8 @@ jobs:
   - aggregate:
     - get: terraform-zip
     - get: pcf-pipelines
-    - get: pcfawsops-terraform-state-get
+    - get: terraform-state
+      resource: tfstate
     - get: tool-om
       trigger: true
       passed: [upload-ert]

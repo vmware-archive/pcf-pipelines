@@ -9,7 +9,7 @@ mv terraform-zip/terraform /usr/local/bin
 CWD=$(pwd)
 pushd $CWD
   cd pcf-pipelines/tasks/install-pcf-aws/terraform/
-  cp $CWD/pcfawsops-terraform-state-get/terraform.tfstate .
+  cp $CWD/terraform-state/terraform.tfstate .
 
   while read -r line
   do

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-cd pcfawsops-terraform-state-get
+cd terraform-state
   db_host=$(terraform output --json | jq --raw-output '.sql_instance_ip.value')
 cd -
 

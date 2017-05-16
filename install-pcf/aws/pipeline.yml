@@ -247,7 +247,8 @@ jobs:
     - get: pcf-pipelines 
       trigger: true
       passed: [upload-ert]
-    - get: pcfawsops-terraform-state-get
+    - get: terraform-state
+      resource: pcfawsops-terraform-state-get
 
   - task: prepare-rds
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-rds.yml
