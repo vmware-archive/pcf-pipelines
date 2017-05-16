@@ -24,7 +24,7 @@ function main() {
 
   local version
   pushd "${cwd}/pivnet-product"
-     version="$(unzip -p *.pivotal 'metadata/*.yml' | grep 'product_version:' | cut -d ':' -f 2 | tr -d ' ' | tr -d "'")"
+    version="$(unzip -p *.pivotal 'metadata/*.yml' | grep 'product_version:' | cut -d ':' -f 2 | tr -d ' ' | tr -d "'")"
   popd
 
   ./${CMD_PATH} --target "${OPSMAN_URI}" \

@@ -4,22 +4,25 @@ resource_types:
   source:
     repository: pivotalcf/pivnet-resource
     tag: v0.26.1
+
 - name: file-url
   type: docker-image
   source:
     repository: pivotalservices/concourse-curl-resource
     tag: latest
+
 resources:
-- name: get-pip 
+- name: get-pip
   type: file-url
   source:
-    url: https://bootstrap.pypa.io/get-pip.py  
-    filename: get-pip.py 
-- name: terraform-zip 
+    url: https://bootstrap.pypa.io/get-pip.py
+    filename: get-pip.py
+
+- name: terraform-zip
   type: file-url
   source:
-    url: https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip  
-    filename: terraform.zip 
+    url: https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip
+    filename: terraform.zip
 
 - name: terraform-state
   type: s3

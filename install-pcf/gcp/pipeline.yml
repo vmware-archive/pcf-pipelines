@@ -14,11 +14,11 @@ resource_types:
     tag: latest
 
 resources:
-- name: terraform-zip 
+- name: terraform-zip
   type: file-url
   source:
     url: https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip  
-    filename: terraform.zip 
+    filename: terraform.zip
 
 - name: pcf-pipelines
   type: git
