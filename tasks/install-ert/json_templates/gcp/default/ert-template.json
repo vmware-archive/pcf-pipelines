@@ -150,7 +150,7 @@
         "value": "pcf-gcp"
       },
       ".mysql_monitor.recipient_email": {
-        "value" : "c0-coreteam@pivotal.io"
+        "value" : "{{mysql_monitor_recipient_email}}"
       },
       ".uaa.service_provider_key_credentials": {
         "value": {

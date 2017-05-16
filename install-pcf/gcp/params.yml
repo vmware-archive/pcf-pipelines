@@ -77,3 +77,4 @@ db_ccdb_password: CHANGEME
 db_routing_username: CHANGEME
 db_routing_password: CHANGEME
 
+mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications

@@ -275,6 +275,7 @@ jobs:
       db_ccdb_password: {{db_ccdb_password}}
       db_routing_username: {{db_routing_username}}
       db_routing_password: {{db_routing_password}}
+      mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
       # aws specific
       bucket:
       TF_VAR_aws_access_key:

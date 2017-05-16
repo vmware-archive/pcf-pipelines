@@ -273,6 +273,7 @@ jobs:
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
       S3_ENDPOINT: {{S3_ENDPOINT}}
+      mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
       # IaaS Specific for GCP only
       gcp_proj_id:
       gcp_region:

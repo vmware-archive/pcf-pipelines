@@ -23,6 +23,7 @@ sed -i \
   -e "s/{{pcf_az_3}}/${pcf_az_3}/g" \
   -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" \
   -e "s/{{terraform_prefix}}/${terraform_prefix}/g" \
+  -e "s/{{mysql_monitor_recipient_email}}/${mysql_monitor_recipient_email}/g" \
   ${json_file}
 
 if [[ ${pcf_ert_ssl_cert} == "generate" ]]; then

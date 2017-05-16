@@ -69,3 +69,5 @@ PEM:
 ERT_SSL_CERT: generate
 ERT_SSL_KEY:
 ROUTE_53_ZONE_ID:
+
+mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications

@@ -59,3 +59,4 @@ params:
   db_ccdb_password:
   ert_sql_db_username:
   ert_sql_db_password:
+  mysql_monitor_recipient_email:
