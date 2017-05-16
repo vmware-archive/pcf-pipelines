@@ -53,8 +53,6 @@ resources:
     user: pivotal-cf
     repository: pcf-product-stemcell-downloader
     access_token: {{github_token}}
-    globs:
-    - stemcell-downloader-linux
 
 - name: schedule
   type: time
