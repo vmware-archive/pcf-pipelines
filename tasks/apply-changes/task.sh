@@ -26,6 +26,7 @@ function main() {
        --skip-ssl-validation \
        --username "${OPSMAN_USERNAME}" \
        --password "${OPSMAN_PASSWORD}" \
+       --ignore-warnings \
        apply-changes
 
     EXITCODE=$?
