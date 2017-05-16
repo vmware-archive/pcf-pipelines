@@ -317,6 +317,10 @@ jobs:
 
 - name: aws-pcf-destroy
   serial: true
+  ensure:
+    put: terraform-state
+    params:
+      file: terraform-state/terraform.tfstate
   plan:
   - aggregate:
     - get: terraform-zip
@@ -355,10 +359,3 @@ jobs:
       TF_VAR_rds_subnet_cidr_az1: {{TF_VAR_rds_subnet_cidr_az1}}
       TF_VAR_rds_subnet_cidr_az2: {{TF_VAR_rds_subnet_cidr_az2}}
       TF_VAR_rds_subnet_cidr_az3: {{TF_VAR_rds_subnet_cidr_az3}}
-    ensure:
-      put: terraform-state
-      params:
-        file: terraform-state/terraform.tfstate
-  - put: terraform-state
-    params:
-      file: terraform-state/terraform.tfstate
