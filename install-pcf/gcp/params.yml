@@ -39,6 +39,7 @@ pivnet_token: CHANGEME
 # Operations Manager credentials to set
 pcf_opsman_admin_username: CHANGEME
 pcf_opsman_admin_password: CHANGEME
+opsman_timeout_seconds: 360 # Time to wait for OpsMgr to be ready prior to making API calls
 
 # Elastic Runtime Domain
 pcf_ert_domain: CHANGEME
