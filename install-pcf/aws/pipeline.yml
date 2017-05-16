@@ -132,7 +132,7 @@ jobs:
       OPSMAN_USER: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
 
-- name: config-director
+- name: deploy-director
   serial: true
   plan:
   - aggregate:
@@ -141,7 +141,8 @@ jobs:
       trigger: true
       passed: [config-opsman]
     - get: terraform-state
-    - get: tool-om-beta
+    - get: tool-om
+      resource: tool-om-beta
       globs: [om-linux]
       version: { tag: '0.17-beta.0' }
   - task: config-director
@@ -161,21 +162,13 @@ jobs:
       services_subnet_reserved_ranges_z2: {{services_subnet_reserved_ranges_z2}}
       services_subnet_reserved_ranges_z3: {{services_subnet_reserved_ranges_z3}}
       infra_subnet_reserved_ranges_z1: {{infra_subnet_reserved_ranges_z1}}
-
-- name: deploy-director
-  serial: true
-  plan:
-  - aggregate:
-    - get: pcf-pipelines 
-      trigger: true
-      passed: [config-director]
-    - get: tool-om
   - task: deploy-director
-    file: pcf-pipelines/tasks/install-pcf-aws/deploy-director.yml
+    file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      pcf_ert_domain: {{ERT_DOMAIN}}
-      pcf_opsman_admin: {{OPSMAN_USER}}
-      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
+      OPSMAN_URI: {{ERT_DOMAIN}}
+      OPSMAN_USERNAME: {{OPSMAN_USER}}
+      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
+      OPSMAN_TIMEOUT: {{OPSMAN_TIMEOUT_SECONDS}}
 
 - name: import-stemcell
   plan:

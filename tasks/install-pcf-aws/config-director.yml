@@ -9,7 +9,7 @@ inputs:
   - name: terraform-zip
   - name: pcf-pipelines 
   - name: terraform-state
-  - name: tool-om-beta
+  - name: tool-om
 params:
   ERT_DOMAIN:
   OPSMAN_USER:
