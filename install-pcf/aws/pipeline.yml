@@ -326,6 +326,7 @@ jobs:
     - get: pcf-pipelines
       passed: [deploy-ert]
     - get: terraform-state
+    - get: pcfawsops-terraform-state-get
   - task: aws-pcf-destroy
     file: pcf-pipelines/tasks/install-pcf-aws/destroy-aws.yml
     params:
