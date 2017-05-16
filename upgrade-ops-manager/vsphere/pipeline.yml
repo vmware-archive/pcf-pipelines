@@ -155,7 +155,6 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
 
-      # todo discuss the order for calling this task
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
