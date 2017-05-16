@@ -210,7 +210,8 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-elastic-runtime
+    - get: pivnet-product
+      resource: pivnet-elastic-runtime
       params:
         globs:
         - "*pivotal"
@@ -224,11 +225,20 @@ jobs:
     - get: terraform-zip
 
   - task: upload-tile
-    file: pcf-pipelines/tasks/install-ert/upload-ert.yml
+    file: pcf-pipelines/tasks/upload-product/task.yml
     params:
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin_username}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+      OPSMAN_URI: {{pcf_ert_domain}}
+      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
+      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      TILE_UPLOAD_TIMEOUT: {{tile_upload_timeout}}
+
+  - task: stage-tile
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_URI: {{pcf_ert_domain}}
+      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
+      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      PRODUCT_NAME: cf
 
   - task: configure-json
     file: pcf-pipelines/tasks/install-ert/configure-json.yml

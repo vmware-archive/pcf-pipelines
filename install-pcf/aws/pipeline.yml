@@ -211,7 +211,8 @@ jobs:
     - get: pcf-pipelines 
       trigger: true
       passed: [import-stemcell]
-    - get: pivnet-elastic-runtime
+    - get: pivnet-product
+      resource: pivnet-elastic-runtime
       passed: [import-stemcell]
       params:
         globs:
@@ -220,12 +221,20 @@ jobs:
       params:
         globs:
         - "om-linux"
-  - task: upload-ert
-    file: pcf-pipelines/tasks/install-ert/upload-ert.yml
+  - task: upload-tile
+    file: pcf-pipelines/tasks/upload-product/task.yml
     params:
-      pcf_ert_domain: {{ERT_DOMAIN}}
-      pcf_opsman_admin: {{OPSMAN_USER}}
-      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
+      OPSMAN_URI: {{OPSMAN_URI}}
+      OPSMAN_USERNAME: {{OPSMAN_USER}}
+      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
+      TILE_UPLOAD_TIMEOUT: {{TILE_UPLOAD_TIMEOUT}}
+  - task: stage-tile
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_URI: {{OPSMAN_URI}}
+      OPSMAN_USERNAME: {{OPSMAN_USER}}
+      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
+      PRODUCT_NAME: cf
 
 - name: deploy-ert
   serial: true
