@@ -92,3 +92,14 @@ CF_PROPERTIES=$(cat <<-EOF
 }
 EOF
 )
+
+if [[ ${MYSQL_BACKUPS} == "scp" ]]; then
+echo "adding scp mysql backup properties"
+CF_PROPERTIES=$(echo "${CF_PROPERTIES}" | 
+  jq '.".properties.mysql_backups.scp.server" = {"value": "'${MYSQL_BACKUPS_SCP_SERVER}'"}' |
+  jq '.".properties.mysql_backups.scp.port" = {"value": "'${MYSQL_BACKUPS_SCP_PORT}'"}' |
+  jq '.".properties.mysql_backups.scp.user" = {"value": "'${MYSQL_BACKUPS_SCP_USER}'"}' |
+  jq '.".properties.mysql_backups.scp.key" = {"value": "'${MYSQL_BACKUPS_SCP_KEY}'"}' |
+  jq '.".properties.mysql_backups.scp.destination" = {"value": "'${MYSQL_BACKUPS_SCP_DESTINATION}'"}' |
+  jq '.".properties.mysql_backups.scp.cron_schedule" = {"value": "'${MYSQL_BACKUPS_SCP_CRON_SCHEDULE}'"}')
+fi
