@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-export PATH=$PATH:/opt/terraform
+unzip terraform-zip/terraform.zip
+mv terraform-zip/terraform /usr/local/bin
 
 cd pcfawsops-terraform-state-get
   output_json=$(terraform output --json)
