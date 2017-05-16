@@ -17,15 +17,8 @@ export AWS_SECRET_ACCESS_KEY=`terraform state show aws_iam_access_key.pcf_iam_us
 export RDS_PASSWORD=`terraform state show aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
 
 cd $CWD
-# Set JSON Config Template and inster Concourse Parameter Values
-json_file_path="pcf-pipelines/tasks/install-pcf-aws/json-opsman/${AWS_TEMPLATE}"
-json_file_template="${json_file_path}/opsman-template.json"
-json_file="${json_file_path}/opsman.json"
 
-cp ${json_file_template} ${json_file}
-
-sed -i \
-  -e "s/{{aws_vpc_id}}/${vpc_id}/g" \
+sed -e "s/{{aws_vpc_id}}/${vpc_id}/g" \
   -e "s/{{aws_sg_id}}/${pcf_security_group}/g" \
   -e "s/{{aws_keypair_name}}/${AWS_KEY_NAME}/g" \
   -e "s/{{aws_region}}/${AWS_REGION}/g" \
@@ -66,11 +59,12 @@ sed -i \
   -e "s|{{infra_subnet_cidr}}|${infra_subnet_cidr_az1}|g" \
   -e "s/{{infra_subnet_reserved}}/${infra_subnet_reserved_ranges_z1}/g" \
   -e "s/{{infra_subnet_gw}}/${infra_subnet_gw_az1}/g" \
-  $json_file
+  pcf-pipelines/tasks/install-pcf-aws/opsman-template.json > opsman.json
 
 echo "=============================================================================================="
 echo "Configuring Director @ https://opsman.$ERT_DOMAIN ..."
-cat $json_file
+cat opsman.json
+
 echo "=============================================================================================="
 
 sudo cp tool-om-beta/om-linux /usr/local/bin
@@ -80,4 +74,4 @@ om-linux -t https://opsman.$ERT_DOMAIN -u "$OPSMAN_USER" -p "$OPSMAN_PASSWORD" -
   aws -a $AWS_ACCESS_KEY_ID \
   -s $AWS_SECRET_ACCESS_KEY \
   -d $RDS_PASSWORD \
-  -p "$PEM" -c "$(cat ${json_file})"
+  -p "$PEM" -c "$(cat opsman.json)"

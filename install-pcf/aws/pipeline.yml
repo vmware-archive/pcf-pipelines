@@ -150,7 +150,6 @@ jobs:
       ERT_DOMAIN: {{ERT_DOMAIN}}
       OPSMAN_USER: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
-      AWS_TEMPLATE: "c0-aws-base"
       AWS_KEY_NAME: {{TF_VAR_aws_key_name}}
       PEM: {{PEM}}
       AWS_REGION: {{TF_VAR_aws_region}}
