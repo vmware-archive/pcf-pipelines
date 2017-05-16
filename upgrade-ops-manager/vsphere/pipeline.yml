@@ -124,6 +124,7 @@ jobs:
       GOVC_DATASTORE: {{vcenter_datastore}}
       GOVC_URL: {{vcenter_url}}
       OPSMAN_IP: {{opsman_ip}}
+      OPSMAN_URI: {{opsman_uri}}
       NETMASK: {{netmask}}
       GATEWAY: {{gateway}}
       DNS: {{dns}}
