@@ -6,7 +6,7 @@ CMD=./tool-om/om-linux
 
 function fn_get_azs {
      local azs_csv=$1
-     echo $azs_csv | awk -F "," -v quote='"' -v OFS='", "' '$1=$1 {print quote $0 quote}'
+     echo $azs_csv | jq --raw-input 'split(",")'
 }
 
 IAAS_CONFIGURATION=$(cat <<-EOF
@@ -49,10 +49,10 @@ AZ_CONFIGURATION=$(cat <<-EOF
 EOF
 )
 
-INFRA_AZS=$(fn_get_azs $INFRA_NW_AZS)
-DEPLOYMENT_AZS=$(fn_get_azs $DEPLOYMENT_NW_AZS)
-SERVICES_AZS=$(fn_get_azs $SERVICES_NW_AZS)
-DYNAMIC_SERVICES_AZS=$(fn_get_azs $DYNAMIC_SERVICES_NW_AZS)
+INFRA_AZS=$(fn_get_azs "$INFRA_NW_AZS")
+DEPLOYMENT_AZS=$(fn_get_azs "$DEPLOYMENT_NW_AZS")
+SERVICES_AZS=$(fn_get_azs "$SERVICES_NW_AZS")
+DYNAMIC_SERVICES_AZS=$(fn_get_azs "$DYNAMIC_SERVICES_NW_AZS")
 
 NETWORK_CONFIGURATION=$(cat <<-EOF
 {
@@ -68,9 +68,7 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
           "reserved_ip_ranges": "$INFRA_EXCLUDED_RANGE",
           "dns": "$INFRA_NW_DNS",
           "gateway": "$INFRA_NW_GATEWAY",
-          "availability_zone_names": [
-            $INFRA_AZS
-          ]
+          "availability_zone_names": $INFRA_AZS
         }
       ]
     },
@@ -84,9 +82,7 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
           "reserved_ip_ranges": "$DEPLOYMENT_EXCLUDED_RANGE",
           "dns": "$DEPLOYMENT_NW_DNS",
           "gateway": "$DEPLOYMENT_NW_GATEWAY",
-          "availability_zone_names": [
-            $DEPLOYMENT_AZS
-          ]
+          "availability_zone_names": $DEPLOYMENT_AZS
         }
       ]
     },
@@ -100,9 +96,7 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
           "reserved_ip_ranges": "$SERVICES_EXCLUDED_RANGE",
           "dns": "$SERVICES_NW_DNS",
           "gateway": "$SERVICES_NW_GATEWAY",
-          "availability_zone_names": [
-            $SERVICES_AZS
-          ]
+          "availability_zone_names": $SERVICES_AZS
         }
       ]
     },
@@ -116,9 +110,7 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
           "reserved_ip_ranges": "$DYNAMIC_SERVICES_EXCLUDED_RANGE",
           "dns": "$DYNAMIC_SERVICES_NW_DNS",
           "gateway": "$DYNAMIC_SERVICES_NW_GATEWAY",
-          "availability_zone_names": [
-            $DYNAMIC_SERVICES_AZS
-          ]
+          "availability_zone_names": $DYNAMIC_SERVICES_AZS
         }
       ]
     }
