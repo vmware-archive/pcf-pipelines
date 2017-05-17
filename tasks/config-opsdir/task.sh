@@ -143,6 +143,8 @@ SECURITY_CONFIG=$(cat <<-EOF
 EOF
 )
 
+INFRA_FIRST_AZ=$(echo $INFRA_AZS | jq --raw-output '.[0]')
+
 NETWORK_ASSIGNMENT=$(cat <<-EOF
 {
   "network_and_az": {
@@ -150,7 +152,7 @@ NETWORK_ASSIGNMENT=$(cat <<-EOF
        "name": "$INFRA_NETWORK_NAME"
      },
      "singleton_availability_zone": {
-       "name": "$AZ_1"
+       "name": "$INFRA_FIRST_AZ"
      }
   }
 }
