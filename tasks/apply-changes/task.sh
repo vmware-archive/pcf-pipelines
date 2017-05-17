@@ -22,5 +22,5 @@ chmod +x tool-om/om-linux
   --skip-ssl-validation \
   --username "${OPSMAN_USERNAME}" \
   --password "${OPSMAN_PASSWORD}" \
-  --ignore-warnings \
-  apply-changes
+  apply-changes \
+  --ignore-warnings
