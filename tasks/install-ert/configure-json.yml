@@ -60,3 +60,10 @@ params:
   ert_sql_db_username:
   ert_sql_db_password:
   mysql_monitor_recipient_email:
+  MYSQL_BACKUPS:
+  MYSQL_BACKUPS_SCP_SERVER:
+  MYSQL_BACKUPS_SCP_PORT:
+  MYSQL_BACKUPS_SCP_USER:
+  MYSQL_BACKUPS_SCP_KEY:
+  MYSQL_BACKUPS_SCP_DESTINATION:
+  MYSQL_BACKUPS_SCP_CRON_SCHEDULE:

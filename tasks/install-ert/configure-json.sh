@@ -8,6 +8,19 @@ chmod +x tool-om/om-linux
 json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}/${terraform_template}"
 json_file_template="${json_file_path}/ert-template.json"
 
+if [[ ${MYSQL_BACKUPS} == "scp" ]]; then
+echo "adding scp mysql backup properties"
+CF_PROPERTIES=$(cat ${json_file_template} |
+  jq '.properties.properties.".properties.mysql_backups" = {"value": "'${MYSQL_BACKUPS}'"}' |
+  jq '.properties.properties.".properties.mysql_backups.scp.server" = {"value": "'${MYSQL_BACKUPS_SCP_SERVER}'"}' |
+  jq '.properties.properties.".properties.mysql_backups.scp.port" = {"value": "'${MYSQL_BACKUPS_SCP_PORT}'"}' |
+  jq '.properties.properties.".properties.mysql_backups.scp.user" = {"value": "'${MYSQL_BACKUPS_SCP_USER}'"}' |
+  jq '.properties.properties.".properties.mysql_backups.scp.key" = {"value": "'${MYSQL_BACKUPS_SCP_KEY}'"}' |
+  jq '.properties.properties.".properties.mysql_backups.scp.destination" = {"value": "'${MYSQL_BACKUPS_SCP_DESTINATION}'"}' |
+  jq '.properties.properties.".properties.mysql_backups.scp.cron_schedule" = {"value": "'${MYSQL_BACKUPS_SCP_CRON_SCHEDULE}'"}')
+cat "${CF_PROPERTIES}" > ${json_file_template}
+fi
+
 if [ ! -f "$json_file_template" ]; then
   echo "Error: can't find file=[${json_file_template}]"
   exit 1
