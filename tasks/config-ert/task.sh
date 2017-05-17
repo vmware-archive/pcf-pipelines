@@ -38,8 +38,8 @@ EOF
 
   CERTIFICATES=`$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k curl -p "$OPS_MGR_GENERATE_SSL_ENDPOINT" -x POST -d "$DOMAINS"`
 
-  export SSL_CERT=`echo $CERTIFICATES | jq --raw-output '.certificate'
-  export SSL_PRIVATE_KEY=`echo $CERTIFICATES | jq --raw-output '.key'
+  export SSL_CERT=`echo $CERTIFICATES | jq --raw-output '.certificate'`
+  export SSL_PRIVATE_KEY=`echo $CERTIFICATES | jq --raw-output '.key'`
 
   echo "Using self signed certificates generated using Ops Manager..."
 
