@@ -103,7 +103,7 @@ if [[ ${MYSQL_BACKUPS} == "scp" ]]; then
     .".properties.mysql_backups.scp.key" = {"value": $mysql_backups_scp_key} |
     .".properties.mysql_backups.scp.destination" = {"value": $mysql_backups_scp_destination} |
     .".properties.mysql_backups.scp.cron_schedule" = {"value": $mysql_backups_scp_cron_schedule}
-  EOF
+EOF
 
   echo "${CF_PROPERTIES}" | jq \
     --arg mysql_backups "$MYSQL_BACKUPS" \
