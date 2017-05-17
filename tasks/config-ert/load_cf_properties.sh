@@ -127,7 +127,7 @@ if [[ ${MYSQL_BACKUPS} == "s3" ]]; then
     .".properties.mysql_backups.s3.access_key_id" = {"value": $mysql_backups_s3_access_key_id} |
     .".properties.mysql_backups.s3.secret_access_key" = {"value": $mysql_backups_s3_secret_access_key} |
     .".properties.mysql_backups.s3.cron_schedule" = {"value": $mysql_backups_s3_cron_schedule}
-  EOF
+EOF
 
   echo "${CF_PROPERTIES}" | jq \
     --arg mysql_backups "$MYSQL_BACKUPS" \
