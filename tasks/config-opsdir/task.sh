@@ -33,17 +33,17 @@ AZ_CONFIGURATION=$(cat <<-EOF
   "availability_zones": [
     {
       "name": "$AZ_1",
-      "cluster": "$AZ_1_CUSTER_NAME",
+      "cluster": "$AZ_1_CLUSTER_NAME",
       "resource_pool": "$AZ_1_RP_NAME"
     },
     {
       "name": "$AZ_2",
-      "cluster": "$AZ_2_CUSTER_NAME",
+      "cluster": "$AZ_2_CLUSTER_NAME",
       "resource_pool": "$AZ_2_RP_NAME"
     },
     {
       "name": "$AZ_3",
-      "cluster": "$AZ_3_CUSTER_NAME",
+      "cluster": "$AZ_3_CLUSTER_NAME",
       "resource_pool": "$AZ_3_RP_NAME"
     }
   ]

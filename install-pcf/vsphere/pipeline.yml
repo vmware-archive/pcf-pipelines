@@ -165,13 +165,13 @@ jobs:
       DYNAMIC_SERVICES_NW_GATEWAY: {{dynamic_services_nw_gateway}}
       DYNAMIC_SERVICES_NW_AZS: {{dynamic_services_nw_azs}}
       AZ_1: {{az_1_name}}
-      AZ_1_CUSTER_NAME: {{az_1_cluster_name}}
+      AZ_1_CLUSTER_NAME: {{az_1_cluster_name}}
       AZ_1_RP_NAME: {{az_1_rp_name}}
       AZ_2: {{az_2_name}}
-      AZ_2_CUSTER_NAME: {{az_2_cluster_name}}
+      AZ_2_CLUSTER_NAME: {{az_2_cluster_name}}
       AZ_2_RP_NAME: {{az_2_rp_name}}
       AZ_3: {{az_3_name}}
-      AZ_3_CUSTER_NAME: {{az_3_cluster_name}}
+      AZ_3_CLUSTER_NAME: {{az_3_cluster_name}}
       AZ_3_RP_NAME: {{az_3_rp_name}}
       NTP_SERVERS: {{ntp_servers}}
       OPS_DIR_HOSTNAME: {{ops_dir_hostname}}
