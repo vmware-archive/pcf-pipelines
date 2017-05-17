@@ -3,8 +3,10 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 chmod +x tool-om/om-linux
-
 CMD=./tool-om/om-linux
+
+chmod +x jq/jq
+PATH=$PWD/jq:$PATH
 
 CF_RELEASE=`$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k available-products | grep cf`
 

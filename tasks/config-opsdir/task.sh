@@ -1,8 +1,10 @@
 #!/bin/bash -e
 
 chmod +x tool-om/om-linux
-
 CMD=./tool-om/om-linux
+
+chmod +x jq/jq
+PATH=$PWD/jq:$PATH
 
 function fn_get_azs {
      local azs_csv=$1

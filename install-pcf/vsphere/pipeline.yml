@@ -5,7 +5,19 @@ resource_types:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
 
+- name: file-url
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
 resources:
+- name: jq
+  type: file-url
+  source:
+    url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    filename: jq
+
 - name: govc
   type: github-release
   source:
@@ -103,6 +115,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: jq
     - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [install-opsmgr]
@@ -212,6 +225,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: jq
     - get: tool-om
       params: {globs: ["*linux*"]}
       trigger: true
