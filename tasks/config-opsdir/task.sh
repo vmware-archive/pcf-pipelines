@@ -143,7 +143,7 @@ SECURITY_CONFIG=$(cat <<-EOF
 EOF
 )
 
-INFRA_FIRST_AZ=$(echo $INFRA_AZS | jq .[0] --raw-output)
+INFRA_FIRST_AZ=$(echo $INFRA_AZS | jq --raw-output '.[0]')
 
 NETWORK_ASSIGNMENT=$(cat <<-EOF
 {
