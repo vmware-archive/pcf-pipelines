@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 chmod +x tool-om/om-linux
-CMD=./tool-om/om-linux
+PATH=$PWD/tool-om:$PATH
 
 chmod +x jq/jq
 PATH=$PWD/jq:$PATH
@@ -159,8 +159,8 @@ NETWORK_ASSIGNMENT=$(cat <<-EOF
 EOF
 )
 
-echo "Configuring IaaS and Director..."
-$CMD \
+echo "Configuring BOSH..."
+om-linux \
   --target https://$OPS_MGR_HOST \
   --skip-ssl-validation \
   --username $OPS_MGR_USR \
@@ -168,23 +168,7 @@ $CMD \
   configure-bosh \
   --iaas-configuration "$IAAS_CONFIGURATION" \
   --director-configuration "$DIRECTOR_CONFIG"
-
-echo "Configuring availability zones..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/availability_zones" \
-            -x PUT -d "$AZ_CONFIGURATION"
-
-echo "Configuring networks..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/networks" \
-            -x PUT -d "$NETWORK_CONFIGURATION"
-
-echo "Configuring network assignment..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/network_and_az" \
-            -x PUT -d "$NETWORK_ASSIGNMENT"
-
-echo "Configuring security..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/properties" \
-            -x PUT -d "$SECURITY_CONFIG"
+  --az-configuration "$AZ_CONFIGURATION" \
+  --networks-configuration "$NETWORK_CONFIGURATION" \
+  --network-assignment "$NETWORK_ASSIGNMENT" \
+  --security-configuration "$SECURITY_CONFIG"
