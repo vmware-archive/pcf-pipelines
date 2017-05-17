@@ -94,12 +94,31 @@ EOF
 )
 
 if [[ ${MYSQL_BACKUPS} == "scp" ]]; then
-echo "adding scp mysql backup properties"
-CF_PROPERTIES=$(echo "${CF_PROPERTIES}" | 
-  jq '.".properties.mysql_backups.scp.server" = {"value": "'${MYSQL_BACKUPS_SCP_SERVER}'"}' |
-  jq '.".properties.mysql_backups.scp.port" = {"value": "'${MYSQL_BACKUPS_SCP_PORT}'"}' |
-  jq '.".properties.mysql_backups.scp.user" = {"value": "'${MYSQL_BACKUPS_SCP_USER}'"}' |
-  jq '.".properties.mysql_backups.scp.key" = {"value": "'${MYSQL_BACKUPS_SCP_KEY}'"}' |
-  jq '.".properties.mysql_backups.scp.destination" = {"value": "'${MYSQL_BACKUPS_SCP_DESTINATION}'"}' |
-  jq '.".properties.mysql_backups.scp.cron_schedule" = {"value": "'${MYSQL_BACKUPS_SCP_CRON_SCHEDULE}'"}')
+  echo "adding scp mysql backup properties"
+  cat > mysql_filter <<-'EOF'
+    .".properties.mysql_backups" = {"value": $mysql_backups} |
+    .".properties.mysql_backups.scp.server" = {"value": $mysql_backups_scp_server} |
+    .".properties.mysql_backups.scp.port" = {"value": $mysql_backups_scp_port} |
+    .".properties.mysql_backups.scp.user" = {"value": $mysql_backups_scp_user} |
+    .".properties.mysql_backups.scp.key" = {"value": $mysql_backups_scp_key} |
+    .".properties.mysql_backups.scp.destination" = {"value": $mysql_backups_scp_destination} |
+    .".properties.mysql_backups.scp.cron_schedule" = {"value": $mysql_backups_scp_cron_schedule}
+  EOF
+
+  echo "${CF_PROPERTIES}" | jq \
+    --arg mysql_backups "$MYSQL_BACKUPS" \
+    --arg mysql_backups_scp_server "$MYSQL_BACKUPS_SCP_SERVER" \
+    --arg mysql_backups_scp_port "$MYSQL_BACKUPS_SCP_PORT" \
+    --arg mysql_backups_scp_user "$MYSQL_BACKUPS_SCP_USER" \
+    --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
+    --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
+    --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
+    --from-file mysql_filter > config.json
+  CF_PROPERTIES=$(cat config.json)
 fi
+
+
+
+
+
+
