@@ -8,19 +8,6 @@ chmod +x tool-om/om-linux
 json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}/${terraform_template}"
 json_file_template="${json_file_path}/ert-template.json"
 
-if [[ ${MYSQL_BACKUPS} == "scp" ]]; then
-echo "adding scp mysql backup properties"
-CF_PROPERTIES=$(cat ${json_file_template} |
-  jq '.properties.properties.".properties.mysql_backups" = {"value": "'${MYSQL_BACKUPS}'"}' |
-  jq '.properties.properties.".properties.mysql_backups.scp.server" = {"value": "'${MYSQL_BACKUPS_SCP_SERVER}'"}' |
-  jq '.properties.properties.".properties.mysql_backups.scp.port" = {"value": "'${MYSQL_BACKUPS_SCP_PORT}'"}' |
-  jq '.properties.properties.".properties.mysql_backups.scp.user" = {"value": "'${MYSQL_BACKUPS_SCP_USER}'"}' |
-  jq '.properties.properties.".properties.mysql_backups.scp.key" = {"value": "'${MYSQL_BACKUPS_SCP_KEY}'"}' |
-  jq '.properties.properties.".properties.mysql_backups.scp.destination" = {"value": "'${MYSQL_BACKUPS_SCP_DESTINATION}'"}' |
-  jq '.properties.properties.".properties.mysql_backups.scp.cron_schedule" = {"value": "'${MYSQL_BACKUPS_SCP_CRON_SCHEDULE}'"}')
-cat "${CF_PROPERTIES}" > ${json_file_template}
-fi
-
 if [ ! -f "$json_file_template" ]; then
   echo "Error: can't find file=[${json_file_template}]"
   exit 1
@@ -29,15 +16,6 @@ fi
 json_file="json_file/ert.json"
 
 cp ${json_file_template} ${json_file}
-
-sed -i \
-  -e "s/{{pcf_az_1}}/${pcf_az_1}/g" \
-  -e "s/{{pcf_az_2}}/${pcf_az_2}/g" \
-  -e "s/{{pcf_az_3}}/${pcf_az_3}/g" \
-  -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" \
-  -e "s/{{terraform_prefix}}/${terraform_prefix}/g" \
-  -e "s/{{mysql_monitor_recipient_email}}/${mysql_monitor_recipient_email}/g" \
-  ${json_file}
 
 if [[ ${pcf_ert_ssl_cert} == "generate" ]]; then
   echo "=============================================================================================="
@@ -54,21 +32,52 @@ domains=$(cat <<-EOF
   {"domains": ["*.${system_domain}", "*.login.${system_domain}", "*.uaa.${system_domain}"] }
 EOF
 )
-
 saml_cert_response=`$OM_CMD -t $ops_mgr_host -u $pcf_opsman_admin -p $pcf_opsman_admin_passwd -k curl -p "/api/v0/rsa_certificates" -x POST -d "$domains"`
-
 saml_cert_pem=$(echo $saml_cert_response | jq --raw-output '.certificate')
 saml_key_pem=$(echo $saml_cert_response | jq --raw-output '.key')
 
-cat > filters <<'EOF'
-.properties.properties.".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate".value = {
-  "cert_pem": $cert_pem,
-  "private_key_pem": $private_key_pem
-} |
-.properties.properties.".uaa.service_provider_key_credentials".value = {
-  "cert_pem": $saml_cert_pem,
-  "private_key_pem": $saml_key_pem
-}
+sed -i \
+  -e "s/{{pcf_az_1}}/${pcf_az_1}/g" \
+  -e "s/{{pcf_az_2}}/${pcf_az_2}/g" \
+  -e "s/{{pcf_az_3}}/${pcf_az_3}/g" \
+  -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" \
+  -e "s/{{terraform_prefix}}/${terraform_prefix}/g" \
+  -e "s/{{mysql_monitor_recipient_email}}/${mysql_monitor_recipient_email}/g" \
+  ${json_file}
+
+if [[ ${MYSQL_BACKUPS} == "scp" ]]; then
+  cat > mysql_filter <<-'EOF'
+    .properties.properties.".properties.mysql_backups" = {"value": $mysql_backups} |
+    .properties.properties.".properties.mysql_backups.scp.server" = {"value": $mysql_backups_scp_server} |
+    .properties.properties.".properties.mysql_backups.scp.port" = {"value": $mysql_backups_scp_port} |
+    .properties.properties.".properties.mysql_backups.scp.user" = {"value": $mysql_backups_scp_user} |
+    .properties.properties.".properties.mysql_backups.scp.key" = {"value": $mysql_backups_scp_key} |
+    .properties.properties.".properties.mysql_backups.scp.destination" = {"value": $mysql_backups_scp_destination} |
+    .properties.properties.".properties.mysql_backups.scp.cron_schedule" = {"value": $mysql_backups_scp_cron_schedule}
+  EOF
+
+  jq \
+    --arg mysql_backups "$MYSQL_BACKUPS" \
+    --arg mysql_backups_scp_server "$MYSQL_BACKUPS_SCP_SERVER" \
+    --arg mysql_backups_scp_port "$MYSQL_BACKUPS_SCP_PORT" \
+    --arg mysql_backups_scp_user "$MYSQL_BACKUPS_SCP_USER" \
+    --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
+    --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
+    --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
+    --from-file mysql_filter \
+    $json_file > config.json
+  mv config.json $json_file
+fi
+
+cat > cert_filter <<-'EOF'
+  .properties.properties.".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate".value = {
+    "cert_pem": $cert_pem,
+    "private_key_pem": $private_key_pem
+  } |
+  .properties.properties.".uaa.service_provider_key_credentials".value = {
+    "cert_pem": $saml_cert_pem,
+    "private_key_pem": $saml_key_pem
+  }
 EOF
 
 jq \
@@ -76,9 +85,8 @@ jq \
   --arg private_key_pem "$pcf_ert_ssl_key" \
   --arg saml_cert_pem "$saml_cert_pem" \
   --arg saml_key_pem "$saml_key_pem" \
-  --from-file filters \
+  --from-file cert_filter \
   $json_file > config.json
-
 mv config.json $json_file
 
 db_creds=(
