@@ -149,6 +149,12 @@ CF_AUTH_PROPERTIES=$(cat <<-EOF
 {
   ".properties.uaa": {
     "value": "$AUTHENTICATION_MODE"
+  },
+  ".uaa.service_provider_key_credentials": {
+        "value": {
+          "cert_pem": "",
+          "private_key_pem": ""
+        }
   }
 }
 EOF
@@ -190,14 +196,44 @@ CF_AUTH_PROPERTIES=$(cat <<-EOF
   },
   ".properties.uaa.ldap.last_name_attribute": {
     "value": "$LAST_NAME_ATTR"
-  }
+  },
+  ".uaa.service_provider_key_credentials": {
+        "value": {
+          "cert_pem": "",
+          "private_key_pem": ""
+        }
+  }  
 }
 EOF
 )
 
 fi
 
-$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_AUTH_PROPERTIES"
+saml_cert_domains=$(cat <<-EOF
+  {"domains": ["*.$SYSTEM_DOMAIN", "*.login.$SYSTEM_DOMAIN", "*.uaa.$SYSTEM_DOMAIN"] }
+EOF
+)
+
+saml_cert_response=`$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k curl -p "$OPS_MGR_GENERATE_SSL_ENDPOINT" -x POST -d "$saml_cert_domains"`
+
+saml_cert_pem=$(echo $saml_cert_response | jq --raw-output '.certificate')
+saml_key_pem=$(echo $saml_cert_response | jq --raw-output '.key')
+
+cat > saml_auth_filters <<'EOF'
+.".uaa.service_provider_key_credentials".value = {
+  "cert_pem": $saml_cert_pem,
+  "private_key_pem": $saml_key_pem
+}
+EOF
+
+CF_AUTH_WITH_SAML_CERTS=$(echo $CF_AUTH_PROPERTIES | jq \
+  --arg saml_cert_pem "$saml_cert_pem" \
+  --arg saml_key_pem "$saml_key_pem" \
+  --from-file saml_auth_filters \
+  --raw-output)
+
+
+$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_AUTH_WITH_SAML_CERTS"
 
 if [[ ! -z "$SYSLOG_HOST" ]]; then
 
