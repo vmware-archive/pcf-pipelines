@@ -116,9 +116,3 @@ EOF
     --from-file mysql_filter > config.json
   CF_PROPERTIES=$(cat config.json)
 fi
-
-
-
-
-
-
