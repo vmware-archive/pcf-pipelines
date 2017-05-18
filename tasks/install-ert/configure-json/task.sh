@@ -35,7 +35,7 @@ domains=$(cat <<-EOF
   {"domains": ["*.${system_domain}", "*.login.${system_domain}", "*.uaa.${system_domain}"] }
 EOF
 )
-saml_cert_response=`$OM_CMD -t $ops_mgr_host -u $pcf_opsman_admin -p $pcf_opsman_admin_passwd -k curl -p "/api/v0/rsa_certificates" -x POST -d "$domains"`
+saml_cert_response=`$OM_CMD -t $ops_mgr_host -u $pcf_opsman_admin -p $pcf_opsman_admin_passwd -k curl -p "/api/v0/certificates/generate" -x POST -d "$domains"`
 saml_cert_pem=$(echo $saml_cert_response | jq --raw-output '.certificate')
 saml_key_pem=$(echo $saml_cert_response | jq --raw-output '.key')
 
