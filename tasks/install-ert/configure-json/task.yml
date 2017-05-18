@@ -12,6 +12,7 @@ inputs:
   - name: pcf-pipelines 
   - name: tool-om
   - name: terraform-state
+  - name: jq
 
 outputs:
   - name: json_file
