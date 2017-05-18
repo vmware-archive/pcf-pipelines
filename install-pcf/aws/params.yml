@@ -79,3 +79,11 @@ mysql_backups_scp_user:
 mysql_backups_scp_key:
 mysql_backups_scp_destination:
 mysql_backups_scp_cron_schedule:
+
+#S3 backup config params (leave empty values if you're not using s3)
+mysql_backups_s3_endpoint_url:
+mysql_backups_s3_bucket_name:
+mysql_backups_s3_bucket_path:
+mysql_backups_s3_access_key_id:
+mysql_backups_s3_secret_access_key:
+mysql_backups_s3_cron_schedule:

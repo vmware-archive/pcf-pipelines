@@ -174,7 +174,7 @@ ssh_static_ips:         # Comma-separated list of static IPs
 mysql_monitor_email:    # Email address to receive MySQL monitor notifications
 mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
 
-#SCP backup config params (leave empty values if you're not using scp
+#SCP backup config params (leave empty values if you're not using scp)
 mysql_backups_scp_server:
 mysql_backups_scp_port:
 mysql_backups_scp_user:
@@ -182,7 +182,7 @@ mysql_backups_scp_key:
 mysql_backups_scp_destination:
 mysql_backups_scp_cron_schedule:
 
-#S3 backup config params (leave empty values if you're not using scp
+#S3 backup config params (leave empty values if you're not using s3)
 mysql_backups_s3_endpoint_url:
 mysql_backups_s3_bucket_name:
 mysql_backups_s3_bucket_path:

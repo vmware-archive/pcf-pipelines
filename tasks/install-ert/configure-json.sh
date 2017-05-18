@@ -69,6 +69,31 @@ EOF
   mv config.json $json_file
 fi
 
+if [[ ${MYSQL_BACKUPS} == "s3" ]]; then
+  echo "adding s3 mysql backup properties"
+  cat > mysql_filter <<-'EOF'
+    .properties.properties.".properties.mysql_backups" = {"value": $mysql_backups} |
+    .properties.properties.".properties.mysql_backups.s3.endpoint_url" = {"value": $mysql_backups_s3_endpoint_url} |
+    .properties.properties.".properties.mysql_backups.s3.bucket_name" = {"value": $mysql_backups_s3_bucket_name} |
+    .properties.properties.".properties.mysql_backups.s3.bucket_path" = {"value": $mysql_backups_s3_bucket_path} |
+    .properties.properties.".properties.mysql_backups.s3.access_key_id" = {"value": $mysql_backups_s3_access_key_id} |
+    .properties.properties.".properties.mysql_backups.s3.secret_access_key" = {"value": $mysql_backups_s3_secret_access_key} |
+    .properties.properties.".properties.mysql_backups.s3.cron_schedule" = {"value": $mysql_backups_s3_cron_schedule}
+EOF
+
+  jq \
+    --arg mysql_backups "$MYSQL_BACKUPS" \
+    --arg mysql_backups_s3_endpoint_url "$MYSQL_BACKUPS_S3_ENDPOINT_URL" \
+    --arg mysql_backups_s3_bucket_name "$MYSQL_BACKUPS_S3_BUCKET_NAME" \
+    --arg mysql_backups_s3_bucket_path "$MYSQL_BACKUPS_S3_BUCKET_PATH" \
+    --arg mysql_backups_s3_access_key_id "$MYSQL_BACKUPS_S3_ACCESS_KEY_ID" \
+    --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
+    --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
+    --from-file mysql_filter \
+    $json_file > config.json
+  mv config.json $json_file
+fi
+
 cat > cert_filter <<-'EOF'
   .properties.properties.".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate".value = {
     "cert_pem": $cert_pem,
