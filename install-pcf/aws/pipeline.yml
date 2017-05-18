@@ -369,3 +369,6 @@ jobs:
       TF_VAR_rds_subnet_cidr_az1: {{TF_VAR_rds_subnet_cidr_az1}}
       TF_VAR_rds_subnet_cidr_az2: {{TF_VAR_rds_subnet_cidr_az2}}
       TF_VAR_rds_subnet_cidr_az3: {{TF_VAR_rds_subnet_cidr_az3}}
+  - put: terraform-state
+    params:
+      file: terraform-state-output/terraform.tfstate

@@ -11,7 +11,7 @@ inputs:
   - name: pcf-pipelines 
   - name: terraform-state
 outputs:
-  - name: terraform-state
+  - name: terraform-state-output
 params:
   TF_VAR_aws_access_key:
   TF_VAR_aws_secret_key:
