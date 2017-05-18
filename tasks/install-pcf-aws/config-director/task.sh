@@ -2,7 +2,7 @@
 set -ex
 
 unzip terraform-zip/terraform.zip
-mv terraform-zip/terraform /usr/local/bin
+mv terraform /usr/local/bin
 root=$(pwd)
 cd pcf-pipelines/tasks/install-pcf-aws/terraform/
 cp $root/terraform-state/terraform.tfstate .

@@ -2,7 +2,7 @@
 set -e
 
 unzip terraform-zip/terraform.zip
-mv terraform-zip/terraform /usr/local/bin
+mv terraform /usr/local/bin
 
 cd terraform-state
   output_json=$(terraform output --json)
