@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eu
 
+export PATH=/opt/terraform:$PATH
+
 export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}
 export GOOGLE_PROJECT=${GCP_PROJECT_ID}
 export GOOGLE_REGION=${GCP_REGION}
