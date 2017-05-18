@@ -21,10 +21,12 @@ export VPC_ID=$(
   terraform state show -state "${root}/terraform-state/terraform.tfstate" aws_vpc.PcfVpc | grep ^id | awk '{print $3}'
 )
 
-#Clean AWS instances
-instances=$(aws ec2 describe-instances --filters Name=vpc-id,Values=$VPC_ID --output=json | jq -r '.[] | .[] | .Instances | .[] | .InstanceId')
-if [[ "X$instances" != "X" ]]
-then
+instances=$(
+  aws ec2 describe-instances --filters "Name=vpc-id,Values=$VPC_ID" --output=json |
+  jq --raw-output '.Reservations[].Instances[].InstanceId'
+)
+if [[ -n "$instances" ]]; then
+  # Purge all BOSH-managed VMs from the VPC
   echo "instances: $instances will be deleted......"
   aws ec2 terminate-instances --instance-ids $instances
   aws ec2 wait instance-terminated --instance-ids $instances
