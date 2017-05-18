@@ -17,7 +17,7 @@ outputs:
   - name: json_file
 
 run:
-  path: pcf-pipelines/tasks/install-ert/configure-json.sh
+  path: pcf-pipelines/tasks/install-ert/configure-json/task.sh
 
 params:
   pcf_iaas:

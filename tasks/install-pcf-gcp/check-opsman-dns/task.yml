@@ -13,4 +13,4 @@ params:
   pcf_ert_domain:
 
 run:
-  path: pcf-pipelines/tasks/install-pcf-gcp/check-opsman-dns.sh
+  path: pcf-pipelines/tasks/install-pcf-gcp/check-opsman-dns/task.sh

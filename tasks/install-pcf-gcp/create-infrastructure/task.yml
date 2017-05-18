@@ -29,4 +29,4 @@ params:
   ERT_SQL_DB_PASSWORD:
 
 run:
-  path: pcf-pipelines/tasks/install-pcf-gcp/create-infrastructure.sh
+  path: pcf-pipelines/tasks/install-pcf-gcp/create-infrastructure/task.sh

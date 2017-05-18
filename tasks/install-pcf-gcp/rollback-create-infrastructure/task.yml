@@ -7,8 +7,10 @@ image_resource:
     repository: virtmerlin/c0-worker-gcp
 
 inputs:
+- name: create-infrastructure-output
+  path: tfstate
 - name: pcf-pipelines 
-- name: pivnet-opsmgr
+- name: tfstate-version
 
 params:
   GCP_PROJECT_ID:
@@ -16,4 +18,4 @@ params:
   GCP_SERVICE_ACCOUNT_KEY:
 
 run:
-  path: pcf-pipelines/tasks/install-pcf-gcp/upload-opsman.sh
+  path: pcf-pipelines/tasks/install-pcf-gcp/wipe-env/task.sh

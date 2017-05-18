@@ -13,7 +13,7 @@ inputs:
   - name: json_file
 
 run:
-  path: pcf-pipelines/tasks/install-ert/configure-ert.sh
+  path: pcf-pipelines/tasks/install-ert/configure-ert/task.sh
 
 params:
   pcf_iaas:

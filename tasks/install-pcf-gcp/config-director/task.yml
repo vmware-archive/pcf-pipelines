@@ -22,4 +22,4 @@ params:
   gcp_svc_acct_key:
 
 run:
-  path: pcf-pipelines/tasks/install-pcf-gcp/config-director.sh
+  path: pcf-pipelines/tasks/install-pcf-gcp/config-director/task.sh

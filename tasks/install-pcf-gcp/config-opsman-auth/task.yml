@@ -16,4 +16,4 @@ params:
   pcf_opsman_admin_password:
 
 run:
-  path: pcf-pipelines/tasks/install-pcf-gcp/config-opsman-auth.sh
+  path: pcf-pipelines/tasks/install-pcf-gcp/config-opsman-auth/task.sh

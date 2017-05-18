@@ -20,4 +20,4 @@ params:
   GCP_SERVICE_ACCOUNT_KEY:
 
 run:
-  path: pcf-pipelines/tasks/install-pcf-gcp/wipe-env.sh
+  path: pcf-pipelines/tasks/install-pcf-gcp/wipe-env/task.sh

@@ -44,4 +44,4 @@ params:
   TF_VAR_nat_ip_az2:
   TF_VAR_nat_ip_az3:
 run:
-  path: pcf-pipelines/tasks/install-pcf-aws/prepare-aws.sh
+  path: pcf-pipelines/tasks/install-pcf-aws/prepare-aws/task.sh

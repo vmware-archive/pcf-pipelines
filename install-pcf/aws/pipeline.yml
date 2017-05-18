@@ -78,7 +78,7 @@ jobs:
     - get: terraform-zip
     - get: pcf-pipelines 
   - task: aws-pcf-prepare
-    file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws.yml
+    file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws/task.yml
     params:
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
@@ -126,7 +126,7 @@ jobs:
       passed: [aws-pcf-prepare]
     - get: tool-om
   - task: config-opsman
-    file: pcf-pipelines/tasks/install-pcf-aws/config-opsman.yml
+    file: pcf-pipelines/tasks/install-pcf-aws/config-opsman/task.yml
     params:
       ERT_DOMAIN: {{ERT_DOMAIN}}
       OPSMAN_USER: {{OPSMAN_USER}}
@@ -147,7 +147,7 @@ jobs:
         globs: ["*linux*"]
       version: { tag: '0.17-beta.0' }
   - task: config-director
-    file: pcf-pipelines/tasks/install-pcf-aws/config-director.yml
+    file: pcf-pipelines/tasks/install-pcf-aws/config-director/task.yml
     params:
       ERT_DOMAIN: {{ERT_DOMAIN}}
       OPSMAN_USER: {{OPSMAN_USER}}
@@ -243,13 +243,13 @@ jobs:
     - get: terraform-state
 
   - task: prepare-rds
-    file: pcf-pipelines/tasks/install-pcf-aws/prepare-rds.yml
+    file: pcf-pipelines/tasks/install-pcf-aws/prepare-rds/task.yml
     params:
       PEM: {{PEM}}
       ERT_DOMAIN: {{ERT_DOMAIN}}
 
   - task: configure-json
-    file: pcf-pipelines/tasks/install-ert/configure-json.yml
+    file: pcf-pipelines/tasks/install-ert/configure-json/task.yml
     params:
       pcf_iaas: aws
       pcf_ert_domain: {{ERT_DOMAIN}}
@@ -305,7 +305,7 @@ jobs:
       ert_sql_db_password: {{TF_VAR_rds_db_password_ertsql}}
 
   - task: configure-ert
-    file: pcf-pipelines/tasks/install-ert/configure-ert.yml
+    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
     params:
       pcf_iaas: aws
       pcf_ert_domain: {{ERT_DOMAIN}}
@@ -332,7 +332,7 @@ jobs:
     - get: pcf-pipelines
     - get: terraform-state
   - task: aws-pcf-destroy
-    file: pcf-pipelines/tasks/install-pcf-aws/destroy-aws.yml
+    file: pcf-pipelines/tasks/install-pcf-aws/destroy-aws/task.yml
     params:
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
