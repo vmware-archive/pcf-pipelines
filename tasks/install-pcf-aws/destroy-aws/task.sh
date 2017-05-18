@@ -9,7 +9,7 @@ export AWS_ACCESS_KEY_ID=${TF_VAR_aws_access_key}
 export AWS_SECRET_ACCESS_KEY=${TF_VAR_aws_secret_key}
 export AWS_DEFAULT_REGION=${TF_VAR_aws_region}
 export VPC_ID=$(
-  terraform state show -state $root/terraform-state/terraform.tfstate aws_vpc.PcfVpc | grep ^id | awk '{print $3}'
+  terraform state show -state "${root}/terraform-state/terraform.tfstate" aws_vpc.PcfVpc | grep ^id | awk '{print $3}'
 )
 
 #Clean AWS instances
