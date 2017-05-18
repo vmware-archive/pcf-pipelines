@@ -1,9 +1,15 @@
 #!/bin/bash
 set -e
-unzip terraform-zip/terraform.zip
-mv terraform /usr/local/bin
+
+unzip terraform-zip/terraform.zip -d terraform-zip
+export PATH=$PWD/terraform-zip:$PATH
+
+python get-pip/get-pip.py
+pip install awscli
+
 root=$(pwd)
-cd pcf-pipelines/tasks/install-pcf-aws/terraform/
+
+cd pcf-pipelines/tasks/install-pcf-aws/terraform
 
 export AWS_ACCESS_KEY_ID=${TF_VAR_aws_access_key}
 export AWS_SECRET_ACCESS_KEY=${TF_VAR_aws_secret_key}
@@ -13,9 +19,6 @@ export VPC_ID=$(
 )
 
 #Clean AWS instances
-python get-pip/get-pip.py
-pip install awscli
-
 instances=$(aws ec2 describe-instances --filters Name=vpc-id,Values=$VPC_ID --output=json | jq -r '.[] | .[] | .Instances | .[] | .InstanceId')
 if [[ "X$instances" != "X" ]]
 then
