@@ -14,6 +14,12 @@ resource_types:
     tag: latest
 
 resources:
+- name: jq
+  type: file-url
+  source:
+    url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    filename: jq
+
 - name: terraform-zip
   type: file-url
   source:
@@ -198,6 +204,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: jq
     - get: pivnet-product
       resource: pivnet-elastic-runtime
       params:
