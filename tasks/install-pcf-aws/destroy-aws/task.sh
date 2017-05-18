@@ -27,5 +27,5 @@ fi
 set +e
 terraform destroy \
   -force \
-  -state $root/terraform-state/terraform.tfstate \
-  -state-out $root/terraform-state-output/terraform.tfstate
+  -state "${root}/terraform-state/terraform.tfstate" \
+  -state-out "${root}/terraform-state-output/terraform.tfstate"
