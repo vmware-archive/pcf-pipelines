@@ -23,14 +23,14 @@ function fn_form_gen_networks {
 
   #for key in $(echo ${json} | jq 'keys' | jq .[] ); do #This one sorts Alpha, was replaced to sort raw
   for key in $(echo ${json} | jq -r 'to_entries[] | "\(.key)"' | sed 's/^/"/' | sed 's/$/"/' ); do
-    fn_metadata_key_value=$(eval ${fn_metadata_cmd} | jq --raw-output '.${key}')
+    fn_metadata_key_value=$(eval ${fn_metadata_cmd} | jq .${key} | tr -d '"')
     fn_metadata_key=$(echo $key | tr -d '"')
 
     if [[ ${fn_metadata_key} == "pipeline_extension" ]]; then
       echo ""
     elif [[ ${fn_metadata_key} == *"availability_zone_references"* ]]; then
       net_guid=$(echo ${fn_metadata_key} | awk -F "[" '{print$3}' | tr -d "]")
-      for set_zone in $(eval ${fn_metadata_cmd} | jq --raw-output '.${key}[]'); do
+      for set_zone in $(eval ${fn_metadata_cmd} | jq .${key}[] | tr -d '"'); do
         set_zone_id=$(fn_opsman_curl "GET" "infrastructure/availability_zones/edit" 2>&1 | grep -B 2 -A 2 ${set_zone} | grep "value=" | awk '{print$4}' | awk -F "'" '{print$2}' | tr -d '\n' | tr -d '\r' | sed 's/text//' )
         return_var="${return_var}&network_collection[networks_attributes][${net_guid}][subnets][0][availability_zone_references][]=${set_zone_id}"
       done
@@ -51,7 +51,7 @@ function fn_form_gen_az_and_network_assignment {
   chk_auth=$(fn_opsman_auth)
 
   for key in $(echo ${json} | jq 'keys' | jq .[] ); do
-    fn_metadata_key_value=$(eval ${fn_metadata_cmd} | jq --raw-output '.${key}')
+    fn_metadata_key_value=$(eval ${fn_metadata_cmd} | jq .${key} | tr -d '"')
     fn_metadata_key=$(echo $key | tr -d '"')
     if [[ ${fn_metadata_key} == *"pipeline_extension"* ]]; then
       echo ""
@@ -79,7 +79,7 @@ function fn_form_gen_ert_az_and_network_assignments {
 
   ert_product_id=$(curl -s -k -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $opsman_bearer_token" \
     "https://${opsman_host}/api/v0/staged/products" | \
-    jq --raw-output '.[] | select(.type == "cf") | .guid')
+    jq '.[] | select(.type == "cf") | .guid'  | tr -d '"')
 
   # Auth to OpsMan
   ch_auth=$(fn_opsman_auth)
@@ -101,7 +101,7 @@ function fn_form_gen_ert_az_and_network_assignments {
 
   # Build POST Data
   for key in $(echo ${json} | jq -r 'to_entries[] | "\(.key)"' | sed 's/^/"/' | sed 's/$/"/' ); do
-    fn_metadata_key_value=$(eval ${fn_metadata_cmd} | jq --raw-output .${key})
+    fn_metadata_key_value=$(eval ${fn_metadata_cmd} | jq .${key} | tr -d '"')
     fn_metadata_key=$(echo $key | tr -d '"')
     if [[ ${fn_metadata_key} == *"pipeline_extension"* ]]; then
       echo ""
