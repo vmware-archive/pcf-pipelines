@@ -7,6 +7,12 @@ export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}
 export GOOGLE_PROJECT=${GCP_PROJECT_ID}
 export GOOGLE_REGION=${GCP_REGION}
 
+google_creds_json=$(mktemp)
+echo $GCP_SERVICE_ACCOUNT_KEY > $google_creds_json
+gcloud auth activate-service-account --key-file $google_creds_json
+gcloud config set project ${GCP_PROJECT_ID}
+gcloud config set compute/region ${GCP_REGION}
+
 # us: ops-manager-us/pcf-gcp-1.9.2.tar.gz -> ops-manager-us/pcf-gcp-1.9.2.tar.gz
 pcf_opsman_bucket_path=$(grep -i 'us:.*.tar.gz' pivnet-opsmgr/*GCP.yml | cut -d' ' -f2)
 
