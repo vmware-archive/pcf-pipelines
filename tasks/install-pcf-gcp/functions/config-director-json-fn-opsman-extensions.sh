@@ -5,8 +5,9 @@ function fn_form_gen_availability_zones {
   return_var=""
   local json=${@}
 
-  for zone in $(echo ${json} | jq --raw-output '.availability_zones[]'); do
-    return_var="${return_var}&availability_zones[availability_zones][][guid]=&availability_zones[availability_zones][][iaas_identifier]=${zone}"
+  for zone in $(echo ${json} | jq .availability_zones[]); do
+    my_zone=$(echo ${zone} | tr -d '"' | tr -d '\n' | tr -d '\r')
+    return_var="${return_var}&availability_zones[availability_zones][][guid]=&availability_zones[availability_zones][][iaas_identifier]=${my_zone}"
   done
   echo $return_var
 }
