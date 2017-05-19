@@ -22,7 +22,7 @@ resource "google_compute_image" "ops-mgr" {
   family = "pcf-opsman"
 
   raw_disk {
-    source = "gs://${pcf_opsman_bucket_path}"
+    source = "http://storage.googleapis.com/${pcf_opsman_bucket_path}"
   }
 }
 EOF
