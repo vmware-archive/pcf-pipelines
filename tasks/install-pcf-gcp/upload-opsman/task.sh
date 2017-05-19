@@ -27,5 +27,10 @@ resource "google_compute_image" "ops-mgr" {
 }
 EOF
 
-set +e
-terraform apply
+if [[ -z $(gcloud compute images list | grep $pcf_opsman_image_name) ]]; then
+  echo "creating image ${pcf_opsman_image_name}"
+  set +e
+  terraform apply
+else
+  echo "image ${pcf_opsman_image_name} already exists"
+fi
