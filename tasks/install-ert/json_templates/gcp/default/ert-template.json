@@ -108,6 +108,30 @@
           "secret": "{{db_ccdb_password}}"
         }
       },
+      ".properties.system_database.external.account_username": {
+        "value": "{{db_accountdb_username}}"
+      },
+      ".properties.system_database.external.account_password": {
+        "value": {
+          "secret": "{{db_accountdb_password}}"
+        }
+      },
+      ".properties.system_database.external.networkpolicyserver_username": {
+        "value": "{{db_networkpolicyserverdb_username}}"
+      },
+      ".properties.system_database.external.networkpolicyserver_password": {
+        "value": {
+          "secret": "{{db_networkpolicyserverdb_password}}"
+        }
+      },  
+      ".properties.system_database.external.nfsvolume_username": {
+        "value": "{{db_nfsvolumedb_username}}"
+      },
+      ".properties.system_database.external.nfsvolume_password": {
+        "value": {
+          "secret": "{{db_nfsvolumedb_password}}"
+        }
+      },         
       ".cloud_controller.system_domain": {
         "value": "sys.{{pcf_ert_domain}}"
       },

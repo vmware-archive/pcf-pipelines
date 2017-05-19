@@ -132,6 +132,12 @@ db_creds=(
   db_uaa_password
   db_ccdb_username
   db_ccdb_password
+  db_accountdb_username
+  db_accountdb_password
+  db_networkpolicyserverdb_username
+  db_networkpolicyserverdb_password
+  db_nfsvolumedb_username
+  db_nfsvolumedb_password  
 )
 
 for i in "${db_creds[@]}"
