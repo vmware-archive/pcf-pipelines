@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-echo "Applying changes on Ops Manager @ ${OPSMAN_URI}"
+echo "Applying changes on Ops Manager @ opsman.${OPSMAN_URI}"
 chmod +x tool-om/om-linux
 
 ./tool-om/om-linux \
-  --target "${OPSMAN_URI}" \
+  --target "opsman.${OPSMAN_URI}" \
   --skip-ssl-validation \
   --username "${OPSMAN_USERNAME}" \
   --password "${OPSMAN_PASSWORD}" \
