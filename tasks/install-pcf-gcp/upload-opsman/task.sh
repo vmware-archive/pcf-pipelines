@@ -20,7 +20,6 @@ resource "google_compute_image" "ops-mgr" {
   name = "$pcf_opsman_image_name"
   project = "$GCP_PROJECT_ID"
   family = "pcf-opsman"
-  description = "Pivotal Cloud Foundry Operations Manager"
 
   raw_disk {
     source = "gs://${pcf_opsman_bucket_path}"
