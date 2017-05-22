@@ -8,11 +8,11 @@ cp $root/terraform-state/terraform.tfstate .
 while read -r line
 do
   `echo "$line" | awk '{print "export "$1"="$3}'`
-done < <(./terraform-bin/terraform output)
+done < <($root/terraform-bin/terraform output)
 
-export AWS_ACCESS_KEY_ID=`./terraform-bin/terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^id | awk '{print $3}'`
-export AWS_SECRET_ACCESS_KEY=`./terraform-bin/terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^secret | awk '{print $3}'`
-export RDS_PASSWORD=`./terraform-bin/terraform state show aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
+export AWS_ACCESS_KEY_ID=`$root/terraform-bin/terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^id | awk '{print $3}'`
+export AWS_SECRET_ACCESS_KEY=`$root/terraform-bin/terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^secret | awk '{print $3}'`
+export RDS_PASSWORD=`$root/terraform-bin/terraform state show aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
 
 cd $root
 
