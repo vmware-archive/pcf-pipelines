@@ -5,7 +5,19 @@ resource_types:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
 
+- name: file-url
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
 resources:
+- name: jq
+  type: file-url
+  source:
+    url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    filename: jq
+
 - name: govc
   type: github-release
   source:
@@ -45,6 +57,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
 
 - name: elastic-runtime
   type: pivnet
@@ -102,6 +115,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: jq
     - get: tool-om
       params: {globs: ["*linux*"]}
       passed: [install-opsmgr]
@@ -136,6 +150,7 @@ jobs:
       DEPLOYMENT_NW_GATEWAY: {{deployment_nw_gateway}}
       DEPLOYMENT_NW_AZS: {{deployment_nw_azs}}
       SERVICES_NETWORK_NAME: {{services_network_name}}
+      IS_SERVICE_NETWORK: {{is_service_network}}
       SERVICES_VCENTER_NETWORK: {{services_vsphere_network}}
       SERVICES_NW_CIDR: {{services_nw_cidr}}
       SERVICES_EXCLUDED_RANGE: {{services_excluded_range}}
@@ -150,13 +165,13 @@ jobs:
       DYNAMIC_SERVICES_NW_GATEWAY: {{dynamic_services_nw_gateway}}
       DYNAMIC_SERVICES_NW_AZS: {{dynamic_services_nw_azs}}
       AZ_1: {{az_1_name}}
-      AZ_1_CUSTER_NAME: {{az_1_cluster_name}}
+      AZ_1_CLUSTER_NAME: {{az_1_cluster_name}}
       AZ_1_RP_NAME: {{az_1_rp_name}}
       AZ_2: {{az_2_name}}
-      AZ_2_CUSTER_NAME: {{az_2_cluster_name}}
+      AZ_2_CLUSTER_NAME: {{az_2_cluster_name}}
       AZ_2_RP_NAME: {{az_2_rp_name}}
       AZ_3: {{az_3_name}}
-      AZ_3_CUSTER_NAME: {{az_3_cluster_name}}
+      AZ_3_CLUSTER_NAME: {{az_3_cluster_name}}
       AZ_3_RP_NAME: {{az_3_rp_name}}
       NTP_SERVERS: {{ntp_servers}}
       OPS_DIR_HOSTNAME: {{ops_dir_hostname}}
@@ -181,7 +196,6 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 - name: upload-elastic-runtime-tile
   plan:
@@ -211,6 +225,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: jq
     - get: tool-om
       params: {globs: ["*linux*"]}
       trigger: true
@@ -272,6 +287,18 @@ jobs:
       GARDEN_NETWORK_MTU: {{garden_network_mtu}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
+      MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
+      MYSQL_BACKUPS_SCP_PORT: {{mysql_backups_scp_port}}
+      MYSQL_BACKUPS_SCP_USER: {{mysql_backups_scp_user}}
+      MYSQL_BACKUPS_SCP_KEY: {{mysql_backups_scp_key}}
+      MYSQL_BACKUPS_SCP_DESTINATION: {{mysql_backups_scp_destination}}
+      MYSQL_BACKUPS_SCP_CRON_SCHEDULE: {{mysql_backups_scp_cron_schedule}}
+      MYSQL_BACKUPS_S3_ENDPOINT_URL: {{mysql_backups_s3_endpoint_url}}
+      MYSQL_BACKUPS_S3_BUCKET_NAME: {{mysql_backups_s3_bucket_name}}
+      MYSQL_BACKUPS_S3_BUCKET_PATH: {{mysql_backups_s3_bucket_path}}
+      MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
+      MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
+      MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
       ALLOW_APP_SSH_ACCESS: {{allow_app_ssh_access}}
       TCP_ROUTER_STATIC_IPS: {{tcp_router_static_ips}}
       SSH_STATIC_IPS: {{ssh_static_ips}}
@@ -329,7 +356,6 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 - name: disable-errands
   plan:
@@ -362,7 +388,6 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 # - name: post-install-step
 #   plan:

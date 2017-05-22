@@ -20,6 +20,14 @@ TF_VAR_rds_db_username_ccdb:
 TF_VAR_rds_db_password_ccdb:
 TF_VAR_rds_db_username_ertsql:
 TF_VAR_rds_db_password_ertsql:
+
+TF_VAR_rds_db_username_account:
+TF_VAR_rds_db_password_account:
+TF_VAR_rds_db_username_networkpolicy:
+TF_VAR_rds_db_password_networkpolicy:
+TF_VAR_rds_db_username_nfsvolume:
+TF_VAR_rds_db_password_nfsvolume:
+
 TF_VAR_environment:
 TF_VAR_opsman_ami:
 TF_VAR_amis_nat:
@@ -61,9 +69,29 @@ ERT_DOMAIN:
 OPSMAN_USER:
 OPSMAN_PASSWORD:
 OPSMAN_URI:
+TILE_UPLOAD_TIMEOUT: 1800 # Time to allow for a tile upload request to live
 PIVNET_TOKEN:
 GITHUB_TOKEN:
 PEM:
 ERT_SSL_CERT: generate
 ERT_SSL_KEY:
 ROUTE_53_ZONE_ID:
+
+mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications
+mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
+
+#SCP backup config params (leave empty values if you're not using scp
+mysql_backups_scp_server:
+mysql_backups_scp_port:
+mysql_backups_scp_user:
+mysql_backups_scp_key:
+mysql_backups_scp_destination:
+mysql_backups_scp_cron_schedule:
+
+#S3 backup config params (leave empty values if you're not using s3)
+mysql_backups_s3_endpoint_url:
+mysql_backups_s3_bucket_name:
+mysql_backups_s3_bucket_path:
+mysql_backups_s3_access_key_id:
+mysql_backups_s3_secret_access_key:
+mysql_backups_s3_cron_schedule:

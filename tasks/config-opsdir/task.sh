@@ -1,12 +1,14 @@
 #!/bin/bash -e
 
 chmod +x tool-om/om-linux
+PATH=$PWD/tool-om:$PATH
 
-CMD=./tool-om/om-linux
+chmod +x jq/jq
+PATH=$PWD/jq:$PATH
 
 function fn_get_azs {
      local azs_csv=$1
-     echo $azs_csv | awk -F "," -v quote='"' -v OFS='", "' '$1=$1 {print quote $0 quote}'
+     echo $azs_csv | jq --raw-input 'split(",")'
 }
 
 IAAS_CONFIGURATION=$(cat <<-EOF
@@ -31,17 +33,17 @@ AZ_CONFIGURATION=$(cat <<-EOF
   "availability_zones": [
     {
       "name": "$AZ_1",
-      "cluster": "$AZ_1_CUSTER_NAME",
+      "cluster": "$AZ_1_CLUSTER_NAME",
       "resource_pool": "$AZ_1_RP_NAME"
     },
     {
       "name": "$AZ_2",
-      "cluster": "$AZ_2_CUSTER_NAME",
+      "cluster": "$AZ_2_CLUSTER_NAME",
       "resource_pool": "$AZ_2_RP_NAME"
     },
     {
       "name": "$AZ_3",
-      "cluster": "$AZ_3_CUSTER_NAME",
+      "cluster": "$AZ_3_CLUSTER_NAME",
       "resource_pool": "$AZ_3_RP_NAME"
     }
   ]
@@ -49,10 +51,10 @@ AZ_CONFIGURATION=$(cat <<-EOF
 EOF
 )
 
-INFRA_AZS=$(fn_get_azs $INFRA_NW_AZS)
-DEPLOYMENT_AZS=$(fn_get_azs $DEPLOYMENT_NW_AZS)
-SERVICES_AZS=$(fn_get_azs $SERVICES_NW_AZS)
-DYNAMIC_SERVICES_AZS=$(fn_get_azs $DYNAMIC_SERVICES_NW_AZS)
+INFRA_AZS=$(fn_get_azs "$INFRA_NW_AZS")
+DEPLOYMENT_AZS=$(fn_get_azs "$DEPLOYMENT_NW_AZS")
+SERVICES_AZS=$(fn_get_azs "$SERVICES_NW_AZS")
+DYNAMIC_SERVICES_AZS=$(fn_get_azs "$DYNAMIC_SERVICES_NW_AZS")
 
 NETWORK_CONFIGURATION=$(cat <<-EOF
 {
@@ -68,9 +70,7 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
           "reserved_ip_ranges": "$INFRA_EXCLUDED_RANGE",
           "dns": "$INFRA_NW_DNS",
           "gateway": "$INFRA_NW_GATEWAY",
-          "availability_zone_names": [
-            $INFRA_AZS
-          ]
+          "availability_zone_names": $INFRA_AZS
         }
       ]
     },
@@ -84,15 +84,13 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
           "reserved_ip_ranges": "$DEPLOYMENT_EXCLUDED_RANGE",
           "dns": "$DEPLOYMENT_NW_DNS",
           "gateway": "$DEPLOYMENT_NW_GATEWAY",
-          "availability_zone_names": [
-            $DEPLOYMENT_AZS
-          ]
+          "availability_zone_names": $DEPLOYMENT_AZS
         }
       ]
     },
     {
       "name": "$SERVICES_NETWORK_NAME",
-      "service_network": true,
+      "service_network": $IS_SERVICE_NETWORK,
       "subnets": [
         {
           "iaas_identifier": "$SERVICES_VCENTER_NETWORK",
@@ -100,9 +98,7 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
           "reserved_ip_ranges": "$SERVICES_EXCLUDED_RANGE",
           "dns": "$SERVICES_NW_DNS",
           "gateway": "$SERVICES_NW_GATEWAY",
-          "availability_zone_names": [
-            $SERVICES_AZS
-          ]
+          "availability_zone_names": $SERVICES_AZS
         }
       ]
     },
@@ -116,9 +112,7 @@ NETWORK_CONFIGURATION=$(cat <<-EOF
           "reserved_ip_ranges": "$DYNAMIC_SERVICES_EXCLUDED_RANGE",
           "dns": "$DYNAMIC_SERVICES_NW_DNS",
           "gateway": "$DYNAMIC_SERVICES_NW_GATEWAY",
-          "availability_zone_names": [
-            $DYNAMIC_SERVICES_AZS
-          ]
+          "availability_zone_names": $DYNAMIC_SERVICES_AZS
         }
       ]
     }
@@ -149,6 +143,8 @@ SECURITY_CONFIG=$(cat <<-EOF
 EOF
 )
 
+INFRA_FIRST_AZ=$(echo $INFRA_AZS | jq --raw-output '.[0]')
+
 NETWORK_ASSIGNMENT=$(cat <<-EOF
 {
   "network_and_az": {
@@ -156,34 +152,23 @@ NETWORK_ASSIGNMENT=$(cat <<-EOF
        "name": "$INFRA_NETWORK_NAME"
      },
      "singleton_availability_zone": {
-       "name": "$AZ_1"
+       "name": "$INFRA_FIRST_AZ"
      }
   }
 }
 EOF
 )
 
-echo "Configuring IaaS and Director..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD configure-bosh \
-            -i "$IAAS_CONFIGURATION" \
-            -d "$DIRECTOR_CONFIG"
-
-echo "Configuring availability zones..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/availability_zones" \
-            -x PUT -d "$AZ_CONFIGURATION"
-
-echo "Configuring networks..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/networks" \
-            -x PUT -d "$NETWORK_CONFIGURATION"
-
-echo "Configuring network assignment..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/network_and_az" \
-            -x PUT -d "$NETWORK_ASSIGNMENT"
-
-echo "Configuring security..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/properties" \
-            -x PUT -d "$SECURITY_CONFIG"
+echo "Configuring BOSH..."
+om-linux \
+  --target https://$OPS_MGR_HOST \
+  --skip-ssl-validation \
+  --username $OPS_MGR_USR \
+  --password $OPS_MGR_PWD \
+  configure-bosh \
+  --iaas-configuration "$IAAS_CONFIGURATION" \
+  --director-configuration "$DIRECTOR_CONFIG"
+  --az-configuration "$AZ_CONFIGURATION" \
+  --networks-configuration "$NETWORK_CONFIGURATION" \
+  --network-assignment "$NETWORK_ASSIGNMENT" \
+  --security-configuration "$SECURITY_CONFIG"

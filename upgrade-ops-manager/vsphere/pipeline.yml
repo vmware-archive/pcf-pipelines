@@ -124,6 +124,7 @@ jobs:
       GOVC_DATASTORE: {{vcenter_datastore}}
       GOVC_URL: {{vcenter_url}}
       OPSMAN_IP: {{opsman_ip}}
+      OPSMAN_URI: {{opsman_uri}}
       NETMASK: {{netmask}}
       GATEWAY: {{gateway}}
       DNS: {{dns}}
@@ -154,11 +155,9 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
 
-      # todo discuss the order for calling this task
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}

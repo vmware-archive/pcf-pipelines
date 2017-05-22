@@ -20,7 +20,7 @@ resource_name: CHANGEME
 # on your Pivotal Network profile page:
 # https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
-# The minor product version to track, as a regexp. To track 1.7 of a product, this would be '1.7.*'
+# The minor product version to track, as a regexp. To track 1.10.x of a product, this would be "1\.10\.*"
 product_version: CHANGEME
 
 # Operations Manager
@@ -30,7 +30,6 @@ product_version: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_uri: CHANGEME
-opsman_timeout_seconds: CHANGEME
 
 # Stemcell Downloader
 # ------------------------------
@@ -40,7 +39,9 @@ github_token: CHANGEME
 # https://github.com/pivotal-cf/pcf-product-stemcell-downloader/ for the list of
 # allowed IaaS names.
 iaas_type: CHANGEME
-# The interval to check Pivotal Network for updates to the product file.
+
+# Interval to check on new releases from Pivotal Network
+# eg. 2h, 3h45m, 3000s
 pivnet_poll_interval: 1h
 # The basename of the metadata file for the product without the file extension.
 # This will be used for figuring out which stemcell the product needs.
@@ -67,3 +68,4 @@ product_slug: CHANGEME
 # be found in the .pivotal file with the following:
 # `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | head`
 product_name: CHANGEME
+tile_upload_timeout: 1800

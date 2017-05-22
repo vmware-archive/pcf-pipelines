@@ -1,6 +1,7 @@
 # Pipeline resource configuration
 pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 github_token:             # GitHub token for downloading resources from GitHub
+opsman_major_minor_version: 1\.10\.* # PCF Ops Manager minor version to track
 
 # vCenter configuration
 vcenter_host:             # vCenter host or IP
@@ -14,7 +15,6 @@ om_data_store:            # vCenter datastore name to deploy Ops Manager in
 opsman_uri:               # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
 opsman_admin_username:    # Username for Ops Manager admin account
 opsman_admin_password:    # Password for Ops Manager admin account
-opsman_timeout_seconds:   # Timeout to wait for Ops Manager to become available
 om_ssh_pwd:               # SSH password for Ops Manager (ssh user is ubuntu)
 om_decryption_pwd:        # Decryption password for Ops Manager exported settings
 om_ntp_servers:           # Comma-separated list of NTP Servers
@@ -76,6 +76,7 @@ deployment_nw_gateway:        # Deployment network Gateway
 deployment_nw_azs:            # Comma seperated list of AZ's to be associated with this network
 
 services_network_name: "SERVICES"
+is_service_network:           # Required select service network option in Ops man true or false
 services_vsphere_network:     # vCenter Services network name
 services_nw_cidr:             # Services network CIDR, ex: 10.0.0.0/22
 services_excluded_range:      # Services network exclusion range
@@ -172,6 +173,22 @@ ssh_static_ips:         # Comma-separated list of static IPs
 
 mysql_monitor_email:    # Email address to receive MySQL monitor notifications
 mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
+
+#SCP backup config params (leave empty values if you're not using scp)
+mysql_backups_scp_server:
+mysql_backups_scp_port:
+mysql_backups_scp_user:
+mysql_backups_scp_key:
+mysql_backups_scp_destination:
+mysql_backups_scp_cron_schedule:
+
+#S3 backup config params (leave empty values if you're not using s3)
+mysql_backups_s3_endpoint_url:
+mysql_backups_s3_bucket_name:
+mysql_backups_s3_bucket_path:
+mysql_backups_s3_access_key_id:
+mysql_backups_s3_secret_access_key:
+mysql_backups_s3_cron_schedule:
 
 ## Default resource configuration
 consul_server_instances: 1

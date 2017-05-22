@@ -7,7 +7,25 @@ resource_types:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
 
+- name: file-url
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
 resources:
+- name: jq
+  type: file-url
+  source:
+    url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    filename: jq
+
+- name: terraform-zip
+  type: file-url
+  source:
+    url: https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip
+    filename: terraform.zip
+
 - name: pcf-pipelines
   type: git
   source:
@@ -15,7 +33,7 @@ resources:
     branch: master
     username: {{github_token}}
 
-- name: tfstate
+- name: terraform-state
   type: s3
   source:
     region_name: {{s3_region}}
@@ -68,17 +86,17 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tfstate
+    - get: terraform-state
     - get: tfstate-version
       params:
         bump: major
   - task: wipe
-    file: pcf-pipelines/tasks/install-pcf-gcp/wipe-env.yml
+    file: pcf-pipelines/tasks/install-pcf-gcp/wipe-env/task.yml
     params:
       GCP_PROJECT_ID: {{gcp_project_id}}
       GCP_REGION: {{gcp_region}}
       GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
-  - put: tfstate
+  - put: terraform-state
     params:
       file: wipe-output/*.tfstate
   - put: tfstate-version
@@ -94,7 +112,7 @@ jobs:
       globs:
       - "*GCP.yml"
   - task: upload
-    file: pcf-pipelines/tasks/install-pcf-gcp/upload-opsman.yml
+    file: pcf-pipelines/tasks/install-pcf-gcp/upload-opsman/task.yml
     params:
       GCP_PROJECT_ID: {{gcp_project_id}}
       GCP_REGION: {{gcp_region}}
@@ -114,7 +132,7 @@ jobs:
       params:
         bump: major
   - task: create-infrastructure
-    file: pcf-pipelines/tasks/install-pcf-gcp/create-infrastructure.yml
+    file: pcf-pipelines/tasks/install-pcf-gcp/create-infrastructure/task.yml
     params:
       GCP_PROJECT_ID: {{gcp_project_id}}
       GCP_REGION: {{gcp_region}}
@@ -130,12 +148,12 @@ jobs:
       ERT_SQL_DB_PASSWORD: {{ert_sql_db_password}}
     on_failure:
       task: rollback
-      file: pcf-pipelines/tasks/install-pcf-gcp/rollback-create-infrastructure.yml
+      file: pcf-pipelines/tasks/install-pcf-gcp/rollback-create-infrastructure/task.yml
       params:
         GCP_PROJECT_ID: {{gcp_project_id}}
         GCP_REGION: {{gcp_region}}
         GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
-  - put: tfstate
+  - put: terraform-state
     params:
       file: create-infrastructure-output/*.tfstate
   - put: tfstate-version
@@ -148,21 +166,22 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: tool-om
+      resource: tool-om-beta
       params:
         globs:
         - "om-linux"
   - task: check-opsman-dns
-    file: pcf-pipelines/tasks/install-pcf-gcp/check-opsman-dns.yml
+    file: pcf-pipelines/tasks/install-pcf-gcp/check-opsman-dns/task.yml
     params:
       pcf_ert_domain: {{pcf_ert_domain}}
   - task: configure-opsman-auth
-    file: pcf-pipelines/tasks/install-pcf-gcp/config-opsman-auth.yml
+    file: pcf-pipelines/tasks/install-pcf-gcp/config-opsman-auth/task.yml
     params:
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin_username: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_password: {{pcf_opsman_admin_password}}
   - task: configure-director
-    file: pcf-pipelines/tasks/install-pcf-gcp/config-director.yml
+    file: pcf-pipelines/tasks/install-pcf-gcp/config-director/task.yml
     params:
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin_username}}
@@ -187,18 +206,20 @@ jobs:
       trigger: true
       passed: [configure-director]
   - task: deploy-director
-    file: pcf-pipelines/tasks/install-pcf-gcp/deploy-director.yml
+    file: pcf-pipelines/tasks/install-pcf-gcp/deploy-director/task.yml
     params:
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin_username: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_password: {{pcf_opsman_admin_password}}
 
-- name: upload-ert
+- name: deploy-ert
   serial_groups: [opsman]
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-elastic-runtime
+    - get: jq
+    - get: pivnet-product
+      resource: pivnet-elastic-runtime
       params:
         globs:
         - "*pivotal"
@@ -208,31 +229,35 @@ jobs:
       params:
         globs:
         - "om-linux"
-  - task: upload
-    file: pcf-pipelines/tasks/install-ert/upload-ert.yml
-    params:
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin_username}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+    - get: terraform-state
+    - <<: *extract-terraform
 
-- name: deploy-ert
-  serial_groups: [opsman]
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: tool-om
-      trigger: true
-      passed: [upload-ert]
-      params:
-        globs:
-        - "om-linux"
+  - task: upload-tile
+    file: pcf-pipelines/tasks/upload-product/task.yml
+    params:
+      OPSMAN_URI: {{pcf_ert_domain}}
+      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
+      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      TILE_UPLOAD_TIMEOUT: {{tile_upload_timeout}}
+
+  - task: stage-tile
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_URI: {{pcf_ert_domain}}
+      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
+      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      PRODUCT_NAME: cf
+
   - task: configure-json
-    file: pcf-pipelines/tasks/install-ert/configure-json.yml
+    file: pcf-pipelines/tasks/install-ert/configure-json/task.yml
     params:
       pcf_iaas: gcp
-      terraform_template: c0-gcp-poc
+      terraform_template: default
       pcf_ert_ssl_cert: "generate"
-      pcf_ert_ssl_key: {{pcf_ert_ssl_key}} 
+      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
+      pcf_az_1: {{gcp_zone_1}}
+      pcf_az_2: {{gcp_zone_2}}
+      pcf_az_3: {{gcp_zone_3}}
       gcp_proj_id: {{gcp_project_id}}
       gcp_region: {{gcp_region}}
       gcp_storage_access_key: {{gcp_storage_access_key}}
@@ -248,7 +273,7 @@ jobs:
       db_diego_password: {{db_diego_password}}
       db_notifications_username: {{db_notifications_username}}
       db_notifications_password: {{db_notifications_password}}
-      db_autoscale_username: {{db_autoscale_username}} 
+      db_autoscale_username: {{db_autoscale_username}}
       db_autoscale_password: {{db_autoscale_password}}
       db_uaa_username: {{db_uaa_username}}
       db_uaa_password: {{db_uaa_password}}
@@ -256,32 +281,51 @@ jobs:
       db_app_usage_service_password: {{db_app_usage_service_password}}
       db_ccdb_username: {{db_ccdb_username}}
       db_ccdb_password: {{db_ccdb_password}}
-      db_routing_username: {{db_routing_username}} 
-      db_routing_password: {{db_routing_password}} 
+      db_routing_username: {{db_routing_username}}
+      db_routing_password: {{db_routing_password}}
+      db_accountdb_username: {{db_accountdb_username}}
+      db_accountdb_password: {{db_accountdb_password}}
+      db_networkpolicyserverdb_username: {{db_networkpolicyserverdb_username}}
+      db_networkpolicyserverdb_password: {{db_networkpolicyserverdb_password}}
+      db_nfsvolumedb_username: {{db_nfsvolumedb_username}}
+      db_nfsvolumedb_password: {{db_nfsvolumedb_password}}         
+      mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
+      MYSQL_BACKUPS: {{mysql_backups}}
+      MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
+      MYSQL_BACKUPS_SCP_PORT: {{mysql_backups_scp_port}}
+      MYSQL_BACKUPS_SCP_USER: {{mysql_backups_scp_user}}
+      MYSQL_BACKUPS_SCP_KEY: {{mysql_backups_scp_key}}
+      MYSQL_BACKUPS_SCP_DESTINATION: {{mysql_backups_scp_destination}}
+      MYSQL_BACKUPS_SCP_CRON_SCHEDULE: {{mysql_backups_scp_cron_schedule}}
+      MYSQL_BACKUPS_S3_ENDPOINT_URL: {{mysql_backups_s3_endpoint_url}}
+      MYSQL_BACKUPS_S3_BUCKET_NAME: {{mysql_backups_s3_bucket_name}}
+      MYSQL_BACKUPS_S3_BUCKET_PATH: {{mysql_backups_s3_bucket_path}}
+      MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
+      MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
+      MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
       # aws specific
       bucket:
       TF_VAR_aws_access_key:
       TF_VAR_aws_secret_key:
-      TF_VAR_aws_region:
       S3_ENDPOINT:
 
   - task: configure-ert
-    file: pcf-pipelines/tasks/install-ert/configure-ert.yml
+    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
     params:
       pcf_iaas: gcp
-      terraform_template: c0-gcp-poc
-      pcf_ert_ssl_cert: "generate"
-      pcf_ert_ssl_key: {{pcf_ert_ssl_key}} 
-      pcf_az_1: {{gcp_zone_1}}
-      pcf_az_2: {{gcp_zone_2}}
-      pcf_az_3: {{gcp_zone_3}}
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
-      terraform_prefix: {{gcp_resource_prefix}}
-  - task: deploy
-    file: pcf-pipelines/tasks/install-ert/deploy-ert.yml
+
+  - task: deploy-ert
+    file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin_username}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+      OPSMAN_URI: {{pcf_ert_domain}}
+      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
+      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+
+extract-terraform: &extract-terraform
+  do:
+    - get: terraform-zip
+    - task: terraform-bin
+      file: pcf-pipelines/tasks/extract-terraform/task.yml

@@ -14,22 +14,38 @@
 
 # Resource configuration
 
+# Interval to check on new releases from Pivotal Network
+# eg. 2h, 3h45m, 3000s
 check_new_opsman_every: CHANGEME
+
+# A github access key to download github binary releases E.g. https://github.com/pivotal-cf/om
 github_token: CHANGEME
-opsman_major_minor_version: CHANGEME
+
+# Ops Manager minor version to track
+opsman_major_minor_version: 1\.10\.*
+
+# Pivotal Net Token to download Ops Manager binaries from https://network.pivotal.io
 pivnet_token: CHANGEME
 
 # Task configuration
 
+# AWS Credentials
 aws_access_key_id: CHANGEME
 aws_secret_access_key: CHANGEME
 aws_region: CHANGEME
 aws_vpc_id: CHANGEME
 
+# Existing Ops Manager VM Name Pattern. This should uniquely filter to a running Ops Manager instance.
+# eg.  myenv-OpsMan
 existing_opsman_vm_name: CHANGEME
 
+# Ops Manager Admin Credentials - set during the installation of Ops Manager
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
+
+# If install pipeline has been used then the passphrase is same as the admin password
 opsman_passphrase: CHANGEME
-opsman_timeout_seconds: 1200
+
+# Ops Manager Url
+# eg. https://myopsman.mydomain.com
 opsman_uri: CHANGEME

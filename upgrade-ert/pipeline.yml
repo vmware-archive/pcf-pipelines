@@ -44,7 +44,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime
-    product_version: 1.9.*
+    product_version: 1\.10\.*
     sort_by: semver
 
 - name: stemcell-downloader
@@ -53,8 +53,6 @@ resources:
     user: pivotal-cf
     repository: pcf-product-stemcell-downloader
     access_token: {{github_token}}
-    globs:
-    - stemcell-downloader-linux
 
 - name: schedule
   type: time
@@ -105,7 +103,7 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      PIVNET_PRODUCT_NAME: elastic-runtime
+      TILE_UPLOAD_TIMEOUT: {{tile_upload_timeout}}
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
@@ -129,4 +127,3 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
