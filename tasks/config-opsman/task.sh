@@ -8,7 +8,7 @@ until $(curl --output /dev/null -k --silent --head --fail https://$OPS_MGR_HOST/
     sleep 5
 done
 
-tool-om \
+om-linux \
   --target https://$OPS_MGR_HOST \
   --skip-ssl-validation \
   configure-authentication \
