@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-# TODO: Remove this
-sudo apt-get update
-sudo apt-get install -y --no-install-recommends python-dev
-python get-pip/get-pip.py
-pip install awscli
-
 root=$(pwd)
 
 cd pcf-pipelines/tasks/install-pcf-aws/terraform
