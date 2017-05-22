@@ -54,13 +54,6 @@ resources:
     branch: version
     file: version
 
-- name: om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}}
-
 - name: cliaas
   type: github-release
   source:
@@ -107,9 +100,6 @@ jobs:
     - get: cliaas
       params:
         globs: ["*linux*"]
-    - get: om
-      params:
-        globs: ["*linux*"]
     - get: yaml-patch
       params:
         globs: ["*linux*"]
@@ -150,9 +140,6 @@ jobs:
     - get: cliaas
       params:
         globs: [cliaas-linux]
-    - get: om
-      params:
-        globs: [om-linux]
 
   - task: unpack-rc
     file: pcf-pipelines/tasks/unpack-tarball/task.yml
@@ -264,9 +251,6 @@ jobs:
     - get: pcf-pipelines
       passed: [update-pipelines]
     - get: cliaas
-      params:
-        globs: ["*linux*"]
-    - get: om
       params:
         globs: ["*linux*"]
     - get: yaml-patch
