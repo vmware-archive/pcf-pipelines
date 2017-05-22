@@ -68,6 +68,13 @@ resources:
     repository: om
     access_token: {{github_token}}
 
+- name: tool-om-beta
+  type: github-release
+  source:
+    user: c0-ops
+    repository: om
+    access_token: {{github_token}}
+
 jobs:
 - name: wipe-env
   serial_groups: [terraform]
