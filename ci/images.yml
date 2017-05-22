@@ -2,7 +2,7 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    repository: git@github.com:pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
     private_key: {{git_private_key}}
     paths: [ci/Dockerfile]
