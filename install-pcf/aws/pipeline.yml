@@ -24,12 +24,6 @@ resources:
     url: https://bootstrap.pypa.io/get-pip.py
     filename: get-pip.py
 
-- name: terraform-zip
-  type: file-url
-  source:
-    url: https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip
-    filename: terraform.zip
-
 - name: terraform-state
   type: s3
   source:
@@ -81,8 +75,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
-    - <<: *extract-terraform
-    - get: pcf-pipelines
+    - get: pcf-pipelines 
   - task: aws-pcf-prepare
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws/task.yml
     params:
@@ -127,7 +120,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
-    - get: pcf-pipelines
+    - get: pcf-pipelines 
       trigger: true
       passed: [aws-pcf-prepare]
     - get: tool-om
@@ -142,8 +135,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
-    - <<: *extract-terraform
-    - get: pcf-pipelines
+    - get: pcf-pipelines 
       trigger: true
       passed: [config-opsman]
     - get: terraform-state
@@ -215,7 +207,7 @@ jobs:
   serial: true
   plan:
   - aggregate:
-    - get: pcf-pipelines
+    - get: pcf-pipelines 
       trigger: true
       passed: [import-stemcell]
     - get: pivnet-product
@@ -247,13 +239,12 @@ jobs:
   serial: true
   plan:
   - aggregate:
-    - <<: *extract-terraform
     - get: jq
     - get: tool-om
       params:
         globs:
         - "om-linux"
-    - get: pcf-pipelines
+    - get: pcf-pipelines 
       trigger: true
       passed: [upload-ert]
     - get: terraform-state
@@ -349,7 +340,6 @@ jobs:
       file: terraform-state/terraform.tfstate
   plan:
   - aggregate:
-    - <<: *extract-terraform
     - get: get-pip
     - get: pcf-pipelines
     - get: terraform-state
@@ -387,9 +377,3 @@ jobs:
   - put: terraform-state
     params:
       file: terraform-state-output/terraform.tfstate
-
-extract-terraform: &extract-terraform
-  do:
-    - get: terraform-zip
-    - task: terraform-bin
-      file: pcf-pipelines/tasks/extract-terraform/task.yml

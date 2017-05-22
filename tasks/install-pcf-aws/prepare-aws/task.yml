@@ -6,8 +6,7 @@ image_resource:
   source:
     repository: czero/cflinuxfs2
 inputs:
-  - name: terraform-bin
-  - name: pcf-pipelines
+  - name: pcf-pipelines 
 outputs:
   - name: terraform-state
 params:
