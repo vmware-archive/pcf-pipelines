@@ -8,7 +8,7 @@ resources:
     paths: [ci/Dockerfile]
 
 - name: pcf-pipelines-image
-  type: docker
+  type: docker-image
   source:
     repository: czero/cflinuxfs2
     tag: latest
