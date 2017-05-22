@@ -17,7 +17,7 @@ apt-get -y update && sudo apt-get -y install --no-install-recommends google-clou
 apt-get install -y --no-install-recommends python-pip python-dev && \
 
 # UAA Client
-gem install cf-uaac --no-rid --no-rdoc && \
+gem install cf-uaac --no-ri --no-rdoc && \
 
 # AWS Client
 pip install awscli && \
