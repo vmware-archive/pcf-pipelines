@@ -319,6 +319,12 @@ jobs:
       db_ccdb_password: {{TF_VAR_rds_db_password_ccdb}}
       ert_sql_db_username: {{TF_VAR_rds_db_username_ertsql}}
       ert_sql_db_password: {{TF_VAR_rds_db_password_ertsql}}
+      db_accountdb_username: {{TF_VAR_rds_db_username_account}}
+      db_accountdb_password: {{TF_VAR_rds_db_password_account}}
+      db_networkpolicyserverdb_username: {{TF_VAR_rds_db_username_networkpolicy}}
+      db_networkpolicyserverdb_password: {{TF_VAR_rds_db_password_networkpolicy}}
+      db_nfsvolumedb_username: {{TF_VAR_rds_db_username_nfsvolume}}
+      db_nfsvolumedb_password: {{TF_VAR_rds_db_password_nfsvolume}}   
 
   - task: configure-ert
     file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml

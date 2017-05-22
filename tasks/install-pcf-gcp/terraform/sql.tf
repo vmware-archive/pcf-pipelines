@@ -96,6 +96,30 @@ resource "google_sql_database" "diego" {
   count = "1"
 }
 
+resource "google_sql_database" "account" {
+  name       = "account"
+  depends_on = ["google_sql_database.diego"]
+  instance   = "${google_sql_database_instance.master.name}"
+
+  count = "1"
+}
+
+resource "google_sql_database" "nfsvolume" {
+  name       = "nfsvolume"
+  depends_on = ["google_sql_database.account"]
+  instance   = "${google_sql_database_instance.master.name}"
+
+  count = "1"
+}
+
+resource "google_sql_database" "networkpolicyserver" {
+  name       = "networkpolicyserver"
+  depends_on = ["google_sql_database.nfsvolume"]
+  instance   = "${google_sql_database_instance.master.name}"
+
+  count = "1"
+}
+
 resource "google_sql_user" "ert" {
   name       = "${var.ert_sql_db_username}"
   depends_on = ["google_sql_database.diego"]

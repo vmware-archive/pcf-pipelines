@@ -20,6 +20,14 @@ TF_VAR_rds_db_username_ccdb:
 TF_VAR_rds_db_password_ccdb:
 TF_VAR_rds_db_username_ertsql:
 TF_VAR_rds_db_password_ertsql:
+
+TF_VAR_rds_db_username_account:
+TF_VAR_rds_db_password_account:
+TF_VAR_rds_db_username_networkpolicy:
+TF_VAR_rds_db_password_networkpolicy:
+TF_VAR_rds_db_username_nfsvolume:
+TF_VAR_rds_db_password_nfsvolume:
+
 TF_VAR_environment:
 TF_VAR_opsman_ami:
 TF_VAR_amis_nat:

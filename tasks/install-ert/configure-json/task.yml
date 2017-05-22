@@ -74,3 +74,9 @@ params:
   MYSQL_BACKUPS_S3_ACCESS_KEY_ID:
   MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY:
   MYSQL_BACKUPS_S3_CRON_SCHEDULE:
+  db_accountdb_username:
+  db_accountdb_password:
+  db_networkpolicyserverdb_username:
+  db_networkpolicyserverdb_password:
+  db_nfsvolumedb_username:
+  db_nfsvolumedb_password:
