@@ -160,6 +160,10 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [create-infrastructure]
+      trigger: true
+      params: {globs: []}
     - get: tool-om-beta
       params:
         globs:
@@ -193,12 +197,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [configure-director]
+      trigger: true
+      params: {globs: []}
     - get: tool-om
       params:
         globs:
         - "om-linux"
-      trigger: true
-      passed: [configure-director]
   - task: deploy-director
     file: pcf-pipelines/tasks/install-pcf-gcp/deploy-director/task.yml
     params:
@@ -211,14 +217,16 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [deploy-director]
+      trigger: true
+      params: {globs: []}
     - get: pivnet-product
       resource: pivnet-elastic-runtime
       params:
         globs:
         - "*pivotal"
     - get: tool-om
-      trigger: true
-      passed: [deploy-director]
       params:
         globs:
         - "om-linux"
