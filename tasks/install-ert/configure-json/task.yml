@@ -8,7 +8,6 @@ image_resource:
     repository: cloudfoundry/cflinuxfs2
 
 inputs:
-  - name: terraform-zip
   - name: pcf-pipelines 
   - name: tool-om
   - name: terraform-state

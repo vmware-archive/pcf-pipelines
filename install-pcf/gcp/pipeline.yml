@@ -23,7 +23,7 @@ resources:
 - name: terraform-zip
   type: file-url
   source:
-    url: https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip  
+    url: https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip
     filename: terraform.zip
 
 - name: pcf-pipelines
@@ -217,7 +217,7 @@ jobs:
         globs:
         - "om-linux"
     - get: terraform-state
-    - get: terraform-zip
+    - <<: *extract-terraform
 
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
@@ -304,3 +304,9 @@ jobs:
       OPSMAN_URI: {{pcf_ert_domain}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+
+extract-terraform: &extract-terraform
+  do:
+    - get: terraform-zip
+    - task: terraform-bin
+      file: pcf-pipelines/tasks/extract-terraform/task.yml
