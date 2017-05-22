@@ -41,6 +41,20 @@ jobs:
       trigger: true
       params: {save: true}
 
+  - task: untar-cf-cli
+    config:
+      image_resource:
+      inputs:
+      - name: cf-cli
+      outputs:
+      - name: cf-cli-binary
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          tar -C cf-cli-binary -xf cf-cli/*.tgz cf
+
   - put: pcf-pipelines-image
     params:
       load_base: cflinuxfs2
