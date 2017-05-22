@@ -3,9 +3,6 @@
 chmod +x tool-om/om-linux
 PATH=$PWD/tool-om:$PATH
 
-chmod +x jq/jq
-PATH=$PWD/jq:$PATH
-
 function fn_get_azs {
      local azs_csv=$1
      echo $azs_csv | jq --raw-input 'split(",")'

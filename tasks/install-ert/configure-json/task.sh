@@ -5,9 +5,6 @@ set -e
 OM_CMD=./tool-om/om-linux
 chmod +x tool-om/om-linux
 
-chmod +x jq/jq
-PATH=$PWD/jq:$PATH
-
 json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}/${terraform_template}"
 json_file_template="${json_file_path}/ert-template.json"
 

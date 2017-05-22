@@ -12,12 +12,6 @@ resource_types:
     tag: latest
 
 resources:
-- name: jq
-  type: file-url
-  source:
-    url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-    filename: jq
-
 - name: get-pip
   type: file-url
   source:
@@ -239,7 +233,6 @@ jobs:
   serial: true
   plan:
   - aggregate:
-    - get: jq
     - get: tool-om
       params:
         globs:
