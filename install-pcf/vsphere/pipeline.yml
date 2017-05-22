@@ -19,13 +19,6 @@ resources:
     repository: govmomi
     access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
 
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
-
 - name: pivnet-cli
   type: github-release
   source:
@@ -66,8 +59,6 @@ jobs:
     - get: pcf-pipelines
     - get: govc
       params: {globs: ["*linux_amd64*"]}
-    - get: tool-om
-      params: {globs: ["*linux*"]}
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
       trigger: true
@@ -109,8 +100,8 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      params: {globs: ["*linux*"]}
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [install-opsmgr]
       trigger: true
 
@@ -177,11 +168,10 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      resource: tool-om
-      params: {globs: ["*linux*"]}
-      trigger: true
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [configure-ops-director]
+      trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
@@ -197,10 +187,10 @@ jobs:
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
-    - get: tool-om
-      params: {globs: ["*linux*"]}
-      trigger: true
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [opsman-apply-changes]
+      trigger: true
     - get: pivnet-cli
       params: {globs: ["*linux-amd64*"]}
 
@@ -218,10 +208,10 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      params: {globs: ["*linux*"]}
-      trigger: true
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [upload-elastic-runtime-tile]
+      trigger: true
 
   - task: config-er-tile
     file: pcf-pipelines/tasks/config-ert/task.yml
@@ -322,9 +312,10 @@ jobs:
 #   - aggregate:
 #     - get: customer-repo
 #       trigger: true
-#     - get: tool-om
-#       params: {globs: ["*linux*"]}
+#     - get: pivnet-opsman-product
+#       params: {globs: ["*.ova"]}
 #       passed: [config-elastic-runtime-tile]
+#       trigger: true
 #
 #   - task: pre-step
 #     file: customer-repo/tasks/pre-step/task.yml
@@ -337,10 +328,10 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      params: {globs: ["*linux*"]}
-      trigger: true
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [config-elastic-runtime-tile]
+      trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
@@ -353,8 +344,8 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      params: {globs: ["*linux*"]}
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [product-apply-changes]
       trigger: true
 
@@ -369,9 +360,9 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [disable-errands]
-      params: {globs: ["*linux*"]}
       trigger: true
 
   - task: apply-changes
@@ -386,9 +377,10 @@ jobs:
 #   - aggregate:
 #     - get: customer-repo
 #       trigger: true
-#     - get: tool-om
-#       params: {globs: ["*linux*"]}
+#     - get: pivnet-opsman-product
+#       params: {globs: ["*.ova"]}
 #       passed: [product-apply-changes]
+#       trigger: true
 #   - task: post-step
 #     file: customer-repo/tasks/post-step/task.yml
 #     params:

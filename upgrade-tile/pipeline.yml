@@ -29,13 +29,6 @@ resources:
     branch: master
     username: {{github_token}}
 
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}}
-
 - name: {{resource_name}}
   type: pivnet
   check_every: {{pivnet_poll_interval}}
@@ -80,10 +73,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: tool-om
-      params:
-        globs:
-        - om-linux
     - get: stemcell-downloader
       params:
         globs: [stemcell-downloader-linux]

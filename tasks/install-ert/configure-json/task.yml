@@ -9,7 +9,6 @@ image_resource:
 
 inputs:
   - name: pcf-pipelines 
-  - name: tool-om
   - name: terraform-state
 
 outputs:

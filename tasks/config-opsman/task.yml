@@ -14,7 +14,6 @@ params:
 
 inputs:
   - name: pcf-pipelines
-  - name: tool-om
 
 run:
   path: pcf-pipelines/tasks/config-opsman/task.sh

@@ -7,7 +7,6 @@ image_resource:
     repository: czero/cflinuxfs2
 inputs:
   - name: pcf-pipelines 
-  - name: tool-om
 
 params:
   pcf_ert_domain:

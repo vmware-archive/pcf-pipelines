@@ -27,13 +27,6 @@ resources:
     repository: govmomi
     access_token: {{github_token}}
 
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}}
-
 - name: tool-pivnet-cli
   type: github-release
   source:
@@ -83,9 +76,6 @@ jobs:
         globs: ["*.ova"]
     - get: pcf-pipelines
     - get: govc
-    - get: tool-om
-      params:
-        globs: ["*linux*"]
     - get: tool-pivnet-cli
       params:
         globs: ["*linux*"]

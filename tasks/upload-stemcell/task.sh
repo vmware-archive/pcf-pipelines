@@ -32,9 +32,7 @@ mkdir -p "${root}/stemcell"
 
 stemcell="$(ls -1 "${root}"/stemcell/*.tgz)"
 
-chmod +x ./tool-om/om-linux
-
-./tool-om/om-linux --target ${OPSMAN_URI} \
+om-linux --target ${OPSMAN_URI} \
   --skip-ssl-validation \
   --username "${OPSMAN_USERNAME}" \
   --password "${OPSMAN_PASSWORD}" \

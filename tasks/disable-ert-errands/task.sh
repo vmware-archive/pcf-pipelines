@@ -1,8 +1,5 @@
 #!/bin/bash -e
 
-chmod +x tool-om/om-linux
-CMD=./tool-om/om-linux
-
 ERT_ERRANDS=$(cat <<-EOF
 {"errands": [
   {"name": "smoke-tests","post_deploy": false},
@@ -16,6 +13,6 @@ ERT_ERRANDS=$(cat <<-EOF
 EOF
 )
 
-CF_GUID=`$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD curl -p "/api/v0/deployed/products" -x GET | jq --raw-output '.[] | select(.installation_name | contains("cf-")) | .guid'`
+CF_GUID=`om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD curl -p "/api/v0/deployed/products" -x GET | jq --raw-output '.[] | select(.installation_name | contains("cf-")) | .guid'`
 
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD curl -p "/api/v0/staged/products/$CF_GUID/errands" -x PUT -d "$ERT_ERRANDS"
+om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD curl -p "/api/v0/staged/products/$CF_GUID/errands" -x PUT -d "$ERT_ERRANDS"

@@ -36,13 +36,6 @@ resources:
     repository: cliaas
     access_token: {{github_token}}
 
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}}
-
 - name: tool-pivnet-cli
   type: github-release
   source:
@@ -88,9 +81,6 @@ jobs:
       params:
         globs: ["*linux*"]
     - get: pcf-pipelines
-    - get: tool-om
-      params:
-        globs: ["*linux*"]
     - get: tool-pivnet-cli
       params:
         globs: ["*linux*"]
