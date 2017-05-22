@@ -93,12 +93,6 @@ jobs:
   - put: version
     params: {bump: minor}
 
-- name: bump-major
-  serial_groups: [version]
-  plan:
-  - put: version
-    params: {bump: major}
-
 - name: test
   on_failure:
     <<: *notify_slack
