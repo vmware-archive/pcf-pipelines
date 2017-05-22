@@ -54,13 +54,6 @@ resources:
     branch: version
     file: version
 
-- name: cf-cli
-  type: s3
-  source:
-    bucket: cf-cli-releases
-    region_name: us-west-1
-    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
-
 - name: om
   type: github-release
   source:
@@ -111,7 +104,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       passed: [test]
-    - get: cf-cli
     - get: cliaas
       params:
         globs: ["*linux*"]
@@ -155,7 +147,6 @@ jobs:
     - get: pivnet-rc
       trigger: true
       passed: [publish-rc]
-    - get: cf-cli
     - get: cliaas
       params:
         globs: [cliaas-linux]
@@ -272,7 +263,6 @@ jobs:
       params: {bump: final}
     - get: pcf-pipelines
       passed: [update-pipelines]
-    - get: cf-cli
     - get: cliaas
       params:
         globs: ["*linux*"]

@@ -20,7 +20,6 @@ image_resource:
   source: {repository: czero/cflinuxfs2}
 
 inputs:
-- name: cf-cli
 - name: pcf-pipelines
 
 params:
