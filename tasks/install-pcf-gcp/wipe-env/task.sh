@@ -8,7 +8,7 @@ export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}
 export GOOGLE_PROJECT=${GCP_PROJECT_ID}
 export GOOGLE_REGION=${GCP_REGION}
 
-/opt/terraform/terraform destroy -force \
+terraform destroy -force \
   -state $root/terraform-state/terraform-*.tfstate \
   -var "gcp_proj_id=dontcare" \
   -var "gcp_region=dontcare" \

@@ -26,7 +26,7 @@ export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}
 export GOOGLE_PROJECT=${GCP_PROJECT_ID}
 export GOOGLE_REGION=${GCP_REGION}
 
-/opt/terraform/terraform plan \
+terraform plan \
   -var "gcp_proj_id=${GCP_PROJECT_ID}" \
   -var "gcp_region=${GCP_REGION}" \
   -var "gcp_zone_1=${GCP_ZONE_1}" \
@@ -43,12 +43,12 @@ export GOOGLE_REGION=${GCP_REGION}
   -out terraform-$version.tfplan \
   pcf-pipelines/tasks/install-pcf-gcp/terraform/$gcp_pcf_terraform_template
 
-/opt/terraform/terraform apply \
+terraform apply \
   -state-out $root/create-infrastructure-output/terraform-$version.tfstate \
   terraform-$version.tfplan
 
 cd $root/create-infrastructure-output
-  output_json=$(/opt/terraform/terraform output -json -state=terraform-$version.tfstate)
+  output_json=$(terraform output -json -state=terraform-$version.tfstate)
   pub_ip_global_pcf=$(echo $output_json | jq --raw-output '.pub_ip_global_pcf.value')
   pub_ip_ssh_and_doppler=$(echo $output_json | jq --raw-output '.pub_ip_ssh_and_doppler.value')
   pub_ip_ssh_tcp_lb=$(echo $output_json | jq --raw-output '.pub_ip_ssh_tcp_lb.value')
