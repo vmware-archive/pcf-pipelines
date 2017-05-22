@@ -2,6 +2,8 @@
 
 set -e
 
+mv terraform-bin/terraform /usr/local/bin
+
 OM_CMD=./tool-om/om-linux
 chmod +x tool-om/om-linux
 

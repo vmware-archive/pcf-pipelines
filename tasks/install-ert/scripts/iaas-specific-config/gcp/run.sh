@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-unzip terraform-zip/terraform.zip
-mv terraform /usr/local/bin
-
 cd terraform-state
   db_host=$(terraform output --json | jq --raw-output '.sql_instance_ip.value')
 cd -
