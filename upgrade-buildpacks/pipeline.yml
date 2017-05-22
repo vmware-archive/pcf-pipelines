@@ -20,13 +20,6 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: cf-cli
-  type: s3
-  source:
-    bucket: cf-cli-releases
-    region_name: us-west-1
-    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
-
 - name: pcf-pipelines
   type: git
   source:
@@ -155,7 +148,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: cf-cli
     - get: buildpack
       resource: binary-buildpack
       trigger: true
@@ -171,8 +163,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: binary-buildpack
+      trigger: true
       passed: [stage-binary-buildpack]
+      params: {globs: []}
     - get: pcf-pipelines
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
@@ -185,7 +179,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       resource: dotnet-core-buildpack
@@ -202,8 +195,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: dotnet-core-buildpack
+      trigger: true
       passed: [stage-dotnet-buildpack]
+      params: {globs: []}
     - get: pcf-pipelines
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
@@ -216,7 +211,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       resource: go-buildpack
@@ -233,8 +227,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: go-buildpack
       passed: [stage-go-buildpack]
+      trigger: true
+      params: {globs: []}
     - get: pcf-pipelines
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
@@ -247,7 +243,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       passed: [regulator]
@@ -267,8 +262,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: java-buildpack
       passed: [stage-java-buildpack]
+      trigger: true
+      params: {globs: []}
     - get: pcf-pipelines
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
@@ -281,7 +278,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       passed: [regulator]
@@ -298,9 +294,11 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
-      passed: [stage-nodejs-buildpack]
     - get: pcf-pipelines
+    - get: nodejs-buildpack
+      passed: [stage-nodejs-buildpack]
+      trigger: true
+      params: {globs: []}
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
     params:
@@ -312,7 +310,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       passed: [regulator]
@@ -329,8 +326,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: php-buildpack
       passed: [stage-php-buildpack]
+      trigger: true
+      params: {globs: []}
     - get: pcf-pipelines
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
@@ -343,7 +342,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       passed: [regulator]
@@ -360,8 +358,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: python-buildpack
       passed: [stage-python-buildpack]
+      trigger: true
+      params: {globs: []}
     - get: pcf-pipelines
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
@@ -374,7 +374,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       passed: [regulator]
@@ -391,8 +390,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: ruby-buildpack
       passed: [stage-ruby-buildpack]
+      trigger: true
+      params: {globs: []}
     - get: pcf-pipelines
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
@@ -405,7 +406,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       passed: [regulator]
@@ -422,8 +422,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: staticfile-buildpack
       passed: [stage-staticfile-buildpack]
+      trigger: true
+      params: {globs: []}
     - get: pcf-pipelines
   - task: promote
     file: pcf-pipelines/tasks/promote-buildpack/task.yml
@@ -436,7 +438,6 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
     - get: pcf-pipelines
     - get: buildpack
       passed: [regulator]
@@ -456,8 +457,10 @@ jobs:
   serial_groups: [cc-api]
   plan:
   - aggregate:
-    - get: cf-cli
+    - get: tc-buildpack
       passed: [stage-tcserver-buildpack]
+      trigger: true
+      params: {globs: []}
     - get: pcf-pipelines
 
   - task: promote
