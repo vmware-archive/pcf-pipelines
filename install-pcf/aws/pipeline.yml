@@ -133,8 +133,7 @@ jobs:
       trigger: true
       passed: [config-opsman]
     - get: terraform-state
-    - get: tool-om
-      resource: tool-om-beta
+    - get: tool-om-beta
       params:
         globs: ["*linux*"]
       version: { tag: '0.17-beta.0' }

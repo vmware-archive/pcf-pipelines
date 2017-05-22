@@ -160,8 +160,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      resource: tool-om-beta
+    - get: tool-om-beta
       params:
         globs:
         - "om-linux"
