@@ -17,7 +17,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: cloudfoundry/cflinuxfs2}
+  source: {repository: czero/cflinuxfs2}
 
 inputs:
   - name: pcf-pipelines
