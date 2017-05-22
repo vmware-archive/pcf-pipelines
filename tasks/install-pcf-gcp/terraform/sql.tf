@@ -97,7 +97,7 @@ resource "google_sql_database" "diego" {
 }
 
 resource "google_sql_database" "account" {
-  name       = "diego"
+  name       = "account"
   depends_on = ["google_sql_database.diego"]
   instance   = "${google_sql_database_instance.master.name}"
 
@@ -105,7 +105,7 @@ resource "google_sql_database" "account" {
 }
 
 resource "google_sql_database" "nfsvolume" {
-  name       = "diego"
+  name       = "nfsvolume"
   depends_on = ["google_sql_database.account"]
   instance   = "${google_sql_database_instance.master.name}"
 
@@ -113,7 +113,7 @@ resource "google_sql_database" "nfsvolume" {
 }
 
 resource "google_sql_database" "networkpolicyserver" {
-  name       = "diego"
+  name       = "networkpolicyserver"
   depends_on = ["google_sql_database.nfsvolume"]
   instance   = "${google_sql_database_instance.master.name}"
 
