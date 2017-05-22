@@ -34,5 +34,5 @@ jobs:
 
   - put: pcf-pipelines-image
     params:
-      dockerfile: pcf-pipelines/ci/Dockerfile
       load_base: cflinuxfs2
+      build: pcf-pipelines/ci
