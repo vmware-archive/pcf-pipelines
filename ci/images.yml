@@ -1,0 +1,38 @@
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    repository: git@github.com:pivotal-cf/pcf-pipelines.git
+    branch: master
+    private_key: {{git_private_key}}
+    paths: [ci/Dockerfile]
+
+- name: pcf-pipelines-image
+  type: docker
+  source:
+    repository: czero/cflinuxfs2
+    tag: latest
+    username: czero
+    password: {{czero_dockerhub_password}}
+
+- name: cflinuxfs2
+  type: docker-image
+  source:
+    repository: cloudfoundry/cflinuxfs2
+    tag: latest
+
+jobs:
+- name: build-pcf-pipelines-image
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+    - get: cflinuxfs2
+      trigger: true
+      params: {save: true}
+
+  - put: pcf-pipelines-image
+    params:
+      dockerfile: pcf-pipelines/ci/Dockerfile
+      load_base: cflinuxfs2
