@@ -48,7 +48,7 @@ export GOOGLE_REGION=${GCP_REGION}
   terraform-$version.tfplan
 
 cd $root/create-infrastructure-output
-  output_json=$(/opt/terraform/terraform output --json)
+  output_json=$(/opt/terraform/terraform output -json -state=terraform-$version.tfstate)
   pub_ip_global_pcf=$(echo $output_json | jq --raw-output '.pub_ip_global_pcf.value')
   pub_ip_ssh_and_doppler=$(echo $output_json | jq --raw-output '.pub_ip_ssh_and_doppler.value')
   pub_ip_ssh_tcp_lb=$(echo $output_json | jq --raw-output '.pub_ip_ssh_tcp_lb.value')

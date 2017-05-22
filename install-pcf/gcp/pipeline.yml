@@ -160,12 +160,13 @@ jobs:
     params:
       file: tfstate-version/version
 
-- name: deploy-director
+- name: configure-director
   serial_groups: [opsman]
   plan:
   - aggregate:
     - get: pcf-pipelines
     - get: tool-om
+      resource: tool-om-beta
       params:
         globs:
         - "om-linux"
@@ -192,12 +193,24 @@ jobs:
       gcp_zone_3: {{gcp_zone_3}}
       gcp_resource_prefix: {{gcp_resource_prefix}}
       gcp_svc_acct_key: {{gcp_service_account_key}}
+
+- name: deploy-director
+  serial_groups: [opsman]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+      trigger: true
+      passed: [configure-director]
   - task: deploy-director
-    file: pcf-pipelines/tasks/apply-changes/task.yml
+    file: pcf-pipelines/tasks/install-pcf-gcp/deploy-director/task.yml
     params:
-      OPSMAN_URI: {{pcf_ert_domain}}
-      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
-      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin_username: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_password: {{pcf_opsman_admin_password}}
 
 - name: deploy-ert
   serial_groups: [opsman]
@@ -270,6 +283,12 @@ jobs:
       db_ccdb_password: {{db_ccdb_password}}
       db_routing_username: {{db_routing_username}}
       db_routing_password: {{db_routing_password}}
+      db_accountdb_username: {{db_accountdb_username}}
+      db_accountdb_password: {{db_accountdb_password}}
+      db_networkpolicyserverdb_username: {{db_networkpolicyserverdb_username}}
+      db_networkpolicyserverdb_password: {{db_networkpolicyserverdb_password}}
+      db_nfsvolumedb_username: {{db_nfsvolumedb_username}}
+      db_nfsvolumedb_password: {{db_nfsvolumedb_password}}         
       mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
       MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
