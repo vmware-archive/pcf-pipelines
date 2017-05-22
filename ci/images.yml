@@ -21,6 +21,13 @@ resources:
     repository: cloudfoundry/cflinuxfs2
     tag: latest
 
+- name: om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
 jobs:
 - name: build-pcf-pipelines-image
   serial: true
@@ -28,6 +35,8 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: true
+    - get: om
+      params: {globs: ["*linux*"]}
     - get: cflinuxfs2
       trigger: true
       params: {save: true}
