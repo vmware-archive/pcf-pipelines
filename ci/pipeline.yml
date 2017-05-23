@@ -129,6 +129,7 @@ jobs:
   - aggregate:
     - get: version
     - get: pcf-pipelines
+      passed: [publish-rc]
     - do:
       - get: pivnet-rc
         trigger: true
