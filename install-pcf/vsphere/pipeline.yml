@@ -12,13 +12,6 @@ resource_types:
     tag: latest
 
 resources:
-- name: govc
-  type: github-release
-  source:
-    user: vmware
-    repository: govmomi
-    access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
-
 - name: pcf-pipelines
   type: git
   source:
@@ -50,8 +43,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: govc
-      params: {globs: ["*linux_amd64*"]}
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
       trigger: true

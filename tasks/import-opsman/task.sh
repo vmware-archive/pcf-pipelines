@@ -1,14 +1,10 @@
 #!/bin/bash -e
 
-gunzip ./govc/govc_linux_amd64.gz
-chmod +x ./govc/govc_linux_amd64
-
-govc=./govc/govc_linux_amd64
 file_path=`find ./pivnet-opsman-product/ -name *.ova`
 
 echo $file_path
 
-$govc import.spec $file_path | python -m json.tool > om-import.json
+govc import.spec $file_path | python -m json.tool > om-import.json
 
 cat > filters <<'EOF'
 del(.Deployment) |
@@ -42,4 +38,4 @@ jq \
 
 cat options.json
 
-$govc import.ova -options=options.json $file_path
+govc import.ova -options=options.json $file_path

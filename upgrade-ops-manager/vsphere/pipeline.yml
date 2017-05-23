@@ -20,13 +20,6 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: govc
-  type: github-release
-  source:
-    user: vmware
-    repository: govmomi
-    access_token: {{github_token}}
-
 - name: pcf-pipelines
   type: git
   source:
@@ -68,7 +61,6 @@ jobs:
       params:
         globs: ["*.ova"]
     - get: pcf-pipelines
-    - get: govc
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml

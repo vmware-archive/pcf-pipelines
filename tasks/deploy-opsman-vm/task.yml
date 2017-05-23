@@ -22,7 +22,6 @@ image_resource:
 inputs:
   - name: pivnet-opsmgr
   - name: pcf-pipelines
-  - name: govc
 
 run:
   path: pcf-pipelines/tasks/deploy-opsman-vm/task.sh

@@ -16,11 +16,6 @@
 
 function main() {
 
-  gunzip ./govc/govc_linux_amd64.gz
-  chmod +x ./govc/govc_linux_amd64
-
-  CMD_PATH="govc/govc_linux_amd64"
-
   local cwd
   cwd="${1}"
 
@@ -60,23 +55,23 @@ EOF
 
   echo "Importing OVA of new OpsMgr VM..."
   echo "Running govc import.ova -options=opsman_settings.json -k=true ${OPSMAN_PATH}"
-  ./${CMD_PATH} import.ova -options=opsman_settings.json -k=true ${OPSMAN_PATH}
+  govc import.ova -options=opsman_settings.json -k=true ${OPSMAN_PATH}
   #
   # echo "Setting CPUs on new OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
-  ./${CMD_PATH} vm.change -c=2 -k=true -vm=${OPSMAN_NAME}
+  govc vm.change -c=2 -k=true -vm=${OPSMAN_NAME}
   #
   # echo "Shutting down OLD OpsMgr VM... ${OPSMAN_IP}"
-  ./${CMD_PATH} vm.power -off=true -k=true -vm.ip=${OPSMAN_IP}
+  govc vm.power -off=true -k=true -vm.ip=${OPSMAN_IP}
   #
   # echo "Starting OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
-  ./${CMD_PATH} vm.power -k=true -on=true ${OPSMAN_NAME}
+  govc vm.power -k=true -on=true ${OPSMAN_NAME}
 
   # make sure that vm and ops manager app is up
   started=false
   timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
   set +e
   while ! $started; do
-      OUTPUT=$(./${CMD_PATH} vm.info -vm.ip=${OPSMAN_IP} -k=true 2>&1)
+      OUTPUT=$(govc vm.info -vm.ip=${OPSMAN_IP} -k=true 2>&1)
 
       if [[ $SECONDS -gt $timeout ]]; then
         echo "Timed out waiting for VM to start."

@@ -33,7 +33,6 @@ params:
 inputs:
   - name: pivnet-opsman-product
   - name: pcf-pipelines
-  - name: govc
 
 run:
   path: pcf-pipelines/tasks/import-opsman/task.sh
