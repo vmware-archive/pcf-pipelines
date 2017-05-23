@@ -20,11 +20,9 @@ root=$PWD
 
 product_file="$(ls -1 ${root}/pivnet-product/*.pivotal)"
 
-chmod +x stemcell-downloader/stemcell-downloader-linux
-
 mkdir -p "${root}/stemcell"
 
-./stemcell-downloader/stemcell-downloader-linux \
+stemcell-downloader \
   --iaas-type "${IAAS_TYPE}" \
   --product-file "${product_file}" \
   --product-name "${PRODUCT}" \

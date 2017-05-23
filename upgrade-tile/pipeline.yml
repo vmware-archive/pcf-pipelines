@@ -38,13 +38,6 @@ resources:
     product_version: {{product_version}}
     sort_by: semver
 
-- name: stemcell-downloader
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pcf-product-stemcell-downloader
-    access_token: {{github_token}}
-
 - name: schedule
   type: time
   source:
@@ -73,9 +66,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: stemcell-downloader
-      params:
-        globs: [stemcell-downloader-linux]
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml

@@ -37,13 +37,6 @@ resources:
     uri: https://github.com/pivotal-cf/pcf-pipelines
     branch: master
 
-- name: stemcell-downloader
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pcf-product-stemcell-downloader
-    access_token: {{GITHUB_TOKEN}}
-
 jobs:
 - name: aws-pcf-prepare
   serial: true
@@ -150,9 +143,6 @@ jobs:
     - get: pcf-pipelines
       trigger: true
       passed: [deploy-director]
-    - get: stemcell-downloader
-      params:
-        globs: [stemcell-downloader-linux]
     - get: pivnet-product
       resource: pivnet-elastic-runtime
       params:

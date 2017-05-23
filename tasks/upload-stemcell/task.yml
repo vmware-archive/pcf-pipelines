@@ -21,7 +21,6 @@ image_resource:
 
 inputs:
   - name: pcf-pipelines
-  - name: stemcell-downloader
   - name: pivnet-product
 
 params:

@@ -71,7 +71,6 @@ OPSMAN_PASSWORD:
 OPSMAN_URI:
 TILE_UPLOAD_TIMEOUT: 1800 # Time to allow for a tile upload request to live
 PIVNET_TOKEN:
-GITHUB_TOKEN:
 PEM:
 ERT_SSL_CERT: generate
 ERT_SSL_KEY:
