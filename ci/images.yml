@@ -56,6 +56,13 @@ resources:
     repository: govmomi
     access_token: {{github_token}}
 
+- name: om-beta
+  type: github-release
+  source:
+    user: c0-ops
+    repository: om
+    access_token: {{github_token}}
+
 jobs:
 - name: build-pcf-pipelines-image
   serial: true
@@ -75,6 +82,9 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: govc
       params: {globs: ["*linux_amd64*"]}
+    - get: om-beta
+      params: {globs: ["*linux*"]}
+      version: { tag: '0.17-beta.0' }
 
   - task: prepare-workspace
     config:
@@ -89,6 +99,7 @@ jobs:
       - name: cliaas
       - name: pivnet-cli
       - name: govc
+      - name: om-beta
       outputs:
       - name: workspace
       run:
@@ -113,6 +124,9 @@ jobs:
           gunzip govc/govc_linux_amd64.gz
           cp govc/govc_linux_amd64 workspace/govc
           chmod +x workspace/govc
+
+          cp om-beta/om-linux workspace/om-linux-beta
+          chmod +x workspace/om-linux-beta
 
   - put: pcf-pipelines-image
     params:
