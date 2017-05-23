@@ -46,7 +46,7 @@ run:
 
       # Remove git_private_key from params as it is no longer needed
       params_file=$(dirname $f)/params.yml
-      sed -i -e's/git_private_key:/d' $params_file
+      sed -i -e '/git_private_key:/d' $params_file
     done
 
     # Create release metadata
