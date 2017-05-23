@@ -34,8 +34,9 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/pivotal-cf/pcf-pipelines
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
+    private_key: {{git_private_key}}
 
 jobs:
 - name: aws-pcf-prepare

@@ -18,8 +18,7 @@
 # eg. 2h, 3h45m, 3000s
 check_new_opsman_every: CHANGEME
 
-# A github access key to download github binary releases E.g. https://github.com/pivotal-cf/om
-github_token: CHANGEME
+git_private_key:
 
 # Ops Manager minor version to track
 opsman_major_minor_version: 1\.10\.*

@@ -43,6 +43,10 @@ run:
     for f in ${files[@]}; do
       cat $f | ./yaml-patch/yaml_patch_linux -o pcf-pipelines/operations/use-pivnet-release.yml > $f.bk
       mv $f.bk $f
+
+      # Remove git_private_key from params as it is no longer needed
+      params_file=$(dirname $f)/params.yml
+      sed -i -e's/git_private_key:/d' $params_file
     done
 
     # Create release metadata

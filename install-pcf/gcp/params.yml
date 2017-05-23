@@ -30,8 +30,7 @@ s3_access_key_id: CHANGEME
 s3_secret_access_key: CHANGEME
 s3_region: CHANGEME
 
-# GitHub token with repo or public_repo scope
-github_token: CHANGEME
+git_private_key:
 
 # Pivotal Network token: https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
