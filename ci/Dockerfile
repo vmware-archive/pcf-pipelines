@@ -8,7 +8,7 @@ COPY \
        govc \
        om-linux-beta \
        stemcell-downloader \
-       /usr/local/bin
+       /usr/local/bin/
 
 RUN \
 # jq
