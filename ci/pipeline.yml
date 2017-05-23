@@ -128,19 +128,39 @@ jobs:
   plan:
   - aggregate:
     - get: version
-    - get: pcf-pipelines
+    - get: src
+      resource: pcf-pipelines
       passed: [publish-rc]
     - do:
       - get: pivnet-rc
         trigger: true
         passed: [publish-rc]
       - task: unpack-rc
-        file: pcf-pipelines/tasks/unpack-tarball/task.yml
+        file: src/tasks/unpack-tarball/task.yml
         input_mapping: { tarball: pivnet-rc }
-        output_mapping: { unpacked_tarball: release }
+        output_mapping: { unpacked_tarball: pcf-pipelines-release }
+
+  - task: prepare-workspace
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      inputs:
+      - name: src
+      - name: pcf-pipelines-release
+      outputs:
+      - name: pcf-pipelines
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cp -r src/*.go pcf-pipelines
+          cp -r pcf-pipelines-release/pcf-pipelines/* pcf-pipelines
+
   - task: test
-    input_mapping: { "pcf-pipelines": release }
-    file: pcf-pipelines/ci/tasks/test.yml
+    file: src/ci/tasks/test.yml
 
 - name: update-pipelines
   on_failure:
