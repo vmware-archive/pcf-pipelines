@@ -12,12 +12,6 @@ resource_types:
     tag: latest
 
 resources:
-- name: get-pip
-  type: file-url
-  source:
-    url: https://bootstrap.pypa.io/get-pip.py
-    filename: get-pip.py
-
 - name: terraform-state
   type: s3
   source:
@@ -312,7 +306,6 @@ jobs:
       file: terraform-state/terraform.tfstate
   plan:
   - aggregate:
-    - get: get-pip
     - get: pcf-pipelines
     - get: terraform-state
   - task: aws-pcf-destroy

@@ -6,7 +6,6 @@ image_resource:
   source:
     repository: czero/cflinuxfs2
 inputs:
-  - name: get-pip
   - name: pcf-pipelines 
   - name: terraform-state
 outputs:
