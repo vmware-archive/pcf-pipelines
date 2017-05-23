@@ -14,7 +14,6 @@ params:
   OPSMAN_ADMIN_USERNAME:
   OPSMAN_ADMIN_PASSWORD:
   OPSMAN_URI:
-  GITHUB_TOKEN:
   OPSMAN_TIMEOUT_SECONDS:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
@@ -31,7 +30,6 @@ run:
   - |
     cat > upgrade_opsman_aws_config/params.yml <<EOF
     check_new_opsman_every: "$CHECK_NEW_OPSMAN_EVERY"
-    github_token: "$GITHUB_TOKEN"
     opsman_major_minor_version: "$OPSMAN_MAJOR_MINOR_VERSION"
     pivnet_token: "$PIVNET_TOKEN"
 

@@ -237,7 +237,6 @@ jobs:
         OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
         OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
         PIVNET_TOKEN: {{pivnet_token}}
-        GITHUB_TOKEN: {{github_token}}
         CHECK_NEW_OPSMAN_EVERY: 24h
     - task: update-upgrade-opsman-aws
       input_mapping: { config: upgrade_opsman_aws_config }
@@ -265,7 +264,6 @@ jobs:
         OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
         OPSMAN_MAJOR_MINOR_VERSION: {{upgrade_opsman_gcp_opsman_major_minor_version}}
         PIVNET_TOKEN: {{pivnet_token}}
-        GITHUB_TOKEN: {{github_token}}
         CHECK_NEW_OPSMAN_EVERY: 24h
     - task: update-upgrade-opsman-gcp
       input_mapping: { config: upgrade_opsman_gcp_config }
@@ -358,7 +356,6 @@ update_pipeline_params: &update_pipeline_params
   OPSMAN_URI: {{opsman_uri}}
   OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
   OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
-  GITHUB_TOKEN: {{github_token}}
 
 notify_slack: &notify_slack
   put: slack
