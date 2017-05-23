@@ -154,7 +154,7 @@ EOF
 )
 
 echo "Configuring IaaS and Director..."
-$CMD \
+om-linux \
   --target https://$OPS_MGR_HOST \
   --skip-ssl-validation \
   --username $OPS_MGR_USR \
@@ -164,21 +164,21 @@ $CMD \
   --director-configuration "$DIRECTOR_CONFIG"
 
 echo "Configuring availability zones..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
+om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
             curl -p "/api/v0/staged/director/availability_zones" \
             -x PUT -d "$AZ_CONFIGURATION"
 
 echo "Configuring networks..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
+om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
             curl -p "/api/v0/staged/director/networks" \
             -x PUT -d "$NETWORK_CONFIGURATION"
 
 echo "Configuring network assignment..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
+om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
             curl -p "/api/v0/staged/director/network_and_az" \
             -x PUT -d "$NETWORK_ASSIGNMENT"
 
 echo "Configuring security..."
-$CMD -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
+om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
             curl -p "/api/v0/staged/director/properties" \
             -x PUT -d "$SECURITY_CONFIG"
