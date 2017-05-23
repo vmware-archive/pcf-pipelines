@@ -65,10 +65,7 @@ cat opsman.json
 
 echo "=============================================================================================="
 
-chmod +x tool-om-beta/om-linux
-export PATH=$PWD/tool-om-beta:$PATH
-
-om-linux -t https://opsman.$ERT_DOMAIN -u "$OPSMAN_USER" -p "$OPSMAN_PASSWORD" -k \
+om-linux-beta -t https://opsman.$ERT_DOMAIN -u "$OPSMAN_USER" -p "$OPSMAN_PASSWORD" -k \
   aws -a $AWS_ACCESS_KEY_ID \
   -s $AWS_SECRET_ACCESS_KEY \
   -d $RDS_PASSWORD \

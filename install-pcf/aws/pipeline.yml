@@ -22,13 +22,6 @@ resources:
     bucket: {{S3_OUTPUT_BUCKET}}
     versioned_file: terraform.tfstate
 
-- name: tool-om-beta
-  type: github-release
-  source:
-    user: c0-ops
-    repository: om
-    access_token: {{GITHUB_TOKEN}}
-
 - name: pivnet-elastic-runtime
   type: pivnet
   check_every: 4h
@@ -119,10 +112,6 @@ jobs:
       trigger: true
       passed: [config-opsman]
     - get: terraform-state
-    - get: tool-om-beta
-      params:
-        globs: ["*linux*"]
-      version: { tag: '0.17-beta.0' }
   - task: config-director
     file: pcf-pipelines/tasks/install-pcf-aws/config-director/task.yml
     params:

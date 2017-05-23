@@ -8,7 +8,6 @@ image_resource:
 
 inputs:
 - name: pcf-pipelines 
-- name: tool-om-beta
 
 params:
   pcf_ert_domain:

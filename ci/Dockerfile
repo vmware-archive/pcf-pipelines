@@ -6,6 +6,7 @@ COPY cliaas-linux /usr/local/bin/cliaas-linux
 COPY pivnet-cli /usr/local/bin/pivnet-cli
 COPY govc /usr/local/bin/govc
 COPY om-linux-beta /usr/local/bin/om-linux-beta
+COPY stemcell-downloader /usr/local/bin/stemcell-downloader
 
 RUN \
 # jq

@@ -61,13 +61,6 @@ resources:
     product_version: {{ert_major_minor_version}}
     sort_by: semver
 
-- name: tool-om-beta
-  type: github-release
-  source:
-    user: c0-ops
-    repository: om
-    access_token: {{github_token}}
-
 jobs:
 - name: wipe-env
   serial_groups: [terraform]
@@ -157,10 +150,6 @@ jobs:
       passed: [create-infrastructure]
       trigger: true
       params: {globs: []}
-    - get: tool-om-beta
-      params:
-        globs:
-        - "om-linux"
   - task: check-opsman-dns
     file: pcf-pipelines/tasks/install-pcf-gcp/check-opsman-dns/task.yml
     params:
