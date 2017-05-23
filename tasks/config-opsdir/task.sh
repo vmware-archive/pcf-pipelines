@@ -165,20 +165,20 @@ om-linux \
 
 echo "Configuring availability zones..."
 om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/availability_zones" \
-            -x PUT -d "$AZ_CONFIGURATION"
+  curl -p "/api/v0/staged/director/availability_zones" \
+  -x PUT -d "$AZ_CONFIGURATION"
 
 echo "Configuring networks..."
 om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/networks" \
-            -x PUT -d "$NETWORK_CONFIGURATION"
+  curl -p "/api/v0/staged/director/networks" \
+  -x PUT -d "$NETWORK_CONFIGURATION"
 
 echo "Configuring network assignment..."
 om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/network_and_az" \
-            -x PUT -d "$NETWORK_ASSIGNMENT"
+  curl -p "/api/v0/staged/director/network_and_az" \
+  -x PUT -d "$NETWORK_ASSIGNMENT"
 
 echo "Configuring security..."
 om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-            curl -p "/api/v0/staged/director/properties" \
-            -x PUT -d "$SECURITY_CONFIG"
+  curl -p "/api/v0/staged/director/properties" \
+  -x PUT -d "$SECURITY_CONFIG"
