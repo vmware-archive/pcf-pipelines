@@ -12,7 +12,7 @@ pushd $CWD
   while read -r line
   do
     `echo "$line" | awk '{print "export "$1"="$3}'`
-  done < <(terraform output)
+  done < <(terraform output -state *.tfstate)
 
   export RDS_PASSWORD=`terraform state show aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
 popd
