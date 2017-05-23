@@ -147,16 +147,18 @@ in the following params template:
 					tasks := allTasksInPlan(&job.Plan, nil)
 					for i, task := range tasks {
 						var inputs []atc.TaskInputConfig
-						if task.TaskConfigPath != "" {
-							var taskConfig atc.TaskConfig
-							bs, err := ioutil.ReadFile(filepath.Join(root, task.TaskConfigPath))
-							Expect(err).NotTo(HaveOccurred())
-
-							err = yaml.Unmarshal(bs, &taskConfig)
-							Expect(err).NotTo(HaveOccurred())
-
-							inputs = taskConfig.Inputs
+						if !strings.HasPrefix(task.TaskConfigPath, "pcf-pipelines") {
+							continue
 						}
+
+						var taskConfig atc.TaskConfig
+						bs, err := ioutil.ReadFile(filepath.Join(root, task.TaskConfigPath))
+						Expect(err).NotTo(HaveOccurred())
+
+						err = yaml.Unmarshal(bs, &taskConfig)
+						Expect(err).NotTo(HaveOccurred())
+
+						inputs = taskConfig.Inputs
 
 						if task.TaskConfig != nil {
 							inputs = task.TaskConfig.Inputs
@@ -171,7 +173,7 @@ in the following params template:
 								}
 							}
 							if !validInputMapping {
-								Fail(fmt.Sprintf("invalid input mapping; task does specify an input named '%s'", k))
+								Fail(fmt.Sprintf("could not find input mapping for '%s' in '%s'\n", k, inputs))
 							}
 						}
 
