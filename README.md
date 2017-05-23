@@ -168,4 +168,9 @@ ginkgo -r -p
 
 #### Other notable examples of pipelines for PCF
 
-[PCFS Sample Pipeline](https://github.com/pivotalservices/concourse-pipeline-samples) by Luciano Silva and other PCF Solutions team members - includes pipelines for integrating Artifactory, Azure blobstores, GCP storage, or Docker registries, for blue-green deployment of apps to PCF, for backing up PCF, and for deploying Concourse itself with bosh.
+[PCFS Sample Pipelines](https://github.com/pivotalservices/concourse-pipeline-samples) - includes pipelines for
+- integrating Artifactory, Azure blobstores, GCP storage, or Docker registries
+- blue-green deployment of apps to PCF
+- backing up PCF
+- deploying Concourse itself with bosh.
+- and more...
