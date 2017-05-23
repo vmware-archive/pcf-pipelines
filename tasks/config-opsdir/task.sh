@@ -161,7 +161,7 @@ om-linux \
   --password $OPS_MGR_PWD \
   configure-bosh \
   --iaas-configuration "$IAAS_CONFIGURATION" \
-  --director-configuration "$DIRECTOR_CONFIG"
+  --director-configuration "$DIRECTOR_CONFIG" \
   --az-configuration "$AZ_CONFIGURATION" \
   --networks-configuration "$NETWORK_CONFIGURATION" \
   --network-assignment "$NETWORK_ASSIGNMENT" \
