@@ -153,6 +153,17 @@ NETWORK_ASSIGNMENT=$(cat <<-EOF
 EOF
 )
 
+echo "Configuring availability zones..."
+om-linux \
+  --target https://$OPS_MGR_HOST \
+  --skip-ssl-validation \
+  --username $OPS_MGR_USR \
+  --password $OPS_MGR_PWD \
+  curl \
+  -p "/api/v0/staged/director/availability_zones" \
+  -x PUT \
+  -d "$AZ_CONFIGURATION"
+
 echo "Configuring BOSH..."
 om-linux \
   --target https://$OPS_MGR_HOST \
@@ -162,7 +173,6 @@ om-linux \
   configure-bosh \
   --iaas-configuration "$IAAS_CONFIGURATION" \
   --director-configuration "$DIRECTOR_CONFIG" \
-  --az-configuration "$AZ_CONFIGURATION" \
   --networks-configuration "$NETWORK_CONFIGURATION" \
   --network-assignment "$NETWORK_ASSIGNMENT" \
   --security-configuration "$SECURITY_CONFIG"
