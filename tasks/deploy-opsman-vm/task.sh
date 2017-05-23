@@ -84,7 +84,9 @@ EOF
         echo "...VM is running! $OUTPUT"
         timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
         while [[ $started ]]; do
-          HTTP_OUTPUT=$(curl --write-out %{http_code} --silent --output /dev/null ${OPSMAN_URI} -k)
+          export http_proxy=''
+          export https_proxy=''
+          HTTP_OUTPUT=$(curl -k --write-out %{http_code} --silent --output /dev/null https://${OPSMAN_IP})
           if [[ $HTTP_OUTPUT == *"302"* || $HTTP_OUTPUT == *"301"* ]]; then
             echo "Site is started! $OUTPUT >>> $HTTP_OUTPUT"
             exit 0
