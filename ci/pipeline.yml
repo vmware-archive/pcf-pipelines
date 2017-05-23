@@ -125,18 +125,37 @@ jobs:
       tag_prefix: v
       only_tag: true
 
+- name: test-rc
+  on_failure:
+    <<: *notify_slack
+  plan:
+  - aggregate:
+    - get: version
+    - get: pcf-pipelines
+    - do:
+      - get: pivnet-rc
+        trigger: true
+        passed: [publish-rc]
+      - task: unpack-rc
+        file: pcf-pipelines/tasks/unpack-tarball/task.yml
+        input_mapping: { tarball: pivnet-rc }
+        output_mapping: { unpacked_tarball: release }
+  - task: test
+    input_mapping: { "pcf-pipelines": release }
+    file: pcf-pipelines/ci/tasks/test.yml
+
 - name: update-pipelines
   on_failure:
     <<: *notify_slack
   plan:
   - aggregate:
     - get: version
-      passed: [publish-rc]
+      passed: [test-rc]
     - get: pcf-pipelines
-      passed: [publish-rc]
+      passed: [test-rc]
     - get: pivnet-rc
       trigger: true
-      passed: [publish-rc]
+      passed: [test-rc]
     - get: cliaas
       params:
         globs: [cliaas-linux]
