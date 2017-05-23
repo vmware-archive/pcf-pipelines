@@ -1,7 +1,7 @@
 FROM cloudfoundry/cflinuxfs2
 
-ADD om-linux /usr/local/bin/om-linux
-ADD cf-cli*.tgz /usr/local/bin/cf
+COPY om-linux /usr/local/bin/om-linux
+COPY cf /usr/local/bin/cf
 
 RUN \
 # jq
