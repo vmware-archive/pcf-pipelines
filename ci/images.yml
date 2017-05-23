@@ -35,6 +35,13 @@ resources:
     regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
     region_name: us-west-1
 
+- name: cliaas
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: cliaas
+    access_token: {{github_token}}
+
 jobs:
 - name: build-pcf-pipelines-image
   serial: true
@@ -42,12 +49,14 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: true
-    - get: om
-      params: {globs: ["*linux*"]}
     - get: cflinuxfs2
       trigger: true
       params: {save: true}
+    - get: om
+      params: {globs: ["*linux*"]}
     - get: cf-cli-tarball
+    - get: cliaas
+      params: {globs: ["*linux*"]}
 
   - task: prepare-workspace
     config:
@@ -56,9 +65,10 @@ jobs:
         type: docker-image
         source: {repository: busybox}
       inputs:
+      - name: pcf-pipelines
       - name: om
       - name: cf-cli-tarball
-      - name: pcf-pipelines
+      - name: cliaas
       outputs:
       - name: workspace
       run:
@@ -73,6 +83,9 @@ jobs:
 
           tar -C workspace -xf cf-cli-tarball/*.tgz cf
           chmod +x workspace/cf
+
+          cp cliaas/cliaas-linux workspace
+          chmod +x workspace/cliaas-linux
 
   - put: pcf-pipelines-image
     params:
