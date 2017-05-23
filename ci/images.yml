@@ -49,6 +49,13 @@ resources:
     repository: pivnet-cli
     access_token: {{github_token}}
 
+- name: govc
+  type: github-release
+  source:
+    user: vmware
+    repository: govmomi
+    access_token: {{github_token}}
+
 jobs:
 - name: build-pcf-pipelines-image
   serial: true
@@ -66,6 +73,8 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: pivnet-cli
       params: {globs: ["*linux*"]}
+    - get: govc
+      params: {globs: ["*linux_amd64*"]}
 
   - task: prepare-workspace
     config:
@@ -79,6 +88,7 @@ jobs:
       - name: cf-cli-tarball
       - name: cliaas
       - name: pivnet-cli
+      - name: govc
       outputs:
       - name: workspace
       run:
@@ -99,6 +109,10 @@ jobs:
 
           cp pivnet-cli/pivnet-linux-* workspace/pivnet-cli
           chmod +x workspace/pivnet-cli
+
+          gunzip govc/govc_linux_amd64.gz
+          cp govc/govc_linux_amd64 workspace/govc
+          chmod +x workspace/govc
 
   - put: pcf-pipelines-image
     params:
