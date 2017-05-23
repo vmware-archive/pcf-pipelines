@@ -4,16 +4,13 @@ if [[ ! -z "$NO_PROXY" ]]; then
   echo "$OM_IP $OPS_MGR_HOST" >> /etc/hosts
 fi
 
-PIVNET_CLI=`find ./pivnet-cli -name "*linux-amd64*"`
-chmod +x $PIVNET_CLI
-
 FILE_PATH=`find ./pivnet-product -name *.pivotal`
 
 STEMCELL_VERSION=`cat ./pivnet-product/metadata.json | jq '.Dependencies[] | select(.Release.Product.Name | contains("Stemcells")) | .Release.Version'`
 
 echo "Downloading stemcell $STEMCELL_VERSION"
-$PIVNET_CLI login --api-token="$PIVNET_API_TOKEN"
-$PIVNET_CLI download-product-files -p stemcells -r $STEMCELL_VERSION -g "*vsphere*" --accept-eula
+pivnet-cli login --api-token="$PIVNET_API_TOKEN"
+pivnet-cli download-product-files -p stemcells -r $STEMCELL_VERSION -g "*vsphere*" --accept-eula
 
 SC_FILE_PATH=`find ./ -name *.tgz`
 

@@ -27,13 +27,6 @@ resources:
     repository: govmomi
     access_token: {{github_token}}
 
-- name: tool-pivnet-cli
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pivnet-cli
-    access_token: {{github_token}}
-
 - name: pcf-pipelines
   type: git
   source:
@@ -76,9 +69,6 @@ jobs:
         globs: ["*.ova"]
     - get: pcf-pipelines
     - get: govc
-    - get: tool-pivnet-cli
-      params:
-        globs: ["*linux*"]
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml

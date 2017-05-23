@@ -29,13 +29,6 @@ resources:
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
-- name: tool-pivnet-cli
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pivnet-cli
-    access_token: {{github_token}}
-
 - name: pcf-pipelines
   type: git
   source:
@@ -71,9 +64,6 @@ jobs:
         globs:
         - "*Azure.yml"
     - get: pcf-pipelines
-    - get: tool-pivnet-cli
-      params:
-        globs: ["*linux*"]
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml

@@ -19,13 +19,6 @@ resources:
     repository: govmomi
     access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
 
-- name: pivnet-cli
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pivnet-cli
-    access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
-
 - name: pcf-pipelines
   type: git
   source:
@@ -191,8 +184,6 @@ jobs:
       params: {globs: ["*.ova"]}
       passed: [opsman-apply-changes]
       trigger: true
-    - get: pivnet-cli
-      params: {globs: ["*linux-amd64*"]}
 
   - task: upload-er-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml

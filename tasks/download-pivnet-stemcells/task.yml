@@ -22,7 +22,6 @@ image_resource:
 inputs:
   - name: pcf-pipelines
   - name: diagnostic-report
-  - name: tool-pivnet-cli
 
 outputs:
   - name: stemcells

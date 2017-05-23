@@ -21,11 +21,9 @@ function main() {
   local cwd=$PWD
   local download_dir="${cwd}/stemcells"
   local diag_report="${cwd}/diagnostic-report/exported-diagnostic-report.json"
-  local pivnet=$(ls tool-pivnet-cli/pivnet-linux-* 2>/dev/null)
 
-  chmod +x "$pivnet"
-  $pivnet login --api-token="$API_TOKEN"
-  $pivnet eula --eula-slug=pivotal_software_eula >/dev/null
+  pivnet-cli login --api-token="$API_TOKEN"
+  pivnet-cli eula --eula-slug=pivotal_software_eula >/dev/null
 
   # get the deduplicated stemcell filename for each deployed release (skipping p-bosh)
   local stemcells=($( (jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | .stemcell' | sort -u) < "$diag_report"))
