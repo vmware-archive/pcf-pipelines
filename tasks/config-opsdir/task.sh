@@ -22,8 +22,6 @@ IAAS_CONFIGURATION=$(cat <<-EOF
 EOF
 )
 
-VCENTER_USR=$(echo $VCENTER_USR | sed -e 's/\\/\\\\/g')
-
 AZ_CONFIGURATION=$(cat <<-EOF
 {
   "availability_zones": [
