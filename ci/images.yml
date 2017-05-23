@@ -42,6 +42,13 @@ resources:
     repository: cliaas
     access_token: {{github_token}}
 
+- name: pivnet-cli
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pivnet-cli
+    access_token: {{github_token}}
+
 jobs:
 - name: build-pcf-pipelines-image
   serial: true
@@ -57,6 +64,8 @@ jobs:
     - get: cf-cli-tarball
     - get: cliaas
       params: {globs: ["*linux*"]}
+    - get: pivnet-cli
+      params: {globs: ["*linux*"]}
 
   - task: prepare-workspace
     config:
@@ -69,6 +78,7 @@ jobs:
       - name: om
       - name: cf-cli-tarball
       - name: cliaas
+      - name: pivnet-cli
       outputs:
       - name: workspace
       run:
@@ -86,6 +96,9 @@ jobs:
 
           cp cliaas/cliaas-linux workspace
           chmod +x workspace/cliaas-linux
+
+          cp pivnet-cli/pivnet-linux-* workspace/pivnet-cli
+          chmod +x workspace/pivnet-cli
 
   - put: pcf-pipelines-image
     params:

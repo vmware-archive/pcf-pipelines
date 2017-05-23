@@ -3,6 +3,7 @@ FROM cloudfoundry/cflinuxfs2
 COPY om-linux /usr/local/bin/om-linux
 COPY cf /usr/local/bin/cf
 COPY cliaas-linux /usr/local/bin/cliaas-linux
+COPY pivnet-cli /usr/local/bin/pivnet-cli
 
 RUN \
 # jq
