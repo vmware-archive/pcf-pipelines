@@ -21,4 +21,5 @@ resource "aws_db_instance" "pcf_rds" {
     multi_az                = true
     backup_retention_period = 7
     apply_immediately       = true
+    skip_final_snapshot     = true
 }
