@@ -2,7 +2,7 @@
 set -e
 
 cd terraform-state
-  output_json=$(terraform output --json)
+  output_json=$(terraform output --json -state *.tfstate)
   db_host=$(echo $output_json | jq --raw-output '.db_host.value')
   aws_region=$(echo $output_json | jq --raw-output '.region.value')
   aws_access_key=`terraform state show aws_iam_access_key.pcf_iam_user_access_key | grep ^id | awk '{print $3}'`
