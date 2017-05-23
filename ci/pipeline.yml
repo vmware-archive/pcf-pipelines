@@ -97,9 +97,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       passed: [test]
-    - get: cliaas
-      params:
-        globs: ["*linux*"]
     - get: yaml-patch
       params:
         globs: ["*linux*"]
@@ -269,9 +266,6 @@ jobs:
       params: {bump: final}
     - get: pcf-pipelines
       passed: [update-pipelines]
-    - get: cliaas
-      params:
-        globs: ["*linux*"]
     - get: yaml-patch
       params:
         globs: ["*linux*"]
