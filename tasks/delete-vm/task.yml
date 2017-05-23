@@ -21,7 +21,6 @@ image_resource:
     repository: czero/cflinuxfs2
 
 inputs:
-  - name: tool-cliaas
   - name: cliaas-config
   - name: pcf-pipelines
 

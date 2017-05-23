@@ -29,13 +29,6 @@ resources:
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
-- name: tool-cliaas
-  type: github-release
-  source:
-    user: pivotal-cf 
-    repository: cliaas
-    access_token: {{github_token}}
-
 - name: tool-pivnet-cli
   type: github-release
   source:
@@ -77,9 +70,6 @@ jobs:
       params:
         globs:
         - "*Azure.yml"
-    - get: tool-cliaas
-      params:
-        globs: ["*linux*"]
     - get: pcf-pipelines
     - get: tool-pivnet-cli
       params:
