@@ -3,6 +3,8 @@
 This is a collection of [Concourse](https://concourse.ci) pipelines for
 installing and upgrading [Pivotal Cloud Foundry](https://pivotal.io/platform).
 
+Other pipelines which may be of interest are listed at the end of this README.
+
 ![Concourse Pipeline](install-pcf/gcp/embed.png)
 
 **Install pipelines** will deploy PCF for whichever IaaS you choose. For public cloud installs, such as AWS, Azure, and GCP, the pipeline will deploy the necessary infrastructure in the public cloud, such as the networks, loadbalancers, and databases, and use these resources to then deploy PCF (Ops Manager and Elastic Runtime). On-premise private datacenter install pipelines, such as with vSphere and Openstack, do not provision any infrastructure resources and only deploy PCF, using resources that are specified in the parameters of the pipeline.
@@ -163,3 +165,7 @@ go get github.com/concourse/atc
 
 ginkgo -r -p
 ```
+
+#### Other notable examples of pipelines for PCF
+
+[PCFS Sample Pipeline](https://github.com/pivotalservices/concourse-pipeline-samples) by Luciano Silva and other PCF Solutions team members - includes pipelines for integrating Artifactory, Azure blobstores, GCP storage, or Docker registries, for blue-green deployment of apps to PCF, for backing up PCF, and for deploying Concourse itself with bosh.
