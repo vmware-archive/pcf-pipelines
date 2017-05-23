@@ -28,6 +28,13 @@ resources:
     repository: om
     access_token: {{github_token}}
 
+- name: cf-cli-tarball
+  type: s3
+  source:
+    bucket: cf-cli-releases
+    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
+    region_name: us-west-1
+
 jobs:
 - name: build-pcf-pipelines-image
   serial: true
@@ -40,22 +47,34 @@ jobs:
     - get: cflinuxfs2
       trigger: true
       params: {save: true}
+    - get: cf-cli-tarball
 
-  - task: untar-cf-cli
+  - task: prepare-workspace
     config:
+      platform: linux
       image_resource:
+        type: docker-image
+        source: {repository: busybox}
       inputs:
-      - name: cf-cli
+      - name: om
+      - name: cf-cli-tarball
+      - name: pcf-pipelines
       outputs:
-      - name: cf-cli-binary
+      - name: workspace
       run:
-        path: bash
+        path: sh
         args:
         - -c
         - |
-          tar -C cf-cli-binary -xf cf-cli/*.tgz cf
+          cp pcf-pipelines/ci/Dockerfile workspace
+
+          cp om/om-linux workspace
+          chmod +x workspace/om-linux
+
+          tar -C workspace -xf cf-cli-tarball/*.tgz cf
+          chmod +x workspace/cf
 
   - put: pcf-pipelines-image
     params:
       load_base: cflinuxfs2
-      build: pcf-pipelines/ci
+      build: workspace
