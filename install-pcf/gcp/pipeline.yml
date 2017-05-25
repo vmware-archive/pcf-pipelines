@@ -121,13 +121,6 @@ jobs:
       PCF_ERT_SSL_KEY: {{pcf_ert_ssl_key}}
       ERT_SQL_DB_USERNAME: {{ert_sql_db_username}}
       ERT_SQL_DB_PASSWORD: {{ert_sql_db_password}}
-    on_failure:
-      task: rollback
-      file: pcf-pipelines/tasks/install-pcf-gcp/rollback-create-infrastructure/task.yml
-      params:
-        GCP_PROJECT_ID: {{gcp_project_id}}
-        GCP_REGION: {{gcp_region}}
-        GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
   - put: terraform-state
     params:
       file: create-infrastructure-output/*.tfstate
