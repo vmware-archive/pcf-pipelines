@@ -36,7 +36,7 @@ pip install awscli && \
 pip install python-openstackclient pytz python-neutronclient && \
 
 # Clean up
-apt-get remove -y python-pip python-dev && \
+apt-get remove -y python-dev && \
 apt-get -y clean && apt-get -y autoremove --purge && rm -rf /etc/apt/ && \
 rm -rf /tmp/* && \
 find /var/lib/apt/lists -type f | xargs rm -f && \
