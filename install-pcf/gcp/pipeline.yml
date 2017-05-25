@@ -7,12 +7,6 @@ resource_types:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
 
-- name: file-url
-  type: docker-image
-  source:
-    repository: pivotalservices/concourse-curl-resource
-    tag: latest
-
 resources:
 - name: pcf-pipelines
   type: git
