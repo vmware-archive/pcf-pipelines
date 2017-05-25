@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-om-linux-beta --target "https://opsman.${pcf_ert_domain}" -k \
+om-linux --target "https://opsman.${pcf_ert_domain}" -k \
   configure-authentication \
   --username "$pcf_opsman_admin_username" \
   --password "$pcf_opsman_admin_password" \
