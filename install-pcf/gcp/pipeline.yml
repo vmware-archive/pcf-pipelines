@@ -184,7 +184,7 @@ jobs:
       pcf_opsman_admin_username: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_password: {{pcf_opsman_admin_password}}
 
-- name: deploy-ert
+- name: upload-ert
   serial_groups: [opsman]
   plan:
   - aggregate:
@@ -198,8 +198,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: terraform-state
-
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
@@ -215,6 +213,17 @@ jobs:
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
       PRODUCT_NAME: cf
+
+- name: deploy-ert
+  serial_groups: [opsman]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [upload-ert]
+      trigger: true
+      params: {globs: []}
+    - get: terraform-state
 
   - task: configure-json
     file: pcf-pipelines/tasks/install-ert/configure-json/task.yml
