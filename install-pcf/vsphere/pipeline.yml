@@ -28,9 +28,12 @@ resources:
 
 - name: elastic-runtime
   type: pivnet
+  check_every: 4h
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime
+    product_version: 1\.10\.*
+    sort_by: semver
 
 jobs:
 - name: install-opsmgr
