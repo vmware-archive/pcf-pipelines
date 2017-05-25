@@ -201,7 +201,7 @@ jobs:
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product/task.yml
     params:
-      OPSMAN_URI: {{pcf_ert_domain}}
+      OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
       TILE_UPLOAD_TIMEOUT: {{tile_upload_timeout}}
@@ -209,7 +209,7 @@ jobs:
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
-      OPSMAN_URI: {{pcf_ert_domain}}
+      OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
       PRODUCT_NAME: cf
