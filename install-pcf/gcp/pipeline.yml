@@ -135,7 +135,6 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-opsmgr
       passed: [create-infrastructure]
-      trigger: true
       params: {globs: []}
   - task: check-opsman-dns
     file: pcf-pipelines/tasks/install-pcf-gcp/check-opsman-dns/task.yml
