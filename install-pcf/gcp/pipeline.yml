@@ -222,7 +222,7 @@ jobs:
     params:
       pcf_iaas: gcp
       terraform_template: default
-      pcf_ert_ssl_cert: "generate"
+      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
       pcf_az_1: {{gcp_zone_1}}
       pcf_az_2: {{gcp_zone_2}}

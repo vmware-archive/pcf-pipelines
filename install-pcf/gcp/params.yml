@@ -49,10 +49,10 @@ ert_sql_db_username: CHANGEME
 ert_sql_db_password: CHANGEME
 
 # Elastic Runtime SSL configuration
-pcf_ert_ssl_cert: |
-  CHANGEME
-pcf_ert_ssl_key: |
-  CHANGEME
+# Set pcf_ert_ssl_cert to 'generate' if you'd like a self-signed cert to be
+# made
+pcf_ert_ssl_cert: generate
+pcf_ert_ssl_key:
 
 # PCF Operations Manager minor version to install
 opsman_major_minor_version: 1\.10\.*

@@ -15,7 +15,7 @@ ert_sql_instance_name="${GCP_RESOURCE_PREFIX}-sql-$(cat /proc/sys/kernel/random/
 pcf_ert_ssl_cert=$PCF_ERT_SSL_CERT
 pcf_ert_ssl_key=$PCF_ERT_SSL_KEY
 
-if [[ ${PCF_ERT_SSL_CERT} == "" ]]; then
+if [[ ${PCF_ERT_SSL_CERT} == "generate" ]]; then
   echo "Generating Self Signed Certs for sys.${PCF_ERT_DOMAIN} & cfapps.${PCF_ERT_DOMAIN} ..."
   pcf-pipelines/tasks/scripts/gen_ssl_certs.sh "sys.${PCF_ERT_DOMAIN}" "cfapps.${PCF_ERT_DOMAIN}"
   pcf_ert_ssl_cert=$(cat sys.${PCF_ERT_DOMAIN}.crt)
