@@ -2,7 +2,6 @@
 set -e
 
 root=$PWD
-version=$(cat tfstate-version/version)
 
 # us: ops-manager-us/pcf-gcp-1.9.2.tar.gz -> ops-manager-us/pcf-gcp-1.9.2.tar.gz
 pcf_opsman_bucket_path=$(grep -i 'us:.*.tar.gz' pivnet-opsmgr/*GCP.yml | cut -d' ' -f2)
@@ -40,15 +39,16 @@ terraform plan \
   -var "ert_sql_instance_name=${ert_sql_instance_name}" \
   -var "ert_sql_db_username=${ERT_SQL_DB_USERNAME}" \
   -var "ert_sql_db_password=${ERT_SQL_DB_PASSWORD}" \
-  -out terraform-$version.tfplan \
+  -out terraform.tfplan \
+  -state terraform-state/terraform.tfstate \
   pcf-pipelines/tasks/install-pcf-gcp/terraform/$gcp_pcf_terraform_template
 
 terraform apply \
-  -state-out $root/create-infrastructure-output/terraform-$version.tfstate \
-  terraform-$version.tfplan
+  -state-out $root/create-infrastructure-output/terraform.tfstate \
+  terraform.tfplan
 
 cd $root/create-infrastructure-output
-  output_json=$(terraform output -json -state=terraform-$version.tfstate)
+  output_json=$(terraform output -json -state=terraform.tfstate)
   pub_ip_global_pcf=$(echo $output_json | jq --raw-output '.pub_ip_global_pcf.value')
   pub_ip_ssh_and_doppler=$(echo $output_json | jq --raw-output '.pub_ip_ssh_and_doppler.value')
   pub_ip_ssh_tcp_lb=$(echo $output_json | jq --raw-output '.pub_ip_ssh_tcp_lb.value')

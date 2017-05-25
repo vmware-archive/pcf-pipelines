@@ -21,21 +21,9 @@ resources:
     region_name: {{s3_region}}
     bucket: {{s3_bucket_terraform}}
     endpoint: {{s3_endpoint}}
-    regexp: "terraform/terraform-(.*).tfstate"
+    versioned_file: terraform.tfstate
     access_key_id: {{s3_access_key_id}}
     secret_access_key: {{s3_secret_access_key}}
-
-- name: tfstate-version
-  type: semver
-  source:
-   driver: s3
-   bucket: {{s3_bucket_terraform}}
-   key: terraform/version
-   access_key_id: {{s3_access_key_id}}
-   secret_access_key: {{s3_secret_access_key}}
-   endpoint: {{s3_endpoint}}
-   initial_version: 0.0.0
-   region_name: {{s3_region}}
 
 - name: pivnet-opsmgr
   type: pivnet
@@ -62,9 +50,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: terraform-state
-    - get: tfstate-version
-      params:
-        bump: major
   - task: wipe
     file: pcf-pipelines/tasks/install-pcf-gcp/wipe-env/task.yml
     params:
@@ -74,9 +59,6 @@ jobs:
   - put: terraform-state
     params:
       file: wipe-output/*.tfstate
-  - put: tfstate-version
-    params:
-      file: tfstate-version/version
 
 - name: upload-opsman-image
   plan:
@@ -93,19 +75,32 @@ jobs:
       GCP_REGION: {{gcp_region}}
       GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
 
+- name: bootstrap-terraform-state
+  serial: true
+  plan:
+  - get: pcf-pipelines
+  - task: create-terraform-state
+    params:
+      S3_BUCKET_TERRAFORM: {{s3_bucket_terraform}}
+      AWS_ACCESS_KEY_ID: {{s3_access_key_id}}
+      AWS_SECRET_ACCESS_KEY: {{s3_secret_access_key}}
+    file: pcf-pipelines/tasks/create-initial-terraform-state/task.yml
+
 - name: create-infrastructure
   serial_groups: [terraform]
+  ensure:
+    put: terraform-state
+    params:
+      file: create-infrastructure-output/*.tfstate
   plan:
   - aggregate:
+    - get: terraform-state
     - get: pcf-pipelines
     - get: pivnet-opsmgr
       passed: [upload-opsman-image]
       params:
         globs:
         - "*GCP.yml"
-    - get: tfstate-version
-      params:
-        bump: major
   - task: create-infrastructure
     file: pcf-pipelines/tasks/install-pcf-gcp/create-infrastructure/task.yml
     params:
@@ -121,12 +116,6 @@ jobs:
       PCF_ERT_SSL_KEY: {{pcf_ert_ssl_key}}
       ERT_SQL_DB_USERNAME: {{ert_sql_db_username}}
       ERT_SQL_DB_PASSWORD: {{ert_sql_db_password}}
-  - put: terraform-state
-    params:
-      file: create-infrastructure-output/*.tfstate
-  - put: tfstate-version
-    params:
-      file: tfstate-version/version
 
 - name: configure-director
   serial_groups: [opsman]

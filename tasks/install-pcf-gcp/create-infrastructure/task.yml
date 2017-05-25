@@ -9,7 +9,7 @@ image_resource:
 inputs:
 - name: pcf-pipelines 
 - name: pivnet-opsmgr
-- name: tfstate-version
+- name: terraform-state
 
 outputs:
 - name: create-infrastructure-output
