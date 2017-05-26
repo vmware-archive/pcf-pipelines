@@ -35,7 +35,7 @@ function fn_opsman_curl() {
 
   ####### Host URL Builder #######
 
-  curl_host="https://${opsman_host}/${2}"
+  curl_host="${opsman_host}/${2}"
 
   ####### Post Form Data Builder #######
 

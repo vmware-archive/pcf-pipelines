@@ -14,9 +14,9 @@ pivnet-cli download-product-files -p stemcells -r $STEMCELL_VERSION -g "*vsphere
 
 SC_FILE_PATH=`find ./ -name *.tgz`
 
-om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k upload-product -p $FILE_PATH
+om-linux -t $OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k upload-product -p $FILE_PATH
 
-om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k upload-stemcell -s $SC_FILE_PATH
+om-linux -t $OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k upload-stemcell -s $SC_FILE_PATH
 
 if [ ! -f "$SC_FILE_PATH" ]; then
     echo "Stemcell file not found!"
