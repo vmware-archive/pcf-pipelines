@@ -38,7 +38,6 @@ pivnet_token: CHANGEME
 # Operations Manager credentials to set
 pcf_opsman_admin_username: CHANGEME
 pcf_opsman_admin_password: CHANGEME
-tile_upload_timeout: 1800 # Time to allow for a tile upload request to live
 
 # Elastic Runtime Domain
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with

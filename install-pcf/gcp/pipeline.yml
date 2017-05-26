@@ -180,12 +180,15 @@ jobs:
         globs:
         - "*pivotal"
   - task: upload-tile
-    file: pcf-pipelines/tasks/upload-product/task.yml
+    file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
-      OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
-      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
-      TILE_UPLOAD_TIMEOUT: {{tile_upload_timeout}}
+      OPS_MGR_HOST: {{opsman_uri}}
+      OPS_MGR_USR: {{pcf_opsman_admin_username}}
+      OPS_MGR_PWD: {{pcf_opsman_admin_password}}
+      PIVNET_API_TOKEN: {{pivnet_token}}
+      STEMCELL_GLOB: "*google*"
+      NO_PROXY: ""
+      OM_IP: ""
 
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
