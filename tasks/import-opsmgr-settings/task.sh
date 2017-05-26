@@ -19,7 +19,7 @@ function main() {
   cwd="${1}"
 
   printf "Waiting for %s to come up" "$OPSMAN_URI"
-  until $(curl --output /dev/null --silent --head --fail -k ${OPSMAN_URI}); do
+  until $(curl --output /dev/null --silent --head --fail -k https://${OPSMAN_URI}); do
     printf '.'
     sleep 5
   done
