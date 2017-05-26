@@ -25,7 +25,7 @@ function main() {
 
   for stemcell in ${cwd}/stemcells/*.tgz; do
     printf "Uploading %s to %s ...\n" "${stemcell}" "${OPSMAN_URI}"
-    om-linux --target "${OPSMAN_URI}" \
+    om-linux --target "https://${OPSMAN_URI}" \
         --skip-ssl-validation \
         --username "${OPSMAN_USERNAME}" \
         --password "${OPSMAN_PASSWORD}" \

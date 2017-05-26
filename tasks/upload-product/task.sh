@@ -25,7 +25,7 @@ function main() {
     export TILE_UPLOAD_TIMEOUT=1800 
   fi
 
-  om-linux --target "${OPSMAN_URI}" \
+  om-linux --target "https://${OPSMAN_URI}" \
      --skip-ssl-validation \
      --username "${OPSMAN_USERNAME}" \
      --password "${OPSMAN_PASSWORD}" \
