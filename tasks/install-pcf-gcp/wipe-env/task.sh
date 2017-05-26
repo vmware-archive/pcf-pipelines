@@ -7,6 +7,15 @@ export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}
 export GOOGLE_PROJECT=${GCP_PROJECT_ID}
 export GOOGLE_REGION=${GCP_REGION}
 
+echo "Deleting PCF installation..."
+om-linux \
+  --target https://$OPSMAN_URI \
+  --skip-ssl-validation \
+  --username $OPSMAN_USERNAME \
+  --password $OPSMAN_PASSWORD \
+  delete-installation
+
+echo "Deleting provisioned infrastructure..."
 terraform destroy -force \
   -state $root/terraform-state/*.tfstate \
   -var "gcp_proj_id=dontcare" \
