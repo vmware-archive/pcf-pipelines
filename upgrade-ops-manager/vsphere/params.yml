@@ -15,10 +15,9 @@
 opsman_timeout_seconds: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
-opsman_major_minor_version: 1.9.*
+opsman_major_minor_version: 1\.10\.*  # Ops Manager minor version to track
 opsman_uri: http://example.com
 opsman_passphrase: CHANGEME
-github_token: CHANGEME
 pivnet_token: CHANGEME
 vcenter_url: http://example.com
 vcenter_username: CHANGEME
@@ -35,3 +34,4 @@ dns: CHANGEME
 ntp: CHANGEME
 opsman_network: CHANGEME
 iaas_type: CHANGEME
+git_private_key:

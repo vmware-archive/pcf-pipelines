@@ -4,7 +4,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: rjain/buildbox}
+  source: {repository: czero/cflinuxfs2}
 
 params:
   GOVC_INSECURE:
@@ -33,7 +33,6 @@ params:
 inputs:
   - name: pivnet-opsman-product
   - name: pcf-pipelines
-  - name: govc
 
 run:
   path: pcf-pipelines/tasks/import-opsman/task.sh

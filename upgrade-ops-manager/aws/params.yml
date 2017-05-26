@@ -18,12 +18,10 @@
 # eg. 2h, 3h45m, 3000s
 check_new_opsman_every: CHANGEME
 
-# A github access key to download github binary releases E.g. https://github.com/pivotal-cf/om
-github_token: CHANGEME
+git_private_key:
 
-# Ops Manager version to check 
-# eg. 1\.10\..*
-opsman_major_minor_version: CHANGEME
+# Ops Manager minor version to track
+opsman_major_minor_version: 1\.10\.*
 
 # Pivotal Net Token to download Ops Manager binaries from https://network.pivotal.io
 pivnet_token: CHANGEME
@@ -46,8 +44,6 @@ opsman_admin_username: CHANGEME
 
 # If install pipeline has been used then the passphrase is same as the admin password
 opsman_passphrase: CHANGEME
-
-opsman_timeout_seconds: 1200
 
 # Ops Manager Url
 # eg. https://myopsman.mydomain.com

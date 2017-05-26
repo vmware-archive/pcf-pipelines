@@ -18,9 +18,8 @@ opsman_admin_password: CHANGEME
 opsman_passphrase: CHANGEME
 opsman_uri: CHANGEME
 check_new_opsman_every: CHANGEME
-opsman_major_minor_version: CHANGEME
-opsman_timeout_seconds: 360
-github_token: CHANGEME
+opsman_major_minor_version: 1\.10\.*     # Ops Manager minor version to track
+git_private_key: CHANGEME
 existing_opsman_vm_name: CHANGEME
 opsman_gcp_project: CHANGEME
 opsman_gcp_zone: CHANGEME

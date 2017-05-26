@@ -138,12 +138,6 @@ Before start kicking off the pipeline, there are a few parameters need to be set
     PIVNET_TOKEN: XXXXXX
     ```
 
-  * A github access key to download github binary releases E.g. https://github.com/pivotal-cf/om
-
-    ```
-    GITHUB_TOKEN: XXXXXX
-    ```
-
   * IP Prefix:
 
     ** Note ** : Current pipeline creates only 10.0.0.0/16 VPC CIDR. Will expose configurable CIDR later

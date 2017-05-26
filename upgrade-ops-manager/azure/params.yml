@@ -15,7 +15,7 @@
 # Resource configuration
 
 check_new_opsman_every: CHANGEME
-github_token: CHANGEME
+git_private_key:
 opsman_major_minor_version: CHANGEME
 pivnet_token: CHANGEME
 
@@ -35,5 +35,4 @@ existing_opsman_vm_name: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_passphrase: CHANGEME
-opsman_timeout_seconds: 1200
 opsman_uri: CHANGEME

@@ -24,5 +24,4 @@ cf_api_uri: CHANGEME
 cf_user: CHANGEME
 cf_password: CHANGEME
 
-# A github access key to download github binary releases E.g. https://github.com/pivotal-cf/om
-github_token: CHANGEME
+git_private_key:

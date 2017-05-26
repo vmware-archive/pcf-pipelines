@@ -1,0 +1,147 @@
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    branch: master
+    private_key: {{git_private_key}}
+    paths: [ci/Dockerfile]
+
+- name: pcf-pipelines-image
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+    tag: latest
+    username: czero
+    password: {{czero_dockerhub_password}}
+
+- name: cflinuxfs2
+  type: docker-image
+  source:
+    repository: cloudfoundry/cflinuxfs2
+    tag: latest
+
+- name: om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{github_token}}
+
+- name: cf-cli-tarball
+  type: s3
+  source:
+    bucket: cf-cli-releases
+    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
+    region_name: us-west-1
+
+- name: cliaas
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: cliaas
+    access_token: {{github_token}}
+
+- name: pivnet-cli
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pivnet-cli
+    access_token: {{github_token}}
+
+- name: govc
+  type: github-release
+  source:
+    user: vmware
+    repository: govmomi
+    access_token: {{github_token}}
+
+- name: om-beta
+  type: github-release
+  source:
+    user: c0-ops
+    repository: om
+    access_token: {{github_token}}
+
+- name: stemcell-downloader
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: pcf-product-stemcell-downloader
+    access_token: {{github_token}}
+
+jobs:
+- name: build-pcf-pipelines-image
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+    - get: cflinuxfs2
+      trigger: true
+      params: {save: true}
+    - get: om
+      params: {globs: ["*linux*"]}
+    - get: cf-cli-tarball
+    - get: cliaas
+      params: {globs: ["*linux*"]}
+    - get: pivnet-cli
+      params: {globs: ["*linux*"]}
+    - get: govc
+      params: {globs: ["*linux_amd64*"]}
+    - get: om-beta
+      params: {globs: ["*linux*"]}
+      version: { tag: '0.17-beta.0' }
+    - get: stemcell-downloader
+      params: {globs: ["*linux*"]}
+
+  - task: prepare-workspace
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+      inputs:
+      - name: pcf-pipelines
+      - name: om
+      - name: cf-cli-tarball
+      - name: cliaas
+      - name: pivnet-cli
+      - name: govc
+      - name: om-beta
+      - name: stemcell-downloader
+      outputs:
+      - name: workspace
+      run:
+        path: sh
+        args:
+        - -c
+        - |
+          cp pcf-pipelines/ci/Dockerfile workspace
+
+          cp om/om-linux workspace
+          chmod +x workspace/om-linux
+
+          tar -C workspace -xf cf-cli-tarball/*.tgz cf
+          chmod +x workspace/cf
+
+          cp cliaas/cliaas-linux workspace
+          chmod +x workspace/cliaas-linux
+
+          cp pivnet-cli/pivnet-linux-* workspace/pivnet-cli
+          chmod +x workspace/pivnet-cli
+
+          gunzip govc/govc_linux_amd64.gz
+          cp govc/govc_linux_amd64 workspace/govc
+          chmod +x workspace/govc
+
+          cp om-beta/om-linux workspace/om-linux-beta
+          chmod +x workspace/om-linux-beta
+
+          cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
+          chmod +x workspace/stemcell-downloader
+
+  - put: pcf-pipelines-image
+    params:
+      load_base: cflinuxfs2
+      build: workspace

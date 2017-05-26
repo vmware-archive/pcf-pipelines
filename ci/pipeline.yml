@@ -54,20 +54,6 @@ resources:
     branch: version
     file: version
 
-- name: cf-cli
-  type: s3
-  source:
-    bucket: cf-cli-releases
-    region_name: us-west-1
-    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
-
-- name: om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}}
-
 - name: cliaas
   type: github-release
   source:
@@ -93,12 +79,6 @@ jobs:
   - put: version
     params: {bump: minor}
 
-- name: bump-major
-  serial_groups: [version]
-  plan:
-  - put: version
-    params: {bump: major}
-
 - name: test
   on_failure:
     <<: *notify_slack
@@ -117,13 +97,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       passed: [test]
-    - get: cf-cli
-    - get: cliaas
-      params:
-        globs: ["*linux*"]
-    - get: om
-      params:
-        globs: ["*linux*"]
     - get: yaml-patch
       params:
         globs: ["*linux*"]
@@ -149,25 +122,61 @@ jobs:
       tag_prefix: v
       only_tag: true
 
+- name: test-rc
+  on_failure:
+    <<: *notify_slack
+  plan:
+  - aggregate:
+    - get: version
+    - get: src
+      resource: pcf-pipelines
+      passed: [publish-rc]
+    - do:
+      - get: pivnet-rc
+        trigger: true
+        passed: [publish-rc]
+      - task: unpack-rc
+        file: src/tasks/unpack-tarball/task.yml
+        input_mapping: { tarball: pivnet-rc }
+        output_mapping: { unpacked_tarball: pcf-pipelines-release }
+
+  - task: prepare-workspace
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      inputs:
+      - name: src
+      - name: pcf-pipelines-release
+      outputs:
+      - name: pcf-pipelines
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cp -r src/*.go pcf-pipelines
+          cp -r pcf-pipelines-release/pcf-pipelines/* pcf-pipelines
+
+  - task: test
+    file: src/ci/tasks/test.yml
+
 - name: update-pipelines
   on_failure:
     <<: *notify_slack
   plan:
   - aggregate:
     - get: version
-      passed: [publish-rc]
+      passed: [test-rc]
     - get: pcf-pipelines
-      passed: [publish-rc]
+      passed: [test-rc]
     - get: pivnet-rc
       trigger: true
-      passed: [publish-rc]
-    - get: cf-cli
+      passed: [test-rc]
     - get: cliaas
       params:
         globs: [cliaas-linux]
-    - get: om
-      params:
-        globs: [om-linux]
 
   - task: unpack-rc
     file: pcf-pipelines/tasks/unpack-tarball/task.yml
@@ -228,7 +237,6 @@ jobs:
         OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
         OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
         PIVNET_TOKEN: {{pivnet_token}}
-        GITHUB_TOKEN: {{github_token}}
         CHECK_NEW_OPSMAN_EVERY: 24h
     - task: update-upgrade-opsman-aws
       input_mapping: { config: upgrade_opsman_aws_config }
@@ -256,7 +264,6 @@ jobs:
         OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
         OPSMAN_MAJOR_MINOR_VERSION: {{upgrade_opsman_gcp_opsman_major_minor_version}}
         PIVNET_TOKEN: {{pivnet_token}}
-        GITHUB_TOKEN: {{github_token}}
         CHECK_NEW_OPSMAN_EVERY: 24h
     - task: update-upgrade-opsman-gcp
       input_mapping: { config: upgrade_opsman_gcp_config }
@@ -278,13 +285,6 @@ jobs:
       params: {bump: final}
     - get: pcf-pipelines
       passed: [update-pipelines]
-    - get: cf-cli
-    - get: cliaas
-      params:
-        globs: ["*linux*"]
-    - get: om
-      params:
-        globs: ["*linux*"]
     - get: yaml-patch
       params:
         globs: ["*linux*"]
@@ -356,7 +356,6 @@ update_pipeline_params: &update_pipeline_params
   OPSMAN_URI: {{opsman_uri}}
   OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
   OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
-  GITHUB_TOKEN: {{github_token}}
 
 notify_slack: &notify_slack
   put: slack

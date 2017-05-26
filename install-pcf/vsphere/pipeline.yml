@@ -6,33 +6,12 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: govc
-  type: github-release
-  source:
-    user: vmware
-    repository: govmomi
-    access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
-
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
-
-- name: pivnet-cli
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pivnet-cli
-    access_token: {{github_token}} ## Optional: Removing this will cause you to hit the rate limit
-
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    username: {{github_token}}
+    private_key: {{git_private_key}}
 
 # - name: customer-repo
 #   type: git
@@ -45,6 +24,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
 
 - name: elastic-runtime
   type: pivnet
@@ -57,10 +37,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: govc
-      params: {globs: ["*linux_amd64*"]}
-    - get: tool-om
-      params: {globs: ["*linux*"]}
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
       trigger: true
@@ -102,8 +78,8 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      params: {globs: ["*linux*"]}
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [install-opsmgr]
       trigger: true
 
@@ -136,6 +112,7 @@ jobs:
       DEPLOYMENT_NW_GATEWAY: {{deployment_nw_gateway}}
       DEPLOYMENT_NW_AZS: {{deployment_nw_azs}}
       SERVICES_NETWORK_NAME: {{services_network_name}}
+      IS_SERVICE_NETWORK: {{is_service_network}}
       SERVICES_VCENTER_NETWORK: {{services_vsphere_network}}
       SERVICES_NW_CIDR: {{services_nw_cidr}}
       SERVICES_EXCLUDED_RANGE: {{services_excluded_range}}
@@ -150,13 +127,13 @@ jobs:
       DYNAMIC_SERVICES_NW_GATEWAY: {{dynamic_services_nw_gateway}}
       DYNAMIC_SERVICES_NW_AZS: {{dynamic_services_nw_azs}}
       AZ_1: {{az_1_name}}
-      AZ_1_CUSTER_NAME: {{az_1_cluster_name}}
+      AZ_1_CLUSTER_NAME: {{az_1_cluster_name}}
       AZ_1_RP_NAME: {{az_1_rp_name}}
       AZ_2: {{az_2_name}}
-      AZ_2_CUSTER_NAME: {{az_2_cluster_name}}
+      AZ_2_CLUSTER_NAME: {{az_2_cluster_name}}
       AZ_2_RP_NAME: {{az_2_rp_name}}
       AZ_3: {{az_3_name}}
-      AZ_3_CUSTER_NAME: {{az_3_cluster_name}}
+      AZ_3_CLUSTER_NAME: {{az_3_cluster_name}}
       AZ_3_RP_NAME: {{az_3_rp_name}}
       NTP_SERVERS: {{ntp_servers}}
       OPS_DIR_HOSTNAME: {{ops_dir_hostname}}
@@ -169,11 +146,10 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      resource: tool-om
-      params: {globs: ["*linux*"]}
-      trigger: true
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [configure-ops-director]
+      trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
@@ -181,7 +157,6 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 - name: upload-elastic-runtime-tile
   plan:
@@ -190,12 +165,10 @@ jobs:
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
-    - get: tool-om
-      params: {globs: ["*linux*"]}
-      trigger: true
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [opsman-apply-changes]
-    - get: pivnet-cli
-      params: {globs: ["*linux-amd64*"]}
+      trigger: true
 
   - task: upload-er-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
@@ -211,10 +184,10 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      params: {globs: ["*linux*"]}
-      trigger: true
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [upload-elastic-runtime-tile]
+      trigger: true
 
   - task: config-er-tile
     file: pcf-pipelines/tasks/config-ert/task.yml
@@ -272,6 +245,18 @@ jobs:
       GARDEN_NETWORK_MTU: {{garden_network_mtu}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
+      MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
+      MYSQL_BACKUPS_SCP_PORT: {{mysql_backups_scp_port}}
+      MYSQL_BACKUPS_SCP_USER: {{mysql_backups_scp_user}}
+      MYSQL_BACKUPS_SCP_KEY: {{mysql_backups_scp_key}}
+      MYSQL_BACKUPS_SCP_DESTINATION: {{mysql_backups_scp_destination}}
+      MYSQL_BACKUPS_SCP_CRON_SCHEDULE: {{mysql_backups_scp_cron_schedule}}
+      MYSQL_BACKUPS_S3_ENDPOINT_URL: {{mysql_backups_s3_endpoint_url}}
+      MYSQL_BACKUPS_S3_BUCKET_NAME: {{mysql_backups_s3_bucket_name}}
+      MYSQL_BACKUPS_S3_BUCKET_PATH: {{mysql_backups_s3_bucket_path}}
+      MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
+      MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
+      MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
       ALLOW_APP_SSH_ACCESS: {{allow_app_ssh_access}}
       TCP_ROUTER_STATIC_IPS: {{tcp_router_static_ips}}
       SSH_STATIC_IPS: {{ssh_static_ips}}
@@ -303,9 +288,10 @@ jobs:
 #   - aggregate:
 #     - get: customer-repo
 #       trigger: true
-#     - get: tool-om
-#       params: {globs: ["*linux*"]}
+#     - get: pivnet-opsman-product
+#       params: {globs: ["*.ova"]}
 #       passed: [config-elastic-runtime-tile]
+#       trigger: true
 #
 #   - task: pre-step
 #     file: customer-repo/tasks/pre-step/task.yml
@@ -318,10 +304,10 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      params: {globs: ["*linux*"]}
-      trigger: true
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [config-elastic-runtime-tile]
+      trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
@@ -329,14 +315,13 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 - name: disable-errands
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
-      params: {globs: ["*linux*"]}
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [product-apply-changes]
       trigger: true
 
@@ -351,9 +336,9 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: tool-om
+    - get: pivnet-opsman-product
+      params: {globs: ["*.ova"]}
       passed: [disable-errands]
-      params: {globs: ["*linux*"]}
       trigger: true
 
   - task: apply-changes
@@ -362,16 +347,16 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}
 
 # - name: post-install-step
 #   plan:
 #   - aggregate:
 #     - get: customer-repo
 #       trigger: true
-#     - get: tool-om
-#       params: {globs: ["*linux*"]}
+#     - get: pivnet-opsman-product
+#       params: {globs: ["*.ova"]}
 #       passed: [product-apply-changes]
+#       trigger: true
 #   - task: post-step
 #     file: customer-repo/tasks/post-step/task.yml
 #     params:

@@ -25,16 +25,9 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    username: {{github_token}}
-
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}}
+    private_key: {{git_private_key}}
 
 - name: {{resource_name}}
   type: pivnet
@@ -44,15 +37,6 @@ resources:
     product_slug: {{product_slug}}
     product_version: {{product_version}}
     sort_by: semver
-
-- name: stemcell-downloader
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pcf-product-stemcell-downloader
-    access_token: {{github_token}}
-    globs:
-    - stemcell-downloader-linux
 
 - name: schedule
   type: time
@@ -82,13 +66,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: tool-om
-      params:
-        globs:
-        - om-linux
-    - get: stemcell-downloader
-      params:
-        globs: [stemcell-downloader-linux]
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
@@ -103,7 +80,6 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      PIVNET_PRODUCT_NAME: {{product_slug}}
       TILE_UPLOAD_TIMEOUT: {{tile_upload_timeout}}
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
@@ -126,4 +102,3 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_TIMEOUT: {{opsman_timeout_seconds}}

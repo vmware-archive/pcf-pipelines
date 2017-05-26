@@ -1,0 +1,20 @@
+---
+- op: replace
+  path: /resources/name=elastic-runtime
+  value:
+    name: elastic-runtime
+    type: artifactory
+    source:
+      endpoint: {{artifactory_endpoint}}
+      repository: {{artifactory_repository}}
+      regex: 'cf-(?<version>.*)\.pivotal'
+      username: {{artifactory_username}}
+      password: {{artifactory_password}}
+      skip_ssl_verification: true
+- op: add
+  path: /resource_types/-
+  value:
+    name: artifactory
+    type: docker-image
+    source:
+      repository: pivotalservices/artifactory-resource

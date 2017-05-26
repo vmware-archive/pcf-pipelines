@@ -92,3 +92,51 @@ CF_PROPERTIES=$(cat <<-EOF
 }
 EOF
 )
+
+if [[ ${MYSQL_BACKUPS} == "scp" ]]; then
+  echo "adding scp mysql backup properties"
+  cat > mysql_filter <<-'EOF'
+    .".properties.mysql_backups" = {"value": $mysql_backups} |
+    .".properties.mysql_backups.scp.server" = {"value": $mysql_backups_scp_server} |
+    .".properties.mysql_backups.scp.port" = {"value": $mysql_backups_scp_port} |
+    .".properties.mysql_backups.scp.user" = {"value": $mysql_backups_scp_user} |
+    .".properties.mysql_backups.scp.key" = {"value": $mysql_backups_scp_key} |
+    .".properties.mysql_backups.scp.destination" = {"value": $mysql_backups_scp_destination} |
+    .".properties.mysql_backups.scp.cron_schedule" = {"value": $mysql_backups_scp_cron_schedule}
+EOF
+
+  echo "${CF_PROPERTIES}" | jq \
+    --arg mysql_backups "$MYSQL_BACKUPS" \
+    --arg mysql_backups_scp_server "$MYSQL_BACKUPS_SCP_SERVER" \
+    --arg mysql_backups_scp_port "$MYSQL_BACKUPS_SCP_PORT" \
+    --arg mysql_backups_scp_user "$MYSQL_BACKUPS_SCP_USER" \
+    --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
+    --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
+    --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
+    --from-file mysql_filter > config.json
+  CF_PROPERTIES=$(cat config.json)
+fi
+
+if [[ ${MYSQL_BACKUPS} == "s3" ]]; then
+  echo "adding s3 mysql backup properties"
+  cat > mysql_filter <<-'EOF'
+    .".properties.mysql_backups" = {"value": $mysql_backups} |
+    .".properties.mysql_backups.s3.endpoint_url" = {"value": $mysql_backups_s3_endpoint_url} |
+    .".properties.mysql_backups.s3.bucket_name" = {"value": $mysql_backups_s3_bucket_name} |
+    .".properties.mysql_backups.s3.bucket_path" = {"value": $mysql_backups_s3_bucket_path} |
+    .".properties.mysql_backups.s3.access_key_id" = {"value": $mysql_backups_s3_access_key_id} |
+    .".properties.mysql_backups.s3.secret_access_key" = {"value": $mysql_backups_s3_secret_access_key} |
+    .".properties.mysql_backups.s3.cron_schedule" = {"value": $mysql_backups_s3_cron_schedule}
+EOF
+
+  echo "${CF_PROPERTIES}" | jq \
+    --arg mysql_backups "$MYSQL_BACKUPS" \
+    --arg mysql_backups_s3_endpoint_url "$MYSQL_BACKUPS_S3_ENDPOINT_URL" \
+    --arg mysql_backups_s3_bucket_name "$MYSQL_BACKUPS_S3_BUCKET_NAME" \
+    --arg mysql_backups_s3_bucket_path "$MYSQL_BACKUPS_S3_BUCKET_PATH" \
+    --arg mysql_backups_s3_access_key_id "$MYSQL_BACKUPS_S3_ACCESS_KEY_ID" \
+    --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
+    --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
+    --from-file mysql_filter > config.json
+  CF_PROPERTIES=$(cat config.json)
+fi

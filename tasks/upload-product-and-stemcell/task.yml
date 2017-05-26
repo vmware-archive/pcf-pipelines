@@ -4,7 +4,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: rjain/buildbox}
+  source: {repository: czero/cflinuxfs2}
 
 params:
   OPS_MGR_HOST:
@@ -17,8 +17,6 @@ params:
 inputs:
   - name: pivnet-product
   - name: pcf-pipelines
-  - name: tool-om
-  - name: pivnet-cli
 
 run:
   path: pcf-pipelines/tasks/upload-product-and-stemcell/task.sh

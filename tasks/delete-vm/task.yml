@@ -18,10 +18,9 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: cloudfoundry/cflinuxfs2
+    repository: czero/cflinuxfs2
 
 inputs:
-  - name: tool-cliaas
   - name: cliaas-config
   - name: pcf-pipelines
 

@@ -2,32 +2,21 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-chmod +x tool-om/om-linux
-
-CMD=./tool-om/om-linux
-
-CF_RELEASE=`$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k available-products | grep cf`
+CF_RELEASE=`om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k available-products | grep cf`
 
 PRODUCT_NAME=`echo $CF_RELEASE | cut -d"|" -f2 | tr -d " "`
 PRODUCT_VERSION=`echo $CF_RELEASE | cut -d"|" -f3 | tr -d " "`
 
-$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k stage-product -p $PRODUCT_NAME -v $PRODUCT_VERSION
+om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k stage-product -p $PRODUCT_NAME -v $PRODUCT_VERSION
 
-function fn_ert_balanced_azs {
-  local azs_csv=$1
-  echo $azs_csv | awk -F "," -v braceopen='{' -v braceclose='}' -v name='"name":' -v quote='"' -v OFS='"},{"name":"' '$1=$1 {print braceopen name quote $0 quote braceclose}'
-}
-
-ERT_AZS=$(fn_ert_balanced_azs $DEPLOYMENT_NW_AZS)
+ERT_AZS=$(echo $DEPLOYMENT_NW_AZS | jq --raw-input 'split(",") | map({name: .})')
 
 CF_NETWORK=$(cat <<-EOF
 {
   "singleton_availability_zone": {
     "name": "$ERT_SINGLETON_JOB_AZ"
   },
-  "other_availability_zones": [
-    $ERT_AZS
-  ],
+  "other_availability_zones": $ERT_AZS,
   "network": {
     "name": "$NETWORK_NAME"
   }
@@ -41,16 +30,16 @@ DOMAINS=$(cat <<-EOF
 EOF
 )
 
-  CERTIFICATES=`$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k curl -p "$OPS_MGR_GENERATE_SSL_ENDPOINT" -x POST -d "$DOMAINS"`
+  CERTIFICATES=`om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k curl -p "$OPS_MGR_GENERATE_SSL_ENDPOINT" -x POST -d "$DOMAINS"`
 
-  export SSL_CERT=`echo $CERTIFICATES | jq '.certificate' | tr -d '"'`
-  export SSL_PRIVATE_KEY=`echo $CERTIFICATES | jq '.key' | tr -d '"'`
+  export SSL_CERT=`echo $CERTIFICATES | jq '.certificate'`
+  export SSL_PRIVATE_KEY=`echo $CERTIFICATES | jq '.key'`
 
   echo "Using self signed certificates generated using Ops Manager..."
 
 fi
 
-. $SCRIPT_DIR/load_cf_properties.sh
+source $SCRIPT_DIR/load_cf_properties.sh
 
 CF_RESOURCES=$(cat <<-EOF
 {
@@ -146,7 +135,7 @@ CF_RESOURCES=$(cat <<-EOF
 EOF
 )
 
-$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_PROPERTIES" -pn "$CF_NETWORK" -pr "$CF_RESOURCES"
+om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_PROPERTIES" -pn "$CF_NETWORK" -pr "$CF_RESOURCES"
 
 if [[ "$AUTHENTICATION_MODE" == "internal" ]]; then
 echo "Configuring Internal Authentication in ERT..."
@@ -154,6 +143,12 @@ CF_AUTH_PROPERTIES=$(cat <<-EOF
 {
   ".properties.uaa": {
     "value": "$AUTHENTICATION_MODE"
+  },
+  ".uaa.service_provider_key_credentials": {
+        "value": {
+          "cert_pem": "",
+          "private_key_pem": ""
+        }
   }
 }
 EOF
@@ -195,14 +190,44 @@ CF_AUTH_PROPERTIES=$(cat <<-EOF
   },
   ".properties.uaa.ldap.last_name_attribute": {
     "value": "$LAST_NAME_ATTR"
-  }
+  },
+  ".uaa.service_provider_key_credentials": {
+        "value": {
+          "cert_pem": "",
+          "private_key_pem": ""
+        }
+  }  
 }
 EOF
 )
 
 fi
 
-$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_AUTH_PROPERTIES"
+saml_cert_domains=$(cat <<-EOF
+  {"domains": ["*.$SYSTEM_DOMAIN", "*.login.$SYSTEM_DOMAIN", "*.uaa.$SYSTEM_DOMAIN"] }
+EOF
+)
+
+saml_cert_response=`om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k curl -p "$OPS_MGR_GENERATE_SSL_ENDPOINT" -x POST -d "$saml_cert_domains"`
+
+saml_cert_pem=$(echo $saml_cert_response | jq --raw-output '.certificate')
+saml_key_pem=$(echo $saml_cert_response | jq --raw-output '.key')
+
+cat > saml_auth_filters <<'EOF'
+.".uaa.service_provider_key_credentials".value = {
+  "cert_pem": $saml_cert_pem,
+  "private_key_pem": $saml_key_pem
+}
+EOF
+
+CF_AUTH_WITH_SAML_CERTS=$(echo $CF_AUTH_PROPERTIES | jq \
+  --arg saml_cert_pem "$saml_cert_pem" \
+  --arg saml_key_pem "$saml_key_pem" \
+  --from-file saml_auth_filters \
+  --raw-output)
+
+
+om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_AUTH_WITH_SAML_CERTS"
 
 if [[ ! -z "$SYSLOG_HOST" ]]; then
 
@@ -229,7 +254,7 @@ CF_SYSLOG_PROPERTIES=$(cat <<-EOF
 EOF
 )
 
-$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_SYSLOG_PROPERTIES"
+om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_SYSLOG_PROPERTIES"
 
 fi
 
@@ -264,7 +289,7 @@ CF_SMTP_PROPERTIES=$(cat <<-EOF
 EOF
 )
 
-$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_SMTP_PROPERTIES"
+om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_SMTP_PROPERTIES"
 
 fi
 
@@ -278,8 +303,8 @@ CF_SSL_TERM_PROPERTIES=$(cat <<-EOF
   },
   ".properties.networking_point_of_entry.haproxy.ssl_rsa_certificate": {
     "value": {
-      "cert_pem": "$SSL_CERT",
-      "private_key_pem": "$SSL_PRIVATE_KEY"
+      "cert_pem": $SSL_CERT,
+      "private_key_pem": $SSL_PRIVATE_KEY
     }
   }
 }
@@ -296,8 +321,8 @@ CF_SSL_TERM_PROPERTIES=$(cat <<-EOF
   },
   ".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate": {
     "value": {
-      "cert_pem": "$SSL_CERT",
-      "private_key_pem": "$SSL_PRIVATE_KEY"
+      "cert_pem": $SSL_CERT,
+      "private_key_pem": $SSL_PRIVATE_KEY
     }
   }
 }
@@ -317,4 +342,4 @@ EOF
 
 fi
 
-$CMD -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_SSL_TERM_PROPERTIES"
+om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k configure-product -n cf -p "$CF_SSL_TERM_PROPERTIES"

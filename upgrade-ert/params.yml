@@ -23,8 +23,7 @@ opsman_admin_password: CHANGEME
 # eg. https://myopsman.mydomain.com
 opsman_uri: CHANGEME
 
-# A github access key to download github binary releases E.g. https://github.com/pivotal-cf/om
-github_token: yyyyyyyyyyyyyyyyy
+git_private_key:
 
 # The IaaS name for which stemcell to download. See
 # https://github.com/pivotal-cf/pcf-product-stemcell-downloader/ for the list of
@@ -34,5 +33,4 @@ iaas_type: gcp
 # Interval to check on new releases from Pivotal Network
 # eg. 2h, 3h45m, 3000s
 pivnet_poll_interval: 1h
-opsman_timeout_seconds: 300
 tile_upload_timeout: 1800

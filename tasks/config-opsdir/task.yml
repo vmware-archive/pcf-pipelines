@@ -4,7 +4,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: rjain/buildbox}
+  source: {repository: czero/cflinuxfs2}
 
 params:
   OPS_MGR_HOST:
@@ -33,6 +33,7 @@ params:
   DEPLOYMENT_NW_GATEWAY:
   DEPLOYMENT_NW_AZS:
   SERVICES_NETWORK_NAME:
+  IS_SERVICE_NETWORK:
   SERVICES_VCENTER_NETWORK:
   SERVICES_NW_CIDR:
   SERVICES_EXCLUDED_RANGE:
@@ -47,13 +48,13 @@ params:
   DYNAMIC_SERVICES_NW_GATEWAY:
   DYNAMIC_SERVICES_NW_AZS:
   AZ_1:
-  AZ_1_CUSTER_NAME:
+  AZ_1_CLUSTER_NAME:
   AZ_1_RP_NAME:
   AZ_2:
-  AZ_2_CUSTER_NAME:
+  AZ_2_CLUSTER_NAME:
   AZ_2_RP_NAME:
   AZ_3:
-  AZ_3_CUSTER_NAME:
+  AZ_3_CLUSTER_NAME:
   AZ_3_RP_NAME:
   NTP_SERVERS:
   OPS_DIR_HOSTNAME:
@@ -64,7 +65,6 @@ params:
 
 inputs:
   - name: pcf-pipelines
-  - name: tool-om
 
 run:
   path: pcf-pipelines/tasks/config-opsdir/task.sh
