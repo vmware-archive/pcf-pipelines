@@ -25,7 +25,7 @@ function main() {
   done
   printf '\n'
 
-  om-linux --target "${OPSMAN_URI}" \
+  om-linux --target "https://${OPSMAN_URI}" \
       --skip-ssl-validation \
       import-installation \
       --installation "${cwd}/opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}" \
