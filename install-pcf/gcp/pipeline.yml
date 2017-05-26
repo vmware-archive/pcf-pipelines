@@ -46,6 +46,10 @@ resources:
 jobs:
 - name: wipe-env
   serial_groups: [terraform]
+  ensure:
+    put: terraform-state
+    params:
+      file: wipe-output/*.tfstate
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -56,9 +60,6 @@ jobs:
       GCP_PROJECT_ID: {{gcp_project_id}}
       GCP_REGION: {{gcp_region}}
       GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
-  - put: terraform-state
-    params:
-      file: wipe-output/*.tfstate
 
 - name: upload-opsman-image
   plan:
