@@ -13,6 +13,7 @@ params:
   PIVNET_API_TOKEN:
   NO_PROXY:
   OM_IP:
+  STEMCELL_GLOB:
 
 inputs:
   - name: pivnet-product
