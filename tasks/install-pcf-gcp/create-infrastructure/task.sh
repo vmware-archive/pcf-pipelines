@@ -45,6 +45,7 @@ terraform plan \
 
 terraform apply \
   -state-out $root/create-infrastructure-output/terraform.tfstate \
+  -parallelism=5 \
   terraform.tfplan
 
 cd $root/create-infrastructure-output
