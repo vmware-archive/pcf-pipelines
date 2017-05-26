@@ -278,6 +278,6 @@ jobs:
   - task: deploy-ert
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      OPSMAN_URI: {{pcf_ert_domain}}
+      OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
