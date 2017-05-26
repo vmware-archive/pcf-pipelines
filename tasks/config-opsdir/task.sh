@@ -22,6 +22,7 @@ IAAS_CONFIGURATION=$(cat <<-EOF
 EOF
 )
 
+if [ ! -z $AZ_3 ];then
 AZ_CONFIGURATION=$(cat <<-EOF
 {
   "availability_zones": [
@@ -44,6 +45,38 @@ AZ_CONFIGURATION=$(cat <<-EOF
 }
 EOF
 )
+elif [ ! -z $AZ_2 ];then
+AZ_CONFIGURATION=$(cat <<-EOF
+{
+  "availability_zones": [
+    {
+      "name": "$AZ_1",
+      "cluster": "$AZ_1_CLUSTER_NAME",
+      "resource_pool": "$AZ_1_RP_NAME"
+    },
+    {
+      "name": "$AZ_2",
+      "cluster": "$AZ_2_CLUSTER_NAME",
+      "resource_pool": "$AZ_2_RP_NAME"
+    }
+  ]
+}
+EOF
+)
+else
+AZ_CONFIGURATION=$(cat <<-EOF
+{
+  "availability_zones": [
+    {
+      "name": "$AZ_1",
+      "cluster": "$AZ_1_CLUSTER_NAME",
+      "resource_pool": "$AZ_1_RP_NAME"
+    }
+  ]
+}
+EOF
+)
+fi
 
 INFRA_AZS=$(fn_get_azs "$INFRA_NW_AZS")
 DEPLOYMENT_AZS=$(fn_get_azs "$DEPLOYMENT_NW_AZS")
