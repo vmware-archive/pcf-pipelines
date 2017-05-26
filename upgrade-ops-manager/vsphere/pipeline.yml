@@ -103,7 +103,7 @@ jobs:
       NTP: {{ntp}}
       OPSMAN_NETWORK: {{opsman_network}}
       OPSMAN_VM_FOLDER: {{opsman_vm_folder}}
-      OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_SSH_PASSWORD: {{opsman_ssh_password}}
 
   - task: import-opsmgr
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
