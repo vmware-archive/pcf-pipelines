@@ -55,8 +55,6 @@ params:
   db_uaa_password:
   db_ccdb_username:
   db_ccdb_password:
-  ert_sql_db_username:
-  ert_sql_db_password:
   mysql_monitor_recipient_email:
   MYSQL_BACKUPS:
   MYSQL_BACKUPS_SCP_SERVER:

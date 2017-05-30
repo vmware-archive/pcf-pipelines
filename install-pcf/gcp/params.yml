@@ -43,10 +43,6 @@ pcf_opsman_admin_password: CHANGEME
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
 opsman_uri: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
 
-# Elastic Runtime SQL DB credentials to set
-ert_sql_db_username: CHANGEME
-ert_sql_db_password: CHANGEME
-
 # Elastic Runtime SSL configuration
 # Set pcf_ert_ssl_cert to 'generate' if you'd like a self-signed cert to be
 # made

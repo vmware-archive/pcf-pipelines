@@ -29,7 +29,25 @@ terraform destroy -force \
   -var "pcf_ert_ssl_cert=dontcare" \
   -var "pcf_ert_ssl_key=dontcare" \
   -var "ert_sql_instance_name=dontcare" \
-  -var "ert_sql_db_username=dontcare" \
-  -var "ert_sql_db_password=dontcare" \
+  -var "db_app_usage_service_username=${DB_APP_USAGE_SERVICE_USERNAME}" \
+  -var "db_app_usage_service_password=${DB_APP_USAGE_SERVICE_PASSWORD}" \
+  -var "db_autoscale_username=${DB_AUTOSCALE_USERNAME}" \
+  -var "db_autoscale_password=${DB_AUTOSCALE_PASSWORD}" \
+  -var "db_diego_username=${DB_DIEGO_USERNAME}" \
+  -var "db_diego_password=${DB_DIEGO_PASSWORD}" \
+  -var "db_notifications_username=${DB_NOTIFICATIONS_USERNAME}" \
+  -var "db_notifications_password=${DB_NOTIFICATIONS_PASSWORD}" \
+  -var "db_routing_username=${DB_ROUTING_USERNAME}" \
+  -var "db_routing_password=${DB_ROUTING_PASSWORD}" \
+  -var "db_uaa_username=${DB_UAA_USERNAME}" \
+  -var "db_uaa_password=${DB_UAA_PASSWORD}" \
+  -var "db_ccdb_username=${DB_CCDB_USERNAME}" \
+  -var "db_ccdb_password=${DB_CCDB_PASSWORD}" \
+  -var "db_accountdb_username=${DB_ACCOUNTDB_USERNAME}" \
+  -var "db_accountdb_password=${DB_ACCOUNTDB_PASSWORD}" \
+  -var "db_networkpolicyserverdb_username=${DB_NETWORKPOLICYSERVERDB_USERNAME}" \
+  -var "db_networkpolicyserverdb_password=${DB_NETWORKPOLICYSERVERDB_PASSWORD}" \
+  -var "db_nfsvolumedb_username=${DB_NFSVOLUMEDB_USERNAME}" \
+  -var "db_nfsvolumedb_password=${DB_NFSVOLUMEDB_PASSWORD}" \
   -state-out $root/wipe-output/terraform.tfstate \
   pcf-pipelines/tasks/install-pcf-gcp/terraform

@@ -18,8 +18,6 @@ TF_VAR_rds_db_username_uaa:
 TF_VAR_rds_db_password_uaa:
 TF_VAR_rds_db_username_ccdb:
 TF_VAR_rds_db_password_ccdb:
-TF_VAR_rds_db_username_ertsql:
-TF_VAR_rds_db_password_ertsql:
 
 TF_VAR_rds_db_username_account:
 TF_VAR_rds_db_password_account:
