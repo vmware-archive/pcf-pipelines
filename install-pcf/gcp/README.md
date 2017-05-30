@@ -66,3 +66,18 @@ If you want to bring the environment up again, run `create-infrastructure`.
   you need to SSH onto the Ops Manager VM you'll need to add an SSH key from
   within GCP to the instance, and also add the `allow-ssh` tag to the network
   access tags.
+
+### Cloud SQL Authorized Networks
+
+There is a set of authorized networks added for the Cloud SQL instance which
+has been modified to include 0.0.0.0/0. This is due to Cloud SQL only
+managing access through public networks. We don't have a good way to keep
+updated with Google Compute Engine CIDRs, and the Google Cloud Proxy is not
+yet available on BOSH-deployed VMs. Thus, to allow Elastic Runtime access to
+Cloud SQL, we allow 0.0.0.0/0. When a better solution comes around we'll be
+able to remove it and allow only the other authorized networks that are
+configured.
+
+There is a (private, sorry) [Pivotal Tracker
+story](https://www.pivotaltracker.com/n/projects/975916/stories/133642819) to
+address this issue.
