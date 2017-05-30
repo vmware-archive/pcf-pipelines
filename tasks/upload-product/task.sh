@@ -25,10 +25,15 @@ function main() {
     export TILE_UPLOAD_TIMEOUT=1800 
   fi
 
+  if [[ -n ${OPSMAN_CLIENT_ID} ]]; then
+    CREDS="--client-id '${OPSMAN_CLIENT_ID}' --client-secret '${OPSMAN_CLIENT_SECRET}'"
+  else
+    CREDS="--username '${OPSMAN_USERNAME}' --password '${OPSMAN_PASSWORD}'"
+  fi
+
   om-linux --target "https://${OPSMAN_URI}" \
      --skip-ssl-validation \
-     --username "${OPSMAN_USERNAME}" \
-     --password "${OPSMAN_PASSWORD}" \
+     ${CREDS} \
      --request-timeout ${TILE_UPLOAD_TIMEOUT} \
      upload-product \
      --product ${product}

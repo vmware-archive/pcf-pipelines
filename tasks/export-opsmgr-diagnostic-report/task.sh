@@ -19,12 +19,17 @@ function main() {
   local cwd
   cwd="${1}"
 
-   om-linux --target "https://${OPSMAN_URI}" \
-     --skip-ssl-validation \
-     --username "${OPSMAN_USERNAME}" \
-     --password "${OPSMAN_PASSWORD}" \
-     curl --path /api/v0/diagnostic_report \
-     > "${cwd}/diagnostic-report/exported-diagnostic-report.json"
+  if [[ -n ${OPSMAN_CLIENT_ID} ]]; then
+    CREDS="--client-id '${OPSMAN_CLIENT_ID}' --client-secret '${OPSMAN_CLIENT_SECRET}'"
+  else
+    CREDS="--username '${OPSMAN_USERNAME}' --password '${OPSMAN_PASSWORD}'"
+  fi
+
+  om-linux --target "https://${OPSMAN_URI}" \
+    --skip-ssl-validation \
+    ${CREDS} \
+    curl --path /api/v0/diagnostic_report \
+    > "${cwd}/diagnostic-report/exported-diagnostic-report.json"
 }
 
 main "${PWD}"
