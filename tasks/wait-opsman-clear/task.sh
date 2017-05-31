@@ -24,9 +24,9 @@ function main() {
   cwd="${1}"
 
   if [[ -n ${OPSMAN_CLIENT_ID} ]]; then
-    CREDS="--client-id '${OPSMAN_CLIENT_ID}' --client-secret '${OPSMAN_CLIENT_SECRET}'"
+    CREDS="--client-id ${OPSMAN_CLIENT_ID} --client-secret ${OPSMAN_CLIENT_SECRET}"
   else
-    CREDS="--username '${OPSMAN_USERNAME}' --password '${OPSMAN_PASSWORD}'"
+    CREDS="--username ${OPSMAN_USERNAME} --password ${OPSMAN_PASSWORD}"
   fi
 
   while :
