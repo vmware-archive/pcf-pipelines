@@ -1,46 +1,19 @@
-# Install PCF on GCP 
-
-- compatible with PCF 1.9
-
-#### This process describes how to get the pipeline and install a PCF on a properly configured GCP
-http://docs.pivotal.io/pivotalcf/1-10/refarch/gcp/gcp_ref_arch.html
-
-```bash
-
-# to get the pipeline bits
-# download from pivnet 
-
-# go to the pipeline dir
-$ cd pcf-pipelines/install-pcf/gcp 
-
-# check the readme for pre-reqs and guidance
-$ cat README.md
-
-# fill in your environments specific values
-$ vim params.yml
-
-# send your pipeline to a concourse (targeting and logging in info can be found here: https://concourse.ci/fly-cli.html)
-$ fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml
-
-# unpause your pipeline
-$ fly -t lite unpause-pipeline -p deploy-pcf
-
-```
 # PCF on GCP
 
 ![Concourse Pipeline](embed.png)
 
 This pipeline uses Terraform to create all the infrastructure required to run a
-3 AZ PCF deployment on GCP.
+3 AZ PCF deployment on GCP per the Customer[0] [reference
+architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/gcp/gcp_ref_arch.html).
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub, GitHub, and the configured
-S3-compatible object store, and as such the Concourse instance must have access
-to those. You can use AWS S3 as your S3-compatible object store, but note that
-Terraform outputs a .tfstate file that contains plaintext secrets. For this
-reason Minio is preferrable to keep the visibility of the .tfstate local to
-Concourse. (See instructions below for how to run Minio in a Docker container.)
+This pipeline downloads artifacts from DockerHub (czero/cflinuxfs2 and custom
+docker-image resources) and the configured S3-compatible object store
+(Terraform .tfstate file), and as such the Concourse instance must have access
+to those. Note that Terraform outputs a .tfstate file that contains plaintext
+secrets, so it is advised you use a private S3-compatible store rather than AWS
+S3.
 
 1. Within Google Cloud Platform, enable the following:
   * GCP Compute API [here](https://console.cloud.google.com/apis/api/compute_component)
@@ -49,7 +22,14 @@ Concourse. (See instructions below for how to run Minio in a Docker container.)
   * GCP DNS API [here](https://console.cloud.google.com/apis/api/dns)
   * GCP Cloud Resource Manager API [here](https://console.cloud.google.com/apis/api/cloudresourcemanager.googleapis.com/overview)
 
-2. Change all of the CHANGEME values in params.yml with real values
+2. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles:
+  * Cloud SQL Admin
+  * Compute Instance Admin (v1)
+  * Compute Network Admin
+  * Compute Security Admin
+  * DNS Administrator
+  * Storage Admin
+
 3. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
   ```
   fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml
@@ -65,41 +45,24 @@ Concourse. (See instructions below for how to run Minio in a Docker container.)
 ### Tearing down the environment
 
 There is a job, `wipe-env`, which you can run to destroy the infrastructure
-that was created by `create-infrastructure`. If you want to bring the
-environment up again, run `create-infrastructure`. This can also be used if
-`create-infrastructure` fails for some reason, where Terraform creates only some
-of the infrastructure.
+that was created by `create-infrastructure`.
 
-### Getting Concourse
+_**Note: This job currently is not all-encompassing. If you have deployed ERT you will want to delete ERT from within Ops Manager before proceeding with `wipe-env`, as well as deleting the BOSH director VM from within GCP. This will be done automatically in the future.**_
 
-The easiest way to get started with Concourse is to use the [Vagrant Virtualbox
-image](http://concourse.ci/single-page.html#vagrant).
+If you want to bring the environment up again, run `create-infrastructure`.
 
-```
-vagrant init concourse/lite
-vagrant up
-fly -t lite login -c http://192.168.100.4:8080
-```
+## Known Issues
 
-### Getting an S3-compatible store
+### `wipe-env` job
+* The job does not account for installed tiles, which means VMs created by tile
+  installations will be left behind and/or prevent wipe-env from completing.
+  Delete the tiles manually prior to running `wipe-env` as a workaround.
+* The job does not account for the BOSH director VM, which will prevent the job
+  from completing. Delete the director VM manually in the GCP console as a
+  workaround.
 
-If you want to use Minio as your S3-compatible object store:
-
-OSX:
-
-```
-docker run -e MINIO_ACCESS_KEY="example-access-key" \
-           -e MINIO_SECRET_KEY="example-secret-key" \
-           minio/minio server /tmp
-```
-
-Linux:
-
-```
-docker run -e MINIO_ACCESS_KEY="example-access-key" \
-           -e MINIO_SECRET_KEY="example-secret-key" \
-           --detach \
-           --network host \
-           minio/minio server /tmp
-```
-
+### Missing Jumpbox
+* There is presently no jumpbox installed as part of the Terraform scripts. If
+  you need to SSH onto the Ops Manager VM you'll need to add an SSH key from
+  within GCP to the instance, and also add the `allow-ssh` tag to the network
+  access tags.
