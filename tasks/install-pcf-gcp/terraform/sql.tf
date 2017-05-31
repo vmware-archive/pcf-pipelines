@@ -101,81 +101,81 @@ resource "google_sql_database" "networkpolicyserver" {
 }
 
 resource "google_sql_user" "diego" {
-  name     = "${var.db_diego_username}"
-  password = "${var.db_diego_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_diego_username}"
+  password   = "${var.db_diego_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_database.networkpolicyserver"]
 }
 
 resource "google_sql_user" "notifications" {
-  name     = "${var.db_notifications_username}"
-  password = "${var.db_notifications_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_notifications_username}"
+  password   = "${var.db_notifications_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.diego"]
 }
 
 resource "google_sql_user" "autoscale" {
-  name     = "${var.db_autoscale_username}"
-  password = "${var.db_autoscale_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_autoscale_username}"
+  password   = "${var.db_autoscale_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.notifications"]
 }
 
 resource "google_sql_user" "uaa" {
-  name     = "${var.db_uaa_username}"
-  password = "${var.db_uaa_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_uaa_username}"
+  password   = "${var.db_uaa_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.autoscale"]
 }
 
 resource "google_sql_user" "app_usage_service" {
-  name     = "${var.db_app_usage_service_username}"
-  password = "${var.db_app_usage_service_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_app_usage_service_username}"
+  password   = "${var.db_app_usage_service_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.uaa"]
 }
 
 resource "google_sql_user" "ccdb" {
-  name     = "${var.db_ccdb_username}"
-  password = "${var.db_ccdb_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_ccdb_username}"
+  password   = "${var.db_ccdb_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.app_usage_service"]
 }
 
 resource "google_sql_user" "routing" {
-  name     = "${var.db_routing_username}"
-  password = "${var.db_routing_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_routing_username}"
+  password   = "${var.db_routing_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.ccdb"]
 }
 
 resource "google_sql_user" "account" {
-  name     = "${var.db_accountdb_username}"
-  password = "${var.db_accountdb_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_accountdb_username}"
+  password   = "${var.db_accountdb_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.routing"]
 }
 
 resource "google_sql_user" "network_policy_server" {
-  name     = "${var.db_networkpolicyserverdb_username}"
-  password = "${var.db_networkpolicyserverdb_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_networkpolicyserverdb_username}"
+  password   = "${var.db_networkpolicyserverdb_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.account"]
 }
 
 resource "google_sql_user" "nfs_volume" {
-  name     = "${var.db_nfsvolumedb_username}"
-  password = "${var.db_nfsvolumedb_password}"
-  instance = "${google_sql_database_instance.master.name}"
-  host     = "%"
+  name       = "${var.db_nfsvolumedb_username}"
+  password   = "${var.db_nfsvolumedb_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
   depends_on = ["google_sql_user.network_policy_server"]
 }
