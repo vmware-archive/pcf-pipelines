@@ -129,9 +129,9 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines 
+    - get: terraform-state
       trigger: true
       passed: [create-infrastructure]
-    - get: terraform-state
   - task: configure-opsman-auth
     file: pcf-pipelines/tasks/install-pcf-aws/config-opsman/task.yml
     params:
@@ -161,6 +161,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+    - get: terraform-state
       trigger: true
       passed: [configure-director]
   - task: deploy-director
@@ -175,13 +176,15 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines 
-      trigger: true
       passed: [deploy-director]
     - get: pivnet-product
       resource: pivnet-elastic-runtime
       params:
         globs:
         - "*pivotal"
+    - get: terraform-state
+      trigger: true
+      passed: [deploy-director]
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
@@ -205,9 +208,9 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines 
+    - get: terraform-state
       trigger: true
       passed: [upload-ert]
-    - get: terraform-state
 
   - task: prepare-rds
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-rds/task.yml
