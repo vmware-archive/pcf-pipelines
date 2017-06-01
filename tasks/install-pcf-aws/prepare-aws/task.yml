@@ -14,11 +14,11 @@ outputs:
 params:
   DB_MASTER_USERNAME:
   DB_MASTER_PASSWORD:
+  TERRAFORM_PREFIX:
   TF_VAR_aws_access_key:
   TF_VAR_aws_secret_key:
   TF_VAR_aws_key_name:
   TF_VAR_aws_cert_arn:
-  TF_VAR_environment:
   TF_VAR_amis_nat:
   TF_VAR_aws_region:
   TF_VAR_az1:

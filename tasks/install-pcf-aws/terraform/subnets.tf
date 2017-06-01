@@ -10,7 +10,7 @@ resource "aws_subnet" "PcfVpcPublicSubnet_az1" {
     availability_zone = "${var.az1}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Public Subnet AZ1"
+        Name = "${var.prefix}-PcfVpc Public Subnet AZ1"
     }
 }
 
@@ -23,7 +23,7 @@ resource "aws_subnet" "PcfVpcErtSubnet_az1" {
     availability_zone = "${var.az1}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Ert Subnet AZ1"
+        Name = "${var.prefix}-PcfVpc Ert Subnet AZ1"
     }
 }
 # 2.2 RDS
@@ -34,7 +34,7 @@ resource "aws_subnet" "PcfVpcRdsSubnet_az1" {
     availability_zone = "${var.az1}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Rds Subnet AZ1"
+        Name = "${var.prefix}-PcfVpc Rds Subnet AZ1"
     }
 }
 # 2.3 Services
@@ -45,7 +45,7 @@ resource "aws_subnet" "PcfVpcServicesSubnet_az1" {
     availability_zone = "${var.az1}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Services Subnet AZ1"
+        Name = "${var.prefix}-PcfVpc Services Subnet AZ1"
     }
 }
 
@@ -62,7 +62,7 @@ resource "aws_subnet" "PcfVpcPublicSubnet_az2" {
     availability_zone = "${var.az2}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Public Subnet AZ2"
+        Name = "${var.prefix}-PcfVpc Public Subnet AZ2"
     }
 }
 resource "aws_subnet" "PcfVpcErtSubnet_az2" {
@@ -72,7 +72,7 @@ resource "aws_subnet" "PcfVpcErtSubnet_az2" {
     availability_zone = "${var.az2}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Ert Subnet AZ2"
+        Name = "${var.prefix}-PcfVpc Ert Subnet AZ2"
     }
 }
 resource "aws_subnet" "PcfVpcRdsSubnet_az2" {
@@ -82,7 +82,7 @@ resource "aws_subnet" "PcfVpcRdsSubnet_az2" {
     availability_zone = "${var.az2}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Rds Subnet AZ2"
+        Name = "${var.prefix}-PcfVpc Rds Subnet AZ2"
     }
 }
 resource "aws_subnet" "PcfVpcServicesSubnet_az2" {
@@ -92,7 +92,7 @@ resource "aws_subnet" "PcfVpcServicesSubnet_az2" {
     availability_zone = "${var.az2}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Services Subnet AZ2"
+        Name = "${var.prefix}-PcfVpc Services Subnet AZ2"
     }
 }
 
@@ -108,7 +108,7 @@ resource "aws_subnet" "PcfVpcPublicSubnet_az3" {
     availability_zone = "${var.az3}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Public Subnet AZ3"
+        Name = "${var.prefix}-PcfVpc Public Subnet AZ3"
     }
 }
 resource "aws_subnet" "PcfVpcErtSubnet_az3" {
@@ -118,7 +118,7 @@ resource "aws_subnet" "PcfVpcErtSubnet_az3" {
     availability_zone = "${var.az3}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Ert Subnet AZ3"
+        Name = "${var.prefix}-PcfVpc Ert Subnet AZ3"
     }
 }
 
@@ -129,7 +129,7 @@ resource "aws_subnet" "PcfVpcRdsSubnet_az3" {
     availability_zone = "${var.az3}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Rds Subnet AZ3"
+        Name = "${var.prefix}-PcfVpc Rds Subnet AZ3"
     }
 }
 resource "aws_subnet" "PcfVpcServicesSubnet_az3" {
@@ -139,7 +139,7 @@ resource "aws_subnet" "PcfVpcServicesSubnet_az3" {
     availability_zone = "${var.az3}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Services Subnet AZ3"
+        Name = "${var.prefix}-PcfVpc Services Subnet AZ3"
     }
 }
 
@@ -151,6 +151,6 @@ resource "aws_subnet" "PcfVpcInfraSubnet_az1" {
     availability_zone = "${var.az1}"
 
     tags {
-        Name = "${var.environment}-PcfVpc Infrastructure Subnet"
+        Name = "${var.prefix}-PcfVpc Infrastructure Subnet"
     }
 }

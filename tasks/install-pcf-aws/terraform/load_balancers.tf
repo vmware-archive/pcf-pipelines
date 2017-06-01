@@ -1,5 +1,5 @@
 resource "aws_elb" "PcfHttpElb" {
-  name = "${var.environment}-Pcf-Http-Elb"
+  name = "${var.prefix}-Pcf-Http-Elb"
   subnets = ["${aws_subnet.PcfVpcPublicSubnet_az1.id}","${aws_subnet.PcfVpcPublicSubnet_az2.id}","${aws_subnet.PcfVpcPublicSubnet_az3.id}"]
   security_groups = ["${aws_security_group.PcfHttpElbSg.id}"]
 
@@ -25,12 +25,12 @@ resource "aws_elb" "PcfHttpElb" {
     healthy_threshold = 10
   }
   tags {
-    Name = "${var.environment}-Pcf Http Elb"
+    Name = "${var.prefix}-Pcf Http Elb"
   }
 }
 
 resource "aws_elb" "PcfSshElb" {
-  name = "${var.environment}-Pcf-Ssh-Elb"
+  name = "${var.prefix}-Pcf-Ssh-Elb"
   subnets = ["${aws_subnet.PcfVpcPublicSubnet_az1.id}","${aws_subnet.PcfVpcPublicSubnet_az2.id}","${aws_subnet.PcfVpcPublicSubnet_az3.id}"]
   security_groups = ["${aws_security_group.PcfSshElbSg.id}"]
 
@@ -48,12 +48,12 @@ resource "aws_elb" "PcfSshElb" {
     healthy_threshold = 10
   }
   tags {
-    Name = "${var.environment}-Pcf Ssh Elb"
+    Name = "${var.prefix}-Pcf Ssh Elb"
   }
 }
 
 resource "aws_elb" "PcfTcpElb" {
-  name = "${var.environment}-Pcf-Tcp-Elb"
+  name = "${var.prefix}-Pcf-Tcp-Elb"
   subnets = ["${aws_subnet.PcfVpcPublicSubnet_az1.id}","${aws_subnet.PcfVpcPublicSubnet_az2.id}","${aws_subnet.PcfVpcPublicSubnet_az3.id}"]
   security_groups = ["${aws_security_group.PcfTcpElbSg.id}"]
 
@@ -666,6 +666,6 @@ resource "aws_elb" "PcfTcpElb" {
   }
 
   tags {
-    Name = "${var.environment}-Pcf Tcp Elb"
+    Name = "${var.prefix}-Pcf Tcp Elb"
   }
 }

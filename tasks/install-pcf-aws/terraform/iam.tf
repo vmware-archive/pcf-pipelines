@@ -1,6 +1,6 @@
 # Users
 resource "aws_iam_user" "pcf_iam_user" {
-    name = "${var.environment}_pcf_iam_user"
+    name = "${var.prefix}_pcf_iam_user"
     path = "/system/"
 }
 resource "aws_iam_access_key" "pcf_iam_user_access_key" {
@@ -14,7 +14,7 @@ resource "aws_iam_user_policy_attachment" "PcfAdminPolicy_role_attach" {
 #Roles
 
 resource "aws_iam_role" "pcf_admin_role" {
-    name = "${var.environment}_pcf_admin_role"
+    name = "${var.prefix}_pcf_admin_role"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -36,14 +36,14 @@ resource "aws_iam_role_policy_attachment" "PcfAdminPolicy_role_attach" {
     policy_arn = "${aws_iam_policy.PcfAdminPolicy.arn}"
 }
 resource "aws_iam_instance_profile" "pcf_admin_role_instance_profile" {
-    name = "${var.environment}_pcf_admin_role_instance_profile"
+    name = "${var.prefix}_pcf_admin_role_instance_profile"
     roles = ["${aws_iam_role.pcf_admin_role.name}"]
 }
 
 
 # Policies
 resource "aws_iam_user_policy" "PcfErtPolicy" {
-    name = "${var.environment}_PcfErtPolicy"
+    name = "${var.prefix}_PcfErtPolicy"
     user = "${aws_iam_user.pcf_iam_user.name}"
     policy = <<EOF
 {
@@ -54,14 +54,14 @@ resource "aws_iam_user_policy" "PcfErtPolicy" {
                 "s3:*"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.environment}-pcf-buildpacks",
-                "arn:aws:s3:::${var.environment}-pcf-buildpacks/*",
-                "arn:aws:s3:::${var.environment}-pcf-droplets",
-                "arn:aws:s3:::${var.environment}-pcf-droplets/*",
-                "arn:aws:s3:::${var.environment}-pcf-packages",
-                "arn:aws:s3:::${var.environment}-pcf-packages/*",
-                "arn:aws:s3:::${var.environment}-pcf-resources",
-                "arn:aws:s3:::${var.environment}-pcf-resources/*"
+                "arn:aws:s3:::${var.prefix}-pcf-buildpacks",
+                "arn:aws:s3:::${var.prefix}-pcf-buildpacks/*",
+                "arn:aws:s3:::${var.prefix}-pcf-droplets",
+                "arn:aws:s3:::${var.prefix}-pcf-droplets/*",
+                "arn:aws:s3:::${var.prefix}-pcf-packages",
+                "arn:aws:s3:::${var.prefix}-pcf-packages/*",
+                "arn:aws:s3:::${var.prefix}-pcf-resources",
+                "arn:aws:s3:::${var.prefix}-pcf-resources/*"
             ],
             "Effect": "Allow",
             "Sid": "ElasticRuntimeS3Permissions"
@@ -72,15 +72,15 @@ EOF
 }
 
 resource "aws_iam_policy" "PcfAdminPolicy" {
-    name = "${var.environment}_PcfAdminPolicy"
+    name = "${var.prefix}_PcfAdminPolicy"
     path = "/"
-    description = "${var.environment} PCF Admin Policy"
+    description = "${var.prefix} PCF Admin Policy"
     policy = "${data.aws_iam_policy_document.pcf_iam_rds_role_policy_document.json}"
 }
 
 # Policy Document
 data "aws_iam_policy_document" "pcf_iam_rds_role_policy_document" {
-    policy_id = "${var.environment}_IamRdsRolePolicyDocument"
+    policy_id = "${var.prefix}_IamRdsRolePolicyDocument"
     statement {
             actions = [
                 "iam:Add*",
@@ -181,8 +181,8 @@ data "aws_iam_policy_document" "pcf_iam_rds_role_policy_document" {
                 "s3:*"
             ],
         resources = [
-                "arn:aws:s3:::${var.environment}-pcf-bosh",
-                "arn:aws:s3:::${var.environment}-pcf-bosh/*",
+                "arn:aws:s3:::${var.prefix}-pcf-bosh",
+                "arn:aws:s3:::${var.prefix}-pcf-bosh/*",
         ],
         effect = "Allow",
         sid = "PcfAdminS3Permissions"

@@ -4,7 +4,7 @@ variable "aws_key_name" {}
 variable "aws_cert_arn" {}
 variable "db_master_username" {}
 variable "db_master_password" {}
-variable "environment" {}
+variable "prefix" {}
 variable "opsman_ami" {}
 variable "amis_nat" {}
 variable "aws_region" {}

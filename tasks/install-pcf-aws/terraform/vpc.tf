@@ -5,24 +5,24 @@ resource "aws_vpc" "PcfVpc" {
     cidr_block = "${var.vpc_cidr}"
     enable_dns_hostnames = true
     tags {
-        Name = "${var.environment}-terraform-pcf-vpc"
+        Name = "${var.prefix}-terraform-pcf-vpc"
     }
 }
 resource "aws_internet_gateway" "internetGw" {
     vpc_id = "${aws_vpc.PcfVpc.id}"
     tags {
-        Name = "${var.environment}-internet-gateway"
+        Name = "${var.prefix}-internet-gateway"
     }
 }
 
 # 3. NAT instance setup
 # 3.1 Security Group for NAT
 resource "aws_security_group" "nat_instance_sg" {
-    name = "${var.environment}-nat_instance_sg"
-    description = "${var.environment} NAT Instance Security Group"
+    name = "${var.prefix}-nat_instance_sg"
+    description = "${var.prefix} NAT Instance Security Group"
     vpc_id = "${aws_vpc.PcfVpc.id}"
     tags {
-        Name = "${var.environment}-NAT intance security group"
+        Name = "${var.prefix}-NAT intance security group"
     }
     ingress {
         from_port = 0
@@ -50,7 +50,7 @@ resource "aws_instance" "nat_az1" {
     private_ip = "${var.nat_ip_az1}"
 
     tags {
-        Name = "${var.environment}-Nat Instance az1"
+        Name = "${var.prefix}-Nat Instance az1"
     }
 }
 
@@ -66,7 +66,7 @@ resource "aws_instance" "nat_az2" {
     private_ip = "${var.nat_ip_az2}"
 
     tags {
-        Name = "${var.environment}-Nat Instance az2"
+        Name = "${var.prefix}-Nat Instance az2"
     }
 }
 
@@ -83,6 +83,6 @@ resource "aws_instance" "nat_az3" {
     private_ip = "${var.nat_ip_az3}"
 
     tags {
-        Name = "${var.environment}-Nat Instance az3"
+        Name = "${var.prefix}-Nat Instance az3"
     }
 }

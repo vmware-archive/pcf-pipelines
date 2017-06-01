@@ -29,5 +29,6 @@ terraform destroy \
   -var "opsman_ami=dontcare" \
   -var "db_master_username=dontcare" \
   -var "db_master_password=dontcare" \
+  -var "prefix=dontcare" \
   -state "${root}/terraform-state/terraform.tfstate" \
   -state-out "${root}/terraform-state-output/terraform.tfstate"

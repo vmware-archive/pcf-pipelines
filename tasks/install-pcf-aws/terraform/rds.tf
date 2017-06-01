@@ -1,12 +1,12 @@
 resource "aws_db_subnet_group" "rds_subnet_group" {
-    name = "${var.environment}-rds_subnet_group"
+    name = "${var.prefix}-rds_subnet_group"
     subnet_ids = ["${aws_subnet.PcfVpcRdsSubnet_az1.id}", "${aws_subnet.PcfVpcRdsSubnet_az2.id}", "${aws_subnet.PcfVpcRdsSubnet_az3.id}"]
     tags {
-        Name = "${var.environment} RDS DB subnet group"
+        Name = "${var.prefix} RDS DB subnet group"
     }
 }
 resource "aws_db_instance" "pcf_rds" {
-    identifier              = "${var.environment}-pcf"
+    identifier              = "${var.prefix}-pcf"
     allocated_storage       = 100
     engine                  = "mariadb"
     engine_version          = "10.1.19"

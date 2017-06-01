@@ -6,11 +6,11 @@
   Elb PcfHttpElb  Security group
 */
 resource "aws_security_group" "PcfHttpElbSg" {
-    name = "${var.environment}-pcf_PcfHttpElb_sg"
+    name = "${var.prefix}-pcf_PcfHttpElb_sg"
     description = "Allow incoming connections for PcfHttpElb Elb."
     vpc_id = "${aws_vpc.PcfVpc.id}"
     tags {
-        Name = "${var.environment}-PcfHttpElb Security Group"
+        Name = "${var.prefix}-PcfHttpElb Security Group"
     }
     ingress {
         from_port = 80
@@ -39,11 +39,11 @@ resource "aws_security_group" "PcfHttpElbSg" {
 }
 
 resource "aws_security_group" "PcfSshElbSg" {
-    name = "${var.environment}-pcf_PcfSshElb_sg"
+    name = "${var.prefix}-pcf_PcfSshElb_sg"
     description = "Allow incoming connections for PcfSshElb Elb."
     vpc_id = "${aws_vpc.PcfVpc.id}"
     tags {
-        Name = "${var.environment}-PcfSshElb Security Group"
+        Name = "${var.prefix}-PcfSshElb Security Group"
     }
     ingress {
         from_port = 2222
@@ -59,11 +59,11 @@ resource "aws_security_group" "PcfSshElbSg" {
     }
 }
 resource "aws_security_group" "PcfTcpElbSg" {
-    name = "${var.environment}-pcf_PcfTcoElb_sg"
+    name = "${var.prefix}-pcf_PcfTcoElb_sg"
     description = "Allow incoming connections for PcfTcpElb Elb."
     vpc_id = "${aws_vpc.PcfVpc.id}"
     tags {
-        Name = "${var.environment}-PcfTcpElb Security Group"
+        Name = "${var.prefix}-PcfTcpElb Security Group"
     }
     ingress {
         from_port = 1024

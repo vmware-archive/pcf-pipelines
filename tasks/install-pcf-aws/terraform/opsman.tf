@@ -12,6 +12,6 @@ resource "aws_instance" "opsmman_az1" {
         volume_size = 100
     }
     tags {
-        Name = "${var.environment}-OpsMan az1"
+        Name = "${var.prefix}-OpsMan az1"
     }
 }

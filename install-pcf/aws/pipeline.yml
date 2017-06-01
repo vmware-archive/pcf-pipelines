@@ -90,11 +90,11 @@ jobs:
     params:
       DB_MASTER_USERNAME: {{db_master_username}}
       DB_MASTER_PASSWORD: {{db_master_password}}
+      TERRAFORM_PREFIX: {{terraform_prefix}}
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
       TF_VAR_aws_key_name: {{TF_VAR_aws_key_name}}
       TF_VAR_aws_cert_arn: {{TF_VAR_aws_cert_arn}}
-      TF_VAR_environment: {{TF_VAR_environment}}
       TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
       TF_VAR_aws_region: {{TF_VAR_aws_region}}
       TF_VAR_az1: {{TF_VAR_az1}}
@@ -248,7 +248,7 @@ jobs:
       pcf_az_2: {{TF_VAR_az2}}
       pcf_az_3: {{TF_VAR_az3}}
       terraform_template: default
-      terraform_prefix: {{TF_VAR_environment}}
+      terraform_prefix: {{terraform_prefix}}
       bucket: {{S3_OUTPUT_BUCKET}}
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
@@ -327,7 +327,6 @@ jobs:
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
       TF_VAR_aws_key_name: {{TF_VAR_aws_key_name}}
       TF_VAR_aws_cert_arn: {{TF_VAR_aws_cert_arn}}
-      TF_VAR_environment: {{TF_VAR_environment}}
       TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
       TF_VAR_aws_region: {{TF_VAR_aws_region}}
       TF_VAR_az1: {{TF_VAR_az1}}

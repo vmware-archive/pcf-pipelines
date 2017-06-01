@@ -9,7 +9,7 @@ resource "aws_route_table" "PublicSubnetRouteTable" {
     }
 
     tags {
-        Name = "${var.environment}-Public Subnet Route Table"
+        Name = "${var.prefix}-Public Subnet Route Table"
     }
 }
 
@@ -23,7 +23,7 @@ resource "aws_route_table" "PrivateSubnetRouteTable_az1" {
     }
 
     tags {
-        Name = "${var.environment}-Private Subnet Route Table AZ1"
+        Name = "${var.prefix}-Private Subnet Route Table AZ1"
     }
 }
 
@@ -37,7 +37,7 @@ resource "aws_route_table" "SubnetRouteTable_az2" {
     }
 
     tags {
-        Name = "${var.environment}-Private Subnet Route Table AZ2"
+        Name = "${var.prefix}-Private Subnet Route Table AZ2"
     }
 }
 
@@ -51,6 +51,6 @@ resource "aws_route_table" "SubnetRouteTable_az3" {
     }
 
     tags {
-        Name = "${var.environment}-Private Subnet Route Table AZ3"
+        Name = "${var.prefix}-Private Subnet Route Table AZ3"
     }
 }

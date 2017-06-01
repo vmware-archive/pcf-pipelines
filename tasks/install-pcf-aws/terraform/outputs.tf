@@ -1,5 +1,5 @@
-output "environment" {
-    value = "${var.environment}"
+output "prefix" {
+    value = "${var.prefix}"
 }
 output "region" {
     value = "${var.aws_region}"

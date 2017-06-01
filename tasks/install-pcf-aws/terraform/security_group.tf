@@ -6,11 +6,11 @@
   Ops Manager Security group
 */
 resource "aws_security_group" "directorSG" {
-    name = "${var.environment}-pcf_director_sg"
+    name = "${var.prefix}-pcf_director_sg"
     description = "Allow incoming connections for Ops Manager."
     vpc_id = "${aws_vpc.PcfVpc.id}"
     tags {
-        Name = "${var.environment}-Ops Manager Director Security Group"
+        Name = "${var.prefix}-Ops Manager Director Security Group"
     }
     ingress {
         from_port = 22
@@ -42,11 +42,11 @@ resource "aws_security_group" "directorSG" {
   RDS Security group
 */
 resource "aws_security_group" "rdsSG" {
-    name = "${var.environment}-pcf_rds_sg"
+    name = "${var.prefix}-pcf_rds_sg"
     description = "Allow incoming connections for RDS."
     vpc_id = "${aws_vpc.PcfVpc.id}"
     tags {
-        Name = "${var.environment}-RDS Security Group"
+        Name = "${var.prefix}-RDS Security Group"
     }
     ingress {
         from_port = 3306
@@ -67,11 +67,11 @@ resource "aws_security_group" "rdsSG" {
   PCF VMS Security group
 */
 resource "aws_security_group" "pcfSG" {
-    name = "${var.environment}-pcf_vms_sg"
+    name = "${var.prefix}-pcf_vms_sg"
     description = "Allow connections between PCF VMs."
     vpc_id = "${aws_vpc.PcfVpc.id}"
     tags {
-        Name = "${var.environment}-PCF VMs Security Group"
+        Name = "${var.prefix}-PCF VMs Security Group"
     }
     ingress {
         from_port = 0
