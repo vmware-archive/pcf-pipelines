@@ -33,11 +33,23 @@ resources:
     private_key: {{git_private_key}}
 
 jobs:
+- name: bootstrap-terraform-state
+  serial: true
+  plan:
+  - get: pcf-pipelines
+  - task: create-terraform-state
+    params:
+      S3_BUCKET_TERRAFORM: {{S3_OUTPUT_BUCKET}}
+      AWS_ACCESS_KEY_ID: {{TF_VAR_aws_access_key}}
+      AWS_SECRET_ACCESS_KEY: {{TF_VAR_aws_secret_key}}
+    file: pcf-pipelines/tasks/create-initial-terraform-state/task.yml
+
 - name: aws-pcf-prepare
   serial: true
   plan:
   - aggregate:
     - get: pcf-pipelines 
+    - get: terraform-state
   - task: aws-pcf-prepare
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws/task.yml
     params:
@@ -76,7 +88,7 @@ jobs:
     ensure:
       put: terraform-state
       params:
-        file: terraform-state/terraform.tfstate
+        file: terraform-state-output/terraform.tfstate
 
 - name: config-opsman
   serial: true

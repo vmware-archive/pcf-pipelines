@@ -7,8 +7,9 @@ image_resource:
     repository: czero/cflinuxfs2
 inputs:
   - name: pcf-pipelines 
-outputs:
   - name: terraform-state
+outputs:
+  - name: terraform-state-output
 params:
   TF_VAR_aws_access_key:
   TF_VAR_aws_secret_key:

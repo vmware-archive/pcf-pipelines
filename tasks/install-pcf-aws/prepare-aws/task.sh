@@ -1,13 +1,12 @@
 #!/bin/bash
+
 set -ex
-CWD=$(pwd)
-cd pcf-pipelines/tasks/install-pcf-aws/terraform/
 
-terraform plan
+terraform plan \
+  -state terraform-state/terraform.tfstate \
+  -out terraform.tfplan \
+  pcf-pipelines/tasks/install-pcf-aws/terraform
 
-set +e
-terraform apply
-ret_code=$?
-
-cp terraform.tfstate $CWD/terraform-state/terraform.tfstate
-exit $ret_code
+terraform apply \
+  -state-out terraform-state-output/terraform.tfstate \
+  terraform.tfplan
