@@ -62,7 +62,7 @@ jobs:
   - aggregate:
     - get: pivnet-product
       resource: elastic-runtime
-      trigger: true
+      trigger: true 
       passed: [regulator]
       params:
         globs:
