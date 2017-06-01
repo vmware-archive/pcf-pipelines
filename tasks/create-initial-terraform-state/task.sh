@@ -21,7 +21,7 @@ files=$(aws s3 ls "${S3_BUCKET_TERRAFORM}/")
 set +e
 echo $files | grep terraform.tfstate
 if [ "$?" -gt "0" ]; then
-  echo "" > terraform.tfstate
+  echo "{\"version\": 3}" > terraform.tfstate
   aws s3 cp terraform.tfstate "s3://${S3_BUCKET_TERRAFORM}/terraform.tfstate"
   set +x
   if [ "$?" -gt "0" ]; then
