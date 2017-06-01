@@ -286,6 +286,8 @@ jobs:
       DOPPLER_INSTANCES: {{doppler_instances}}
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
+      SERVICE_PROVIDER_KEY: {{ert_service_provider_key}}
+      SERVICE_PROVIDER_CERT: {{ert_service_provider_cert}}
 
 # - name: pre-install-step
 #   plan:
