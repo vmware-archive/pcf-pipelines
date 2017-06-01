@@ -88,12 +88,12 @@ jobs:
   - task: create-infrastructure
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws/task.yml
     params:
+      DB_MASTER_USERNAME: {{db_master_username}}
+      DB_MASTER_PASSWORD: {{db_master_password}}
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
       TF_VAR_aws_key_name: {{TF_VAR_aws_key_name}}
       TF_VAR_aws_cert_arn: {{TF_VAR_aws_cert_arn}}
-      TF_VAR_rds_db_username: {{TF_VAR_rds_db_username}}
-      TF_VAR_rds_db_password: {{TF_VAR_rds_db_password}}
       TF_VAR_environment: {{TF_VAR_environment}}
       TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
       TF_VAR_aws_region: {{TF_VAR_aws_region}}
@@ -214,6 +214,26 @@ jobs:
     params:
       PEM: {{PEM}}
       ERT_DOMAIN: {{ERT_DOMAIN}}
+      DB_APP_USAGE_SERVICE_USERNAME: {{db_app_usage_service_username}}
+      DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
+      DB_AUTOSCALE_USERNAME: {{db_autoscale_username}}
+      DB_AUTOSCALE_PASSWORD: {{db_autoscale_password}}
+      DB_DIEGO_USERNAME: {{db_diego_username}}
+      DB_DIEGO_PASSWORD: {{db_diego_password}}
+      DB_NOTIFICATIONS_USERNAME: {{db_notifications_username}}
+      DB_NOTIFICATIONS_PASSWORD: {{db_notifications_password}}
+      DB_ROUTING_USERNAME: {{db_routing_username}}
+      DB_ROUTING_PASSWORD: {{db_routing_password}}
+      DB_UAA_USERNAME: {{db_uaa_username}}
+      DB_UAA_PASSWORD: {{db_uaa_password}}
+      DB_CCDB_USERNAME: {{db_ccdb_username}}
+      DB_CCDB_PASSWORD: {{db_ccdb_password}}
+      DB_ACCOUNTDB_USERNAME: {{db_accountdb_username}}
+      DB_ACCOUNTDB_PASSWORD: {{db_accountdb_password}}
+      DB_NETWORKPOLICYSERVERDB_USERNAME: {{db_networkpolicyserverdb_username}}
+      DB_NETWORKPOLICYSERVERDB_PASSWORD: {{db_networkpolicyserverdb_password}}
+      DB_NFSVOLUMEDB_USERNAME: {{db_nfsvolumedb_username}}
+      DB_NFSVOLUMEDB_PASSWORD: {{db_nfsvolumedb_password}}
 
   - task: configure-json
     file: pcf-pipelines/tasks/install-ert/configure-json/task.yml
@@ -254,26 +274,26 @@ jobs:
       gcp_storage_access_key:
       gcp_storage_secret_key:
       # db credentials
-      db_app_usage_service_username: {{TF_VAR_rds_db_username_appusage}}
-      db_app_usage_service_password: {{TF_VAR_rds_db_password_appusage}}
-      db_autoscale_username: {{TF_VAR_rds_db_username_autoscale}}
-      db_autoscale_password: {{TF_VAR_rds_db_password_autoscale}}
-      db_diego_username: {{TF_VAR_rds_db_username_diego}}
-      db_diego_password: {{TF_VAR_rds_db_password_diego}}
-      db_notifications_username: {{TF_VAR_rds_db_username_notifications}}
-      db_notifications_password: {{TF_VAR_rds_db_password_notifications}}
-      db_routing_username: {{TF_VAR_rds_db_username_routing}}
-      db_routing_password: {{TF_VAR_rds_db_password_routing}}
-      db_uaa_username: {{TF_VAR_rds_db_username_uaa}}
-      db_uaa_password: {{TF_VAR_rds_db_password_uaa}}
-      db_ccdb_username: {{TF_VAR_rds_db_username_ccdb}}
-      db_ccdb_password: {{TF_VAR_rds_db_password_ccdb}}
-      db_accountdb_username: {{TF_VAR_rds_db_username_account}}
-      db_accountdb_password: {{TF_VAR_rds_db_password_account}}
-      db_networkpolicyserverdb_username: {{TF_VAR_rds_db_username_networkpolicy}}
-      db_networkpolicyserverdb_password: {{TF_VAR_rds_db_password_networkpolicy}}
-      db_nfsvolumedb_username: {{TF_VAR_rds_db_username_nfsvolume}}
-      db_nfsvolumedb_password: {{TF_VAR_rds_db_password_nfsvolume}}   
+      db_app_usage_service_username: {{db_app_usage_service_username}}
+      db_app_usage_service_password: {{db_app_usage_service_password}}
+      db_autoscale_username: {{db_autoscale_username}}
+      db_autoscale_password: {{db_autoscale_password}}
+      db_diego_username: {{db_diego_username}}
+      db_diego_password: {{db_diego_password}}
+      db_notifications_username: {{db_notifications_username}}
+      db_notifications_password: {{db_notifications_password}}
+      db_routing_username: {{db_routing_username}}
+      db_routing_password: {{db_routing_password}}
+      db_uaa_username: {{db_uaa_username}}
+      db_uaa_password: {{db_uaa_password}}
+      db_ccdb_username: {{db_ccdb_username}}
+      db_ccdb_password: {{db_ccdb_password}}
+      db_accountdb_username: {{db_accountdb_username}}
+      db_accountdb_password: {{db_accountdb_password}}
+      db_networkpolicyserverdb_username: {{db_networkpolicyserverdb_username}}
+      db_networkpolicyserverdb_password: {{db_networkpolicyserverdb_password}}
+      db_nfsvolumedb_username: {{db_nfsvolumedb_username}}
+      db_nfsvolumedb_password: {{db_nfsvolumedb_password}}
 
   - task: configure-ert
     file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
@@ -307,8 +327,6 @@ jobs:
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
       TF_VAR_aws_key_name: {{TF_VAR_aws_key_name}}
       TF_VAR_aws_cert_arn: {{TF_VAR_aws_cert_arn}}
-      TF_VAR_rds_db_username: {{TF_VAR_rds_db_username}}
-      TF_VAR_rds_db_password: {{TF_VAR_rds_db_password}}
       TF_VAR_environment: {{TF_VAR_environment}}
       TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
       TF_VAR_aws_region: {{TF_VAR_aws_region}}

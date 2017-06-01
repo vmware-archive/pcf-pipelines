@@ -13,8 +13,8 @@ resource "aws_db_instance" "pcf_rds" {
     iops                    = 1000
     instance_class          = "${var.db_instance_type}"
     name                    = "bosh"
-    username                = "${var.rds_db_username}"
-    password                = "${var.rds_db_password}"
+    username                = "${var.db_master_username}"
+    password                = "${var.db_master_password}"
     db_subnet_group_name    = "${aws_db_subnet_group.rds_subnet_group.name}"
     parameter_group_name    = "default.mariadb10.1"
     vpc_security_group_ids  = ["${aws_security_group.rdsSG.id}"]
