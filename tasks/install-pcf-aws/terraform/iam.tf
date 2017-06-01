@@ -37,7 +37,7 @@ resource "aws_iam_role_policy_attachment" "PcfAdminPolicy_role_attach" {
 }
 resource "aws_iam_instance_profile" "pcf_admin_role_instance_profile" {
     name = "${var.prefix}_pcf_admin_role_instance_profile"
-    roles = ["${aws_iam_role.pcf_admin_role.name}"]
+    role = "${aws_iam_role.pcf_admin_role.name}"
 }
 
 
