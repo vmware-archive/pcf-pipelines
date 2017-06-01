@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+    tag: latest
+
+outputs:
+- name: config
+
+params:
+  CONFIG:
+
+run:
+  path: bash
+  args:
+  - -c
+  - |
+    IFS=$'\n'
+    for line in $CONFIG; do
+      echo "$line" >> config/params.yml
+    done
