@@ -19,9 +19,10 @@ pivnet_token: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 
-# Ops Manager Admin Credentials - set during the installation of Ops Manager
-opsman_client: CHANGEME
-opsman_secret: CHANGEME
+# Ops Manager Operations Client Credentials - setup when an Ops Manager 
+# has been configured with SSO
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
 
 # Ops Manager Url
 # eg. https://myopsman.mydomain.com
