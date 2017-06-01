@@ -7,13 +7,18 @@ export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}
 export GOOGLE_PROJECT=${GCP_PROJECT_ID}
 export GOOGLE_REGION=${GCP_REGION}
 
-echo "Deleting PCF installation..."
-om-linux \
-  --target https://$OPSMAN_URI \
-  --skip-ssl-validation \
-  --username $OPSMAN_USERNAME \
-  --password $OPSMAN_PASSWORD \
-  delete-installation
+echo "Checking for existence of ops manager..."
+if [[ $(dig +nocmd ${OPSMAN_URI} +noall +answer | wc -l) -ne 0 ]]; then 
+  echo "Deleting PCF installation..."
+  om-linux \
+    --target https://$OPSMAN_URI \
+    --skip-ssl-validation \
+    --username $OPSMAN_USERNAME \
+    --password $OPSMAN_PASSWORD \
+    delete-installation
+else
+  echo "No ops manager could be found."
+fi
 
 echo "Deleting provisioned infrastructure..."
 terraform destroy -force \
