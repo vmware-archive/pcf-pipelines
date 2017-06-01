@@ -190,7 +190,7 @@ jobs:
         <<: *update_pipeline_params
     - task: update-ert-pipeline
       input_mapping: { config: update_ert_config }
-      file: pcf-pipelines/ci/tasks/update_pipeline.yml
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
       params:
         PIPELINE_NAME: lre1-aws-ert-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
@@ -206,7 +206,7 @@ jobs:
         <<: *update_pipeline_params
     - task: update-buildpacks-pipeline
       input_mapping: { config: update_buildpacks_config }
-      file: pcf-pipelines/ci/tasks/update_pipeline.yml
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
       params:
         PIPELINE_NAME: lre1-aws-buildpacks-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
@@ -240,7 +240,7 @@ jobs:
         CHECK_NEW_OPSMAN_EVERY: 24h
     - task: update-upgrade-opsman-aws
       input_mapping: { config: upgrade_opsman_aws_config }
-      file: pcf-pipelines/ci/tasks/update_pipeline.yml
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
       params:
         PIPELINE_NAME: lre1-aws-opsman-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
@@ -267,7 +267,7 @@ jobs:
         CHECK_NEW_OPSMAN_EVERY: 24h
     - task: update-upgrade-opsman-gcp
       input_mapping: { config: upgrade_opsman_gcp_config }
-      file: pcf-pipelines/ci/tasks/update_pipeline.yml
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
       params:
         PIPELINE_NAME: upgrade-opsman-gcp
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
