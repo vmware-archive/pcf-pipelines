@@ -34,7 +34,7 @@ resources:
 
 jobs:
 - name: bootstrap-terraform-state
-  serial: true
+  serial_groups: [terraform]
   plan:
   - get: pcf-pipelines
   - task: create-terraform-state
@@ -45,7 +45,7 @@ jobs:
     file: pcf-pipelines/tasks/create-initial-terraform-state/task.yml
 
 - name: create-infrastructure
-  serial: true
+  serial_groups: [terraform]
   plan:
   - aggregate:
     - get: pcf-pipelines 
@@ -91,7 +91,7 @@ jobs:
         file: terraform-state-output/terraform.tfstate
 
 - name: configure-director
-  serial: true
+  serial_groups: [opsman]
   plan:
   - aggregate:
     - get: pcf-pipelines 
@@ -123,7 +123,7 @@ jobs:
       infra_subnet_reserved_ranges_z1: {{infra_subnet_reserved_ranges_z1}}
 
 - name: deploy-director
-  serial: true
+  serial_groups: [opsman]
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -137,7 +137,7 @@ jobs:
       pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
 
 - name: upload-ert
-  serial: true
+  serial_groups: [opsman]
   plan:
   - aggregate:
     - get: pcf-pipelines 
@@ -167,7 +167,7 @@ jobs:
       PRODUCT_NAME: cf
 
 - name: deploy-ert
-  serial: true
+  serial_groups: [opsman]
   plan:
   - aggregate:
     - get: pcf-pipelines 
@@ -257,7 +257,7 @@ jobs:
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
 
 - name: wipe-env
-  serial: true
+  serial_groups: [terraform]
   ensure:
     put: terraform-state
     params:
