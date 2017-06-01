@@ -1,3 +1,5 @@
+opsman_major_minor_version: ^1\.10\..*$
+
 TF_VAR_aws_access_key:
 TF_VAR_aws_secret_key:
 TF_VAR_aws_key_name:
@@ -27,7 +29,6 @@ TF_VAR_rds_db_username_nfsvolume:
 TF_VAR_rds_db_password_nfsvolume:
 
 TF_VAR_environment:
-TF_VAR_opsman_ami:
 TF_VAR_amis_nat:
 TF_VAR_aws_region:
 TF_VAR_az1:

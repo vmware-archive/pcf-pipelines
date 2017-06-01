@@ -32,6 +32,15 @@ resources:
     branch: master
     private_key: {{git_private_key}}
 
+- name: pivnet-opsmgr
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
+    sort_by: semver
+
 jobs:
 - name: bootstrap-terraform-state
   serial_groups: [terraform]
@@ -50,6 +59,32 @@ jobs:
   - aggregate:
     - get: pcf-pipelines 
     - get: terraform-state
+    - get: pivnet-opsmgr
+      params:
+        globs: ["*AWS.yml"]
+  - task: find-ami
+    params:
+      REGION: {{TF_VAR_aws_region}}
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/cflinuxfs2
+      inputs:
+      - name: pivnet-opsmgr
+      outputs:
+      - name: ami
+      params:
+        REGION:
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          ami=$(grep $REGION pivnet-opsmgr/*.yml | cut -d' ' -f2)
+          echo $ami > ami/ami
+
   - task: create-infrastructure
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws/task.yml
     params:
@@ -60,7 +95,6 @@ jobs:
       TF_VAR_rds_db_username: {{TF_VAR_rds_db_username}}
       TF_VAR_rds_db_password: {{TF_VAR_rds_db_password}}
       TF_VAR_environment: {{TF_VAR_environment}}
-      TF_VAR_opsman_ami: {{TF_VAR_opsman_ami}}
       TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
       TF_VAR_aws_region: {{TF_VAR_aws_region}}
       TF_VAR_az1: {{TF_VAR_az1}}
@@ -276,7 +310,6 @@ jobs:
       TF_VAR_rds_db_username: {{TF_VAR_rds_db_username}}
       TF_VAR_rds_db_password: {{TF_VAR_rds_db_password}}
       TF_VAR_environment: {{TF_VAR_environment}}
-      TF_VAR_opsman_ami: {{TF_VAR_opsman_ami}}
       TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
       TF_VAR_aws_region: {{TF_VAR_aws_region}}
       TF_VAR_az1: {{TF_VAR_az1}}

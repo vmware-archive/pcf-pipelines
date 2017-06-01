@@ -26,5 +26,6 @@ fi
 set +e
 terraform destroy \
   -force \
+  -var "opsman_ami=dontcare" \
   -state "${root}/terraform-state/terraform.tfstate" \
   -state-out "${root}/terraform-state-output/terraform.tfstate"
