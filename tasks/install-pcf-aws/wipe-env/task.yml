@@ -40,4 +40,4 @@ params:
   TF_VAR_rds_subnet_cidr_az2:
   TF_VAR_rds_subnet_cidr_az3:
 run:
-  path: pcf-pipelines/tasks/install-pcf-aws/destroy-aws/task.sh
+  path: pcf-pipelines/tasks/install-pcf-aws/wipe-env/task.sh

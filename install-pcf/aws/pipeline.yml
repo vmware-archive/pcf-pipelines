@@ -274,7 +274,7 @@ jobs:
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
 
-- name: aws-pcf-destroy
+- name: wipe-env
   serial: true
   ensure:
     put: terraform-state
@@ -284,8 +284,8 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: terraform-state
-  - task: aws-pcf-destroy
-    file: pcf-pipelines/tasks/install-pcf-aws/destroy-aws/task.yml
+  - task: wipe
+    file: pcf-pipelines/tasks/install-pcf-aws/wipe-env/task.yml
     params:
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
       TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
