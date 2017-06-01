@@ -44,13 +44,13 @@ jobs:
       AWS_SECRET_ACCESS_KEY: {{TF_VAR_aws_secret_key}}
     file: pcf-pipelines/tasks/create-initial-terraform-state/task.yml
 
-- name: aws-pcf-prepare
+- name: create-infrastructure
   serial: true
   plan:
   - aggregate:
     - get: pcf-pipelines 
     - get: terraform-state
-  - task: aws-pcf-prepare
+  - task: create-infrastructure
     file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws/task.yml
     params:
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
@@ -96,7 +96,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines 
       trigger: true
-      passed: [aws-pcf-prepare]
+      passed: [create-infrastructure]
   - task: config-opsman
     file: pcf-pipelines/tasks/install-pcf-aws/config-opsman/task.yml
     params:
