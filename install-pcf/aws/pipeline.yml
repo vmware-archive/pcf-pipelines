@@ -22,7 +22,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime
-    product_version: ^1\.10\..*$
+    product_version: {{ert_major_minor_version}}
     sort_by: semver
 
 - name: pcf-pipelines

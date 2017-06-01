@@ -2,6 +2,7 @@ pivnet_token:
 git_private_key:
 
 opsman_major_minor_version: ^1\.10\..*$
+ert_major_minor_version: ^1\.10\..*$
 
 # RDS Master Credentials
 db_master_username:
