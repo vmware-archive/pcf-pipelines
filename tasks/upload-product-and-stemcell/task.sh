@@ -7,9 +7,24 @@ fi
 STEMCELL_VERSION=`cat ./pivnet-product/metadata.json | jq --raw-output '.Dependencies[] | select(.Release.Product.Name | contains("Stemcells")) | .Release.Version'`
 
 if [ -n "$STEMCELL_VERSION" ]; then
-  stemcell_exists=$(om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k curl --silent --path "/api/v0/diagnostic_report" | jq '.stemcells' | grep $STEMCELL_VERSION | grep -c ${STEMCELL_GLOB//\*/})
+  diagnostic_report=$(
+    om-linux \
+      --target https://$OPS_MGR_HOST \
+      --username $OPS_MGR_USR \
+      --password $OPS_MGR_PWD \
+      --skip-ssl-validation \
+      curl --silent --path "/api/v0/diagnostic_report"
+  )
 
-  if [[ "$stemcell_exists" -eq "0" ]]; then
+  stemcell=$(
+    echo $diagnostic_report |
+    jq \
+      --arg version "$STEMCELL_VERSION" \
+      --arg glob "${STEMCELL_GLOB//\*/}" \
+    '.stemcells[] | select(contains($version) and contains($glob))'
+  )
+
+  if [[ -z "$stemcell" ]]; then
     echo "Downloading stemcell $STEMCELL_VERSION"
     pivnet-cli login --api-token="$PIVNET_API_TOKEN"
     pivnet-cli download-product-files -p stemcells -r $STEMCELL_VERSION -g $STEMCELL_GLOB --accept-eula
