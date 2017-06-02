@@ -29,6 +29,13 @@ product_version: CHANGEME
 # and deploying the product file on Operations Manager.
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
+
+# Ops Manager Operations Client Credentials - setup when an Ops Manager 
+# has been configured with SSO
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
+
+# Ops Manager URI
 opsman_uri: CHANGEME
 
 # The IaaS name for which stemcell to download. See

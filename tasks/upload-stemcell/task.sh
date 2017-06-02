@@ -22,6 +22,12 @@ product_file="$(ls -1 ${root}/pivnet-product/*.pivotal)"
 
 mkdir -p "${root}/stemcell"
 
+if [[ -n ${OPSMAN_CLIENT_ID} ]]; then
+  CREDS="--client-id ${OPSMAN_CLIENT_ID} --client-secret ${OPSMAN_CLIENT_SECRET}"
+else
+  CREDS="--username ${OPSMAN_USERNAME} --password ${OPSMAN_PASSWORD}"
+fi
+
 stemcell-downloader \
   --iaas-type "${IAAS_TYPE}" \
   --product-file "${product_file}" \
@@ -32,7 +38,6 @@ stemcell="$(ls -1 "${root}"/stemcell/*.tgz)"
 
 om-linux --target "https://${OPSMAN_URI}" \
   --skip-ssl-validation \
-  --username "${OPSMAN_USERNAME}" \
-  --password "${OPSMAN_PASSWORD}" \
+  ${CREDS} \
   upload-stemcell \
   --stemcell "${stemcell}"

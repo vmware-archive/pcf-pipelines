@@ -23,12 +23,17 @@ function main() {
     exit 0
   fi
 
+  if [[ -n ${OPSMAN_CLIENT_ID} ]]; then
+    CREDS="--client-id ${OPSMAN_CLIENT_ID} --client-secret ${OPSMAN_CLIENT_SECRET}"
+  else
+    CREDS="--username ${OPSMAN_USERNAME} --password ${OPSMAN_PASSWORD}"
+  fi
+
   for stemcell in ${cwd}/stemcells/*.tgz; do
     printf "Uploading %s to %s ...\n" "${stemcell}" "${OPSMAN_URI}"
     om-linux --target "https://${OPSMAN_URI}" \
         --skip-ssl-validation \
-        --username "${OPSMAN_USERNAME}" \
-        --password "${OPSMAN_PASSWORD}" \
+        ${CREDS} \
         upload-stemcell \
         --stemcell "${stemcell}"
   done

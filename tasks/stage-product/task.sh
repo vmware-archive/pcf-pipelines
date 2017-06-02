@@ -24,10 +24,15 @@ function main() {
     version="$(unzip -p *.pivotal 'metadata/*.yml' | grep 'product_version:' | cut -d ':' -f 2 | tr -d ' ' | tr -d "'")"
   popd
 
+  if [[ -n ${OPSMAN_CLIENT_ID} ]]; then
+    CREDS="--client-id ${OPSMAN_CLIENT_ID} --client-secret ${OPSMAN_CLIENT_SECRET}"
+  else
+    CREDS="--username ${OPSMAN_USERNAME} --password ${OPSMAN_PASSWORD}"
+  fi
+
   om-linux --target "https://${OPSMAN_URI}" \
      --skip-ssl-validation \
-     --username "${OPSMAN_USERNAME}" \
-     --password "${OPSMAN_PASSWORD}" \
+     ${CREDS} \
      stage-product \
      --product-name "${PRODUCT_NAME}" \
      --product-version "${version}"
