@@ -32,6 +32,8 @@ db_nfsvolumedb_password:
 
 terraform_prefix:
 
+director_certificates:
+
 TF_VAR_aws_access_key:
 TF_VAR_aws_secret_key:
 TF_VAR_aws_key_name:

@@ -148,6 +148,7 @@ jobs:
       PEM: {{PEM}}
       AWS_REGION: {{TF_VAR_aws_region}}
       S3_ENDPOINT: {{S3_ENDPOINT}}
+      TRUSTED_CERTIFICATES: {{director_certificates}}
       ert_subnet_reserved_ranges_z1: {{ert_subnet_reserved_ranges_z1}}
       ert_subnet_reserved_ranges_z2: {{ert_subnet_reserved_ranges_z2}}
       ert_subnet_reserved_ranges_z3: {{ert_subnet_reserved_ranges_z3}}
