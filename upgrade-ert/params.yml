@@ -19,7 +19,7 @@ pivnet_token: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 
-ert_major_minor_version: 1\.10\.*  # ERT minor version to track
+ert_major_minor_version: ^1\.10\..*$  # ERT minor version to track
 # Ops Manager Url
 # eg. https://myopsman.mydomain.com
 opsman_uri: CHANGEME
