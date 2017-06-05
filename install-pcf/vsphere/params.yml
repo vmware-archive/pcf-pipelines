@@ -1,6 +1,6 @@
 # Pipeline resource configuration
 pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
-opsman_major_minor_version: 1\.10\.* # PCF Ops Manager minor version to track
+opsman_major_minor_version: ^1\.10\..*$ # PCF Ops Manager minor version to track
 git_private_key:
 
 # vCenter configuration
