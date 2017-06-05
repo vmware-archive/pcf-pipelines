@@ -135,9 +135,6 @@ jobs:
           cp govc/govc_linux_amd64 workspace/govc
           chmod +x workspace/govc
 
-          cp om-beta/om-linux workspace/om-linux-beta
-          chmod +x workspace/om-linux-beta
-
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           chmod +x workspace/stemcell-downloader
 
