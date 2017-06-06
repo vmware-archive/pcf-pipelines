@@ -196,7 +196,7 @@ jobs:
       passed: [upload-ert]
       trigger: true
 
-  - task: config-er-tile
+  - task: configure
     file: pcf-pipelines/tasks/config-ert/task.yml
     params:
       OPS_MGR_HOST: {{opsman_uri}}
