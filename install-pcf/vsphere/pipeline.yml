@@ -290,16 +290,7 @@ jobs:
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
 
-- name: product-apply-changes
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
-      passed: [deploy-ert]
-      trigger: true
-
-  - task: apply-changes
+  - task: deploy
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_URI: {{opsman_uri}}
