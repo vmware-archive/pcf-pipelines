@@ -177,7 +177,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines 
-      passed: [deploy-director]
     - get: pivnet-product
       resource: pivnet-elastic-runtime
       params:
