@@ -140,7 +140,7 @@ jobs:
       TRUSTED_CERTIFICATES: {{trusted_certificates}}
       GENERATE_VM_PASSWORDS: {{generate_vm_passwords}}
 
-- name: opsman-apply-changes
+- name: deploy-director
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -165,7 +165,7 @@ jobs:
       params: {globs: ["*.pivotal"]}
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
-      passed: [opsman-apply-changes]
+      passed: [deploy-director]
       trigger: true
 
   - task: upload-er-tile
