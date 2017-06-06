@@ -31,7 +31,7 @@ resources:
     sort_by: semver
 
 jobs:
-- name: install-opsmgr
+- name: create-opsman-vm
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -78,7 +78,7 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
-      passed: [install-opsmgr]
+      passed: [create-opsman-vm]
       trigger: true
 
   - task: config-opsdir
