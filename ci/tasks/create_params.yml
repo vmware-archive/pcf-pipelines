@@ -18,5 +18,5 @@ run:
   - -ce
   - |
     cat > pipeline_params/params.yml <<EOF
-      ${PARAMS_RAW}
+    ${PARAMS_RAW}
     EOF
