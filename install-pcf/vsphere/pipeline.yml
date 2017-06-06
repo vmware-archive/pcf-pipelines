@@ -31,7 +31,7 @@ resources:
     sort_by: semver
 
 jobs:
-- name: create-opsman-vm
+- name: deploy-opsman
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -39,7 +39,7 @@ jobs:
       params: {globs: ["*.ova"]}
       trigger: true
 
-  - task: deploy-opsman
+  - task: deploy
     file: pcf-pipelines/tasks/import-opsman/task.yml
     params:
       GOVC_INSECURE: 1
@@ -78,7 +78,7 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
-      passed: [create-opsman-vm]
+      passed: [deploy-opsman]
       trigger: true
 
   - task: config-opsdir
