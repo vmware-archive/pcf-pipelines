@@ -156,7 +156,7 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
 
-- name: upload-elastic-runtime-tile
+- name: upload-ert
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -185,7 +185,7 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
-      passed: [upload-elastic-runtime-tile]
+      passed: [upload-ert]
       trigger: true
 
   - task: config-er-tile
