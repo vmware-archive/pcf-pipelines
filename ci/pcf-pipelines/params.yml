@@ -36,3 +36,8 @@ upgrade_opsman_gcp_opsman_gcp_zone:
 upgrade_opsman_gcp_opsman_gcp_diskimage_name:
 upgrade_opsman_gcp_opsman_gcp_credfile_contents:
 upgrade_opsman_gcp_opsman_major_minor_version:
+params_lre2_gcp_ert_upgrade:
+params_lre2_gcp_opsman_upgrade:
+params_lre3_gcp_ert_upgrade:
+params_lre3_gcp_opsman_upgrade:
+

@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+
+outputs:
+  - name: pipeline_params
+
+params:
+  PARAMS_RAW:
+
+run:
+  path: bash
+  args:
+  - -ce
+  - |
+    cat > pipeline_params/params.yml <<EOF
+      ${PARAMS_RAW}
+    EOF
