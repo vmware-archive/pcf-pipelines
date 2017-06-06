@@ -40,7 +40,7 @@ jobs:
       trigger: true
 
   - task: deploy
-    file: pcf-pipelines/tasks/import-opsman/task.yml
+    file: pcf-pipelines/install-pcf/vsphere/tasks/import-opsman/task.yml
     params:
       GOVC_INSECURE: 1
       GOVC_URL: {{vcenter_host}}
