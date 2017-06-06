@@ -187,7 +187,7 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       PRODUCT_NAME: cf
 
-- name: config-elastic-runtime-tile
+- name: deploy-ert
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -296,7 +296,7 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
       params: {globs: ["*.ova"]}
-      passed: [config-elastic-runtime-tile]
+      passed: [deploy-ert]
       trigger: true
 
   - task: apply-changes
