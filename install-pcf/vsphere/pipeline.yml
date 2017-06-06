@@ -179,6 +179,14 @@ jobs:
       NO_PROXY: {{company_proxy_domain}}
       OM_IP: {{om_ip}}
 
+  - task: stage-tile
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      PRODUCT_NAME: cf
+
 - name: config-elastic-runtime-tile
   plan:
   - aggregate:

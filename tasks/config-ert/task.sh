@@ -2,13 +2,6 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CF_RELEASE=`om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k available-products | grep cf`
-
-PRODUCT_NAME=`echo $CF_RELEASE | cut -d"|" -f2 | tr -d " "`
-PRODUCT_VERSION=`echo $CF_RELEASE | cut -d"|" -f3 | tr -d " "`
-
-om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k stage-product -p $PRODUCT_NAME -v $PRODUCT_VERSION
-
 ERT_AZS=$(echo $DEPLOYMENT_NW_AZS | jq --raw-input 'split(",") | map({name: .})')
 
 CF_NETWORK=$(cat <<-EOF
