@@ -13,12 +13,6 @@ resources:
     branch: master
     private_key: {{git_private_key}}
 
-# - name: customer-repo
-#   type: git
-#   source:
-#     uri: https://github.com/rahul-kj/sample-customer-repo
-#     branch: master
-
 - name: pivnet-opsman-product
   type: pivnet
   source:
@@ -288,23 +282,6 @@ jobs:
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
 
-# - name: pre-install-step
-#   plan:
-#   - aggregate:
-#     - get: customer-repo
-#       trigger: true
-#     - get: pivnet-opsman-product
-#       params: {globs: ["*.ova"]}
-#       passed: [config-elastic-runtime-tile]
-#       trigger: true
-#
-#   - task: pre-step
-#     file: customer-repo/tasks/pre-step/task.yml
-#     params:
-#       OPS_MGR_HOST: {{opsman_uri}}
-#       OPS_MGR_USR: {{opsman_admin_username}}
-#       OPS_MGR_PWD: {{opsman_admin_password}}
-
 - name: product-apply-changes
   plan:
   - aggregate:
@@ -352,19 +329,3 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-
-# - name: post-install-step
-#   plan:
-#   - aggregate:
-#     - get: customer-repo
-#       trigger: true
-#     - get: pivnet-opsman-product
-#       params: {globs: ["*.ova"]}
-#       passed: [product-apply-changes]
-#       trigger: true
-#   - task: post-step
-#     file: customer-repo/tasks/post-step/task.yml
-#     params:
-#       OPS_MGR_HOST: {{opsman_uri}}
-#       OPS_MGR_USR: {{opsman_admin_username}}
-#       OPS_MGR_PWD: {{opsman_admin_password}}
