@@ -296,35 +296,3 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-
-- name: disable-errands
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
-      passed: [product-apply-changes]
-      trigger: true
-
-  - task: disable-ert-errands
-    file: pcf-pipelines/tasks/disable-ert-errands/task.yml
-    params:
-      OPS_MGR_HOST: {{opsman_uri}}
-      OPS_MGR_USR: {{opsman_admin_username}}
-      OPS_MGR_PWD: {{opsman_admin_password}}
-
-- name: post-apply-changes
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
-      passed: [disable-errands]
-      trigger: true
-
-  - task: apply-changes
-    file: pcf-pipelines/tasks/apply-changes/task.yml
-    params:
-      OPSMAN_URI: {{opsman_uri}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
