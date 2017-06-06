@@ -4,3 +4,4 @@ atc_external_url:
 atc_team_name:
 git_private_key:
 sle1_gcp_params:
+sle1_aws_params:
