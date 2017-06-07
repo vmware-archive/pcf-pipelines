@@ -66,7 +66,7 @@ var _ = Describe("pcf-pipelines", func() {
 				Expect(err).NotTo(HaveOccurred())
 
 				for _, job := range config.Jobs {
-					for _, task := range allTasksInPlan(&job.Plan, nil) {
+					for _, task := range allTasksInPlan(&job.Plan) {
 						failMessage := fmt.Sprintf("Found error in the following pipeline:\n    %s\n\nin the following task's params:\n    %s/%s\n", pipelinePath, job.Name, task.Name())
 
 						var configParams []string
@@ -144,7 +144,9 @@ in the following params template:
 				Expect(err).NotTo(HaveOccurred())
 
 				for _, job := range config.Jobs {
-					tasks := allTasksInPlan(&job.Plan, nil)
+					tasks := allTasksInPlan(&job.Plan)
+					resources := availableResources(&job.Plan)
+
 					for i, task := range tasks {
 						var inputs []atc.TaskInputConfig
 						if !strings.HasPrefix(task.TaskConfigPath, "pcf-pipelines") {
@@ -177,14 +179,12 @@ in the following params template:
 							}
 						}
 
-						actuals := availableResources(&job.Plan, nil)
-
 						for j := 0; j < i; j++ {
 							upstreamTask := tasks[j]
 
 							if upstreamTask.TaskConfig != nil {
 								for _, output := range upstreamTask.TaskConfig.Outputs {
-									actuals = append(actuals, output.Name)
+									resources = append(resources, output.Name)
 								}
 							}
 
@@ -197,18 +197,18 @@ in the following params template:
 								Expect(err).NotTo(HaveOccurred())
 
 								for _, output := range upstreamTaskConfig.Outputs {
-									actuals = append(actuals, output.Name)
+									resources = append(resources, output.Name)
 								}
 							}
 
 							for _, v := range upstreamTask.OutputMapping {
-								actuals = append(actuals, v)
+								resources = append(resources, v)
 							}
 						}
 
 					OUTER:
 						for _, input := range inputs {
-							for _, actual := range actuals {
+							for _, actual := range resources {
 								if input.Name == actual {
 									continue OUTER
 								}
@@ -229,13 +229,15 @@ in the following params template:
 	}
 })
 
-func allTasksInPlan(seq *atc.PlanSequence, tasks []atc.PlanConfig) []atc.PlanConfig {
+func allTasksInPlan(seq *atc.PlanSequence) []atc.PlanConfig {
+	var tasks []atc.PlanConfig
+
 	for _, planConfig := range *seq {
 		if planConfig.Aggregate != nil {
-			tasks = append(tasks, allTasksInPlan(planConfig.Aggregate, tasks)...)
+			tasks = append(tasks, allTasksInPlan(planConfig.Aggregate)...)
 		}
 		if planConfig.Do != nil {
-			tasks = append(tasks, allTasksInPlan(planConfig.Do, tasks)...)
+			tasks = append(tasks, allTasksInPlan(planConfig.Do)...)
 		}
 		if planConfig.Task != "" {
 			tasks = append(tasks, planConfig)
@@ -245,17 +247,22 @@ func allTasksInPlan(seq *atc.PlanSequence, tasks []atc.PlanConfig) []atc.PlanCon
 	return tasks
 }
 
-func availableResources(seq *atc.PlanSequence, resources []string) []string {
+func availableResources(seq *atc.PlanSequence) []string {
+	var resources []string
+
 	for _, planConfig := range *seq {
 		if planConfig.Aggregate != nil {
-			resources = append(resources, availableResources(planConfig.Aggregate, resources)...)
+			resources = append(resources, availableResources(planConfig.Aggregate)...)
 		}
+
 		if planConfig.Do != nil {
-			resources = append(resources, availableResources(planConfig.Do, resources)...)
+			resources = append(resources, availableResources(planConfig.Do)...)
 		}
+
 		if planConfig.Get != "" {
 			resources = append(resources, planConfig.Get)
 		}
+
 		if planConfig.Put != "" {
 			resources = append(resources, planConfig.Put)
 		}
