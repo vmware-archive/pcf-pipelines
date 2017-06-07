@@ -9,7 +9,8 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:bhudlemeyer/pcf-pipelines.git
+    #uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
     private_key: {{git_private_key}}
 
@@ -29,11 +30,11 @@ resources:
 
 - name: elastic-runtime
   type: pivnet
-  check_every: 4h
+  #check_every: 4h
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime
-    product_version: ^1\.10\..*$
+    product_version: ^1\.11\..*$
     sort_by: semver
 
 jobs:
@@ -82,10 +83,12 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
-      passed: [install-opsmgr]
       trigger: true
+      passed: [install-opsmgr]
+    #- get: pivnet-opsman-product
+    #  params: {globs: ["*.ova"]}
+    #  passed: [install-opsmgr]
+    #  #trigger: true
 
   - task: config-opsdir
     file: pcf-pipelines/tasks/config-opsdir/task.yml
@@ -150,10 +153,12 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [configure-ops-director]
       trigger: true
+    #- get: pivnet-opsman-product
+    #  params: {globs: ["*.ova"]}
+    #  passed: [configure-ops-director]
+    #  trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
@@ -166,16 +171,19 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [opsman-apply-changes]
+      trigger: true
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
-      passed: [opsman-apply-changes]
-      trigger: true
+    #- get: pivnet-opsman-product
+    #  params: {globs: ["*.ova"]}
+    #  passed: [opsman-apply-changes]
+    #  trigger: true
 
   - task: upload-er-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
+    attempts: 3
     params:
       STEMCELL_GLOB: "*vsphere*"
       OPS_MGR_HOST: {{opsman_uri}}
@@ -189,10 +197,12 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [upload-elastic-runtime-tile]
       trigger: true
+   # - get: pivnet-opsman-product
+   #   params: {globs: ["*.ova"]}
+   #   passed: [upload-elastic-runtime-tile]
+   #   trigger: true
 
   - task: config-er-tile
     file: pcf-pipelines/tasks/config-ert/task.yml
@@ -309,13 +319,17 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [config-elastic-runtime-tile]
       trigger: true
 
+    #- get: pivnet-opsman-product
+    #  params: {globs: ["*.ova"]}
+    #  passed: [config-elastic-runtime-tile]
+    #  trigger: true
+
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
+    attempts: 3
     params:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
@@ -325,10 +339,12 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [product-apply-changes]
       trigger: true
+    #- get: pivnet-opsman-product
+    #  params: {globs: ["*.ova"]}
+    #  passed: [product-apply-changes]
+    #  trigger: true
 
   - task: disable-ert-errands
     file: pcf-pipelines/tasks/disable-ert-errands/task.yml
@@ -341,10 +357,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [disable-errands]
       trigger: true
+
+    #- get: pivnet-opsman-product
+    #  params: {globs: ["*.ova"]}
+    #  passed: [disable-errands]
+    #  trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
