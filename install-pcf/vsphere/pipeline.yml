@@ -69,7 +69,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
+      params: {globs: []}
       passed: [deploy-opsman]
       trigger: true
 
@@ -145,7 +145,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
+      params: {globs: []}
       passed: [configure-ops-director]
       trigger: true
 
@@ -164,7 +164,7 @@ jobs:
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
     - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
+      params: {globs: []}
       passed: [deploy-director]
       trigger: true
 
@@ -192,7 +192,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
+      params: {globs: []}
       passed: [upload-ert]
       trigger: true
 
