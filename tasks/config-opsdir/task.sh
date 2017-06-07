@@ -14,9 +14,9 @@ IAAS_CONFIGURATION=$(cat <<-EOF
   "disk_type": "$VCENTER_DISK_TYPE",
   "ephemeral_datastores_string": "$EPHEMERAL_STORAGE_NAMES",
   "persistent_datastores_string": "$PERSISTENT_STORAGE_NAMES",
-  "bosh_vm_folder": "pcf_vms",
-  "bosh_template_folder": "pcf_templates",
-  "bosh_disk_path": "pcf_disk",
+  "bosh_vm_folder": "$BOSH_VM_FOLDER", 
+  "bosh_template_folder": "$BOSH_TEMPLATE_FOLDER",
+  "bosh_disk_path": "$BOSH_DISK_PATH",
   "ssl_verification_enabled": false
 }
 EOF
