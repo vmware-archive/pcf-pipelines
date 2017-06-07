@@ -148,22 +148,15 @@ in the following params template:
 					resources := availableResources(&job.Plan)
 
 					for i, task := range tasks {
-						var inputs []atc.TaskInputConfig
 						if !strings.HasPrefix(task.TaskConfigPath, "pcf-pipelines") {
 							continue
 						}
 
-						var taskConfig atc.TaskConfig
-						bs, err := ioutil.ReadFile(filepath.Join(root, task.TaskConfigPath))
-						Expect(err).NotTo(HaveOccurred())
-
-						err = yaml.Unmarshal(bs, &taskConfig)
-						Expect(err).NotTo(HaveOccurred())
-
-						inputs = taskConfig.Inputs
-
+						var inputs []atc.TaskInputConfig
 						if task.TaskConfig != nil {
 							inputs = task.TaskConfig.Inputs
+						} else {
+							inputs = taskInputConfigs(filepath.Join(root, task.TaskConfigPath))
 						}
 
 						for k := range task.InputMapping {
@@ -290,4 +283,22 @@ func assertUnorderedEqual(left, right []string, failMessage string) {
 			Expect(right).NotTo(ContainElement(r), failMessage)
 		}
 	}
+}
+
+var taskConfigs = map[string]*atc.TaskConfig{}
+
+func taskInputConfigs(path string) []atc.TaskInputConfig {
+	taskConfig, ok := taskConfigs[path]
+
+	if !ok {
+		bs, err := ioutil.ReadFile(path)
+		Expect(err).NotTo(HaveOccurred())
+
+		err = yaml.Unmarshal(bs, &taskConfig)
+		Expect(err).NotTo(HaveOccurred())
+
+		taskConfigs[path] = taskConfig
+	}
+
+	return taskConfig.Inputs
 }
