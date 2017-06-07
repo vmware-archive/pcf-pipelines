@@ -85,10 +85,6 @@ jobs:
     - get: pcf-pipelines
       trigger: true
       passed: [install-opsmgr]
-    #- get: pivnet-opsman-product
-    #  params: {globs: ["*.ova"]}
-    #  passed: [install-opsmgr]
-    #  #trigger: true
 
   - task: config-opsdir
     file: pcf-pipelines/tasks/config-opsdir/task.yml
@@ -155,10 +151,6 @@ jobs:
     - get: pcf-pipelines
       passed: [configure-ops-director]
       trigger: true
-    #- get: pivnet-opsman-product
-    #  params: {globs: ["*.ova"]}
-    #  passed: [configure-ops-director]
-    #  trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
@@ -176,10 +168,6 @@ jobs:
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
-    #- get: pivnet-opsman-product
-    #  params: {globs: ["*.ova"]}
-    #  passed: [opsman-apply-changes]
-    #  trigger: true
 
   - task: upload-er-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
@@ -199,10 +187,6 @@ jobs:
     - get: pcf-pipelines
       passed: [upload-elastic-runtime-tile]
       trigger: true
-   # - get: pivnet-opsman-product
-   #   params: {globs: ["*.ova"]}
-   #   passed: [upload-elastic-runtime-tile]
-   #   trigger: true
 
   - task: config-er-tile
     file: pcf-pipelines/tasks/config-ert/task.yml
@@ -341,10 +325,6 @@ jobs:
     - get: pcf-pipelines
       passed: [product-apply-changes]
       trigger: true
-    #- get: pivnet-opsman-product
-    #  params: {globs: ["*.ova"]}
-    #  passed: [product-apply-changes]
-    #  trigger: true
 
   - task: disable-ert-errands
     file: pcf-pipelines/tasks/disable-ert-errands/task.yml
@@ -359,11 +339,6 @@ jobs:
     - get: pcf-pipelines
       passed: [disable-errands]
       trigger: true
-
-    #- get: pivnet-opsman-product
-    #  params: {globs: ["*.ova"]}
-    #  passed: [disable-errands]
-    #  trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
