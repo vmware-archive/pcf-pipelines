@@ -82,10 +82,8 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
-      passed: [install-opsmgr]
       trigger: true
+      passed: [install-opsmgr]
 
   - task: config-opsdir
     file: pcf-pipelines/tasks/config-opsdir/task.yml
@@ -150,8 +148,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [configure-ops-director]
       trigger: true
 
@@ -166,13 +162,11 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [opsman-apply-changes]
+      trigger: true
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
-      passed: [opsman-apply-changes]
-      trigger: true
 
   - task: upload-er-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
@@ -189,8 +183,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [upload-elastic-runtime-tile]
       trigger: true
 
@@ -309,8 +301,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [config-elastic-runtime-tile]
       trigger: true
 
@@ -325,8 +315,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [product-apply-changes]
       trigger: true
 
@@ -341,8 +329,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
-      params: {globs: ["*.ova"]}
       passed: [disable-errands]
       trigger: true
 
