@@ -94,6 +94,7 @@ dynamic_services_nw_gateway:          # Dynamic Services network Gateway
 dynamic_services_nw_azs:              # Comma seperated list of AZ's to be associated with this network
 
 ert_singleton_job_az:         # AZ to use for deployment of ERT Singleton jobs
+ert_errands_to_disable:       # Comma-separated list of errand names to disable before deploy
 
 loggregator_endpoint_port:    # Loggegrator Port. Default is 443
 company_name:                 # Company Name for Apps Manager

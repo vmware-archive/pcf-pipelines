@@ -293,6 +293,15 @@ jobs:
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
 
+  - task: disable-errands
+    file: pcf-pipelines/tasks/disable-errands/task.yml
+    params:
+      PRODUCT_NAME: cf
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      ERRANDS_TO_DISABLE: {{ert_errands_to_disable}}
+
   - task: deploy
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
