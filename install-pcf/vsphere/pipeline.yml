@@ -170,7 +170,6 @@ jobs:
 
   - task: upload-er-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
-    attempts: 3
     params:
       STEMCELL_GLOB: "*vsphere*"
       OPS_MGR_HOST: {{opsman_uri}}
@@ -307,7 +306,6 @@ jobs:
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
-    attempts: 3
     params:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
