@@ -9,8 +9,7 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@github.com:bhudlemeyer/pcf-pipelines.git
-    #uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
     private_key: {{git_private_key}}
 
@@ -34,7 +33,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime
-    product_version: ^1\.11\..*$
+    product_version: ^1\.10\..*$
     sort_by: semver
 
 jobs:
