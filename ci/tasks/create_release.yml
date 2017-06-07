@@ -57,6 +57,7 @@ run:
     release:
       version: "${version}"
       release_date: "${release_date}"
+      release_notes_url: "https://github.com/pivotal-cf/pcf-pipelines/releases/${version}"
       description: |
         Concourse Pipeline Templates and Scripts for PCF Platform Ops Automation
       availability: $AVAILABILITY
