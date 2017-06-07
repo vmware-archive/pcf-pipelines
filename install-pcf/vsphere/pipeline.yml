@@ -29,7 +29,7 @@ resources:
 
 - name: elastic-runtime
   type: pivnet
-  #check_every: 4h
+  check_every: 4h
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime
@@ -304,11 +304,6 @@ jobs:
     - get: pcf-pipelines
       passed: [config-elastic-runtime-tile]
       trigger: true
-
-    #- get: pivnet-opsman-product
-    #  params: {globs: ["*.ova"]}
-    #  passed: [config-elastic-runtime-tile]
-    #  trigger: true
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
