@@ -54,13 +54,6 @@ resources:
     branch: version
     file: version
 
-- name: cliaas
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: cliaas
-    access_token: {{github_token}}
-
 - name: slack
   type: slack-notification
   source:
@@ -174,9 +167,6 @@ jobs:
     - get: pivnet-rc
       trigger: true
       passed: [test-rc]
-    - get: cliaas
-      params:
-        globs: [cliaas-linux]
 
   - task: unpack-rc
     file: pcf-pipelines/tasks/unpack-tarball/task.yml
