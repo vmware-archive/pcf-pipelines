@@ -94,6 +94,9 @@ jobs:
       VCENTER_DISK_TYPE: {{vm_disk_type}}
       EPHEMERAL_STORAGE_NAMES: {{ephemeral_storage_names}}
       PERSISTENT_STORAGE_NAMES: {{persistent_storage_names}}
+      BOSH_VM_FOLDER:  {{bosh_vm_folder}}
+      BOSH_TEMPLATE_FOLDER: {{bosh_template_folder}}
+      BOSH_DISK_PATH: {{bosh_disk_path}}
       ICMP_CHECKS_ENABLED: {{icmp_checks_enabled}}
       INFRA_NETWORK_NAME: {{infra_network_name}}
       INFRA_VCENTER_NETWORK: {{infra_vsphere_network}}
