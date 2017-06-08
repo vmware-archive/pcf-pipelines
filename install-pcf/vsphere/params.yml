@@ -37,9 +37,9 @@ om_resource_pool:
 ephemeral_storage_names:  # Ephemeral Storage names in vCenter for use by PCF
 persistent_storage_names: # Persistent Storage names in vCenter for use by PCF
 
-bosh_vm_folder: "pcf_vms"          # vSphere datacenter folder (such as pcf_vms) where VMs will be placed
-bosh_template_folder: "pcf_templates"    # vSphere datacenter folder (such as pcf_templates) where templates will be placed
-bosh_disk_path: "pcf_disk"          # vSphere datastore folder (such as pcf_disk) where attached disk images will be created
+bosh_vm_folder: "pcf_vms"                 # vSphere datacenter folder (such as pcf_vms) where VMs will be placed
+bosh_template_folder: "pcf_templates"     # vSphere datacenter folder (such as pcf_templates) where templates will be placed
+bosh_disk_path: "pcf_disk"                # vSphere datastore folder (such as pcf_disk) where attached disk images will be created
 
 trusted_certificates:         # Trusted certificates to be deployed along with all VM's provisioned by BOSH
 generate_vm_passwords: true   # Allow BOSH to generate random passwords for each job.
