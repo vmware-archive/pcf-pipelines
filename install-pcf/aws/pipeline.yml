@@ -49,6 +49,8 @@ jobs:
   - task: create-terraform-state
     params:
       S3_BUCKET_TERRAFORM: {{S3_OUTPUT_BUCKET}}
+      S3_ENDPOINT: {{S3_ENDPOINT}}
+      S3_REGION: {{TF_VAR_aws_region}}
       AWS_ACCESS_KEY_ID: {{TF_VAR_aws_access_key}}
       AWS_SECRET_ACCESS_KEY: {{TF_VAR_aws_secret_key}}
     file: pcf-pipelines/tasks/create-initial-terraform-state/task.yml
