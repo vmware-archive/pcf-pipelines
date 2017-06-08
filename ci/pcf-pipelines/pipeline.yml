@@ -199,11 +199,6 @@ jobs:
         PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
         <<: *atc_creds
 
-    - task: trigger-buildpacks-pipelines
-      file: pcf-pipelines/ci/tasks/trigger_buildpacks_pipelines.yml
-      params:
-        <<: *atc_creds
-
   - do:
     - task: create-upgrade-opsman-aws-config
       file: pcf-pipelines/ci/tasks/create_upgrade_opsman_aws_config.yml
@@ -285,7 +280,6 @@ jobs:
         PIPELINE_NAME: lre3-gcp-opsman-upgrade
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
         <<: *atc_creds
-
 
 - name: publish-release
   serial_groups: [version]
