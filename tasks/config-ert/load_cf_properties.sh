@@ -1,16 +1,5 @@
 #!/bin/bash -e
 
-echo "checking for 1.11 compatibility..."
-function version_gt() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
-STAGED_ERT_VERSION=$(om-linux   --target "https://${OPSMAN_URI}"   --skip-ssl-validation   --username "${OPSMAN_USERNAME}"   --password "${OPSMAN_PASSWORD}" staged-products  --ignore-warnings | grep "| cf" | awk '{ print $4}')
-TOGGLE_VERSION=1.11
-DIEGO_NETWORK_SETTINGS=""
-if version_gt $TOGGLE_VERSION $STAGED_ERT_VERSION; then
-     echo "$TOGGLE_VERSION is greater than $STAGED_ERT_VERSION ! loading a config compatible with <= 1.10 ert"
-     DIEGO_NETWORK_SETTINGS='".diego_cell.garden_network_pool": {"value": "$GARDEN_NETWORK_POOL_CIDR"},'
-fi
-echo "finished 1.11 compatibility check"
-
 if [[ -n "$TCP_ROUTING" ]] && [[ "$TCP_ROUTING" == "enable" ]]; then
 CF_TCP_ROUTING_PROPERTIES=$(cat <<-EOF
   ".properties.tcp_routing": {
@@ -85,7 +74,9 @@ CF_PROPERTIES=$(cat <<-EOF
   ".mysql_monitor.recipient_email": {
     "value": "$MYSQL_MONITOR_EMAIL"
   },
-  $DIEGO_NETWORK_SETTINGS
+  ".diego_cell.garden_network_pool": {
+    "value": "$GARDEN_NETWORK_POOL_CIDR"
+  },
   ".diego_cell.garden_network_mtu": {
     "value": $GARDEN_NETWORK_MTU
   },
