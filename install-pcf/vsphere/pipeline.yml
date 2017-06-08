@@ -190,6 +190,7 @@ jobs:
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
+      passed: [upload-ert]
 
   - task: stage
     file: pcf-pipelines/tasks/stage-product/task.yml
