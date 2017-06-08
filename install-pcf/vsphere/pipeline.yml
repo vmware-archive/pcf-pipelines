@@ -64,7 +64,7 @@ jobs:
       OM_DISK_TYPE: {{om_disk_type}}
       OM_VM_POWER_STATE: {{om_vm_power_state}}
 
-- name: configure-ops-director
+- name: configure-director
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -146,7 +146,7 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
       params: {globs: []}
-      passed: [configure-ops-director]
+      passed: [configure-director]
       trigger: true
 
   - task: apply-changes
