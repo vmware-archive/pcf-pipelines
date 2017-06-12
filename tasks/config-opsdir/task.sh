@@ -1,11 +1,6 @@
 #!/bin/bash -e
 
-function fn_get_azs {
-     local azs_csv=$1
-     echo $azs_csv | jq --raw-input 'split(",")'
-}
-
-IAAS_CONFIGURATION=$(cat <<-EOF
+iaas_configuration=$(cat <<-EOF
 {
   "vcenter_host": "$VCENTER_HOST",
   "vcenter_username": "$VCENTER_USR",
@@ -14,7 +9,7 @@ IAAS_CONFIGURATION=$(cat <<-EOF
   "disk_type": "$VCENTER_DISK_TYPE",
   "ephemeral_datastores_string": "$EPHEMERAL_STORAGE_NAMES",
   "persistent_datastores_string": "$PERSISTENT_STORAGE_NAMES",
-  "bosh_vm_folder": "$BOSH_VM_FOLDER", 
+  "bosh_vm_folder": "$BOSH_VM_FOLDER",
   "bosh_template_folder": "$BOSH_TEMPLATE_FOLDER",
   "bosh_disk_path": "$BOSH_DISK_PATH",
   "ssl_verification_enabled": false
@@ -22,7 +17,7 @@ IAAS_CONFIGURATION=$(cat <<-EOF
 EOF
 )
 
-AZ_CONFIGURATION=$(cat <<-EOF
+az_configuration=$(cat <<-EOF
 {
   "availability_zones": [
     {
@@ -45,77 +40,104 @@ AZ_CONFIGURATION=$(cat <<-EOF
 EOF
 )
 
-INFRA_AZS=$(fn_get_azs "$INFRA_NW_AZS")
-DEPLOYMENT_AZS=$(fn_get_azs "$DEPLOYMENT_NW_AZS")
-SERVICES_AZS=$(fn_get_azs "$SERVICES_NW_AZS")
-DYNAMIC_SERVICES_AZS=$(fn_get_azs "$DYNAMIC_SERVICES_NW_AZS")
-
-NETWORK_CONFIGURATION=$(cat <<-EOF
-{
-  "icmp_checks_enabled": $ICMP_CHECKS_ENABLED,
-  "networks": [
+network_configuration=$(
+  echo '{}' |
+  jq \
+    --argjson icmp_checks_enabled $ICMP_CHECKS_ENABLED \
+    --arg infra_network_name "$INFRA_NETWORK_NAME" \
+    --arg infra_vcenter_network "$INFRA_VCENTER_NETWORK" \
+    --arg infra_network_cidr "$INFRA_NW_CIDR" \
+    --arg infra_reserved_ip_ranges "$INFRA_EXCLUDED_RANGE" \
+    --arg infra_dns "$INFRA_NW_DNS" \
+    --arg infra_gateway "$INFRA_NW_GATEWAY" \
+    --arg infra_availability_zones "$INFRA_NW_AZS" \
+    --arg deployment_network_name "$DEPLOYMENT_NETWORK_NAME" \
+    --arg deployment_vcenter_network "$DEPLOYMENT_VCENTER_NETWORK" \
+    --arg deployment_network_cidr "$DEPLOYMENT_NW_CIDR" \
+    --arg deployment_reserved_ip_ranges "$DEPLOYMENT_EXCLUDED_RANGE" \
+    --arg deployment_dns "$DEPLOYMENT_NW_DNS" \
+    --arg deployment_gateway "$DEPLOYMENT_NW_GATEWAY" \
+    --arg deployment_availability_zones "$DEPLOYMENT_NW_AZS" \
+    --argjson services_network_is_service_network $IS_SERVICE_NETWORK \
+    --arg services_network_name "$SERVICES_NETWORK_NAME" \
+    --arg services_vcenter_network "$SERVICES_VCENTER_NETWORK" \
+    --arg services_network_cidr "$SERVICES_NW_CIDR" \
+    --arg services_reserved_ip_ranges "$SERVICES_EXCLUDED_RANGE" \
+    --arg services_dns "$SERVICES_NW_DNS" \
+    --arg services_gateway "$SERVICES_NW_GATEWAY" \
+    --arg services_availability_zones "$SERVICES_NW_AZS" \
+    --arg dynamic_services_network_name "$DYNAMIC_SERVICES_NETWORK_NAME" \
+    --arg dynamic_services_vcenter_network "$DYNAMIC_SERVICES_VCENTER_NETWORK" \
+    --arg dynamic_services_network_cidr "$DYNAMIC_SERVICES_NW_CIDR" \
+    --arg dynamic_services_reserved_ip_ranges "$DYNAMIC_SERVICES_EXCLUDED_RANGE" \
+    --arg dynamic_services_dns "$DYNAMIC_SERVICES_NW_DNS" \
+    --arg dynamic_services_gateway "$DYNAMIC_SERVICES_NW_GATEWAY" \
+    --arg dynamic_services_availability_zones "$DYNAMIC_SERVICES_NW_AZS" \
+    '. +
     {
-      "name": "$INFRA_NETWORK_NAME",
-      "service_network": false,
-      "subnets": [
+      "icmp_checks_enabled": $icmp_checks_enabled,
+      "networks": [
         {
-          "iaas_identifier": "$INFRA_VCENTER_NETWORK",
-          "cidr": "$INFRA_NW_CIDR",
-          "reserved_ip_ranges": "$INFRA_EXCLUDED_RANGE",
-          "dns": "$INFRA_NW_DNS",
-          "gateway": "$INFRA_NW_GATEWAY",
-          "availability_zone_names": $INFRA_AZS
+          "name": $infra_network_name,
+          "service_network": false,
+          "subnets": [
+            {
+              "iaas_identifier": $infra_vcenter_network,
+              "cidr": $infra_network_cidr,
+              "reserved_ip_ranges": $infra_reserved_ip_ranges,
+              "dns": $infra_dns,
+              "gateway": $infra_gateway,
+              "availability_zones": ($infra_availability_zones | split(","))
+            }
+          ]
+        },
+        {
+          "name": $deployment_network_name,
+          "service_network": false,
+          "subnets": [
+            {
+              "iaas_identifier": $deployment_vcenter_network,
+              "cidr": $deployment_network_cidr,
+              "reserved_ip_ranges": $deployment_reserved_ip_ranges,
+              "dns": $deployment_dns,
+              "gateway": $deployment_gateway,
+              "availability_zones": ($deployment_availability_zones | split(","))
+            }
+          ]
+        },
+        {
+          "name": $services_network_name,
+          "service_network": $services_network_is_service_network,
+          "subnets": [
+            {
+              "iaas_identifier": $services_vcenter_network,
+              "cidr": $services_network_cidr,
+              "reserved_ip_ranges": $services_reserved_ip_ranges,
+              "dns": $services_dns,
+              "gateway": $services_gateway,
+              "availability_zones": ($services_availability_zones | split(","))
+            }
+          ]
+        },
+        {
+          "name": $dynamic_services_network_name,
+          "service_network": true,
+          "subnets": [
+            {
+              "iaas_identifier": $dynamic_services_vcenter_network,
+              "cidr": $dynamic_services_network_cidr,
+              "reserved_ip_ranges": $dynamic_services_reserved_ip_ranges,
+              "dns": $dynamic_services_dns,
+              "gateway": $dynamic_services_gateway,
+              "availability_zones": ($dynamic_services_availability_zones | split(","))
+            }
+          ]
         }
       ]
-    },
-    {
-      "name": "$DEPLOYMENT_NETWORK_NAME",
-      "service_network": false,
-      "subnets": [
-        {
-          "iaas_identifier": "$DEPLOYMENT_VCENTER_NETWORK",
-          "cidr": "$DEPLOYMENT_NW_CIDR",
-          "reserved_ip_ranges": "$DEPLOYMENT_EXCLUDED_RANGE",
-          "dns": "$DEPLOYMENT_NW_DNS",
-          "gateway": "$DEPLOYMENT_NW_GATEWAY",
-          "availability_zone_names": $DEPLOYMENT_AZS
-        }
-      ]
-    },
-    {
-      "name": "$SERVICES_NETWORK_NAME",
-      "service_network": $IS_SERVICE_NETWORK,
-      "subnets": [
-        {
-          "iaas_identifier": "$SERVICES_VCENTER_NETWORK",
-          "cidr": "$SERVICES_NW_CIDR",
-          "reserved_ip_ranges": "$SERVICES_EXCLUDED_RANGE",
-          "dns": "$SERVICES_NW_DNS",
-          "gateway": "$SERVICES_NW_GATEWAY",
-          "availability_zone_names": $SERVICES_AZS
-        }
-      ]
-    },
-    {
-      "name": "$DYNAMIC_SERVICES_NETWORK_NAME",
-      "service_network": true,
-      "subnets": [
-        {
-          "iaas_identifier": "$DYNAMIC_SERVICES_VCENTER_NETWORK",
-          "cidr": "$DYNAMIC_SERVICES_NW_CIDR",
-          "reserved_ip_ranges": "$DYNAMIC_SERVICES_EXCLUDED_RANGE",
-          "dns": "$DYNAMIC_SERVICES_NW_DNS",
-          "gateway": "$DYNAMIC_SERVICES_NW_GATEWAY",
-          "availability_zone_names": $DYNAMIC_SERVICES_AZS
-        }
-      ]
-    }
-  ]
-}
-EOF
+    }'
 )
 
-DIRECTOR_CONFIG=$(cat <<-EOF
+director_config=$(cat <<-EOF
 {
   "ntp_servers_string": "$NTP_SERVERS",
   "resurrector_enabled": $ENABLE_VM_RESURRECTOR,
@@ -127,30 +149,27 @@ DIRECTOR_CONFIG=$(cat <<-EOF
 EOF
 )
 
-SECURITY_CONFIG=$(cat <<-EOF
-{
-  "security_configuration": {
-    "generate_vm_passwords": $GENERATE_VM_PASSWORDS,
-    "trusted_certificates": "$TRUSTED_CERTIFICATES"
-  }
-}
-EOF
+security_configuration=$(
+  echo '{}' |
+  jq \
+    --arg trusted_certificates "$TRUSTED_CERTIFICATES" \
+    '. +
+    {
+      "trusted_certificates": $trusted_certificates,
+      "vm_password_type": "generate"
+    }'
 )
 
-INFRA_FIRST_AZ=$(echo $INFRA_AZS | jq --raw-output '.[0]')
-
-NETWORK_ASSIGNMENT=$(cat <<-EOF
-{
-  "network_and_az": {
-     "network": {
-       "name": "$INFRA_NETWORK_NAME"
-     },
-     "singleton_availability_zone": {
-       "name": "$INFRA_FIRST_AZ"
-     }
-  }
-}
-EOF
+network_assignment=$(
+echo '{}' |
+jq \
+  --arg infra_availability_zones "$INFRA_NW_AZS" \
+  --arg network "$INFRA_NETWORK_NAME" \
+  '. +
+  {
+    "singleton_availability_zone": ($infra_availability_zones | split(",") | .[0]),
+    "network": $network
+  }'
 )
 
 echo "Configuring IaaS and Director..."
@@ -160,25 +179,19 @@ om-linux \
   --username $OPS_MGR_USR \
   --password $OPS_MGR_PWD \
   configure-bosh \
-  --iaas-configuration "$IAAS_CONFIGURATION" \
-  --director-configuration "$DIRECTOR_CONFIG"
+  --iaas-configuration "$iaas_configuration" \
+  --director-configuration "$director_config"
 
-echo "Configuring availability zones..."
 om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
   curl -p "/api/v0/staged/director/availability_zones" \
-  -x PUT -d "$AZ_CONFIGURATION"
+  -x PUT -d "$az_configuration"
 
-echo "Configuring networks..."
-om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-  curl -p "/api/v0/staged/director/networks" \
-  -x PUT -d "$NETWORK_CONFIGURATION"
-
-echo "Configuring network assignment..."
-om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-  curl -p "/api/v0/staged/director/network_and_az" \
-  -x PUT -d "$NETWORK_ASSIGNMENT"
-
-echo "Configuring security..."
-om-linux -t https://$OPS_MGR_HOST -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-  curl -p "/api/v0/staged/director/properties" \
-  -x PUT -d "$SECURITY_CONFIG"
+om-linux \
+  --target https://$OPS_MGR_HOST \
+  --skip-ssl-validation \
+  --username $OPS_MGR_USR \
+  --password $OPS_MGR_PWD \
+  configure-bosh \
+  --networks-configuration "$network_configuration" \
+  --network-assignment "$network_assignment" \
+  --security-configuration "$security_configuration"

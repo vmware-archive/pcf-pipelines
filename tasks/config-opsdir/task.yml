@@ -64,7 +64,6 @@ params:
   ENABLE_VM_RESURRECTOR:
   MAX_THREADS:
   TRUSTED_CERTIFICATES:
-  GENERATE_VM_PASSWORDS:
 
 inputs:
   - name: pcf-pipelines

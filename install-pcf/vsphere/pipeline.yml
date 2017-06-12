@@ -141,7 +141,6 @@ jobs:
       ENABLE_VM_RESURRECTOR: {{enable_vm_resurrector}}
       MAX_THREADS: {{max_threads}}
       TRUSTED_CERTIFICATES: {{trusted_certificates}}
-      GENERATE_VM_PASSWORDS: {{generate_vm_passwords}}
 
 - name: deploy-director
   plan:
