@@ -42,7 +42,6 @@ bosh_template_folder: "pcf_templates"     # vSphere datacenter folder (such as p
 bosh_disk_path: "pcf_disk"                # vSphere datastore folder (such as pcf_disk) where attached disk images will be created
 
 trusted_certificates:         # Trusted certificates to be deployed along with all VM's provisioned by BOSH
-generate_vm_passwords: true   # Allow BOSH to generate random passwords for each job.
 vm_disk_type: "thick"         # Disk type for BOSH provisioned VM. (thick|thin)
 
 # AZ configuration for Ops Director
