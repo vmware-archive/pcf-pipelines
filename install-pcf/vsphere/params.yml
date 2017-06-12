@@ -71,6 +71,11 @@ infra_excluded_range:         # Infrastructure network exclusion range
 infra_nw_dns:                 # Infrastructure network DNS
 infra_nw_gateway:             # Infrastructure network Gateway
 infra_nw_azs:                 # Comma seperated list of AZ's to be associated with this network
+nsx_networking_enabled: false # (true|false) to use nsx networking feature 
+nsx_address:                  # address of nsx
+nsx_username:                 # username for nsx access
+nsx_password:                 # password for nsx access
+nsx_ca_certificate:           # cert for nsx
 
 deployment_network_name: "DEPLOYMENT"
 deployment_vsphere_network:   # vCenter Deployment network name
