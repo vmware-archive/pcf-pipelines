@@ -1,0 +1,65 @@
+# This doesn't work quite yet because it assumes the placeholders for AWS,
+# which differ across pipelines. It also assumes the output location of the
+# terraform.tfstate file, which isn't consistent.
+---
+- op: remove
+  path: /resources/name=terraform-state/source/versioned_file
+
+- op: add
+  path: /resources/name=terraform-state/source/regexp
+  value: "terraform/terraform-(.*).tfstate"
+
+- op: add
+  path: /resources/-
+  value:
+    name: tfstate-version
+    type: semver
+    source:
+     driver: s3
+     bucket: {{s3_bucket_terraform}}
+     key: terraform/version
+     access_key_id: {{s3_access_key_id}}
+     secret_access_key: {{s3_secret_access_key}}
+     endpoint: {{s3_endpoint}}
+     initial_version: 0.0.0
+     region_name: {{s3_region}}
+
+- op: replace
+  path: /jobs/get=terraform-state
+  value:
+    do:
+    - get: terraform-state
+    - get: tfstate-version
+      params:
+        bump: major
+
+- op: replace
+  path: /jobs/put=terraform-state
+  value:
+    do:
+    - task: create-versioned-terraform-state-file
+      config:
+        platform: linux
+        image_resource:
+          type: docker
+          source:
+            repository: czero/cflinuxfs2
+          inputs:
+          - name: terraform-state
+          - name: tfstate-version
+          outputs:
+          - name: versioned-terraform-state-file
+          run:
+            path: bash
+            args:
+            - -c
+            - |
+              version=$(cat tfstate-version/version)
+              cp terraform-state/terraform.tfstate versioned-terraform-state-file/terraform-$version.tfstate
+
+    - put: terraform-state
+      params:
+        file: versioned-terraform-state-file/*.tfstate
+    - put: tfstate-version
+      params:
+        file: tfstate-version/version
