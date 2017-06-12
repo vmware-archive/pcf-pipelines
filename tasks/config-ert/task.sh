@@ -98,10 +98,7 @@ cf_resources=$(
 EOF
 
   echo "$input" | jq \
-    'map_values(. = {
-      "instance_type": {"id":"automatic"},
-      "instances": .
-    })'
+    'map_values(. = .)'
 )
 
 om-linux \
