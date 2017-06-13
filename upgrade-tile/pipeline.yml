@@ -35,7 +35,7 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: {{product_slug}}
-    product_version: {{product_version}}
+    product_version: {{product_version_regex}}
     sort_by: semver
 
 - name: schedule
