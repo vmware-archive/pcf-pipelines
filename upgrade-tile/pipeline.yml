@@ -74,13 +74,17 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
 
-  - task: upload-tile
-    file: pcf-pipelines/tasks/upload-product/task.yml
+  - task: upload-tile-and-stemcell
+    file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-      TILE_UPLOAD_TIMEOUT: {{tile_upload_timeout}}
+      IAAS: {{iaas_type}}
+      OPS_MGR_HOST: {{opsman_uri}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      PIVNET_API_TOKEN: {{pivnet_token}}
+      NO_PROXY: ""
+      OM_IP: ""
+
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
@@ -88,14 +92,7 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_URI: {{opsman_uri}}
       PRODUCT_NAME: {{product_name}}
-  - task: upload-stemcell
-    file: pcf-pipelines/tasks/upload-stemcell/task.yml
-    params:
-      PRODUCT: {{metadata_basename}}
-      IAAS_TYPE: {{iaas_type}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
