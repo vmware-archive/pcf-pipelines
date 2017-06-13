@@ -138,7 +138,7 @@ jobs:
         trigger: true
         passed: [publish-rc]
       - task: unpack-rc
-        file: src/tasks/unpack-tarball/task.yml
+        file: src/ci/tasks/unpack_tarball.yml
         input_mapping: { tarball: pivnet-rc }
         output_mapping: { unpacked_tarball: pcf-pipelines-release }
 
@@ -178,7 +178,7 @@ jobs:
       passed: [test-rc]
 
   - task: unpack-rc
-    file: pcf-pipelines/tasks/unpack-tarball/task.yml
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
     output_mapping: { unpacked_tarball: release }
 

@@ -87,7 +87,7 @@ jobs:
         OPSMAN_URI: {{opsman_uri}}
 
   - task: create-cliaas-config
-    file: pcf-pipelines/tasks/create-cliaas-config-aws/task.yml
+    file: pcf-pipelines/upgrade-ops-manager/aws/tasks/create-cliaas-config/task.yml
     params:
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}

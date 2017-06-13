@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+
+inputs:
+- name: pcf-pipelines 
+
+params:
+  pcf_ert_domain:
+  pcf_opsman_admin_username:
+  pcf_opsman_admin_password:
+
+run:
+  path: pcf-pipelines/install-pcf/gcp/tasks/config-opsman-auth/task.sh

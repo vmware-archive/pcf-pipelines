@@ -88,7 +88,7 @@ jobs:
         OPSMAN_URI: {{opsman_uri}}
 
   - task: create-cliaas-config
-    file: pcf-pipelines/tasks/create-cliaas-config-azure/task.yml
+    file: pcf-pipelines/upgrade-ops-manager/azure/tasks/create-cliaas-config/task.yml
     params:
         AZURE_REGION: {{azure_region}}
         AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}} 

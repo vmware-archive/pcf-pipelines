@@ -88,7 +88,7 @@ jobs:
         OPSMAN_URI: {{opsman_uri}}
 
   - task: create-cliaas-config
-    file: pcf-pipelines/tasks/create-cliaas-config-gcp/task.yml
+    file: pcf-pipelines/upgrade-ops-manager/gcp/tasks/create-cliaas-config/task.yml
     params:
       PIVNET_IMAGE_REGION: {{pivnet_image_region}}
       OPSMAN_PROJECT: {{opsman_gcp_project}}

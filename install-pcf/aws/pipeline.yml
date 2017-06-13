@@ -88,7 +88,7 @@ jobs:
           echo $ami > ami/ami
 
   - task: create-infrastructure
-    file: pcf-pipelines/tasks/install-pcf-aws/prepare-aws/task.yml
+    file: pcf-pipelines/install-pcf/aws/tasks/prepare-aws/task.yml
     params:
       DB_MASTER_USERNAME: {{db_master_username}}
       DB_MASTER_PASSWORD: {{db_master_password}}
@@ -135,13 +135,13 @@ jobs:
       trigger: true
       passed: [create-infrastructure]
   - task: configure-opsman-auth
-    file: pcf-pipelines/tasks/install-pcf-aws/config-opsman/task.yml
+    file: pcf-pipelines/install-pcf/aws/tasks/config-opsman/task.yml
     params:
       ERT_DOMAIN: {{ERT_DOMAIN}}
       OPSMAN_USER: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
   - task: configure-director
-    file: pcf-pipelines/tasks/install-pcf-aws/config-director/task.yml
+    file: pcf-pipelines/install-pcf/aws/tasks/config-director/task.yml
     params:
       ERT_DOMAIN: {{ERT_DOMAIN}}
       OPSMAN_USER: {{OPSMAN_USER}}
@@ -168,7 +168,7 @@ jobs:
       trigger: true
       passed: [configure-director]
   - task: deploy-director
-    file: pcf-pipelines/tasks/install-pcf-aws/deploy-director/task.yml
+    file: pcf-pipelines/install-pcf/aws/tasks/deploy-director/task.yml
     params:
       pcf_ert_domain: {{ERT_DOMAIN}}
       pcf_opsman_admin: {{OPSMAN_USER}}
@@ -215,7 +215,7 @@ jobs:
       passed: [upload-ert]
 
   - task: prepare-rds
-    file: pcf-pipelines/tasks/install-pcf-aws/prepare-rds/task.yml
+    file: pcf-pipelines/install-pcf/aws/tasks/prepare-rds/task.yml
     params:
       PEM: {{PEM}}
       ERT_DOMAIN: {{ERT_DOMAIN}}
@@ -326,7 +326,7 @@ jobs:
     - get: pcf-pipelines
     - get: terraform-state
   - task: wipe
-    file: pcf-pipelines/tasks/install-pcf-aws/wipe-env/task.yml
+    file: pcf-pipelines/install-pcf/aws/tasks/wipe-env/task.yml
     params:
       OPSMAN_URI: {{OPSMAN_URI}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
