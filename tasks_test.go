@@ -59,7 +59,7 @@ var _ = Describe("Tasks", func() {
 
 		err = yaml.Unmarshal(configBytes, &task)
 		if err != nil {
-			log.Fatalf("failed to unmarshal task: %s", err)
+			log.Fatalf("failed to unmarshal task at %s: %s", taskPath, err)
 		}
 
 		if strings.HasPrefix(task.Run.Path, "pcf-pipelines") {
