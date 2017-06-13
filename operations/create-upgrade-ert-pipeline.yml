@@ -1,0 +1,23 @@
+- op: replace
+  path: /name={{resource_name}}/name
+  value: elastic-runtime
+
+- op: replace
+  path: /product_slug={{product_slug}}/product_slug
+  value: elastic-runtime
+
+- op: replace
+  path: /resource={{resource_name}}/resource
+  value: elastic-runtime
+
+- op: replace
+  path: /get={{resource_name}}/get
+  value: elastic-runtime
+
+- op: replace
+  path: /jobs/name=upgrade-tile/name
+  value: upgrade-ert
+
+- op: replace
+  path: /jobs/name=upgrade-ert/task=upload-tile-and-stemcell/task
+  value: upload-ert-and-stemcell
