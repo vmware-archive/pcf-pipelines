@@ -59,6 +59,14 @@ resources:
   source:
     url: {{slack_webhook_url}}
 
+- name: fly
+  type: github-release
+  check_every: 720h
+  source:
+    user: krishicks
+    repository: fly
+    access_token: {{github_token}}
+
 jobs:
 - name: bump-patch
   serial_groups: [version]
@@ -294,6 +302,7 @@ jobs:
     - get: yaml-patch
       params:
         globs: ["*linux*"]
+    - get: fly
 
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
