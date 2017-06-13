@@ -28,7 +28,12 @@ var _ = Describe("Tasks", func() {
 			return err
 		}
 
-		if filepath.Base(path) == "task.yml" {
+		fi, err := os.Lstat(path)
+		if err != nil {
+			return err
+		}
+
+		if !fi.IsDir() && fi.Mode().IsRegular() && strings.Contains(path, "tasks") && strings.HasSuffix(path, ".yml") {
 			relTaskPath, err := filepath.Rel(cwd, path)
 			if err != nil {
 				return err
