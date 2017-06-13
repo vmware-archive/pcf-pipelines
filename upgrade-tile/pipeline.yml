@@ -29,7 +29,7 @@ resources:
     branch: master
     private_key: {{git_private_key}}
 
-- name: {{resource_name}}
+- name: tile
   type: pivnet
   check_every: {{pivnet_poll_interval}}
   source:
@@ -52,7 +52,7 @@ jobs:
   plan:
   - get: schedule
     trigger: true
-  - get: {{resource_name}}
+  - get: tile
     params: { globs: [] }
 
 - name: upgrade-tile
@@ -60,7 +60,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-product
-      resource: {{resource_name}}
+      resource: tile
       passed: [regulator]
       trigger: true 
       params:
