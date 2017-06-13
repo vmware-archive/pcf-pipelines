@@ -151,7 +151,7 @@ Before start kicking off the pipeline, there are a few parameters need to be set
     ** Note ** : Since pipeline uses pre load AWS server certificate. Currently these parameters are not used.
 
     ```    
-     ERT_SSL_CERT: generate
+     ERT_SSL_CERT:
      ERT_SSL_KEY:
     ```
 
