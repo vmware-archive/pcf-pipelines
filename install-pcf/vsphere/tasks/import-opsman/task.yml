@@ -35,4 +35,4 @@ inputs:
   - name: pcf-pipelines
 
 run:
-  path: pcf-pipelines/tasks/import-opsman/task.sh
+  path: pcf-pipelines/install-pcf/vsphere/tasks/import-opsman/task.sh
