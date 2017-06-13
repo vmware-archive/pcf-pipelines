@@ -14,24 +14,32 @@ json_file="json_file/ert.json"
 
 cp ${json_file_template} ${json_file}
 
+source pcf-pipelines/functions/generate_cert.sh
+
+OPS_MGR_HOST="https://opsman.$pcf_ert_domain"
+OPS_MGR_USR="$pcf_opsman_admin"
+OPS_MGR_PWD="$pcf_opsman_admin_passwd"
+
 if [[ ${pcf_ert_ssl_cert} == "generate" ]]; then
-  echo "=============================================================================================="
-  echo "Generating Self Signed Certs for sys.${pcf_ert_domain} & cfapps.${pcf_ert_domain} ..."
-  echo "=============================================================================================="
-  pcf-pipelines/scripts/gen_ssl_certs.sh "sys.${pcf_ert_domain}" "cfapps.${pcf_ert_domain}"
-  export pcf_ert_ssl_cert=$(cat sys.${pcf_ert_domain}.crt)
-  export pcf_ert_ssl_key=$(cat sys.${pcf_ert_domain}.key)
+  domains=(
+    "sys.${pcf_ert_domain}"
+    "cfapps.${pcf_ert_domain}"
+  )
+
+  certificates=$(generate_cert "${domains[*]}")
+  pcf_ert_ssl_cert=`echo $certificates | jq --raw-output '.certificate'`
+  pcf_ert_ssl_key=`echo $certificates | jq --raw-output '.key'`
 fi
 
-system_domain=sys.${pcf_ert_domain}
-ops_mgr_host="https://opsman.$pcf_ert_domain"
-domains=$(cat <<-EOF
-  {"domains": ["*.${system_domain}", "*.login.${system_domain}", "*.uaa.${system_domain}"] }
-EOF
+saml_domains=(
+  "*.sys.${pcf_ert_domain}"
+  "*.login.sys.${pcf_ert_domain}"
+  "*.uaa.sys.${pcf_ert_domain}"
 )
-saml_cert_response=`om-linux -t $ops_mgr_host -u $pcf_opsman_admin -p $pcf_opsman_admin_passwd -k curl -p "/api/v0/certificates/generate" -x POST -d "$domains"`
-saml_cert_pem=$(echo $saml_cert_response | jq --raw-output '.certificate')
-saml_key_pem=$(echo $saml_cert_response | jq --raw-output '.key')
+
+saml_certificates=$(generate_cert "${saml_domains[*]}")
+saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
+saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
 sed -i \
   -e "s/{{pcf_az_1}}/${pcf_az_1}/g" \
