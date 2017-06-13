@@ -18,7 +18,7 @@ if [[ ${pcf_ert_ssl_cert} == "generate" ]]; then
   echo "=============================================================================================="
   echo "Generating Self Signed Certs for sys.${pcf_ert_domain} & cfapps.${pcf_ert_domain} ..."
   echo "=============================================================================================="
-  pcf-pipelines/tasks/scripts/gen_ssl_certs.sh "sys.${pcf_ert_domain}" "cfapps.${pcf_ert_domain}"
+  pcf-pipelines/scripts/gen_ssl_certs.sh "sys.${pcf_ert_domain}" "cfapps.${pcf_ert_domain}"
   export pcf_ert_ssl_cert=$(cat sys.${pcf_ert_domain}.crt)
   export pcf_ert_ssl_key=$(cat sys.${pcf_ert_domain}.key)
 fi
