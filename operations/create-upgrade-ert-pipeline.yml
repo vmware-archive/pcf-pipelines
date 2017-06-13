@@ -1,5 +1,5 @@
 - op: replace
-  path: /name={{resource_name}}/name
+  path: /name=tile/name
   value: elastic-runtime
 
 - op: replace
@@ -7,11 +7,11 @@
   value: elastic-runtime
 
 - op: replace
-  path: /resource={{resource_name}}/resource
+  path: /resource=tile/resource
   value: elastic-runtime
 
 - op: replace
-  path: /get={{resource_name}}/get
+  path: /get=tile/get
   value: elastic-runtime
 
 - op: replace
