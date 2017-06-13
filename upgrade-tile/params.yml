@@ -14,8 +14,6 @@
 
 # Resource
 # ------------------------------
-# The name of the resource to be displayed in the pipeline, e.g. 'rabbitmq'
-resource_name: CHANGEME
 # The token used to download the product file from Pivotal Network. Find this
 # on your Pivotal Network profile page:
 # https://network.pivotal.io/users/dashboard/edit-profile
