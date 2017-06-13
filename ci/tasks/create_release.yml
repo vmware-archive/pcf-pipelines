@@ -44,8 +44,6 @@ run:
       cat ci/yaml_license_header <(
         cat upgrade-tile/pipeline.yml | yaml_patch_linux -o operations/create-upgrade-ert-pipeline.yml
       ) > upgrade-ert/pipeline.yml
-
-      fly fmt -w -c upgrade-ert/pipeline.yml
     popd
 
     # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
@@ -75,6 +73,8 @@ run:
         -o <(echo "$hardcode_pivnet_version") \
         > $f.bk
       mv $f.bk $f
+
+      fly fmt --write --config $f
 
       # Remove git_private_key from params as it is no longer needed
       params_file=$(dirname $f)/params.yml
