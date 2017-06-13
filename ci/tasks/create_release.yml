@@ -10,6 +10,7 @@ inputs:
 - name: pcf-pipelines
 - name: version
 - name: yaml-patch
+- name: fly
 
 outputs:
 - name: pcf-pipelines-release-tarball

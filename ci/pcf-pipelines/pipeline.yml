@@ -101,6 +101,7 @@ jobs:
     - get: yaml-patch
       params:
         globs: ["*linux*"]
+    - get: fly
 
   - put: version
     params: {pre: rc}
