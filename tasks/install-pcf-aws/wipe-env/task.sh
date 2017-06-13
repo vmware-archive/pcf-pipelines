@@ -5,13 +5,18 @@ root=$(pwd)
 
 cd pcf-pipelines/tasks/install-pcf-aws/terraform
 
-echo "Deleting PCF installation..."
-om-linux \
-  --target "https://${OPSMAN_URI}" \
-  --skip-ssl-validation \
-  --username $OPSMAN_USERNAME \
-  --password $OPSMAN_PASSWORD \
-  delete-installation
+echo "Checking for existence of ops manager..."
+if [[ $(dig +nocmd ${OPSMAN_URI} +noall +answer | wc -l) -ne 0 ]]; then 
+  echo "Deleting PCF installation..."
+  om-linux \
+    --target "https://${OPSMAN_URI}" \
+    --skip-ssl-validation \
+    --username $OPSMAN_USERNAME \
+    --password $OPSMAN_PASSWORD \
+    delete-installation
+else
+  echo "No ops manager could be found."
+fi
 
 export AWS_ACCESS_KEY_ID=${TF_VAR_aws_access_key}
 export AWS_SECRET_ACCESS_KEY=${TF_VAR_aws_secret_key}
