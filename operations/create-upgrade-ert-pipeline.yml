@@ -21,3 +21,7 @@
 - op: replace
   path: /jobs/name=upgrade-ert/task=upload-tile-and-stemcell/task
   value: upload-ert-and-stemcell
+
+- op: replace
+  path: /jobs/name=upgrade-ert/task=stage-tile/params/PRODUCT_NAME
+  value: cf
