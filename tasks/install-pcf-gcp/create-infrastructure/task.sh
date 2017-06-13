@@ -59,7 +59,7 @@ terraform plan \
   -var "db_nfsvolumedb_password=${DB_NFSVOLUMEDB_PASSWORD}" \
   -out terraform.tfplan \
   -state terraform-state/terraform.tfstate \
-  pcf-pipelines/tasks/install-pcf-gcp/terraform/$gcp_pcf_terraform_template
+  pcf-pipelines/install-pcf/gcp/terraform/$gcp_pcf_terraform_template
 
 terraform apply \
   -state-out $root/create-infrastructure-output/terraform.tfstate \
