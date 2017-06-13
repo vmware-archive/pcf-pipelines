@@ -27,10 +27,10 @@ run:
     set -o pipefail
 
     chmod +x yaml-patch/yaml_patch_linux
-    set PATH="$PWD/yaml-patch":$PATH
+    export PATH="$PWD/yaml-patch":$PATH
 
     chmod +x fly/fly
-    set PATH="$PWD/fly":$PATH
+    export PATH="$PWD/fly":$PATH
 
     # Create upgrade-ert pipeline from upgrade-tile pipeline
     pushd pcf-pipelines
