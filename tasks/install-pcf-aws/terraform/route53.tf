@@ -8,7 +8,7 @@ resource "aws_route53_record" "opsman" {
 
 resource "aws_route53_record" "apps_wild_card" {
   zone_id = "${var.route53_zone_id}"
-  name = "*.apps"
+  name = "*.cfapps"
   type = "CNAME"
   ttl = "900"
   records = ["${aws_elb.PcfHttpElb.dns_name}"]
