@@ -13,7 +13,7 @@ function generate_cert {
       --skip-ssl-validation \
       curl \
       --silent \
-      --path "$OPS_MGR_GENERATE_SSL_ENDPOINT" \
+      --path "/api/v0/certificates/generate" \
       -x POST \
       -d $data
     )

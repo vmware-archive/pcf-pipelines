@@ -221,7 +221,6 @@ jobs:
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
       SSL_TERMINATION: {{ssl_termination_point}}
       SSL_CERT: {{ssl_cert}}
-      OPS_MGR_GENERATE_SSL_ENDPOINT: {{om_generate_ssl_endpoint}}
       SSL_PRIVATE_KEY: {{ssl_private_key}}
       DISABLE_HTTP_PROXY: {{disable_http_proxy}}
       TCP_ROUTING: {{tcp_routing}}
