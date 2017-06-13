@@ -63,13 +63,6 @@ resources:
     repository: om
     access_token: {{github_token}}
 
-- name: stemcell-downloader
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pcf-product-stemcell-downloader
-    access_token: {{github_token}}
-
 jobs:
 - name: build-pcf-pipelines-image
   serial: true
@@ -92,8 +85,6 @@ jobs:
     - get: om-beta
       params: {globs: ["*linux*"]}
       version: { tag: '0.17-beta.0' }
-    - get: stemcell-downloader
-      params: {globs: ["*linux*"]}
 
   - task: prepare-workspace
     config:
@@ -109,7 +100,6 @@ jobs:
       - name: pivnet-cli
       - name: govc
       - name: om-beta
-      - name: stemcell-downloader
       outputs:
       - name: workspace
       run:
@@ -134,9 +124,6 @@ jobs:
           gunzip govc/govc_linux_amd64.gz
           cp govc/govc_linux_amd64 workspace/govc
           chmod +x workspace/govc
-
-          cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
-          chmod +x workspace/stemcell-downloader
 
   - put: pcf-pipelines-image
     params:

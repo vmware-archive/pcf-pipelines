@@ -6,7 +6,6 @@ COPY \
        cliaas-linux \
        pivnet-cli \
        govc \
-       stemcell-downloader \
        /usr/local/bin/
 
 RUN \
