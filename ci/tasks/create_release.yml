@@ -99,6 +99,7 @@ run:
       user_group_ids:
       - 6   # Pivotal Internal Early Access
       - 159 # C[0] PCF Automation Pipelines Access
+      - 64  #| Pivotal SI Partners Known and Potential Partners. 
     EOF
 
     # Create release tarball
