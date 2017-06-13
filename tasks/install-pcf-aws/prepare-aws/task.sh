@@ -11,7 +11,7 @@ terraform plan \
   -var "db_master_password=${DB_MASTER_PASSWORD}" \
   -var "prefix=${TERRAFORM_PREFIX}" \
   -out terraform.tfplan \
-  pcf-pipelines/tasks/install-pcf-aws/terraform
+  pcf-pipelines/install-pcf/aws/terraform
 
 terraform apply \
   -state-out terraform-state-output/terraform.tfstate \

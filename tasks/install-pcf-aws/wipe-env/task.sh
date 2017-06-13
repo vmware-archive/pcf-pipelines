@@ -3,7 +3,7 @@ set -e
 
 root=$(pwd)
 
-cd pcf-pipelines/tasks/install-pcf-aws/terraform
+cd pcf-pipelines/install-pcf/aws/terraform
 
 echo "Checking for existence of ops manager..."
 if [[ $(dig +nocmd ${OPSMAN_URI} +noall +answer | wc -l) -ne 0 ]]; then 

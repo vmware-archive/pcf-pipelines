@@ -55,4 +55,4 @@ terraform destroy -force \
   -var "db_nfsvolumedb_username=${DB_NFSVOLUMEDB_USERNAME}" \
   -var "db_nfsvolumedb_password=${DB_NFSVOLUMEDB_PASSWORD}" \
   -state-out $root/wipe-output/terraform.tfstate \
-  pcf-pipelines/tasks/install-pcf-gcp/terraform
+  pcf-pipelines/install-pcf/gcp/terraform
