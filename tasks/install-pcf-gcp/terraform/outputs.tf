@@ -27,7 +27,7 @@ output "sys_domain" {
 }
 
 output "apps_domain" {
-  value = "apps.${var.pcf_ert_domain}"
+  value = "cfapps.${var.pcf_ert_domain}"
 }
 
 output "tcp_domain" {

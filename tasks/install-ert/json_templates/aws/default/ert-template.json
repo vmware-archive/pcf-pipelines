@@ -136,7 +136,7 @@
         "value": "sys.{{pcf_ert_domain}}"
       },
       ".cloud_controller.apps_domain": {
-        "value": "apps.{{pcf_ert_domain}}"
+        "value": "cfapps.{{pcf_ert_domain}}"
       },
       ".cloud_controller.allow_app_ssh_access": {
         "value": true
