@@ -194,7 +194,7 @@ jobs:
       OPS_MGR_USR: {{OPSMAN_USER}}
       OPS_MGR_PWD: {{OPSMAN_PASSWORD}}
       PIVNET_API_TOKEN: {{pivnet_token}}
-      STEMCELL_GLOB: "*aws*"
+      IAAS: "aws"
       NO_PROXY: ""
       OM_IP: ""
   - task: stage-tile

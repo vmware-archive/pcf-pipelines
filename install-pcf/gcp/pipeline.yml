@@ -210,7 +210,7 @@ jobs:
       OPS_MGR_USR: {{pcf_opsman_admin_username}}
       OPS_MGR_PWD: {{pcf_opsman_admin_password}}
       PIVNET_API_TOKEN: {{pivnet_token}}
-      STEMCELL_GLOB: "*google*"
+      IAAS: "google"
       NO_PROXY: ""
       OM_IP: ""
 
