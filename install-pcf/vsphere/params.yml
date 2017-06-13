@@ -124,11 +124,6 @@ ssl_cert:
 ssl_private_key:
 ssl_termination_point: haproxy # (external_ssl|external_non_ssl|haproxy)
 
-## Get this from the OPS Manager API docs for your release. Possible values are
-## - /api/v0/certificates/generate (for 1.10)
-## - /api/v0/rsa_certificates (for 1.9)
-om_generate_ssl_endpoint:
-
 disable_http_proxy: false
 security_acknowledgement:  # Must be set to 'X'. See explanation here: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#app-security
 
