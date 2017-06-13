@@ -51,7 +51,14 @@ run:
     # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
     # of GitHub
     version=v$(cat version/version)
-    sed -i "/product_slug: pcf-automation/ {N; s/\(product_slug: pcf-automation.*product_version: \).*/\1${version}/g}" pcf-pipelines/operations/use-pivnet-release.yml
+
+    set +e # read -d '' requires this
+    read -r -d '' hardcode_pivnet_version <<EOF
+    - op: replace
+      path: /resources/name=pcf-pipelines-tarball/source/product_version
+      value: $version
+    EOF
+    set -e
 
     files=$(
       find pcf-pipelines \
@@ -62,7 +69,11 @@ run:
     )
 
     for f in ${files[@]}; do
-      cat $f | ./yaml-patch/yaml_patch_linux -o pcf-pipelines/operations/use-pivnet-release.yml > $f.bk
+      cat $f |
+      yaml_patch_linux \
+        -o pcf-pipelines/operations/use-pivnet-release.yml \
+        -o <(echo "$hardcode_pivnet_version") \
+        > $f.bk
       mv $f.bk $f
 
       # Remove git_private_key from params as it is no longer needed
