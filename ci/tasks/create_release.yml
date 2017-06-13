@@ -35,7 +35,12 @@ run:
     # Create upgrade-ert pipeline from upgrade-tile pipeline
     pushd pcf-pipelines
       mkdir -p upgrade-ert
-      sed 's/^product_slug:/# product_slug:/' upgrade-tile/params.yml > upgrade-ert/params.yml
+
+      sed \
+        -e 's/^product_slug:/# product_slug:/' \
+        -e 's/^product_name:/# product_name:/' \
+        upgrade-tile/params.yml > upgrade-ert/params.yml
+
       cat ci/yaml_license_header <(
         fly fmt -c <(
           cat upgrade-tile/pipeline.yml | yaml_patch_linux -o operations/create-upgrade-ert-pipeline.yml
