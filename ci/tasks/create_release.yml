@@ -42,10 +42,10 @@ run:
         upgrade-tile/params.yml > upgrade-ert/params.yml
 
       cat ci/yaml_license_header <(
-        fly fmt -c <(
-          cat upgrade-tile/pipeline.yml | yaml_patch_linux -o operations/create-upgrade-ert-pipeline.yml
-        )
+        cat upgrade-tile/pipeline.yml | yaml_patch_linux -o operations/create-upgrade-ert-pipeline.yml
       ) > upgrade-ert/pipeline.yml
+
+      fly fmt -w -c upgrade-ert/pipeline.yml
     popd
 
     # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
