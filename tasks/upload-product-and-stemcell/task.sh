@@ -20,14 +20,14 @@ if [ -n "$STEMCELL_VERSION" ]; then
     echo $diagnostic_report |
     jq \
       --arg version "$STEMCELL_VERSION" \
-      --arg glob "${STEMCELL_GLOB//\*/}" \
+      --arg glob "$IAAS" \
     '.stemcells[] | select(contains($version) and contains($glob))'
   )
 
   if [[ -z "$stemcell" ]]; then
     echo "Downloading stemcell $STEMCELL_VERSION"
     pivnet-cli login --api-token="$PIVNET_API_TOKEN"
-    pivnet-cli download-product-files -p stemcells -r $STEMCELL_VERSION -g $STEMCELL_GLOB --accept-eula
+    pivnet-cli download-product-files -p stemcells -r $STEMCELL_VERSION -g "*${IAAS}*" --accept-eula
 
     SC_FILE_PATH=`find ./ -name *.tgz`
 
