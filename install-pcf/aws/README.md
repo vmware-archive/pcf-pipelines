@@ -19,7 +19,7 @@ Before start kicking off the pipeline, there are a few parameters need to be set
 * Decide a domain for elastic runtime e.g pivotal-c0.com. The pipeline will use prefix apps and sys for wild card domains:
 
    ```
-   *.apps.pivotal-c0.com
+   *.cfapps.pivotal-c0.com
    *.sys.pivotal-c0.com
    ```
 
