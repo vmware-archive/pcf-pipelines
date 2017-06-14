@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -eu
 
 file_path=`find ./pivnet-opsman-product/ -name *.ova`
 

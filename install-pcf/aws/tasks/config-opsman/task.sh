@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+
+set -eu
 
 echo "=============================================================================================="
 echo "Configuring OpsManager @ https://opsman.$ERT_DOMAIN ..."
