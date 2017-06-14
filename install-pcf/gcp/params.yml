@@ -60,8 +60,8 @@ db_diego_username: CHANGEME
 db_diego_password: CHANGEME
 db_notifications_username: CHANGEME 
 db_notifications_password: CHANGEME 
-db_autoscale_password: CHANGEME 
 db_autoscale_username: CHANGEME 
+db_autoscale_password: CHANGEME 
 db_uaa_username: CHANGEME
 db_uaa_password: CHANGEME
 db_app_usage_service_username: CHANGEME 
