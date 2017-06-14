@@ -7,17 +7,16 @@ export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}
 export GOOGLE_PROJECT=${GCP_PROJECT_ID}
 export GOOGLE_REGION=${GCP_REGION}
 
-echo "Checking for existence of ops manager..."
-if [[ $(dig +nocmd ${OPSMAN_URI} +noall +answer | wc -l) -ne 0 ]]; then 
-  echo "Deleting PCF installation..."
+source "${root}/pcf-pipelines/functions/check_opsman_available.sh"
+
+opsman_available=$(check_opsman_available $OPSMAN_URI)
+if [[ $opsman_available == "available" ]]; then
   om-linux \
     --target https://$OPSMAN_URI \
     --skip-ssl-validation \
     --username $OPSMAN_USERNAME \
     --password $OPSMAN_PASSWORD \
     delete-installation
-else
-  echo "No ops manager could be found."
 fi
 
 echo "Deleting provisioned infrastructure..."
