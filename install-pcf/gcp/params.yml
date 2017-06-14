@@ -49,6 +49,22 @@ opsman_uri: CHANGEME # This should be your pcf_ert_domain with "opsman." as a pr
 pcf_ert_ssl_cert: generate
 pcf_ert_ssl_key:
 
+# Errands to disable prior to deploying ERT
+# Valid values:
+#   all
+#   none
+#   "" (empty string)
+#   Any combination of the following, separated by comma:
+#     smoke-tests
+#     push-apps-manager
+#     notifications
+#     notifications-ui
+#     push-pivotal-account
+#     autoscaling
+#     autoscaling-register-broker
+#     nfsbrokerpush
+ert_errands_to_disable: none
+
 # PCF Operations Manager minor version to install
 opsman_major_minor_version: ^1\.10\..*$
 
