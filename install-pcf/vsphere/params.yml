@@ -69,7 +69,7 @@ infra_nw_cidr:                # Infrastructure network CIDR, ex: 10.0.0.0/22
 infra_excluded_range:         # Infrastructure network exclusion range
 infra_nw_dns:                 # Infrastructure network DNS
 infra_nw_gateway:             # Infrastructure network Gateway
-infra_nw_azs:                 # Comma seperated list of AZ's to be associated with this network
+infra_nw_azs:                 # Comma separated list of AZ's to be associated with this network
 
 deployment_network_name: "DEPLOYMENT"
 deployment_vsphere_network:   # vCenter Deployment network name
@@ -77,7 +77,7 @@ deployment_nw_cidr:           # Deployment network CIDR, ex: 10.0.0.0/22
 deployment_excluded_range:    # Deployment network exclusion range
 deployment_nw_dns:            # Deployment network DNS
 deployment_nw_gateway:        # Deployment network Gateway
-deployment_nw_azs:            # Comma seperated list of AZ's to be associated with this network
+deployment_nw_azs:            # Comma separated list of AZ's to be associated with this network
 
 services_network_name: "SERVICES"
 is_service_network:           # Required select service network option in Ops man true or false
@@ -86,7 +86,7 @@ services_nw_cidr:             # Services network CIDR, ex: 10.0.0.0/22
 services_excluded_range:      # Services network exclusion range
 services_nw_dns:              # Services network DNS
 services_nw_gateway:          # Services network Gateway
-services_nw_azs:              # Comma seperated list of AZ's to be associated with this network
+services_nw_azs:              # Comma separated list of AZ's to be associated with this network
 
 dynamic_services_network_name: "DYNAMIC-SERVICES"
 dynamic_services_vsphere_network:     # vCenter Dynamic Services network name
@@ -94,7 +94,7 @@ dynamic_services_nw_cidr:             # Dynamic Services network CIDR, ex: 10.0.
 dynamic_services_excluded_range:      # Dynamic Services network exclusion range
 dynamic_services_nw_dns:              # Dynamic Services network DNS
 dynamic_services_nw_gateway:          # Dynamic Services network Gateway
-dynamic_services_nw_azs:              # Comma seperated list of AZ's to be associated with this network
+dynamic_services_nw_azs:              # Comma separated list of AZ's to be associated with this network
 
 ert_singleton_job_az:         # AZ to use for deployment of ERT Singleton jobs
 ert_errands_to_disable:       # Comma-separated list of errand names to disable before deploy
