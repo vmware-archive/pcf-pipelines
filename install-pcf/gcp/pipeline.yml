@@ -162,16 +162,16 @@ jobs:
   - task: configure-director
     file: pcf-pipelines/install-pcf/gcp/tasks/config-director/task.yml
     params:
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin_username}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
-      gcp_proj_id: {{gcp_project_id}}
-      gcp_region: {{gcp_region}}
-      gcp_zone_1: {{gcp_zone_1}}
-      gcp_zone_2: {{gcp_zone_2}}
-      gcp_zone_3: {{gcp_zone_3}}
-      gcp_resource_prefix: {{gcp_resource_prefix}}
-      gcp_svc_acct_key: {{gcp_service_account_key}}
+      OPS_MGR_HOST: {{opsman_uri}}
+      OPS_MGR_USR: {{pcf_opsman_admin_username}}
+      OPS_MGR_PWD: {{pcf_opsman_admin_password}}
+      GCP_PROJECT_ID: {{gcp_project_id}}
+      GCP_REGION: {{gcp_region}}
+      GCP_ZONE_1: {{gcp_zone_1}}
+      GCP_ZONE_2: {{gcp_zone_2}}
+      GCP_ZONE_3: {{gcp_zone_3}}
+      GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
 
 - name: deploy-director
   serial_groups: [opsman]

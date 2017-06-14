@@ -10,16 +10,16 @@ inputs:
 - name: pcf-pipelines 
 
 params:
-  pcf_ert_domain:
-  pcf_opsman_admin:
-  pcf_opsman_admin_passwd:
-  gcp_proj_id:
-  gcp_region:
-  gcp_zone_1:
-  gcp_zone_2:
-  gcp_zone_3:
-  gcp_resource_prefix:
-  gcp_svc_acct_key:
+  OPS_MGR_HOST:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
+  GCP_PROJECT_ID:
+  GCP_REGION:
+  GCP_ZONE_1:
+  GCP_ZONE_2:
+  GCP_ZONE_3:
+  GCP_RESOURCE_PREFIX:
+  GCP_SERVICE_ACCOUNT_KEY:
 
 run:
   path: pcf-pipelines/install-pcf/gcp/tasks/config-director/task.sh
