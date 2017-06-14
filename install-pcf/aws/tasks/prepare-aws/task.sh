@@ -6,7 +6,7 @@ ami=$(cat ami/ami)
 
 if [[ ${OPSMAN_ALLOW_ACCESS} == true ]]; then
   pushd pcf-pipelines/install-pcf/aws
-    cp overrides/security_group_opsman_allow_override.tf .
+    cp overrides/security_group_opsman_allow_override.tf terraform/.
   popd
 fi
 
