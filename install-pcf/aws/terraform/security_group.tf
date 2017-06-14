@@ -13,18 +13,6 @@ resource "aws_security_group" "directorSG" {
         Name = "${var.prefix}-Ops Manager Director Security Group"
     }
     ingress {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-    ingress {
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-    ingress {
         from_port = 0
         to_port = 0
         protocol = -1
