@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -eu
 
 source pcf-pipelines/functions/generate_cert.sh
 
@@ -49,6 +51,7 @@ cf_network=$(
 )
 
 cf_resources=$(
+  set +e
   read -d'%' -r input <<EOF
   {
     "backup-prepare": $BACKUP_PREPARE_INSTANCES,
@@ -76,6 +79,7 @@ cf_resources=$(
   }
   %
 EOF
+  set -e
 
   echo "$input" | jq \
     'map_values(. = {

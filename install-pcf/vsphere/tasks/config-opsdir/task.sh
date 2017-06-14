@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -eu
 
 iaas_configuration=$(cat <<-EOF
 {

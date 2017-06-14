@@ -1,4 +1,6 @@
-#!/bin/bash -u
+#!/bin/bash
+
+set -eu
 
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
@@ -23,6 +25,7 @@ function main() {
   local cwd
   cwd="${1}"
 
+  set +e
   while :
   do
 
@@ -62,6 +65,7 @@ function main() {
       echo "Pending changes or running installs detected. Waiting"
       sleep $POLL_INTERVAL
   done
+  set -e
 }
 
 main "${PWD}"
