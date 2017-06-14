@@ -11,9 +11,8 @@ variable "aws_region" {}
 variable "az1" {}
 variable "az2" {}
 variable "az3" {}
-variable "opsman_allow_cidr" {
-    default = "0.0.0.0/0"
-}
+variable "opsman_allow_cidr" {}
+
 variable "opsman_instance_type" {
     description = "Instance Type for OpsMan"
     default = "m3.large"
