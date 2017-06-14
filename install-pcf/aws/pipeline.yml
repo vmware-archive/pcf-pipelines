@@ -121,6 +121,8 @@ jobs:
       TF_VAR_nat_ip_az1: {{TF_VAR_nat_ip_az1}}
       TF_VAR_nat_ip_az2: {{TF_VAR_nat_ip_az2}}
       TF_VAR_nat_ip_az3: {{TF_VAR_nat_ip_az3}}
+      OPSMAN_ALLOW_ACCESS: {{OPSMAN_ALLOW_ACCESS}}
+      TF_VAR_opsman_allow_cidr: {{TF_VAR_opsman_allow_cidr}}
     ensure:
       put: terraform-state
       params:
