@@ -56,6 +56,7 @@ opsman_major_minor_version: ^1\.10\..*$
 ert_major_minor_version: ^1\.10\..*$
 
 # DB Creds
+# Usernames must be 16 characters or fewer
 db_diego_username: CHANGEME
 db_diego_password: CHANGEME
 db_notifications_username: CHANGEME 
