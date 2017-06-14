@@ -16,7 +16,7 @@ cp ${json_file_template} ${json_file}
 
 source pcf-pipelines/functions/generate_cert.sh
 
-OPS_MGR_HOST="https://opsman.$pcf_ert_domain"
+OPS_MGR_HOST="opsman.$pcf_ert_domain"
 OPS_MGR_USR="$pcf_opsman_admin"
 OPS_MGR_PWD="$pcf_opsman_admin_passwd"
 
