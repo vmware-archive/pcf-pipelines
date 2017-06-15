@@ -1,0 +1,13 @@
+# Pin the git release of pcf-pipelines to a specific version. This is required
+# because the resource normally pulls the latest from master, which will #
+# eventually cause your pipeline to break.  If the version you pin isn't
+# available in Concourse, meaning it hasn't seen that version for some reason,
+# you can tell it about that version via `fly check-resource`:
+# https://concourse.ci/fly-check-resource.html
+#
+# e.g. fly -t your-target check-resource -r your-pipeline-name/pcf-pipelines --from ref:v0.15.0
+
+- op: add
+  path: /get=pcf-pipelines/version
+  value:
+    ref: v0.15.0
