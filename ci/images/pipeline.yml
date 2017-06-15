@@ -15,11 +15,11 @@ resources:
     username: czero
     password: {{czero_dockerhub_password}}
 
-- name: pcf-pipelines-image-test
+- name: pcf-pipelines-image-rc
   type: docker-image
   source:
     repository: czero/cflinuxfs2
-    tag: test
+    tag: release-candidate
     username: czero
     password: {{czero_dockerhub_password}}
 
@@ -80,7 +80,7 @@ resources:
 
 jobs:
 - name: build-pcf-pipelines-image
-  serial: true
+  serial_groups: [pcf-pipelines-image]
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -149,26 +149,27 @@ jobs:
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           chmod +x workspace/stemcell-downloader
 
-  - put: pcf-pipelines-image-test
+  - put: pcf-pipelines-image-rc
     params:
       load_base: cflinuxfs2
       build: workspace
 
 - name: test-pcf-pipelines-image
+  serial_groups: [pcf-pipelines-image]
   plan:
-  - get: pcf-pipelines-image-test
-    params:
-      rootfs: true
+  - get: pcf-pipelines-image-rc
     trigger: true
     passed: [build-pcf-pipelines-image]
+    params:
+      skip_download: true
   - task: test-for-required-binaries
     config:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2, tag: 'test'}
-      inputs:
-      - name: pcf-pipelines-image-test
+        source:
+          repository: czero/cflinuxfs2
+          tag: release-candidate
       run:
         path: sh
         args:
@@ -192,6 +193,15 @@ jobs:
           which openstack
           which neutron
 
+- name: promote-image
+  serial_groups: [pcf-pipelines-image]
+  plan:
+  - get: pcf-pipelines-image-rc
+    passed: [test-pcf-pipelines-image]
+    trigger: true
+    params:
+      save: true
   - put: pcf-pipelines-image
     params:
-      import_file: pcf-pipelines-image-test/rootfs.tar 
+      load: pcf-pipelines-image-rc
+      tag_as_latest: true
