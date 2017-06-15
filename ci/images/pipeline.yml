@@ -145,3 +145,36 @@ jobs:
     params:
       load_base: cflinuxfs2
       build: workspace
+
+- name: test-pcf-pipelines-image
+  plan:
+  - get: pcf-pipelines-image
+    trigger: true
+    passed: [build-pcf-pipelines-image]
+  - task: test-for-required-binaries
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      run:
+        path: sh
+        args:
+        - -c
+        - |
+          which om-linux
+          which cf
+          which cliaas-linux
+          which pivnet-cli
+          which govc
+          which om-linux-beta
+          which stemcell-downloader
+          which jq
+          which terraform
+          which gcloud
+          which gem
+          which pip
+          which uaac
+          which aws
+          which openstack
+          which neutron
