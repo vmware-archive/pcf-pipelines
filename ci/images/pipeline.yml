@@ -15,6 +15,14 @@ resources:
     username: czero
     password: {{czero_dockerhub_password}}
 
+- name: pcf-pipelines-image-test
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+    tag: test
+    username: czero
+    password: {{czero_dockerhub_password}}
+
 - name: cflinuxfs2
   type: docker-image
   source:
@@ -141,14 +149,16 @@ jobs:
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           chmod +x workspace/stemcell-downloader
 
-  - put: pcf-pipelines-image
+  - put: pcf-pipelines-image-test
     params:
       load_base: cflinuxfs2
       build: workspace
 
 - name: test-pcf-pipelines-image
   plan:
-  - get: pcf-pipelines-image
+  - get: pcf-pipelines-image-test
+    params:
+      rootfs: true
     trigger: true
     passed: [build-pcf-pipelines-image]
   - task: test-for-required-binaries
@@ -156,12 +166,15 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/cflinuxfs2, tag: 'test'}
+      inputs:
+      - name: pcf-pipelines-image-test
       run:
         path: sh
         args:
         - -c
         - |
+          set -e
           which om-linux
           which cf
           which cliaas-linux
@@ -178,3 +191,7 @@ jobs:
           which aws
           which openstack
           which neutron
+
+  - put: pcf-pipelines-image
+    params:
+      import_file: pcf-pipelines-image-test/rootfs.tar 
