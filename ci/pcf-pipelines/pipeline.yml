@@ -190,7 +190,7 @@ jobs:
           PIPELINE_NAME: install-pcf-aws-current
           PIPELINE_PATH: release/pcf-pipelines/install-pcf/aws/pipeline.yml
           <<: *atc_creds
-        file: pcf-pipelines/ci/set_pipeline.yml
+        file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
 - name: publish-release
   serial_groups: [version]
