@@ -8,11 +8,11 @@ image_resource:
 
 inputs:
 - name: release
-- name: config
 
 params:
   PIPELINE_NAME:
   PIPELINE_PATH:
+  PIPELINE_PARAMS:
   ATC_EXTERNAL_URL:
   ATC_BASIC_AUTH_USERNAME:
   ATC_BASIC_AUTH_PASSWORD:
@@ -21,8 +21,15 @@ params:
 run:
   path: bash
   args:
-  - -ce
+  - -c
   - |
+    set -eu
+
+    IFS=$'\n'
+    for line in $PIPELINE_PARAMS; do
+      echo "$line" >> params.yml
+    done
+
     curl \
       --silent \
       --insecure \
@@ -42,4 +49,4 @@ run:
       --non-interactive \
       --pipeline "${PIPELINE_NAME}" \
       --config "${PIPELINE_PATH}" \
-      --load-vars-from config/params.yml
+      --load-vars-from params.yml

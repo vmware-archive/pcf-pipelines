@@ -184,112 +184,13 @@ jobs:
 
   - aggregate:
     - do:
-      - task: create-update-ert-config
-        file: pcf-pipelines/ci/tasks/create_update_ert_config.yml
+      - task: update-install-pcf-aws-current-pipeline
         params:
-          <<: *aws_update_pipeline_params
-      - task: update-ert-pipeline
-        input_mapping: { config: update_ert_config }
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-        params:
-          PIPELINE_NAME: lre1-aws-ert-upgrade
-          PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
+          PIPELINE_PARAMS: {{install_pcf_aws_current_params}}
+          PIPELINE_NAME: install-pcf-aws-current
+          PIPELINE_PATH: release/pcf-pipelines/install-pcf/aws/pipeline.yml
           <<: *atc_creds
-
-    - do:
-      - task: create-update-buildpacks-config
-        file: pcf-pipelines/ci/tasks/create_update_buildpacks_config.yml
-        params:
-          <<: *aws_update_pipeline_params
-      - task: update-buildpacks-pipeline
-        input_mapping: { config: update_buildpacks_config }
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-        params:
-          PIPELINE_NAME: lre1-aws-buildpacks-upgrade
-          PIPELINE_PATH: release/pcf-pipelines/upgrade-buildpacks/pipeline.yml
-          <<: *atc_creds
-
-    - do:
-      - task: create-upgrade-opsman-aws-config
-        file: pcf-pipelines/ci/tasks/create_upgrade_opsman_aws_config.yml
-        params:
-          <<: *aws_update_opsman_params
-
-      - task: update-upgrade-opsman-aws
-        input_mapping: { config: upgrade_opsman_aws_config }
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-        params:
-          PIPELINE_NAME: lre1-aws-opsman-upgrade
-          PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
-          <<: *atc_creds
-
-    - do:
-      - task: create-upgrade-opsman-gcp-config
-        file: pcf-pipelines/ci/tasks/create_upgrade_opsman_gcp_config.yml
-        params:
-          <<: *gcp_update_opsman_params
-
-      - task: update-upgrade-opsman-gcp
-        input_mapping: { config: upgrade_opsman_gcp_config }
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-        params:
-          PIPELINE_NAME: upgrade-opsman-gcp
-          PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
-          <<: *atc_creds
-
-    - do:
-      - task: lre2-gcp-create-update-ert-config
-        file: pcf-pipelines/ci/tasks/create_params.yml
-        params:
-          PARAMS_RAW: {{params_lre2_gcp_ert_upgrade}}
-      - task: lre2-gcp-update-ert-pipeline
-        input_mapping: { config: pipeline_params }
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-        params:
-          PIPELINE_NAME: lre2-gcp-ert-upgrade
-          PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
-          <<: *atc_creds
-
-    - do:
-      - task: lre3-gcp-create-update-ert-config
-        file: pcf-pipelines/ci/tasks/create_params.yml
-        params:
-          PARAMS_RAW: {{params_lre3_gcp_ert_upgrade}}
-      - task: lre3-gcp-update-ert-pipeline
-        input_mapping: { config: pipeline_params }
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-        params:
-          PIPELINE_NAME: lre3-gcp-ert-upgrade
-          PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
-          <<: *atc_creds
-
-    - do:
-      - task: lre2-gcp-opsman-upgrade-config
-        file: pcf-pipelines/ci/tasks/create_params.yml
-        params:
-          PARAMS_RAW: {{params_lre2_gcp_opsman_upgrade}}
-
-      - task: lre2-gcp-opsman-upgrade-pipeline
-        input_mapping: { config: pipeline_params }
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-        params:
-          PIPELINE_NAME: lre2-gcp-opsman-upgrade
-          PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
-          <<: *atc_creds
-
-    - do:
-      - task: lre3-gcp-opsman-upgrade-config
-        file: pcf-pipelines/ci/tasks/create_params.yml
-        params:
-          PARAMS_RAW: {{params_lre3_gcp_opsman_upgrade}}
-
-      - task: lre3-gcp-opsman-upgrade-pipeline
-        input_mapping: { config: pipeline_params }
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-        params:
-          PIPELINE_NAME: lre3-gcp-opsman-upgrade
-          PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
-          <<: *atc_creds
+        file: pcf-pipelines/ci/set_pipeline.yml
 
 - name: publish-release
   serial_groups: [version]
@@ -358,48 +259,6 @@ jobs:
 
     - put: version
       params: {bump: patch, pre: rc}
-
-aws_update_pipeline_params: &aws_update_pipeline_params
-  IAAS_TYPE: {{iaas_type}}
-  PIVNET_TOKEN: {{pivnet_token}}
-  PIVNET_POLL_INTERVAL: {{pivnet_poll_interval}}
-  CF_API_URI: {{aws_cf_api_uri}}
-  CF_USER: {{aws_cf_user}}
-  CF_PASSWORD: {{aws_cf_password}}
-  CHECK_NEW_OPSMAN_EVERY: 24h
-  OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
-  OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
-  OPSMAN_URI: {{opsman_uri}}
-  OPSMAN_ADMIN_USERNAME: {{opsman_admin_username}}
-  OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
-
-gcp_update_opsman_params: &gcp_update_opsman_params
-  OPSMAN_PROJECT: {{upgrade_opsman_gcp_opsman_gcp_project}}
-  OPSMAN_ZONE: {{upgrade_opsman_gcp_opsman_gcp_zone}}
-  OPSMAN_DISKIMAGE_NAME: {{upgrade_opsman_gcp_opsman_gcp_diskimage_name}}
-  OPSMAN_GCP_CREDFILE_CONTENTS: {{upgrade_opsman_gcp_opsman_gcp_credfile_contents}}
-  EXISTING_OPSMAN_VM_NAME: {{upgrade_opsman_gcp_existing_opsman_vm_name}}
-  OPSMAN_URI: {{upgrade_opsman_gcp_opsman_uri}}
-  OPSMAN_ADMIN_USERNAME: {{upgrade_opsman_gcp_opsman_admin_username}}
-  OPSMAN_ADMIN_PASSWORD: {{upgrade_opsman_gcp_opsman_admin_password}}
-  OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
-  OPSMAN_MAJOR_MINOR_VERSION: {{upgrade_opsman_gcp_opsman_major_minor_version}}
-  PIVNET_TOKEN: {{pivnet_token}}
-  CHECK_NEW_OPSMAN_EVERY: 24h
-
-aws_update_opsman_params: &aws_update_opsman_params
-  AWS_SECRET_ACCESS_KEY: {{upgrade_opsman_aws_aws_secret_access_key}}
-  AWS_REGION: {{upgrade_opsman_aws_aws_region}}
-  AWS_VPC_ID: {{upgrade_opsman_aws_aws_vpc_id}}
-  AWS_ACCESS_KEY_ID: {{upgrade_opsman_aws_aws_access_key_id}}
-  EXISTING_OPSMAN_VM_NAME: {{upgrade_opsman_aws_existing_opsman_vm_name}}
-  OPSMAN_URI: {{upgrade_opsman_aws_opsman_uri}}
-  OPSMAN_ADMIN_USERNAME: {{upgrade_opsman_aws_opsman_admin_username}}
-  OPSMAN_ADMIN_PASSWORD: {{upgrade_opsman_aws_opsman_admin_password}}
-  OPSMAN_TIMEOUT_SECONDS: {{opsman_timeout_seconds}}
-  OPSMAN_MAJOR_MINOR_VERSION: {{opsman_major_minor_version}}
-  PIVNET_TOKEN: {{pivnet_token}}
-  CHECK_NEW_OPSMAN_EVERY: 24h
 
 atc_creds: &atc_creds
   ATC_EXTERNAL_URL: {{atc_external_url}}
