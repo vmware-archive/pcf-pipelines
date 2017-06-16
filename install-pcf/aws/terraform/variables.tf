@@ -11,7 +11,7 @@ variable "aws_region" {}
 variable "az1" {}
 variable "az2" {}
 variable "az3" {}
-variable "opsman_allow_cidr" {}
+variable "opsman_allow_cidr" {type    = "list"}
 
 variable "opsman_instance_type" {
     description = "Instance Type for OpsMan"
