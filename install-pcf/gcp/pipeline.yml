@@ -243,11 +243,8 @@ jobs:
       pcf_az_1: {{gcp_zone_1}}
       pcf_az_2: {{gcp_zone_2}}
       pcf_az_3: {{gcp_zone_3}}
-      gcp_proj_id: {{gcp_project_id}}
-      gcp_region: {{gcp_region}}
       gcp_storage_access_key: {{gcp_storage_access_key}}
       gcp_storage_secret_key: {{gcp_storage_secret_key}}
-      gcp_svc_acct_key: {{gcp_service_account_key}}
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
@@ -287,9 +284,6 @@ jobs:
       MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
       MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
       # aws specific
-      bucket:
-      TF_VAR_aws_access_key:
-      TF_VAR_aws_secret_key:
       S3_ENDPOINT:
 
   - task: configure-ert

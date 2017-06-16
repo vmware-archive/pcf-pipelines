@@ -30,15 +30,9 @@ params:
   terraform_template:
   terraform_prefix:
   # IaaS Specific for GCP only
-  gcp_proj_id:
-  gcp_region:
-  gcp_svc_acct_key:
   gcp_storage_access_key:
   gcp_storage_secret_key:
   # aws specific
-  bucket:
-  TF_VAR_aws_access_key:
-  TF_VAR_aws_secret_key:
   S3_ENDPOINT:
   # db credentials
   db_app_usage_service_username:
