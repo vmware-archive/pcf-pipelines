@@ -38,6 +38,5 @@ params:
   TF_VAR_rds_subnet_cidr_az1:
   TF_VAR_rds_subnet_cidr_az2:
   TF_VAR_rds_subnet_cidr_az3:
-  TF_VAR_opsman_allow_cidr:
 run:
   path: pcf-pipelines/install-pcf/aws/tasks/wipe-env/task.sh

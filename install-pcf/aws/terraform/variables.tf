@@ -11,7 +11,15 @@ variable "aws_region" {}
 variable "az1" {}
 variable "az2" {}
 variable "az3" {}
-variable "opsman_allow_cidr" {type    = "list"}
+
+/*
+* used for configuring ingress rules to ops manager vm
+*/
+variable "opsman_allow_ssh" {default = false}
+variable "opsman_allow_https" {default = false}
+variable "opsman_allow_ssh_cidr_ranges" {type = "list"}
+variable "opsman_allow_https_cidr_ranges" {type = "list"}
+
 
 variable "opsman_instance_type" {
     description = "Instance Type for OpsMan"
