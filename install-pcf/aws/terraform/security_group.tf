@@ -26,6 +26,28 @@ resource "aws_security_group" "directorSG" {
     }
 }
 
+resource "aws_security_group_rule" "allow_ssh" {
+    count           = "${var.opsman_allow_ssh}"
+    type            = "ingress"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    cidr_blocks     = "${var.opsman_allow_ssh_cidr_ranges}"
+
+    security_group_id = "${aws_security_group.directorSG.id}"
+}
+
+resource "aws_security_group_rule" "allow_https" {
+    count           = "${var.opsman_allow_https}" 
+    type            = "ingress"
+    from_port       = 443 
+    to_port         = 443
+    protocol        = "tcp"
+    cidr_blocks     = "${var.opsman_allow_https_cidr_ranges}"
+
+    security_group_id = "${aws_security_group.directorSG.id}"
+}
+
 /*
   RDS Security group
 */

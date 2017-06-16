@@ -4,10 +4,18 @@ set -ex
 
 ami=$(cat ami/ami)
 
-if [[ ${OPSMAN_ALLOW_ACCESS} == true ]]; then
-  pushd pcf-pipelines/install-pcf/aws
-    cp overrides/security_group_opsman_allow_override.tf terraform/.
-  popd
+OPSMAN_ALLOW_SSH="false"
+OPSMAN_ALLOW_SSH_CIDR_LIST='["0.0.0.0/32"]'
+if [[ -n "${OPSMAN_ALLOW_SSH_CIDR_RANGES// }" ]]; then
+  OPSMAN_ALLOW_SSH="true"
+  OPSMAN_ALLOW_SSH_CIDR_LIST='["'${OPSMAN_ALLOW_SSH_CIDR_RANGES/\,/\"\,\"}'"]'
+fi
+
+OPSMAN_ALLOW_HTTPS="false"
+OPSMAN_ALLOW_HTTPS_CIDR_LIST='["0.0.0.0/32"]'
+if [[ -n "${OPSMAN_ALLOW_HTTPS_CIDR_RANGES// }" ]]; then
+  OPSMAN_ALLOW_HTTPS="true"
+  OPSMAN_ALLOW_HTTPS_CIDR_LIST='["'${OPSMAN_ALLOW_HTTPS_CIDR_RANGES/\,/\"\,\"}'"]'
 fi
 
 terraform plan \
@@ -16,6 +24,10 @@ terraform plan \
   -var "db_master_username=${DB_MASTER_USERNAME}" \
   -var "db_master_password=${DB_MASTER_PASSWORD}" \
   -var "prefix=${TERRAFORM_PREFIX}" \
+  -var "opsman_allow_ssh=${OPSMAN_ALLOW_SSH}" \
+  -var "opsman_allow_ssh_cidr_ranges=${OPSMAN_ALLOW_SSH_CIDR_LIST}" \
+  -var "opsman_allow_https=${OPSMAN_ALLOW_HTTPS}" \
+  -var "opsman_allow_https_cidr_ranges=${OPSMAN_ALLOW_HTTPS_CIDR_LIST}" \
   -out terraform.tfplan \
   pcf-pipelines/install-pcf/aws/terraform
 
