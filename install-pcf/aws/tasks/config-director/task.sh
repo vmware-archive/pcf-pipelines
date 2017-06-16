@@ -51,6 +51,17 @@ read -r -d '' director_configuration <<EOF
 }
 EOF
 
+resource_configuration=$(cat <<-EOF
+{
+  "director": {
+    "instance_type": {
+      "id": "m4.large"
+    }
+  }
+}
+EOF
+)
+
 read -r -d '' az_configuration <<EOF
 {
   "availability_zones": [
@@ -175,6 +186,7 @@ jsons=(
   "$networks_configuration"
   "$network_assignment"
   "$security_configuration"
+  "$resource_configuration"
 )
 
 for json in "${jsons[@]}"; do
@@ -193,4 +205,5 @@ om-linux \
   --az-configuration "$az_configuration" \
   --networks-configuration "$networks_configuration" \
   --network-assignment "$network_assignment" \
-  --security-configuration "$security_configuration"
+  --security-configuration "$security_configuration" \
+  --resource-configuration "$resource_configuration"

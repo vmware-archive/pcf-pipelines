@@ -94,6 +94,10 @@ db_networkpolicyserverdb_username: CHANGEME
 db_networkpolicyserverdb_password: CHANGEME
 db_nfsvolumedb_username: CHANGEME
 db_nfsvolumedb_password: CHANGEME
+db_silk_username:
+db_silk_password:
+db_locket_username:
+db_locket_password:
 
 mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications
 mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
