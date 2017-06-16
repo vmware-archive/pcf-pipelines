@@ -96,6 +96,7 @@ run:
       release_type: Beta Release
       eula_slug: "pivotal_beta_eula"
       eccn: "5D002"
+      license_exception: "TSU"
       user_group_ids:
       - 6   # Pivotal Internal Early Access
       - 159 # C[0] PCF Automation Pipelines Access
