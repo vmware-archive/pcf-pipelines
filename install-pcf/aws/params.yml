@@ -45,6 +45,10 @@ db_networkpolicyserverdb_username:
 db_networkpolicyserverdb_password:
 db_nfsvolumedb_username:
 db_nfsvolumedb_password:
+db_silk_username:
+db_silk_password:
+db_locket_username:
+db_locket_password:
 
 terraform_prefix:
 

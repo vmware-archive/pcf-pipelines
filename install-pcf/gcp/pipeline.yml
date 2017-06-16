@@ -269,6 +269,10 @@ jobs:
       db_networkpolicyserverdb_password: {{db_networkpolicyserverdb_password}}
       db_nfsvolumedb_username: {{db_nfsvolumedb_username}}
       db_nfsvolumedb_password: {{db_nfsvolumedb_password}}         
+      db_silk_username: {{db_silk_username}}
+      db_silk_password: {{db_silk_password}}
+      db_locket_username: {{db_locket_username}}
+      db_locket_password: {{db_locket_password}}
       mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
       MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
