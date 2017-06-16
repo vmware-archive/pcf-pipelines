@@ -256,9 +256,6 @@ jobs:
       pcf_az_3: {{TF_VAR_az3}}
       terraform_template: default
       terraform_prefix: {{terraform_prefix}}
-      bucket: {{S3_OUTPUT_BUCKET}}
-      TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
-      TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
       S3_ENDPOINT: {{S3_ENDPOINT}}
       mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
@@ -275,9 +272,6 @@ jobs:
       MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
       MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
       # IaaS Specific for GCP only
-      gcp_proj_id:
-      gcp_region:
-      gcp_svc_acct_key:
       gcp_storage_access_key:
       gcp_storage_secret_key:
       # db credentials
