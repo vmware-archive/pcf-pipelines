@@ -17,8 +17,14 @@ variable "az3" {}
 */
 variable "opsman_allow_ssh" {default = false}
 variable "opsman_allow_https" {default = false}
-variable "opsman_allow_ssh_cidr_ranges" {type = "list"}
-variable "opsman_allow_https_cidr_ranges" {type = "list"}
+variable "opsman_allow_ssh_cidr_ranges" {
+    type = "list"
+    default = ["0.0.0.0/32"]
+}
+variable "opsman_allow_https_cidr_ranges" {
+    type = "list"
+    default = ["0.0.0.0/32"]
+}
 
 
 variable "opsman_instance_type" {
