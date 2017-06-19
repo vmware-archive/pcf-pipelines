@@ -95,6 +95,8 @@ jobs:
     - get: cflinuxfs2
       trigger: true
       params: {save: true}
+    - get: yaml-patch 
+      params: {globs: ["*linux*"]}
     - get: om
       params: {globs: ["*linux*"]}
     - get: cf-cli-tarball
@@ -119,6 +121,7 @@ jobs:
       inputs:
       - name: pcf-pipelines
       - name: om
+      - name: yaml-patch 
       - name: cf-cli-tarball
       - name: cliaas
       - name: pivnet-cli
@@ -136,6 +139,9 @@ jobs:
 
           cp om/om-linux workspace
           chmod +x workspace/om-linux
+
+          cp yaml-patch/yaml_patch_linux workspace
+          chmod +x workspace/yaml_patch_linux
 
           tar -C workspace -xf cf-cli-tarball/*.tgz cf
           chmod +x workspace/cf
@@ -184,6 +190,7 @@ jobs:
         - |
           set -e
           which om-linux
+          which yaml_patch_linux 
           which cf
           which cliaas-linux
           which pivnet-cli
