@@ -36,6 +36,13 @@ resources:
     repository: om
     access_token: {{github_token}}
 
+- name: yaml-patch 
+  type: github-release
+  source:
+    user: krishicks
+    repository: yaml-patch 
+    access_token: {{github_token}}
+
 - name: cf-cli-tarball
   type: s3
   source:
