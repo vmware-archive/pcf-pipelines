@@ -190,7 +190,7 @@ jobs:
         - |
           set -e
           which om-linux
-          which yaml_patch_linux 
+          which yaml_patch_linux
           which cf
           which cliaas-linux
           which pivnet-cli
