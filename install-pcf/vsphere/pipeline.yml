@@ -310,3 +310,14 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+
+- name: wipe-env
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+  - task: wipe
+    file: pcf-pipelines/install-pcf/vsphere/tasks/wipe-env/task.yml
+    params:
+      OPSMAN_URI: {{OPSMAN_URI}}
+      OPSMAN_USERNAME: {{OPSMAN_USER}}
+      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
