@@ -4,6 +4,22 @@ git_private_key:
 opsman_major_minor_version: ^1\.10\..*$
 ert_major_minor_version: ^1\.10\..*$
 
+# Errands to disable prior to deploying ERT
+# Valid values:
+#   all
+#   none
+#   "" (empty string)
+#   Any combination of the following, separated by comma:
+#     smoke-tests
+#     push-apps-manager
+#     notifications
+#     notifications-ui
+#     push-pivotal-account
+#     autoscaling
+#     autoscaling-register-broker
+#     nfsbrokerpush
+ert_errands_to_disable: none
+
 # RDS Master Credentials
 db_master_username:
 db_master_password:
