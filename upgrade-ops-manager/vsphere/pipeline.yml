@@ -52,12 +52,32 @@ jobs:
   - get: pivnet-opsmgr
     params: { globs: [] }
 
+- name: check-upgrade-available
+  serial: true
+  plan:
+  - aggregate:
+    - get: product-files
+      resource: pivnet-opsmgr
+      passed: [regulator]
+      trigger: true
+      params:
+        globs: ["*.ova"]
+    - get: pcf-pipelines
+
+  - task: allow-patch-release-only-check
+    file: pcf-pipelines/tasks/allow-only-patch-upgrades/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+      PRODUCT_NAME: p-bosh
+
 - name: upgrade-opsmgr
   plan:
   - aggregate:
     - get: pivnet-opsmgr
-      trigger: true 
-      passed: [regulator]
+      trigger: true
+      passed: [check-upgrade-available]
       params:
         globs: ["*.ova"]
     - get: pcf-pipelines
@@ -122,13 +142,6 @@ jobs:
 
   - task: restore-stemcells
     file: pcf-pipelines/tasks/restore-stemcells/task.yml
-    params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-
-  - task: allow-patch-release-only-check 
-    file: pcf-pipelines/tasks/allow-only-patch-upgrades/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
