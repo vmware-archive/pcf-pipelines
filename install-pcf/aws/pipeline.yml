@@ -88,7 +88,6 @@ jobs:
           echo $ami > ami/ami
 
   - task: create-infrastructure
-    attempts: 2
     file: pcf-pipelines/install-pcf/aws/tasks/prepare-aws/task.yml
     params:
       DB_MASTER_USERNAME: {{db_master_username}}
