@@ -93,6 +93,13 @@ jobs:
       OPSMAN_URI: {{opsman_uri}}
       PRODUCT_NAME: {{product_name}}
 
+  - task: allow-patch-release-only-check 
+    file: pcf-pipelines/tasks/allow-only-patch-upgrades/task.yml
+    params:
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      OPS_MGR_HOST: {{opsman_uri}}
+
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
