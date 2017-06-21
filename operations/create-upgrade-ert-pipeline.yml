@@ -23,6 +23,5 @@
   value: upload-ert-and-stemcell
 
 - op: replace
-  path: /jobs/PRODUCT_NAME={{product_name}}
-  value:
-    PRODUCT_NAME: cf
+  path: /jobs/PRODUCT_NAME={{product_name}}/PRODUCT_NAME
+  value: cf
