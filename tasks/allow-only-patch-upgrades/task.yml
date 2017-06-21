@@ -21,11 +21,13 @@ image_resource:
 
 inputs:
   - name: pcf-pipelines
+  - name: product-files
 
 params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_URI:
+  PRODUCT_NAME:
 
 run:
   path: pcf-pipelines/tasks/allow-only-patch-upgrades/task.sh
