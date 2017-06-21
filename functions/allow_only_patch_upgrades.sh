@@ -9,6 +9,13 @@ set -eu
 # then we should fail
 #
 function allow_only_patch_upgrades {
+  if [ "$#" -ne 3 ]; then
+      echo "Illegal number of arguments."
+      echo "usage: allow_only_patch_upgrades <opsman_uri> <opsman_user> <opsman_pass>"
+  fi
+  local OPS_MGR_HOST=$1
+  local OPS_MGR_USR=$2
+  local OPS_MGR_PWD=$3
   local staged_versions=$(
     om-linux \
       --target "https://${OPS_MGR_HOST}" \

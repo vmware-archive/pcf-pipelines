@@ -23,9 +23,9 @@ inputs:
   - name: pcf-pipelines
 
 params:
-  OPS_MGR_USR:
-  OPS_MGR_PWD:
-  OPS_MGR_HOST:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  OPSMAN_URI:
 
 run:
   path: pcf-pipelines/tasks/allow-only-patch-upgrades/task.sh
