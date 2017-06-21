@@ -17,16 +17,7 @@ set -eu
 # limitations under the License.
 
 echo "Checking if you are applying an allowed patch upgrade @ ${OPSMAN_URI}"
-for i in `om-linux --target "https://${OPSMAN_URI}" --skip-ssl-validation --username "${OPSMAN_USERNAME}" --password "${OPSMAN_PASSWORD}" deployed-products | egrep -v "\-\-\-|NAME" | awk -F"|" '{ print $3 }'`; do
-  echo $i | grep "${PRODUCT_VERSION_REGEX}";
-  if [[ $? == 1 ]]; then
-    echo "current version: ${i}"
-    echo "attempting to upgrade to ${PRODUCT_VERSION_REGEX}"
-    echo "Pivotal recommends that you only automate
-    patch upgrades of PCF, and perform major or minor
-    upgrades manually to ensure that no high-impact
-    changes to the platform are introduced without
-    your prior knowledge."
-    exit 1
-  fi
-done
+
+source pcf-pipelines/functions/allow_only_patch_upgrades.sh
+
+allow_only_patch_upgrades
