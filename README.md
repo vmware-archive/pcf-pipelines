@@ -3,6 +3,8 @@
 This is a collection of [Concourse](https://concourse.ci) pipelines for
 installing and upgrading [Pivotal Cloud Foundry](https://pivotal.io/platform).
 
+Other pipelines which may be of interest are listed at the end of this README.
+
 ![Concourse Pipeline](install-pcf/gcp/embed.png)
 
 **Install pipelines** will deploy PCF for whichever IaaS you choose. For public cloud installs, such as AWS, Azure, and GCP, the pipeline will deploy the necessary infrastructure in the public cloud, such as the networks, loadbalancers, and databases, and use these resources to then deploy PCF (Ops Manager and Elastic Runtime). On-premise private datacenter install pipelines, such as with vSphere and Openstack, do not provision any infrastructure resources and only deploy PCF, using resources that are specified in the parameters of the pipeline.
@@ -93,6 +95,10 @@ You can add as many operations as you like, chaining them with successive `-o` f
 
 See [operations](operations) for more examples of operations.
 
+## Deploying and Managing Multiple Pipelines
+
+There is an experimental tool which you may find helpful for deploying and managing multiple customized pipelines all at once, called [PCF Pipelines Maestro](https://github.com/pivotalservices/pcf-pipelines-maestro). It uses a single pipeline to generate multiple pipelines for as many PCF foundations as you need.
+
 ## Pipeline Compatibility Across PCF Versions
 
 Our goal is to at least support the latest version of PCF with these pipelines. Currently there is no assurance of backwards compatibility, however we do keep past releases of the pipelines to ensure there is at least one version of the pipelines that would work with an older version of PCF.
@@ -164,106 +170,11 @@ go get github.com/concourse/atc
 ginkgo -r -p
 ```
 
-There is a test pipeline located at `ci/tasks/test.yml`. It is best practice to
-run this script locally, in concourse before committing your changes to the
-repository.  The test pipeline will execute all `ginkgo` tests as well as the
-BATS tests `(see below)`.
+#### Other notable examples of pipelines for PCF
 
-In order to execute the test pipeline, a running concourse is required. Options
-to run concourse locally are available in both `vagrant` and `docker`, as well
-as numerous other methods.  Then execute test pipeline with `fly` cli.
-
-```
-fly -t ci execute --config ci/tasks/test.yml --input pcf-pipelines=.
-```
-
-#### Unit Tests with BATS
-
-BATS, Bash Automated Testing System, is a tool for executing local unit tests.
-BATS can also execute the tests as a part of the test pipeline. See the
-[BATS Documentation](https://github.com/sstephenson/bats#readme) for more.
-
-##### BATS Test Conventions
-
-A BATS tests is a special kind of shell script. Add the following to a script
-file. Best practices dictate this file should have a `.bats` extension
-
-```
-#!/usr/bin/env bats
-```
-
-Test cases are annotated with `@Test`, much like you would find in any xUnit
-framework. The function should return the assertion for the test case.
-
-```
-@test "givenSomeTest_verifyTestResult" {
-  ...
-  [ [test] -eq [result] ]
-}
-```
-
-BATS has familiar constructs such as `setup` and `teardown` so that the test
-case can setup test conditions and clean them up afterwards.
-
-Setup function
-
-```
-setup() {
-  ...
-}
-```
-
-Teardown function
-
-```
-teardown() {
-  ...
-}
-```
-
-##### Setup BATS locally
-
-BATS is available from numerous repositories or from source. Below are
-instructions for a few common environments.
-
-###### Setup BATS locally on a Mac
-
-BATS is available in Home Brew
-
-```
-brew install bats
-```
-
-###### Setup BATS locally on a ubuntu
-
-```
-sudo add-apt-repository ppa:duggan/bats
-sudo apt-get update
-sudo apt-get install bats
-```
-
-###### Setup BATS locally from source
-
-```
-git clone https://github.com/sstephenson/bats.git
-cd bats
-./install.sh /usr/local
-```
-
-##### Execute BATS tests
-
-BATS can be executed with directory of BATS scripts or by supplying a single
-script. These scripts should be executed relative to the `pcf-pipelines`
-directory.
-
-###### Execute all BATS tests
-
-```
-bats tasks-test
-```
-
-###### Execute a single BATS test
-
-```
-bats tasks-test extract-terraform-test.bats
-```
+[PCFS Sample Pipelines](https://github.com/pivotalservices/concourse-pipeline-samples) - includes pipelines for
+- integrating Artifactory, Azure blobstores, GCP storage, or Docker registries
+- blue-green deployment of apps to PCF
+- backing up PCF
+- deploying Concourse itself with bosh.
+- and more...

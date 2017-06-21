@@ -1,4 +1,6 @@
-#!/bin/bash -u
+#!/bin/bash
+
+set -eu
 
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
@@ -20,16 +22,14 @@
 POLL_INTERVAL=30
 function main() {
 
-  chmod +x tool-om/om-linux
-  CMD_PATH="./tool-om/om-linux"
-
   local cwd
   cwd="${1}"
 
+  set +e
   while :
   do
 
-      ${CMD_PATH} --target "${OPSMAN_URI}" \
+      om-linux --target "https://${OPSMAN_URI}" \
            --skip-ssl-validation \
            --username "${OPSMAN_USERNAME}" \
            --password "${OPSMAN_PASSWORD}" \
@@ -41,7 +41,7 @@ function main() {
         exit 1
       fi
 
-      ${CMD_PATH} --target "${OPSMAN_URI}" \
+      om-linux --target "https://${OPSMAN_URI}" \
            --skip-ssl-validation \
            --username "${OPSMAN_USERNAME}" \
            --password "${OPSMAN_PASSWORD}" \
@@ -65,6 +65,7 @@ function main() {
       echo "Pending changes or running installs detected. Waiting"
       sleep $POLL_INTERVAL
   done
+  set -e
 }
 
 main "${PWD}"

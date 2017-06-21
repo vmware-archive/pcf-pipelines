@@ -1,5 +1,16 @@
 FROM cloudfoundry/cflinuxfs2
 
+COPY \
+       om-linux \
+       yaml_patch_linux \
+       cf \
+       cliaas-linux \
+       pivnet-cli \
+       govc \
+       om-linux-beta \
+       stemcell-downloader \
+       /usr/local/bin/
+
 RUN \
 # jq
 wget -O /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x /usr/local/bin/jq && \
@@ -16,6 +27,9 @@ apt-get -y update && sudo apt-get -y install --no-install-recommends google-clou
 # pip
 apt-get install -y --no-install-recommends python-pip python-dev && \
 
+# UAA Client
+gem install cf-uaac --no-ri --no-rdoc && \
+
 # AWS Client
 pip install awscli && \
 
@@ -23,7 +37,7 @@ pip install awscli && \
 pip install python-openstackclient pytz python-neutronclient && \
 
 # Clean up
-apt-get remove -y python-pip python-dev && \
+apt-get remove -y python-dev && \
 apt-get -y clean && apt-get -y autoremove --purge && rm -rf /etc/apt/ && \
 rm -rf /tmp/* && \
 find /var/lib/apt/lists -type f | xargs rm -f && \

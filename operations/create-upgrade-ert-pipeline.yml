@@ -1,0 +1,27 @@
+- op: replace
+  path: /name=tile/name
+  value: elastic-runtime
+
+- op: replace
+  path: /product_slug={{product_slug}}/product_slug
+  value: elastic-runtime
+
+- op: replace
+  path: /resource=tile/resource
+  value: elastic-runtime
+
+- op: replace
+  path: /get=tile/get
+  value: elastic-runtime
+
+- op: replace
+  path: /jobs/name=upgrade-tile/name
+  value: upgrade-ert
+
+- op: replace
+  path: /jobs/name=upgrade-ert/task=upload-tile-and-stemcell/task
+  value: upload-ert-and-stemcell
+
+- op: replace
+  path: /jobs/name=upgrade-ert/task=stage-tile/params/PRODUCT_NAME
+  value: cf

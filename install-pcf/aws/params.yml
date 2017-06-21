@@ -1,40 +1,104 @@
+pivnet_token:
+git_private_key:
+
+opsman_major_minor_version: ^1\.10\..*$
+ert_major_minor_version: ^1\.10\..*$
+
+# Errands to disable prior to deploying ERT
+# Valid values:
+#   all
+#   none
+#   "" (empty string)
+#   Any combination of the following, separated by comma:
+#     smoke-tests
+#     push-apps-manager
+#     notifications
+#     notifications-ui
+#     push-pivotal-account
+#     autoscaling
+#     autoscaling-register-broker
+#     nfsbrokerpush
+ert_errands_to_disable: none
+
+# RDS Master Credentials
+db_master_username:
+db_master_password:
+
+# ERT Database Credentials
+db_app_usage_service_username:
+db_app_usage_service_password:
+db_autoscale_username:
+db_autoscale_password:
+db_diego_username:
+db_diego_password:
+db_notifications_username:
+db_notifications_password:
+db_routing_username:
+db_routing_password:
+db_uaa_username:
+db_uaa_password:
+db_ccdb_username:
+db_ccdb_password:
+db_accountdb_username:
+db_accountdb_password:
+db_networkpolicyserverdb_username:
+db_networkpolicyserverdb_password:
+db_nfsvolumedb_username:
+db_nfsvolumedb_password:
+db_silk_username:
+db_silk_password:
+db_locket_username:
+db_locket_password:
+
+terraform_prefix:
+
+director_certificates:
+
 TF_VAR_aws_access_key:
 TF_VAR_aws_secret_key:
 TF_VAR_aws_key_name:
 TF_VAR_aws_cert_arn:
-TF_VAR_rds_db_username:
-TF_VAR_rds_db_password:
-TF_VAR_rds_db_username_appusage:
-TF_VAR_rds_db_password_appusage:
-TF_VAR_rds_db_username_autoscale:
-TF_VAR_rds_db_password_autoscale:
-TF_VAR_rds_db_username_diego:
-TF_VAR_rds_db_password_diego:
-TF_VAR_rds_db_username_notifications:
-TF_VAR_rds_db_password_notifications:
-TF_VAR_rds_db_username_routing:
-TF_VAR_rds_db_password_routing:
-TF_VAR_rds_db_username_uaa:
-TF_VAR_rds_db_password_uaa:
-TF_VAR_rds_db_username_ccdb:
-TF_VAR_rds_db_password_ccdb:
-TF_VAR_rds_db_username_ertsql:
-TF_VAR_rds_db_password_ertsql:
-
-TF_VAR_rds_db_username_account:
-TF_VAR_rds_db_password_account:
-TF_VAR_rds_db_username_networkpolicy:
-TF_VAR_rds_db_password_networkpolicy:
-TF_VAR_rds_db_username_nfsvolume:
-TF_VAR_rds_db_password_nfsvolume:
-
-TF_VAR_environment:
-TF_VAR_opsman_ami:
 TF_VAR_amis_nat:
 TF_VAR_aws_region:
 TF_VAR_az1:
 TF_VAR_az2:
 TF_VAR_az3:
+
+S3_ENDPOINT: https://s3.amazonaws.com
+S3_OUTPUT_BUCKET:
+ERT_DOMAIN:
+OPSMAN_USER:
+OPSMAN_PASSWORD:
+OPSMAN_URI:
+PEM:
+ERT_SSL_CERT:
+ERT_SSL_KEY:
+ROUTE_53_ZONE_ID:
+
+# if the `opsman_allow` cidr ranges are left blank then there will not be any
+# external ingress to ops manager defined in the security group
+# ingress from the local network will remain allowed for all protos
+opsman_allow_ssh_cidr_ranges: 
+opsman_allow_https_cidr_ranges: 
+
+mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications
+mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
+
+#SCP backup config params (leave empty values if you're not using scp
+mysql_backups_scp_server:
+mysql_backups_scp_port:
+mysql_backups_scp_user:
+mysql_backups_scp_key:
+mysql_backups_scp_destination:
+mysql_backups_scp_cron_schedule:
+
+#S3 backup config params (leave empty values if you're not using s3)
+mysql_backups_s3_endpoint_url:
+mysql_backups_s3_bucket_name:
+mysql_backups_s3_bucket_path:
+mysql_backups_s3_access_key_id:
+mysql_backups_s3_secret_access_key:
+mysql_backups_s3_cron_schedule:
 
 #SUBNETS
 TF_VAR_vpc_cidr: 192.168.0.0/16
@@ -62,36 +126,3 @@ TF_VAR_opsman_ip_az1: 192.168.0.7
 TF_VAR_nat_ip_az1: 192.168.0.6
 TF_VAR_nat_ip_az2: 192.168.1.6
 TF_VAR_nat_ip_az3: 192.168.2.6
-
-S3_ENDPOINT:
-S3_OUTPUT_BUCKET:
-ERT_DOMAIN:
-OPSMAN_USER:
-OPSMAN_PASSWORD:
-OPSMAN_URI:
-TILE_UPLOAD_TIMEOUT: 1800 # Time to allow for a tile upload request to live
-PIVNET_TOKEN:
-GITHUB_TOKEN:
-PEM:
-ERT_SSL_CERT: generate
-ERT_SSL_KEY:
-ROUTE_53_ZONE_ID:
-
-mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications
-mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
-
-#SCP backup config params (leave empty values if you're not using scp
-mysql_backups_scp_server:
-mysql_backups_scp_port:
-mysql_backups_scp_user:
-mysql_backups_scp_key:
-mysql_backups_scp_destination:
-mysql_backups_scp_cron_schedule:
-
-#S3 backup config params (leave empty values if you're not using s3)
-mysql_backups_s3_endpoint_url:
-mysql_backups_s3_bucket_name:
-mysql_backups_s3_bucket_path:
-mysql_backups_s3_access_key_id:
-mysql_backups_s3_secret_access_key:
-mysql_backups_s3_cron_schedule:

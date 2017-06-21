@@ -1,4 +1,6 @@
-#!/bin/bash -eu
+#!/bin/bash
+
+set -eu
 
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
@@ -14,26 +16,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-tar -xf cf-cli/*.tgz cf
-chmod +x cf
-
-./cf api $CF_API_URI --skip-ssl-validation
-./cf auth $CF_USERNAME $CF_PASSWORD
+cf api $CF_API_URI --skip-ssl-validation
+cf auth $CF_USERNAME $CF_PASSWORD
 
 echo Enabling buildpack ${SOURCE_BUILDPACK_NAME}...
-./cf update-buildpack $SOURCE_BUILDPACK_NAME --enable
+cf update-buildpack $SOURCE_BUILDPACK_NAME --enable
 
 set +e
-old_buildpack=$(./cf buildpacks | grep "${TARGET_BUILDPACK_NAME}\s")
+old_buildpack=$(cf buildpacks | grep "${TARGET_BUILDPACK_NAME}\s")
 set -e
 if [ -n "$old_buildpack" ]; then
   index=$(echo $old_buildpack | cut -d' ' -f2)
   name=$(echo $old_buildpack | cut -d' ' -f1)
 
-  ./cf delete-buildpack -f $TARGET_BUILDPACK_NAME
+  cf delete-buildpack -f $TARGET_BUILDPACK_NAME
 
   echo Updating buildpack ${SOURCE_BUILDPACK_NAME} index...
-  ./cf update-buildpack $SOURCE_BUILDPACK_NAME -i $index
+  cf update-buildpack $SOURCE_BUILDPACK_NAME -i $index
 fi
 
-./cf rename-buildpack $SOURCE_BUILDPACK_NAME $TARGET_BUILDPACK_NAME
+cf rename-buildpack $SOURCE_BUILDPACK_NAME $TARGET_BUILDPACK_NAME

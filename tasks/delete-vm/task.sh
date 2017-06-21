@@ -18,10 +18,6 @@ set -eu
 
 root=$PWD
 
-export PATH=$root/tool-cliaas:$PATH
-
-chmod +x tool-cliaas/cliaas-linux
-
 cliaas-linux delete-vm \
   --config cliaas-config/config.yml \
   --identifier $VM_IDENTIFIER

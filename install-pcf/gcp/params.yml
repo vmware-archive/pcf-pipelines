@@ -30,8 +30,7 @@ s3_access_key_id: CHANGEME
 s3_secret_access_key: CHANGEME
 s3_region: CHANGEME
 
-# GitHub token with repo or public_repo scope
-github_token: CHANGEME
+git_private_key:
 
 # Pivotal Network token: https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
@@ -39,34 +38,47 @@ pivnet_token: CHANGEME
 # Operations Manager credentials to set
 pcf_opsman_admin_username: CHANGEME
 pcf_opsman_admin_password: CHANGEME
-tile_upload_timeout: 1800 # Time to allow for a tile upload request to live
 
 # Elastic Runtime Domain
-pcf_ert_domain: CHANGEME
-
-# Elastic Runtime SQL DB credentials to set
-ert_sql_db_username: CHANGEME
-ert_sql_db_password: CHANGEME
+pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
+opsman_uri: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
 
 # Elastic Runtime SSL configuration
-pcf_ert_ssl_cert: |
-  CHANGEME
-pcf_ert_ssl_key: |
-  CHANGEME
+# Set pcf_ert_ssl_cert to 'generate' if you'd like a self-signed cert to be
+# made
+pcf_ert_ssl_cert: generate
+pcf_ert_ssl_key:
+
+# Errands to disable prior to deploying ERT
+# Valid values:
+#   all
+#   none
+#   "" (empty string)
+#   Any combination of the following, separated by comma:
+#     smoke-tests
+#     push-apps-manager
+#     notifications
+#     notifications-ui
+#     push-pivotal-account
+#     autoscaling
+#     autoscaling-register-broker
+#     nfsbrokerpush
+ert_errands_to_disable: none
 
 # PCF Operations Manager minor version to install
-opsman_major_minor_version: 1\.10\.*
+opsman_major_minor_version: ^1\.10\..*$
 
 # PCF Elastic Runtime minor version to install
-ert_major_minor_version: 1\.10\.*
+ert_major_minor_version: ^1\.10\..*$
 
 # DB Creds
+# Usernames must be 16 characters or fewer
 db_diego_username: CHANGEME
 db_diego_password: CHANGEME
 db_notifications_username: CHANGEME 
 db_notifications_password: CHANGEME 
-db_autoscale_password: CHANGEME 
 db_autoscale_username: CHANGEME 
+db_autoscale_password: CHANGEME 
 db_uaa_username: CHANGEME
 db_uaa_password: CHANGEME
 db_app_usage_service_username: CHANGEME 
@@ -82,6 +94,10 @@ db_networkpolicyserverdb_username: CHANGEME
 db_networkpolicyserverdb_password: CHANGEME
 db_nfsvolumedb_username: CHANGEME
 db_nfsvolumedb_password: CHANGEME
+db_silk_username:
+db_silk_password:
+db_locket_username:
+db_locket_password:
 
 mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications
 mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)

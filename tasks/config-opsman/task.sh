@@ -1,14 +1,13 @@
-#!/bin/bash -e
+#!/bin/bash
 
-chmod +x tool-om/om-linux
-PATH=$PWD/tool-om:$PATH
+set -eu
 
 until $(curl --output /dev/null -k --silent --head --fail https://$OPS_MGR_HOST/setup); do
     printf '.'
     sleep 5
 done
 
-tool-om \
+om-linux \
   --target https://$OPS_MGR_HOST \
   --skip-ssl-validation \
   configure-authentication \

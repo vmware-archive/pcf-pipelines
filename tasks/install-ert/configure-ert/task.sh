@@ -8,10 +8,6 @@ if [[ ! -f ${json_file} ]]; then
   exit 1
 fi
 
-# Setup OM Tool
-sudo cp tool-om/om-linux /usr/local/bin
-sudo chmod 755 /usr/local/bin/om-linux
-
 function fn_om_linux_curl_fail {
     echo ERROR
     echo stdout:\n

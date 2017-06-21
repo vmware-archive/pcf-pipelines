@@ -2,14 +2,6 @@
 
 set -e
 
-mv terraform-bin/terraform /usr/local/bin
-
-OM_CMD=./tool-om/om-linux
-chmod +x tool-om/om-linux
-
-chmod +x jq/jq
-PATH=$PWD/jq:$PATH
-
 json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}/${terraform_template}"
 json_file_template="${json_file_path}/ert-template.json"
 
@@ -22,24 +14,32 @@ json_file="json_file/ert.json"
 
 cp ${json_file_template} ${json_file}
 
-if [[ ${pcf_ert_ssl_cert} == "generate" ]]; then
-  echo "=============================================================================================="
-  echo "Generating Self Signed Certs for sys.${pcf_ert_domain} & cfapps.${pcf_ert_domain} ..."
-  echo "=============================================================================================="
-  pcf-pipelines/tasks/scripts/gen_ssl_certs.sh "sys.${pcf_ert_domain}" "cfapps.${pcf_ert_domain}"
-  export pcf_ert_ssl_cert=$(cat sys.${pcf_ert_domain}.crt)
-  export pcf_ert_ssl_key=$(cat sys.${pcf_ert_domain}.key)
+source pcf-pipelines/functions/generate_cert.sh
+
+OPS_MGR_HOST="opsman.$pcf_ert_domain"
+OPS_MGR_USR="$pcf_opsman_admin"
+OPS_MGR_PWD="$pcf_opsman_admin_passwd"
+
+if [[ ${pcf_ert_ssl_cert} == "" || ${pcf_ert_ssl_cert} == "generate" ]]; then
+  domains=(
+    "*.sys.${pcf_ert_domain}"
+    "*.cfapps.${pcf_ert_domain}"
+  )
+
+  certificates=$(generate_cert "${domains[*]}")
+  pcf_ert_ssl_cert=`echo $certificates | jq --raw-output '.certificate'`
+  pcf_ert_ssl_key=`echo $certificates | jq --raw-output '.key'`
 fi
 
-system_domain=sys.${pcf_ert_domain}
-ops_mgr_host="https://opsman.$pcf_ert_domain"
-domains=$(cat <<-EOF
-  {"domains": ["*.${system_domain}", "*.login.${system_domain}", "*.uaa.${system_domain}"] }
-EOF
+saml_domains=(
+  "*.sys.${pcf_ert_domain}"
+  "*.login.sys.${pcf_ert_domain}"
+  "*.uaa.sys.${pcf_ert_domain}"
 )
-saml_cert_response=`$OM_CMD -t $ops_mgr_host -u $pcf_opsman_admin -p $pcf_opsman_admin_passwd -k curl -p "/api/v0/certificates/generate" -x POST -d "$domains"`
-saml_cert_pem=$(echo $saml_cert_response | jq --raw-output '.certificate')
-saml_key_pem=$(echo $saml_cert_response | jq --raw-output '.key')
+
+saml_certificates=$(generate_cert "${saml_domains[*]}")
+saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
+saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
 sed -i \
   -e "s/{{pcf_az_1}}/${pcf_az_1}/g" \
@@ -48,6 +48,10 @@ sed -i \
   -e "s/{{pcf_ert_domain}}/${pcf_ert_domain}/g" \
   -e "s/{{terraform_prefix}}/${terraform_prefix}/g" \
   -e "s/{{mysql_monitor_recipient_email}}/${mysql_monitor_recipient_email}/g" \
+  -e "s/{{db_locket_username}}/${db_locket_username}/g" \
+  -e "s/{{db_locket_password}}/${db_locket_password}/g" \
+  -e "s/{{db_silk_username}}/${db_silk_username}/g" \
+  -e "s/{{db_silk_password}}/${db_silk_password}/g" \
   ${json_file}
 
 if [[ ${MYSQL_BACKUPS} == "scp" ]]; then
@@ -82,7 +86,7 @@ if [[ ${MYSQL_BACKUPS} == "s3" ]]; then
     .properties.properties.".properties.mysql_backups.s3.bucket_name" = {"value": $mysql_backups_s3_bucket_name} |
     .properties.properties.".properties.mysql_backups.s3.bucket_path" = {"value": $mysql_backups_s3_bucket_path} |
     .properties.properties.".properties.mysql_backups.s3.access_key_id" = {"value": $mysql_backups_s3_access_key_id} |
-    .properties.properties.".properties.mysql_backups.s3.secret_access_key" = {"value": $mysql_backups_s3_secret_access_key} |
+    .properties.properties.".properties.mysql_backups.s3.secret_access_key" = {"value": { "secret": $mysql_backups_s3_secret_access_key}} |
     .properties.properties.".properties.mysql_backups.s3.cron_schedule" = {"value": $mysql_backups_s3_cron_schedule}
 EOF
 

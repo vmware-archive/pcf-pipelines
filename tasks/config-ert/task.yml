@@ -4,7 +4,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: cloudfoundry/cflinuxfs2}
+  source: {repository: czero/cflinuxfs2}
 
 params:
   OPS_MGR_HOST:
@@ -24,7 +24,6 @@ params:
   SSL_TERMINATION:
   SSL_CERT:
   SSL_PRIVATE_KEY:
-  OPS_MGR_GENERATE_SSL_ENDPOINT:
   DISABLE_HTTP_PROXY:
   TCP_ROUTING:
   TCP_ROUTING_PORTS:
@@ -100,8 +99,6 @@ params:
 
 inputs:
   - name: pcf-pipelines
-  - name: tool-om
-  - name: jq
 
 run:
   path: pcf-pipelines/tasks/config-ert/task.sh

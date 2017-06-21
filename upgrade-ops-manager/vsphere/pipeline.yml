@@ -20,33 +20,12 @@ resource_types:
     tag: latest-final
 
 resources:
-- name: govc
-  type: github-release
-  source:
-    user: vmware
-    repository: govmomi
-    access_token: {{github_token}}
-
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}}
-
-- name: tool-pivnet-cli
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pivnet-cli
-    access_token: {{github_token}}
-
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    username: {{github_token}}
+    private_key: {{git_private_key}}
 
 - name: pivnet-opsmgr
   type: pivnet
@@ -82,13 +61,6 @@ jobs:
       params:
         globs: ["*.ova"]
     - get: pcf-pipelines
-    - get: govc
-    - get: tool-om
-      params:
-        globs: ["*linux*"]
-    - get: tool-pivnet-cli
-      params:
-        globs: ["*linux*"]
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
@@ -131,7 +103,7 @@ jobs:
       NTP: {{ntp}}
       OPSMAN_NETWORK: {{opsman_network}}
       OPSMAN_VM_FOLDER: {{opsman_vm_folder}}
-      OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_SSH_PASSWORD: {{opsman_ssh_password}}
 
   - task: import-opsmgr
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
@@ -150,6 +122,13 @@ jobs:
 
   - task: restore-stemcells
     file: pcf-pipelines/tasks/restore-stemcells/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
+  - task: allow-patch-release-only-check 
+    file: pcf-pipelines/tasks/allow-only-patch-upgrades/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}

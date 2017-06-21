@@ -29,33 +29,12 @@ resources:
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
-- name: tool-cliaas
-  type: github-release
-  source:
-    user: pivotal-cf 
-    repository: cliaas
-    access_token: {{github_token}}
-
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{github_token}}
-
-- name: tool-pivnet-cli
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: pivnet-cli
-    access_token: {{github_token}}
-
 - name: pcf-pipelines
   type: git
   source:
-    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    username: {{github_token}}
+    private_key: {{git_private_key}}
 
 - name: schedule
   type: time
@@ -84,17 +63,7 @@ jobs:
       params:
         globs:
         - "*GCP.yml"
-    - get: tool-cliaas
-      params:
-        globs: ["*linux*"]
     - get: pcf-pipelines
-
-    - get: tool-om
-      params:
-        globs: ["*linux*"]
-    - get: tool-pivnet-cli
-      params:
-        globs: ["*linux*"]
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
@@ -119,7 +88,7 @@ jobs:
         OPSMAN_URI: {{opsman_uri}}
 
   - task: create-cliaas-config
-    file: pcf-pipelines/tasks/create-cliaas-config-gcp/task.yml
+    file: pcf-pipelines/upgrade-ops-manager/gcp/tasks/create-cliaas-config/task.yml
     params:
       PIVNET_IMAGE_REGION: {{pivnet_image_region}}
       OPSMAN_PROJECT: {{opsman_gcp_project}}
@@ -144,10 +113,17 @@ jobs:
     file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
     params:
       API_TOKEN: {{pivnet_token}}
-      IAAS_TYPE: gcp 
+      IAAS_TYPE: google
 
   - task: restore-stemcells
     file: pcf-pipelines/tasks/restore-stemcells/task.yml
+    params:
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_URI: {{opsman_uri}}
+
+  - task: allow-patch-release-only-check 
+    file: pcf-pipelines/tasks/allow-only-patch-upgrades/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}

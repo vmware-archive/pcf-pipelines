@@ -19,7 +19,7 @@ Before start kicking off the pipeline, there are a few parameters need to be set
 * Decide a domain for elastic runtime e.g pivotal-c0.com. The pipeline will use prefix apps and sys for wild card domains:
 
    ```
-   *.apps.pivotal-c0.com
+   *.cfapps.pivotal-c0.com
    *.sys.pivotal-c0.com
    ```
 
@@ -138,12 +138,6 @@ Before start kicking off the pipeline, there are a few parameters need to be set
     PIVNET_TOKEN: XXXXXX
     ```
 
-  * A github access key to download github binary releases E.g. https://github.com/pivotal-cf/om
-
-    ```
-    GITHUB_TOKEN: XXXXXX
-    ```
-
   * IP Prefix:
 
     ** Note ** : Current pipeline creates only 10.0.0.0/16 VPC CIDR. Will expose configurable CIDR later
@@ -157,7 +151,7 @@ Before start kicking off the pipeline, there are a few parameters need to be set
     ** Note ** : Since pipeline uses pre load AWS server certificate. Currently these parameters are not used.
 
     ```    
-     ERT_SSL_CERT: generate
+     ERT_SSL_CERT:
      ERT_SSL_KEY:
     ```
 

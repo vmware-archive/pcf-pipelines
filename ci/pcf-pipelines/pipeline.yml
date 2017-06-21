@@ -1,0 +1,272 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    branch: master
+    private_key: {{git_private_key}}
+
+- name: yaml-patch
+  type: github-release
+  source:
+    user: krishicks
+    repository: yaml-patch
+    access_token: {{github_token}}
+
+- name: pivnet-rc
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    access_key_id: {{pivnet_aws_access_key}}
+    secret_access_key: {{pivnet_aws_secret_key}}
+    product_version: .*-rc\.\d+
+
+- name: pivnet-release
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+    access_key_id: {{pivnet_aws_access_key}}
+    secret_access_key: {{pivnet_aws_secret_key}}
+
+- name: version
+  type: semver
+  source:
+    driver: git
+    initial_version: 0.1.0-rc.1
+    uri: https://github.com/pivotal-cf/pcf-pipelines
+    username: {{github_token}}
+    password: x-oauth-basic
+    branch: version
+    file: version
+
+- name: slack
+  type: slack-notification
+  source:
+    url: {{slack_webhook_url}}
+
+- name: fly
+  type: github-release
+  check_every: 720h
+  source:
+    user: krishicks
+    repository: fly
+    access_token: {{github_token}}
+
+jobs:
+- name: bump-patch
+  serial_groups: [version]
+  plan:
+  - put: version
+    params: {bump: patch}
+
+- name: bump-minor
+  serial_groups: [version]
+  plan:
+  - put: version
+    params: {bump: minor}
+
+- name: test
+  on_failure:
+    <<: *notify_slack
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+  - task: test
+    file: pcf-pipelines/ci/tasks/test.yml
+
+- name: publish-rc
+  serial_groups: [version]
+  on_failure:
+    <<: *notify_slack
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [test]
+    - get: yaml-patch
+      params:
+        globs: ["*linux*"]
+    - get: fly
+
+  - put: version
+    params: {pre: rc}
+
+  - task: create-release
+    file: pcf-pipelines/ci/tasks/create_release.yml
+    params:
+      AVAILABILITY: Admins Only
+
+  - put: pivnet-rc
+    params:
+      metadata_file: pivnet-metadata/metadata.yml
+      file_glob: pcf-pipelines-release-tarball/*.tgz
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
+  - put: pcf-pipelines
+    params:
+      repository: pcf-pipelines
+      tag: version/version
+      tag_prefix: v
+      only_tag: true
+
+- name: test-rc
+  on_failure:
+    <<: *notify_slack
+  plan:
+  - aggregate:
+    - get: version
+    - get: src
+      resource: pcf-pipelines
+      passed: [publish-rc]
+    - do:
+      - get: pivnet-rc
+        trigger: true
+        passed: [publish-rc]
+      - task: unpack-rc
+        file: src/ci/tasks/unpack_tarball.yml
+        input_mapping: { tarball: pivnet-rc }
+        output_mapping: { unpacked_tarball: pcf-pipelines-release }
+
+  - task: prepare-workspace
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      inputs:
+      - name: src
+      - name: pcf-pipelines-release
+      outputs:
+      - name: pcf-pipelines
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cp -r src/*.go pcf-pipelines
+          cp -r pcf-pipelines-release/pcf-pipelines/* pcf-pipelines
+
+  - task: test
+    file: src/ci/tasks/test.yml
+
+- name: update-pipelines
+  on_failure:
+    <<: *notify_slack
+  plan:
+  - aggregate:
+    - get: version
+      passed: [test-rc]
+    - get: pcf-pipelines
+      passed: [test-rc]
+    - get: pivnet-rc
+      trigger: true
+      passed: [test-rc]
+
+  - task: unpack-rc
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: release }
+
+  - aggregate:
+    - do:
+      - task: update-install-pcf-aws-current-pipeline
+        params:
+          PIPELINE_PARAMS: {{install_pcf_aws_current_params}}
+          PIPELINE_NAME: install-pcf-aws-current
+          PIPELINE_PATH: release/pcf-pipelines/install-pcf/aws/pipeline.yml
+          <<: *atc_creds
+        file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
+- name: publish-release
+  serial_groups: [version]
+  plan:
+  - aggregate:
+    - get: version
+      passed: [update-pipelines]
+      params: {bump: final}
+    - get: pcf-pipelines
+      passed: [update-pipelines]
+    - get: yaml-patch
+      params:
+        globs: ["*linux*"]
+    - get: fly
+
+  - task: create-release
+    file: pcf-pipelines/ci/tasks/create_release.yml
+    params:
+      AVAILABILITY: Selected User Groups Only
+
+  - put: pivnet-release
+    params:
+      metadata_file: pivnet-metadata/metadata.yml
+      file_glob: pcf-pipelines-release-tarball/*.tgz
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
+
+  - put: pcf-pipelines
+    params:
+      repository: pcf-pipelines
+      tag: version/version
+      tag_prefix: v
+      only_tag: true
+
+  on_failure:
+    <<: *notify_slack
+  on_success:
+    do:
+    - task: create-slack-notification
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: concourse/buildroot
+            tag: curl
+        inputs:
+        - name: pivnet-release
+        outputs:
+        - name: notification-text
+        run:
+          path: sh
+          args:
+          - -ce
+          - |
+            release_id=$(cat pivnet-release/metadata.json | jq .Release.ID)
+            cat > notification-text/text <<EOF
+              Deployed pcf-pipelines final release to https://network.pivotal.io/products/pcf-automation#/releases/$release_id
+            EOF
+    - put: slack
+      params:
+        text_file: notification-text/text
+        silent: true
+
+    - put: version
+      params: {bump: final}
+
+    - put: version
+      params: {bump: patch, pre: rc}
+
+atc_creds: &atc_creds
+  ATC_EXTERNAL_URL: {{atc_external_url}}
+  ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+  ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+  ATC_TEAM_NAME: {{atc_team_name}}
+
+notify_slack: &notify_slack
+  put: slack
+  params:
+    text: "$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME failed: $ATC_EXTERNAL_URL/builds/$BUILD_ID"

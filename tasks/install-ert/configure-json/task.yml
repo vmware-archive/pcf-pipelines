@@ -5,14 +5,11 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: cloudfoundry/cflinuxfs2
+    repository: czero/cflinuxfs2
 
 inputs:
-  - name: terraform-bin
   - name: pcf-pipelines 
-  - name: tool-om
   - name: terraform-state
-  - name: jq
 
 outputs:
   - name: json_file
@@ -33,15 +30,9 @@ params:
   terraform_template:
   terraform_prefix:
   # IaaS Specific for GCP only
-  gcp_proj_id:
-  gcp_region:
-  gcp_svc_acct_key:
   gcp_storage_access_key:
   gcp_storage_secret_key:
   # aws specific
-  bucket:
-  TF_VAR_aws_access_key:
-  TF_VAR_aws_secret_key:
   S3_ENDPOINT:
   # db credentials
   db_app_usage_service_username:
@@ -58,8 +49,6 @@ params:
   db_uaa_password:
   db_ccdb_username:
   db_ccdb_password:
-  ert_sql_db_username:
-  ert_sql_db_password:
   mysql_monitor_recipient_email:
   MYSQL_BACKUPS:
   MYSQL_BACKUPS_SCP_SERVER:
@@ -80,3 +69,7 @@ params:
   db_networkpolicyserverdb_password:
   db_nfsvolumedb_username:
   db_nfsvolumedb_password:
+  db_locket_username:
+  db_locket_password:
+  db_silk_username:
+  db_silk_password:

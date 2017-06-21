@@ -21,18 +21,6 @@ run:
     go get github.com/onsi/gomega
     go get github.com/concourse/atc
 
-    apt-get update
-    apt-get install -y zip
-
-    git clone https://github.com/sstephenson/bats.git
-    pushd bats
-      ./install.sh /usr/local
-    popd
-
     pushd pcf-pipelines
       ginkgo -p -r -randomizeAllSpecs
-    popd
-
-    pushd pcf-pipelines
-      bats --tap tasks-test
     popd

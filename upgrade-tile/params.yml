@@ -14,14 +14,12 @@
 
 # Resource
 # ------------------------------
-# The name of the resource to be displayed in the pipeline, e.g. 'rabbitmq'
-resource_name: CHANGEME
 # The token used to download the product file from Pivotal Network. Find this
 # on your Pivotal Network profile page:
 # https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
-# The minor product version to track, as a regexp. To track 1.10.x of a product, this would be "1\.10\.*"
-product_version: CHANGEME
+# The minor product version to track, as a regexp. To track 1.10.x of a product, this would be "^1\.10\..*$"
+product_version_regex: ^1\.10\..*$
 
 # Operations Manager
 # ------------------------------
@@ -31,26 +29,13 @@ opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_uri: CHANGEME
 
-# Stemcell Downloader
-# ------------------------------
-# The token used to download the stemcell downloader from GitHub.
-github_token: CHANGEME
-# The IaaS name for which stemcell to download. See
-# https://github.com/pivotal-cf/pcf-product-stemcell-downloader/ for the list of
-# allowed IaaS names.
+# The IaaS name for which stemcell to download. This must match the IaaS name
+# within the stemcell to download, e.g. "vsphere"
 iaas_type: CHANGEME
 
 # Interval to check on new releases from Pivotal Network
 # eg. 2h, 3h45m, 3000s
 pivnet_poll_interval: 1h
-# The basename of the metadata file for the product without the file extension.
-# This will be used for figuring out which stemcell the product needs.
-#
-# For rabbitmq this is 'p_rabbitmq', from the file 'metadata/p_rabbitmq.yml'.
-#
-# This can be found in the .pivotal file with the following:
-# `unzip -l p-rabbitmq-1.7.9.pivotal | grep metadata`
-metadata_basename: CHANGEME
 
 # om-linux
 # ------------------------------
@@ -68,4 +53,5 @@ product_slug: CHANGEME
 # be found in the .pivotal file with the following:
 # `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | head`
 product_name: CHANGEME
-tile_upload_timeout: 1800
+
+git_private_key:

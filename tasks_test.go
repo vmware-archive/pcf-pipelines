@@ -1,11 +1,13 @@
 package pcf_pipelines_test
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/concourse/atc"
@@ -13,6 +15,9 @@ import (
 	. "github.com/onsi/gomega"
 	"gopkg.in/yaml.v2"
 )
+
+var set_eu_regexp = regexp.MustCompile("^set -eu$")
+var shebang_regexp = regexp.MustCompile("^#!/bin/bash$")
 
 var _ = Describe("Tasks", func() {
 	cwd, err := os.Getwd()
@@ -28,7 +33,12 @@ var _ = Describe("Tasks", func() {
 			return err
 		}
 
-		if filepath.Base(path) == "task.yml" {
+		fi, err := os.Lstat(path)
+		if err != nil {
+			return err
+		}
+
+		if !fi.IsDir() && fi.Mode().IsRegular() && strings.Contains(path, "tasks") && strings.HasSuffix(path, ".yml") {
 			relTaskPath, err := filepath.Rel(cwd, path)
 			if err != nil {
 				return err
@@ -54,7 +64,7 @@ var _ = Describe("Tasks", func() {
 
 		err = yaml.Unmarshal(configBytes, &task)
 		if err != nil {
-			log.Fatalf("failed to unmarshal task: %s", err)
+			log.Fatalf("failed to unmarshal task at %s: %s", taskPath, err)
 		}
 
 		if strings.HasPrefix(task.Run.Path, "pcf-pipelines") {
@@ -92,6 +102,39 @@ Found error with the following task:
 					Expect(fi.Mode().IsDir()).To(BeFalse())
 					if fi.Mode() < os.FileMode(0700) {
 						Fail(fmt.Sprintf("Expected '%s' to be executable (>= 0700), but was 0%o", task.Run.Path, fi.Mode()))
+					}
+				})
+
+				It("points to a task.sh that has the correct bash flags set", func() {
+					f, err := os.Open(filepath.Join(root, task.Run.Path))
+					Expect(err).NotTo(HaveOccurred())
+					defer f.Close()
+
+					var has_correct_set_eu bool
+					var has_flags_in_shebang_line bool
+					scanner := bufio.NewScanner(f)
+					for scanner.Scan() && !(has_correct_set_eu || has_flags_in_shebang_line) {
+						if set_eu_regexp.Match(scanner.Bytes()) {
+							has_correct_set_eu = true
+						}
+
+						if shebang_regexp.Match(scanner.Bytes()) {
+							has_flags_in_shebang_line = true
+						}
+					}
+
+					if !(has_correct_set_eu || has_flags_in_shebang_line) {
+						msg := "incorrect bash args specified;"
+
+						if has_flags_in_shebang_line {
+							msg = fmt.Sprintf("%s\n%s", msg, "remove flags from shebang line")
+						}
+
+						if !has_correct_set_eu {
+							msg = fmt.Sprintf("%s\n%s", msg, "add 'set -eu' two lines after shebang line")
+						}
+
+						Fail(msg)
 					}
 				})
 			})

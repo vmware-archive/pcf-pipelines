@@ -1,4 +1,6 @@
-#!/bin/bash -eu
+#!/bin/bash
+
+set -eu
 
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
@@ -15,10 +17,9 @@
 # limitations under the License.
 
 echo "Applying changes on Ops Manager @ ${OPSMAN_URI}"
-chmod +x tool-om/om-linux
 
-./tool-om/om-linux \
-  --target "${OPSMAN_URI}" \
+om-linux \
+  --target "https://${OPSMAN_URI}" \
   --skip-ssl-validation \
   --username "${OPSMAN_USERNAME}" \
   --password "${OPSMAN_PASSWORD}" \

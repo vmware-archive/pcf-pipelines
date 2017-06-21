@@ -1,4 +1,6 @@
-#!/bin/bash -eu
+#!/bin/bash
+
+set -eu
 
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
@@ -21,11 +23,9 @@ function main() {
   local cwd=$PWD
   local download_dir="${cwd}/stemcells"
   local diag_report="${cwd}/diagnostic-report/exported-diagnostic-report.json"
-  local pivnet=$(ls tool-pivnet-cli/pivnet-linux-* 2>/dev/null)
 
-  chmod +x "$pivnet"
-  $pivnet login --api-token="$API_TOKEN"
-  $pivnet eula --eula-slug=pivotal_software_eula >/dev/null
+  pivnet-cli login --api-token="$API_TOKEN"
+  pivnet-cli eula --eula-slug=pivotal_software_eula >/dev/null
 
   # get the deduplicated stemcell filename for each deployed release (skipping p-bosh)
   local stemcells=($( (jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | .stemcell' | sort -u) < "$diag_report"))
@@ -54,16 +54,16 @@ function download_stemcell_version() {
   stemcell_version="$1"
 
   # ensure the stemcell version found in the manifest exists on pivnet
-  if [[ $($pivnet pfs -p stemcells -r "$stemcell_version") == *"release not found"* ]]; then
+  if [[ $(pivnet-cli pfs -p stemcells -r "$stemcell_version") == *"release not found"* ]]; then
     abort "Could not find the required stemcell version ${stemcell_version}. This version might not be published on PivNet yet, try again later."
   fi
 
   # loop over all the stemcells for the specified version and then download it if it's for the IaaS we're targeting
-  for product_file_id in $($pivnet pfs -p stemcells -r "$stemcell_version" --format json | jq .[].id); do
+  for product_file_id in $(pivnet-cli pfs -p stemcells -r "$stemcell_version" --format json | jq .[].id); do
     local product_file_name
-    product_file_name=$($pivnet product-file -p stemcells -r "$stemcell_version" -i "$product_file_id" --format=json | jq .name)
+    product_file_name=$(pivnet-cli product-file -p stemcells -r "$stemcell_version" -i "$product_file_id" --format=json | jq .name)
     if echo "$product_file_name" | grep -iq "$IAAS_TYPE"; then
-      $pivnet download-product-files -p stemcells -r "$stemcell_version" -i "$product_file_id" -d "$download_dir" --accept-eula
+      pivnet-cli download-product-files -p stemcells -r "$stemcell_version" -i "$product_file_id" -d "$download_dir" --accept-eula
       return 0
     fi
   done
