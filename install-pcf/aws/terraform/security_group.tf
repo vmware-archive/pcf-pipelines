@@ -12,18 +12,24 @@ resource "aws_security_group" "directorSG" {
     tags {
         Name = "${var.prefix}-Ops Manager Director Security Group"
     }
-    ingress {
-        from_port = 0
-        to_port = 0
-        protocol = -1
-        cidr_blocks = ["${var.vpc_cidr}"]
-    }
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = -1
-        cidr_blocks = ["0.0.0.0/0"]
-    }
+}
+
+resource "aws_security_group_rule" "allow_directorsg_ingress_default" {
+    type = "ingress"
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    cidr_blocks = ["${var.vpc_cidr}"]
+    security_group_id = "${aws_security_group.directorSG.id}"
+}
+
+resource "aws_security_group_rule" "allow_directorsg_egress_default" {
+    type = "egress"
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    cidr_blocks = ["0.0.0.0/0"]
+    security_group_id = "${aws_security_group.directorSG.id}"
 }
 
 resource "aws_security_group_rule" "allow_ssh" {
