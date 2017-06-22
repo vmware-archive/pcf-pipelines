@@ -52,7 +52,7 @@ jobs:
   - get: pivnet-opsmgr
     params: { globs: [] }
 
-- name: check-upgrade-available
+- name: confirm-compatible-version
   serial: true
   plan:
   - aggregate:
