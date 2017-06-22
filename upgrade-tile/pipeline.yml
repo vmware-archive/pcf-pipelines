@@ -81,7 +81,7 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-product
       resource: tile
-      passed: [check-upgrade-available]
+      passed: [confirm-compatible-version]
       trigger: true 
       params:
         globs:

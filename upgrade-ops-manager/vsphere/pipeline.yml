@@ -77,7 +77,7 @@ jobs:
   - aggregate:
     - get: pivnet-opsmgr
       trigger: true
-      passed: [check-upgrade-available]
+      passed: [confirm-compatible-version]
       params:
         globs: ["*.ova"]
     - get: pcf-pipelines
