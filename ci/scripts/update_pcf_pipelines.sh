@@ -11,6 +11,7 @@ function cleanup {
 trap cleanup EXIT
 
 install_pcf_aws_current_params=$(lpass show Shared-Customer\ [0]/lre1-aws/install-pcf-params --notes)
+upgrade_ert_aws_current_params=$(lpass show Shared-Customer\ [0]/lre1-aws/ert-upgrade-params --notes)
 
 tmpfile=$(mktemp)
 
@@ -21,6 +22,14 @@ install_pcf_aws_current_params: |
 EOF
 
 for line in $install_pcf_aws_current_params; do
+  echo "  $line" >> $tmpfile
+done
+
+cat >> $tmpfile <<EOF
+upgrade_ert_aws_current_params: |
+EOF
+
+for line in $upgrade_ert_aws_current_params; do
   echo "  $line" >> $tmpfile
 done
 

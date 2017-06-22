@@ -192,6 +192,14 @@ jobs:
           <<: *atc_creds
         file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
+      - task: set-upgrade-ert-aws-current-pipeline
+        params:
+          PIPELINE_PARAMS: {{upgrade_ert_aws_current_params}}
+          PIPELINE_NAME: upgrade-ert-aws-current
+          PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
+          <<: *atc_creds
+        file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
 - name: publish-release
   serial_groups: [version]
   plan:
