@@ -19,27 +19,33 @@ These upgrade pipelines are intended to be kept running for as long as the found
 
 These pipelines are found in any of the directories with the `upgrade-` prefix.
 
+## Prerequisites 
+
+- [install a Concourse server](https://concourse.ci/installing.html)
+- download the [Fly CLI](https://concourse.ci/fly-cli.html) to interact with the Concourse server
+- depending on where you've installed Concourse, you may need to set up
+[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
+third-party sources of pipeline dependencies
+
 ## Usage
 
-You'll need to [install a Concourse server](https://concourse.ci/installing.html)
-and get the [Fly CLI](https://concourse.ci/fly-cli.html)
-to interact with that server.
+1. Clone this repository.
 
-Depending on where you've installed Concourse, you may need to set up
-[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
-third-party sources of pipeline dependencies.
+1. Each pipeline has an IAAS-specific `params.yml` file you'll need to fill out for your infrastructure. Navigate to the IAAS-specific directories located in `pcf-pipelines/install-pcf`.
 
-Each pipeline has an associated `params.yml` file next to it that you'll need to fill out with the appropriate values for that pipeline.
+1. Edit the `params.yml` with details related to your infrastructure. See the README for each `params.yml` for more information on how to fill out this file.
 
-After filling out your params.yml, set the pipeline:
+1. Target your pipeline and log into concourse: 
+   ```
+   fly -t yourtarget login --concourse-url https://yourtarget.example.com
+   ```
 
-```
-fly -t yourtarget login --concourse-url https://yourtarget.example.com
-fly -t yourtarget set-pipeline \
-  --pipeline upgrade-opsman \
-  --config upgrade-ops-manager/aws/pipeline.yml \
-  --load-vars-from upgrade-ops-manager/aws/params.yml
-```
+1. Now set your pipeline with the `params.yml` file you created in step two above:
+   ```
+   fly -t yourtarget set-pipeline -p nameofpipeline -c ~/workspace/pcf-pipelines/install-pcf/your-specific-iaas/pipeline.yml -l path-to-the-params-file
+   ```
+
+1. Finally, navigate to the pipeline url, unpause the pipeline and trigger the first job. 
 
 ## Upgrading/Extending
 
