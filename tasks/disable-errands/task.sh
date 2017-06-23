@@ -18,6 +18,8 @@ if [[ -z "$enabled_errands" ]]; then
   exit 0
 fi
 
+errands_to_disable=''
+
 if [[ "$ERRANDS_TO_DISABLE" == "all" ]]; then
   errands_to_disable="${enabled_errands[@]}"
 elif [[ "$ERRANDS_TO_DISABLE" != "" ]] && [[ "$ERRANDS_TO_DISABLE" != "none" ]]; then
