@@ -184,7 +184,7 @@ jobs:
 
   - aggregate:
     - do:
-      - task: update-install-pcf-aws-current-pipeline
+      - task: set-install-pcf-aws-current-pipeline
         params:
           PIPELINE_PARAMS: {{install_pcf_aws_current_params}}
           PIPELINE_NAME: install-pcf-aws-current
