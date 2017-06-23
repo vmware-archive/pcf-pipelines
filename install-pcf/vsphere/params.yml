@@ -213,3 +213,5 @@ diego_cell_instances: 3
 doppler_instances: 1
 loggregator_traffic_controller_instances: 1
 tcp_router_instances: 1
+syslog_adapter_instances: 3
+syslog_scheduler_instances: 1
