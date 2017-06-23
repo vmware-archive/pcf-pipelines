@@ -261,7 +261,7 @@ ha_proxy_instances: |
 # remove nsx fields if you are not leveraging the nsx features
 router_instances: |
   {
-    "instances": 0 ,
+    "instances": 1 ,
     "instance_type": {"id":"automatic"},
     "nsx_security_groups":["sg1", "sg2"],
     "nsx_lbs": [
@@ -352,4 +352,14 @@ tcp_router_instances: |
       "security_group": "sg-2",
       "port": "5000"
     }]
+  }
+syslog_adapter_instances: |
+  {
+    "instances": 3 ,
+    "instance_type": {"id":"automatic"}
+  }
+syslog_scheduler_instances: |
+  {
+    "instances": 1 ,
+    "instance_type": {"id":"automatic"}
   }
