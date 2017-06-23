@@ -13,7 +13,7 @@ resources:
     branch: master
     private_key: {{git_private_key}}
 
-- name: pivnet-opsman-product
+- name: pcf-ops-manager
   type: pivnet
   source:
     api_token: {{pivnet_token}}
@@ -36,6 +36,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
+      resource: pcf-ops-manager
       params: {globs: ["*.ova"]}
       trigger: true
 
@@ -68,7 +69,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
+    - get: pcf-ops-manager
       params: {globs: []}
       passed: [deploy-opsman]
       trigger: true
@@ -146,7 +147,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
+    - get: pcf-ops-manager
       params: {globs: []}
       passed: [configure-director]
       trigger: true
@@ -165,7 +166,7 @@ jobs:
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
-    - get: pivnet-opsman-product
+    - get: pcf-ops-manager
       params: {globs: []}
       passed: [deploy-director]
       trigger: true
@@ -185,7 +186,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
+    - get: pcf-ops-manager
       params: {globs: []}
       passed: [upload-ert]
       trigger: true
