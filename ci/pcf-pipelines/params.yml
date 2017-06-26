@@ -10,3 +10,4 @@ pivnet_s3_filepath_prefix:
 pivnet_token:
 slack_webhook_url:
 install_pcf_aws_current_params:
+upgrade_ert_aws_current_params:
