@@ -54,5 +54,9 @@ terraform destroy -force \
   -var "db_networkpolicyserverdb_password=dontcare" \
   -var "db_nfsvolumedb_username=dontcare" \
   -var "db_nfsvolumedb_password=dontcare" \
+  -var "db_locket_username=dontcare" \
+  -var "db_locket_password=dontcare" \
+  -var "db_silk_username=dontcare" \
+  -var "db_silk_password=dontcare" \
   -state-out $root/wipe-output/terraform.tfstate \
   pcf-pipelines/install-pcf/gcp/terraform

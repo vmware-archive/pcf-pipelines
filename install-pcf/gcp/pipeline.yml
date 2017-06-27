@@ -139,6 +139,10 @@ jobs:
       DB_NETWORKPOLICYSERVERDB_PASSWORD: {{db_networkpolicyserverdb_password}}
       DB_NFSVOLUMEDB_USERNAME: {{db_nfsvolumedb_username}}
       DB_NFSVOLUMEDB_PASSWORD: {{db_nfsvolumedb_password}}
+      DB_LOCKET_USERNAME: {{db_locket_username}}
+      DB_LOCKET_PASSWORD: {{db_locket_password}}
+      DB_SILK_USERNAME: {{db_silk_username}}
+      DB_SILK_PASSWORD: {{db_silk_password}}
 
 - name: configure-director
   serial_groups: [opsman]
