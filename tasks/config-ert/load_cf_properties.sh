@@ -64,6 +64,7 @@ jq \
   --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
   --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
   --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
+  --arg blobstore_internal_access_rules "$BLOBSTORE_INTERNAL_ACCESS_RULES" \
   '
   . +
   {
@@ -358,6 +359,21 @@ jq \
   else
     .
   end
+
+  +
+
+  # Advanced Features
+  if $blobstore_internal_access_rules != "" then
+    {
+      ".nfs_server.blobstore_internal_access_rules": {
+      "value": $blobstore_internal_access_rules
+      }
+    }
+  else
+    .
+  end
+    
+
   ' > cf_properties
 
 cf_properties=$(cat cf_properties)
