@@ -244,6 +244,7 @@ jobs:
       FIRST_NAME_ATTR: {{first_name_attribute}}
       LAST_NAME_ATTR: {{last_name_attribute}}
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
+      BLOBSTORE_INTERNAL_ACCESS_RULES: {{blobstore_internal_access_rules}}
       SYSTEM_DOMAIN: {{system_domain}}
       APPS_DOMAIN: {{apps_domain}}
       DEFAULT_QUOTA_MEMORY_LIMIT_IN_MB: {{default_quota_memory_limit_mb}}
@@ -294,7 +295,6 @@ jobs:
       DOPPLER_INSTANCES: {{doppler_instances}}
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
-      BLOBSTORE_INTERNAL_ACCESS_RULES: {{blobstore_internal_access_rules}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml

@@ -273,6 +273,7 @@ jobs:
       db_silk_password: {{db_silk_password}}
       db_locket_username: {{db_locket_username}}
       db_locket_password: {{db_locket_password}}
+      BLOBSTORE_INTERNAL_ACCESS_RULES: {{blobstore_internal_access_rules}}
       mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
       MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
@@ -287,7 +288,6 @@ jobs:
       MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
       MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
       MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
-      BLOBSTORE_INTERNAL_ACCESS_RULES: {{blobstore_internal_access_rules}}
       # aws specific
       S3_ENDPOINT:
 

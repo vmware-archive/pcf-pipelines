@@ -49,6 +49,7 @@ jq \
   --arg ldap_mail_attr_name "$MAIL_ATTR_NAME" \
   --arg ldap_first_name_attr "$FIRST_NAME_ATTR" \
   --arg ldap_last_name_attr "$LAST_NAME_ATTR" \
+  --arg blobstore_internal_access_rules "$BLOBSTORE_INTERNAL_ACCESS_RULES" \
   --arg saml_cert_pem "$saml_cert_pem" \
   --arg saml_key_pem "$saml_key_pem" \
   --arg mysql_backups "$MYSQL_BACKUPS" \
@@ -64,7 +65,6 @@ jq \
   --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
   --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
   --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
-  --arg blobstore_internal_access_rules "$BLOBSTORE_INTERNAL_ACCESS_RULES" \
   '
   . +
   {
@@ -295,6 +295,19 @@ jq \
 
   +
 
+  # Whitelist for non-RFC-1918 Private Networks
+  if $blobstore_internal_access_rules != "" then
+    {
+      ".nfs_server.blobstore_internal_access_rules": {
+      "value": $blobstore_internal_access_rules
+      }
+    }
+  else
+    .
+  end
+
+  +
+
   # UAA SAML Credentials
   {
     ".uaa.service_provider_key_credentials": {
@@ -359,21 +372,6 @@ jq \
   else
     .
   end
-
-  +
-
-  # Advanced Features
-  if $blobstore_internal_access_rules != "" then
-    {
-      ".nfs_server.blobstore_internal_access_rules": {
-      "value": $blobstore_internal_access_rules
-      }
-    }
-  else
-    .
-  end
-    
-
   ' > cf_properties
 
 cf_properties=$(cat cf_properties)
