@@ -22,7 +22,9 @@ secrets.
   * GCP Cloud Resource Manager API [here](https://console.cloud.google.com/apis/api/cloudresourcemanager.googleapis.com/overview)
   * GCP Storage Interopability [here](https://console.cloud.google.com/storage/settings)
 
-2. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles:
+2. Create a bucket in Google Cloud Storage to hold the Terraform state file, enabling versioning for this bucket via the `gsutil` CLI: `gcloud auth activate-service-account --key-file credentials.json && gsutil versioning set on gs://<your-bucket>`
+
+3. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles:
   * Cloud SQL Admin
   * Compute Instance Admin (v1)
   * Compute Network Admin
@@ -30,17 +32,17 @@ secrets.
   * DNS Administrator
   * Storage Admin
 
-3. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
+4. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
   ```
   fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml
   ```
 
-4. Unpause the pipeline
-5. Run `bootstrap-terraform-state` to bootstrap the Terraform .tfstate file. This only needs to be run once.
-6. `upload-opsman-image` will automatically upload the latest matching version of Operations Manager
-7. Run the `create-initial-terraform-state` job manually. This will prepare the s3 resource that holds the terraform state.
-8. Trigger the `create-infrastructure` job. `create-infrastructure` will output at the end the DNS settings that you must configure before continuing.
-9. Once DNS is set up you can run `configure-director`. From there the pipeline should automatically run through to the end.
+5. Unpause the pipeline
+6. Run `bootstrap-terraform-state` to bootstrap the Terraform .tfstate file. This only needs to be run once.
+7. `upload-opsman-image` will automatically upload the latest matching version of Operations Manager
+8. Run the `create-initial-terraform-state` job manually. This will prepare the s3 resource that holds the terraform state.
+9. Trigger the `create-infrastructure` job. `create-infrastructure` will output at the end the DNS settings that you must configure before continuing.
+10. Once DNS is set up you can run `configure-director`. From there the pipeline should automatically run through to the end.
 
 ### Tearing down the environment
 
