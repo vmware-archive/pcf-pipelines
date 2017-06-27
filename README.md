@@ -29,9 +29,9 @@ third-party sources of pipeline dependencies
 
 ## Usage
 
-1. Clone this repository.
+1. We recommend downloading pcf-pipelines from [Pivotal Networks](https://network.pivotal.io/products/pcf-automation).
 
-1. Each pipeline has an IAAS-specific `params.yml` file you'll need to fill out for your infrastructure. Navigate to the IAAS-specific directories located in `pcf-pipelines/install-pcf`.
+1. In the `install-pcf` directory, each pipeline has an IAAS-specific `params.yml` file you'll need to fill out for your infrastructure.
 
 1. Edit the `params.yml` with details related to your infrastructure. See the README for each `params.yml` for more information on how to fill out this file.
 
@@ -40,12 +40,17 @@ third-party sources of pipeline dependencies
    fly -t yourtarget login --concourse-url https://yourtarget.example.com
    ```
 
-1. Now set your pipeline with the `params.yml` file you created in step two above:
+1. Now set your pipeline with the `params.yml` file you created in step two above. For example:
    ```
-   fly -t yourtarget set-pipeline -p nameofpipeline -c ~/workspace/pcf-pipelines/install-pcf/your-specific-iaas/pipeline.yml -l path-to-the-params-file
+   fly -t yourtarget set-pipeline \
+     --pipeline upgrade-opsman \
+     --config upgrade-ops-manager/aws/pipeline.yml \
+     --load-vars-from upgrade-ops-manager/aws/params.yml
    ```
 
-1. Finally, navigate to the pipeline url, unpause the pipeline and trigger the first job. 
+1. Navigate to the pipeline url, and unpause the pipeline. 
+
+1. Depending on the pipeline, the first job will either trigger on its own or the job will require manual intervention. Some pipelines may also require manual work during the duration of the run to complete the pipeline. 
 
 ## Upgrading/Extending
 
