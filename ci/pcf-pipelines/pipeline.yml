@@ -199,6 +199,14 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
+    - task: set-install-pcf-gcp-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{install_pcf_gcp_current_params}}
+        PIPELINE_NAME: install-pcf-gcp-current
+        PIPELINE_PATH: release/pcf-pipelines/install-pcf/gcp/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
 - name: publish-release
   serial_groups: [version]
   plan:
