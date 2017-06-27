@@ -9,11 +9,10 @@ architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/gcp/gcp_ref_arch.htm
 ## Usage
 
 This pipeline downloads artifacts from DockerHub (czero/cflinuxfs2 and custom
-docker-image resources) and the configured S3-compatible object store
-(Terraform .tfstate file), and as such the Concourse instance must have access
+docker-image resources) and the configured Google Cloud Storage bucket
+(terraform.tfstate file), and as such the Concourse instance must have access
 to those. Note that Terraform outputs a .tfstate file that contains plaintext
-secrets, so it is advised you use a private S3-compatible store rather than AWS
-S3.
+secrets.
 
 1. Within Google Cloud Platform, enable the following:
   * GCP Compute API [here](https://console.cloud.google.com/apis/api/compute_component)
@@ -21,6 +20,7 @@ S3.
   * GCP SQL API [here](https://console.cloud.google.com/apis/api/sql_component)
   * GCP DNS API [here](https://console.cloud.google.com/apis/api/dns)
   * GCP Cloud Resource Manager API [here](https://console.cloud.google.com/apis/api/cloudresourcemanager.googleapis.com/overview)
+  * GCP Storage Interopability [here](https://console.cloud.google.com/storage/settings)
 
 2. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles:
   * Cloud SQL Admin
