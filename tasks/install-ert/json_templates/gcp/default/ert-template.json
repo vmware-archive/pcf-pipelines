@@ -92,14 +92,6 @@
           "secret": "{{db_routing_password}}"
         }
       },
-      ".properties.system_database.external.uaa_username": {
-        "value": "{{db_uaa_username}}"
-      },
-      ".properties.system_database.external.uaa_password": {
-        "value": {
-          "secret": "{{db_uaa_password}}"
-        }
-      },
       ".properties.system_database.external.ccdb_username": {
         "value": "{{db_ccdb_username}}"
       },
@@ -132,6 +124,39 @@
           "secret": "{{db_nfsvolumedb_password}}"
         }
       },         
+      ".properties.system_database.external.locket_username": {
+        "value": "{{db_locket_username}}"
+      },
+      ".properties.system_database.external.locket_password": {
+        "value": {
+	  "secret": "{{db_locket_password}}"
+        }
+      },
+      ".properties.system_database.external.silk_username": {
+        "value": "{{db_silk_username}}"
+      },
+      ".properties.system_database.external.silk_password": {
+        "value": {
+	  "secret": "{{db_silk_password}}"
+        }
+      },
+      ".properties.uaa_database": {
+        "value": "external"
+      },
+      ".properties.uaa_database.external.host": {
+        "value": "{{db_host}}"
+      },
+      ".properties.uaa_database.external.port": {
+        "value": "3306"
+      },
+      ".properties.uaa_database.external.uaa_username": {
+        "value": "{{db_uaa_username}}"
+      },
+      ".properties.uaa_database.external.uaa_password": {
+        "value": {
+          "secret": "{{db_uaa_password}}"
+        }
+      },
       ".cloud_controller.system_domain": {
         "value": "sys.{{pcf_ert_domain}}"
       },
@@ -208,6 +233,8 @@
       "diego_cell": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": [],"internet_connected": false},
       "doppler": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": [],"internet_connected": false},
       "loggregator_trafficcontroller": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": [],"internet_connected": false},
+      "syslog_adapter": {"instance_type": {"id": "automatic"},"instances": 3,"elb_names": [],"internet_connected": false},
+      "syslog_scheduler": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": [],"internet_connected": false},
       "tcp_router": {"instance_type": {"id": "automatic"},"instances": 0,"elb_names": [],"internet_connected": false,"persistent_disk":{"size_mb":"automatic"}},
       "backup-prepare": {"instance_type": {"id": "automatic"},"instances": 0,"elb_names": [],"internet_connected": false,"persistent_disk":{"size_mb":"automatic"}},
       "push-apps-manager": {"instance_type": {"id": "automatic"},"instances": 1,"elb_names": [],"internet_connected": false},
