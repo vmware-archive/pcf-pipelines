@@ -99,9 +99,6 @@ db_silk_password:
 db_locket_username:
 db_locket_password:
 
-#Advanced Features
-blobstore_internal_access_rules: # Whitelist for non-RFC-1918 Private Networks, https://docs.pivotal.io/pivotalcf/latest/customizing/gcp-er-config.html#rfc_whitelist
-
 mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications
 mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
 
@@ -121,3 +118,5 @@ mysql_backups_s3_access_key_id:
 mysql_backups_s3_secret_access_key:
 mysql_backups_s3_cron_schedule:
 
+#Advanced Features
+blobstore_internal_access_rules: # Whitelist for non-RFC-1918 Private Networks, https://docs.pivotal.io/pivotalcf/latest/customizing/gcp-er-config.html#rfc_whitelist
