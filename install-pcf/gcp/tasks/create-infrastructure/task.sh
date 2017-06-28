@@ -57,6 +57,10 @@ terraform plan \
   -var "db_networkpolicyserverdb_password=${DB_NETWORKPOLICYSERVERDB_PASSWORD}" \
   -var "db_nfsvolumedb_username=${DB_NFSVOLUMEDB_USERNAME}" \
   -var "db_nfsvolumedb_password=${DB_NFSVOLUMEDB_PASSWORD}" \
+  -var "db_locket_username=${DB_LOCKET_USERNAME}" \
+  -var "db_locket_password=${DB_LOCKET_PASSWORD}" \
+  -var "db_silk_username=${DB_SILK_USERNAME}" \
+  -var "db_silk_password=${DB_SILK_PASSWORD}" \
   -out terraform.tfplan \
   -state terraform-state/terraform.tfstate \
   pcf-pipelines/install-pcf/gcp/terraform/$gcp_pcf_terraform_template

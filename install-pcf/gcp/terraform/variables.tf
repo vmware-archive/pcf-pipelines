@@ -40,3 +40,7 @@ variable "db_networkpolicyserverdb_username" {}
 variable "db_networkpolicyserverdb_password" {}
 variable "db_nfsvolumedb_username" {}
 variable "db_nfsvolumedb_password" {}
+variable "db_locket_username" {}
+variable "db_locket_password" {}
+variable "db_silk_username" {}
+variable "db_silk_password" {}

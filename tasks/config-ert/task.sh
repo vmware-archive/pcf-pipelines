@@ -73,6 +73,8 @@ cf_resources=$(
     "nats": $NATS_INSTANCES,
     "nfs_server": $NFS_SERVER_INSTANCES,
     "router": $ROUTER_INSTANCES,
+    "syslog_adapter": $SYSLOG_ADAPTER_INSTANCES,
+    "syslog_scheduler": $SYSLOG_SCHEDULER_INSTANCES,
     "tcp_router": $TCP_ROUTER_INSTANCES,
     "uaa": $UAA_INSTANCES,
     "uaadb": $UAADB_INSTANCES
