@@ -38,7 +38,6 @@ jobs:
     - get: pivnet-opsman-product
       resource: pcf-ops-manager
       params: {globs: ["*.ova"]}
-      trigger: true
 
   - task: deploy
     file: pcf-pipelines/install-pcf/vsphere/tasks/import-opsman/task.yml
