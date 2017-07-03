@@ -41,4 +41,4 @@ write_params $tmpfile "lre1-aws/install-pcf-params" "install_pcf_aws_current_par
 write_params $tmpfile "lre1-aws/ert-upgrade-params" "upgrade_ert_aws_current_params"
 write_params $tmpfile "lre1-gcp/install-pcf-params" "install_pcf_gcp_current_params"
 
-fly -tc02 sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml -l $tmpfile -l <(lpass show pcf-pipelines-params --notes)
+fly -tlrp3 sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml -l $tmpfile -l <(lpass show pcf-pipelines-params --notes)
