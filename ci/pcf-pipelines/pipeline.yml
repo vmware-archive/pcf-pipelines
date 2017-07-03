@@ -197,7 +197,7 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
-    - task: set-install-pcf-vsphere-current-pipeline
+    - task: set-install-pcf-slot1-current-pipeline
       params:
         PIPELINE_PARAMS: {{install_pcf_vsphere_slot1_params}}
         PIPELINE_NAME: install-pcf-slot1-current
