@@ -9,7 +9,6 @@ image_resource:
 inputs:
 - name: pcf-pipelines
 - name: version
-- name: yaml-patch
 - name: fly
 
 outputs:
@@ -25,9 +24,6 @@ run:
   - -ce
   - |
     set -o pipefail
-
-    chmod +x yaml-patch/yaml_patch_linux
-    export PATH="$PWD/yaml-patch":$PATH
 
     chmod +x fly/fly
     export PATH="$PWD/fly":$PATH

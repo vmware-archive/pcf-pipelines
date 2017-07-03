@@ -19,13 +19,6 @@ resources:
     branch: master
     private_key: {{git_private_key}}
 
-- name: yaml-patch
-  type: github-release
-  source:
-    user: krishicks
-    repository: yaml-patch
-    access_token: {{github_token}}
-
 - name: pivnet-rc
   type: pivnet
   source:
@@ -98,9 +91,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       passed: [test]
-    - get: yaml-patch
-      params:
-        globs: ["*linux*"]
     - get: fly
 
   - put: version
@@ -224,9 +214,6 @@ jobs:
       params: {bump: final}
     - get: pcf-pipelines
       passed: [update-pipelines]
-    - get: yaml-patch
-      params:
-        globs: ["*linux*"]
     - get: fly
 
   - task: create-release
