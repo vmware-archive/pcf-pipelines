@@ -42,7 +42,7 @@ resources:
     driver: git
     initial_version: 0.1.0-rc.1
     uri: https://github.com/pivotal-cf/pcf-pipelines
-    username: {{github_token}}
+    username: {{pcf_pipelines_github_token}}
     password: x-oauth-basic
     branch: version
     file: version
@@ -58,7 +58,7 @@ resources:
   source:
     user: krishicks
     repository: fly
-    access_token: {{github_token}}
+    access_token: {{pcf_pipelines_github_token}}
 
 jobs:
 - name: bump-patch
