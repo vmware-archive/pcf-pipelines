@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-opsman_timeout_seconds: CHANGEME
+opsman_timeout_seconds: 3600 # time to wait for new OM VM to come up
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_ssh_password: CHANGEME   # ubuntu user ssh password
