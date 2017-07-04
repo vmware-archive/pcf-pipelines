@@ -295,7 +295,7 @@ jq \
   if $blobstore_internal_access_rules != "" then
     {
       ".nfs_server.blobstore_internal_access_rules": {
-      "value": $blobstore_internal_access_rules
+        "value": $blobstore_internal_access_rules
       }
     }
   else
