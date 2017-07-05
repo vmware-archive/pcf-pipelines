@@ -276,7 +276,6 @@ jobs:
       db_silk_password: {{db_silk_password}}
       db_locket_username: {{db_locket_username}}
       db_locket_password: {{db_locket_password}}
-      BLOBSTORE_INTERNAL_ACCESS_RULES: {{blobstore_internal_access_rules}}
       mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
       MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
