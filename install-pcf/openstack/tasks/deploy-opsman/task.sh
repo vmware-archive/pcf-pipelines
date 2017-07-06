@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# If we are using a self signed SSL certificate,
-# export the location so the openstack-cli uses it.
-
 echo "$OPENSTACK_CA_CERT" > /ca.crt
 export OS_CACERT='/ca.crt'
 
@@ -23,19 +20,22 @@ if [ $? != 0 ]; then
 fi
 
 echo "Booting OpsMan: $OPSMAN_VM_NAME"
-openstack server create --image $IMG_NAME \
-  --flavor $OPSMAN_FLAVOR --key-name $OPSMAN_KEY \
+openstack server create \
+  --image $IMG_NAME \
+  --flavor $OPSMAN_FLAVOR \
+  --key-name $OPSMAN_KEY \
   --security-group $SECURITY_GROUP \
-  --nic net-id=$INFRA_NETWORK $OPSMAN_VM_NAME
+  --nic net-id=$INFRA_NETWORK \
+  $OPSMAN_VM_NAME
 
- if [ $? == 0 ]; then
-   echo "Sleeping 20 seconds for the VM to boot before adding a floating IP."
-   sleep 20 # Give openstack a few moments to get the VM organized.
-   echo "Adding floating IP: $OPSMAN_FLOATING_IP to $OPSMAN_VM_NAME"
-   openstack server add floating ip $OPSMAN_VM_NAME $OPSMAN_FLOATING_IP
+if [ $? == 0 ]; then
+  echo "Sleeping 20 seconds for the VM to boot before adding a floating IP."
+  sleep 20 # Give openstack a few moments to get the VM organized.
+  echo "Adding floating IP: $OPSMAN_FLOATING_IP to $OPSMAN_VM_NAME"
+  openstack server add floating ip $OPSMAN_VM_NAME $OPSMAN_FLOATING_IP
 
-   echo "Opsman URL: http://$OPSMAN_FLOATING_IP/"
- else
-   echo "Failed to boot $OPSMAN_VM_NAME"
-   openstack server show $OPSMAN_VM_NAME
- fi
+  echo "Opsman URL: http://$OPSMAN_FLOATING_IP/"
+else
+  echo "Failed to boot $OPSMAN_VM_NAME"
+  openstack server show $OPSMAN_VM_NAME
+fi

@@ -1,27 +1,27 @@
 groups:
-  - name: deploy
-    jobs:
-      - create-infrastructure
-      - deploy-opsman
-      - deploy-director
-      - upload-ert
-      - configure-ert
-      - deploy-ert
-  - name: infra
-    jobs:
-      - create-infrastructure
-  - name: opsman
-    jobs:
-      - deploy-opsman
-      - deploy-director
-  - name: ert
-    jobs:
-      - upload-ert
-      - configure-ert
-      - deploy-ert
-  - name: teardown
-    jobs:
-      - wipe-env
+- name: deploy
+  jobs:
+  - create-infrastructure
+  - deploy-opsman
+  - deploy-director
+  - upload-ert
+  - configure-ert
+  - deploy-ert
+- name: infra
+  jobs:
+  - create-infrastructure
+- name: opsman
+  jobs:
+  - deploy-opsman
+  - deploy-director
+- name: ert
+  jobs:
+  - upload-ert
+  - configure-ert
+  - deploy-ert
+- name: teardown
+  jobs:
+  - wipe-env
 
 resource_types:
 - name: pivnet

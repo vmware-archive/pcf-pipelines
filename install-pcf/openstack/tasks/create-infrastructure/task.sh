@@ -4,7 +4,6 @@ echo "$OPENSTACK_CA_CERT" > /ca.crt
 export OS_CACERT='/ca.crt'
 
 function create_private_network() {
-
   local NETNAME=$1
   local SUBNET=$2
   local DNS=$3
@@ -19,7 +18,6 @@ function create_private_network() {
 }
 
 function create_admin_router() {
-
   local ROUTER=$1
   echo -n "Creating router $ROUTER: "
 
@@ -32,7 +30,6 @@ function create_admin_router() {
 }
 
 function create_secgroup() {
-
    local SECURITY_GROUP=$1
 
    openstack security group list | grep -w " $SECURITY_GROUP "

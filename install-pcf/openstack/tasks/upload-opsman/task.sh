@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# If we are using a self signed SSL certificate,
-# export the location so the openstack-cli uses it.
-
 echo "$OPENSTACK_CA_CERT" > /ca.crt
 export OS_CACERT='/ca.crt'
 
@@ -23,5 +20,9 @@ if [ $? == 0 ]; then
 fi
 
 echo "Installing: $IMG_NAME"
-openstack image create --disk-format qcow2 --container-format bare \
-  --private --file ./$OPSMAN_FILE $IMG_NAME
+openstack image create \
+  --disk-format qcow2 \
+  --container-format bare \
+  --private \
+  --file $OPSMAN_FILE \
+  $IMG_NAME

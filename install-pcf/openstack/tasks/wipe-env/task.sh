@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-# This script will nuke the entire pcf environment.
-# Mostly used for iterating over a pipelined deployment.
 
 function delete_admin_router() {
    echo "Deleting router $ADMIN_ROUTER: "
@@ -52,5 +49,3 @@ delete_opsman
 delete_admin_router
 delete_networks
 delete_secgroup
-
-#TODO: Add failure conditions and exit with success or error accordingly
