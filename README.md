@@ -29,18 +29,16 @@ third-party sources of pipeline dependencies
 
 ## Usage
 
-1. We recommend downloading pcf-pipelines from [Pivotal Networks](https://network.pivotal.io/products/pcf-automation).
+1. Download pcf-pipelines from [Pivotal Networks](https://network.pivotal.io/products/pcf-automation). 
 
-1. In the `install-pcf` directory, each pipeline has an IAAS-specific `params.yml` file you'll need to fill out for your infrastructure.
+1. Each pipeline has an associated `params.yml` file. Edit the `params.yml` with details related to your infrastructure.
 
-1. Edit the `params.yml` with details related to your infrastructure. See the README for each `params.yml` for more information on how to fill out this file.
-
-1. Target your pipeline and log into concourse: 
+1. Log in and target your Concourse: 
    ```
    fly -t yourtarget login --concourse-url https://yourtarget.example.com
    ```
 
-1. Now set your pipeline with the `params.yml` file you created in step two above. For example:
+1. Set your pipeline with the `params.yml` file you created in step two above. For example:
    ```
    fly -t yourtarget set-pipeline \
      --pipeline upgrade-opsman \
