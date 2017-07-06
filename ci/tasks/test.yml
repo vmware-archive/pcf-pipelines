@@ -23,4 +23,5 @@ run:
 
     pushd pcf-pipelines
       ginkgo -p -r -randomizeAllSpecs
+      ./run_bash_testsuite.sh ./
     popd

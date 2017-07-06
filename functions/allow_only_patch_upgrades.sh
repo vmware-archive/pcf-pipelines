@@ -19,14 +19,22 @@ function allow_only_patch_upgrades {
   local PRODUCT_NAME=$4
   local PRODUCT_DIR=$5
 
-  local deployed_version=$(
+  local deployed_products=$(
     om-linux \
       --target "https://${OPS_MGR_HOST}" \
       --username "${OPS_MGR_USR}" \
       --password "${OPS_MGR_PWD}" \
       --skip-ssl-validation \
-      deployed-products | grep "^| ${PRODUCT_NAME} *|" | awk -F"|" '{print $3 }' | awk -F"." '{print $1"."$2}'
-    )
+      deployed-products)
+  version=$(echo "${deployed_products}" | grep "|.*\s${PRODUCT_NAME}\s.*|" | awk -F"|" '{print $3 }' | awk -F"." '{print $1"."$2}')
+  local deployed_version=${version// }
+
+  if [[ ${deployed_version// } == "" ]];then
+      echo "version check yielded empty version information from product call:"
+      echo ${deployed_products}
+      exit 1 
+  fi
+
   if [[ `ls ${PRODUCT_DIR} | grep ${deployed_version}` ]]; then
     echo "we have a safe upgrade for version: ${deployed_version}";
 
