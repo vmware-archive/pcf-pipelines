@@ -197,11 +197,35 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
+    - task: set-upgrade-ert-gcp-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{upgrade_ert_gcp_current_params}}
+        PIPELINE_NAME: upgrade-ert-gcp-current
+        PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
     - task: set-install-pcf-slot1-current-pipeline
       params:
         PIPELINE_PARAMS: {{install_pcf_vsphere_slot1_params}}
         PIPELINE_NAME: install-pcf-slot1-current
         PIPELINE_PATH: release/pcf-pipelines/install-pcf/vsphere/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
+    - task: set-upgrade-ert-slot1-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{upgrade_ert_vsphere_slot1_params}}
+        PIPELINE_NAME: upgrade-ert-slot1-current
+        PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
+    - task: set-upgrade-ops-manager-slot1-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{upgrade_ops_manager_vsphere_slot1_params}}
+        PIPELINE_NAME: upgrade-ops-manager-slot1-current
+        PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/vsphere/pipeline.yml
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 

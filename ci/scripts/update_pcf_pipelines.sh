@@ -40,7 +40,10 @@ EOF
 write_params $tmpfile "lre1-aws/install-pcf-params" "install_pcf_aws_current_params"
 write_params $tmpfile "lre1-aws/ert-upgrade-params" "upgrade_ert_aws_current_params"
 write_params $tmpfile "lre1-gcp/install-pcf-params" "install_pcf_gcp_current_params"
+write_params $tmpfile "lre1-gcp/ert-upgrade-params" "upgrade_ert_gcp_current_params"
 write_params $tmpfile "vsphere-slot1/install-pcf-params" "install_pcf_vsphere_slot1_params"
+write_params $tmpfile "vsphere-slot1/upgrade-ert-params" "upgrade_ert_vsphere_slot1_params"
+write_params $tmpfile "vsphere-slot1/upgrade-ops-manager-params" "upgrade_ops_manager_vsphere_slot1_params"
 
 fly -tlrp3 sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml \
   -l $tmpfile \
