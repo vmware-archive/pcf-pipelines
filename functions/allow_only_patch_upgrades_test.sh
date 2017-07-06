@@ -8,9 +8,9 @@ function TestAllowOnlyPatchUpgradesShouldAllowAPatchUpgrade () (
     fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_10}"
   }
 
-  # fake the ls command
-  function ls () {
-    echo "${ls_fakeresponse_deployproducts_1_10}"
+  # fake the cat command
+  function cat () {
+    echo "${cat_fakeresponse_version_1_10}"
   }
   
   (allow_only_patch_upgrades "a" "b" "c" "acme-product-1" "./")
@@ -24,10 +24,11 @@ function TestAllowOnlyPatchUpgradesShouldFailIfNotAPatchUpgrade () (
     fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_11}"
   }
  
-  # fake the ls command
-  function ls () {
-    echo "${ls_fakeresponse_deployproducts_1_10}"
+  # fake the cat command
+  function cat () {
+    echo "${cat_fakeresponse_version_1_10}"
   }
+
   (allow_only_patch_upgrades "a" "b" "c" "acme-product-1" "./")
   exitCode=$?
   return $(Expect $exitCode ToBe 1)
@@ -40,9 +41,9 @@ function TestAllowOnlyPatchUpgradesShouldFilterOnExactProductName () (
     fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_10}"
   }
 
-  # fake the ls command
-  function ls () {
-    echo "${ls_fakeresponse_deployproducts_1_10}"
+  # fake the cat command
+  function cat () {
+    echo "${cat_fakeresponse_version_1_10}"
   }
 
   (allow_only_patch_upgrades "a" "b" "c" "acme-product" "./")
@@ -93,5 +94,4 @@ om_linux_fakeresponse_curl_deployedproducts_1_10='[
       "product_version":"1.10.1"
    }
 ]'
-
-ls_fakeresponse_deployproducts_1_10="blah-1.10.yml manifest.yml blah.html"
+cat_fakeresponse_version_1_10="1.10.2#2017-06-28T03:22:42.162Z"
