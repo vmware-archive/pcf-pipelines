@@ -53,11 +53,11 @@ function allow_only_patch_upgrades {
 function get_new_product_version () {
   local PRODUCT_DIR=$1
   local complete_new_version=$(cat ${PRODUCT_DIR}/version)
-  local new_version=$(format_sermver_major_minor ${complete_new_version})
+  local new_version=$(format_semver_major_minor ${complete_new_version})
   echo ${new_version// }
 }
 
-function format_sermver_major_minor () {
+function format_semver_major_minor () {
   echo $1 | awk -F"." '{print $1"."$2}'
 }
 
@@ -75,7 +75,7 @@ function get_deployed_product_version () {
   local complete_version=$(echo "${products}" | jq --arg product "$PRODUCT_NAME" '.[] | select(.type == $product) | .product_version')
   local major_minor_version=""
   if [[ "${complete_version// }" != "" ]]; then
-    local major_minor_version=$(format_sermver_major_minor "${complete_version//\"}")
+    local major_minor_version=$(format_semver_major_minor "${complete_version//\"}")
   fi
   echo "${major_minor_version}"
 }
