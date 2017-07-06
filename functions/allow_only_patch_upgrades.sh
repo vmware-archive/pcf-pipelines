@@ -20,6 +20,7 @@ function allow_only_patch_upgrades {
   local PRODUCT_DIR=$5
   local version="$(get_deployed_product_version ${OPS_MGR_HOST} ${OPS_MGR_USR} ${OPS_MGR_PWD} ${PRODUCT_NAME})"
   local deployed_version=${version// }
+  local new_version="$(get_new_product_version $PRODUCT_DIR)"
 
   if [[ ${deployed_version// } == "" ]];then
       echo "version check yielded empty version information from product call:"
@@ -27,12 +28,12 @@ function allow_only_patch_upgrades {
       exit 1 
   fi
 
-  if [[ `ls ${PRODUCT_DIR} | grep ${deployed_version}` ]]; then
+  if [[ ${new_version} == ${deployed_version} ]]; then
     echo "we have a safe upgrade for version: ${deployed_version}";
 
   else
     echo "You are trying to install version: "
-    ls ${PRODUCT_DIR}
+    cat ${PRODUCT_DIR}/version
     echo
     echo "Your currently deployed version is: "
     echo "$deployed_version"
@@ -49,6 +50,17 @@ function allow_only_patch_upgrades {
   fi
 }
 
+function get_new_product_version () {
+  local PRODUCT_DIR=$1
+  local complete_new_version=$(cat ${PRODUCT_DIR}/version)
+  local new_version=$(format_sermver_major_minor ${complete_new_version})
+  echo ${new_version// }
+}
+
+function format_sermver_major_minor () {
+  echo $1 | awk -F"." '{print $1"."$2}'
+}
+
 function get_deployed_product_version () {
   local OPS_MGR_HOST=$1
   local OPS_MGR_USR=$2
@@ -63,7 +75,7 @@ function get_deployed_product_version () {
   local complete_version=$(echo "${products}" | jq --arg product "$PRODUCT_NAME" '.[] | select(.type == $product) | .product_version')
   local major_minor_version=""
   if [[ "${complete_version// }" != "" ]]; then
-    local major_minor_version=$( echo "${complete_version//\"}" | awk -F"." '{print $1"."$2}' )
+    local major_minor_version=$(format_sermver_major_minor "${complete_version//\"}")
   fi
   echo "${major_minor_version}"
 }
