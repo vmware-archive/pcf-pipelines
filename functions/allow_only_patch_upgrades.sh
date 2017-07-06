@@ -18,11 +18,10 @@ function allow_only_patch_upgrades {
   local OPS_MGR_PWD=$3
   local PRODUCT_NAME=$4
   local PRODUCT_DIR=$5
-  local version="$(get_deployed_product_version ${OPS_MGR_HOST} ${OPS_MGR_USR} ${OPS_MGR_PWD} ${PRODUCT_NAME})"
-  local deployed_version=${version// }
+  local deployed_version="$(get_deployed_product_version ${OPS_MGR_HOST} ${OPS_MGR_USR} ${OPS_MGR_PWD} ${PRODUCT_NAME})"
   local new_version="$(get_new_product_version $PRODUCT_DIR)"
 
-  if [[ ${deployed_version// } == "" ]];then
+  if [[ ${deployed_version} == "" ]];then
       echo "version check yielded empty version information from product call:"
       echo $deployed_version
       exit 1 
@@ -77,5 +76,5 @@ function get_deployed_product_version () {
   if [[ "${complete_version// }" != "" ]]; then
     local major_minor_version=$(format_semver_major_minor "${complete_version//\"}")
   fi
-  echo "${major_minor_version}"
+  echo "${major_minor_version// }"
 }
