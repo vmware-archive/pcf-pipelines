@@ -80,16 +80,8 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: true
-  - task: test
+  - task: test-pipeline-yaml
     file: pcf-pipelines/ci/tasks/test.yml
-
-- name: test-bash
-  on_failure:
-    <<: *notify_slack
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-      trigger: true
   - task: test-bash-functions 
     file: pcf-pipelines/ci/tasks/test_bash.yml
 
@@ -100,7 +92,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-      passed: [test, test-bash]
+      passed: [test]
     - get: fly
 
   - put: version
