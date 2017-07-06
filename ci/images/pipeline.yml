@@ -231,7 +231,7 @@ jobs:
 
 - name: create-czero-cflinuxfs2-tarball
   plan:
-  - get: image
+  - get: docker-image-resource
     resource: pcf-pipelines-image
   - task: create-tarball
     config:
@@ -241,17 +241,18 @@ jobs:
         source:
           repository: busybox
       inputs:
-      - name: image
+      - name: docker-image-resource
       outputs:
-      - name: rootfs-tarball
+      - name: image-tarball
       run:
-        path: bash
+        path: sh
         args:
         - -c
         - |
           set -e
 
-          tar czvf rootfs-tarball/czero-cflinuxfs2.tgz -C image .
+          echo "Creating tarball..."
+          tar czf image-tarball/czero-cflinuxfs2.tgz -C image .
   - put: s3-rootfs
     params:
-      file: rootfs-tarball/czero-cflinuxfs2.tgz
+      file: image-tarball/czero-cflinuxfs2.tgz
