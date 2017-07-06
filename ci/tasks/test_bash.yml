@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: czero/cflinuxfs2}
+
+inputs:
+- name: pcf-pipelines
+
+run:
+  path: bash
+  args:
+  - -ce
+  - |
+    pushd pcf-pipelines
+      ./run_bash_testsuite.sh ./
+    popd
