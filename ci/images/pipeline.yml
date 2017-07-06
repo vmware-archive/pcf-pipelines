@@ -34,14 +34,14 @@ resources:
   source:
     user: pivotal-cf
     repository: om
-    access_token: {{github_token}}
+    access_token: {{images_pipeline_github_token}}
 
 - name: yaml-patch 
   type: github-release
   source:
     user: krishicks
     repository: yaml-patch 
-    access_token: {{github_token}}
+    access_token: {{images_pipeline_github_token}}
 
 - name: cf-cli-tarball
   type: s3
@@ -55,35 +55,35 @@ resources:
   source:
     user: pivotal-cf
     repository: cliaas
-    access_token: {{github_token}}
+    access_token: {{images_pipeline_github_token}}
 
 - name: pivnet-cli
   type: github-release
   source:
     user: pivotal-cf
     repository: pivnet-cli
-    access_token: {{github_token}}
+    access_token: {{images_pipeline_github_token}}
 
 - name: govc
   type: github-release
   source:
     user: vmware
     repository: govmomi
-    access_token: {{github_token}}
+    access_token: {{images_pipeline_github_token}}
 
 - name: om-beta
   type: github-release
   source:
     user: c0-ops
     repository: om
-    access_token: {{github_token}}
+    access_token: {{images_pipeline_github_token}}
 
 - name: stemcell-downloader
   type: github-release
   source:
     user: pivotal-cf
     repository: pcf-product-stemcell-downloader
-    access_token: {{github_token}}
+    access_token: {{images_pipeline_github_token}}
 
 jobs:
 - name: build-pcf-pipelines-image
