@@ -250,7 +250,6 @@ jobs:
         - -c
         - |
           set -e
-          exit 1
 
           tar czvf rootfs-tarball/czero-cflinuxfs2.tgz -C image .
   - put: s3-rootfs
