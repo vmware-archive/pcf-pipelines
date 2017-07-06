@@ -18,7 +18,7 @@ function allow_only_patch_upgrades {
   local OPS_MGR_PWD=$3
   local PRODUCT_NAME=$4
   local PRODUCT_DIR=$5
-  local version="$(get_product_version ${OPS_MGR_HOST} ${OPS_MGR_USR} ${OPS_MGR_PWD} ${PRODUCT_NAME})"
+  local version="$(get_deployed_product_version ${OPS_MGR_HOST} ${OPS_MGR_USR} ${OPS_MGR_PWD} ${PRODUCT_NAME})"
   local deployed_version=${version// }
 
   if [[ ${deployed_version// } == "" ]];then
@@ -49,7 +49,7 @@ function allow_only_patch_upgrades {
   fi
 }
 
-function get_product_version () {
+function get_deployed_product_version () {
   local OPS_MGR_HOST=$1
   local OPS_MGR_USR=$2
   local OPS_MGR_PWD=$3

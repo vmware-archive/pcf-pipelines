@@ -51,22 +51,9 @@ function TestAllowOnlyPatchUpgradesShouldFilterOnExactProductName () (
 )
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+############################################################################## 
+# fake stuff below 
+############################################################################## 
 
 function fakeOmLinux () {
   if [[ "$(echo $1 | grep '/api/v0/deployed/products')" != "" ]]; then 
