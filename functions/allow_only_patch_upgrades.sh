@@ -18,20 +18,12 @@ function allow_only_patch_upgrades {
   local OPS_MGR_PWD=$3
   local PRODUCT_NAME=$4
   local PRODUCT_DIR=$5
-
-  local deployed_products=$(
-    om-linux \
-      --target "https://${OPS_MGR_HOST}" \
-      --username "${OPS_MGR_USR}" \
-      --password "${OPS_MGR_PWD}" \
-      --skip-ssl-validation \
-      deployed-products)
-  version=$(echo "${deployed_products}" | grep "|.*\s${PRODUCT_NAME}\s.*|" | awk -F"|" '{print $3 }' | awk -F"." '{print $1"."$2}')
+  local version="$(get_product_version ${OPS_MGR_HOST} ${OPS_MGR_USR} ${OPS_MGR_PWD} ${PRODUCT_NAME})"
   local deployed_version=${version// }
 
   if [[ ${deployed_version// } == "" ]];then
       echo "version check yielded empty version information from product call:"
-      echo ${deployed_products}
+      echo $deployed_version
       exit 1 
   fi
 
@@ -55,4 +47,23 @@ function allow_only_patch_upgrades {
     echo "$deployed_version" | awk -F"." '{print "^"$1"\\\."$2"\\..*$"}'
     exit 1
   fi
+}
+
+function get_product_version () {
+  local OPS_MGR_HOST=$1
+  local OPS_MGR_USR=$2
+  local OPS_MGR_PWD=$3
+  local PRODUCT_NAME=$4
+  local products="$( om-linux \
+    --target "https://${OPS_MGR_HOST}" \
+    --username "${OPS_MGR_USR}" \
+    --password "${OPS_MGR_PWD}" \
+    --skip-ssl-validation \
+    curl --path /api/v0/deployed/products -s )"
+  local complete_version=$(echo "${products}" | jq --arg product "$PRODUCT_NAME" '.[] | select(.type == $product) | .product_version')
+  local major_minor_version=""
+  if [[ "${complete_version// }" != "" ]]; then
+    local major_minor_version=$( echo "${complete_version//\"}" | awk -F"." '{print $1"."$2}' )
+  fi
+  echo "${major_minor_version}"
 }
