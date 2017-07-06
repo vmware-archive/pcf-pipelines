@@ -80,10 +80,11 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: true
-  - task: test-pipeline-yaml
-    file: pcf-pipelines/ci/tasks/test.yml
-  - task: test-bash-functions 
-    file: pcf-pipelines/ci/tasks/test_bash.yml
+  - aggregate:
+    - task: test-pipeline-yaml
+      file: pcf-pipelines/ci/tasks/test.yml
+    - task: test-bash-functions 
+      file: pcf-pipelines/ci/tasks/test_bash.yml
 
 - name: publish-rc
   serial_groups: [version]
