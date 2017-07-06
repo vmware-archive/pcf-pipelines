@@ -41,9 +41,8 @@ resources:
   source:
     driver: git
     initial_version: 0.1.0-rc.1
-    uri: https://github.com/pivotal-cf/pcf-pipelines
-    username: {{pcf_pipelines_github_token}}
-    password: x-oauth-basic
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    private_key: {{git_private_key}}
     branch: version
     file: version
 
