@@ -21,9 +21,10 @@ params:
 run:
   path: bash
   args:
-  - -ce
+  - -c
   - |
     set -o pipefail
+    set -eu
 
     chmod +x fly/fly
     export PATH="$PWD/fly":$PATH
