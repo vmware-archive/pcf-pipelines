@@ -100,6 +100,8 @@ run:
       -e '/company_proxy_domain:/d' \
       pcf-pipelines/install-pcf/vsphere/offline/params.yml
     cat >> pcf-pipelines/install-pcf/vsphere/offline/params.yml <<EOF
+
+    # offline resource config
     s3_endpoint:
     s3_bucket:
     s3_access_key_id:
