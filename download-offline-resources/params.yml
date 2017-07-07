@@ -1,0 +1,9 @@
+pivnet_token:
+opsman_major_minor_version:
+ert_major_minor_version:
+s3_access_key_id:
+s3_secret_access_key:
+s3_endpoint:
+s3_bucket:
+dockerhub_username:
+dockerhub_password:
