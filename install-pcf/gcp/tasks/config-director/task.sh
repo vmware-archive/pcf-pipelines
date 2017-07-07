@@ -131,7 +131,7 @@ EOF
 security_configuration=$(
   echo '{}' |
   jq \
-    --arg trusted_certificates "" \
+    --arg trusted_certificates "$OPS_MGR_TRUSTED_CERTS" \
     '. +
     {
       "trusted_certificates": $trusted_certificates,
