@@ -89,9 +89,9 @@ run:
     steamroll -p pcf-pipelines/install-pcf/vsphere/pipeline.yml -c steamroll_config.yml |
     yaml_patch_linux \
       -o pcf-pipelines/operations/create-install-pcf-vsphere-offline-pipeline.yml \
-      > $tmpdir/offline.yml
+      > vsphere-offline.yml
 
-    fly fmt -c $tmpdir/offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
+    fly fmt -c vsphere-offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
     cp pcf-pipelines/install-pcf/vsphere{,/offline}/params.yml
     sed -i \
       -e '/pivnet_token:/d' \
