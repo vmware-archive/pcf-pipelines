@@ -141,6 +141,11 @@ jobs:
       ENABLE_VM_RESURRECTOR: {{enable_vm_resurrector}}
       MAX_THREADS: {{max_threads}}
       TRUSTED_CERTIFICATES: {{trusted_certificates}}
+      NSX_NETWORKING_ENABLED: {{nsx_networking_enabled}}
+      NSX_ADDRESS: {{nsx_address}}
+      NSX_USERNAME: {{nsx_username}}
+      NSX_PASSWORD: {{nsx_password}}
+      NSX_CA_CERTIFICATE: {{nsx_ca_certificate}}
 
 - name: deploy-director
   plan:

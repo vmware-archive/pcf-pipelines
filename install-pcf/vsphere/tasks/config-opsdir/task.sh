@@ -14,7 +14,12 @@ iaas_configuration=$(cat <<-EOF
   "bosh_vm_folder": "$BOSH_VM_FOLDER",
   "bosh_template_folder": "$BOSH_TEMPLATE_FOLDER",
   "bosh_disk_path": "$BOSH_DISK_PATH",
-  "ssl_verification_enabled": false
+  "ssl_verification_enabled": false,
+  "nsx_networking_enabled": $NSX_NETWORKING_ENABLED,
+  "nsx_address": "$NSX_ADDRESS",
+  "nsx_username": "$NSX_USERNAME",
+  "nsx_password": "$NSX_PASSWORD",
+  "nsx_ca_certificate": "$NSX_CA_CERTIFICATE"
 }
 EOF
 )
