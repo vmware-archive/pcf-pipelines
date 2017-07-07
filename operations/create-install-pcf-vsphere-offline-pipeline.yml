@@ -52,7 +52,7 @@
   path: /name=pcf-pipelines
 
 - op: remove
-  path: /get=pcf-pipelines
+  path: /get=pcf-pipelines-tarball
 
 - op: remove
   path: /jobs/get=pivnet-opsman-product/params/globs
