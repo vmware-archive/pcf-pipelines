@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+function main () {
 
 iaas_configuration=$(cat <<-EOF
 {
@@ -202,3 +202,9 @@ om-linux \
   --networks-configuration "$network_configuration" \
   --network-assignment "$network_assignment" \
   --security-configuration "$security_configuration"
+}
+
+if [[ $0 == "$BASH_SOURCE" ]]; then 
+  set -eu
+  main
+fi
