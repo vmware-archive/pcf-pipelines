@@ -1,0 +1,204 @@
+- op: remove
+  path: /resource_types
+
+- op: add
+  path: /resource_types
+  value:
+  - name: s3-image-resource
+    type: docker-image
+    source:
+      repository: czero/s3-resource
+      tag: latest
+
+- op: remove
+  path: /resources
+
+- op: add
+  path: /resources
+  value:
+  - name: pcf-ops-manager
+    type: s3
+    source:
+      access_key_id: {{s3_access_key_id}}
+      secret_access_key: {{s3_secret_access_key}}
+      endpoint: {{s3_endpoint}}
+      bucket: {{s3_bucket}}
+      regexp: "ops-manager/ops-manager-(.*).tgz"
+      unpack: true
+
+  - name: elastic-runtime
+    type: s3
+    source:
+      access_key_id: {{s3_access_key_id}}
+      secret_access_key: {{s3_secret_access_key}}
+      endpoint: {{s3_endpoint}}
+      bucket: {{s3_bucket}}
+      regexp: "elastic-runtime/elastic-runtime-(.*).tgz"
+      unpack: true
+
+- op: replace
+  path: /jobs/type=docker-image
+  value:
+    type: s3-image-resource
+    source:
+      access_key_id: {{s3_access_key_id}}
+      secret_access_key: {{s3_secret_access_key}}
+      endpoint: {{s3_endpoint}}
+      bucket: {{s3_bucket}}
+      regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz"
+      unpack: true
+
+- op: remove
+  path: /name=pcf-pipelines
+
+- op: remove
+  path: /get=pcf-pipelines
+
+- op: remove
+  path: /jobs/get=pivnet-opsman-product/params/globs
+
+- op: remove
+  path: /jobs/get=pcf-ops-manager/params/globs
+
+- op: remove
+  path: /jobs/get=pivnet-product/params/globs
+
+- op: replace
+  path: /jobs/name=upload-ert/plan/task=upload-tile
+  value:
+    do:
+    - task: upload-stemcell
+      config:
+        platform: linux
+        image_resource:
+          type: s3
+          source:
+            access_key_id: {{s3_access_key_id}}
+            bucket: {{s3_bucket}}
+            endpoint: {{s3_endpoint}}
+            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz
+            secret_access_key: {{s3_secret_access_key}}
+            unpack: true
+        inputs:
+        - name: pivnet-product
+        params:
+          S3_ACCESS_KEY_ID: {{s3_access_key_id}}
+          S3_SECRET_ACCESS_KEY: {{s3_secret_access_key}}
+          S3_BUCKET: {{s3_bucket}}
+          S3_ENDPOINT: {{s3_endpoint}}
+          IAAS: vsphere
+          OPS_MGR_DOMAIN: {{opsman_uri}}
+          OPS_MGR_USERNAME: {{opsman_admin_username}}
+          OPS_MGR_PASSWORD: {{opsman_admin_password}}
+        run:
+          path: bash
+          args:
+          - -c
+          - |
+            set -eu
+
+            stemcell_version=$(
+              cat ./pivnet-product/metadata.json |
+              jq \
+              --raw-output \
+              '.Dependencies[]
+              | select(.Release.Product.Name | contains("Stemcells"))
+              | .Release.Version
+              '
+            )
+
+            if [ -n "$stemcell_version" ]; then
+              diagnostic_report=$(
+                om-linux \
+                  --target https://$OPS_MGR_DOMAIN \
+                  --username $OPS_MGR_USERNAME \
+                  --password $OPS_MGR_PASSWORD \
+                  --skip-ssl-validation \
+                  curl --silent --path "/api/v0/diagnostic_report"
+              )
+
+              stemcell=$(
+                echo $diagnostic_report |
+                jq \
+                  --arg version "$stemcell_version" \
+                  --arg glob "$IAAS" \
+                '.stemcells[] | select(contains($version) and contains($glob))'
+              )
+
+              if [[ -z "$stemcell" ]]; then
+                export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY_ID
+                export AWS_SECRET_ACCESS_KEY=$S3_SECRET_ACCESS_KEY
+
+                echo "Downloading stemcell $stemcell_version"
+
+                available_stemcells=$(
+                  aws \
+                  --endpoint-url $S3_ENDPOINT \
+                  s3 ls "s3://${S3_BUCKET}/stemcells/" | grep $IAAS | cut -d' ' -f5
+                )
+
+                if [[ -z "$available_stemcells" ]]; then
+                  echo "No stemcells available for ${IAAS} in s3://${S3_BUCKET}/stemcells/"
+                  exit 1
+                fi
+
+                stemcell_to_download=$(
+                  set +e
+                  echo $available_stemcells | grep $stemcell_version
+                  set -e
+                )
+
+                if [[ -z "$stemcell_to_download" ]]; then
+                  echo "Stemcell with version '$stemcell_version' not found in s3://${S3_BUCKET}/stemcells/"
+                  exit 1
+                fi
+
+                aws \
+                --endpoint-url $S3_ENDPOINT \
+                s3 cp "s3://${S3_BUCKET}/stemcells/${stemcell_to_download}" .
+
+                om-linux \
+                  --target https://$OPS_MGR_DOMAIN \
+                  --username $OPS_MGR_USERNAME \
+                  --password $OPS_MGR_PASSWORD \
+                  --skip-ssl-validation \
+                  upload-stemcell \
+                  --stemcell "./${stemcell_to_download}"
+              fi
+            fi
+
+    - task: upload-tile
+      config:
+        platform: linux
+        image_resource:
+          type: s3
+          source:
+            access_key_id: {{s3_access_key_id}}
+            bucket: {{s3_bucket}}
+            endpoint: {{s3_endpoint}}
+            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz
+            secret_access_key: {{s3_secret_access_key}}
+            unpack: true
+        inputs:
+        - name: pivnet-product
+        params:
+          OPS_MGR_DOMAIN:
+          OPS_MGR_USERNAME:
+          OPS_MGR_PASSWORD:
+        run:
+          path: bash
+          args:
+          - -c
+          - |
+            set -eu
+
+            file_path=$(find ./pivnet-product -name "*.pivotal")
+
+            om-linux \
+            --target https://$OPS_MGR_DOMAIN \
+            --username $OPS_MGR_USERNAME \
+            --password $OPS_MGR_PASSWORD \
+            --request-timeout 3600 \
+            --skip-ssl-validation \
+            upload-product \
+            --product $file_path
