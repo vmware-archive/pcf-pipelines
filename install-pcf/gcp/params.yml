@@ -32,7 +32,7 @@ pcf_opsman_admin_username: CHANGEME
 pcf_opsman_admin_password: CHANGEME
 
 # Operations Manager Trusted Certificates
-pcf_opsman_trusted_certs:
+pcf_opsman_trusted_certs: |
 
 # Elastic Runtime Domain
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
@@ -112,7 +112,3 @@ mysql_backups_s3_bucket_path:
 mysql_backups_s3_access_key_id:
 mysql_backups_s3_secret_access_key:
 mysql_backups_s3_cron_schedule:
-
-# Pipeline resources
-pcf_pipelines_git_uri: git@github.com:pivotal-cf/pcf-pipelines.git
-pcf_pipelines_git_branch: master
