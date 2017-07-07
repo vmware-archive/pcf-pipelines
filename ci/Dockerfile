@@ -9,6 +9,7 @@ COPY \
        govc \
        om-linux-beta \
        stemcell-downloader \
+       steamroll \
        /usr/local/bin/
 
 RUN \

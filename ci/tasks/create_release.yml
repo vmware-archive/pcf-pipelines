@@ -29,6 +29,8 @@ run:
     chmod +x fly/fly
     export PATH="$PWD/fly":$PATH
 
+    root=$PWD
+
     # Create upgrade-ert pipeline from upgrade-tile pipeline
     pushd pcf-pipelines
       mkdir -p upgrade-ert
@@ -77,6 +79,32 @@ run:
       params_file=$(dirname $f)/params.yml
       sed -i -e '/git_private_key:/d' $params_file
     done
+
+    # Create offline install-pcf/vsphere pipeline
+    mkdir -p pcf-pipelines/install-pcf/vsphere/offline
+    cat > steamroll_config.yml <<EOF
+    resource_map:
+      "pcf-pipelines": $root/pcf-pipelines
+    EOF
+    steamroll -p pcf-pipelines/install-pcf/vsphere/pipeline.yml -c steamroll_config.yml |
+    yaml_patch_linux \
+      -o pcf-pipelines/operations/create-install-pcf-vsphere-offline-pipeline.yml \
+      > $tmpdir/offline.yml
+
+    fly fmt -c $tmpdir/offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
+    cp pcf-pipelines/install-pcf/vsphere{,/offline}/params.yml
+    sed -i \
+      -e '/pivnet_token:/d' \
+      -e '/ert_major_minor_version:/d' \
+      -e '/opsman_major_minor_version:/d' \
+      -e '/company_proxy_domain:/d' \
+      pcf-pipelines/install-pcf/vsphere/offline/params.yml
+    cat >> pcf-pipelines/install-pcf/vsphere/offline/params.yml <<EOF
+    s3_endpoint:
+    s3_bucket:
+    s3_access_key_id:
+    s3_secret_access_key:
+    EOF
 
     # Create release metadata
     release_date=$(date +%Y-%m-%d)

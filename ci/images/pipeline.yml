@@ -94,6 +94,13 @@ resources:
     bucket: czero-images
     versioned_file: "czero-cflinuxfs2-rootfs.tgz"
 
+- name: steamroll
+  type: github-release
+  source:
+    user: krishicks
+    repository: concourse-pipeline-steamroller
+    access_token: {{images_pipeline_github_token}}
+
 jobs:
 - name: build-pcf-pipelines-image
   serial_groups: [pcf-pipelines-image]
@@ -120,6 +127,8 @@ jobs:
       version: { tag: '0.17-beta.0' }
     - get: stemcell-downloader
       params: {globs: ["*linux*"]}
+    - get: steamroll
+      params: {globs: ["*linux*"]}
 
   - task: prepare-workspace
     config:
@@ -137,6 +146,7 @@ jobs:
       - name: govc
       - name: om-beta
       - name: stemcell-downloader
+      - name: steamroll
       outputs:
       - name: workspace
       run:
@@ -170,6 +180,9 @@ jobs:
 
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           chmod +x workspace/stemcell-downloader
+
+          cp steamroll/steamroll_linux workspace/steamroll
+          chmod +x workspace/steamroll
 
   - put: pcf-pipelines-image-rc
     params:
@@ -215,6 +228,7 @@ jobs:
           which aws
           which openstack
           which neutron
+          which steamroll
 
 - name: promote-image
   serial_groups: [pcf-pipelines-image]
