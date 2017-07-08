@@ -1,0 +1,202 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: stemcell-pivnet
+  type: pivnet
+  check_every: 1h
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: stemcells
+    sort_by: semver
+
+- name: ops-manager-pivnet
+  type: pivnet
+  check_every: 1h
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
+    sort_by: semver
+
+- name: elastic-runtime-pivnet
+  type: pivnet
+  check_every: 1h
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: elastic-runtime
+    product_version: {{ert_major_minor_version}}
+    sort_by: semver
+
+- name: czero-cflinuxfs2
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+    tag: latest
+    username: {{dockerhub_username}}
+    password: {{dockerhub_password}}
+
+- name: ops-manager-s3
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "ops-manager/ops-manager-(.*).tgz"
+
+- name: elastic-runtime-s3
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "elastic-runtime/elastic-runtime-(.*).tgz"
+
+- name: czero-cflinuxfs2-s3
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-(.*).tgz"
+    disable_ssl: false
+
+- name: czero-cflinuxfs2-version
+  type: semver
+  source:
+    initial_version: 0.0.0
+    driver: s3
+    bucket: {{s3_bucket}}
+    key: "czero-cflinuxfs2/version"
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    disable_ssl: false
+
+- name: stemcell-s3
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "stemcells/bosh-stemcell-(.*)-.*.tgz"
+    disable_ssl: false
+
+jobs:
+- name: stemcell
+  plan:
+  - get: stemcell-pivnet
+    trigger: true
+    params:
+      globs: ["*vsphere*"]
+  - put: stemcell-s3
+    params:
+      file: "stemcell-pivnet/*.tgz"
+
+- name: ops-manager
+  plan:
+  - get: ops-manager-pivnet
+    trigger: true
+    params:
+      globs: ["*.ova"]
+  - task: create-tarball
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/cflinuxfs2
+      inputs:
+      - name: ops-manager-pivnet
+      outputs:
+      - name: ops-manager-tarball
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -eu
+
+          version=$(cat ops-manager-pivnet/metadata.json | jq --raw-output '.Release.Version')
+
+          echo "Creating tarball with version ${version}..."
+          tar czf "ops-manager-tarball/ops-manager-${version}.tgz" -C ops-manager-pivnet .
+  - put: ops-manager-s3
+    params:
+      file: "ops-manager-tarball/ops-manager-*.tgz"
+
+- name: elastic-runtime
+  plan:
+  - get: elastic-runtime-pivnet
+    trigger: true
+    params:
+      globs: ["*.pivotal"]
+  - task: create-tarball
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/cflinuxfs2
+      inputs:
+      - name: elastic-runtime-pivnet
+      outputs:
+      - name: elastic-runtime-tarball
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -eu
+
+          version=$(cat elastic-runtime-pivnet/metadata.json | jq --raw-output '.Release.Version')
+
+          echo "Creating tarball with version ${version}..."
+          tar czf "elastic-runtime-tarball/elastic-runtime-${version}.tgz" -C elastic-runtime-pivnet .
+  - put: elastic-runtime-s3
+    params:
+      file: "elastic-runtime-tarball/elastic-runtime-*.tgz"
+
+- name: czero-cflinuxfs2
+  plan:
+  - aggregate:
+    - get: czero-cflinuxfs2
+    - get: czero-cflinuxfs2-version
+      params: {bump: major}
+  - task: create-tarball
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: busybox
+      inputs:
+      - name: czero-cflinuxfs2
+      - name: czero-cflinuxfs2-version
+      outputs:
+      - name: czero-cflinuxfs2-tarball
+      run:
+        path: sh
+        args:
+        - -c
+        - |
+          set -eu
+
+          version=$(cat czero-cflinuxfs2-version/version)
+          digest=$(cat czero-cflinuxfs2/digest)
+
+          echo "Creating tarball with version ${version}-${digest}..."
+          tar czf "czero-cflinuxfs2-tarball/czero-cflinuxfs2-${version}-${digest}.tgz" -C czero-cflinuxfs2 .
+  - put: czero-cflinuxfs2-version
+    params: {bump: major}
+  - put: czero-cflinuxfs2-s3
+    params:
+      file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tgz"

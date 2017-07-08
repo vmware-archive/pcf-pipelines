@@ -20,4 +20,4 @@ echo "Checking if you are applying an allowed patch upgrade @ ${OPSMAN_URI}"
 
 source pcf-pipelines/functions/allow_only_patch_upgrades.sh
 
-allow_only_patch_upgrades ${OPSMAN_URI} ${OPSMAN_USERNAME} ${OPSMAN_PASSWORD}
+allow_only_patch_upgrades ${OPSMAN_URI} ${OPSMAN_USERNAME} ${OPSMAN_PASSWORD} ${PRODUCT_NAME} "product-files"

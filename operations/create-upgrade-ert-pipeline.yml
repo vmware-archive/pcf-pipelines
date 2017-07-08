@@ -23,5 +23,5 @@
   value: upload-ert-and-stemcell
 
 - op: replace
-  path: /jobs/name=upgrade-ert/task=stage-tile/params/PRODUCT_NAME
+  path: /jobs/PRODUCT_NAME={{product_name}}/PRODUCT_NAME
   value: cf

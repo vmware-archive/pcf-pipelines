@@ -45,6 +45,10 @@ params:
   DB_NETWORKPOLICYSERVERDB_PASSWORD:
   DB_NFSVOLUMEDB_USERNAME:
   DB_NFSVOLUMEDB_PASSWORD:
+  DB_LOCKET_USERNAME:
+  DB_LOCKET_PASSWORD:
+  DB_SILK_USERNAME:
+  DB_SILK_PASSWORD:
 
 run:
   path: pcf-pipelines/install-pcf/gcp/tasks/create-infrastructure/task.sh

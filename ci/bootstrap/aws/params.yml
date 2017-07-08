@@ -1,0 +1,8 @@
+git_private_key:
+admin_aws_access_key_id:
+admin_aws_secret_access_key:
+route53_domain:
+route53_zone_id:
+terraform_statefiles_bucket:
+pivnet_token:
+mysql_monitor_email:

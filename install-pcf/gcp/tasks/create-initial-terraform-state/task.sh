@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-platform: linux
+set -eu
 
-image_resource:
-  type: docker-image
-  source: {repository: czero/cflinuxfs2}
+echo $GCP_SERVICE_ACCOUNT_KEY > gcloud.key
+gcloud auth activate-service-account --key-file=gcloud.key
 
-inputs:
-  - name: pcf-pipelines
-  - name: product-files
+files=$(gsutil ls "gs://${TERRAFORM_STATEFILE_BUCKET}")
 
-params:
-  OPSMAN_USERNAME:
-  OPSMAN_PASSWORD:
-  OPSMAN_URI:
-  PRODUCT_NAME:
-
-run:
-  path: pcf-pipelines/tasks/allow-only-patch-upgrades/task.sh
+if [ $(echo $files | grep -c terraform.tfstate) == 0 ]; then
+  echo "{\"version\": 3}" > terraform.tfstate
+  gsutil cp terraform.tfstate "gs://${TERRAFORM_STATEFILE_BUCKET}/terraform.tfstate"
+else
+  echo "terraform.tfstate file found, skipping"
+  exit 0
+fi

@@ -1,0 +1,22 @@
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    branch: master
+    private_key: {{git_private_key}}
+
+jobs:
+- name: bootstrap-aws
+  plan:
+  - get: pcf-pipelines
+  - task: terraform
+    params:
+      AWS_ACCESS_KEY_ID: {{admin_aws_access_key_id}}
+      AWS_SECRET_ACCESS_KEY: {{admin_aws_secret_access_key}}
+      ROUTE53_DOMAIN: {{route53_domain}}
+      ROUTE53_ZONE_ID: {{route53_zone_id}}
+      TERRAFORM_STATEFILES_BUCKET: {{terraform_statefiles_bucket}}
+      PIVNET_TOKEN: {{pivnet_token}}
+      MYSQL_MONITOR_EMAIL: {{mysql_monitor_email}}
+    file: pcf-pipelines/ci/bootstrap/aws/tasks/bootstrap.yml

@@ -20,15 +20,7 @@ gcp_zone_3: us-central1-c
 gcp_storage_access_key: CHANGEME
 gcp_storage_secret_key: CHANGEME
 
-# S3 configuration for storage of terraform state. Terraform state files
-# contain plaintext secrets; as such Minio is recommended to keep configuration
-# local to Concourse: https://hub.docker.com/r/minio/minio
-# docker run -e MINIO_ACCESS_KEY="example-access-key" -e MINIO_SECRET_KEY="example-secret-key" --network host minio/minio server /tmp
-s3_endpoint: s3.amazonaws.com
-s3_bucket_terraform: gcp-concourse
-s3_access_key_id: CHANGEME
-s3_secret_access_key: CHANGEME
-s3_region: CHANGEME
+terraform_statefile_bucket:
 
 git_private_key:
 

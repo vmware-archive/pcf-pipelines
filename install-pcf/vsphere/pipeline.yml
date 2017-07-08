@@ -13,7 +13,7 @@ resources:
     branch: master
     private_key: {{git_private_key}}
 
-- name: pivnet-opsman-product
+- name: pcf-ops-manager
   type: pivnet
   source:
     api_token: {{pivnet_token}}
@@ -36,8 +36,8 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-opsman-product
+      resource: pcf-ops-manager
       params: {globs: ["*.ova"]}
-      trigger: true
 
   - task: deploy
     file: pcf-pipelines/install-pcf/vsphere/tasks/import-opsman/task.yml
@@ -68,7 +68,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
+    - get: pcf-ops-manager
       params: {globs: []}
       passed: [deploy-opsman]
       trigger: true
@@ -146,7 +146,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
+    - get: pcf-ops-manager
       params: {globs: []}
       passed: [configure-director]
       trigger: true
@@ -165,7 +165,7 @@ jobs:
     - get: pivnet-product
       resource: elastic-runtime
       params: {globs: ["*.pivotal"]}
-    - get: pivnet-opsman-product
+    - get: pcf-ops-manager
       params: {globs: []}
       passed: [deploy-director]
       trigger: true
@@ -185,7 +185,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsman-product
+    - get: pcf-ops-manager
       params: {globs: []}
       passed: [upload-ert]
       trigger: true
@@ -294,6 +294,8 @@ jobs:
       DOPPLER_INSTANCES: {{doppler_instances}}
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
+      SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
+      SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml

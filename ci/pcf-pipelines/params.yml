@@ -2,7 +2,7 @@ atc_external_url:
 atc_team_name:
 fly_basic_auth_password:
 fly_basic_auth_username:
-github_token:
+pcf_pipelines_github_token:
 git_private_key:
 pivnet_aws_access_key:
 pivnet_aws_secret_key:
@@ -10,3 +10,9 @@ pivnet_s3_filepath_prefix:
 pivnet_token:
 slack_webhook_url:
 install_pcf_aws_current_params:
+upgrade_ert_aws_current_params:
+install_pcf_gcp_current_params:
+upgrade_ert_gcp_current_params:
+install_pcf_vsphere_slot1_params:
+upgrade_ert_vsphere_slot1_params:
+upgrade_ops_manager_vsphere_slot1_params:

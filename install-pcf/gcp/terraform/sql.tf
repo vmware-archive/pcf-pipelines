@@ -100,12 +100,24 @@ resource "google_sql_database" "networkpolicyserver" {
   instance   = "${google_sql_database_instance.master.name}"
 }
 
+resource "google_sql_database" "locket" {
+  name       = "locket"
+  depends_on = ["google_sql_database.networkpolicyserver"]
+  instance   = "${google_sql_database_instance.master.name}"
+}
+
+resource "google_sql_database" "silk" {
+  name       = "silk"
+  depends_on = ["google_sql_database.locket"]
+  instance   = "${google_sql_database_instance.master.name}"
+}
+
 resource "google_sql_user" "diego" {
   name       = "${var.db_diego_username}"
   password   = "${var.db_diego_password}"
   instance   = "${google_sql_database_instance.master.name}"
   host       = "%"
-  depends_on = ["google_sql_database.networkpolicyserver"]
+  depends_on = ["google_sql_database.silk"]
 }
 
 resource "google_sql_user" "notifications" {
@@ -178,4 +190,20 @@ resource "google_sql_user" "nfs_volume" {
   instance   = "${google_sql_database_instance.master.name}"
   host       = "%"
   depends_on = ["google_sql_user.network_policy_server"]
+}
+
+resource "google_sql_user" "locket" {
+  name       = "${var.db_locket_username}"
+  password   = "${var.db_locket_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
+  depends_on = ["google_sql_user.nfs_volume"]
+}
+
+resource "google_sql_user" "silk" {
+  name       = "${var.db_silk_username}"
+  password   = "${var.db_silk_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
+  depends_on = ["google_sql_user.locket"]
 }

@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-opsman_timeout_seconds: CHANGEME
+opsman_timeout_seconds: 3600 # time to wait for new OM VM to come up
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_ssh_password: CHANGEME   # ubuntu user ssh password
-opsman_major_minor_version: ^1\.10\..*$  # Ops Manager minor version to track
+opsman_major_minor_version: ^1\.11\..*$  # Ops Manager minor version to track
 opsman_uri: http://example.com
 opsman_passphrase: CHANGEME
 pivnet_token: CHANGEME
@@ -34,5 +34,5 @@ gateway: CHANGEME
 dns: CHANGEME
 ntp: CHANGEME
 opsman_network: CHANGEME
-iaas_type: CHANGEME
+iaas_type: vsphere
 git_private_key:

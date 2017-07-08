@@ -59,6 +59,19 @@ var _ = Describe("pcf-pipelines", func() {
 				Expect(err).NotTo(HaveOccurred())
 			})
 
+			It("specifies only valid job names in any `passed` definitions in the buildplan", func() {
+				var config atc.Config
+				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
+				err := yaml.Unmarshal(cleanConfigBytes, &config)
+				Expect(err).NotTo(HaveOccurred())
+
+				for _, job := range config.Jobs {
+					for _, plan := range job.Plans() {
+						checkValidJobsList(config.Jobs, plan.Passed, job.Name)
+					}
+				}
+			})
+
 			It("specifies all and only the params that the pipeline's tasks expect", func() {
 				var config atc.Config
 				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
@@ -221,6 +234,13 @@ in the following params template:
 		})
 	}
 })
+
+func checkValidJobsList(jobs atc.JobConfigs, jobNames []string, location string) {
+	for _, jobName := range jobNames {
+		_, exists := jobs.Lookup(jobName)
+		Expect(exists).Should(BeTrue(), fmt.Sprintf("%s is not a valid job defined in %s", jobName, location))
+	}
+}
 
 func allTasksInPlan(seq *atc.PlanSequence) []atc.PlanConfig {
 	var tasks []atc.PlanConfig
