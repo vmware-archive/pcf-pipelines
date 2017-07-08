@@ -131,7 +131,7 @@ run:
     EOF
 
     exclusions="--exclude .git* --exclude ci --exclude *.go"
-    if "$AVAILABILITY" != "Admins Only"; then
+    if [[ "$AVAILABILITY" != "Admins Only" ]]; then
       exclusions+=" --exclude download-offline-resources --exclude install-pcf/vsphere/offline"
     fi
 
