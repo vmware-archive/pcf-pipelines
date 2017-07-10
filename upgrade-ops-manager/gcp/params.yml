@@ -18,7 +18,7 @@ opsman_admin_password: CHANGEME
 opsman_passphrase: CHANGEME
 opsman_uri: CHANGEME
 check_new_opsman_every: CHANGEME
-opsman_major_minor_version: ^1\.10\..*$     # Ops Manager minor version to track
+opsman_major_minor_version: ^1\.11\..*$     # Ops Manager minor version to track
 git_private_key: CHANGEME
 existing_opsman_vm_name: CHANGEME
 opsman_gcp_project: CHANGEME

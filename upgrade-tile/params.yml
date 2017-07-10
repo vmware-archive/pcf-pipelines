@@ -18,8 +18,8 @@
 # on your Pivotal Network profile page:
 # https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
-# The minor product version to track, as a regexp. To track 1.10.x of a product, this would be "^1\.10\..*$"
-product_version_regex: ^1\.10\..*$
+# The minor product version to track, as a regexp. To track 1.11.x of a product, this would be "^1\.11\..*$"
+product_version_regex: ^1\.11\..*$
 
 # Operations Manager
 # ------------------------------
