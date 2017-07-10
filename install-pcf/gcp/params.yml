@@ -61,10 +61,10 @@ pcf_ert_ssl_key:
 ert_errands_to_disable: none
 
 # PCF Operations Manager minor version to install
-opsman_major_minor_version: ^1\.10\..*$
+opsman_major_minor_version: ^1\.11\..*$
 
 # PCF Elastic Runtime minor version to install
-ert_major_minor_version: ^1\.10\..*$
+ert_major_minor_version: ^1\.11\..*$
 
 # DB Creds
 # Usernames must be 16 characters or fewer

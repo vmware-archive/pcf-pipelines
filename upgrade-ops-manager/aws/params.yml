@@ -21,7 +21,7 @@ check_new_opsman_every: CHANGEME
 git_private_key:
 
 # Ops Manager minor version to track
-opsman_major_minor_version: ^1\.10\..*$
+opsman_major_minor_version: ^1\.11\..*$
 
 # Pivotal Net Token to download Ops Manager binaries from https://network.pivotal.io
 pivnet_token: CHANGEME

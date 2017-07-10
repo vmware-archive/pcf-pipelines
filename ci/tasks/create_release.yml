@@ -21,12 +21,15 @@ params:
 run:
   path: bash
   args:
-  - -ce
+  - -c
   - |
     set -o pipefail
+    set -eu
 
     chmod +x fly/fly
     export PATH="$PWD/fly":$PATH
+
+    root=$PWD
 
     # Create upgrade-ert pipeline from upgrade-tile pipeline
     pushd pcf-pipelines
@@ -77,6 +80,34 @@ run:
       sed -i -e '/git_private_key:/d' $params_file
     done
 
+    # Create offline install-pcf/vsphere pipeline
+    mkdir -p pcf-pipelines/install-pcf/vsphere/offline
+    cat > steamroll_config.yml <<EOF
+    resource_map:
+      "pcf-pipelines": $root/pcf-pipelines
+    EOF
+    steamroll -p pcf-pipelines/install-pcf/vsphere/pipeline.yml -c steamroll_config.yml |
+    yaml_patch_linux \
+      -o pcf-pipelines/operations/create-install-pcf-vsphere-offline-pipeline.yml \
+      > vsphere-offline.yml
+
+    fly fmt -c vsphere-offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
+    cp pcf-pipelines/install-pcf/vsphere{,/offline}/params.yml
+    sed -i \
+      -e '/pivnet_token:/d' \
+      -e '/ert_major_minor_version:/d' \
+      -e '/opsman_major_minor_version:/d' \
+      -e '/company_proxy_domain:/d' \
+      pcf-pipelines/install-pcf/vsphere/offline/params.yml
+    cat >> pcf-pipelines/install-pcf/vsphere/offline/params.yml <<EOF
+
+    # offline resource config
+    s3_endpoint:
+    s3_bucket:
+    s3_access_key_id:
+    s3_secret_access_key:
+    EOF
+
     # Create release metadata
     release_date=$(date +%Y-%m-%d)
 
@@ -99,12 +130,14 @@ run:
       - 64  #| Pivotal SI Partners Known and Potential Partners. 
     EOF
 
-    # Create release tarball
+    exclusions="--exclude .git* --exclude ci --exclude *.go"
+    if [[ "$AVAILABILITY" != "Admins Only" ]]; then
+      exclusions+=" --exclude download-offline-resources --exclude install-pcf/vsphere/offline"
+    fi
 
+    # Create release tarball
     tar \
-      --exclude .git* \
-      --exclude ci \
-      --exclude "*.go" \
+      $exclusions \
       --create \
       --gzip \
       --file pcf-pipelines-release-tarball/pcf-pipelines-$version.tgz \
