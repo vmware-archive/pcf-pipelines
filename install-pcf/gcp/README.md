@@ -55,6 +55,13 @@ If you want to bring the environment up again, run `create-infrastructure`.
 
 ## Known Issues
 
+### `create-infrastructure` job trying to delete SSL cert in use
+
+When the `create-infrastructure` job runs, it may generate an error like this:
+`google_compute_ssl_certificate.ssl-cert (destroy): 1 error(s) occurred:
+google_compute_ssl_certificate.ssl-cert: Error deleting ssl certificate: googleapi: Error 400: The ssl_certificate resource 'projects/<redacted>/global/sslCertificates/<redacted>-gcp-lb-cert' is already being used by 'projects/<redacted>/global/targetHttpsProxies/<redacted>-gcp-https-proxy', resourceInUseByAnotherResource`
+When this happens, after you've initially run create-infrastructure, update your params to supply the generated certs so they aren't recreated.
+
 ### `wipe-env` job
 * The job does not account for installed tiles, which means VMs created by tile
   installations will be left behind and/or prevent wipe-env from completing.
