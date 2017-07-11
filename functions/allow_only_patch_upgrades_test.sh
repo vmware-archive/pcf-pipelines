@@ -1,16 +1,32 @@
 #!/bin/bash
 set -u
 
-function TestAllowOnlyPatchUpgradesShouldAllowAPatchUpgrade () (
-
+function TestScriptExitsWithFailureWhenPatchVersionsAreIdentical () (
   # fake the om-linux command
   function om-linux () {
-    fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_10}"
+    fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_10_1}"
   }
 
   # fake the cat command
   function cat () {
-    echo "${cat_fakeresponse_version_1_10}"
+    echo "${cat_fakeresponse_version_1_10_1}"
+  }
+
+  (allow_only_patch_upgrades "a" "b" "c" "acme-product-1" "./")
+  exitCode=$?
+  return $(Expect $exitCode ToNotBe 0)
+)
+
+function TestAllowOnlyPatchUpgradesShouldAllowAPatchUpgrade () (
+
+  # fake the om-linux command
+  function om-linux () {
+    fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_10_1}"
+  }
+
+  # fake the cat command
+  function cat () {
+    echo "${cat_fakeresponse_version_1_10_2}"
   }
   
   (allow_only_patch_upgrades "a" "b" "c" "acme-product-1" "./")
@@ -21,12 +37,12 @@ function TestAllowOnlyPatchUpgradesShouldAllowAPatchUpgrade () (
 function TestAllowOnlyPatchUpgradesShouldFailIfNotAPatchUpgrade () (
   # fake the om-linux command
   function om-linux () {
-    fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_11}"
+    fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_11_1}"
   }
  
   # fake the cat command
   function cat () {
-    echo "${cat_fakeresponse_version_1_10}"
+    echo "${cat_fakeresponse_version_1_10_2}"
   }
 
   (allow_only_patch_upgrades "a" "b" "c" "acme-product-1" "./")
@@ -38,12 +54,12 @@ function TestAllowOnlyPatchUpgradesShouldFilterOnExactProductName () (
 
   # fake the om-linux command
   function om-linux () {
-    fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_10}"
+    fakeOmLinux "$*" "${om_linux_fakeresponse_curl_deployedproducts_1_10_1}"
   }
 
   # fake the cat command
   function cat () {
-    echo "${cat_fakeresponse_version_1_10}"
+    echo "${cat_fakeresponse_version_1_10_2}"
   }
 
   (allow_only_patch_upgrades "a" "b" "c" "acme-product" "./")
@@ -65,7 +81,7 @@ function fakeOmLinux () {
   fi
 }
 
-om_linux_fakeresponse_curl_deployedproducts_1_11='[
+om_linux_fakeresponse_curl_deployedproducts_1_11_1='[
    {
       "installation_name":"p-bosh",
       "guid":"p-bosh-9c60538f074d2fcad102",
@@ -80,7 +96,7 @@ om_linux_fakeresponse_curl_deployedproducts_1_11='[
    }
 ]'
 
-om_linux_fakeresponse_curl_deployedproducts_1_10='[
+om_linux_fakeresponse_curl_deployedproducts_1_10_1='[
    {
       "installation_name":"p-bosh",
       "guid":"p-bosh-9c60538f074d2fcad102",
@@ -94,4 +110,5 @@ om_linux_fakeresponse_curl_deployedproducts_1_10='[
       "product_version":"1.10.1"
    }
 ]'
-cat_fakeresponse_version_1_10="1.10.2#2017-06-28T03:22:42.162Z"
+cat_fakeresponse_version_1_10_2="1.10.2#2017-06-28T03:22:42.162Z"
+cat_fakeresponse_version_1_10_1="1.10.1#2017-06-28T03:22:42.162Z"
