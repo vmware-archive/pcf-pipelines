@@ -22,3 +22,8 @@ Required Scopes and authorities are :
 - scope (list):  opsman.admin
 - authorized grant types (list):  client_credentials
 - authorities (list):  opsman.admin
+
+## Known Issues:
+
+### Ops Mgr IP address swapping
+The vSphere upgrade-ops-mgr pipelines currently do not de-tach the IP adddress from the old Ops Mgr instance, once the new Ops Mgr is added. This will be fixed soon. Similarly, on other IaaSes, the private IP address is not necessarily kept and re-used on the new Ops Mgr instance.
