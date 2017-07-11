@@ -31,6 +31,9 @@ pivnet_token: CHANGEME
 pcf_opsman_admin_username: CHANGEME
 pcf_opsman_admin_password: CHANGEME
 
+# Operations Manager Trusted Certificates
+pcf_opsman_trusted_certs: |
+
 # Elastic Runtime Domain
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
 opsman_uri: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
@@ -67,14 +70,14 @@ ert_major_minor_version: ^1\.11\..*$
 # Usernames must be 16 characters or fewer
 db_diego_username: CHANGEME
 db_diego_password: CHANGEME
-db_notifications_username: CHANGEME 
-db_notifications_password: CHANGEME 
-db_autoscale_username: CHANGEME 
-db_autoscale_password: CHANGEME 
+db_notifications_username: CHANGEME
+db_notifications_password: CHANGEME
+db_autoscale_username: CHANGEME
+db_autoscale_password: CHANGEME
 db_uaa_username: CHANGEME
 db_uaa_password: CHANGEME
-db_app_usage_service_username: CHANGEME 
-db_app_usage_service_password: CHANGEME 
+db_app_usage_service_username: CHANGEME
+db_app_usage_service_password: CHANGEME
 db_ccdb_username: CHANGEME
 db_ccdb_password: CHANGEME
 db_routing_username: CHANGEME

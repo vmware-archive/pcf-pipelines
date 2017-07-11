@@ -7,12 +7,13 @@ image_resource:
     repository: czero/cflinuxfs2
 
 inputs:
-- name: pcf-pipelines 
+- name: pcf-pipelines
 
 params:
   OPS_MGR_HOST:
   OPS_MGR_USR:
   OPS_MGR_PWD:
+  OPS_MGR_TRUSTED_CERTS:
   GCP_PROJECT_ID:
   GCP_REGION:
   GCP_ZONE_1:

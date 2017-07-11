@@ -168,6 +168,7 @@ jobs:
       OPS_MGR_HOST: {{opsman_uri}}
       OPS_MGR_USR: {{pcf_opsman_admin_username}}
       OPS_MGR_PWD: {{pcf_opsman_admin_password}}
+      OPS_MGR_TRUSTED_CERTS: {{pcf_opsman_trusted_certs}}
       GCP_PROJECT_ID: {{gcp_project_id}}
       GCP_REGION: {{gcp_region}}
       GCP_ZONE_1: {{gcp_zone_1}}
@@ -271,7 +272,7 @@ jobs:
       db_networkpolicyserverdb_username: {{db_networkpolicyserverdb_username}}
       db_networkpolicyserverdb_password: {{db_networkpolicyserverdb_password}}
       db_nfsvolumedb_username: {{db_nfsvolumedb_username}}
-      db_nfsvolumedb_password: {{db_nfsvolumedb_password}}         
+      db_nfsvolumedb_password: {{db_nfsvolumedb_password}}
       db_silk_username: {{db_silk_username}}
       db_silk_password: {{db_silk_password}}
       db_locket_username: {{db_locket_username}}
