@@ -40,7 +40,7 @@ secrets.
 5. Unpause the pipeline
 6. Run `bootstrap-terraform-state` to bootstrap the Terraform .tfstate file. This only needs to be run once.
 7. `upload-opsman-image` will automatically upload the latest matching version of Operations Manager
-8. Run the `create-initial-terraform-state` job manually. This will prepare the s3 resource that holds the terraform state.
+8. Run the `bootstrap-terraform-state` job manually. This will prepare the s3 resource that holds the terraform state.
 9. Trigger the `create-infrastructure` job. `create-infrastructure` will output at the end the DNS settings that you must configure before continuing.
 10. Once DNS is set up you can run `configure-director`. From there the pipeline should automatically run through to the end.
 
