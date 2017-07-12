@@ -11,7 +11,7 @@ function TestProductPropertiesShouldNotContainNSXConfigWhenNSXLBValuesNotSet () 
       echo "${product_properties// }" > ${config_file}
     fi
   }
-  (main)
+  (configure_product)
   config_json=$(cat "${config_file}" && rm -fr "${config_file}")
   (echo "${config_json}" | \
     jq -e \
@@ -52,7 +52,7 @@ function TestProductPropertiesShouldContainNSXConfigWhenNSXValuesAreSet () (
       echo "${product_properties// }" > ${config_file}
     fi
   }
-  (main)
+  (configure_product)
   config_json=$(cat "${config_file}" && rm -fr "${config_file}")
   (echo "${config_json}" | \
     jq -e \
