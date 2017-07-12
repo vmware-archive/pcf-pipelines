@@ -1,5 +1,173 @@
 #!/bin/bash
 
+function main () {
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+root_dir="$( cd "${script_dir}/../../.." && pwd)"
+
+source ${root_dir}/pcf-pipelines/functions/generate_cert.sh
+
+if [[ -z "$SSL_CERT" ]]; then
+  domains=(
+    "*.${SYSTEM_DOMAIN}"
+    "*.${APPS_DOMAIN}"
+    "*.login.${SYSTEM_DOMAIN}"
+    "*.uaa.${SYSTEM_DOMAIN}"
+  )
+
+  certificates=$(generate_cert "${domains[*]}")
+  SSL_CERT=`echo $certificates | jq --raw-output '.certificate'`
+  SSL_PRIVATE_KEY=`echo $certificates | jq --raw-output '.key'`
+fi
+
+saml_cert_domains=(
+  "*.${SYSTEM_DOMAIN}"
+  "*.login.${SYSTEM_DOMAIN}"
+  "*.uaa.${SYSTEM_DOMAIN}"
+)
+
+saml_certificates=$(generate_cert "${saml_cert_domains[*]}")
+saml_cert_pem=$(echo $saml_certificates | jq --raw-output '.certificate')
+saml_key_pem=$(echo $saml_certificates | jq --raw-output '.key')
+cf_properties=$(load_cf_properties)
+
+cf_network=$(
+  echo '{}' |
+  jq \
+    --arg network_name "$NETWORK_NAME" \
+    --arg other_azs "$DEPLOYMENT_NW_AZS" \
+    --arg singleton_az "$ERT_SINGLETON_JOB_AZ" \
+    '
+    . +
+    {
+      "network": {
+        "name": $network_name
+      },
+      "other_availability_zones": ($other_azs | split(",") | map({name: .})),
+      "singleton_availability_zone": {
+        "name": $singleton_az
+      }
+    }
+    '
+)
+
+cf_resources=$(
+  set +e
+  read -d'%' -r input <<EOF
+  {
+    "backup-prepare": $BACKUP_PREPARE_INSTANCES,
+    "ccdb": $CCDB_INSTANCES,
+    "clock_global": $CLOCK_GLOBAL_INSTANCES,
+    "cloud_controller": $CLOUD_CONTROLLER_INSTANCES,
+    "cloud_controller_worker": $CLOUD_CONTROLLER_WORKER_INSTANCES,
+    "consul_server": $CONSUL_SERVER_INSTANCES,
+    "diego_brain": $DIEGO_BRAIN_INSTANCES,
+    "diego_cell": $DIEGO_CELL_INSTANCES,
+    "diego_database": $DIEGO_DATABASE_INSTANCES,
+    "doppler": $DOPPLER_INSTANCES,
+    "etcd_tls_server": $ETCD_TLS_SERVER_INSTANCES,
+    "ha_proxy": $HA_PROXY_INSTANCES,
+    "loggregator_trafficcontroller": $LOGGREGATOR_TC_INSTANCES,
+    "mysql": $MYSQL_INSTANCES,
+    "mysql_monitor": $MYSQL_MONITOR_INSTANCES,
+    "mysql_proxy": $MYSQL_PROXY_INSTANCES,
+    "nats": $NATS_INSTANCES,
+    "nfs_server": $NFS_SERVER_INSTANCES,
+    "router": $ROUTER_INSTANCES,
+    "syslog_adapter": $SYSLOG_ADAPTER_INSTANCES,
+    "syslog_scheduler": $SYSLOG_SCHEDULER_INSTANCES,
+    "tcp_router": $TCP_ROUTER_INSTANCES,
+    "uaa": $UAA_INSTANCES,
+    "uaadb": $UAADB_INSTANCES
+  }
+  %
+EOF
+  set -e
+
+  echo "$input" | jq \
+    'map_values(. = {
+      "instance_type": {"id":"automatic"},
+      "instances": .
+    })'
+)
+
+if [[ -n ${TCP_ROUTER_NSX_LB_EDGE_NAME} ]]; then
+	cf_resources=$(
+		decorate_nsx_lb "${cf_resources}" \
+			"tcp_router" \
+			"${TCP_ROUTER_NSX_SECURITY_GROUP}" \
+			"${TCP_ROUTER_NSX_LB_EDGE_NAME}" \
+			"${TCP_ROUTER_NSX_LB_POOL_NAME}" \
+			"${TCP_ROUTER_NSX_LB_SECURITY_GROUP}" \
+			"${TCP_ROUTER_NSX_LB_PORT}"
+	)
+fi
+
+if [[ -n ${ROUTER_NSX_LB_EDGE_NAME} ]]; then
+	cf_resources=$(
+		decorate_nsx_lb "${cf_resources}" \
+			"router" \
+			"${ROUTER_NSX_SECURITY_GROUP}" \
+			"${ROUTER_NSX_LB_EDGE_NAME}" \
+			"${ROUTER_NSX_LB_POOL_NAME}" \
+			"${ROUTER_NSX_LB_SECURITY_GROUP}" \
+			"${ROUTER_NSX_LB_PORT}"
+	)
+fi
+
+if [[ -n ${DIEGO_BRAIN_NSX_LB_EDGE_NAME} ]]; then
+	cf_resources=$(
+		decorate_nsx_lb "${cf_resources}" \
+			"diego_brain" \
+			"${DIEGO_BRAIN_NSX_SECURITY_GROUP}" \
+			"${DIEGO_BRAIN_NSX_LB_EDGE_NAME}" \
+			"${DIEGO_BRAIN_NSX_LB_POOL_NAME}" \
+			"${DIEGO_BRAIN_NSX_LB_SECURITY_GROUP}" \
+			"${DIEGO_BRAIN_NSX_LB_PORT}"
+	)
+fi
+
+om-linux \
+  --target https://$OPS_MGR_HOST \
+  --username $OPS_MGR_USR \
+  --password $OPS_MGR_PWD \
+  --skip-ssl-validation \
+  configure-product \
+  --product-name cf \
+  --product-properties "$cf_properties" \
+  --product-network "$cf_network" \
+  --product-resources "$cf_resources"
+}
+
+function decorate_nsx_lb() {
+	local resources_json=${1}
+	local cf_component_name=${2}
+	local nsx_sg=${3}
+	local nsx_lb_edge=${4}
+	local nsx_lb_pool=${5}
+	local nsx_lb_sg=${6}
+	local nsx_lb_port=${7}
+
+	echo "${resources_json}" | jq \
+	--arg cf_component_name ${cf_component_name} \
+  --arg nsx_sg "${nsx_sg}" \
+  --arg nsx_lb_edge "${nsx_lb_edge}" \
+  --arg nsx_lb_pool "${nsx_lb_pool}" \
+  --arg nsx_lb_sg "${nsx_lb_sg}" \
+  --arg nsx_lb_port ${nsx_lb_port} \
+	'.[$cf_component_name] |= . +
+		{
+			"nsx_security_groups":	[$nsx_sg],
+			"nsx_lbs":	{
+				"edge_name":$nsx_lb_edge,
+				"pool_name":$nsx_lb_pool,
+				"security_group": $nsx_lb_sg,
+				"port": $nsx_lb_port | tonumber
+			}
+		}'
+}
+
+function load_cf_properties () {
 echo '{}' |
 jq \
   --arg tcp_routing "$TCP_ROUTING" \
@@ -351,5 +519,6 @@ jq \
     .
   end
   ' > cf_properties
-
-cf_properties=$(cat cf_properties)
+  cat cf_properties
+  rm cf_properties
+}

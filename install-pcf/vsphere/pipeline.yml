@@ -301,6 +301,21 @@ jobs:
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
       SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
+      TCP_ROUTER_NSX_SECURITY_GROUP: {{tcp_router_nsx_security_group}}
+      TCP_ROUTER_NSX_LB_EDGE_NAME: {{tcp_router_nsx_lb_edge_name}}
+      TCP_ROUTER_NSX_LB_POOL_NAME: {{tcp_router_nsx_lb_pool_name}}
+      TCP_ROUTER_NSX_LB_SECURITY_GROUP: {{tcp_router_nsx_lb_security_group}}
+      TCP_ROUTER_NSX_LB_PORT: {{tcp_router_nsx_lb_port}}
+      ROUTER_NSX_SECURITY_GROUP: {{router_nsx_security_group}}
+      ROUTER_NSX_LB_EDGE_NAME: {{router_nsx_lb_edge_name}}
+      ROUTER_NSX_LB_POOL_NAME: {{router_nsx_lb_pool_name}}
+      ROUTER_NSX_LB_SECURITY_GROUP: {{router_nsx_lb_security_group}}
+      ROUTER_NSX_LB_PORT: {{router_nsx_lb_port}}
+      DIEGO_BRAIN_NSX_SECURITY_GROUP: {{diego_brain_nsx_security_group}}
+      DIEGO_BRAIN_NSX_LB_EDGE_NAME: {{diego_brain_nsx_lb_edge_name}}
+      DIEGO_BRAIN_NSX_LB_POOL_NAME: {{diego_brain_nsx_lb_pool_name}}
+      DIEGO_BRAIN_NSX_LB_SECURITY_GROUP: {{diego_brain_nsx_lb_security_group}}
+      DIEGO_BRAIN_NSX_LB_PORT: {{diego_brain_nsx_lb_port}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
