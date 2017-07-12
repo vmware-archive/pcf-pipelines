@@ -6,17 +6,7 @@ if [[ -n "$NO_PROXY" ]]; then
   echo "$OM_IP $OPS_MGR_HOST" >> /etc/hosts
 fi
 
-STEMCELL_VERSION=$(
-  cat ./pivnet-product/metadata.json |
-  jq --raw-output \
-    '
-    [
-      .Dependencies[]
-      | select(.Release.Product.Name | contains("Stemcells"))
-      | .Release.Version
-    ] | sort | last
-    '
-)
+STEMCELL_VERSION=`cat ./pivnet-product/metadata.json | jq --raw-output '.Dependencies[] | select(.Release.Product.Name | contains("Stemcells")) | .Release.Version'`
 
 if [ -n "$STEMCELL_VERSION" ]; then
   diagnostic_report=$(
@@ -49,6 +39,9 @@ if [ -n "$STEMCELL_VERSION" ]; then
     fi
 
     om-linux -t https://$OPS_MGR_HOST -u $OPS_MGR_USR -p $OPS_MGR_PWD -k upload-stemcell -s $SC_FILE_PATH
+
+    echo "Removing downloaded stemcell $STEMCELL_VERSION"
+    rm $SC_FILE_PATH
   fi
 fi
 
