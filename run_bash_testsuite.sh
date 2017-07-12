@@ -65,33 +65,33 @@ echo "running bash test suite"
 # using the convention of each test file should have a 
 # function file excluding '_test' suffix
 for test in ${TESTFILES}; do
-	(
-		source ${test//_test.sh/.sh}
-		source ${test}
-		EXITCODE=0
-		# convention for function names is
-		# functions with prefix 'Test' will be executed
-		# and the output will pass/fail the pipeline
-		for testFunc in $(typeset -f | grep '^Test.*()' | awk '{print $1}'); do
-		   if eval "${testFunc} >> ${temp_file}"; then
-			  setgreen
-			  printf "."
-			  setdefault
-		   else
-			  EXITCODE=1
-			  setred
-			  echo "(test failed !!!!! )"
-			  echo ${testFunc}
-			  cat ${temp_file}
-			  echo
-			  echo "----------------------------------------------------"
-			  echo
-			  setdefault
-		   fi
-		   rm ${temp_file}
-		done
-		exit $EXITCODE
-	)
+  (
+    source ${test//_test.sh/.sh}
+    source ${test}
+    EXITCODE=0
+    # convention for function names is
+    # functions with prefix 'Test' will be executed
+    # and the output will pass/fail the pipeline
+    for testFunc in $(typeset -f | grep '^Test.*()' | awk '{print $1}'); do
+       if eval "${testFunc} >> ${temp_file}"; then
+        setgreen
+        printf "."
+        setdefault
+       else
+        EXITCODE=1
+        setred
+        echo "(test failed !!!!! )"
+        echo ${testFunc}
+        cat ${temp_file}
+        echo
+        echo "----------------------------------------------------"
+        echo
+        setdefault
+       fi
+       rm ${temp_file}
+    done
+    exit $EXITCODE
+  )
 EXITCODE=$?
 done
 
