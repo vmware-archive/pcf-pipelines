@@ -36,3 +36,4 @@ ntp: CHANGEME
 opsman_network: CHANGEME
 iaas_type: vsphere
 git_private_key:
+om_disk_type: thick # use thick or thin disk provisioning
