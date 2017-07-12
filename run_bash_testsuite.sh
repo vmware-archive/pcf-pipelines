@@ -73,11 +73,11 @@ for test in ${TESTFILES}; do
     # functions with prefix 'Test' will be executed
     # and the output will pass/fail the pipeline
     for testFunc in $(typeset -f | grep '^Test.*()' | awk '{print $1}'); do
-       if eval "${testFunc} >> ${temp_file}"; then
+      if eval "${testFunc} >> ${temp_file}"; then
         setgreen
         printf "."
         setdefault
-       else
+      else
         EXITCODE=1
         setred
         echo "(test failed !!!!! )"
@@ -87,12 +87,12 @@ for test in ${TESTFILES}; do
         echo "----------------------------------------------------"
         echo
         setdefault
-       fi
-       rm ${temp_file}
+      fi
+      rm ${temp_file}
     done
     exit $EXITCODE
   )
-EXITCODE=$?
+  EXITCODE=$?
 done
 
 if [[ ${EXITCODE} == 0 ]];then
