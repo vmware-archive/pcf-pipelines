@@ -12,10 +12,10 @@ function TestCallToDirectorIaasConfigShouldContainNSXElements () (
   function om-linux () {
     local iaas_config=$(omLinuxSpy "$@")
     if [[ ${iaas_config// } != "" ]]; then
-      echo "${iaas_config// }" >> ${config_file}  
+      echo "${iaas_config// }" >> ${config_file}
     fi
   }
-  (main)
+  (configure_director)
   config_json=$(cat "${config_file}" && rm -fr "${config_file}")
 
   if [[ ${config_json} == "" ]]; then
@@ -35,10 +35,10 @@ function TestCallToDirectorIaasConfigShouldContainNSXElements () (
     select(.nsx_password == $pass) |
     select(.nsx_ca_certificate == $cert)')
   exitcode=$?
-  return $(Expect $exitcode ToBe 0) 
+  return $(Expect $exitcode ToBe 0)
 )
 
-# this spies on calls to om-linux checking for 
+# this spies on calls to om-linux checking for
 # any flags matching `--iaas-configuration`
 # if found it will return the value for the flag
 # which should be the iaas config json
