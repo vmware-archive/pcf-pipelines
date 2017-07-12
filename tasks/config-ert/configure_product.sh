@@ -92,39 +92,39 @@ EOF
 )
 
 if [[ -n ${TCP_ROUTER_NSX_LB_EDGE_NAME} ]]; then
-	cf_resources=$(
-		decorate_nsx_lb "${cf_resources}" \
-			"tcp_router" \
-			"${TCP_ROUTER_NSX_SECURITY_GROUP}" \
-			"${TCP_ROUTER_NSX_LB_EDGE_NAME}" \
-			"${TCP_ROUTER_NSX_LB_POOL_NAME}" \
-			"${TCP_ROUTER_NSX_LB_SECURITY_GROUP}" \
-			"${TCP_ROUTER_NSX_LB_PORT}"
-	)
+  cf_resources=$(
+    decorate_nsx_lb "${cf_resources}" \
+      "tcp_router" \
+      "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
+      "${TCP_ROUTER_NSX_LB_EDGE_NAME}" \
+      "${TCP_ROUTER_NSX_LB_POOL_NAME}" \
+      "${TCP_ROUTER_NSX_LB_SECURITY_GROUP}" \
+      "${TCP_ROUTER_NSX_LB_PORT}"
+  )
 fi
 
 if [[ -n ${ROUTER_NSX_LB_EDGE_NAME} ]]; then
-	cf_resources=$(
-		decorate_nsx_lb "${cf_resources}" \
-			"router" \
-			"${ROUTER_NSX_SECURITY_GROUP}" \
-			"${ROUTER_NSX_LB_EDGE_NAME}" \
-			"${ROUTER_NSX_LB_POOL_NAME}" \
-			"${ROUTER_NSX_LB_SECURITY_GROUP}" \
-			"${ROUTER_NSX_LB_PORT}"
-	)
+  cf_resources=$(
+    decorate_nsx_lb "${cf_resources}" \
+      "router" \
+      "${ROUTER_NSX_SECURITY_GROUP}" \
+      "${ROUTER_NSX_LB_EDGE_NAME}" \
+      "${ROUTER_NSX_LB_POOL_NAME}" \
+      "${ROUTER_NSX_LB_SECURITY_GROUP}" \
+      "${ROUTER_NSX_LB_PORT}"
+  )
 fi
 
 if [[ -n ${DIEGO_BRAIN_NSX_LB_EDGE_NAME} ]]; then
-	cf_resources=$(
-		decorate_nsx_lb "${cf_resources}" \
-			"diego_brain" \
-			"${DIEGO_BRAIN_NSX_SECURITY_GROUP}" \
-			"${DIEGO_BRAIN_NSX_LB_EDGE_NAME}" \
-			"${DIEGO_BRAIN_NSX_LB_POOL_NAME}" \
-			"${DIEGO_BRAIN_NSX_LB_SECURITY_GROUP}" \
-			"${DIEGO_BRAIN_NSX_LB_PORT}"
-	)
+  cf_resources=$(
+    decorate_nsx_lb "${cf_resources}" \
+      "diego_brain" \
+      "${DIEGO_BRAIN_NSX_SECURITY_GROUP}" \
+      "${DIEGO_BRAIN_NSX_LB_EDGE_NAME}" \
+      "${DIEGO_BRAIN_NSX_LB_POOL_NAME}" \
+      "${DIEGO_BRAIN_NSX_LB_SECURITY_GROUP}" \
+      "${DIEGO_BRAIN_NSX_LB_PORT}"
+  )
 fi
 
 om-linux \
@@ -140,31 +140,31 @@ om-linux \
 }
 
 function decorate_nsx_lb() {
-	local resources_json=${1}
-	local cf_component_name=${2}
-	local nsx_sg=${3}
-	local nsx_lb_edge=${4}
-	local nsx_lb_pool=${5}
-	local nsx_lb_sg=${6}
-	local nsx_lb_port=${7}
+  local resources_json=${1}
+  local cf_component_name=${2}
+  local nsx_sg=${3}
+  local nsx_lb_edge=${4}
+  local nsx_lb_pool=${5}
+  local nsx_lb_sg=${6}
+  local nsx_lb_port=${7}
 
-	echo "${resources_json}" | jq \
-	--arg cf_component_name ${cf_component_name} \
+  echo "${resources_json}" | jq \
+  --arg cf_component_name ${cf_component_name} \
   --arg nsx_sg "${nsx_sg}" \
   --arg nsx_lb_edge "${nsx_lb_edge}" \
   --arg nsx_lb_pool "${nsx_lb_pool}" \
   --arg nsx_lb_sg "${nsx_lb_sg}" \
   --arg nsx_lb_port ${nsx_lb_port} \
-	'.[$cf_component_name] |= . +
-		{
-			"nsx_security_groups":	[$nsx_sg],
-			"nsx_lbs":	{
-				"edge_name":$nsx_lb_edge,
-				"pool_name":$nsx_lb_pool,
-				"security_group": $nsx_lb_sg,
-				"port": $nsx_lb_port | tonumber
-			}
-		}'
+  '.[$cf_component_name] |= . +
+    {
+      "nsx_security_groups":  [$nsx_sg],
+      "nsx_lbs":  {
+        "edge_name":$nsx_lb_edge,
+        "pool_name":$nsx_lb_pool,
+        "security_group": $nsx_lb_sg,
+        "port": $nsx_lb_port | tonumber
+      }
+    }'
 }
 
 function load_cf_properties () {
