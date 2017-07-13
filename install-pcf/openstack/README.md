@@ -2,8 +2,8 @@
 
 ![Concourse Pipeline](embed.png)
 
-This pipeline uses Terraform to create all the infrastructure required to run a
-3 AZ PCF deployment on Openstack per the Customer[0] [reference
+This pipeline assumes all of the infrastructure required to run a
+3 AZ PCF deployment on Openstack per the Customer[0] has been pre-provisioned [reference
 architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/openstack/openstack_ref_arch.html).
 
 ## Usage
