@@ -34,8 +34,7 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: http://github.com/xetamus/pcf-pipelines.git
-    branch: openstack
+    uri: http://github.com/pivotal-cf/pcf-pipelines.git
 
 - name: ops-manager
   type: pivnet
