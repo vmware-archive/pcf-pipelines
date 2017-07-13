@@ -51,7 +51,7 @@ function allow_only_patch_upgrades {
     your prior knowledge."
     echo
     echo "To upgrade patch releases, we suggest using the following version regex in your params file:"
-    echo "${deployed_version_major_minor}" | awk -F"." '{print "^"$1"\\\."$2"\\..*$"}'
+    echo "${deployed_version_major_minor}" | awk -F"." '{print "^"$1"\\."$2"\\..*$"}'
     exit 1
   fi
 }
