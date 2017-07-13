@@ -40,6 +40,13 @@ function main() {
   for stemcell in "${stemcells[@]}"; do
     local stemcell_version
     stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
+
+    if [[ $stemcell_version != *.* ]];then
+      #WARNING: Stemcell is floating versions by major only. This will fail when attempting download-product-files
+      #         Instead, just get the latest full version number from pivnet
+      stemcell_version=$(pivnet-cli releases -p stemcells | egrep -o "${stemcell_version}.[0-9]+" | sort -rn | head -1)
+    fi
+
     download_stemcell_version $stemcell_version
   done
 }
