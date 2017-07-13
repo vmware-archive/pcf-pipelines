@@ -1,0 +1,37 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+
+inputs:
+- name: pcf-pipelines
+
+params:
+  EXTERNAL_NETWORK:
+  INFRA_NETWORK:
+  INFRA_SUBNET:
+  INFRA_DNS:
+  ERT_NETWORK:
+  ERT_SUBNET:
+  SERVICES_NETWORK:
+  SERVICES_SUBNET:
+  DYNAMIC_SERVICES_NETWORK:
+  DYNAMIC_SERVICES_SUBNET:
+  ADMIN_ROUTER:
+  SECURITY_GROUP:
+  OS_PROJECT_ID:
+  OS_REGION_NAME:
+  OS_USER_DOMAIN_NAME:
+  OS_PROJECT_NAME:
+  OS_IDENTITY_API_VERSION:
+  OS_PASSWORD:
+  OS_AUTH_URL:
+  OS_USERNAME:
+  OPENSTACK_CA_CERT:
+  OS_INTERFACE:
+
+run:
+  path: pcf-pipelines/install-pcf/openstack/tasks/create-infrastructure/task.sh
