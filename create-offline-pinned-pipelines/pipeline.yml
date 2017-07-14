@@ -1,0 +1,145 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: operations-manager
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{operations_manager_regex}}
+    sort_by: semver
+
+- name: elastic-runtime
+  type: pivnet
+  source:
+    product_slug: elastic-runtime
+    product_version: {{elastic_runtime_regex}}
+    sort_by: semver
+    api_token: {{pivnet_token}}
+
+- name: czero-cflinuxfs2
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+    tag: latest
+
+- name: pcf-pipelines-tarball
+  type: pivnet
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: pcf-automation
+
+- name: pcf-pipelines-offline-pinned-tarball
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "pcf-pipelines-offline-pinned-tarball/pcf-pipelines-offline-pinned-v(.*).tar"
+
+- name: fly
+  type: github-release
+  check_every: 720h
+  source:
+    user: krishicks
+    repository: fly
+    access_token: {{github_token}}
+
+jobs:
+- name: create-offline-pinned-pipelines
+  plan:
+  - aggregate:
+    - get: czero-cflinuxfs2
+    - get: operations-manager
+      params:
+        globs: ["*vsphere*"]
+    - get: elastic-runtime
+      params:
+        globs: ["*.pivotal"]
+    - get: fly
+    - do:
+      - get: pcf-pipelines-tarball
+      - task: unpack-pcf-pipelines
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: busybox
+          inputs:
+          - name: pcf-pipelines-tarball
+          outputs:
+          - name: pcf-pipelines
+          run:
+           path: sh
+           args: ["-c", "tar -xvf pcf-pipelines-tarball/*.tgz"]
+  - task: create-pipelines
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      inputs:
+      - name: czero-cflinuxfs2
+      - name: operations-manager
+      - name: elastic-runtime
+      - name: pcf-pipelines-tarball
+      - name: pcf-pipelines
+      - name: fly
+      outputs:
+      - name: pcf-pipelines-offline-pinned-tarball
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -o pipefail
+          set -eu
+
+          root=$PWD
+
+          chmod +x fly/fly
+          export PATH="${root}/fly:${PATH}"
+
+          mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
+
+          cp pcf-pipelines/install-pcf/vsphere/offline/params.yml pcf-pipelines-offline-pinned/install-pcf/vsphere/params.yml
+
+          opsman_version=$(cat operations-manager/metadata.json | jq --raw-output '.Release.Version')
+          ert_version=$(cat elastic-runtime/metadata.json | jq --raw-output '.Release.Version')
+
+          cat > pin-resource-gets.yml <<EOF
+          - op: add
+            path: /jobs/get=pivnet-opsman-product/version
+            value:
+              path: "ops-manager/ops-manager-${opsman_version}.tgz"
+          - op: add
+            path: /jobs/get=pcf-ops-manager/version
+            value:
+              path: "ops-manager/ops-manager-${opsman_version}.tgz"
+          - op: add
+            path: /jobs/get=pivnet-product/version
+            value:
+              path: "elastic-runtime/elastic-runtime-${ert_version}.tgz"
+          EOF
+
+          fly fmt -c <(
+            cat pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml | yaml_patch_linux -o pin-resource-gets.yml
+          ) > pcf-pipelines-offline-pinned/install-pcf/vsphere/pipeline.yml
+
+          pcf_pipelines_version=$(cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version')
+          tar \
+          --create \
+          --verbose \
+          --directory pcf-pipelines-offline-pinned . \
+          --file "pcf-pipelines-offline-pinned-tarball/pcf-pipelines-offline-pinned-${pcf_pipelines_version}.tar"
+  - put: pcf-pipelines-offline-pinned-tarball
+    params:
+      file: "pcf-pipelines-offline-pinned-tarball/*.tar"
+

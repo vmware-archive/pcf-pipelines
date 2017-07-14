@@ -231,6 +231,14 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
+    - task: set-create-offline-pinned-pipelines-pipeline
+      params:
+        PIPELINE_PARAMS: {{create_offline_pinned_pipelines_params}}
+        PIPELINE_NAME: create-offline-pinned-pipelines
+        PIPELINE_PATH: release/pcf-pipelines/create-offline-pinned-pipelines/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
 - name: publish-release
   serial_groups: [version]
   plan:

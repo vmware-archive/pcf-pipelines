@@ -132,7 +132,9 @@ run:
 
     exclusions="--exclude .git* --exclude ci --exclude *.go"
     if [[ "$AVAILABILITY" != "Admins Only" ]]; then
-      exclusions+=" --exclude download-offline-resources --exclude install-pcf/vsphere/offline"
+      exclusions+=" --exclude download-offline-resources"
+      exclusions+=" --exclude install-pcf/vsphere/offline"
+      exclusions+=" --exclude create-offline-pinned-pipelines"
     fi
 
     # Create release tarball
