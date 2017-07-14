@@ -61,7 +61,7 @@ run:
       find pcf-pipelines \
       -type f \
       -name pipeline.yml \
-      -exec grep -l "get: pcf-pipelines" {} \; |
+      -exec grep -l "name: pcf-pipelines" {} \; |
       grep -v ci/pipeline.yml
     )
 
