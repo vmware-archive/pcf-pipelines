@@ -59,6 +59,15 @@ resources:
     repository: fly
     access_token: {{pcf_pipelines_github_token}}
 
+- name: pcf-pipelines-combined
+  type: s3
+  source:
+    access_key_id: {{minio_s3_access_key_id}}
+    secret_access_key: {{minio_s3_secret_access_key}}
+    endpoint: {{minio_s3_endpoint}}
+    bucket: {{minio_s3_bucket}}
+    regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar"
+
 jobs:
 - name: bump-patch
   serial_groups: [version]
@@ -231,13 +240,86 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
-    - task: set-create-offline-pinned-pipelines-pipeline
-      params:
-        PIPELINE_PARAMS: {{create_offline_pinned_pipelines_params}}
-        PIPELINE_NAME: create-offline-pinned-pipelines
-        PIPELINE_PATH: release/pcf-pipelines/create-offline-pinned-pipelines/pipeline.yml
-        <<: *atc_creds
-      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+    - do:
+      - task: set-create-offline-pinned-pipelines-pipeline
+        params:
+          PIPELINE_PARAMS: {{create_offline_pinned_pipelines_params}}
+          PIPELINE_NAME: create-offline-pinned-pipelines
+          PIPELINE_PATH: release/pcf-pipelines/create-offline-pinned-pipelines/pipeline.yml
+          <<: *atc_creds
+        file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
+      - task: trigger-create-offline-pinned-pipelines
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: czero/cflinuxfs2
+          params:
+            <<: *atc_creds
+          run:
+            path: sh
+            args:
+            - -ce
+            - |
+              curl \
+                --silent \
+                --insecure \
+                --output fly \
+                "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"
+
+              chmod +x fly
+
+              ./fly --target self login \
+                --insecure \
+                --concourse-url "${ATC_EXTERNAL_URL}" \
+                --username "${ATC_BASIC_AUTH_USERNAME}" \
+                --password "${ATC_BASIC_AUTH_PASSWORD}" \
+                --team-name "${ATC_TEAM_NAME}"
+
+              ./fly --target self trigger-job \
+                --job create-offline-pinned-pipelines/create-pipelines
+
+              ./fly --target self trigger-job \
+                --job create-offline-pinned-pipelines/create-ops-manager-tarball
+
+              ./fly --target self trigger-job \
+                --job create-offline-pinned-pipelines/create-elastic-runtime-tarball
+
+              ./fly --target self trigger-job \
+                --job create-offline-pinned-pipelines/create-czero-cflinuxfs2-tarball
+
+              ./fly --target self trigger-job \
+                --job create-offline-pinned-pipelines/create-pcf-pipelines-combined
+
+      - get: pcf-pipelines-combined
+      - task: unpack-pcf-pipelines-from-combined
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: busybox
+          inputs:
+          - name: pcf-pipelines-tarball
+          outputs:
+          - name: pcf-pipelines-only
+          run:
+           path: sh
+           args:
+            - -c
+            - |
+              tar -xvz -C pcf-pipelines-only -f pcf-pipelines-tarball/*.tgz pcf-pipelines
+
+      - task: set-install-pcf-darknet-current-pipeline
+        input_mapping: { "release": pcf-pipelines-only }
+        params:
+          PIPELINE_PARAMS: {{install_pcf_vsphere_darknet_params}}
+          PIPELINE_NAME: install-pcf-darknet-current
+          PIPELINE_PATH: release/pcf-pipelines/install-pcf/vsphere/pipeline.yml
+          <<: *atc_creds
+        file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
 - name: publish-release
   serial_groups: [version]
