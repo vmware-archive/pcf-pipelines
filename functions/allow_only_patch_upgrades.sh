@@ -71,6 +71,10 @@ function format_semver_major_minor () {
   echo $1 | awk -F"." '{print $1"."$2}'
 }
 
+function format_semver_complete () {
+  echo $1 | awk -F"." '{print $1"."$2"."$3}'
+}
+
 function get_deployed_product_version () {
   local OPS_MGR_HOST=$1
   local OPS_MGR_USR=$2
@@ -83,5 +87,5 @@ function get_deployed_product_version () {
     --skip-ssl-validation \
     curl --path /api/v0/deployed/products -s )"
   local complete_version=$(echo "${products}" | jq -r --arg product "$PRODUCT_NAME" '.[] | select(.type == $product) | .product_version')
-  echo "${complete_version// }"
+  echo "$(format_semver_complete "${complete_version// }")"
 }
