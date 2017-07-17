@@ -279,7 +279,7 @@ jobs:
                 --team-name "${ATC_TEAM_NAME}"
 
               ./fly --target self trigger-job \
-                --job create-offline-pinned-pipelines/create-pipelines
+                --job create-offline-pinned-pipelines/create-offline-pinned-pipelines
 
               ./fly --target self trigger-job \
                 --job create-offline-pinned-pipelines/create-ops-manager-tarball
