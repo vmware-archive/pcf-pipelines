@@ -44,8 +44,8 @@ write_params $tmpfile "lre1-gcp/ert-upgrade-params" "upgrade_ert_gcp_current_par
 write_params $tmpfile "vsphere-slot1/install-pcf-params" "install_pcf_vsphere_slot1_params"
 write_params $tmpfile "vsphere-slot1/upgrade-ert-params" "upgrade_ert_vsphere_slot1_params"
 write_params $tmpfile "vsphere-slot1/upgrade-ops-manager-params" "upgrade_ops_manager_vsphere_slot1_params"
+write_params $tmpfile "vsphere-slot6/install-pcf-params" "install_pcf_vsphere_darknet_params"
 write_params $tmpfile "create-offline-pinned-pipelines-params" "create_offline_pinned_pipelines_params"
-write_params $tmpfile "vsphere-slot1/install-pcf-params" "install_pcf_vsphere_darknet_params"
 
 fly -tlrp3 sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml \
   -l $tmpfile \
