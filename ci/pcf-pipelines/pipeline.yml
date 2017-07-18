@@ -261,8 +261,10 @@ jobs:
           run:
             path: bash
             args:
-            - -ce
+            - -c
             - |
+              set -eu
+
               curl \
                 --silent \
                 --insecure \
@@ -371,8 +373,10 @@ jobs:
         run:
           path: bash
           args:
-          - -ce
+          - -c
           - |
+            set -eu
+
             release_id=$(cat pivnet-release/metadata.json | jq .Release.ID)
             cat > notification-text/text <<EOF
               Deployed pcf-pipelines final release to https://network.pivotal.io/products/pcf-automation#/releases/$release_id
