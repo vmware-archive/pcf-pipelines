@@ -1,0 +1,11 @@
+{
+    "Name": "PCF Terraform Min Perms",
+    "Id": "8f8aefce-e08d-41cd-897f-8368b97aeb27",
+    "IsCustom": true,
+    "Description": "MVP PCF Terraform Perms",
+    "Actions": [
+      "Microsoft.Compute/register/action"
+    ],
+    "NotActions": [],
+    "AssignableScopes": ["/subscriptions/3df1883a-06af-4e6e-8d78-7984d63ba9e6"]
+}

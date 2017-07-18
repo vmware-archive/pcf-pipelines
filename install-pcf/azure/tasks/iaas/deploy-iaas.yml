@@ -1,0 +1,33 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: virtmerlin/c0-worker
+
+inputs:
+  - name: pcf-pipelines 
+  - name: opsman-metadata
+
+run:
+  path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-iaas.sh
+
+params:
+  azure_pcf_terraform_template:
+  azure_subscription_id:
+  azure_tenant_id:
+  azure_service_principal_id:
+  azure_service_principal_password:
+  azure_region:
+  azure_terraform_prefix:
+  azure_vm_admin:
+  azure_vm_password:
+  pcf_ert_domain:
+  pcf_opsman_admin:
+  pcf_opsman_admin_passwd:
+  pcf_ssh_key_pub:
+  azure_multi_resgroup_network:
+  azure_multi_resgroup_pcf:
+  azure_multi_resgroup_infra_subnet_name:
+  azure_multi_resgroup_infra_vnet_name:

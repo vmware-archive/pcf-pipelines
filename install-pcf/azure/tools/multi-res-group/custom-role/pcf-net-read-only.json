@@ -1,0 +1,18 @@
+{
+    "Name": "PCF Network Read Only",
+    "Id" : "89e39530-92e5-4edd-bcc9-59621ccb7f30",
+    "IsCustom": true,
+    "Description": "MVP PCF Read Network Resgroup",
+    "Actions": [
+      "Microsoft.Network/networkSecurityGroups/read",
+      "Microsoft.Network/networkSecurityGroups/join/action",
+      "Microsoft.Network/publicIPAddresses/read",
+      "Microsoft.Network/publicIPAddresses/join/action",
+      "Microsoft.Network/loadBalancers/read",
+      "Microsoft.Network/virtualNetworks/subnets/read",
+      "Microsoft.Network/virtualNetworks/subnets/join/action",
+      "Microsoft.Network/virtualNetworks/read"
+    ],
+    "NotActions": [],
+    "AssignableScopes": ["/subscriptions/3df1883a-06af-4e6e-8d78-7984d63ba9e6"]
+}

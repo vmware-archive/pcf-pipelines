@@ -1,0 +1,527 @@
+groups:
+
+- name: all
+  jobs:
+  - init-env
+  - deploy-iaas
+  - config-opsman-auth
+  - config-director
+  - deploy-director
+  - upload-ert
+  - configure-ert
+  - deploy-ert
+
+- name: init
+  jobs:
+  - init-env
+
+- name: iaas
+  jobs:
+  - deploy-iaas
+  - config-opsman-auth
+  - config-director
+  - deploy-director
+
+- name: ert
+  jobs:
+  - upload-ert
+  - configure-ert
+  - deploy-ert
+
+
+resource_types:
+
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+
+resources:
+
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: https://github.com/pivotal-cf/pcf-pipelines.git
+    branch: master
+
+- name: ert-concourse
+  type: git
+  source:
+    uri: https://github.com/c0-ops/ert-concourse.git
+    branch: master
+
+- name: tool-om
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: om
+    access_token: {{githubtoken}}
+
+- name: pivnet-opsmgr
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
+    sort_by: semver
+
+- name: pivnet-elastic-runtime
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{pcf_pivnet_token}}
+    product_slug: elastic-runtime
+    product_version: {{ert_major_minor_version}}
+    sort_by: semver
+
+jobs:
+#####################
+## Job - Init Env  ##
+#####################
+- name: init-env
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
+
+  - task: wipe-env
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
+      inputs:
+        - name: pcf-pipelines
+      outputs:
+        - name: opsman-metadata
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/init/wipe-env.sh
+      params:
+        arg_wipe: {{arg_wipe}}
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
+        azure_subscription_id: {{azure_subscription_id}}
+        azure_tenant_id: {{azure_tenant_id}}
+        azure_service_principal_id: {{azure_service_principal_id}}
+        azure_service_principal_password: {{azure_service_principal_password}}
+        azure_region: {{azure_region}}
+        azure_terraform_prefix: {{azure_terraform_prefix}}
+
+  - task: init-public-ips
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
+      inputs:
+        - name: pcf-pipelines
+      outputs:
+        - name: opsman-metadata
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/init/init-public-ip.sh
+      params:
+        arg_wipe: {{arg_wipe}}
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
+        azure_subscription_id: {{azure_subscription_id}}
+        azure_tenant_id: {{azure_tenant_id}}
+        azure_service_principal_id: {{azure_service_principal_id}}
+        azure_service_principal_password: {{azure_service_principal_password}}
+        azure_region: {{azure_region}}
+        azure_terraform_prefix: {{azure_terraform_prefix}}
+        azure_terraform_vnet_cidr: {{azure_terraform_vnet_cidr}}
+        azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
+        azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
+        azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
+        azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
+        pcf_ert_domain: {{pcf_ert_domain}}
+
+
+
+#######################
+## Job - Deploy-Iaas ##
+#######################
+- name: deploy-iaas
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
+
+  - task: upload-opsman
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
+      inputs:
+        - name: pcf-pipelines
+        - name: pivnet-opsmgr
+      outputs:
+        - name: opsman-metadata
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/upload-opsman.sh
+
+  - task: deploy-iaas
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
+      inputs:
+        - name: pcf-pipelines
+        - name: opsman-metadata
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-iaas.sh
+      params:
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
+        azure_subscription_id: {{azure_subscription_id}}
+        azure_tenant_id: {{azure_tenant_id}}
+        azure_service_principal_id: {{azure_service_principal_id}}
+        azure_service_principal_password: {{azure_service_principal_password}}
+        azure_region: {{azure_region}}
+        azure_terraform_prefix: {{azure_terraform_prefix}}
+        azure_vm_admin: {{azure_vm_admin}}
+        azure_vm_password: {{azure_vm_password}}
+        pcf_ert_domain: {{pcf_ert_domain}}
+        pcf_opsman_admin: {{pcf_opsman_admin}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+        pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
+        azure_account_name: {{azure_account_name}}
+        azure_buildpacks_container: {{azure_buildpacks_container}}
+        azure_droplets_container: {{azure_droplets_container}}
+        azure_packages_container: {{azure_packages_container}}
+        azure_resources_container: {{azure_resources_container}}
+
+##############################
+## Job - Config OpsMan Auth ##
+##############################
+- name: config-opsman-auth
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+      passed: [deploy-iaas]
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+
+  - task: config-opsman
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
+      inputs:
+        - name: pcf-pipelines
+        - name: tool-om
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-opsman.sh
+      params:
+        pcf_ert_domain: {{pcf_ert_domain}}
+        pcf_opsman_admin: {{pcf_opsman_admin}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+
+###########################
+## Job - Config-Director ##
+###########################
+- name: config-director
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+      passed: [config-opsman-auth]
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+
+  - task: config-director
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker
+      inputs:
+        - name: pcf-pipelines
+        - name: tool-om
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
+      params:
+        pcf_ert_domain: {{pcf_ert_domain}}
+        pcf_opsman_admin: {{pcf_opsman_admin}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
+        azure_subscription_id: {{azure_subscription_id}}
+        azure_tenant_id: {{azure_tenant_id}}
+        azure_service_principal_id: {{azure_service_principal_id}}
+        azure_service_principal_password: {{azure_service_principal_password}}
+        azure_terraform_prefix: {{azure_terraform_prefix}}
+        azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
+        azure_terraform_subnet_infra_reserved: {{azure_terraform_subnet_infra_reserved}}
+        azure_terraform_subnet_infra_dns: {{azure_terraform_subnet_infra_dns}}
+        azure_terraform_subnet_infra_gateway: {{azure_terraform_subnet_infra_gateway}}
+        azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
+        azure_terraform_subnet_ert_reserved: {{azure_terraform_subnet_ert_reserved}}
+        azure_terraform_subnet_ert_dns: {{azure_terraform_subnet_ert_dns}}
+        azure_terraform_subnet_ert_gateway: {{azure_terraform_subnet_ert_gateway}}
+        azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
+        azure_terraform_subnet_services1_reserved: {{azure_terraform_subnet_services1_reserved}}
+        azure_terraform_subnet_services1_dns: {{azure_terraform_subnet_services1_dns}}
+        azure_terraform_subnet_services1_gateway: {{azure_terraform_subnet_services1_gateway}}
+        azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
+        azure_terraform_subnet_dynamic_services_reserved: {{azure_terraform_subnet_dynamic_services_reserved}}
+        azure_terraform_subnet_dynamic_services_dns: {{azure_terraform_subnet_dynamic_services_dns}}
+        azure_terraform_subnet_dynamic_services_gateway: {{azure_terraform_subnet_dynamic_services_gateway}}
+        pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
+        pcf_ssh_key_priv: {{pcf_ssh_key_priv}}
+
+###########################
+## Job - Deploy-Director ##
+###########################
+- name: deploy-director
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+      passed: [config-director]
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
+
+  - task: deploy-director
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: virtmerlin/c0-worker-gcp
+      inputs:
+        - name: pcf-pipelines
+        - name: tool-om
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-director.sh
+      params:
+        pcf_ert_domain: {{pcf_ert_domain}}
+        pcf_opsman_admin: {{pcf_opsman_admin}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+
+###########################
+## Job - Upload ERT      ##
+###########################
+- name: upload-ert
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+      passed: [deploy-director]
+    - get: ert-concourse
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+
+  - task: upload-ert
+    file: ert-concourse/ci/tasks/upload-ert.yml
+    params:
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+
+###########################
+## Job - Configure ERT   ##
+###########################
+- name: configure-ert
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [upload-ert]
+      trigger: true
+    - get: ert-concourse
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+
+  - task: configure-json
+    file: ert-concourse/ci/tasks/configure-json.yml
+    params:
+      pcf_iaas: {{pcf_iaas}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
+      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
+      pcf_ert_saml_cert: {{pcf_ert_saml_cert}}
+      pcf_ert_saml_key: {{pcf_ert_saml_key}}
+      terraform_template: {{azure_pcf_terraform_template}}
+      terraform_prefix: {{azure_terraform_prefix}}
+
+  - task: configure-ert
+    file: ert-concourse/ci/tasks/configure-ert.yml
+    params:
+      pcf_iaas: {{pcf_iaas}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+      pcf_ert_networking_pointofentry: {{pcf_ert_networking_pointofentry}}
+      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
+      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
+      pcf_ert_saml_cert: {{pcf_ert_saml_cert}}
+      pcf_ert_saml_key: {{pcf_ert_saml_key}}
+      terraform_template: {{azure_pcf_terraform_template}}
+      terraform_prefix: {{azure_terraform_prefix}}
+      azure_access_key: {{azure_access_key}}
+      azure_account_name: {{azure_account_name}}
+      azure_buildpacks_container: {{azure_buildpacks_container}}
+      azure_droplets_container: {{azure_droplets_container}}
+      azure_packages_container: {{azure_packages_container}}
+      azure_resources_container: {{azure_resources_container}}
+      
+###########################
+## Job - Deploy    ERT   ##
+###########################
+- name: deploy-ert
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: true
+      passed: [configure-ert]
+    - get: ert-concourse
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+    - get: pivnet-opsmgr
+      trigger: false
+      params:
+        globs:
+        - "*Azure.pdf"
+    - get: tool-om
+      params:
+        globs:
+        - "om-linux"
+
+  - task: deploy-ert
+    file: ert-concourse/ci/tasks/deploy-ert.yml
+    params:
+      pcf_iaas: {{pcf_iaas}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
+      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
+      terraform_template: {{azure_pcf_terraform_template}}
+      terraform_prefix: {{azure_terraform_prefix}}
