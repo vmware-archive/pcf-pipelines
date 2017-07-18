@@ -78,7 +78,6 @@
             endpoint: {{s3_endpoint}}
             regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
-          params:
             unpack: true
         inputs:
         - name: pivnet-product
