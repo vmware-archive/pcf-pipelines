@@ -93,14 +93,14 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
 
-- name: pcf-pipelines-offline-pinned-tarball
+- name: pcf-pipelines-s3
   type: s3
   source:
     access_key_id: {{s3_access_key_id}}
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "staging/pcf-pipelines-offline-pinned-tarball/pcf-pipelines-offline-pinned-v(.*).tgz"
+    regexp: "staging/pcf-pipelines/pcf-pipelines-v(.*).tgz"
 
 - name: pcf-pipelines-combined
   type: s3
@@ -210,16 +210,16 @@ jobs:
           pcf_pipelines_version=$(cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version')
 
           tar czv \
-          -f "pcf-pipelines-offline-pinned-tarball/pcf-pipelines-offline-pinned-${pcf_pipelines_version}.tgz" \
+          -f "pcf-pipelines-s3/pcf-pipelines-${pcf_pipelines_version}.tgz" \
           -C pcf-pipelines-offline-pinned \
           .
-  - put: pcf-pipelines-offline-pinned-tarball
+  - put: pcf-pipelines-s3
     params:
       file: "pcf-pipelines-offline-pinned-tarball/*.tgz"
 
 - name: create-ops-manager-tarball
   plan:
-  - get: pcf-pipelines-offline-pinned-tarball
+  - get: pcf-pipelines-s3
     passed: [create-offline-pinned-pipelines]
   - get: operations-manager-pivnet
     passed: [create-offline-pinned-pipelines]
@@ -254,7 +254,7 @@ jobs:
 
 - name: create-elastic-runtime-tarball
   plan:
-  - get: pcf-pipelines-offline-pinned-tarball
+  - get: pcf-pipelines-s3
     passed: [create-offline-pinned-pipelines]
   - get: elastic-runtime-pivnet
     passed: [create-offline-pinned-pipelines]
@@ -325,7 +325,7 @@ jobs:
 - name: create-czero-cflinuxfs2-tarball
   plan:
   - aggregate:
-    - get: pcf-pipelines-offline-pinned-tarball
+    - get: pcf-pipelines-s3
       passed: [create-offline-pinned-pipelines]
     - get: czero-cflinuxfs2
       trigger: true
@@ -365,7 +365,7 @@ jobs:
 - name: create-pcf-pipelines-combined
   plan:
   - aggregate:
-    - get: pcf-pipelines-offline-pinned-tarball
+    - get: pcf-pipelines-s3
       passed:
       - create-czero-cflinuxfs2-tarball
       - create-ops-manager-tarball
@@ -387,7 +387,7 @@ jobs:
         type: docker-image
         source: {repository: czero/cflinuxfs2}
       inputs:
-      - name: pcf-pipelines-offline-pinned-tarball
+      - name: pcf-pipelines-s3
       - name: pcf-pipelines-combined-version
       - name: czero-cflinuxfs2-s3
       - name: operations-manager-s3
@@ -416,7 +416,7 @@ jobs:
           popd
 
           mkdir -p pcf-pipelines-combined-contents/pcf-pipelines
-          tar xzf pcf-pipelines-offline-pinned-tarball/*.tgz -C pcf-pipelines-combined-contents/pcf-pipelines
+          tar xzf pcf-pipelines-s3/*.tgz -C pcf-pipelines-combined-contents/pcf-pipelines
           pushd pcf-pipelines-combined-contents
             find pcf-pipelines -type f -print0 | xargs -0 shasum >> MANIFEST.MF
           popd
