@@ -63,7 +63,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-(.*).tar"
+    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
 
 - name: czero-cflinuxfs2-version
   type: semver
