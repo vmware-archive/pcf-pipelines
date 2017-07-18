@@ -23,7 +23,7 @@
       secret_access_key: {{s3_secret_access_key}}
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
-      regexp: "ops-manager/ops-manager-(.*).tgz"
+      regexp: "ops-manager/ops-manager-(.*).tar"
       unpack: true
 
   - name: elastic-runtime
@@ -33,7 +33,7 @@
       secret_access_key: {{s3_secret_access_key}}
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
-      regexp: "elastic-runtime/elastic-runtime-(.*).tgz"
+      regexp: "elastic-runtime/elastic-runtime-(.*).tar"
       unpack: true
 
 - op: replace
@@ -45,7 +45,7 @@
       secret_access_key: {{s3_secret_access_key}}
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
-      regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz"
+      regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
       unpack: true
 
 - op: remove
@@ -76,7 +76,7 @@
             access_key_id: {{s3_access_key_id}}
             bucket: {{s3_bucket}}
             endpoint: {{s3_endpoint}}
-            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz
+            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
           params:
             unpack: true
@@ -177,7 +177,7 @@
             access_key_id: {{s3_access_key_id}}
             bucket: {{s3_bucket}}
             endpoint: {{s3_endpoint}}
-            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz
+            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
             unpack: true
         inputs:
