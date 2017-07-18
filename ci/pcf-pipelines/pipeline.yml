@@ -278,19 +278,19 @@ jobs:
                 --password "${ATC_BASIC_AUTH_PASSWORD}" \
                 --team-name "${ATC_TEAM_NAME}"
 
-              ./fly --target self trigger-job \
+              ./fly --target self trigger-job --watch \
                 --job create-offline-pinned-pipelines/create-offline-pinned-pipelines
 
-              ./fly --target self trigger-job \
+              ./fly --target self trigger-job --watch \
                 --job create-offline-pinned-pipelines/create-ops-manager-tarball
 
-              ./fly --target self trigger-job \
+              ./fly --target self trigger-job --watch \
                 --job create-offline-pinned-pipelines/create-elastic-runtime-tarball
 
-              ./fly --target self trigger-job \
+              ./fly --target self trigger-job --watch \
                 --job create-offline-pinned-pipelines/create-czero-cflinuxfs2-tarball
 
-              ./fly --target self trigger-job \
+              ./fly --target self trigger-job --watch \
                 --job create-offline-pinned-pipelines/create-pcf-pipelines-combined
 
       - get: pcf-pipelines-combined
