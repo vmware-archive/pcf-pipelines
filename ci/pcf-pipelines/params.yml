@@ -9,10 +9,6 @@ pivnet_aws_secret_key:
 pivnet_s3_filepath_prefix:
 pivnet_token:
 slack_webhook_url:
-minio_s3_access_key_id:
-minio_s3_secret_access_key:
-minio_s3_bucket:
-minio_s3_endpoint:
 install_pcf_aws_current_params:
 upgrade_ert_aws_current_params:
 install_pcf_gcp_current_params:
@@ -21,4 +17,3 @@ install_pcf_vsphere_slot1_params:
 upgrade_ert_vsphere_slot1_params:
 upgrade_ops_manager_vsphere_slot1_params:
 create_offline_pinned_pipelines_params:
-install_pcf_vsphere_darknet_params:
