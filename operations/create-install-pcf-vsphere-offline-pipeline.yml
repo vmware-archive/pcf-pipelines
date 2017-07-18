@@ -71,7 +71,7 @@
       config:
         platform: linux
         image_resource:
-          type: s3
+          type: czero-s3
           source:
             access_key_id: {{s3_access_key_id}}
             bucket: {{s3_bucket}}
