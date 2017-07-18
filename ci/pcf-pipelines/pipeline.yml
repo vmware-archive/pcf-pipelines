@@ -302,7 +302,7 @@ jobs:
             source:
               repository: busybox
           inputs:
-          - name: pcf-pipelines-tarball
+          - name: pcf-pipelines-combined
           outputs:
           - name: pcf-pipelines-only
           run:
@@ -310,7 +310,9 @@ jobs:
            args:
             - -c
             - |
-              tar -xvz -C pcf-pipelines-only -f pcf-pipelines-tarball/*.tgz pcf-pipelines
+              set -eu
+
+              tar -xv -C pcf-pipelines-only -f pcf-pipelines-combined/*.tar ./pcf-pipelines
 
       - task: set-install-pcf-darknet-current-pipeline
         input_mapping: { "release": pcf-pipelines-only }
