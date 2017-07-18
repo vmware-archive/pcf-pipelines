@@ -63,7 +63,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-(.*).tgz"
+    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-(.*).tar"
 
 - name: czero-cflinuxfs2-version
   type: semver
@@ -355,12 +355,12 @@ jobs:
           digest=$(cat czero-cflinuxfs2/digest)
 
           echo "Creating tarball with version ${version}-${digest}..."
-          tar cf "czero-cflinuxfs2-tarball/czero-cflinuxfs2-${version}-${digest}.tgz" -C czero-cflinuxfs2 .
+          tar cf "czero-cflinuxfs2-tarball/czero-cflinuxfs2-${version}-${digest}.tar" -C czero-cflinuxfs2 .
   - put: czero-cflinuxfs2-version
     params: {bump: major}
   - put: czero-cflinuxfs2-s3
     params:
-      file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tgz"
+      file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tar"
 
 - name: create-pcf-pipelines-combined
   plan:
@@ -400,18 +400,26 @@ jobs:
         args:
         - -c
         - |
-          mkdir -p pcf-pipelines-combined-contents
+          set -eu
 
-          tar xzf pcf-pipelines-offline-pinned-tarball/*.tgz -C pcf-pipelines-combined-contents
+          mkdir -p pcf-pipelines-combined-contents
 
           mv \
             czero-cflinuxfs2-s3/*.tar \
-            operations-manager/*.tar \
-            elastic-runtime/*.tar \
-            stemcells-s3/*.tar \
+            operations-manager-s3/*.tar \
+            elastic-runtime-s3/*.tar \
+            stemcells-s3/*.tgz \
             pcf-pipelines-combined-contents
 
-          shasum pcf-pipelines-combined-contents > pcf-pipelines-combined-contents/MANIFEST.MF
+          pushd pcf-pipelines-combined-contents
+            shasum * > MANIFEST.MF
+          popd
+
+          mkdir -p pcf-pipelines-combined-contents/pcf-pipelines
+          tar xzf pcf-pipelines-offline-pinned-tarball/*.tgz -C pcf-pipelines-combined-contents/pcf-pipelines
+          pushd pcf-pipelines-combined-contents
+            find pcf-pipelines -type f -print0 | xargs -0 shasum >> MANIFEST.MF
+          popd
 
           version=$(cat pcf-pipelines-combined-version/version)
 
