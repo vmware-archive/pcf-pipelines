@@ -21,7 +21,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "ops-manager/ops-manager-(.*).tar"
+    regexp: "staging/ops-manager/ops-manager-(.*).tar"
 
 - name: elastic-runtime-pivnet
   type: pivnet
@@ -38,7 +38,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "elastic-runtime/elastic-runtime-(.*).tar"
+    regexp: "staging/elastic-runtime/elastic-runtime-(.*).tar"
 
 - name: stemcells-s3
   type: s3
@@ -47,7 +47,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "stemcells/bosh-stemcell-(.*)-.*.tgz"
+    regexp: "staging/stemcells/bosh-stemcell-(.*)-.*.tgz"
     disable_ssl: false
 
 - name: czero-cflinuxfs2
@@ -63,7 +63,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+    regexp: "staging/czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
 
 - name: czero-cflinuxfs2-version
   type: semver
@@ -100,7 +100,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "pcf-pipelines-offline-pinned-tarball/pcf-pipelines-offline-pinned-v(.*).tgz"
+    regexp: "staging/pcf-pipelines-offline-pinned-tarball/pcf-pipelines-offline-pinned-v(.*).tgz"
 
 - name: pcf-pipelines-combined
   type: s3
