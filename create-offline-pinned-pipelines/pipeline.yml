@@ -71,7 +71,7 @@ resources:
     initial_version: 0.0.0
     driver: s3
     bucket: {{s3_bucket}}
-    key: "czero-cflinuxfs2/version"
+    key: "staging/czero-cflinuxfs2/version"
     access_key_id: {{s3_access_key_id}}
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
@@ -88,7 +88,7 @@ resources:
     initial_version: 0.0.0
     driver: s3
     bucket: {{s3_bucket}}
-    key: "pcf-pipelines-combined-version/version"
+    key: "pcf-pipelines-combined/version"
     access_key_id: {{s3_access_key_id}}
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
@@ -124,15 +124,19 @@ jobs:
   plan:
   - aggregate:
     - get: czero-cflinuxfs2
+      trigger: true
     - get: czero-cflinuxfs2-version
       params: { bump: major }
     - get: operations-manager-pivnet
+      trigger: true
       params: { globs: [] }
     - get: elastic-runtime-pivnet
+      trigger: true
       params: { globs: [] }
     - get: fly
     - do:
       - get: pcf-pipelines-tarball
+        trigger: true
       - task: unpack-pcf-pipelines
         config:
           platform: linux
@@ -210,7 +214,7 @@ jobs:
           pcf_pipelines_version=$(cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version')
 
           tar czv \
-          -f "pcf-pipelines-s3/pcf-pipelines-${pcf_pipelines_version}.tgz" \
+          -f "pcf-pipelines-offline-pinned-tarball/pcf-pipelines-${pcf_pipelines_version}.tgz" \
           -C pcf-pipelines-offline-pinned \
           .
   - put: pcf-pipelines-s3
@@ -220,10 +224,10 @@ jobs:
 - name: create-ops-manager-tarball
   plan:
   - get: pcf-pipelines-s3
+    trigger: true
     passed: [create-offline-pinned-pipelines]
   - get: operations-manager-pivnet
     passed: [create-offline-pinned-pipelines]
-    trigger: true
     params:
       globs: ["*.ova"]
   - task: create-tarball
@@ -255,10 +259,10 @@ jobs:
 - name: create-elastic-runtime-tarball
   plan:
   - get: pcf-pipelines-s3
+    trigger: true
     passed: [create-offline-pinned-pipelines]
   - get: elastic-runtime-pivnet
     passed: [create-offline-pinned-pipelines]
-    trigger: true
     params:
       globs: ["*.pivotal"]
   - task: create-tarball
@@ -326,9 +330,9 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines-s3
+      trigger: true
       passed: [create-offline-pinned-pipelines]
     - get: czero-cflinuxfs2
-      trigger: true
       passed: [create-offline-pinned-pipelines]
     - get: czero-cflinuxfs2-version
       params: {bump: major}
@@ -366,6 +370,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines-s3
+      trigger: true
       passed:
       - create-czero-cflinuxfs2-tarball
       - create-ops-manager-tarball
