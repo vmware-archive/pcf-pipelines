@@ -19,27 +19,36 @@ These upgrade pipelines are intended to be kept running for as long as the found
 
 These pipelines are found in any of the directories with the `upgrade-` prefix.
 
+## Prerequisites 
+
+- [install a Concourse server](https://concourse.ci/installing.html)
+- download the [Fly CLI](https://concourse.ci/fly-cli.html) to interact with the Concourse server
+- depending on where you've installed Concourse, you may need to set up
+[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
+third-party sources of pipeline dependencies
+
 ## Usage
 
-You'll need to [install a Concourse server](https://concourse.ci/installing.html)
-and get the [Fly CLI](https://concourse.ci/fly-cli.html)
-to interact with that server.
+1. Download pcf-pipelines from [Pivotal Networks](https://network.pivotal.io/products/pcf-automation). 
 
-Depending on where you've installed Concourse, you may need to set up
-[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
-third-party sources of pipeline dependencies.
+1. Each pipeline has an associated `params.yml` file. Edit the `params.yml` with details related to your infrastructure.
 
-Each pipeline has an associated `params.yml` file next to it that you'll need to fill out with the appropriate values for that pipeline.
+1. Log in and target your Concourse: 
+   ```
+   fly -t yourtarget login --concourse-url https://yourtarget.example.com
+   ```
 
-After filling out your params.yml, set the pipeline:
+1. Set your pipeline with the `params.yml` file you created in step two above. For example:
+   ```
+   fly -t yourtarget set-pipeline \
+     --pipeline upgrade-opsman \
+     --config upgrade-ops-manager/aws/pipeline.yml \
+     --load-vars-from upgrade-ops-manager/aws/params.yml
+   ```
 
-```
-fly -t yourtarget login --concourse-url https://yourtarget.example.com
-fly -t yourtarget set-pipeline \
-  --pipeline upgrade-opsman \
-  --config upgrade-ops-manager/aws/pipeline.yml \
-  --load-vars-from upgrade-ops-manager/aws/params.yml
-```
+1. Navigate to the pipeline url, and unpause the pipeline. 
+
+1. Depending on the pipeline, the first job will either trigger on its own or the job will require manual intervention. Some pipelines may also require manual work during the duration of the run to complete the pipeline. 
 
 ## Upgrading/Extending
 
