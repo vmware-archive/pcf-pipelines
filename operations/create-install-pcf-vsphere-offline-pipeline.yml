@@ -4,7 +4,7 @@
 - op: add
   path: /resource_types
   value:
-  - name: s3-image-resource
+  - name: czero-s3
     type: docker-image
     source:
       repository: czero/s3-resource
@@ -39,7 +39,7 @@
 - op: replace
   path: /jobs/type=docker-image
   value:
-    type: s3-image-resource
+    type: czero-s3
     source:
       access_key_id: {{s3_access_key_id}}
       secret_access_key: {{s3_secret_access_key}}
