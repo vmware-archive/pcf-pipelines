@@ -36,11 +36,11 @@ resources:
     repository: om
     access_token: {{images_pipeline_github_token}}
 
-- name: yaml-patch 
+- name: yaml-patch
   type: github-release
   source:
     user: krishicks
-    repository: yaml-patch 
+    repository: yaml-patch
     access_token: {{images_pipeline_github_token}}
 
 - name: cf-cli-tarball
