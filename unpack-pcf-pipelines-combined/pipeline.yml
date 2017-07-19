@@ -46,6 +46,15 @@ resources:
     bucket: {{s3_bucket}}
     regexp: "stemcells/bosh-stemcell-(.*)-.*.tgz"
 
+- name: pcf-pipelines
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "pcf-pipelines/pcf-pipelines-(.*).tgz"
+
 jobs:
 - name: unpack-tarball
   plan:
@@ -81,3 +90,6 @@ jobs:
     - put: stemcells
       params:
         file: pcf-pipelines-separated/bosh-stemcell*
+    - put: pcf-pipelines
+      params:
+        file: pcf-pipelines-separated/pcf-pipelines*
