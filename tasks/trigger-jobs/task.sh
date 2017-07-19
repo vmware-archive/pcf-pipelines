@@ -18,7 +18,7 @@ chmod +x fly
   --team-name "${ATC_TEAM_NAME}"
 
 IFS=$'\n'
-
-for job in "${JOBS[@]}"; do
+jobs=($JOBS)
+for job in "${jobs[@]}"; do
   ./fly --target self trigger-job --watch --job $job
 done
