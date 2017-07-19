@@ -17,3 +17,4 @@ install_pcf_vsphere_slot1_params:
 upgrade_ert_vsphere_slot1_params:
 upgrade_ops_manager_vsphere_slot1_params:
 create_offline_pinned_pipelines_params:
+unpack_pcf_pipelines_combined_params:
