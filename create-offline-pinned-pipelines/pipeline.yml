@@ -180,13 +180,23 @@ jobs:
           chmod +x fly/fly
           export PATH="${root}/fly:${PATH}"
 
-          mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
-
-          cp pcf-pipelines/install-pcf/vsphere/offline/params.yml pcf-pipelines-offline-pinned/install-pcf/vsphere/params.yml
-
-          opsman_version=$(cat operations-manager-pivnet/metadata.json | jq --raw-output '.Release.Version')
-          ert_version=$(cat elastic-runtime-pivnet/metadata.json | jq --raw-output '.Release.Version')
+          opsman_version=$(
+            cat operations-manager-pivnet/metadata.json | jq --raw-output '.Release.Version'
+          )
+          ert_version=$(
+            cat elastic-runtime-pivnet/metadata.json | jq --raw-output '.Release.Version'
+          )
           czero_cflinuxfs2_version=$(cat czero-cflinuxfs2-version/version)
+          pcf_pipelines_version=$(
+            cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version'
+          )
+
+          echo "Pinning gets of resources to specific versions:"
+          echo "  ops-manager -> ${opsman_version}"
+          echo "  elastic-runtime -> ${ert_version}"
+          echo "  czero-cflinuxfs2 -> ${czero_cflinuxfs2_version}"
+          echo "  pcf-pipelines -> ${pcf_pipelines_version}"
+          echo
 
           cat > pin-resource-gets.yml <<EOF
           - op: add
@@ -207,12 +217,37 @@ jobs:
               path: "czero-cflinuxfs2/czero-cflinuxfs2-(${czero_cflinuxfs2_version})-.*.tar"
           EOF
 
+          mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
+
+          echo "Creating install-pcf/vsphere/pipeline.yml"
           fly fmt -c <(
-            cat pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml | yaml_patch_linux -o pin-resource-gets.yml
+            cat pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml |
+              yaml_patch_linux -o pin-resource-gets.yml
           ) > pcf-pipelines-offline-pinned/install-pcf/vsphere/pipeline.yml
 
-          pcf_pipelines_version=$(cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version')
+          pcf_pipelines_version=$(
+            cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version'
+          )
 
+          echo "Creating install-pcf/vsphere/params.yml"
+          cp pcf-pipelines/install-pcf/vsphere/offline/params.yml \
+            pcf-pipelines-offline-pinned/install-pcf/vsphere/params.yml
+
+          echo "Creating unpack-pcf-pipelines-combined/pipeline.yml"
+          cat > steamroll_config.yml <<EOF
+          resource_map:
+            "pcf-pipelines": $root/pcf-pipelines
+          EOF
+          mkdir -p pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined
+          fly fmt -c <(
+            steamroll -p pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml -c steamroll_config.yml
+          ) > pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined/pipeline.yml
+
+          echo "Creating unpack-pcf-pipelines-combined/params.yml"
+          cp pcf-pipelines/unpack-pcf-pipelines-combined/params.yml \
+            pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined/params.yml
+
+          echo "Creating offline pinned tarball"
           tar czv \
           -f "pcf-pipelines-offline-pinned-tarball/pcf-pipelines-${pcf_pipelines_version}.tgz" \
           -C pcf-pipelines-offline-pinned \
