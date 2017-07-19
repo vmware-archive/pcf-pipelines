@@ -1,5 +1,3 @@
 git_private_key:
 czero_dockerhub_password:
 images_pipeline_github_token:
-concourse_s3_aws_access_key_id:
-concourse_s3_aws_secret_access_key:

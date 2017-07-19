@@ -85,15 +85,6 @@ resources:
     repository: pcf-product-stemcell-downloader
     access_token: {{images_pipeline_github_token}}
 
-- name: s3-rootfs
-  type: s3
-  source:
-    access_key_id: {{concourse_s3_aws_access_key_id}}
-    secret_access_key: {{concourse_s3_aws_secret_access_key}}
-    region_name: us-east-1
-    bucket: czero-images
-    versioned_file: "czero-cflinuxfs2-rootfs.tgz"
-
 - name: steamroll
   type: github-release
   source:
@@ -242,31 +233,3 @@ jobs:
     params:
       load: pcf-pipelines-image-rc
       tag_as_latest: true
-
-- name: create-czero-cflinuxfs2-tarball
-  plan:
-  - get: docker-image-resource
-    resource: pcf-pipelines-image
-  - task: create-tarball
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: czero/cflinuxfs2
-      inputs:
-      - name: docker-image-resource
-      outputs:
-      - name: image-tarball
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          set -e
-
-          echo "Creating tarball..."
-          tar czf image-tarball/czero-cflinuxfs2.tgz -C image .
-  - put: s3-rootfs
-    params:
-      file: image-tarball/czero-cflinuxfs2.tgz
