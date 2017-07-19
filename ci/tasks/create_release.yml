@@ -55,6 +55,18 @@ run:
       path: /resources/name=pcf-pipelines-tarball/source/product_version
       value: $version
     EOF
+
+    read -r -d '' test_for_pcf_pipelines_git <<EOF
+    - op: test
+      path: /resources/name=pcf-pipelines
+      value:
+        name: pcf-pipelines
+        type: git
+        source:
+          uri: git@github.com:pivotal-cf/pcf-pipelines.git
+          branch: master
+          private_key: "{{git_private_key}}"
+    EOF
     set -e
 
     files=$(
@@ -65,7 +77,7 @@ run:
     )
 
     for f in ${files[@]}; do
-      if [[ $(cat $f | tr '\n' ' ' | grep -c "name: pcf-pipelines\s\+type: git") > 0 ]]; then
+      if [[ $(cat $f | yaml-patch -o <(echo "$test_for_pcf_pipelines_git") ]]; then
         cat $f |
         yaml_patch_linux \
           -o pcf-pipelines/operations/use-pivnet-release.yml \
