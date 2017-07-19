@@ -73,7 +73,7 @@ run:
       find pcf-pipelines \
       -type f \
       -name pipeline.yml |
-      grep -v ci/pipeline.yml
+      grep -v pcf-pipelines/ci
     )
 
     for f in ${files[@]}; do
