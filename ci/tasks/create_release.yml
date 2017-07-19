@@ -152,7 +152,7 @@ run:
       exclusions+=" --exclude unpack-pcf-pipelines-combined"
     fi
 
-    echo "Creating release tarball, ommitting the following directories (may be blank):"
+    echo "Creating release tarball, ommitting the following globs:"
     echo "${exclusions}"
     tar \
       $exclusions \
