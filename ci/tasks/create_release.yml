@@ -77,7 +77,7 @@ run:
     )
 
     for f in ${files[@]}; do
-      if [[ $(cat $f | yaml-patch -o <(echo "$test_for_pcf_pipelines_git") ]]; then
+      if [[ $(cat $f | yaml-patch -o <(echo "$test_for_pcf_pipelines_git")) ]]; then
         cat $f |
         yaml_patch_linux \
           -o pcf-pipelines/operations/use-pivnet-release.yml \
