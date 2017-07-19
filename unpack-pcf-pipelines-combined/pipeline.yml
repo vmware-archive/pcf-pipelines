@@ -97,7 +97,6 @@ jobs:
 - name: set-install-pcf-pipeline
   plan:
   - get: pcf-pipelines
-    resource: pcf-pipelines-s3
   - task: set-pipeline
     file: pcf-pipelines/tasks/set-pipeline/task.yml
     params:
