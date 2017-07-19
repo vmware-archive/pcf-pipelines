@@ -1,0 +1,84 @@
+resources:
+- name: pcf-ops-manager
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "ops-manager/ops-manager-(.*).tar"
+    unpack: true
+
+- name: elastic-runtime
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "elastic-runtime/elastic-runtime-(.*).tar"
+    unpack: true
+
+- name: czero-cflinuxfs2
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+
+- name: pcf-pipelines-combined
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar"
+
+- name: stemcells
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "stemcells/bosh-stemcell-(.*)-.*.tgz"
+
+jobs:
+- name: unpack-tarball
+  plan:
+  - get: pcf-pipelines-combined
+    trigger: true
+  - task: unpack-tarball
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/cflinuxfs2
+      inputs:
+      - name: pcf-pipelines-combined
+      outputs:
+      - name: pcf-pipelines-separated
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -eu
+          tar xvf pcf-pipelines-combined/*.tar -C pcf-pipelines-separated
+  - aggregate:
+    - put: pcf-ops-manager
+      params:
+        file: pcf-pipelines-separated/ops-manager*
+    - put: elastic-runtime
+      params:
+        file: pcf-pipelines-separated/elastic-runtime*
+    - put: czero-cflinuxfs2
+      params:
+        file: pcf-pipelines-separated/czero-cflinuxfs2*
+    - put: stemcells
+      params:
+        file: pcf-pipelines-separated/bosh-stemcell*

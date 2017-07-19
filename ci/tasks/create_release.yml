@@ -135,6 +135,7 @@ run:
       exclusions+=" --exclude download-offline-resources"
       exclusions+=" --exclude install-pcf/vsphere/offline"
       exclusions+=" --exclude create-offline-pinned-pipelines"
+      exclusions+=" --exclude unpack-pcf-pipelines-combined"
     fi
 
     # Create release tarball
