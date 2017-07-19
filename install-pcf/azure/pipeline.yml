@@ -103,7 +103,7 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure.pdf"
+        - "*Azure.yml"
 
   - task: wipe-env
     config:
@@ -179,7 +179,7 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure.pdf"
+        - "*Azure.yml"
 
   - task: upload-opsman
     config:
@@ -249,7 +249,7 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure.pdf"
+        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
@@ -293,7 +293,7 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure.pdf"
+        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
@@ -365,7 +365,7 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure.pdf"
+        - "*Azure.yml"
 
   - task: deploy-director
     config:
@@ -407,7 +407,7 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure.pdf"
+        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
@@ -443,7 +443,7 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure.pdf"
+        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
@@ -508,7 +508,7 @@ jobs:
       trigger: false
       params:
         globs:
-        - "*Azure.pdf"
+        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
