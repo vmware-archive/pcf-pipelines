@@ -31,7 +31,7 @@ run:
 
     root=$PWD
 
-    # Create upgrade-ert pipeline from upgrade-tile pipeline
+    echo "Creating upgrade-ert pipeline from upgrade-tile pipeline"
     pushd pcf-pipelines
       mkdir -p upgrade-ert
 
@@ -77,8 +77,8 @@ run:
     )
 
     for f in ${files[@]}; do
-      echo $f
-      if [[ $(cat $f | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git")) ]]; then
+      if [[ $(cat $f | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git") 2>/dev/null ) ]]; then
+        echo "Using pivnet release for ${f}"
         cat $f |
         yaml_patch_linux \
           -o pcf-pipelines/operations/use-pivnet-release.yml \
@@ -94,7 +94,7 @@ run:
       fi
     done
 
-    # Create offline install-pcf/vsphere pipeline
+    echo "Creating install-pcf/vsphere/offline/pipeline.yml"
     mkdir -p pcf-pipelines/install-pcf/vsphere/offline
     cat > steamroll_config.yml <<EOF
     resource_map:
@@ -105,6 +105,7 @@ run:
       -o pcf-pipelines/operations/create-install-pcf-vsphere-offline-pipeline.yml \
       > vsphere-offline.yml
 
+    echo "Creating install-pcf/vsphere/offline/params.yml"
     fly fmt -c vsphere-offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
     cp pcf-pipelines/install-pcf/vsphere{,/offline}/params.yml
     sed -i \
@@ -122,9 +123,8 @@ run:
     s3_secret_access_key:
     EOF
 
-    # Create release metadata
+    echo "Creating release metadata.yml"
     release_date=$(date +%Y-%m-%d)
-
     cat >> pivnet-metadata/metadata.yml <<EOF
     ---
     release:
@@ -152,7 +152,8 @@ run:
       exclusions+=" --exclude unpack-pcf-pipelines-combined"
     fi
 
-    # Create release tarball
+    echo "Creating release tarball, ommitting the following directories (may be blank):"
+    echo "${exclusions}"
     tar \
       $exclusions \
       --create \
