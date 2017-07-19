@@ -97,6 +97,7 @@ jobs:
 - name: set-install-pcf-pipeline
   plan:
   - get: pcf-pipelines
+    passed: [unpack-tarball]
   - task: set-pipeline
     file: pcf-pipelines/tasks/set-pipeline/task.yml
     params:
