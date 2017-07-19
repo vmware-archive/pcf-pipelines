@@ -60,24 +60,25 @@ run:
     files=$(
       find pcf-pipelines \
       -type f \
-      -name pipeline.yml \
-      -exec grep -l "get: pcf-pipelines$" {} \; |
+      -name pipeline.yml |
       grep -v ci/pipeline.yml
     )
 
     for f in ${files[@]}; do
-      cat $f |
-      yaml_patch_linux \
-        -o pcf-pipelines/operations/use-pivnet-release.yml \
-        -o <(echo "$hardcode_pivnet_version") \
-        > $f.bk
-      mv $f.bk $f
+      if [[ $(cat $f | tr '\n' ' ' | grep -c "name: pcf-pipelines\s\+type: git") > 0 ]]; then
+        cat $f |
+        yaml_patch_linux \
+          -o pcf-pipelines/operations/use-pivnet-release.yml \
+          -o <(echo "$hardcode_pivnet_version") \
+          > $f.bk
+        mv $f.bk $f
 
-      fly fmt --write --config $f
+        fly fmt --write --config $f
 
-      # Remove git_private_key from params as it is no longer needed
-      params_file=$(dirname $f)/params.yml
-      sed -i -e '/git_private_key:/d' $params_file
+        # Remove git_private_key from params as it is no longer needed
+        params_file=$(dirname $f)/params.yml
+        sed -i -e '/git_private_key:/d' $params_file
+      fi
     done
 
     # Create offline install-pcf/vsphere pipeline
