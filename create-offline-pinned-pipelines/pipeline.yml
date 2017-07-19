@@ -414,16 +414,11 @@ jobs:
             operations-manager-s3/*.tar \
             elastic-runtime-s3/*.tar \
             stemcells-s3/*.tgz \
+            pcf-pipelines-s3/*.tgz \
             pcf-pipelines-combined-contents
 
           pushd pcf-pipelines-combined-contents
             shasum * > MANIFEST.MF
-          popd
-
-          mkdir -p pcf-pipelines-combined-contents/pcf-pipelines
-          tar xzf pcf-pipelines-s3/*.tgz -C pcf-pipelines-combined-contents/pcf-pipelines
-          pushd pcf-pipelines-combined-contents
-            find pcf-pipelines -type f -print0 | xargs -0 shasum >> MANIFEST.MF
           popd
 
           version=$(cat pcf-pipelines-combined-version/version)
