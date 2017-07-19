@@ -104,9 +104,9 @@ run:
     yaml_patch_linux \
       -o pcf-pipelines/operations/create-install-pcf-vsphere-offline-pipeline.yml \
       > vsphere-offline.yml
+    fly fmt -c vsphere-offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
 
     echo "Creating install-pcf/vsphere/offline/params.yml"
-    fly fmt -c vsphere-offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
     cp pcf-pipelines/install-pcf/vsphere{,/offline}/params.yml
     sed -i \
       -e '/pivnet_token:/d' \
