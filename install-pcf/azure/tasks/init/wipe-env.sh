@@ -14,10 +14,6 @@ fi
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 azure account set ${azure_subscription_id}
 
-if [[ ! -z ${azure_multi_resgroup_pcf} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
-    azure_terraform_prefix=${azure_multi_resgroup_pcf}
-fi
-
 # Test if Resource Group exists,  if so then wipe it!!!
 get_res_group_cmd="azure group list --json | jq '.[] | select(.name == \"${azure_terraform_prefix}\") | .' | jq .name | tr -d '\"'"
 get_res_group=$(eval ${get_res_group_cmd})

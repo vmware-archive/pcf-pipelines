@@ -17,18 +17,10 @@ pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 azure account set ${azure_subscription_id}
 
-# Setting lookup Values when using multiple Resource Group Template
-if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
-    resgroup_lookup_net=${azure_multi_resgroup_network}
-    resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
-    subnet_lookup_infra=${azure_multi_resgroup_infra_subnet_name}
-    vnet_lookup=${azure_multi_resgroup_infra_vnet_name}
-else
-    resgroup_lookup_net=${azure_terraform_prefix}
-    resgroup_lookup_pcf=${azure_terraform_prefix}
-    subnet_lookup_infra="${azure_terraform_prefix}-opsman-and-director-subnet"
-    vnet_lookup="${azure_terraform_prefix}-virtual-network"
-fi
+resgroup_lookup_net=${azure_terraform_prefix}
+resgroup_lookup_pcf=${azure_terraform_prefix}
+subnet_lookup_infra="${azure_terraform_prefix}-opsman-and-director-subnet"
+vnet_lookup="${azure_terraform_prefix}-virtual-network"
 
 ### IP Functions
 

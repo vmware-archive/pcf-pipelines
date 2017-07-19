@@ -17,14 +17,8 @@ azure login --service-principal -u ${azure_service_principal_id} -p ${azure_serv
 #############################################################
 
 
-if [[ ! -z ${azure_multi_resgroup_network} && ${azure_pcf_terraform_template} == "c0-azure-multi-res-group" ]]; then
-    resgroup_lookup_net=${azure_multi_resgroup_network}
-    resgroup_lookup_pcf=${azure_multi_resgroup_pcf}
-
-else
-    resgroup_lookup_net=${azure_terraform_prefix}
-    resgroup_lookup_pcf=${azure_terraform_prefix}
-fi
+resgroup_lookup_net=${azure_terraform_prefix}
+resgroup_lookup_pcf=${azure_terraform_prefix}
 
 function fn_get_ip {
       # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
