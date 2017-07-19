@@ -77,6 +77,7 @@ run:
     )
 
     for f in ${files[@]}; do
+      echo $f
       if [[ $(cat $f | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git")) ]]; then
         cat $f |
         yaml_patch_linux \
