@@ -99,11 +99,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*Azure.yml"
 
   - task: wipe-env
     config:
@@ -245,11 +240,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
@@ -289,11 +279,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
@@ -361,11 +346,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*Azure.yml"
 
   - task: deploy-director
     config:
@@ -403,11 +383,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
@@ -439,11 +414,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
@@ -504,11 +474,6 @@ jobs:
       params:
         globs:
         - "*pivotal"
-    - get: pivnet-opsmgr
-      trigger: false
-      params:
-        globs:
-        - "*Azure.yml"
     - get: tool-om
       params:
         globs:
