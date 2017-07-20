@@ -30,6 +30,10 @@ groups:
 
 
 resource_types:
+- name: azure-blob
+  type: docker-image
+  source:
+    repository: cfcloudops/azure-blobstore-concourse-resource
 
 - name: pivnet
   type: docker-image
@@ -44,6 +48,13 @@ resource_types:
     tag: latest
 
 resources:
+- name: terraform-state
+  type: azure-blob
+  source:
+    container: {{terraform_statefile_container}}
+    storage_account_name: {{azure_account_name}}
+    storage_access_key: {{azure_access_key}}
+    regexp: terraform.tfstate
 
 - name: pcf-pipelines
   type: git
@@ -331,6 +342,9 @@ jobs:
     - get: pcf-pipelines
       trigger: true
       passed: [config-director]
+    - get: pivnet-opsmgr
+      trigger: true
+      params: {globs: []}
     - get: tool-om
       params:
         globs:
