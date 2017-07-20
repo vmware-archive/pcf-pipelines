@@ -152,6 +152,9 @@ mail_attribute_name:
 first_name_attribute:
 last_name_attribute:
 
+#Whitelist for non-RFC-1918 Private Networks: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#er-advanced
+blobstore_internal_access_rules: "allow 10.0.0.0/8;,allow 172.16.0.0/12;,allow 192.168.0.0/16;"
+
 ## Deployment domain names
 system_domain:
 apps_domain:
@@ -171,7 +174,8 @@ router_static_ips:      # Comma-separated list of static IPs
 tcp_router_static_ips:  # Comma-separated list of static IPs
 ssh_static_ips:         # Comma-separated list of static IPs
 
-mysql_monitor_email:    # Email address to receive MySQL monitor notifications
+mysql_monitor_email:     # Email address to receive MySQL monitor notifications
+mysql_activity_logging: enable  # Whether to enable internal MySQL server activity logging (enable|disable)
 mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
 
 #SCP backup config params (leave empty values if you're not using scp)
