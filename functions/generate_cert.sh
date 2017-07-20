@@ -1,8 +1,7 @@
 #!/bin/bash
 
-set -eu
-
-function generate_cert {
+function generate_cert () (
+  set -eu
   local domains="$1"
 
   local data=$(echo $domains | jq --raw-input -c '{"domains": (. | split(" "))}')
@@ -21,4 +20,4 @@ function generate_cert {
     )
 
   echo "$response"
-}
+)

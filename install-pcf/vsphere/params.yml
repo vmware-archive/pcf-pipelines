@@ -70,6 +70,11 @@ infra_excluded_range:         # Infrastructure network exclusion range
 infra_nw_dns:                 # Infrastructure network DNS
 infra_nw_gateway:             # Infrastructure network Gateway
 infra_nw_azs:                 # Comma separated list of AZ's to be associated with this network
+nsx_networking_enabled: false # (true|false) to use nsx networking feature 
+nsx_address:                  # address of nsx
+nsx_username:                 # username for nsx access
+nsx_password:                 # password for nsx access
+nsx_ca_certificate:           # cert for nsx
 
 deployment_network_name: "DEPLOYMENT"
 deployment_vsphere_network:   # vCenter Deployment network name
@@ -191,6 +196,8 @@ mysql_backups_s3_secret_access_key:
 mysql_backups_s3_cron_schedule:
 
 ## Default resource configuration
+## these resources can take any parameter made available in 
+## the ops manager API ( https://<your-ops-man/docs#configuring-resources-for-a-job )
 consul_server_instances: 1
 nats_instances: 1
 etcd_tls_server_instances: 1
@@ -215,3 +222,19 @@ loggregator_traffic_controller_instances: 1
 tcp_router_instances: 1
 syslog_adapter_instances: 3
 syslog_scheduler_instances: 1
+# leave nsx fields empty if you are not leveraging the nsx features for a given component
+tcp_router_nsx_security_group:
+tcp_router_nsx_lb_edge_name:
+tcp_router_nsx_lb_pool_name:
+tcp_router_nsx_lb_security_group:
+tcp_router_nsx_lb_port:
+router_nsx_security_group:
+router_nsx_lb_edge_name:
+router_nsx_lb_pool_name:
+router_nsx_lb_security_group:
+router_nsx_lb_port:
+diego_brain_nsx_security_group:
+diego_brain_nsx_lb_edge_name:
+diego_brain_nsx_lb_pool_name:
+diego_brain_nsx_lb_security_group:
+diego_brain_nsx_lb_port:
