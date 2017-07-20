@@ -99,12 +99,48 @@ jobs:
   - get: pcf-pipelines
     passed: [unpack-tarball]
   - task: set-pipeline
-    file: pcf-pipelines/tasks/set-pipeline/task.yml
-    params:
-      PIPELINE_PARAMS: {{install_pcf_pipeline_params}}
-      PIPELINE_NAME: install-pcf
-      PIPELINE_PATH: pcf-pipelines/install-pcf/vsphere/pipeline.yml
-      ATC_EXTERNAL_URL: {{atc_external_url}}
-      ATC_BASIC_AUTH_USERNAME: {{atc_basic_auth_username}}
-      ATC_BASIC_AUTH_PASSWORD: {{atc_basic_auth_password}}
-      ATC_TEAM_NAME: {{atc_team_name}}
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: { repository: czero/cflinuxfs2 }
+      inputs:
+      - name: pcf-pipelines
+      params:
+        PIPELINE_PARAMS: {{install_pcf_pipeline_params}}
+        PIPELINE_NAME: {{install_pcf_pipeline_name}}
+        PIPELINE_PATH: pcf-pipelines/install-pcf/vsphere/pipeline.yml
+        ATC_EXTERNAL_URL: {{atc_external_url}}
+        ATC_BASIC_AUTH_USERNAME: {{atc_basic_auth_username}}
+        ATC_BASIC_AUTH_PASSWORD: {{atc_basic_auth_password}}
+        ATC_TEAM_NAME: {{atc_team_name}}
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          curl \
+            --silent \
+            --insecure \
+            --output fly \
+            "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"
+
+          chmod +x fly
+
+          ./fly --target self login \
+            --insecure \
+            --concourse-url "${ATC_EXTERNAL_URL}" \
+            --username "${ATC_BASIC_AUTH_USERNAME}" \
+            --password "${ATC_BASIC_AUTH_PASSWORD}" \
+            --team-name "${ATC_TEAM_NAME}"
+
+          IFS=$'\n'
+          for line in $PIPELINE_PARAMS; do
+            echo "$line" >> params.yml
+          done
+
+          ./fly --target self set-pipeline \
+            --non-interactive \
+            --pipeline "${PIPELINE_NAME}" \
+            --config "${PIPELINE_PATH}" \
+            --load-vars-from params.yml
