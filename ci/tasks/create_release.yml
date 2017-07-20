@@ -144,7 +144,7 @@ run:
       - 64  #| Pivotal SI Partners Known and Potential Partners. 
     EOF
 
-    exclusions="--exclude .git* --exclude ci --exclude *.go"
+    exclusions="--exclude .git* --exclude ci --exclude *.go --exclude run_bash_testsuite.sh"
     if [[ "$AVAILABILITY" != "Admins Only" ]]; then
       exclusions+=" --exclude download-offline-resources"
       exclusions+=" --exclude install-pcf/vsphere/offline"
