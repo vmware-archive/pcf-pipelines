@@ -301,6 +301,16 @@ jobs:
       db_locket_password: {{db_locket_password}}
       db_silk_username: {{db_silk_username}}
       db_silk_password: {{db_silk_password}}
+      # azure specific
+      pcf_ert_saml_cert:
+      pcf_ert_saml_key:
+      pcf_ert_networking_pointofentry:
+      azure_access_key:
+      azure_account_name:
+      azure_buildpacks_container:
+      azure_droplets_container:
+      azure_packages_container:
+      azure_resources_container:
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml

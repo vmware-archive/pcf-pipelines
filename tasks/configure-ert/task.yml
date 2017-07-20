@@ -29,6 +29,16 @@ params:
   gcp_storage_secret_key:
   # aws specific
   S3_ENDPOINT:
+  # azure specific
+  pcf_ert_saml_cert:
+  pcf_ert_saml_key:
+  pcf_ert_networking_pointofentry:
+  azure_access_key:
+  azure_account_name:
+  azure_buildpacks_container:
+  azure_droplets_container:
+  azure_packages_container:
+  azure_resources_container:
   # db credentials
   db_app_usage_service_username:
   db_app_usage_service_password:

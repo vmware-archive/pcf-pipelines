@@ -51,12 +51,6 @@ resources:
     uri: https://github.com/pivotal-cf/pcf-pipelines.git
     branch: master
 
-- name: ert-concourse
-  type: git
-  source:
-    uri: https://github.com/c0-ops/ert-concourse.git
-    branch: master
-
 - name: tool-om
   type: github-release
   source:
@@ -214,8 +208,8 @@ jobs:
         azure_vm_admin: {{azure_vm_admin}}
         azure_vm_password: {{azure_vm_password}}
         pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+        pcf_opsman_admin: {{pcf_opsman_admin_username}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
         pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
         azure_account_name: {{azure_account_name}}
         azure_buildpacks_container: {{azure_buildpacks_container}}
@@ -259,8 +253,8 @@ jobs:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-opsman.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+        pcf_opsman_admin: {{pcf_opsman_admin_username}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
 
 ###########################
 ## Job - Config-Director ##
@@ -298,8 +292,8 @@ jobs:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+        pcf_opsman_admin: {{pcf_opsman_admin_username}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
         azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
         azure_subscription_id: {{azure_subscription_id}}
         azure_tenant_id: {{azure_tenant_id}}
@@ -361,39 +355,45 @@ jobs:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-director.sh
       params:
         pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+        pcf_opsman_admin: {{pcf_opsman_admin_username}}
+        pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
 
 ###########################
 ## Job - Upload ERT      ##
 ###########################
 - name: upload-ert
-  serial: true
-  max_in_flight: 1
-  serial_groups: [full]
+  serial_groups: [opsman]
   plan:
   - aggregate:
     - get: pcf-pipelines
-      trigger: true
+    - get: pivnet-opsmgr
       passed: [deploy-director]
-    - get: ert-concourse
-      trigger: false
-    - get: pivnet-elastic-runtime
-      trigger: false
+      trigger: true
+      params: {globs: []}
+    - get: pivnet-product
+      resource: pivnet-elastic-runtime
       params:
         globs:
         - "*pivotal"
-    - get: tool-om
-      params:
-        globs:
-        - "om-linux"
 
-  - task: upload-ert
-    file: ert-concourse/ci/tasks/upload-ert.yml
+  - task: upload-tile
+    file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+      OPS_MGR_HOST: {{opsman_uri}}
+      OPS_MGR_USR: {{pcf_opsman_admin_username}}
+      OPS_MGR_PWD: {{pcf_opsman_admin_password}}
+      PIVNET_API_TOKEN: {{pcf_pivnet_token}}
+      IAAS: "azure"
+      NO_PROXY: ""
+      OM_IP: ""
+
+  - task: stage-tile
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
+      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      PRODUCT_NAME: cf
 
 ###########################
 ## Job - Configure ERT   ##
@@ -407,8 +407,7 @@ jobs:
     - get: pcf-pipelines
       passed: [upload-ert]
       trigger: true
-    - get: ert-concourse
-      trigger: false
+    - get: terraform-state
     - get: pivnet-elastic-runtime
       trigger: false
       params:
@@ -420,39 +419,77 @@ jobs:
         - "om-linux"
 
   - task: configure-json
-    file: ert-concourse/ci/tasks/configure-json.yml
+    file: pcf-pipelines/tasks/install-ert/configure-json/task.yml
     params:
       pcf_iaas: {{pcf_iaas}}
       pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+      pcf_opsman_admin: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
       pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
       pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
-      pcf_ert_saml_cert: {{pcf_ert_saml_cert}}
-      pcf_ert_saml_key: {{pcf_ert_saml_key}}
       terraform_template: {{azure_pcf_terraform_template}}
       terraform_prefix: {{azure_terraform_prefix}}
-
-  - task: configure-ert
-    file: ert-concourse/ci/tasks/configure-ert.yml
-    params:
-      pcf_iaas: {{pcf_iaas}}
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
+      pcf_ert_saml_cert: {{pcf_ert_saml_cert}}
+      pcf_ert_saml_key: {{pcf_ert_saml_key}}
       pcf_ert_networking_pointofentry: {{pcf_ert_networking_pointofentry}}
-      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
-      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
-      pcf_ert_saml_cert: {{pcf_ert_saml_cert}}
-      pcf_ert_saml_key: {{pcf_ert_saml_key}}
-      terraform_template: {{azure_pcf_terraform_template}}
-      terraform_prefix: {{azure_terraform_prefix}}
       azure_access_key: {{azure_access_key}}
       azure_account_name: {{azure_account_name}}
       azure_buildpacks_container: {{azure_buildpacks_container}}
       azure_droplets_container: {{azure_droplets_container}}
       azure_packages_container: {{azure_packages_container}}
       azure_resources_container: {{azure_resources_container}}
+      mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
+      MYSQL_BACKUPS: {{mysql_backups}}
+      MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
+      MYSQL_BACKUPS_SCP_PORT: {{mysql_backups_scp_port}}
+      MYSQL_BACKUPS_SCP_USER: {{mysql_backups_scp_user}}
+      MYSQL_BACKUPS_SCP_KEY: {{mysql_backups_scp_key}}
+      MYSQL_BACKUPS_SCP_DESTINATION: {{mysql_backups_scp_destination}}
+      MYSQL_BACKUPS_SCP_CRON_SCHEDULE: {{mysql_backups_scp_cron_schedule}}
+      MYSQL_BACKUPS_S3_ENDPOINT_URL: {{mysql_backups_s3_endpoint_url}}
+      MYSQL_BACKUPS_S3_BUCKET_NAME: {{mysql_backups_s3_bucket_name}}
+      MYSQL_BACKUPS_S3_BUCKET_PATH: {{mysql_backups_s3_bucket_path}}
+      MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
+      MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
+      MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
+      pcf_az_1:
+      pcf_az_2:
+      pcf_az_3:
+      gcp_storage_access_key: 
+      gcp_storage_secret_key:
+      db_diego_username: 
+      db_diego_password:
+      db_notifications_username:
+      db_notifications_password:
+      db_autoscale_username:
+      db_autoscale_password:
+      db_uaa_username:
+      db_uaa_password:
+      db_app_usage_service_username:
+      db_app_usage_service_password:
+      db_ccdb_username:
+      db_ccdb_password:
+      db_routing_username:
+      db_routing_password:
+      db_accountdb_username:
+      db_accountdb_password:
+      db_networkpolicyserverdb_username:
+      db_networkpolicyserverdb_password:
+      db_nfsvolumedb_username:
+      db_nfsvolumedb_password:
+      db_silk_username:
+      db_silk_password:
+      db_locket_username:
+      db_locket_password:
+      S3_ENDPOINT:
+
+  - task: configure-ert
+    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
+    params:
+      pcf_iaas: {{pcf_iaas}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
       
 ###########################
 ## Job - Deploy    ERT   ##
@@ -467,8 +504,6 @@ jobs:
     - get: pcf-pipelines
       trigger: true
       passed: [configure-ert]
-    - get: ert-concourse
-      trigger: false
     - get: pivnet-elastic-runtime
       trigger: false
       params:
@@ -480,13 +515,8 @@ jobs:
         - "om-linux"
 
   - task: deploy-ert
-    file: ert-concourse/ci/tasks/deploy-ert.yml
+    file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      pcf_iaas: {{pcf_iaas}}
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_passwd}}
-      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
-      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
-      terraform_template: {{azure_pcf_terraform_template}}
-      terraform_prefix: {{azure_terraform_prefix}}
+      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
+      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}

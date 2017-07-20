@@ -14,8 +14,9 @@ ert_major_minor_version: '1\.11\..*' # Reqd
 # Pivent Download token
 pcf_pivnet_token:
 # Opsman Settings
-pcf_opsman_admin:
-pcf_opsman_admin_passwd:
+opsman_uri:
+pcf_opsman_admin_username:
+pcf_opsman_admin_password:
 
 # ERT Domain Name
 pcf_ert_domain:
@@ -84,3 +85,22 @@ azure_terraform_vnet_cidr: "192.168.0.0/20"
 # azure_vm_admin value should match with userid used to create the certs pcf_ssh_key_pub. The userid will appear towards the end of the pub key
 azure_vm_admin:
 azure_vm_password:
+
+mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications
+mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
+
+#SCP backup config params (leave empty values if you're not using scp
+mysql_backups_scp_server:
+mysql_backups_scp_port:
+mysql_backups_scp_user:
+mysql_backups_scp_key:
+mysql_backups_scp_destination:
+mysql_backups_scp_cron_schedule:
+
+#S3 backup config params (leave empty values if you're not using s3)
+mysql_backups_s3_endpoint_url:
+mysql_backups_s3_bucket_name:
+mysql_backups_s3_bucket_path:
+mysql_backups_s3_access_key_id:
+mysql_backups_s3_secret_access_key:
+mysql_backups_s3_cron_schedule:

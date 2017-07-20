@@ -292,6 +292,16 @@ jobs:
       MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
       # aws specific
       S3_ENDPOINT:
+      # azure specific
+      pcf_ert_saml_cert:
+      pcf_ert_saml_key:
+      pcf_ert_networking_pointofentry:
+      azure_access_key:
+      azure_account_name:
+      azure_buildpacks_container:
+      azure_droplets_container:
+      azure_packages_container:
+      azure_resources_container:
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
