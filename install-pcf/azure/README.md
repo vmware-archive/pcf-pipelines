@@ -16,18 +16,18 @@
 
 2. `git clone` this repo
 
-3. **EDIT!!!** `ci/c0-azure-concourse-poc-params.yml` and replace all variables/parameters you will want for your concourse individual pipeline run
+3. **EDIT!!!** `pcf-pipelines/install-pcf/azure/params.yml` and replace all variables/parameters you will want for your concourse individual pipeline run
 
     - The sample pipeline params file includes 2 params that set the major/minor versions of OpsMan & ERT that will be pulled.  They will typically default to the latest RC/GA avail tiles.
       ```
-      opsman_major_minor_version: '1\.9\..*'
-      ert_major_minor_version: '1\.9\..*'
+      opsman_major_minor_version: '1\.11\..*'
+      ert_major_minor_version: '1\.11\..*'
       ```
 
 4. **AFTER!!!** Completing Step 3 above ... log into concourse & create the pipeline.
       ```
       fly -t <Target> login
-      fly -t <Target> set-pipeline -p <Pipeline-Name> -c ci/c0-azure-concourse-poc.yml -l ci/c0-azure-concourse-poc-params.yml
+      fly -t <Target> set-pipeline -p <Pipeline-Name> -c pcf-pipelines/install-pcf/azure/pipeline.yml -l pcf-pipelines/install-pcf/azure/params.yml
       ```
 
 5. Un-pause the pipeline
