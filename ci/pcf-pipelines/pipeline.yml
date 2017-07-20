@@ -231,41 +231,21 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
-    - do:
-      - task: set-create-offline-pinned-pipelines-pipeline
-        params:
-          PIPELINE_PARAMS: {{create_offline_pinned_pipelines_params}}
-          PIPELINE_NAME: create-offline-pinned-pipelines
-          PIPELINE_PATH: release/pcf-pipelines/create-offline-pinned-pipelines/pipeline.yml
-          <<: *atc_creds
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
+    - task: set-create-offline-pinned-pipelines-pipeline
+      params:
+        PIPELINE_PARAMS: {{create_offline_pinned_pipelines_params}}
+        PIPELINE_NAME: create-offline-pinned-pipelines
+        PIPELINE_PATH: release/pcf-pipelines/create-offline-pinned-pipelines/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
-      - task: set-unpack-pcf-pipelines-combined
-        params:
-          PIPELINE_PARAMS: {{unpack_pcf_pipelines_combined_params}}
-          PIPELINE_NAME: unpack-pcf-pipelines-combined
-          PIPELINE_PATH: release/pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml
-          <<: *atc_creds
-        file: pcf-pipelines/ci/tasks/set_pipeline.yml
-
-      - task: trigger-create-and-unpack-offline-artifact
-        params:
-          <<: *atc_creds
-          JOBS: |
-            create-offline-pinned-pipelines/create-offline-pinned-pipelines
-            create-offline-pinned-pipelines/create-ops-manager-tarball
-            create-offline-pinned-pipelines/create-elastic-runtime-tarball
-            create-offline-pinned-pipelines/create-czero-cflinuxfs2-tarball
-            create-offline-pinned-pipelines/create-pcf-pipelines-combined
-            unpack-pcf-pipelines-combined/unpack-tarball
-        file: release/pcf-pipelines/tasks/trigger-jobs/task.yml
-
-      - task: trigger-set-install-pcf-darknet-vsphere-current-pipeline
-        params:
-          <<: *atc_creds
-          JOBS: |
-            unpack-pcf-pipelines-combined/set-install-pcf-pipeline
-        file: release/pcf-pipelines/tasks/trigger-jobs/task.yml
+    - task: set-unpack-pcf-pipelines-combined
+      params:
+        PIPELINE_PARAMS: {{unpack_pcf_pipelines_combined_params}}
+        PIPELINE_NAME: unpack-pcf-pipelines-combined
+        PIPELINE_PATH: release/pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
 - name: publish-release
   serial_groups: [version]
