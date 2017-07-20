@@ -16,36 +16,14 @@ set -e
 provider_type=${1}
 config_target=${2}
 
-# Setting exec_mode=LOCAL for debugging, otherise vars get pulled from Concourse
-exec_mode="CONCOURSE" # LOCAL|CONCOURSE
-  if [[ $exec_mode == "LOCAL" ]]; then
-     exec_mode_root="."
-     pcf_opsman_admin="admin"
-     pcf_opsman_admin_passwd='P1v0t4l!'
-     pcf_ert_domain="azure.customer0.net"
-     if [[ $provider_type == "azure" ]]; then
-       azure_pcf_terraform_template="c0-azure-base"
-       azure_subscription_id=""
-       azure_tenant_id=""
-       azure_service_principal_id=""
-       azure_service_principal_password=""
-       azure_terraform_prefix=""
-       azure_bosh_stg_acct=""
-       azure_deployment_stg_acct_wildcard=""
-       azure_default_security_group=""
-       pcf_ssh_key_pub=""
-       azure_ssh_private_key=""
-     fi
-  else
-     exec_mode_root="./pcf-pipelines/install-pcf/azure/json-opsman"
-     if [[ -z ${pcf_opsman_admin} || -z ${pcf_opsman_admin} ]]; then
-       echo "config-director-json_err: Missing Key Variables!!!!"
-       exit 1
-     fi
-  fi
+if [[ -z ${pcf_opsman_admin} || -z ${pcf_opsman_admin} ]]; then
+  echo "config-director-json_err: Missing Key Variables!!!!"
+  exit 1
+fi
 
-  json_file_path="${exec_mode_root}/${azure_pcf_terraform_template}"
-  opsman_host="opsman.${pcf_ert_domain}"
+exec_mode_root="./pcf-pipelines/install-pcf/azure/json-opsman"
+json_file_path="${exec_mode_root}/${azure_pcf_terraform_template}"
+opsman_host="opsman.${pcf_ert_domain}"
 
 # Import reqd BASH functions
 
