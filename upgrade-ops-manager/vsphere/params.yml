@@ -34,5 +34,4 @@ gateway: CHANGEME
 dns: CHANGEME
 ntp: CHANGEME
 opsman_network: CHANGEME
-iaas_type: vsphere
 git_private_key:
