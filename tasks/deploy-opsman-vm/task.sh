@@ -29,7 +29,7 @@ function main() {
 
 IAAS_CONFIGURATION=$(cat <<-EOF
 {
-  "DiskProvisioning":"$OM_DISK_TYPE",
+  "DiskProvisioning":"$OPSMAN_DISK_TYPE",
   "IPAllocationPolicy":"dhcpPolicy",
   "IPProtocol":"IPv4",
   "Name": "$OPSMAN_NAME",

@@ -35,4 +35,4 @@ dns: CHANGEME #example: 8.8.8.8,8.8.4.4
 ntp: CHANGEME #example: 0.pool.ntp.org,1.pool.ntp.org
 opsman_network: CHANGEME
 git_private_key:
-om_disk_type: thick # use thick or thin disk provisioning
+opsman_disk_type: thin # use thick or thin disk provisioning
