@@ -2,26 +2,44 @@
 
 function configure_director () {
 
-iaas_configuration=$(cat <<-EOF
-{
-  "vcenter_host": "$VCENTER_HOST",
-  "vcenter_username": "$VCENTER_USR",
-  "vcenter_password": "$VCENTER_PWD",
-  "datacenter": "$VCENTER_DATA_CENTER",
-  "disk_type": "$VCENTER_DISK_TYPE",
-  "ephemeral_datastores_string": "$EPHEMERAL_STORAGE_NAMES",
-  "persistent_datastores_string": "$PERSISTENT_STORAGE_NAMES",
-  "bosh_vm_folder": "$BOSH_VM_FOLDER",
-  "bosh_template_folder": "$BOSH_TEMPLATE_FOLDER",
-  "bosh_disk_path": "$BOSH_DISK_PATH",
-  "ssl_verification_enabled": false,
-  "nsx_networking_enabled": $NSX_NETWORKING_ENABLED,
-  "nsx_address": "$NSX_ADDRESS",
-  "nsx_username": "$NSX_USERNAME",
-  "nsx_password": "$NSX_PASSWORD",
-  "nsx_ca_certificate": "$NSX_CA_CERTIFICATE"
-}
-EOF
+iaas_configuration=$(
+  echo '{}' |
+  jq \
+  --arg vcenter_host "$VCENTER_HOST" \
+  --arg vcenter_username "$VCENTER_USR" \
+  --arg vcenter_password "$VCENTER_PWD" \
+  --arg datacenter "$VCENTER_DATA_CENTER" \
+  --arg disk_type "$VCENTER_DISK_TYPE" \
+  --arg ephemeral_datastores_string "$EPHEMERAL_STORAGE_NAMES" \
+  --arg persistent_datastores_string "$PERSISTENT_STORAGE_NAMES" \
+  --arg bosh_vm_folder "$BOSH_VM_FOLDER" \
+  --arg bosh_template_folder "$BOSH_TEMPLATE_FOLDER" \
+  --arg bosh_disk_path "$BOSH_DISK_PATH" \
+  --arg ssl_verification_enabled false \
+  --arg nsx_networking_enabled "$NSX_NETWORKING_ENABLED" \
+  --arg nsx_address "$NSX_ADDRESS" \
+  --arg nsx_username "$NSX_USERNAME" \
+  --arg nsx_password "$NSX_PASSWORD" \
+  --arg nsx_ca_certificate "$NSX_CA_CERTIFICATE" \
+  '. +
+  {
+    "vcenter_host": $vcenter_host,
+    "vcenter_username": $vcenter_username,
+    "vcenter_password": $vcenter_password,
+    "datacenter": $datacenter,
+    "disk_type": $disk_type,
+    "ephemeral_datastores_string": $ephemeral_datastores_string,
+    "persistent_datastores_string": $persistent_datastores_string,
+    "bosh_vm_folder": $bosh_vm_folder,
+    "bosh_template_folder": $bosh_template_folder,
+    "bosh_disk_path": $bosh_disk_path,
+    "ssl_verification_enabled": $ssl_verification_enabled,
+    "nsx_networking_enabled": $nsx_networking_enabled,
+    "nsx_address": $nsx_address,
+    "nsx_username": $nsx_username,
+    "nsx_password": $nsx_password,
+    "nsx_ca_certificate": $nsx_ca_certificate
+  }'
 )
 
 az_configuration=$(cat <<-EOF
