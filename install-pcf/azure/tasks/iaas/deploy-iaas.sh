@@ -14,8 +14,8 @@ echo "==========================================================================
 pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 
 # Get Public IPs
-azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
-azure account set ${azure_subscription_id}
+az login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+az account set --subscription ${azure_subscription_id}
 
 resgroup_lookup_net=${azure_terraform_prefix}
 resgroup_lookup_pcf=${azure_terraform_prefix}
@@ -28,7 +28,7 @@ function fn_get_ip {
       # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
       for (( z=1; z<6; z++ )); do
            sleep 1
-           azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+           azure_cmd="az network public-ip list -g ${resgroup_lookup_net} --output json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
            pub_ip=$(eval $azure_cmd)
 
            if [[ -z ${pub_ip} ]]; then
@@ -46,13 +46,13 @@ function fn_get_ip {
 }
 
 function fn_get_ip_ref_id {
-     azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .id' | tr -d '\"'"
+     azure_cmd="az network public-ip list -g ${resgroup_lookup_net} --output json | jq '.[] | select( .name | contains(\"${1}\")) | .id' | tr -d '\"'"
      pub_ip=$(eval $azure_cmd)
      echo $pub_ip
 }
 
 function fn_get_subnet_id {
-     azure_cmd="azure network vnet subnet list -g ${resgroup_lookup_net} -e ${vnet_lookup} --json | jq '.[] | select(.name == \"${subnet_lookup_infra}\") | .id' | awk -F \"/\" '{print$3}'"
+     azure_cmd="az network vnet subnet list -g ${resgroup_lookup_net} --vnet-name ${vnet_lookup} --output json | jq '.[] | select(.name == \"${subnet_lookup_infra}\") | .id' | awk -F \"/\" '{print$3}'"
      subnet_id=$(eval $azure_cmd)
      echo $subnet_id
 }
@@ -61,7 +61,7 @@ function fn_get_subnet_id {
 pub_ip_pcf_lb=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
-priv_ip_mysql_lb=$(azure network lb frontend-ip list -g ${resgroup_lookup_pcf} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql_lb=$(az network lb frontend-ip list -g ${resgroup_lookup_pcf} --lb-name ${azure_terraform_prefix}-mysql-lb --output json | jq .[].privateIPAddress | tr -d '"')
 
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
@@ -87,20 +87,6 @@ fi
 # Use prefix to strip down a Storage Account Prefix String
 env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
 env_short_name=$(echo ${env_short_name:0:10})
-
-##########################################################
-# Terraforming
-##########################################################
-
-# Install Terraform cli until we can update the Docker image
-wget $(wget -q -O- https://www.terraform.io/downloads.html | grep linux_amd64 | awk -F '"' '{print$2}') -O /tmp/terraform.zip
-if [ -d /opt/terraform ]; then
-  rm -rf /opt/terraform
-fi
-
-unzip /tmp/terraform.zip
-sudo cp terraform /usr/local/bin
-export PATH=/opt/terraform/terraform:$PATH
 
 ##########################################################
 # Detect generate for ssh keys

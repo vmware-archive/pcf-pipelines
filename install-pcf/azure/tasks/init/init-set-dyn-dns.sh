@@ -10,7 +10,7 @@ fi
 #################### Azure Auth  & functions ##################
 #############################################################
 
-azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+az login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
 #############################################################
 ############### Set C0 Dyn DNS             ##################
@@ -24,7 +24,7 @@ function fn_get_ip {
       # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
       for (( z=1; z<6; z++ )); do
            sleep 1
-           azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+           azure_cmd="az network public-ip list -g ${resgroup_lookup_net} --output json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
            pub_ip=$(eval $azure_cmd)
 
            if [[ -z ${pub_ip} ]]; then
@@ -52,7 +52,7 @@ pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
-priv_ip_mysql=$(azure network lb frontend-ip list -g ${resgroup_lookup_pcf} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql=$(az network lb frontend-ip list -g ${resgroup_lookup_pcf} --lb-name ${azure_terraform_prefix}-mysql-lb --output json | jq .[].privateIPAddress | tr -d '"')
 
 
 fn_set_dyn_dns "api" "$pub_ip_pcf_lb"

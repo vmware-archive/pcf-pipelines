@@ -12,9 +12,9 @@ fi
 
 # Get ert subnet if multi-resgroup
 
-azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
-azure account set ${azure_subscription_id}
-ert_subnet_cmd="azure network vnet subnet list -g network-core  -e vnet-pcf --json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
+az login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+az account set --subscription ${azure_subscription_id}
+ert_subnet_cmd="az network vnet subnet list -g network-core --vnet-name vnet-pcf --output json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
 ert_subnet=$(eval $ert_subnet_cmd)
 echo "Found SubnetID=${ert_subnet}"
 
@@ -59,7 +59,7 @@ echo "This azure_pcf_terraform_template has an 'Init' set of terraform that has 
 echo "=============================================================================================="
 
 
-azure login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+az login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
 
 resgroup_lookup_net=${azure_terraform_prefix}
 resgroup_lookup_pcf=${azure_terraform_prefix}
@@ -68,7 +68,7 @@ function fn_get_ip {
       # Adding retry logic to this because Azure doesn't always return the IPs on the first attempt
       for (( z=1; z<6; z++ )); do
            sleep 1
-           azure_cmd="azure network public-ip list -g ${resgroup_lookup_net} --json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
+           azure_cmd="az network public-ip list -g ${resgroup_lookup_net} --output json | jq '.[] | select( .name | contains(\"${1}\")) | .ipAddress' | tr -d '\"'"
            pub_ip=$(eval $azure_cmd)
 
            if [[ -z ${pub_ip} ]]; then
@@ -91,7 +91,7 @@ pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
 
-priv_ip_mysql=$(azure network lb frontend-ip list -g ${resgroup_lookup_pcf} -l ${azure_terraform_prefix}-mysql-lb --json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql=$(az network lb frontend-ip list -g ${resgroup_lookup_pcf} --lb-name ${azure_terraform_prefix}-mysql-lb --output json | jq .[].privateIPAddress | tr -d '"')
 
 
 echo "You have now deployed Public IPs to azure that must be resolvable to:"
