@@ -55,35 +55,14 @@ jobs:
   - get: tile
     params: { globs: [] }
 
-- name: confirm-compatible-version
-  serial: true
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: product-files
-      resource: tile
-      passed: [regulator]
-      trigger: true
-      params:
-        globs:
-        - "*pivotal"
-
-  - task: allow-patch-release-only-check
-    file: pcf-pipelines/tasks/allow-only-patch-upgrades/task.yml
-    params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-      PRODUCT_NAME: {{product_name}}
-
 - name: upgrade-tile
   plan:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-product
       resource: tile
-      passed: [confirm-compatible-version]
-      trigger: true 
+      passed: [regulator]
+      trigger: true
       params:
         globs:
         - "*pivotal"
