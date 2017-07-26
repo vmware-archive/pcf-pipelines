@@ -56,7 +56,7 @@ function download_stemcell_version() {
   stemcell_os="$2"
 
   # check to see if we have a custom stemcell that matches first
-  if [[ grab_custom_stemcell $stemcell_version $stemcell_os ]]; then
+  if grab_custom_stemcell $stemcell_version $stemcell_os; then
     return 0
   fi 
 
