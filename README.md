@@ -29,7 +29,7 @@ third-party sources of pipeline dependencies
 
 ## Usage
 
-1. Download pcf-pipelines from [Pivotal Networks](https://network.pivotal.io/products/pcf-automation). 
+1. Download pcf-pipelines from [Pivotal Networks](https://network.pivotal.io/products/pcf-automation). Note: log-in to PivNet is required first.
 
 1. Each pipeline has an associated `params.yml` file. Edit the `params.yml` with details related to your infrastructure.
 
