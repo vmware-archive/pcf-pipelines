@@ -37,8 +37,14 @@ pip install awscli && \
 # Openstack Client
 pip install python-openstackclient pytz python-neutronclient && \
 
+# Azure Client
+echo "deb https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && \
+sudo apt-key adv --keyserver packages.microsoft.com --recv-keys 417A0893 && \
+sudo apt-get -y install --no-install-recommends apt-transport-https && \
+sudo apt-get -y update && sudo apt-get -y install --no-install-recommends azure-cli && \
+
 # Clean up
-apt-get remove -y python-dev && \
+apt-get remove -y python-dev apt-transport-https && \
 apt-get -y clean && apt-get -y autoremove --purge && rm -rf /etc/apt/ && \
 rm -rf /tmp/* && \
 find /var/lib/apt/lists -type f | xargs rm -f && \
