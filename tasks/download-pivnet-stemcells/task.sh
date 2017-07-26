@@ -40,7 +40,8 @@ function main() {
   for stemcell in "${stemcells[@]}"; do
     local stemcell_version
     stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
-    download_stemcell_version $stemcell_version
+    stemcell_os=$(echo "$stemcell" | grep -Eo "bosh-stemcell-[0-9]+\.[0-9]+-vsphere-esxi-([A-z0-9-]*)-go_agent.tgz")
+    download_stemcell_version $stemcell_version $stemcell_os
   done
 }
 
@@ -52,6 +53,12 @@ function abort() {
 function download_stemcell_version() {
   local stemcell_version
   stemcell_version="$1"
+  stemcell_os="$2"
+
+  # check to see if we have a custom stemcell that matches first
+  if [[ grab_custom_stemcell($stemcell_version,$stemcell_os) ]]; then
+    return 0
+  fi 
 
   # ensure the stemcell version found in the manifest exists on pivnet
   if [[ $(pivnet-cli pfs -p stemcells -r "$stemcell_version") == *"release not found"* ]]; then
@@ -70,6 +77,16 @@ function download_stemcell_version() {
 
   # shouldn't get here
   abort "Could not find stemcell ${stemcell_version} for ${IAAS_TYPE}. Did you specify a supported IaaS type for this stemcell version?"
+}
+
+function grab_custom_stemcell() {
+  stemcell_path="custom-stemcells/bosh-stemcell-${1}-${IAAS_TYPE}-esxi-${2}-go_agent.tgz" 
+  if [ -e $stemcell_path ]; then
+    cp $stemcell_path $download_dir
+    return 0
+  fi
+  # couldn't find the file
+  return -1
 }
 
 main
