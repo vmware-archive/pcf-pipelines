@@ -39,12 +39,14 @@ function main() {
   # extract the stemcell version from the filename, e.g. 3312.21, and download the file from pivnet
   for stemcell in "${stemcells[@]}"; do
     local stemcell_version
-    stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
-    stemcell_os_regex="bosh-stemcell-[0-9]+\.[0-9]+-vsphere-esxi-([A-z0-9-]*)-go_agent.tgz"
-    if [[ $stemcell =~ $stemcell_os_regex ]]; then
-      stemcell_os=${BASH_REMATCH[1]}
+    local stemcell_os
+    local stemcell_re
+    stemcell_re="bosh-stemcell-([0-9]+\.[0-9]+)-vsphere-esxi-([A-z0-9-]*)-go_agent.tgz"
+    if [[ $stemcell =~ $stemcell_re ]]; then
+      stemcell_version=${BASH_REMATCH[1]}
+      stemcell_os=${BASH_REMATCH[2]}
     else
-      abort "Could not extract stemcell os type."
+      abort "Could not extract stemcell version and os type."
     fi
     download_stemcell_version "$stemcell_version" "$stemcell_os"
   done
