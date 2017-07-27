@@ -40,7 +40,12 @@ function main() {
   for stemcell in "${stemcells[@]}"; do
     local stemcell_version
     stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
-    stemcell_os=$(echo "$stemcell" | grep -Eo "bosh-stemcell-[0-9]+\.[0-9]+-vsphere-esxi-([A-z0-9-]*)-go_agent.tgz")
+    stemcell_os_regex="bosh-stemcell-[0-9]+\.[0-9]+-vsphere-esxi-([A-z0-9-]*)-go_agent.tgz"
+    if [[ $stemcell ~= $stemcell_os_regex ]]; then
+      stemcell_os=${BASH_REMATCH[1]}
+    else
+      abort "Could not extract stemcell os type."
+    fi
     download_stemcell_version $stemcell_version $stemcell_os
   done
 }
