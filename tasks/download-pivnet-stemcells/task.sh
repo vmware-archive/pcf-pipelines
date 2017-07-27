@@ -81,7 +81,9 @@ function download_stemcell_version() {
 
 function grab_custom_stemcell() {
   stemcell_path="custom-stemcells/bosh-stemcell-${1}-${IAAS_TYPE}-esxi-${2}-go_agent.tgz" 
+  echo Checking for custom stemcell at $stemcell_path
   if [ -e $stemcell_path ]; then
+    echo Found custom stemcell and copying to download directory
     cp $stemcell_path $download_dir
     return 0
   fi
