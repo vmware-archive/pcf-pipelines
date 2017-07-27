@@ -62,7 +62,7 @@ function download_stemcell_version() {
   stemcell_os="$2"
 
   # check to see if we have a custom stemcell that matches first
-  if grab_custom_stemcell $stemcell_version $stemcell_os; then
+  if grab_custom_stemcell "$stemcell_version" "$stemcell_os"; then
     return 0
   fi 
 
@@ -86,6 +86,8 @@ function download_stemcell_version() {
 }
 
 function grab_custom_stemcell() {
+  local stemcell_path
+  echo "Version: $1 and OS: $2"
   stemcell_path="${cwd}/custom-stemcells/bosh-stemcell-${1}-${IAAS_TYPE}-esxi-${2}-go_agent.tgz" 
   echo Checking for custom stemcell at $stemcell_path
   if [ -e $stemcell_path ]; then
