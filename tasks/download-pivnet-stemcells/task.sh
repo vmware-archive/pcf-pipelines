@@ -41,7 +41,7 @@ function main() {
     local stemcell_version
     stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
     stemcell_os_regex="bosh-stemcell-[0-9]+\.[0-9]+-vsphere-esxi-([A-z0-9-]*)-go_agent.tgz"
-    if [[ $stemcell ~= $stemcell_os_regex ]]; then
+    if [[ $stemcell =~ $stemcell_os_regex ]]; then
       stemcell_os=${BASH_REMATCH[1]}
     else
       abort "Could not extract stemcell os type."
