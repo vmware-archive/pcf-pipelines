@@ -116,6 +116,7 @@ jobs:
       GCP_ZONE_2: {{gcp_zone_2}}
       GCP_ZONE_3: {{gcp_zone_3}}
       GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
+      GCP_STORAGE_BUCKET_LOCATION: {{gcp_storage_bucket_location}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
       PCF_ERT_SSL_CERT: {{pcf_ert_ssl_cert}}
       PCF_ERT_SSL_KEY: {{pcf_ert_ssl_key}}
