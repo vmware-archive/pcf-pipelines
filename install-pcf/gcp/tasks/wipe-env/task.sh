@@ -27,6 +27,7 @@ terraform destroy -force \
   -var "gcp_zone_1=dontcare" \
   -var "gcp_zone_2=dontcare" \
   -var "gcp_zone_3=dontcare" \
+  -var "gcp_storage_bucket_location=dontcare" \
   -var "prefix=dontcare" \
   -var "pcf_opsman_image_name=dontcare" \
   -var "pcf_ert_domain=dontcare" \
