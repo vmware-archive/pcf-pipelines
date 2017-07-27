@@ -46,7 +46,7 @@ function main() {
     else
       abort "Could not extract stemcell os type."
     fi
-    download_stemcell_version $stemcell_version $stemcell_os
+    download_stemcell_version "$stemcell_version" "$stemcell_os"
   done
 }
 
