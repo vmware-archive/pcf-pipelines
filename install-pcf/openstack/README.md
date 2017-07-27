@@ -154,6 +154,10 @@ environment with multiple AZs is available, this functionality will be fully
 fleshed out and incorporated into the pipeline. In the meantime, the other
 two AZ defintions can remain commented out.
 
+### Floating IP setting
+
+Currently Ops Manager's API does not have an API endpoint that can configure the Floating IPs in PCF, so the pipeline does not allow configuring these fields. Ops Manager will add this API endpoint later.
+
 ### MySQL Monitor
 
 There is the possibilty of random running into `deploy-ert` failures with
