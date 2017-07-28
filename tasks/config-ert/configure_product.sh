@@ -157,13 +157,15 @@ function decorate_nsx_lb() {
   --arg nsx_lb_port ${nsx_lb_port} \
   '.[$cf_component_name] |= . +
     {
-      "nsx_security_groups":  [$nsx_sg],
-      "nsx_lbs":  {
-        "edge_name":$nsx_lb_edge,
-        "pool_name":$nsx_lb_pool,
-        "security_group": $nsx_lb_sg,
-        "port": $nsx_lb_port | tonumber
-      }
+      "nsx_security_groups": [$nsx_sg],
+      "nsx_lbs": [
+        {
+          "edge_name":$nsx_lb_edge,
+          "pool_name":$nsx_lb_pool,
+          "security_group": $nsx_lb_sg,
+          "port": $nsx_lb_port | tonumber
+        }
+      ]
     }'
 }
 
