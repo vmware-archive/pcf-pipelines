@@ -163,7 +163,7 @@ function decorate_nsx_lb() {
           "edge_name":$nsx_lb_edge,
           "pool_name":$nsx_lb_pool,
           "security_group": $nsx_lb_sg,
-          "port": $nsx_lb_port | tonumber
+          "port": $nsx_lb_port
         }
       ]
     }'

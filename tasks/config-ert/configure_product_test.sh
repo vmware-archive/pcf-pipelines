@@ -75,17 +75,17 @@ function TestProductPropertiesShouldContainNSXConfigWhenNSXValuesAreSet () (
       select(.tcp_router.nsx_lbs[0].edge_name == $tcp_edge) |
       select(.tcp_router.nsx_lbs[0].pool_name == $tcp_pool) |
       select(.tcp_router.nsx_lbs[0].security_group == $tcp_lb_sg) |
-      select(.tcp_router.nsx_lbs[0].port == ($tcp_port | tonumber)) |
+      select(.tcp_router.nsx_lbs[0].port == $tcp_port) |
       select(.router.nsx_security_groups[0] == $router_sg) |
       select(.router.nsx_lbs[0].edge_name == $router_edge) |
       select(.router.nsx_lbs[0].pool_name == $router_pool) |
       select(.router.nsx_lbs[0].security_group == $router_lb_sg) |
-      select(.router.nsx_lbs[0].port == ($router_port | tonumber)) |
+      select(.router.nsx_lbs[0].port == $router_port) |
       select(.diego_brain.nsx_security_groups[0] == $diego_sg) |
       select(.diego_brain.nsx_lbs[0].edge_name == $diego_edge) |
       select(.diego_brain.nsx_lbs[0].pool_name == $diego_pool) |
       select(.diego_brain.nsx_lbs[0].security_group == $diego_lb_sg) |
-      select(.diego_brain.nsx_lbs[0].port == ($diego_port | tonumber))')
+      select(.diego_brain.nsx_lbs[0].port == $diego_port)')
 
   exitcode=$?
   return $(Expect $exitcode ToBe 0)
