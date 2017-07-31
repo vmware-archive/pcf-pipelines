@@ -61,7 +61,7 @@ function fn_get_subnet_id {
 pub_ip_pcf_lb=$(fn_get_ip "web-lb")
 pub_ip_tcp_lb=$(fn_get_ip "tcp-lb")
 pub_ip_ssh_proxy_lb=$(fn_get_ip "ssh-proxy-lb")
-priv_ip_mysql_lb=$(az network lb frontend-ip list -g ${resgroup_lookup_pcf} --lb-name ${azure_terraform_prefix}-mysql-lb --output json | jq .[].privateIPAddress | tr -d '"')
+priv_ip_mysql_lb=$(az network lb frontend-ip list -g ${resgroup_lookup_pcf} --lb-name ${azure_terraform_prefix}-mysql-lb --output json | jq -r .[].privateIpAddress)
 
 pub_ip_opsman_vm=$(fn_get_ip "opsman")
 pub_ip_jumpbox_vm=$(fn_get_ip "jb")
