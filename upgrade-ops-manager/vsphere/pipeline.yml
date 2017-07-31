@@ -44,6 +44,14 @@ resources:
     location: America/Los_Angeles
     days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
 
+#- name: custom-stemcells
+#  type: s3
+#  source:
+#    regexp: bosh-stemcell-(?P<version>[0-9\.]*)-vsphere-esxi-(?P<os>[[:ascii:]]*)-go_agent.tgz
+#    bucket: {{custom_stemcells_bucket_name}}
+#    access_key_id: {{custom_stemcells_access_key}}
+#    secret_access_key: {{custom_stemcells_secret_key}}
+
 jobs:
 - name: regulator
   plan:
@@ -61,6 +69,7 @@ jobs:
       params:
         globs: ["*.ova"]
     - get: pcf-pipelines
+#    - get: custom-stemcells
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml

@@ -35,3 +35,6 @@ dns: CHANGEME
 ntp: CHANGEME
 opsman_network: CHANGEME
 git_private_key:
+custom_stemcells_bucket_name: CHANGEME
+custom_stemcells_access_key: CHANGEME
+custom_stemcells_secret_key: CHANGEME
