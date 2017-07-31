@@ -22,7 +22,7 @@ image_resource:
 inputs:
   - name: pcf-pipelines
   - name: diagnostic-report
-  - name: custom-stemcells
+#  - name: custom-stemcells
 
 outputs:
   - name: stemcells
