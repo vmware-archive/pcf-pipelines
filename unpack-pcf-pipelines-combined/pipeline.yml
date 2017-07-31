@@ -63,9 +63,15 @@ jobs:
     config:
       platform: linux
       image_resource:
-        type: docker-image
+        type: s3
         source:
-          repository: czero/cflinuxfs2
+          access_key_id: {{s3_access_key_id}}
+          secret_access_key: {{s3_secret_access_key}}
+          endpoint: {{s3_endpoint}}
+          bucket: {{s3_bucket}}
+          regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+        params:
+          unpack: true
       inputs:
       - name: pcf-pipelines-combined
       outputs:
@@ -102,9 +108,15 @@ jobs:
     config:
       platform: linux
       image_resource:
-        type: docker-image
+        type: s3
         source:
-          repository: czero/cflinuxfs2
+          access_key_id: {{s3_access_key_id}}
+          secret_access_key: {{s3_secret_access_key}}
+          endpoint: {{s3_endpoint}}
+          bucket: {{s3_bucket}}
+          regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+        params:
+          unpack: true
       inputs:
       - name: pcf-pipelines-tarball
       outputs:
@@ -116,8 +128,15 @@ jobs:
     config:
       platform: linux
       image_resource:
-        type: docker-image
-        source: { repository: czero/cflinuxfs2 }
+        type: s3
+        source:
+          access_key_id: {{s3_access_key_id}}
+          secret_access_key: {{s3_secret_access_key}}
+          endpoint: {{s3_endpoint}}
+          bucket: {{s3_bucket}}
+          regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+        params:
+          unpack: true
       inputs:
       - name: pcf-pipelines
       params:
