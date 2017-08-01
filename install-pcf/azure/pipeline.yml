@@ -3,6 +3,7 @@ groups:
 - name: all
   jobs:
   - init-env
+  - wipe-env
   - deploy-iaas
   - config-opsman-auth
   - config-director
@@ -88,6 +89,46 @@ resources:
     sort_by: semver
 
 jobs:
+#####################
+## Job - Wipe Env  ##
+#####################
+- name: wipe-env
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      trigger: false
+    - get: pivnet-elastic-runtime
+      trigger: false
+      params:
+        globs:
+        - "*pivotal"
+
+  - task: wipe-env
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/cflinuxfs2
+      inputs:
+        - name: pcf-pipelines
+      outputs:
+        - name: opsman-metadata
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/init/wipe-env.sh
+      params:
+        arg_wipe: {{arg_wipe}}
+        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
+        azure_subscription_id: {{azure_subscription_id}}
+        azure_tenant_id: {{azure_tenant_id}}
+        azure_service_principal_id: {{azure_service_principal_id}}
+        azure_service_principal_password: {{azure_service_principal_password}}
+        azure_region: {{azure_region}}
+        azure_terraform_prefix: {{azure_terraform_prefix}}
+
 #####################
 ## Job - Init Env  ##
 #####################
