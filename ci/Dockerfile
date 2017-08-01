@@ -37,6 +37,7 @@ gem install cf-uaac --no-ri --no-rdoc && \
 pip install awscli && \
 
 # Openstack Client
+apt-get install -y --no-install-recommends libffi-dev && \
 pip install python-openstackclient pytz python-neutronclient && \
 
 # Azure Client
