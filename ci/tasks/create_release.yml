@@ -145,6 +145,8 @@ run:
     EOF
 
     exclusions="--exclude .git* --exclude ci --exclude *.go --exclude run_bash_testsuite.sh"
+    exclusions+=" --exclude pin-pcf-pipelines-git"
+
     if [[ "$AVAILABILITY" != "Admins Only" ]]; then
       exclusions+=" --exclude download-offline-resources"
       exclusions+=" --exclude install-pcf/vsphere/offline"

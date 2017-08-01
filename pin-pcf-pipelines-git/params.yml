@@ -1,0 +1,8 @@
+git_private_key:
+
+# For committing the pinned changes
+git_author_user:
+git_author_email:
+
+# Repo to push pinned changes to
+pcf_pipelines_pinned_git_uri:
