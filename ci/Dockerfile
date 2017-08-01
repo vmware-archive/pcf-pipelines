@@ -13,7 +13,7 @@ COPY \
        /usr/local/bin/
 
 RUN \
-cp /usr/local/bin/{yaml_patch_linux,yaml-patch} && \
+cp /usr/local/bin/yaml_patch_linux /usr/local/bin/yaml-patch && \
 
 # jq
 wget -O /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x /usr/local/bin/jq && \
