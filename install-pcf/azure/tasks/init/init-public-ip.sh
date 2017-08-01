@@ -29,9 +29,7 @@ unzip /tmp/terraform.zip
 sudo cp terraform /usr/local/bin
 export PATH=/opt/terraform/terraform:$PATH
 
-function fn_terraform {
-
-terraform ${1} \
+terraform plan \
   -var "subscription_id=${azure_subscription_id}" \
   -var "client_id=${azure_service_principal_id}" \
   -var "client_secret=${azure_service_principal_password}" \
@@ -46,12 +44,12 @@ terraform ${1} \
   -var "ert_subnet_id=${ert_subnet}" \
   -var "azure_multi_resgroup_network=${azure_multi_resgroup_network}" \
   -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
+  -out terraform.tfplan \
   pcf-pipelines/install-pcf/azure/terraform/${azure_pcf_terraform_template}/init
 
-}
-
-fn_terraform "plan"
-fn_terraform "apply"
+terraform apply \
+  -state-out terraform-state-output/terraform.tfstate \
+  terraform.tfplan
 
 
 echo "=============================================================================================="
