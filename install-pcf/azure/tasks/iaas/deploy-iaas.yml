@@ -7,8 +7,12 @@ image_resource:
     repository: czero/cflinuxfs2
 
 inputs:
-  - name: pcf-pipelines 
+  - name: pcf-pipelines
   - name: opsman-metadata
+  - name: terraform-state
+
+outputs:
+  - name: terraform-state-output
 
 run:
   path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-iaas.sh

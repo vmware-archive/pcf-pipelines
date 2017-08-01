@@ -207,10 +207,15 @@ jobs:
   serial: true
   max_in_flight: 1
   serial_groups: [full]
+  ensure:
+    put: terraform-state
+    params:
+      file: terraform-state-output/*.tfstate
   plan:
   - aggregate:
     - get: pcf-pipelines
       trigger: false
+    - get: terraform-state
     - get: pivnet-elastic-runtime
       trigger: false
       params:

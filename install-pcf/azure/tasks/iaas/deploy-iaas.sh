@@ -106,46 +106,51 @@ if [[ ${pcf_ssh_key_pub} == 'generate' ]]; then
   echo "******************************"
 fi
 
-function fn_exec_tf {
-  echo "=============================================================================================="
-  echo "Executing Terraform ${1} ..."
-  echo "=============================================================================================="
+echo "=============================================================================================="
+echo "Executing Terraform Plan ..."
+echo "=============================================================================================="
 
-  terraform ${1} \
-    -var "subscription_id=${azure_subscription_id}" \
-    -var "client_id=${azure_service_principal_id}" \
-    -var "client_secret=${azure_service_principal_password}" \
-    -var "tenant_id=${azure_tenant_id}" \
-    -var "location=${azure_region}" \
-    -var "env_name=${azure_terraform_prefix}" \
-    -var "env_short_name=${env_short_name}" \
-    -var "dns_suffix=${pcf_ert_domain}" \
-    -var "pub_ip_pcf_lb=${pub_ip_pcf_lb}" \
-    -var "pub_ip_id_pcf_lb=${pub_ip_id_pcf_lb}" \
-    -var "pub_ip_tcp_lb=${pub_ip_tcp_lb}" \
-    -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
-    -var "priv_ip_mysql_lb=${priv_ip_mysql_lb}" \
-    -var "pub_ip_ssh_proxy_lb=${pub_ip_ssh_proxy_lb}" \
-    -var "pub_ip_id_ssh_proxy_lb=${pub_ip_id_ssh_proxy_lb}" \
-    -var "pub_ip_opsman_vm=${pub_ip_opsman_vm}" \
-    -var "pub_ip_id_opsman_vm=${pub_ip_id_opsman_vm}" \
-    -var "pub_ip_jumpbox_vm=${pub_ip_jumpbox_vm}" \
-    -var "pub_ip_id_jumpbox_vm=${pub_ip_id_jumpbox_vm}" \
-    -var "subnet_infra_id=${subnet_infra_id}" \
-    -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
-    -var "vm_admin_username=${azure_vm_admin}" \
-    -var "vm_admin_password=${azure_vm_password}" \
-    -var "vm_admin_public_key=${pcf_ssh_key_pub}" \
-    -var "azure_multi_resgroup_network=${e_multi_resgroup_network}" \
-    -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
-    -var "priv_ip_opsman_vm=${azure_terraform_opsman_priv_ip}" \
-    -var "azure_account_name=${azure_account_name}" \
-    -var "azure_buildpacks_container=${azure_buildpacks_container}" \
-    -var "azure_droplets_container=${azure_droplets_container}" \
-    -var "azure_packages_container=${azure_packages_container}" \
-    -var "azure_resources_container=${azure_resources_container}" \
-    pcf-pipelines/install-pcf/azure/terraform/$azure_pcf_terraform_template
-}
+terraform plan \
+  -var "subscription_id=${azure_subscription_id}" \
+  -var "client_id=${azure_service_principal_id}" \
+  -var "client_secret=${azure_service_principal_password}" \
+  -var "tenant_id=${azure_tenant_id}" \
+  -var "location=${azure_region}" \
+  -var "env_name=${azure_terraform_prefix}" \
+  -var "env_short_name=${env_short_name}" \
+  -var "dns_suffix=${pcf_ert_domain}" \
+  -var "pub_ip_pcf_lb=${pub_ip_pcf_lb}" \
+  -var "pub_ip_id_pcf_lb=${pub_ip_id_pcf_lb}" \
+  -var "pub_ip_tcp_lb=${pub_ip_tcp_lb}" \
+  -var "pub_ip_id_tcp_lb=${pub_ip_id_tcp_lb}" \
+  -var "priv_ip_mysql_lb=${priv_ip_mysql_lb}" \
+  -var "pub_ip_ssh_proxy_lb=${pub_ip_ssh_proxy_lb}" \
+  -var "pub_ip_id_ssh_proxy_lb=${pub_ip_id_ssh_proxy_lb}" \
+  -var "pub_ip_opsman_vm=${pub_ip_opsman_vm}" \
+  -var "pub_ip_id_opsman_vm=${pub_ip_id_opsman_vm}" \
+  -var "pub_ip_jumpbox_vm=${pub_ip_jumpbox_vm}" \
+  -var "pub_ip_id_jumpbox_vm=${pub_ip_id_jumpbox_vm}" \
+  -var "subnet_infra_id=${subnet_infra_id}" \
+  -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
+  -var "vm_admin_username=${azure_vm_admin}" \
+  -var "vm_admin_password=${azure_vm_password}" \
+  -var "vm_admin_public_key=${pcf_ssh_key_pub}" \
+  -var "azure_multi_resgroup_network=${e_multi_resgroup_network}" \
+  -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
+  -var "priv_ip_opsman_vm=${azure_terraform_opsman_priv_ip}" \
+  -var "azure_account_name=${azure_account_name}" \
+  -var "azure_buildpacks_container=${azure_buildpacks_container}" \
+  -var "azure_droplets_container=${azure_droplets_container}" \
+  -var "azure_packages_container=${azure_packages_container}" \
+  -var "azure_resources_container=${azure_resources_container}" \
+  -out terraform.tfplan \
+  -state terraform-state/terraform.tfstate \
+  pcf-pipelines/install-pcf/azure/terraform/$azure_pcf_terraform_template
 
-fn_exec_tf "plan"
-fn_exec_tf "apply"
+echo "=============================================================================================="
+echo "Executing Terraform Apply ..."
+echo "=============================================================================================="
+
+terraform apply \
+  -state-out terraform-state-output/terraform.tfstate \
+  terraform.tfplan
