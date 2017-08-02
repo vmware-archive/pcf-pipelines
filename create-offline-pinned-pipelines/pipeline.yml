@@ -113,9 +113,8 @@ resources:
 
 - name: fly
   type: github-release
-  check_every: 720h
   source:
-    user: krishicks
+    user: concourse
     repository: fly
     access_token: {{github_token}}
 
