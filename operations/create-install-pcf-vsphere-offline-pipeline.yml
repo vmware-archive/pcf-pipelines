@@ -15,6 +15,7 @@
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "ops-manager/ops-manager-(.*).tar"
+    params:
       unpack: true
 
   - name: elastic-runtime
@@ -25,6 +26,7 @@
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "elastic-runtime/elastic-runtime-(.*).tar"
+    params:
       unpack: true
 
 - op: replace
@@ -70,6 +72,7 @@
             endpoint: {{s3_endpoint}}
             regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
+          params:
             unpack: true
         inputs:
         - name: pivnet-product
@@ -170,6 +173,7 @@
             endpoint: {{s3_endpoint}}
             regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
+          params:
             unpack: true
         inputs:
         - name: pivnet-product
