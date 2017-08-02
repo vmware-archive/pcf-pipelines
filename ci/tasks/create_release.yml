@@ -26,6 +26,7 @@ run:
     set -o pipefail
     set -eu
 
+    mv fly/{fly_linux_amd64,fly}
     chmod +x fly/fly
     export PATH="$PWD/fly":$PATH
 
