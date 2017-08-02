@@ -1,12 +1,34 @@
 #!/bin/bash
 set -e
 
+json_file="json_file/ert.json"
+
+cat > networking_poe_cert_filter <<-'EOF'
+  .properties.properties.".properties.networking_point_of_entry.{{pcf_ert_networking_pointofentry}}.ssl_rsa_certificate".value = {
+    "cert_pem": $cert_pem,
+    "private_key_pem": $private_key_pem
+  }
+EOF
+
+jq \
+  --arg cert_pem "$pcf_ert_ssl_cert" \
+  --arg private_key_pem "$pcf_ert_ssl_key" \
+  --from-file networking_poe_cert_filter \
+  $json_file > config.json
+mv config.json $json_file
+
+# Remove .properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate
+# added by generic configure-json script
+jq \
+  'del(.properties.properties.".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate")' \
+  $json_file > config.json
+mv config.json $json_file
+
 sed -i \
   -e "s%{{pcf_ert_networking_pointofentry}}%${pcf_ert_networking_pointofentry}%g" \
-  json_file/ert.json
+  $json_file
 
 if [[ "${azure_access_key}" != "" ]]; then
-  json_file="json_file/ert.json"
   cat ${json_file} | jq \
     --arg azure_access_key "${azure_access_key}" \
     --arg azure_account_name "${ert_azure_account_name}" \
