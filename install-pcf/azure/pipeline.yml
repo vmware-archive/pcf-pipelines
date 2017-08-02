@@ -53,9 +53,9 @@ resources:
   type: azure-blob
   source:
     container: {{terraform_statefile_container}}
-    storage_account_name: {{azure_account_name}}
-    storage_access_key: {{azure_access_key}}
-    regexp: terraform.tfstate
+    storage_account_name: {{terraform_azure_account_name}}
+    storage_access_key: {{terraform_azure_access_key}}
+    regexp: terraform.tfstate()
 
 - name: pcf-pipelines
   type: git
@@ -519,35 +519,35 @@ jobs:
       MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
       MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
       MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
+      db_diego_username: {{db_diego_username}}
+      db_diego_password: {{db_diego_password}}
+      db_notifications_username: {{db_notifications_username}}
+      db_notifications_password: {{db_notifications_password}}
+      db_autoscale_username: {{db_autoscale_username}}
+      db_autoscale_password: {{db_autoscale_password}}
+      db_uaa_username: {{db_uaa_username}}
+      db_uaa_password: {{db_uaa_password}}
+      db_app_usage_service_username: {{db_app_usage_service_username}}
+      db_app_usage_service_password: {{db_app_usage_service_password}}
+      db_ccdb_username: {{db_ccdb_username}}
+      db_ccdb_password: {{db_ccdb_password}}
+      db_routing_username: {{db_routing_username}}
+      db_routing_password: {{db_routing_password}}
+      db_accountdb_username: {{db_accountdb_username}}
+      db_accountdb_password: {{db_accountdb_password}}
+      db_networkpolicyserverdb_username: {{db_networkpolicyserverdb_username}}
+      db_networkpolicyserverdb_password: {{db_networkpolicyserverdb_password}}
+      db_nfsvolumedb_username: {{db_nfsvolumedb_username}}
+      db_nfsvolumedb_password: {{db_nfsvolumedb_password}}
+      db_silk_username: {{db_silk_username}}
+      db_silk_password: {{db_silk_password}}
+      db_locket_username: {{db_locket_username}}
+      db_locket_password: {{db_locket_password}}
       pcf_az_1:
       pcf_az_2:
       pcf_az_3:
-      gcp_storage_access_key: 
+      gcp_storage_access_key:
       gcp_storage_secret_key:
-      db_diego_username: 
-      db_diego_password:
-      db_notifications_username:
-      db_notifications_password:
-      db_autoscale_username:
-      db_autoscale_password:
-      db_uaa_username:
-      db_uaa_password:
-      db_app_usage_service_username:
-      db_app_usage_service_password:
-      db_ccdb_username:
-      db_ccdb_password:
-      db_routing_username:
-      db_routing_password:
-      db_accountdb_username:
-      db_accountdb_password:
-      db_networkpolicyserverdb_username:
-      db_networkpolicyserverdb_password:
-      db_nfsvolumedb_username:
-      db_nfsvolumedb_password:
-      db_silk_username:
-      db_silk_password:
-      db_locket_username:
-      db_locket_password:
       S3_ENDPOINT:
 
   - task: configure-ert
@@ -557,7 +557,7 @@ jobs:
       pcf_ert_domain: {{pcf_ert_domain}}
       pcf_opsman_admin: {{pcf_opsman_admin_username}}
       pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
-      
+
 ###########################
 ## Job - Deploy    ERT   ##
 ###########################

@@ -2,7 +2,7 @@
 ### Concourse Objects
 ##############################################
 # github RSA private key for git resources
-githubtoken:
+githubtoken: CHANGEME
 
 ##############################################
 ### PCF Object Params
@@ -12,21 +12,24 @@ opsman_major_minor_version: '1\.11\..*' # Reqd
 ert_major_minor_version: '1\.11\..*' # Reqd
 
 # Pivent Download token
-pcf_pivnet_token:
-# Opsman Settings
-opsman_uri:
-pcf_opsman_admin_username:
-pcf_opsman_admin_password:
+pcf_pivnet_token: CHANGEME
 
 # ERT Domain Name
-pcf_ert_domain:
-pcf_ssh_key_pub:
+pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
+pcf_ssh_key_pub: CHANGEME
 pcf_ssh_key_priv: |
+  CHANGEME
+
+# Opsman Settings
+opsman_uri: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
+pcf_opsman_admin_username: CHANGEME
+pcf_opsman_admin_password: CHANGEME
 
 # ERT Cert & Key , if the string 'generate' is passed, pipeline will autogen certs
 pcf_ert_networking_pointofentry: "haproxy" #This is set to HAProxy for now as Azure load balancer does not support external SSL termination now. If Azure adds suport for that, you may change it to a different value in future.
 pcf_ert_ssl_cert: |
-pcf_ert_ssl_key:
+  CHANGEME
+pcf_ert_ssl_key: CHANGEME
 
 # SAML Service Credential provider Cert and Key, of the string generate is passed, pipeline will autogen certs
 pcf_ert_saml_cert: generate
@@ -38,7 +41,10 @@ pcf_ert_saml_key: generate
 # Wipe Arg(s) anything other than wipe bypasses the wipe-env job
 arg_wipe: wipe
 
-terraform_statefile_container:
+# The storage account and container that will be used for your terraform state
+terraform_azure_account_name: CHANGEME
+terraform_azure_access_key: CHANGEME
+terraform_statefile_container: CHANGEME
 
 ### azure ###
 # IF the azure_access_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
@@ -49,7 +55,7 @@ azure_account_name:
 azure_access_key:
 
 # REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
-azure_buildpacks_container: 
+azure_buildpacks_container:
 
 # REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the droplets will be stored. It is similar to the S3 bucket in AWS.
 azure_droplets_container:
@@ -59,6 +65,7 @@ azure_packages_container:
 
 # REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
 azure_resources_container:
+
 azure_pcf_terraform_template: c0-azure-base # 'Template' for pipeline to determine Terrafrom & Opsman JSON config
 azure_region:
 azure_service_principal_id:
@@ -85,7 +92,7 @@ azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_vnet_cidr: "192.168.0.0/20"
 
 # azure_vm_admin value should match with userid used to create the certs pcf_ssh_key_pub. The userid will appear towards the end of the pub key
-azure_vm_admin:
+azure_vm_admin: CHANGEME
 azure_vm_password:
 
 mysql_monitor_recipient_email:  # Email address for sending mysql monitor notifications
@@ -106,3 +113,30 @@ mysql_backups_s3_bucket_path:
 mysql_backups_s3_access_key_id:
 mysql_backups_s3_secret_access_key:
 mysql_backups_s3_cron_schedule:
+
+# DB Creds
+db_diego_username: CHANGEME
+db_diego_password: CHANGEME
+db_notifications_username: CHANGEME
+db_notifications_password: CHANGEME
+db_autoscale_username: CHANGEME
+db_autoscale_password: CHANGEME
+db_uaa_username: CHANGEME
+db_uaa_password: CHANGEME
+db_app_usage_service_username: CHANGEME
+db_app_usage_service_password: CHANGEME
+db_ccdb_username: CHANGEME
+db_ccdb_password: CHANGEME
+db_routing_username: CHANGEME
+db_routing_password: CHANGEME
+
+db_accountdb_username: CHANGEME
+db_accountdb_password: CHANGEME
+db_networkpolicyserverdb_username: CHANGEME
+db_networkpolicyserverdb_password: CHANGEME
+db_nfsvolumedb_username: CHANGEME
+db_nfsvolumedb_password: CHANGEME
+db_silk_username: CHANGEME
+db_silk_password: CHANGEME
+db_locket_username: CHANGEME
+db_locket_password: CHANGEME
