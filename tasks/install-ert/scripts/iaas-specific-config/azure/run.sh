@@ -31,7 +31,7 @@ sed -i \
 if [[ "${azure_access_key}" != "" ]]; then
   cat ${json_file} | jq \
     --arg azure_access_key "${azure_access_key}" \
-    --arg azure_account_name "${ert_azure_account_name}" \
+    --arg azure_account_name "${azure_account_name}" \
     --arg azure_buildpacks_container "${azure_buildpacks_container}" \
     --arg azure_droplets_container "${azure_droplets_container}" \
     --arg azure_packages_container "${azure_packages_container}" \
