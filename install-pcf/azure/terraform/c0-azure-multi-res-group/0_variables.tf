@@ -15,7 +15,7 @@ variable "client_secret" {}
 variable "tenant_id" {}
 variable "location" {}
 
-variable "dns_suffix" {}
+variable "pcf_ert_domain" {}
 
 variable "pub_ip_pcf_lb" {}
 variable "pub_ip_id_pcf_lb" {}

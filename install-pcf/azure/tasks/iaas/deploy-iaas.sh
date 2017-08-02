@@ -118,7 +118,7 @@ terraform plan \
   -var "location=${azure_region}" \
   -var "env_name=${azure_terraform_prefix}" \
   -var "env_short_name=${env_short_name}" \
-  -var "dns_suffix=${pcf_ert_domain}" \
+  -var "pcf_ert_domain=${pcf_ert_domain}" \
   -var "pub_ip_pcf_lb=${pub_ip_pcf_lb}" \
   -var "pub_ip_id_pcf_lb=${pub_ip_id_pcf_lb}" \
   -var "pub_ip_tcp_lb=${pub_ip_tcp_lb}" \

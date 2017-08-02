@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////
 
 resource "azurerm_dns_zone" "env_dns_zone" {
-  name                = "${var.env_name}.${var.dns_suffix}"
+  name                = "${var.pcf_ert_domain}"
   resource_group_name = "${var.azure_multi_resgroup_pcf}"
 }
 
