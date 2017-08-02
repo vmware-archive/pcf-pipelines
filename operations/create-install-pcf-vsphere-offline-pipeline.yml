@@ -15,8 +15,6 @@
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "ops-manager/ops-manager-(.*).tar"
-    params:
-      unpack: true
 
   - name: elastic-runtime
     type: s3
@@ -26,8 +24,6 @@
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "elastic-runtime/elastic-runtime-(.*).tar"
-    params:
-      unpack: true
 
 - op: replace
   path: /jobs/type=docker-image
@@ -39,8 +35,6 @@
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
-    params:
-      unpack: true
 
 - op: remove
   path: /name=pcf-pipelines
@@ -51,11 +45,23 @@
 - op: remove
   path: /jobs/get=pivnet-opsman-product/params/globs
 
+- op: add
+  path: /jobs/get=pivnet-opsman-product/params/unpack
+  value: true
+
 - op: remove
   path: /jobs/get=pcf-ops-manager/params/globs
 
+- op: add
+  path: /jobs/get=pcf-ops-manager/params/unpack
+  value: true
+
 - op: remove
   path: /jobs/get=pivnet-product/params/globs
+
+- op: add
+  path: /jobs/get=pivnet-product/params/unpack
+  value: true
 
 - op: replace
   path: /jobs/name=upload-ert/plan/task=upload-tile
