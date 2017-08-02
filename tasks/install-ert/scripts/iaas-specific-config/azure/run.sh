@@ -1,15 +1,6 @@
 #!/bin/bash
 set -e
 
-cd terraform-state
-  db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.sql_instance_ip.value')
-cd -
-
-if [ -z "$db_host" ]; then
-  echo Failed to get SQL instance IP from Terraform state file
-  exit 1
-fi
-
 sed -i \
   -e "s%{{pcf_ert_networking_pointofentry}}%${pcf_ert_networking_pointofentry}%g" \
   json_file/ert.json
