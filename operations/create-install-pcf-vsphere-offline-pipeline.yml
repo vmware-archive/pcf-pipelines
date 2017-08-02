@@ -26,7 +26,7 @@
       regexp: "elastic-runtime/elastic-runtime-(.*).tar"
 
 - op: replace
-  path: /jobs/image_resource/type=docker-image
+  path: /jobs/type=docker-image
   value:
     type: s3
     source:
