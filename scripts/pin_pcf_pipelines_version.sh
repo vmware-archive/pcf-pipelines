@@ -3,6 +3,11 @@
 set -eu
 set -o pipefail
 
+if [[ ! $(which yaml-patch) ]]; then
+  echo "Did not find yaml-patch; are you sure it's in your PATH?"
+  exit 1
+fi
+
 root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 overwrite=""
