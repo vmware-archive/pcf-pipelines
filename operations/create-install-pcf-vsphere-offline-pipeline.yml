@@ -35,6 +35,8 @@
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+    params:
+      unpack: true
 
 - op: remove
   path: /name=pcf-pipelines
