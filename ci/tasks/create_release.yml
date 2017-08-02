@@ -31,7 +31,7 @@ run:
 
     root=$PWD
 
-    # Create upgrade-ert pipeline from upgrade-tile pipeline
+    echo "Creating upgrade-ert pipeline from upgrade-tile pipeline"
     pushd pcf-pipelines
       mkdir -p upgrade-ert
 
@@ -55,32 +55,46 @@ run:
       path: /resources/name=pcf-pipelines-tarball/source/product_version
       value: $version
     EOF
+
+    read -r -d '' test_for_pcf_pipelines_git <<EOF
+    - op: test
+      path: /resources/name=pcf-pipelines
+      value:
+        name: pcf-pipelines
+        type: git
+        source:
+          uri: git@github.com:pivotal-cf/pcf-pipelines.git
+          branch: master
+          private_key: "{{git_private_key}}"
+    EOF
     set -e
 
     files=$(
       find pcf-pipelines \
       -type f \
-      -name pipeline.yml \
-      -exec grep -l "get: pcf-pipelines" {} \; |
-      grep -v ci/pipeline.yml
+      -name pipeline.yml |
+      grep -v pcf-pipelines/ci
     )
 
     for f in ${files[@]}; do
-      cat $f |
-      yaml_patch_linux \
-        -o pcf-pipelines/operations/use-pivnet-release.yml \
-        -o <(echo "$hardcode_pivnet_version") \
-        > $f.bk
-      mv $f.bk $f
+      if [[ $(cat $f | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git") 2>/dev/null ) ]]; then
+        echo "Using pivnet release for ${f}"
+        cat $f |
+        yaml_patch_linux \
+          -o pcf-pipelines/operations/use-pivnet-release.yml \
+          -o <(echo "$hardcode_pivnet_version") \
+          > $f.bk
+        mv $f.bk $f
 
-      fly fmt --write --config $f
+        fly fmt --write --config $f
 
-      # Remove git_private_key from params as it is no longer needed
-      params_file=$(dirname $f)/params.yml
-      sed -i -e '/git_private_key:/d' $params_file
+        # Remove git_private_key from params as it is no longer needed
+        params_file=$(dirname $f)/params.yml
+        sed -i -e '/git_private_key:/d' $params_file
+      fi
     done
 
-    # Create offline install-pcf/vsphere pipeline
+    echo "Creating install-pcf/vsphere/offline/pipeline.yml"
     mkdir -p pcf-pipelines/install-pcf/vsphere/offline
     cat > steamroll_config.yml <<EOF
     resource_map:
@@ -90,8 +104,9 @@ run:
     yaml_patch_linux \
       -o pcf-pipelines/operations/create-install-pcf-vsphere-offline-pipeline.yml \
       > vsphere-offline.yml
-
     fly fmt -c vsphere-offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
+
+    echo "Creating install-pcf/vsphere/offline/params.yml"
     cp pcf-pipelines/install-pcf/vsphere{,/offline}/params.yml
     sed -i \
       -e '/pivnet_token:/d' \
@@ -108,9 +123,8 @@ run:
     s3_secret_access_key:
     EOF
 
-    # Create release metadata
+    echo "Creating release metadata.yml"
     release_date=$(date +%Y-%m-%d)
-
     cat >> pivnet-metadata/metadata.yml <<EOF
     ---
     release:
@@ -130,12 +144,18 @@ run:
       - 64  #| Pivotal SI Partners Known and Potential Partners. 
     EOF
 
-    exclusions="--exclude .git* --exclude ci --exclude *.go"
+    exclusions="--exclude .git* --exclude ci --exclude *.go --exclude run_bash_testsuite.sh"
+    exclusions+=" --exclude pin-pcf-pipelines-git"
+
     if [[ "$AVAILABILITY" != "Admins Only" ]]; then
-      exclusions+=" --exclude download-offline-resources --exclude install-pcf/vsphere/offline"
+      exclusions+=" --exclude download-offline-resources"
+      exclusions+=" --exclude install-pcf/vsphere/offline"
+      exclusions+=" --exclude create-offline-pinned-pipelines"
+      exclusions+=" --exclude unpack-pcf-pipelines-combined"
     fi
 
-    # Create release tarball
+    echo "Creating release tarball, ommitting the following globs:"
+    echo "${exclusions}"
     tar \
       $exclusions \
       --create \

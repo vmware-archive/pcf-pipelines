@@ -177,14 +177,14 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: busybox
+          repository: czero/cflinuxfs2
       inputs:
       - name: czero-cflinuxfs2
       - name: czero-cflinuxfs2-version
       outputs:
       - name: czero-cflinuxfs2-tarball
       run:
-        path: sh
+        path: bash
         args:
         - -c
         - |

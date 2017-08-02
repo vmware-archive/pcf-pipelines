@@ -1,0 +1,10 @@
+s3_access_key_id:
+s3_secret_access_key:
+s3_endpoint:
+s3_bucket:
+atc_external_url:
+atc_basic_auth_username:
+atc_basic_auth_password:
+atc_team_name:
+install_pcf_pipeline_params:
+install_pcf_pipeline_name:

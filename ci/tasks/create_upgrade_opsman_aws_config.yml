@@ -13,7 +13,7 @@ params:
   PIVNET_TOKEN:
   OPSMAN_ADMIN_USERNAME:
   OPSMAN_ADMIN_PASSWORD:
-  OPSMAN_URI:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_TIMEOUT_SECONDS:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
@@ -44,5 +44,5 @@ run:
     opsman_admin_password: "$OPSMAN_ADMIN_PASSWORD"
     opsman_passphrase: "$OPSMAN_ADMIN_PASSWORD"
     opsman_timeout_seconds: "$OPSMAN_TIMEOUT_SECONDS"
-    opsman_uri: "$OPSMAN_URI"
+    opsman_domain_or_ip_address: "$OPSMAN_DOMAIN_OR_IP_ADDRESS"
     EOF

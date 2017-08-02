@@ -17,7 +17,7 @@ opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_ssh_password: CHANGEME   # ubuntu user ssh password
 opsman_major_minor_version: ^1\.11\..*$  # Ops Manager minor version to track
-opsman_uri: http://example.com
+opsman_domain_or_ip_address: http://example.com
 opsman_passphrase: CHANGEME
 pivnet_token: CHANGEME
 vcenter_url: http://example.com
@@ -31,8 +31,7 @@ opsman_vm_folder: CHANGEME
 opsman_ip: CHANGEME
 netmask: CHANGEME
 gateway: CHANGEME
-dns: CHANGEME
-ntp: CHANGEME
+dns: CHANGEME #example: 8.8.8.8,8.8.4.4
+ntp: CHANGEME #example: 0.pool.ntp.org,1.pool.ntp.org
 opsman_network: CHANGEME
-iaas_type: vsphere
 git_private_key:

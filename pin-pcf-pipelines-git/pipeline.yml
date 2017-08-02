@@ -1,0 +1,64 @@
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    branch: master
+    private_key: {{git_private_key}}
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    tag_filter: v*
+
+- name: pcf-pipelines-pinned
+  type: git
+  source:
+    branch: master
+    private_key: {{git_private_key}}
+    uri: {{pcf_pipelines_pinned_git_uri}}
+
+jobs:
+- name: pin-pipelines
+  plan:
+  - get: pcf-pipelines
+  - task: pin-pipelines
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/cflinuxfs2
+      params:
+        GIT_USER: {{git_author_user}}
+        GIT_EMAIL: {{git_author_email}}
+      inputs:
+      - name: pcf-pipelines
+      outputs:
+      - name: pcf-pipelines-pinned
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -eu
+
+          git config --global user.name $GIT_USER
+          git config --global user.email $GIT_EMAIL
+
+          git clone ./pcf-pipelines pcf-pipelines-pinned
+
+          pushd pcf-pipelines-pinned 1>/dev/null
+            version=$(
+              if [[ $(git describe --tags --exact-match $(git rev-parse HEAD) 2>/dev/null) ]]; then
+                echo $(git describe HEAD --tags)
+              else
+                echo $(git rev-parse HEAD)
+              fi
+            )
+
+            ./scripts/pin_pcf_pipelines_version.sh -v $version -w true -d .
+
+            git add -A
+            git commit -m "Bump pinned pipelines to ${version}"
+          popd 1>/dev/null
+
+  - put: pcf-pipelines-pinned
+    params:
+      repository: pcf-pipelines-pinned

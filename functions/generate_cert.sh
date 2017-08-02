@@ -1,15 +1,14 @@
 #!/bin/bash
 
-set -eu
-
-function generate_cert {
+function generate_cert () (
+  set -eu
   local domains="$1"
 
   local data=$(echo $domains | jq --raw-input -c '{"domains": (. | split(" "))}')
 
   local response=$(
     om-linux \
-      --target "https://${OPS_MGR_HOST}" \
+      --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
       --username "$OPS_MGR_USR" \
       --password "$OPS_MGR_PWD" \
       --skip-ssl-validation \
@@ -21,4 +20,4 @@ function generate_cert {
     )
 
   echo "$response"
-}
+)

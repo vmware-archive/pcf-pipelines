@@ -13,6 +13,8 @@ COPY \
        /usr/local/bin/
 
 RUN \
+cp /usr/local/bin/yaml_patch_linux /usr/local/bin/yaml-patch && \
+
 # jq
 wget -O /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x /usr/local/bin/jq && \
 
@@ -35,10 +37,17 @@ gem install cf-uaac --no-ri --no-rdoc && \
 pip install awscli && \
 
 # Openstack Client
+apt-get install -y --no-install-recommends libffi-dev && \
 pip install python-openstackclient pytz python-neutronclient && \
 
+# Azure Client
+echo "deb https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && \
+sudo apt-key adv --keyserver packages.microsoft.com --recv-keys 417A0893 && \
+sudo apt-get -y install --no-install-recommends apt-transport-https && \
+sudo apt-get -y update && sudo apt-get -y install --no-install-recommends azure-cli && \
+
 # Clean up
-apt-get remove -y python-dev && \
+apt-get remove -y python-dev apt-transport-https && \
 apt-get -y clean && apt-get -y autoremove --purge && rm -rf /etc/apt/ && \
 rm -rf /tmp/* && \
 find /var/lib/apt/lists -type f | xargs rm -f && \

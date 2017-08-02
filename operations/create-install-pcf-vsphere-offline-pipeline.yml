@@ -4,7 +4,7 @@
 - op: add
   path: /resource_types
   value:
-  - name: s3-image-resource
+  - name: czero-s3
     type: docker-image
     source:
       repository: czero/s3-resource
@@ -23,7 +23,7 @@
       secret_access_key: {{s3_secret_access_key}}
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
-      regexp: "ops-manager/ops-manager-(.*).tgz"
+      regexp: "ops-manager/ops-manager-(.*).tar"
       unpack: true
 
   - name: elastic-runtime
@@ -33,19 +33,19 @@
       secret_access_key: {{s3_secret_access_key}}
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
-      regexp: "elastic-runtime/elastic-runtime-(.*).tgz"
+      regexp: "elastic-runtime/elastic-runtime-(.*).tar"
       unpack: true
 
 - op: replace
   path: /jobs/type=docker-image
   value:
-    type: s3-image-resource
+    type: czero-s3
     source:
       access_key_id: {{s3_access_key_id}}
       secret_access_key: {{s3_secret_access_key}}
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
-      regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz"
+      regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
       unpack: true
 
 - op: remove
@@ -71,12 +71,12 @@
       config:
         platform: linux
         image_resource:
-          type: s3
+          type: czero-s3
           source:
             access_key_id: {{s3_access_key_id}}
             bucket: {{s3_bucket}}
             endpoint: {{s3_endpoint}}
-            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz
+            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
             unpack: true
         inputs:
@@ -87,7 +87,7 @@
           S3_BUCKET: {{s3_bucket}}
           S3_ENDPOINT: {{s3_endpoint}}
           IAAS: vsphere
-          OPS_MGR_DOMAIN: {{opsman_uri}}
+          OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
           OPS_MGR_USERNAME: {{opsman_admin_username}}
           OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:
@@ -176,7 +176,7 @@
             access_key_id: {{s3_access_key_id}}
             bucket: {{s3_bucket}}
             endpoint: {{s3_endpoint}}
-            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tgz
+            regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
             unpack: true
         inputs:

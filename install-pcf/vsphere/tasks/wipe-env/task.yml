@@ -8,7 +8,7 @@ image_resource:
 inputs:
   - name: pcf-pipelines 
 params:
-  OPSMAN_URI:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
 run:

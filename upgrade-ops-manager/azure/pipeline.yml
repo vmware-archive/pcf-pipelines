@@ -53,33 +53,12 @@ jobs:
   - get: pivnet-opsmgr
     params: { globs: [] }
 
-- name: confirm-compatible-version
-  serial: true
-  plan:
-  - aggregate:
-    - get: product-files
-      resource: pivnet-opsmgr
-      passed: [regulator]
-      trigger: true
-      params:
-        globs:
-        - "*Azure.yml"
-    - get: pcf-pipelines
-
-  - task: allow-patch-release-only-check
-    file: pcf-pipelines/tasks/allow-only-patch-upgrades/task.yml
-    params:
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
-      PRODUCT_NAME: p-bosh
-
 - name: upgrade-opsmgr
   serial: true
   plan:
   - aggregate:
     - get: pivnet-opsmgr
-      passed: [confirm-compatible-version]
+      passed: [regulator]
       trigger: true
       params:
         globs:
@@ -91,7 +70,7 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
 
   - aggregate:
     - task: export-opsmgr-settings
@@ -99,14 +78,14 @@ jobs:
       params:
         OPSMAN_USERNAME: {{opsman_admin_username}}
         OPSMAN_PASSWORD: {{opsman_admin_password}}
-        OPSMAN_URI: {{opsman_uri}}
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
         OPSMAN_SETTINGS_FILENAME: installation.zip
     - task: exported-opsmgr-diagnostic-report
       file: pcf-pipelines/tasks/export-opsmgr-diagnostic-report/task.yml
       params:
         OPSMAN_USERNAME: {{opsman_admin_username}}
         OPSMAN_PASSWORD: {{opsman_admin_password}}
-        OPSMAN_URI: {{opsman_uri}}
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
 
   - task: create-cliaas-config
     file: pcf-pipelines/upgrade-ops-manager/azure/tasks/create-cliaas-config/task.yml
@@ -131,7 +110,7 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_SETTINGS_FILENAME: installation.zip
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
 
@@ -146,11 +125,11 @@ jobs:
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}

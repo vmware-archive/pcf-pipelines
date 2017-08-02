@@ -7,7 +7,7 @@ image_resource:
   source: {repository: czero/cflinuxfs2}
 
 params:
-  OPS_MGR_HOST:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPS_MGR_USR:
   OPS_MGR_PWD:
   PIVNET_API_TOKEN:

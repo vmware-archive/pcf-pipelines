@@ -36,7 +36,7 @@ pcf_opsman_trusted_certs: |
 
 # Elastic Runtime Domain
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
-opsman_uri: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
+opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
 
 # Elastic Runtime SSL configuration
 # Set pcf_ert_ssl_cert to 'generate' if you'd like a self-signed cert to be
