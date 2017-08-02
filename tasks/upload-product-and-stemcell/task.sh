@@ -18,6 +18,23 @@ STEMCELL_VERSION=$(
     '
 )
 
+set +e
+cat ./pivnet-product/metadata.json | jq -e \
+    '
+    [
+      .Dependencies[]
+      | select(.Release.Product.Name | contains("Stemcells for PCF (Windows)"))
+      | .Release.Version
+    ] | sort | last // empty
+    ' > /dev/null
+
+if [ $? -eq 0 ]; then
+  STEMCELL_PLUG=stemcells-windows-server
+else
+  STEMCELL_PLUG=stemcells
+fi
+set -e
+
 if [ -n "$STEMCELL_VERSION" ]; then
   diagnostic_report=$(
     om-linux \
@@ -39,7 +56,7 @@ if [ -n "$STEMCELL_VERSION" ]; then
   if [[ -z "$stemcell" ]]; then
     echo "Downloading stemcell $STEMCELL_VERSION"
     pivnet-cli login --api-token="$PIVNET_API_TOKEN"
-    pivnet-cli download-product-files -p stemcells -r $STEMCELL_VERSION -g "*${IAAS}*" --accept-eula
+    pivnet-cli download-product-files -p $STEMCELL_PLUG -r $STEMCELL_VERSION -g "*${IAAS}*" --accept-eula
 
     SC_FILE_PATH=`find ./ -name *.tgz`
 
