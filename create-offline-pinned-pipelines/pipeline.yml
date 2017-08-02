@@ -212,9 +212,8 @@ jobs:
             value:
               path: "elastic-runtime-pivnet/elastic-runtime-${ert_version}.tar"
           - op: replace
-            path: /jobs/regexp=czero-cflinuxfs2~1czero-cflinuxfs2-(.*)-.*.tar
-            value:
-              path: "czero-cflinuxfs2/czero-cflinuxfs2-(${czero_cflinuxfs2_version})-.*.tar"
+            path: /jobs/regexp=czero-cflinuxfs2~1czero-cflinuxfs2-(.*)-.*.tar/regexp
+            value: "czero-cflinuxfs2/czero-cflinuxfs2-(${czero_cflinuxfs2_version})-.*.tar"
           EOF
 
           mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
