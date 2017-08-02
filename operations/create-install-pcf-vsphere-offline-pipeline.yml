@@ -1,15 +1,6 @@
 - op: remove
   path: /resource_types
 
-- op: add
-  path: /resource_types
-  value:
-  - name: czero-s3
-    type: docker-image
-    source:
-      repository: czero/s3-resource
-      tag: latest
-
 - op: remove
   path: /resources
 
@@ -39,13 +30,14 @@
 - op: replace
   path: /jobs/type=docker-image
   value:
-    type: czero-s3
+    type: s3
     source:
       access_key_id: {{s3_access_key_id}}
       secret_access_key: {{s3_secret_access_key}}
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+    params:
       unpack: true
 
 - op: remove
