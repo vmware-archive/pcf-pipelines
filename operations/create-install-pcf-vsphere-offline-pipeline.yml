@@ -87,7 +87,7 @@
           S3_BUCKET: {{s3_bucket}}
           S3_ENDPOINT: {{s3_endpoint}}
           IAAS: vsphere
-          OPS_MGR_DOMAIN: {{opsman_uri}}
+          OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
           OPS_MGR_USERNAME: {{opsman_admin_username}}
           OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:

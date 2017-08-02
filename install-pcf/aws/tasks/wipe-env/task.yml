@@ -11,7 +11,7 @@ inputs:
 outputs:
   - name: terraform-state-output
 params:
-  OPSMAN_URI:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   TF_VAR_aws_access_key:

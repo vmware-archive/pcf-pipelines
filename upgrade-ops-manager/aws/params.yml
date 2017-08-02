@@ -47,4 +47,4 @@ opsman_passphrase: CHANGEME
 
 # Ops Manager Url
 # eg. https://myopsman.mydomain.com
-opsman_uri: CHANGEME
+opsman_domain_or_ip_address: CHANGEME

@@ -27,7 +27,7 @@ product_version_regex: ^1\.11\..*$
 # and deploying the product file on Operations Manager.
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
-opsman_uri: CHANGEME
+opsman_domain_or_ip_address: CHANGEME
 
 # The IaaS name for which stemcell to download. This must match the IaaS name
 # within the stemcell to download, e.g. "vsphere"

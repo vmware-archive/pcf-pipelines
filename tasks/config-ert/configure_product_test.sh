@@ -119,7 +119,7 @@ function omLinuxSpy () {
 # errors
 function helperLoadDefaultEnvVars () {
   set +u
-  OPS_MGR_HOST=""
+  OPSMAN_DOMAIN_OR_IP_ADDRESS=""
   OPS_MGR_USR=""
   OPS_MGR_PWD=""
   BACKUP_PREPARE_INSTANCES=1

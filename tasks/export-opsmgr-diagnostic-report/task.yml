@@ -28,7 +28,7 @@ outputs:
 params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
-  OPSMAN_URI:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
 
 run:
   path: pcf-pipelines/tasks/export-opsmgr-diagnostic-report/task.sh

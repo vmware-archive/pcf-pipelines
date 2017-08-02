@@ -153,7 +153,7 @@ network_assignment=$(
 
 echo "Configuring IaaS and Director..."
 om-linux \
-  --target https://$OPS_MGR_HOST \
+  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
   --username $OPS_MGR_USR \
   --password $OPS_MGR_PWD \

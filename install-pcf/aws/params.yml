@@ -86,7 +86,7 @@ ERT_SSL_CERT:
 ERT_SSL_KEY:
 
 # The domain to access Operations Manager; opsman.<ert-domain>
-OPSMAN_URI:
+OPSMAN_DOMAIN_OR_IP_ADDRESS:
 
 # Operations Manager credentials
 OPSMAN_USER:

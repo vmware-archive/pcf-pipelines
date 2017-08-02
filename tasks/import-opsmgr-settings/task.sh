@@ -20,14 +20,14 @@ function main() {
   local cwd
   cwd="${1}"
 
-  printf "Waiting for %s to come up" "$OPSMAN_URI"
-  until $(curl --output /dev/null --silent --head --fail -k https://${OPSMAN_URI}); do
+  printf "Waiting for %s to come up" "$OPSMAN_DOMAIN_OR_IP_ADDRESS"
+  until $(curl --output /dev/null --silent --head --fail -k https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}); do
     printf '.'
     sleep 5
   done
   printf '\n'
 
-  om-linux --target "https://${OPSMAN_URI}" \
+  om-linux --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
       --skip-ssl-validation \
       --request-timeout 86400 \
       import-installation \

@@ -192,7 +192,7 @@ jobs:
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
-      OPS_MGR_HOST: {{OPSMAN_URI}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{OPSMAN_DOMAIN_OR_IP_ADDRESS}}
       OPS_MGR_USR: {{OPSMAN_USER}}
       OPS_MGR_PWD: {{OPSMAN_PASSWORD}}
       PIVNET_API_TOKEN: {{pivnet_token}}
@@ -202,7 +202,7 @@ jobs:
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
-      OPSMAN_URI: {{OPSMAN_URI}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{OPSMAN_DOMAIN_OR_IP_ADDRESS}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
       PRODUCT_NAME: cf
@@ -316,7 +316,7 @@ jobs:
     file: pcf-pipelines/tasks/disable-errands/task.yml
     params:
       PRODUCT_NAME: cf
-      OPSMAN_URI: {{OPSMAN_URI}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{OPSMAN_DOMAIN_OR_IP_ADDRESS}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
       ERRANDS_TO_DISABLE: {{ert_errands_to_disable}}
@@ -324,7 +324,7 @@ jobs:
   - task: deploy-ert
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      OPSMAN_URI: {{OPSMAN_URI}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{OPSMAN_DOMAIN_OR_IP_ADDRESS}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
 
@@ -341,7 +341,7 @@ jobs:
   - task: wipe
     file: pcf-pipelines/install-pcf/aws/tasks/wipe-env/task.yml
     params:
-      OPSMAN_URI: {{OPSMAN_URI}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{OPSMAN_DOMAIN_OR_IP_ADDRESS}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
       TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}

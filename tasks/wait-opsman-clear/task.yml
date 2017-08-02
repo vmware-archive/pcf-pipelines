@@ -25,7 +25,7 @@ inputs:
 params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
-  OPSMAN_URI:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
 
 run:
   path: pcf-pipelines/tasks/wait-opsman-clear/task.sh

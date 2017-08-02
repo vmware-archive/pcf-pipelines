@@ -13,7 +13,7 @@ params:
   PIVNET_TOKEN:
   OPSMAN_ADMIN_USERNAME:
   OPSMAN_ADMIN_PASSWORD:
-  OPSMAN_URI:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
   IAAS_TYPE:
   PIVNET_POLL_INTERVAL:
   OPSMAN_TIMEOUT_SECONDS:
@@ -39,7 +39,7 @@ run:
       opsman_major_minor_version: "${OPSMAN_MAJOR_MINOR_VERSION}"
       opsman_passphrase: "${OPSMAN_ADMIN_PASSWORD}"
       opsman_timeout_seconds: "${OPSMAN_TIMEOUT_SECONDS}"
-      opsman_uri: "${OPSMAN_URI}"
+      opsman_domain_or_ip_address: "${OPSMAN_DOMAIN_OR_IP_ADDRESS}"
       pivnet_poll_interval: "${PIVNET_POLL_INTERVAL}"
       pivnet_token: "${PIVNET_TOKEN}"
     EOF

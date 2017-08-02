@@ -25,7 +25,7 @@ echo $MYSQL_MONITOR_EMAIL > /dev/null
 cat > params.yml <<EOF
 S3_OUTPUT_BUCKET: $(output s3_bucket)
 ERT_DOMAIN: $ert_domain
-OPSMAN_URI: opsman.$ert_domain
+OPSMAN_DOMAIN_OR_IP_ADDRESS: opsman.$ert_domain
 ROUTE_53_ZONE_ID: $(output zone_id)
 TF_VAR_aws_key_name: $(output opsman_key_pair_name)
 terraform_prefix: $prefix

@@ -21,7 +21,7 @@ function main() {
   local cwd
   cwd="${1}"
 
-   om-linux --target "https://${OPSMAN_URI}" \
+   om-linux --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
      --skip-ssl-validation \
      --username "${OPSMAN_USERNAME}" \
      --password "${OPSMAN_PASSWORD}" \

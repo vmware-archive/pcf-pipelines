@@ -13,7 +13,7 @@ params:
   PIVNET_TOKEN:
   OPSMAN_ADMIN_USERNAME:
   OPSMAN_ADMIN_PASSWORD:
-  OPSMAN_URI:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_TIMEOUT_SECONDS:
   OPSMAN_MAJOR_MINOR_VERSION:
   CHECK_NEW_OPSMAN_EVERY:
@@ -38,7 +38,7 @@ run:
     opsman_admin_username: "$OPSMAN_ADMIN_USERNAME"
     opsman_passphrase: "$OPSMAN_ADMIN_PASSWORD"
     opsman_timeout_seconds: "$OPSMAN_TIMEOUT_SECONDS"
-    opsman_uri: "$OPSMAN_URI"
+    opsman_domain_or_ip_address: "$OPSMAN_DOMAIN_OR_IP_ADDRESS"
 
     opsman_gcp_project: "$OPSMAN_PROJECT"
     opsman_gcp_zone: "$OPSMAN_ZONE"

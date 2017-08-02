@@ -9,7 +9,7 @@ fi
 
 enabled_errands=$(
   om-linux \
-    --target "https://${OPSMAN_URI}" \
+    --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
     --skip-ssl-validation \
     --username "$OPSMAN_USERNAME" \
     --password "$OPSMAN_PASSWORD" \
@@ -48,7 +48,7 @@ fi
 while read errand; do
   echo -n Disabling $errand...
   om-linux \
-    --target "https://${OPSMAN_URI}" \
+    --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
     --skip-ssl-validation \
     --username "$OPSMAN_USERNAME" \
     --password "$OPSMAN_PASSWORD" \
