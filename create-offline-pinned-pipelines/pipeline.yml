@@ -117,6 +117,7 @@ resources:
     user: concourse
     repository: fly
     access_token: {{github_token}}
+    pre_release: true
 
 jobs:
 - name: create-offline-pinned-pipelines
