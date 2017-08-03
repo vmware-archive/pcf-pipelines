@@ -96,6 +96,10 @@ jobs:
   serial: true
   max_in_flight: 1
   serial_groups: [full]
+  ensure:
+    put: terraform-state
+    params:
+      file: terraform-state-output/*.tfstate
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -117,6 +121,7 @@ jobs:
         - name: pcf-pipelines
       outputs:
         - name: opsman-metadata
+        - name: terraform-state-output
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/init/wipe-env.sh
       params:
