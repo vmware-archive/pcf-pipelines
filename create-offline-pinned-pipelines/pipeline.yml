@@ -134,6 +134,7 @@ jobs:
       trigger: true
       params: { globs: [] }
     - get: fly
+      params: { globs: ["*linux*"] }
     - do:
       - get: pcf-pipelines-tarball
         trigger: true
@@ -177,6 +178,7 @@ jobs:
 
           root=$PWD
 
+          mv fly/{fly_linux_amd64,fly}
           chmod +x fly/fly
           export PATH="${root}/fly:${PATH}"
 
