@@ -24,6 +24,57 @@ jq \
   $json_file > config.json
 mv config.json $json_file
 
+cat > elb_filter <<-'EOF'
+  .jobs.ha_proxy = {
+    "instance_type": {
+      "id": "automatic"
+    },
+    "instances": $haproxy_instance_count | tonumber,
+    "elb_names": [
+      $haproxy_elb_name
+    ]
+  } |
+  .jobs.router = {
+    "instance_type": {
+      "id": "automatic"
+    },
+    "instances": $router_instance_count | tonumber,
+    "elb_names": [
+      $router_elb_name
+    ]
+  }
+EOF
+
+router_instance_count="$(jq '.jobs.router.instances' $json_file)"
+
+if [[ "${pcf_ert_networking_pointofentry}" == "haproxy" ]]; then
+  jq \
+    --arg haproxy_instance_count 1 \
+    --arg haproxy_elb_name "${terraform_prefix}-web-lb" \
+    --arg router_instance_count ${router_instance_count} \
+    --arg router_elb_name "" \
+    --from-file elb_filter \
+    $json_file > config.json
+  mv config.json $json_file
+  jq \
+    'del(.jobs.router.elb_names)' \
+    $json_file > config.json
+  mv config.json $json_file
+else
+  jq \
+    --arg haproxy_instance_count 0 \
+    --arg haproxy_elb_name "" \
+    --arg router_instance_count ${router_instance_count} \
+    --arg router_elb_name "${terraform_prefix}-web-lb" \
+    --from-file elb_filter \
+    $json_file > config.json
+  mv config.json $json_file
+  jq \
+    'del(.jobs.ha_proxy.elb_names)' \
+    $json_file > config.json
+  mv config.json $json_file
+fi
+
 sed -i \
   -e "s%{{pcf_ert_networking_pointofentry}}%${pcf_ert_networking_pointofentry}%g" \
   $json_file
