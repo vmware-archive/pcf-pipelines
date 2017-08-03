@@ -1,5 +1,3 @@
-#!/bin/bash
-
 function generate_cert () (
   set -eu
   local domains="$1"
