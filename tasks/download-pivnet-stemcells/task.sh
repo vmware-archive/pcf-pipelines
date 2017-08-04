@@ -38,6 +38,12 @@ function main() {
 
   # extract the stemcell version from the filename, e.g. 3312.21, and download the file from pivnet
   for stemcell in "${stemcells[@]}"; do
+    # skip any stemcells that already exist in the download dir
+    if [[ -n $(ls ${download_dir} | grep ${stemcell}) ]]; then
+      echo "${stemcell} already exists in download dir. skipping..."
+      continue
+    fi
+
     local stemcell_version
     stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
     download_stemcell_version $stemcell_version
