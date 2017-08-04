@@ -105,6 +105,12 @@ resources:
     uri: https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip
     filename: terraform.zip
 
+- name: jq
+  type: curl
+  source:
+    uri: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    filename: jq
+
 jobs:
 - name: build-pcf-pipelines-image
   serial_groups: [pcf-pipelines-image]
@@ -134,6 +140,7 @@ jobs:
     - get: steamroll
       params: {globs: ["*linux*"]}
     - get: terraform
+    - get: jq
 
   - task: prepare-workspace
     config:
@@ -153,6 +160,7 @@ jobs:
       - name: stemcell-downloader
       - name: steamroll
       - name: terraform
+      - name: jq
       outputs:
       - name: workspace
       run:
@@ -165,6 +173,7 @@ jobs:
             yaml-patch/yaml_patch_linux \
             cliaas/cliaas-linux \
             pivnet-cli/pivnet-linux-* \
+            jq/jq \
             workspace
 
           tar -C workspace -xf cf-cli-tarball/*.tgz cf
