@@ -25,5 +25,7 @@ EOF
     tail -n +$followingLineNumber $targetFile >> $tmpFile
 
     cat $tmpFile > $targetFile
+
+    rm $tmpFile
   done
 done
