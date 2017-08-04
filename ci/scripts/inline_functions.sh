@@ -8,7 +8,7 @@ for functionFile in $(ls functions/*); do
 
   echo Inlining $functionFile
 
-  for targetFile in $(grep -Rl "source.*functions/${filename}" --exclude ".git"); do
+  for targetFile in $(grep -Rl --exclude-dir .git "source.*functions/${filename}"); do
     echo "  - $targetFile"
     lineNumber=$(grep -n "source.*functions/${filename}" $targetFile | cut -f1 -d':')
     let "precedingLineNumber=lineNumber-1"
