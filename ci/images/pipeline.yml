@@ -115,7 +115,7 @@ jobs:
     - get: cflinuxfs2
       trigger: true
       params: {save: true}
-    - get: yaml-patch 
+    - get: yaml-patch
       params: {globs: ["*linux*"]}
     - get: om
       params: {globs: ["*linux*"]}
@@ -144,7 +144,7 @@ jobs:
       inputs:
       - name: pcf-pipelines
       - name: om
-      - name: yaml-patch 
+      - name: yaml-patch
       - name: cf-cli-tarball
       - name: cliaas
       - name: pivnet-cli
