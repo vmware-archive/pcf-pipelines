@@ -521,4 +521,3 @@ om-linux \
   --product-properties "$cf_properties" \
   --product-network "$cf_network" \
   --product-resources "$cf_resources"
-}
