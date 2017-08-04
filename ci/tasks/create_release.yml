@@ -32,7 +32,6 @@ run:
 
     root=$PWD
 
-    echo "Inlining functions"
     pushd pcf-pipelines 1>/dev/null
       ./ci/scripts/inline_functions.sh
     popd 1>/dev/null
