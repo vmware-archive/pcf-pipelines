@@ -76,14 +76,10 @@ jobs:
   on_failure:
     <<: *notify_slack
   plan:
-  - aggregate:
-    - get: pcf-pipelines
-      trigger: true
-  - aggregate:
-    - task: test-pipeline-yaml
-      file: pcf-pipelines/ci/tasks/test.yml
-    - task: test-bash-functions 
-      file: pcf-pipelines/ci/tasks/test_bash.yml
+  - get: pcf-pipelines
+    trigger: true
+  - task: test
+    file: pcf-pipelines/ci/tasks/test.yml
 
 - name: publish-rc
   serial_groups: [version]
