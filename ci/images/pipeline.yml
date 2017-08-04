@@ -102,13 +102,13 @@ resources:
 - name: terraform
   type: curl
   source:
-    uri: https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip
+    url: https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip
     filename: terraform.zip
 
 - name: jq
   type: curl
   source:
-    uri: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
     filename: jq
 
 jobs:
