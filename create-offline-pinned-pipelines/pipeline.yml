@@ -212,7 +212,7 @@ jobs:
           - op: add
             path: /jobs/get=pivnet-product/version
             value:
-              path: "elastic-runtime-pivnet/elastic-runtime-${ert_version}.tar"
+              path: "elastic-runtime/elastic-runtime-${ert_version}.tar"
           EOF
 
           mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
