@@ -1,3 +1,10 @@
+resource_types:
+- name: curl
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
 resources:
 - name: pcf-pipelines
   type: git
@@ -92,6 +99,12 @@ resources:
     repository: concourse-pipeline-steamroller
     access_token: {{images_pipeline_github_token}}
 
+- name: terraform
+  type: curl
+  source:
+    uri: https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip
+    filename: terraform.zip
+
 jobs:
 - name: build-pcf-pipelines-image
   serial_groups: [pcf-pipelines-image]
@@ -120,6 +133,7 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: steamroll
       params: {globs: ["*linux*"]}
+    - get: terraform
 
   - task: prepare-workspace
     config:
@@ -138,6 +152,7 @@ jobs:
       - name: om-beta
       - name: stemcell-downloader
       - name: steamroll
+      - name: terraform
       outputs:
       - name: workspace
       run:
@@ -174,6 +189,9 @@ jobs:
 
           cp steamroll/steamroll_linux workspace/steamroll
           chmod +x workspace/steamroll
+
+          unzip -d workspace terraform/terraform.zip
+          chmod +x workspace/terraform
 
   - put: pcf-pipelines-image-rc
     params:

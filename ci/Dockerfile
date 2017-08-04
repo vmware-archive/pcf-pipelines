@@ -18,9 +18,6 @@ cp /usr/local/bin/yaml_patch_linux /usr/local/bin/yaml-patch && \
 # jq
 wget -O /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x /usr/local/bin/jq && \
 
-# Terraform
-wget -q -O- https://www.terraform.io/downloads.html | grep linux_amd64 | sed -e's/^.*"\(.*\)".*$/\1/g' | xargs wget -O /tmp/terraform.zip && unzip -d /usr/local/bin /tmp/terraform.zip && chmod +x /usr/local/bin/terraform && \
-
 # gcloud SDK
 export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
 echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list && \
