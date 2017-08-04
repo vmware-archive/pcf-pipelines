@@ -11,6 +11,7 @@ COPY \
        stemcell-downloader \
        steamroll \
        jq \
+       terraform \
        /usr/local/bin/
 
 RUN \
