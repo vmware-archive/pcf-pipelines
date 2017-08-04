@@ -6,8 +6,10 @@ for functionFile in $(ls functions/*); do
   filename=$(basename $functionFile)
   contents=$(cat $functionFile)
 
-  for targetFile in `ag -l "source.*functions/${filename}"`; do
-    echo Inlining $functionFile into $targetFile
+  echo Inlining $functionFile
+
+  for targetFile in $(grep -Rl "source.*functions/${filename}" --exclude ".git"); do
+    echo "  - $targetFile"
     lineNumber=$(grep -n "source.*functions/${filename}" $targetFile | cut -f1 -d':')
     let "precedingLineNumber=lineNumber-1"
     let "followingLineNumber=lineNumber+1"
