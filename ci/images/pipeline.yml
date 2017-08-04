@@ -160,38 +160,29 @@ jobs:
         args:
         - -c
         - |
-          cp pcf-pipelines/ci/Dockerfile workspace
-
-          cp om/om-linux workspace
-          chmod +x workspace/om-linux
-
-          cp yaml-patch/yaml_patch_linux workspace
-          chmod +x workspace/yaml_patch_linux
+          cp \
+            om/om-linux \
+            yaml-patch/yaml_patch_linux \
+            cliaas/cliaas-linux \
+            pivnet-cli/pivnet-linux-* \
+            workspace
 
           tar -C workspace -xf cf-cli-tarball/*.tgz cf
-          chmod +x workspace/cf
-
-          cp cliaas/cliaas-linux workspace
-          chmod +x workspace/cliaas-linux
-
-          cp pivnet-cli/pivnet-linux-* workspace/pivnet-cli
-          chmod +x workspace/pivnet-cli
 
           gunzip govc/govc_linux_amd64.gz
           cp govc/govc_linux_amd64 workspace/govc
-          chmod +x workspace/govc
 
           cp om-beta/om-linux workspace/om-linux-beta
-          chmod +x workspace/om-linux-beta
 
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
-          chmod +x workspace/stemcell-downloader
 
           cp steamroll/steamroll_linux workspace/steamroll
-          chmod +x workspace/steamroll
 
           unzip -d workspace terraform/terraform.zip
-          chmod +x workspace/terraform
+
+          chmod +x workspace/*
+
+          cp pcf-pipelines/ci/Dockerfile workspace
 
   - put: pcf-pipelines-image-rc
     params:
