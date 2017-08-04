@@ -35,8 +35,6 @@ run:
     pushd pcf-pipelines 1>/dev/null
       ./ci/scripts/inline_functions.sh
     popd 1>/dev/null
-    echo "done"
-    echo
 
     echo "Creating upgrade-ert pipeline from upgrade-tile pipeline"
     pushd pcf-pipelines
