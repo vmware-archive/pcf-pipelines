@@ -24,6 +24,6 @@ EOF
 
     tail -n +$followingLineNumber $targetFile >> $tmpFile
 
-    mv $tmpFile $targetFile
+    cat $tmpFile > $targetFile
   done
 done
