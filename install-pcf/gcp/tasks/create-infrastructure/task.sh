@@ -31,6 +31,7 @@ terraform plan \
   -var "gcp_zone_1=${GCP_ZONE_1}" \
   -var "gcp_zone_2=${GCP_ZONE_2}" \
   -var "gcp_zone_3=${GCP_ZONE_3}" \
+  -var "gcp_storage_bucket_location=${GCP_STORAGE_BUCKET_LOCATION}" \
   -var "prefix=${GCP_RESOURCE_PREFIX}" \
   -var "pcf_opsman_image_name=${pcf_opsman_image_name}" \
   -var "pcf_ert_domain=${PCF_ERT_DOMAIN}" \

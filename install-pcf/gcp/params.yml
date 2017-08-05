@@ -16,6 +16,9 @@ gcp_zone_1: us-central1-a
 gcp_zone_2: us-central1-b
 gcp_zone_3: us-central1-c
 
+# Storage Location
+gcp_storage_bucket_location: US
+
 # GCP Interopable storage access key: https://console.cloud.google.com/storage/settings
 gcp_storage_access_key: CHANGEME
 gcp_storage_secret_key: CHANGEME
