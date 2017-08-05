@@ -80,9 +80,13 @@ sed -i \
   $json_file
 
 if [[ "${azure_access_key}" != "" ]]; then
+  # Use prefix to strip down a Storage Account Prefix String
+  env_short_name=$(echo ${terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
+  env_short_name=$(echo ${env_short_name:0:10})
+
   cat ${json_file} | jq \
     --arg azure_access_key "${azure_access_key}" \
-    --arg azure_account_name "${azure_account_name}" \
+    --arg azure_account_name "${env_short_name}${azure_account_name}" \
     --arg azure_buildpacks_container "${azure_buildpacks_container}" \
     --arg azure_droplets_container "${azure_droplets_container}" \
     --arg azure_packages_container "${azure_packages_container}" \
