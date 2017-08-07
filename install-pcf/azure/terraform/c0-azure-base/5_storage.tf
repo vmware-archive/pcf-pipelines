@@ -59,7 +59,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_1" {
   name                = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}1"
   resource_group_name = "${var.env_name}"
   location            = "${var.location}"
-  account_type        = "Standard_LRS"
+  account_type        = "Premium_LRS"
 }
 
 resource "azurerm_storage_container" "bosh_storage_container_1" {
@@ -82,7 +82,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_2" {
   name                = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}2"
   resource_group_name = "${var.env_name}"
   location            = "${var.location}"
-  account_type        = "Standard_LRS"
+  account_type        = "Premium_LRS"
 }
 
 resource "azurerm_storage_container" "bosh_storage_container_2" {
@@ -105,7 +105,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_3" {
   name                = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}3"
   resource_group_name = "${var.env_name}"
   location            = "${var.location}"
-  account_type        = "Standard_LRS"
+  account_type        = "Premium_LRS"
 }
 
 resource "azurerm_storage_container" "bosh_storage_container_3" {
@@ -128,7 +128,7 @@ resource "azurerm_storage_account" "ert_storage_account" {
   name                = "${var.env_short_name}${var.azure_account_name}"
   resource_group_name = "${var.env_name}"
   location            = "${var.location}"
-  account_type        = "Premium_LRS"
+  account_type        = "Standard_LRS"
   tags {
     job = "ert_storage_account"
   }
