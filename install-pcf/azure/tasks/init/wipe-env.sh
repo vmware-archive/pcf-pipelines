@@ -1,27 +1,57 @@
 #!/bin/bash
-set -e
+set -eu
 
-ROOT=${PWD}
+ROOT="${PWD}"
 
-if [ $arg_wipe == "wipe" ]; then
-  echo "Wiping Environment...."
-else
-  echo "Need Args [0]=wipe, anything else and I swear I'll exit and do nothing!!! "
-  echo "Example: ./wipe-env.sh wipe ..."
-  exit 0
-fi
+function main() {
+  if [[ "${arg_wipe}" == "wipe" ]]; then
+    echo "Wiping Environment...."
+  else
+    echo "Need Args [0]=wipe, anything else and I swear I'll exit and do nothing!!! "
+    echo "Example: ./wipe-env.sh wipe ..."
+    exit 0
+  fi
 
-az login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
-az account set --subscription ${azure_subscription_id}
+  echo "=============================================================================================="
+  echo "Executing Terraform Destroy ...."
+  echo "=============================================================================================="
 
-# Test if Resource Group exists,  if so then wipe it!!!
-get_res_group_cmd="az group list --output json | jq '.[] | select(.name == \"${azure_terraform_prefix}\") | .' | jq .name | tr -d '\"'"
-get_res_group=$(eval ${get_res_group_cmd})
-if [[ ${get_res_group} = ${azure_terraform_prefix} ]]; then
-    echo "Found Resource Group to Remove ....."
-    az group delete --name ${azure_terraform_prefix} --yes
-fi
+  terraform destroy -force \
+    -var "subscription_id=${azure_subscription_id}" \
+    -var "client_id=${azure_service_principal_id}" \
+    -var "client_secret=${azure_service_principal_password}" \
+    -var "tenant_id=${azure_tenant_id}" \
+    -var "location=dontcare" \
+    -var "env_name=dontcare" \
+    -var "env_short_name=dontcare" \
+    -var "pcf_ert_domain=dontcare" \
+    -var "pub_ip_pcf_lb=dontcare" \
+    -var "pub_ip_id_pcf_lb=dontcare" \
+    -var "pub_ip_tcp_lb=dontcare" \
+    -var "pub_ip_id_tcp_lb=dontcare" \
+    -var "priv_ip_mysql_lb=dontcare" \
+    -var "pub_ip_ssh_proxy_lb=dontcare" \
+    -var "pub_ip_id_ssh_proxy_lb=dontcare" \
+    -var "pub_ip_opsman_vm=dontcare" \
+    -var "pub_ip_id_opsman_vm=dontcare" \
+    -var "pub_ip_jumpbox_vm=dontcare" \
+    -var "pub_ip_id_jumpbox_vm=dontcare" \
+    -var "subnet_infra_id=dontcare" \
+    -var "ops_manager_image_uri=dontcare" \
+    -var "vm_admin_username=dontcare" \
+    -var "vm_admin_password=dontcare" \
+    -var "vm_admin_public_key=dontcare" \
+    -var "azure_multi_resgroup_network=dontcare" \
+    -var "azure_multi_resgroup_pcf=dontcare" \
+    -var "priv_ip_opsman_vm=dontcare" \
+    -var "azure_account_name=dontcare" \
+    -var "azure_buildpacks_container=dontcare" \
+    -var "azure_droplets_container=dontcare" \
+    -var "azure_packages_container=dontcare" \
+    -var "azure_resources_container=dontcare" \
+    -state "${ROOT}/terraform-state/terraform.tfstate" \
+    -state-out "${ROOT}/terraform-state-output/terraform.tfstate" \
+    "pcf-pipelines/install-pcf/azure/terraform/${azure_pcf_terraform_template}"
+}
 
-# Clear terraform.tfstate
-mkdir -p ${ROOT}/terraform-state-output
-echo "{}" > ${ROOT}/terraform-state-output/terraform.tfstate
+main
