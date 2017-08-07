@@ -24,19 +24,19 @@ output "pcf_security_group" {
 }
 # s3 buckets
 output "s3_pcf_bosh" {
-    value = "${aws_s3_bucket.pcf-bosh.bucket}"
+    value = "${aws_s3_bucket.bosh.bucket}"
 }
 output "s3_buildpacks" {
-    value = "${aws_s3_bucket.pcf-buildpacks.bucket}"
+    value = "${aws_s3_bucket.buildpacks.bucket}"
 }
 output "s3_pcf_droplets" {
-    value = "${aws_s3_bucket.pcf-droplets.bucket}"
+    value = "${aws_s3_bucket.droplets.bucket}"
 }
 output "s3_pcf_packages" {
-    value = "${aws_s3_bucket.pcf-packages.bucket}"
+    value = "${aws_s3_bucket.packages.bucket}"
 }
 output "s3_pcf_resources" {
-    value = "${aws_s3_bucket.pcf-resources.bucket}"
+    value = "${aws_s3_bucket.resources.bucket}"
 }
 
 # DNS

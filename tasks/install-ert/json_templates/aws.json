@@ -176,16 +176,16 @@
         "value": "external"
       },
       ".properties.system_blobstore.external.buildpacks_bucket": {
-        "value": "{{terraform_prefix}}-pcf-buildpacks"
+        "value": "{{terraform_prefix}}-buildpacks"
       },
       ".properties.system_blobstore.external.droplets_bucket": {
-        "value": "{{terraform_prefix}}-pcf-droplets"
+        "value": "{{terraform_prefix}}-droplets"
       },
       ".properties.system_blobstore.external.packages_bucket": {
-        "value": "{{terraform_prefix}}-pcf-packages"
+        "value": "{{terraform_prefix}}-packages"
       },
       ".properties.system_blobstore.external.resources_bucket": {
-        "value": "{{terraform_prefix}}-pcf-resources"
+        "value": "{{terraform_prefix}}-resources"
       },
       ".properties.system_blobstore.external.access_key": {
         "value": "{{aws_access_key}}"
