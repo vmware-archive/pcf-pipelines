@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eu
 
 json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}/${terraform_template}"
 json_file_template="${json_file_path}/ert-template.json"
