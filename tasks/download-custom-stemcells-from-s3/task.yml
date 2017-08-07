@@ -32,4 +32,4 @@ params:
   S3_BUCKET_NAME:
 
 run:
-  path: pcf-pipelines/tasks/download-custom-stemcell-from-s3/task.sh
+  path: pcf-pipelines/tasks/download-custom-stemcells-from-s3/task.sh
