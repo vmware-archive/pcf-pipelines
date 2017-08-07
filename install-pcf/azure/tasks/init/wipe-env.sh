@@ -3,15 +3,21 @@ set -eu
 
 ROOT="${PWD}"
 
-function main() {
-  if [[ "${arg_wipe}" == "wipe" ]]; then
-    echo "Wiping Environment...."
-  else
-    echo "Need Args [0]=wipe, anything else and I swear I'll exit and do nothing!!! "
-    echo "Example: ./wipe-env.sh wipe ..."
-    exit 0
-  fi
+function delete-opsman() {
+  source "${ROOT}/pcf-pipelines/functions/check_opsman_available.sh"
 
+  opsman_available=$(check_opsman_available "${OPSMAN_URI}")
+  if [[ ${opsman_available} == "available" ]]; then
+    om-linux \
+      --target "https://${OPSMAN_URI}" \
+      --skip-ssl-validation \
+      --username ${OPSMAN_USERNAME} \
+      --password ${OPSMAN_PASSWORD} \
+      delete-installation
+  fi
+}
+
+function delete-infrastructure() {
   echo "=============================================================================================="
   echo "Executing Terraform Destroy ...."
   echo "=============================================================================================="
@@ -52,6 +58,19 @@ function main() {
     -state "${ROOT}/terraform-state/terraform.tfstate" \
     -state-out "${ROOT}/terraform-state-output/terraform.tfstate" \
     "pcf-pipelines/install-pcf/azure/terraform/${azure_pcf_terraform_template}"
+}
+
+function main() {
+  if [[ "${arg_wipe}" == "wipe" ]]; then
+    echo "Wiping Environment...."
+  else
+    echo "Need Args [0]=wipe, anything else and I swear I'll exit and do nothing!!! "
+    echo "Example: ./wipe-env.sh wipe ..."
+    exit 0
+  fi
+
+  delete-opsman
+  delete-infrastructure
 }
 
 main

@@ -104,6 +104,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: false
+    - get: terraform-state
     - get: pivnet-elastic-runtime
       trigger: false
       params:
@@ -119,6 +120,7 @@ jobs:
           repository: czero/cflinuxfs2
       inputs:
         - name: pcf-pipelines
+        - name: terraform-state
       outputs:
         - name: opsman-metadata
         - name: terraform-state-output
@@ -126,6 +128,9 @@ jobs:
         path: pcf-pipelines/install-pcf/azure/tasks/init/wipe-env.sh
       params:
         arg_wipe: {{arg_wipe}}
+        OPSMAN_URI: {{opsman_uri}}
+        OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
+        OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
         azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
         azure_subscription_id: {{azure_subscription_id}}
         azure_tenant_id: {{azure_tenant_id}}
@@ -149,6 +154,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: false
+    - get: terraform-state
     - get: pivnet-elastic-runtime
       trigger: false
       params:
@@ -164,8 +170,10 @@ jobs:
           repository: czero/cflinuxfs2
       inputs:
         - name: pcf-pipelines
+        - name: terraform-state
       outputs:
         - name: opsman-metadata
+        - name: terraform-state-output
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/init/wipe-env.sh
       params:
