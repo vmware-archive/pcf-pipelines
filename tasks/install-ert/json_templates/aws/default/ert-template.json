@@ -52,22 +52,6 @@
       ".properties.system_database.external.host": {
         "value": "{{db_host}}"
       },
-      ".properties.system_database.external.locket_username": {
-        "value": "{{db_locket_username}}"
-      },
-      ".properties.system_database.external.locket_password": {
-        "value": {
-	  "secret": "{{db_locket_password}}"
-        }
-      },
-      ".properties.system_database.external.silk_username": {
-        "value": "{{db_silk_username}}"
-      },
-      ".properties.system_database.external.silk_password": {
-        "value": {
-	  "secret": "{{db_silk_password}}"
-        }
-      },
       ".properties.system_database.external.app_usage_service_username": {
         "value": "{{db_app_usage_service_username}}"
       },
@@ -139,7 +123,40 @@
         "value": {
           "secret": "{{db_nfsvolumedb_password}}"
         }
-      },          
+      },
+      ".properties.system_database.external.locket_username": {
+        "value": "{{db_locket_username}}"
+      },
+      ".properties.system_database.external.locket_password": {
+        "value": {
+	  "secret": "{{db_locket_password}}"
+        }
+      },
+      ".properties.system_database.external.silk_username": {
+        "value": "{{db_silk_username}}"
+      },
+      ".properties.system_database.external.silk_password": {
+        "value": {
+	  "secret": "{{db_silk_password}}"
+        }
+      },
+      ".properties.uaa_database": {
+        "value": "external"
+      },
+      ".properties.uaa_database.external.host": {
+        "value": "{{db_host}}"
+      },
+      ".properties.uaa_database.external.port": {
+        "value": "3306"
+      },
+      ".properties.uaa_database.external.uaa_username": {
+        "value": "{{db_uaa_username}}"
+      },
+      ".properties.uaa_database.external.uaa_password": {
+        "value": {
+          "secret": "{{db_uaa_password}}"
+        }
+      },
       ".cloud_controller.system_domain": {
         "value": "sys.{{pcf_ert_domain}}"
       },
@@ -200,23 +217,6 @@
         "value": {
           "cert_pem": "",
           "private_key_pem": ""
-        }
-      },
-      ".properties.uaa_database": {
-        "value": "external"
-      },
-      ".properties.uaa_database.external.host": {
-        "value": "{{db_host}}"
-      },
-      ".properties.uaa_database.external.port": {
-        "value": "3306"
-      },
-      ".properties.uaa_database.external.uaa_username": {
-        "value": "{{db_uaa_username}}"
-      },
-      ".properties.uaa_database.external.uaa_password": {
-        "value": {
-          "secret": "{{db_uaa_password}}"
         }
       }
     }

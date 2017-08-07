@@ -123,7 +123,7 @@
         "value": {
           "secret": "{{db_nfsvolumedb_password}}"
         }
-      },         
+      },
       ".properties.system_database.external.locket_username": {
         "value": "{{db_locket_username}}"
       },
