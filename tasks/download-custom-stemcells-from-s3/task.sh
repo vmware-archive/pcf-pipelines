@@ -17,9 +17,9 @@ set -eu
 # limitations under the License.
 
 function main() {
-  if [ -z "${AWS_ACCESS_KEY_ID}" ]; then abort "The required env var AWS_ACCESS_KEY_ID was not set"; fi
-  if [ -z "${AWS_SECRET_ACCESS_KEY}" ]; then abort "The required env var AWS_SECRET_ACCESS_KEY was not set"; fi
-  if [ -z "${S3_BUCKET_NAME}" ]; then abort "The required env var S3_BUCKET_NAME was not set"; fi
+  if [[ -z "${AWS_ACCESS_KEY_ID}" ]]; then abort "The required env var AWS_ACCESS_KEY_ID was not set"; fi
+  if [[ -z "${AWS_SECRET_ACCESS_KEY}" ]]; then abort "The required env var AWS_SECRET_ACCESS_KEY was not set"; fi
+  if [[ -z "${S3_BUCKET_NAME}" ]]; then abort "The required env var S3_BUCKET_NAME was not set"; fi
 
   local cwd="${PWD}"
   local download_dir="${cwd}/stemcells"
@@ -30,11 +30,6 @@ function main() {
   if [ "${#stemcells[@]}" -eq 0 ]; then
     echo "No installed products found that require a stemcell"
     exit 0
-  fi
-
-  # filter on stemcell name regex if user supplies a regex
-  if [[ -n ${STEMCELL_NAME_REGEX} ]]; then
-    stemcells=($( echo ${stemcells} | grep ${STEMCELL_NAME_REGEX} ))
   fi
 
   mkdir -p "${download_dir}"
