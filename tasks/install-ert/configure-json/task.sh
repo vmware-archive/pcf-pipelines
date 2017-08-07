@@ -2,7 +2,7 @@
 
 set -eu
 
-json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}/${terraform_template}"
+json_file_path="pcf-pipelines/tasks/install-ert/json_templates/${pcf_iaas}.json"
 json_file_template="${json_file_path}/ert-template.json"
 
 if [ ! -f "$json_file_template" ]; then

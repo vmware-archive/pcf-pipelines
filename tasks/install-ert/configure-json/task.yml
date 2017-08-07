@@ -27,7 +27,6 @@ params:
   pcf_az_3:
   pcf_ert_ssl_cert:
   pcf_ert_ssl_key:
-  terraform_template:
   terraform_prefix:
   # IaaS Specific for GCP only
   gcp_storage_access_key:
