@@ -293,6 +293,12 @@ jobs:
         azure_droplets_container: {{azure_droplets_container}}
         azure_packages_container: {{azure_packages_container}}
         azure_resources_container: {{azure_resources_container}}
+        azure_terraform_prefix: {{azure_terraform_prefix}}
+        azure_terraform_vnet_cidr: {{azure_terraform_vnet_cidr}}
+        azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
+        azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
+        azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
+        azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
 
 ##############################
 ## Job - Config OpsMan Auth ##

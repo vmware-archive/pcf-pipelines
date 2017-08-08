@@ -13,7 +13,7 @@ resource "azurerm_dns_a_record" "ops_manager_dns" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_opsman_vm}"]
+  records             = ["${azurerm_public_ip.opsman-public-ip.ip_address}"]
 }
 
 resource "azurerm_dns_a_record" "apps" {
@@ -21,7 +21,7 @@ resource "azurerm_dns_a_record" "apps" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_pcf_lb}"]
+  records             = ["${azurerm_public_ip.web-lb-public-ip.ip_address}"]
 }
 
 resource "azurerm_dns_a_record" "sys" {
@@ -29,7 +29,7 @@ resource "azurerm_dns_a_record" "sys" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_pcf_lb}"]
+  records             = ["${azurerm_public_ip.web-lb-public-ip.ip_address}"]
 }
 
 resource "azurerm_dns_a_record" "mysql" {
@@ -37,7 +37,7 @@ resource "azurerm_dns_a_record" "mysql" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.priv_ip_mysql_lb}"]
+  records             = ["${azurerm_lb.mysql.private_ip_address}"]
 }
 
 resource "azurerm_dns_a_record" "ssh-proxy" {
@@ -45,7 +45,7 @@ resource "azurerm_dns_a_record" "ssh-proxy" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_ssh_proxy_lb}"]
+  records             = ["${azurerm_public_ip.ssh-proxy-lb-public-ip.ip_address}"]
 }
 
 
@@ -54,7 +54,7 @@ resource "azurerm_dns_a_record" "tcp" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_pcf_lb}"]
+  records             = ["${azurerm_public_ip.web-lb-public-ip.ip_address}"]
 }
 
 resource "azurerm_dns_a_record" "jumpbox" {
@@ -62,5 +62,5 @@ resource "azurerm_dns_a_record" "jumpbox" {
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.env_name}"
   ttl                 = "60"
-  records             = ["${var.pub_ip_jumpbox_vm}"]
+  records             = ["${azurerm_public_ip.jb-lb-public-ip.ip_address}"]
 }

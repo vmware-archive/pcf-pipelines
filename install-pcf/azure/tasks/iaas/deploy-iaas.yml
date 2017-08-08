@@ -35,3 +35,8 @@ params:
   azure_multi_resgroup_pcf:
   azure_multi_resgroup_infra_subnet_name:
   azure_multi_resgroup_infra_vnet_name:
+  azure_terraform_vnet_cidr:
+  azure_terraform_subnet_infra_cidr:
+  azure_terraform_subnet_ert_cidr:
+  azure_terraform_subnet_services1_cidr:
+  azure_terraform_subnet_dynamic_services_cidr:
