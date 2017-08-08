@@ -142,7 +142,6 @@ cf_properties=$(
     --arg saml_cert_pem "$saml_cert_pem" \
     --arg saml_key_pem "$saml_key_pem" \
     --arg iaas $pcf_iaas \
-    --arg syslog_host "$SYSLOG_HOST" \
     --arg pcf_ert_domain "$pcf_ert_domain" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
     --arg db_host "$db_host" \
@@ -352,9 +351,6 @@ cf_properties=$(
       },
       ".push-apps-manager.company_name": {
         "value": "pcf-\($iaas)"
-      },
-      ".properties.syslog_host": {
-        "value": $syslog_host
       },
       ".mysql_monitor.recipient_email": {
         "value" : $mysql_monitor_recipient_email
