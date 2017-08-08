@@ -352,12 +352,6 @@ cf_properties=$(
       },
       ".mysql_monitor.recipient_email": {
         "value" : $mysql_monitor_recipient_email
-      },
-      ".uaa.service_provider_key_credentials": {
-        "value": {
-          "cert_pem": "",
-          "private_key_pem": ""
-        }
       }
     }
 
