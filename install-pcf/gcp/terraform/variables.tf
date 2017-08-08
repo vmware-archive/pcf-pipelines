@@ -20,8 +20,6 @@ variable "pcf_ert_ssl_cert" {}
 
 variable "pcf_ert_ssl_key" {}
 
-variable "ert_sql_instance_name" {}
-
 variable "db_diego_username" {}
 variable "db_diego_password" {}
 variable "db_notifications_username" {}
