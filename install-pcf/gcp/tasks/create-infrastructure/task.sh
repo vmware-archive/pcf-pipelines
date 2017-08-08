@@ -61,7 +61,7 @@ terraform plan \
   -var "db_silk_password=${DB_SILK_PASSWORD}" \
   -out terraform.tfplan \
   -state terraform-state/terraform.tfstate \
-  pcf-pipelines/install-pcf/gcp/terraform/$gcp_pcf_terraform_template
+  pcf-pipelines/install-pcf/gcp/terraform
 
 terraform apply \
   -state-out $root/create-infrastructure-output/terraform.tfstate \
