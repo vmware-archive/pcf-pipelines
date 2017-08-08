@@ -71,24 +71,3 @@ echo "==========================================================================
 
 json_properties=$(cat ${json_file} | jq -c .properties)
 fn_om_linux_curl "PUT" "/api/v0/staged/products/${guid_cf}/properties" "$json_properties"
-
-# Set Resource Configs
-echo "=============================================================================================="
-echo "Setting Resource Job Properties for: ${guid_cf}"
-echo "=============================================================================================="
-json_jobs_configs=$(cat ${json_file} | jq .jobs )
-json_job_guids=$(fn_om_linux_curl "GET" "/api/v0/staged/products/${guid_cf}/jobs" | jq .)
-opsman_avail_jobs=$(echo ${json_job_guids} | jq --raw-output '.jobs[].name')
-
-#for job in $(echo ${json_jobs_configs} | jq . | jq 'keys' | jq .[] | tr -d '"'); do
-for job in ${opsman_avail_jobs}; do
-
- json_job_guid_cmd="echo \${json_job_guids} | jq --raw-output '.jobs[] | select(.name == \"${job}\") | .guid'"
- json_job_guid=$(eval ${json_job_guid_cmd})
- json_job_config_cmd="echo \${json_jobs_configs} | jq -c '.[\"${job}\"]' "
- json_job_config=$(eval ${json_job_config_cmd})
- echo "---------------------------------------------------------------------------------------------"
- echo "Setting ${json_job_guid} with --data=${json_job_config}..."
- fn_om_linux_curl "PUT" "/api/v0/staged/products/${guid_cf}/jobs/${json_job_guid}/resource_config" "${json_job_config}"
-
-done

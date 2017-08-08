@@ -68,6 +68,45 @@ cf_network=$(
     '
 )
 
+cf_resources=$(
+  jq -n \
+    --arg terraform_prefix $terraform_prefix \
+    --arg iaas $pcf_iaas \
+    '
+    {
+      "mysql_proxy": {"instances": 0},
+      "mysql": {"instances": 0},
+      "mysql_monitor": {"instances": 0}
+    }
+
+    +
+
+    # ELBs
+
+    if $iaas == "aws" then
+      {
+        "router": {
+          "elb_names": ["\($terraform_prefix)-Pcf-Http-Elb"]
+        },
+        "diego_brain": {
+          "elb_names": ["\($terraform_prefix)-Pcf-Ssh-Elb"]
+        }
+      }
+    elif $iaas == "gcp" then
+      {
+        "router": {
+          "elb_names": ["http:\($terraform_prefix)-http-lb-backend","tcp:\($terraform_prefix)-wss-logs"]
+        },
+        "diego_brain": {
+          "elb_names": ["tcp:\($terraform_prefix)-ssh-proxy"]
+        }
+      }
+    else
+      .
+    end
+    '
+)
+
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --username $OPS_MGR_USR \
@@ -75,7 +114,8 @@ om-linux \
   --skip-ssl-validation \
   configure-product \
   --product-name cf \
-  --product-network "$cf_network"
+  --product-network "$cf_network" \
+  --product-resources "$cf_resources"
 
 jq -n \
   --arg terraform_prefix $terraform_prefix \
@@ -312,27 +352,8 @@ jq -n \
           }
         }
       }
-    },
-    "jobs": {
-      "mysql_proxy": {"instances": 0},
-      "mysql": {"instances": 0},
-      "mysql_monitor": {"instances": 0},
     }
   }
-
-  |
-
-  # ELBs
-
-  if $iaas == "aws" then
-    .jobs.router.elb_names = ["\($terraform_prefix)-Pcf-Http-Elb"]
-    | .jobs.diego_brain.elb_names = ["\($terraform_prefix)-Pcf-Ssh-Elb"]
-  elif $iaas == "gcp" then
-    .jobs.router.elb_names = ["http:\($terraform_prefix)-http-lb-backend","tcp:\($terraform_prefix)-wss-logs"]
-    | .jobs.diego_brain.elb_names = ["tcp:\($terraform_prefix)-ssh-proxy"]
-  else
-    .
-  end
 
   |
 
