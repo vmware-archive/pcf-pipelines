@@ -247,7 +247,7 @@ jobs:
       DB_SILK_PASSWORD: {{db_silk_password}}
 
   - task: configure-ert
-    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
+    file: pcf-pipelines/tasks/configure-ert/task.yml
     params:
       pcf_iaas: aws
       pcf_ert_domain: {{ERT_DOMAIN}}

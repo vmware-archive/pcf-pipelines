@@ -12,7 +12,7 @@ inputs:
   - name: terraform-state
 
 run:
-  path: pcf-pipelines/tasks/install-ert/configure-ert/task.sh
+  path: pcf-pipelines/tasks/configure-ert/task.sh
 
 params:
   pcf_iaas:

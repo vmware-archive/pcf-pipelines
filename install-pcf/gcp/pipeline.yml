@@ -239,7 +239,7 @@ jobs:
     - get: terraform-state
 
   - task: configure-ert
-    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
+    file: pcf-pipelines/tasks/configure-ert/task.yml
     params:
       pcf_iaas: gcp
       pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
