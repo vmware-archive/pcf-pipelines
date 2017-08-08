@@ -298,13 +298,9 @@ jq -n \
       }
     },
     "jobs": {
-      "nats": {"instances": 3},
       "mysql_proxy": {"instances": 0},
       "mysql": {"instances": 0},
       "mysql_monitor": {"instances": 0},
-      "uaa": {"instances": 3},
-      "cloud_controller": {"instances": 3},
-      "cloud_controller_worker": {"instances": 3},
     }
   }
 
