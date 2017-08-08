@@ -1,11 +1,11 @@
-resource "random_id" "sql_db" {
-  byte_length = 8
+resource "random_pet" "sql_db" {
+  length = 1
 }
 
 resource "google_sql_database_instance" "master" {
   region           = "${var.gcp_region}"
   database_version = "MYSQL_5_6"
-  name             = "${var.prefix}-${random_id.sql_db.id}"
+  name             = "${var.prefix}-${random_pet.sql_db.id}"
 
   settings {
     tier = "db-f1-micro"
