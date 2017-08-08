@@ -64,14 +64,6 @@ echo "==========================================================================
 echo "Found ERT Deployment with guid of ${guid_cf}"
 echo "=============================================================================================="
 
-# Set Networks & AZs
-echo "=============================================================================================="
-echo "Setting Availability Zones & Networks for: ${guid_cf}"
-echo "=============================================================================================="
-
-json_net_and_az=$(cat ${json_file} | jq -c .networks_and_azs)
-fn_om_linux_curl "PUT" "/api/v0/staged/products/${guid_cf}/networks_and_azs" "$json_net_and_az"
-
 # Set ERT Properties
 echo "=============================================================================================="
 echo "Setting Properties for: ${guid_cf}"

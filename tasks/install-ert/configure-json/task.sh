@@ -50,6 +50,33 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
   fi
 fi
 
+cf_network=$(
+  jq -n \
+    --arg iaas $pcf_iaas \
+    --arg singleton_availability_zone "$pcf_az_1" \
+    --arg other_availability_zones "$pcf_az_1,$pcf_az_2,$pcf_az_3" \
+    '
+    {
+      "network": {
+        "name": (if $iaas == "aws" then "deployment" else "ert" end),
+      },
+      "other_availability_zones": ($other_availability_zones | split(",") | map({name: .})),
+      "singleton_availability_zone": {
+        "name": $singleton_availability_zone
+      }
+    }
+    '
+)
+
+om-linux \
+  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
+  --username $OPS_MGR_USR \
+  --password $OPS_MGR_PWD \
+  --skip-ssl-validation \
+  configure-product \
+  --product-name cf \
+  --product-network "$cf_network"
+
 jq -n \
   --arg terraform_prefix $terraform_prefix \
   --arg singleton_availability_zone "$pcf_az_1" \
@@ -108,17 +135,6 @@ jq -n \
   --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
   '
   {
-    "networks_and_azs":{
-      "networks_and_azs": {
-        "singleton_availability_zone": {
-          "name": $singleton_availability_zone
-        },
-        "other_availability_zones": ($other_availability_zones | split(",") | map({name: .})),
-        "network": {
-          "name": (if $iaas == "aws" then "deployment" else "ert" end),
-        }
-      }
-    },
     "properties": {
       "properties": {
         ".properties.networking_point_of_entry": {
