@@ -3,7 +3,7 @@ groups:
 - name: all
   jobs:
   - wipe-env
-  - deploy-iaas
+  - create-infrastructure
   - config-opsman-auth
   - config-director
   - deploy-director
@@ -13,7 +13,7 @@ groups:
 
 - name: iaas
   jobs:
-  - deploy-iaas
+  - create-infrastructure
   - config-opsman-auth
   - config-director
   - deploy-director
@@ -23,7 +23,6 @@ groups:
   - upload-ert
   - configure-ert
   - deploy-ert
-
 
 resource_types:
 - name: azure-blob
@@ -134,10 +133,10 @@ jobs:
         azure_region: {{azure_region}}
         azure_terraform_prefix: {{azure_terraform_prefix}}
 
-#######################
-## Job - Deploy-Iaas ##
-#######################
-- name: deploy-iaas
+#################################
+## Job - Create Infrastructure ##
+#################################
+- name: create-infrastructure
   serial: true
   max_in_flight: 1
   serial_groups: [full]
@@ -176,45 +175,33 @@ jobs:
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/upload-opsman.sh
 
-  - task: deploy-iaas
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: czero/cflinuxfs2
-      inputs:
-        - name: pcf-pipelines
-        - name: opsman-metadata
-      outputs:
-        - name: terraform-state-output
-      run:
-        path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-iaas.sh
-      params:
-        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
-        azure_subscription_id: {{azure_subscription_id}}
-        azure_tenant_id: {{azure_tenant_id}}
-        azure_service_principal_id: {{azure_service_principal_id}}
-        azure_service_principal_password: {{azure_service_principal_password}}
-        azure_region: {{azure_region}}
-        azure_terraform_prefix: {{azure_terraform_prefix}}
-        azure_vm_admin: {{azure_vm_admin}}
-        azure_vm_password: {{azure_vm_password}}
-        pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin_username}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
-        pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
-        azure_account_name: {{azure_account_name}}
-        azure_buildpacks_container: {{azure_buildpacks_container}}
-        azure_droplets_container: {{azure_droplets_container}}
-        azure_packages_container: {{azure_packages_container}}
-        azure_resources_container: {{azure_resources_container}}
-        azure_terraform_prefix: {{azure_terraform_prefix}}
-        azure_terraform_vnet_cidr: {{azure_terraform_vnet_cidr}}
-        azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
-        azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
-        azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
-        azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
+  - task: create-infrastructure
+    file: pcf-pipelines/install-pcf/azure/tasks/create-infrastructure/task.yml
+    params:
+      azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
+      azure_subscription_id: {{azure_subscription_id}}
+      azure_tenant_id: {{azure_tenant_id}}
+      azure_service_principal_id: {{azure_service_principal_id}}
+      azure_service_principal_password: {{azure_service_principal_password}}
+      azure_region: {{azure_region}}
+      azure_terraform_prefix: {{azure_terraform_prefix}}
+      azure_vm_admin: {{azure_vm_admin}}
+      azure_vm_password: {{azure_vm_password}}
+      pcf_ert_domain: {{pcf_ert_domain}}
+      pcf_opsman_admin: {{pcf_opsman_admin_username}}
+      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+      pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
+      azure_account_name: {{azure_account_name}}
+      azure_buildpacks_container: {{azure_buildpacks_container}}
+      azure_droplets_container: {{azure_droplets_container}}
+      azure_packages_container: {{azure_packages_container}}
+      azure_resources_container: {{azure_resources_container}}
+      azure_terraform_prefix: {{azure_terraform_prefix}}
+      azure_terraform_vnet_cidr: {{azure_terraform_vnet_cidr}}
+      azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
+      azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
+      azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
+      azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
 
 ##############################
 ## Job - Config OpsMan Auth ##
@@ -227,7 +214,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       trigger: true
-      passed: [deploy-iaas]
+      passed: [create-infrastructure]
     - get: pivnet-elastic-runtime
       trigger: false
       params:

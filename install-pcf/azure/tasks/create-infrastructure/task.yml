@@ -15,7 +15,7 @@ outputs:
   - name: terraform-state-output
 
 run:
-  path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-iaas.sh
+  path: pcf-pipelines/install-pcf/azure/tasks/create-infrastructure/task.sh
 
 params:
   azure_pcf_terraform_template:
