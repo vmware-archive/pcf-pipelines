@@ -28,8 +28,6 @@ saml_certificates=$(generate_cert "${saml_domains[*]}")
 saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
 saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
-db_host=$(echo $output_json | jq --raw-output '.db_host.value')
-
 if [[ "${pcf_iaas}" == "aws" ]]; then
   cd terraform-state
     output_json=$(terraform output --json -state *.tfstate)
