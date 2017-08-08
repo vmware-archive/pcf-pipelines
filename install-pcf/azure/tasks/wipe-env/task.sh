@@ -30,6 +30,12 @@ function delete-infrastructure() {
     -var "location=dontcare" \
     -var "env_name=dontcare" \
     -var "env_short_name=dontcare" \
+    -var "azure_terraform_vnet_cidr=dontcare" \
+    -var "azure_terraform_subnet_infra_cidr=dontcare" \
+    -var "azure_terraform_subnet_ert_cidr=dontcare" \
+    -var "azure_terraform_subnet_services1_cidr=dontcare" \
+    -var "azure_terraform_subnet_dynamic_services_cidr=dontcare" \
+    -var "ert_subnet_id=dontcare" \
     -var "pcf_ert_domain=dontcare" \
     -var "pub_ip_pcf_lb=dontcare" \
     -var "pub_ip_id_pcf_lb=dontcare" \
