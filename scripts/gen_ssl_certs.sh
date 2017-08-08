@@ -1,7 +1,7 @@
 #!/bin/bash
 #mglynn@pivotal.io
 
-set -e
+set -eu
 
 SYS_DOMAIN=$1
 APP_DOMAIN=$2

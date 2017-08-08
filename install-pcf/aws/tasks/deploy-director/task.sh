@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eu
 
 echo "=============================================================================================="
 echo "Deploying Director @ https://opsman.$pcf_ert_domain ..."

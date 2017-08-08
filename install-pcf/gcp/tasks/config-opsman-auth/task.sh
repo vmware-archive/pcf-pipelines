@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eu
 
 om-linux \
   --target "https://opsman.${pcf_ert_domain}" \

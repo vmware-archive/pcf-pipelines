@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -eu
 
 ami=$(cat ami/ami)
 
