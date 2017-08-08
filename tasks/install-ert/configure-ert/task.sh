@@ -1,9 +1,7 @@
 #!/bin/bash
 set -eu
 
-OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$pcf_ert_domain"
-OPS_MGR_USR="$pcf_opsman_admin"
-OPS_MGR_PWD="$pcf_opsman_admin_passwd"
+export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$pcf_ert_domain"
 
 source pcf-pipelines/functions/generate_cert.sh
 

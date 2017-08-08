@@ -250,8 +250,8 @@ jobs:
       gcp_storage_access_key: {{gcp_storage_access_key}}
       gcp_storage_secret_key: {{gcp_storage_secret_key}}
       pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin_username}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+      OPS_MGR_USR: {{pcf_opsman_admin_username}}
+      OPS_MGR_PWD: {{pcf_opsman_admin_password}}
       terraform_prefix: {{gcp_resource_prefix}}
       db_diego_username: {{db_diego_username}}
       db_diego_password: {{db_diego_password}}

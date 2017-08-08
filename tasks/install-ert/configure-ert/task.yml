@@ -17,8 +17,8 @@ run:
 params:
   pcf_iaas:
   pcf_ert_domain:
-  pcf_opsman_admin:
-  pcf_opsman_admin_passwd:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
   pcf_az_1:
   pcf_az_2:
   pcf_az_3:
