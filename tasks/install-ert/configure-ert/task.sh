@@ -73,33 +73,61 @@ cf_resources=$(
     --arg iaas $pcf_iaas \
     '
     {
-      "mysql_proxy": {"instances": 0},
-      "mysql": {"instances": 0},
-      "mysql_monitor": {"instances": 0}
+      "consul_server": {"internet_connected": false},
+      "nats": {"internet_connected": false},
+      "etcd_tls_server": {"internet_connected": false},
+      "nfs_server": {"internet_connected": false},
+      "mysql_proxy": {
+        "instances": 0,
+        "internet_connected": false
+      },
+      "mysql": {
+        "instances": 0,
+        "internet_connected": false
+      },
+      "backup-prepare": {"internet_connected": false},
+      "ccdb": {"internet_connected": false},
+      "diego_database": {"internet_connected": false},
+      "uaadb": {"internet_connected": false},
+      "uaa": {"internet_connected": false},
+      "cloud_controller": {"internet_connected": false},
+      "ha_proxy": {"internet_connected": false},
+      "router": {"internet_connected": false},
+      "mysql_monitor": {
+        "instances": 0,
+        "internet_connected": false
+      },
+      "clock_global": {"internet_connected": false},
+      "cloud_controller_worker": {"internet_connected": false},
+      "diego_brain": {"internet_connected": false},
+      "diego_cell": {"internet_connected": false},
+      "loggregator_trafficcontroller": {"internet_connected": false},
+      "syslog_adapter": {"internet_connected": false},
+      "syslog_scheduler": {"internet_connected": false},
+      "doppler": {"internet_connected": false},
+      "tcp_router": {"internet_connected": false},
+      "smoke-tests": {"internet_connected": false},
+      "push-apps-manager": {"internet_connected": false},
+      "notifications": {"internet_connected": false},
+      "notifications-ui": {"internet_connected": false},
+      "push-pivotal-account": {"internet_connected": false},
+      "autoscaling": {"internet_connected": false},
+      "autoscaling-register-broker": {"internet_connected": false},
+      "nfsbrokerpush": {"internet_connected": false},
+      "bootstrap": {"internet_connected": false},
+      "mysql-rejoin-unsafe": {"internet_connected": false}
     }
 
-    +
+    |
 
     # ELBs
 
     if $iaas == "aws" then
-      {
-        "router": {
-          "elb_names": ["\($terraform_prefix)-Pcf-Http-Elb"]
-        },
-        "diego_brain": {
-          "elb_names": ["\($terraform_prefix)-Pcf-Ssh-Elb"]
-        }
-      }
+      .router |= . + { "elb_names": ["\($terraform_prefix)-Pcf-Http-Elb"] }
+      | .diego_brain |= . + { "elb_names": ["\($terraform_prefix)-Pcf-Ssh-Elb"] }
     elif $iaas == "gcp" then
-      {
-        "router": {
-          "elb_names": ["http:\($terraform_prefix)-http-lb-backend","tcp:\($terraform_prefix)-wss-logs"]
-        },
-        "diego_brain": {
-          "elb_names": ["tcp:\($terraform_prefix)-ssh-proxy"]
-        }
-      }
+      .router |= . + { "elb_names": ["http:\($terraform_prefix)-http-lb-backend","tcp:\($terraform_prefix)-wss-logs"] }
+      | .diego_brain |= . + { "elb_names": ["tcp:\($terraform_prefix)-ssh-proxy"] }
     else
       .
     end
