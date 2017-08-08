@@ -2,7 +2,6 @@ groups:
 
 - name: all
   jobs:
-  - init-env
   - wipe-env
   - deploy-iaas
   - config-opsman-auth
@@ -11,10 +10,6 @@ groups:
   - upload-ert
   - configure-ert
   - deploy-ert
-
-- name: init
-  jobs:
-  - init-env
 
 - name: iaas
   jobs:
@@ -138,85 +133,6 @@ jobs:
         azure_service_principal_password: {{azure_service_principal_password}}
         azure_region: {{azure_region}}
         azure_terraform_prefix: {{azure_terraform_prefix}}
-
-#####################
-## Job - Init Env  ##
-#####################
-- name: init-env
-  serial: true
-  max_in_flight: 1
-  serial_groups: [full]
-  ensure:
-    put: terraform-state
-    params:
-      file: terraform-state-output/*.tfstate
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-      trigger: false
-    - get: terraform-state
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
-
-  - task: wipe-env
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: czero/cflinuxfs2
-      inputs:
-        - name: pcf-pipelines
-        - name: terraform-state
-      outputs:
-        - name: opsman-metadata
-        - name: terraform-state-output
-      run:
-        path: pcf-pipelines/install-pcf/azure/tasks/init/wipe-env.sh
-      params:
-        arg_wipe: {{arg_wipe}}
-        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
-        azure_subscription_id: {{azure_subscription_id}}
-        azure_tenant_id: {{azure_tenant_id}}
-        azure_service_principal_id: {{azure_service_principal_id}}
-        azure_service_principal_password: {{azure_service_principal_password}}
-        azure_region: {{azure_region}}
-        azure_terraform_prefix: {{azure_terraform_prefix}}
-
-  - task: init-public-ips
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: czero/cflinuxfs2
-      inputs:
-        - name: pcf-pipelines
-      outputs:
-        - name: opsman-metadata
-        - name: terraform-state-output
-      run:
-        path: pcf-pipelines/install-pcf/azure/tasks/init/init-public-ip.sh
-      params:
-        arg_wipe: {{arg_wipe}}
-        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
-        azure_subscription_id: {{azure_subscription_id}}
-        azure_tenant_id: {{azure_tenant_id}}
-        azure_service_principal_id: {{azure_service_principal_id}}
-        azure_service_principal_password: {{azure_service_principal_password}}
-        azure_region: {{azure_region}}
-        azure_terraform_prefix: {{azure_terraform_prefix}}
-        azure_terraform_vnet_cidr: {{azure_terraform_vnet_cidr}}
-        azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
-        azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
-        azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
-        azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
-        pcf_ert_domain: {{pcf_ert_domain}}
-
-
 
 #######################
 ## Job - Deploy-Iaas ##
