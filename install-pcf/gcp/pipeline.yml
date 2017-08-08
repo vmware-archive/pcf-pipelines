@@ -238,8 +238,8 @@ jobs:
       params: {globs: []}
     - get: terraform-state
 
-  - task: configure-json
-    file: pcf-pipelines/tasks/install-ert/configure-json/task.yml
+  - task: configure-ert
+    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
     params:
       pcf_iaas: gcp
       pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
@@ -293,14 +293,6 @@ jobs:
       MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
       # aws specific
       S3_ENDPOINT:
-
-  - task: configure-ert
-    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
-    params:
-      pcf_iaas: gcp
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin_username}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml

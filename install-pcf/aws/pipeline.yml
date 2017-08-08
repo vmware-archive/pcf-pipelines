@@ -246,8 +246,8 @@ jobs:
       DB_SILK_USERNAME: {{db_silk_username}}
       DB_SILK_PASSWORD: {{db_silk_password}}
 
-  - task: configure-json
-    file: pcf-pipelines/tasks/install-ert/configure-json/task.yml
+  - task: configure-ert
+    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
     params:
       pcf_iaas: aws
       pcf_ert_domain: {{ERT_DOMAIN}}
@@ -302,14 +302,6 @@ jobs:
       db_locket_password: {{db_locket_password}}
       db_silk_username: {{db_silk_username}}
       db_silk_password: {{db_silk_password}}
-
-  - task: configure-ert
-    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
-    params:
-      pcf_iaas: aws
-      pcf_ert_domain: {{ERT_DOMAIN}}
-      pcf_opsman_admin: {{OPSMAN_USER}}
-      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
