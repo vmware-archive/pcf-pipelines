@@ -136,12 +136,13 @@ jobs:
     - get: terraform-state
       trigger: true
       passed: [create-infrastructure]
-  - task: configure-opsman-auth
-    file: pcf-pipelines/install-pcf/aws/tasks/config-opsman/task.yml
+  - task: config-opsman-auth
+    file: pcf-pipelines/tasks/config-opsman/task.yml
     params:
-      ERT_DOMAIN: {{ERT_DOMAIN}}
-      OPSMAN_USER: {{OPSMAN_USER}}
-      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPS_MGR_USR: {{OPSMAN_USER}}
+      OPS_MGR_PWD: {{OPSMAN_PASSWORD}}
+      OM_DECRYPTION_PWD: {{OPSMAN_PASSWORD}}
   - task: configure-director
     file: pcf-pipelines/install-pcf/aws/tasks/config-director/task.yml
     params:
