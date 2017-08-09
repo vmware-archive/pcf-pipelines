@@ -1,5 +1,4 @@
 ---
-
 platform: linux
 
 image_resource:
@@ -8,8 +7,8 @@ image_resource:
     repository: czero/cflinuxfs2
 
 inputs:
-  - name: pcf-pipelines 
-  - name: terraform-state
+- name: pcf-pipelines
+- name: terraform-state
 
 run:
   path: pcf-pipelines/tasks/configure-ert/task.sh
