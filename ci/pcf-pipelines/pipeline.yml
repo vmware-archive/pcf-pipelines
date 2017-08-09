@@ -188,6 +188,14 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
+    - task: set-upgrade-ops-manager-aws-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{upgrade_ops_manager_aws_current_params}}
+        PIPELINE_NAME: upgrade-ops-manager-aws-current
+        PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
     - task: set-install-pcf-gcp-current-pipeline
       params:
         PIPELINE_PARAMS: {{install_pcf_gcp_current_params}}
@@ -201,6 +209,14 @@ jobs:
         PIPELINE_PARAMS: {{upgrade_ert_gcp_current_params}}
         PIPELINE_NAME: upgrade-ert-gcp-current
         PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
+    - task: set-upgrade-ops-manager-gcp-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{upgrade_ops_manager_gcp_current_params}}
+        PIPELINE_NAME: upgrade-ops-manager-gcp-current
+        PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 

@@ -38,8 +38,10 @@ EOF
 
 write_params $tmpfile "" "install_pcf_aws_current_params" 'lre1-aws/install-pcf-params'
 write_params $tmpfile "" "upgrade_ert_aws_current_params" 'lre1-aws/ert-upgrade-params'
+write_params $tmpfile "" "upgrade_ops_manager_aws_current_params" 'lre1-aws/upgrade-ops-man-params'
 write_params $tmpfile "" "install_pcf_gcp_current_params" 'lre1-gcp/install-pcf-params'
 write_params $tmpfile "" "upgrade_ert_gcp_current_params" 'lre1-gcp/ert-upgrade-params'
+write_params $tmpfile "" "upgrade_ops_manager_gcp_current_params" 'lre1-gcp/opsman-upgrade-params'
 write_params $tmpfile "" "install_pcf_vsphere_slot1_params" 'vsphere-slot1/install-pcf-params'
 write_params $tmpfile "" "upgrade_ert_vsphere_slot1_params" 'vsphere-slot1/upgrade-ert-params'
 write_params $tmpfile "" "upgrade_ops_manager_vsphere_slot1_params" 'vsphere-slot1/upgrade-ops-manager-params'
