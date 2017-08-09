@@ -170,11 +170,11 @@ jobs:
       trigger: true
       passed: [configure-director]
   - task: deploy-director
-    file: pcf-pipelines/install-pcf/aws/tasks/deploy-director/task.yml
+    file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      pcf_ert_domain: {{ERT_DOMAIN}}
-      pcf_opsman_admin: {{OPSMAN_USER}}
-      pcf_opsman_admin_passwd: {{OPSMAN_PASSWORD}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_USERNAME: {{OPSMAN_USER}}
+      OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
 
 - name: upload-ert
   serial_groups: [opsman]
