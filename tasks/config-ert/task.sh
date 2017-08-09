@@ -439,30 +439,30 @@ cf_resources=$(
   set +e
   read -d'%' -r input <<EOF
   {
+    "consul_server": $CONSUL_SERVER_INSTANCES,
+    "nats": $NATS_INSTANCES,
+    "etcd_tls_server": $ETCD_TLS_SERVER_INSTANCES,
+    "nfs_server": $NFS_SERVER_INSTANCES,
+    "mysql_proxy": $MYSQL_PROXY_INSTANCES,
+    "mysql": $MYSQL_INSTANCES,
     "backup-prepare": $BACKUP_PREPARE_INSTANCES,
     "ccdb": $CCDB_INSTANCES,
-    "clock_global": $CLOCK_GLOBAL_INSTANCES,
+    "diego_database": $DIEGO_DATABASE_INSTANCES,
+    "uaadb": $UAADB_INSTANCES,
+    "uaa": $UAA_INSTANCES,
     "cloud_controller": $CLOUD_CONTROLLER_INSTANCES,
+    "ha_proxy": $HA_PROXY_INSTANCES,
+    "router": $ROUTER_INSTANCES,
+    "mysql_monitor": $MYSQL_MONITOR_INSTANCES,
+    "clock_global": $CLOCK_GLOBAL_INSTANCES,
     "cloud_controller_worker": $CLOUD_CONTROLLER_WORKER_INSTANCES,
-    "consul_server": $CONSUL_SERVER_INSTANCES,
     "diego_brain": $DIEGO_BRAIN_INSTANCES,
     "diego_cell": $DIEGO_CELL_INSTANCES,
-    "diego_database": $DIEGO_DATABASE_INSTANCES,
-    "doppler": $DOPPLER_INSTANCES,
-    "etcd_tls_server": $ETCD_TLS_SERVER_INSTANCES,
-    "ha_proxy": $HA_PROXY_INSTANCES,
     "loggregator_trafficcontroller": $LOGGREGATOR_TC_INSTANCES,
-    "mysql": $MYSQL_INSTANCES,
-    "mysql_monitor": $MYSQL_MONITOR_INSTANCES,
-    "mysql_proxy": $MYSQL_PROXY_INSTANCES,
-    "nats": $NATS_INSTANCES,
-    "nfs_server": $NFS_SERVER_INSTANCES,
-    "router": $ROUTER_INSTANCES,
+    "tcp_router": $TCP_ROUTER_INSTANCES,
     "syslog_adapter": $SYSLOG_ADAPTER_INSTANCES,
     "syslog_scheduler": $SYSLOG_SCHEDULER_INSTANCES,
-    "tcp_router": $TCP_ROUTER_INSTANCES,
-    "uaa": $UAA_INSTANCES,
-    "uaadb": $UAADB_INSTANCES
+    "doppler": $DOPPLER_INSTANCES
   }
   %
 EOF
