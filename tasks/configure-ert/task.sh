@@ -251,7 +251,7 @@ cf_properties=$(
 
     if $iaas == "aws" then
       {
-        ".properties.eystem_blobstore": { "value": "external" },
+        ".properties.system_blobstore": { "value": "external" },
         ".properties.system_blobstore.external.buildpacks_bucket": { "value": "\($terraform_prefix)-buildpacks" },
         ".properties.system_blobstore.external.droplets_bucket": { "value": "\($terraform_prefix)-droplets" },
         ".properties.system_blobstore.external.packages_bucket": { "value": "\($terraform_prefix)-packages" },
