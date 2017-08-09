@@ -460,7 +460,7 @@ cf_resources=$(cat <<EOF
   "tcp_router": { "instances": $TCP_ROUTER_INSTANCES },
   "syslog_adapter": { "instances": $SYSLOG_ADAPTER_INSTANCES },
   "syslog_scheduler": { "instances": $SYSLOG_SCHEDULER_INSTANCES },
-  "doppler": $DOPPLER_INSTANCES
+  "doppler": { "instances": $DOPPLER_INSTANCES }
 }
 EOF
 )

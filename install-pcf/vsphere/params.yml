@@ -198,30 +198,31 @@ mysql_backups_s3_cron_schedule:
 ## Default resource configuration
 ## these resources can take any parameter made available in 
 ## the ops manager API ( https://<your-ops-man/docs#configuring-resources-for-a-job )
-consul_server_instances: 1
-nats_instances: 1
-etcd_tls_server_instances: 1
+consul_server_instances: 3
+nats_instances: 2
+etcd_tls_server_instances: 3
 nfs_server_instances: 1
-mysql_proxy_instances: 1
-mysql_instances: 1
+mysql_proxy_instances: 2
+mysql_instances: 3
 backup_prepare_instances: 0
 ccdb_instances: 0
+diego_database_instances: 3
 uaadb_instances: 0
-uaa_instances: 1
-cloud_controller_instances: 1
+uaa_instances: 2
+cloud_controller_instances: 2
 ha_proxy_instances: 0
-router_instances: 1
+router_instances: 3
 mysql_monitor_instances: 1
 clock_global_instances: 1
-cloud_controller_worker_instances: 1
-diego_database_instances: 1
-diego_brain_instances: 1
+cloud_controller_worker_instances: 2
+diego_brain_instances: 3
 diego_cell_instances: 3
-doppler_instances: 1
-loggregator_traffic_controller_instances: 1
-tcp_router_instances: 1
+loggregator_traffic_controller_instances: 3
 syslog_adapter_instances: 3
 syslog_scheduler_instances: 1
+doppler_instances: 3
+tcp_router_instances: 0
+
 # leave nsx fields empty if you are not leveraging the nsx features for a given component
 tcp_router_nsx_security_group:
 tcp_router_nsx_lb_edge_name:
