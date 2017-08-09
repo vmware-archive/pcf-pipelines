@@ -335,29 +335,5 @@ jobs:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
-      TF_VAR_aws_access_key: {{TF_VAR_aws_access_key}}
-      TF_VAR_aws_secret_key: {{TF_VAR_aws_secret_key}}
-      TF_VAR_aws_key_name: {{TF_VAR_aws_key_name}}
-      TF_VAR_aws_cert_arn: {{TF_VAR_aws_cert_arn}}
-      TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
-      TF_VAR_aws_region: {{TF_VAR_aws_region}}
-      TF_VAR_az1: {{TF_VAR_az1}}
-      TF_VAR_az2: {{TF_VAR_az2}}
-      TF_VAR_az3: {{TF_VAR_az3}}
-      TF_VAR_route53_zone_id: {{ROUTE_53_ZONE_ID}}
-      TF_VAR_vpc_cidr: {{TF_VAR_vpc_cidr}}
-      TF_VAR_public_subnet_cidr_az1: {{TF_VAR_public_subnet_cidr_az1}}
-      TF_VAR_public_subnet_cidr_az2: {{TF_VAR_public_subnet_cidr_az2}}
-      TF_VAR_public_subnet_cidr_az3: {{TF_VAR_public_subnet_cidr_az3}}
-      TF_VAR_ert_subnet_cidr_az1: {{TF_VAR_ert_subnet_cidr_az1}}
-      TF_VAR_ert_subnet_cidr_az2: {{TF_VAR_ert_subnet_cidr_az2}}
-      TF_VAR_ert_subnet_cidr_az3: {{TF_VAR_ert_subnet_cidr_az3}}
-      TF_VAR_services_subnet_cidr_az1: {{TF_VAR_services_subnet_cidr_az1}}
-      TF_VAR_services_subnet_cidr_az2: {{TF_VAR_services_subnet_cidr_az2}}
-      TF_VAR_services_subnet_cidr_az3: {{TF_VAR_services_subnet_cidr_az3}}
-      TF_VAR_infra_subnet_cidr_az1: {{TF_VAR_infra_subnet_cidr_az1}}
-      TF_VAR_rds_subnet_cidr_az1: {{TF_VAR_rds_subnet_cidr_az1}}
-      TF_VAR_rds_subnet_cidr_az2: {{TF_VAR_rds_subnet_cidr_az2}}
-      TF_VAR_rds_subnet_cidr_az3: {{TF_VAR_rds_subnet_cidr_az3}}
-      OPSMAN_ALLOW_SSH_CIDR_RANGES: {{opsman_allow_ssh_cidr_ranges}}
-      OPSMAN_ALLOW_HTTPS_CIDR_RANGES: {{opsman_allow_https_cidr_ranges}}
+      AWS_ACCESS_KEY_ID: {{TF_VAR_aws_access_key}}
+      AWS_SECRET_ACCESS_KEY: {{TF_VAR_aws_secret_key}}
