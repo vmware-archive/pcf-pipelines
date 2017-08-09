@@ -4,36 +4,6 @@ set -eu
 
 source pcf-pipelines/functions/generate_cert.sh
 
-function decorate_nsx_lb() {
-  local resources_json=${1}
-  local cf_component_name=${2}
-  local nsx_sg=${3}
-  local nsx_lb_edge=${4}
-  local nsx_lb_pool=${5}
-  local nsx_lb_sg=${6}
-  local nsx_lb_port=${7}
-
-  echo "${resources_json}" | jq \
-  --arg cf_component_name ${cf_component_name} \
-  --arg nsx_sg "${nsx_sg}" \
-  --arg nsx_lb_edge "${nsx_lb_edge}" \
-  --arg nsx_lb_pool "${nsx_lb_pool}" \
-  --arg nsx_lb_sg "${nsx_lb_sg}" \
-  --arg nsx_lb_port ${nsx_lb_port} \
-  '.[$cf_component_name] |= . +
-    {
-      "nsx_security_groups": [$nsx_sg],
-      "nsx_lbs": [
-        {
-          "edge_name":$nsx_lb_edge,
-          "pool_name":$nsx_lb_pool,
-          "security_group": $nsx_lb_sg,
-          "port": $nsx_lb_port
-        }
-      ]
-    }'
-}
-
 function load_cf_properties () {
 echo '{}' |
 jq \
@@ -461,6 +431,21 @@ cf_resources=$(
     --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
     --argjson syslog_scheduler_instances $SYSLOG_SCHEDULER_INSTANCES \
     --argjson doppler_instances $DOPPLER_INSTANCES \
+    --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
+    --arg tcp_router_nsx_lb_edge_name "${TCP_ROUTER_NSX_LB_EDGE_NAME}" \
+    --arg tcp_router_nsx_lb_pool_name "${TCP_ROUTER_NSX_LB_POOL_NAME}" \
+    --arg tcp_router_nsx_lb_security_group "${TCP_ROUTER_NSX_LB_SECURITY_GROUP}" \
+    --arg tcp_router_nsx_lb_port "${TCP_ROUTER_NSX_LB_PORT}" \
+    --arg router_nsx_security_group "${ROUTER_NSX_SECURITY_GROUP}" \
+    --arg router_nsx_lb_edge_name "${ROUTER_NSX_LB_EDGE_NAME}" \
+    --arg router_nsx_lb_pool_name "${ROUTER_NSX_LB_POOL_NAME}" \
+    --arg router_nsx_lb_security_group "${ROUTER_NSX_LB_SECURITY_GROUP}" \
+    --arg router_nsx_lb_port "${ROUTER_NSX_LB_PORT}" \
+    --arg diego_brain_nsx_security_group "${DIEGO_BRAIN_NSX_SECURITY_GROUP}" \
+    --arg diego_brain_nsx_lb_edge_name "${DIEGO_BRAIN_NSX_LB_EDGE_NAME}" \
+    --arg diego_brain_nsx_lb_pool_name "${DIEGO_BRAIN_NSX_LB_POOL_NAME}" \
+    --arg diego_brain_nsx_lb_security_group "${DIEGO_BRAIN_NSX_LB_SECURITY_GROUP}" \
+    --arg diego_brain_nsx_lb_port "${DIEGO_BRAIN_NSX_LB_PORT}" \
     '
     {
       "consul_server": { "instances": $consul_server_instances },
@@ -488,44 +473,64 @@ cf_resources=$(
       "syslog_scheduler": { "instances": $syslog_scheduler_instances },
       "doppler": { "instances": $doppler_instances }
     }
+
+    |
+
+    # NSX LBs
+
+    if $tcp_router_nsx_lb_edge_name != "" then
+      .tcp_router |= . + {
+        "nsx_security_groups": [$tcp_router_nsx_security_group],
+        "nsx_lbs": [
+          {
+            "edge_name": $tcp_router_nsx_lb_edge_name,
+            "pool_name": $tcp_router_nsx_lb_pool_name,
+            "security_group": $tcp_router_nsx_lb_security_group,
+            "port": $tcp_router_nsx_lb_port
+          }
+        ]
+      }
+    else
+      .
+    end
+
+    |
+
+    if $router_nsx_lb_edge_name != "" then
+      .router |= . + {
+        "nsx_security_groups": [$router_nsx_security_group],
+        "nsx_lbs": [
+          {
+            "edge_name": $router_nsx_lb_edge_name,
+            "pool_name": $router_nsx_lb_pool_name,
+            "security_group": $router_nsx_lb_security_group,
+            "port": $router_nsx_lb_port
+          }
+        ]
+      }
+    else
+      .
+    end
+
+    |
+
+    if $diego_brain_nsx_lb_edge_name != "" then
+      .diego_brain |= . + {
+        "nsx_security_groups": [$diego_brain_nsx_security_group],
+        "nsx_lbs": [
+          {
+            "edge_name": $diego_brain_nsx_lb_edge_name,
+            "pool_name": $diego_brain_nsx_lb_pool_name,
+            "security_group": $diego_brain_nsx_lb_security_group,
+            "port": $diego_brain_nsx_lb_port
+          }
+        ]
+      }
+    else
+      .
+    end
     '
 )
-
-if [[ -n ${TCP_ROUTER_NSX_LB_EDGE_NAME} ]]; then
-  cf_resources=$(
-    decorate_nsx_lb "${cf_resources}" \
-      "tcp_router" \
-      "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
-      "${TCP_ROUTER_NSX_LB_EDGE_NAME}" \
-      "${TCP_ROUTER_NSX_LB_POOL_NAME}" \
-      "${TCP_ROUTER_NSX_LB_SECURITY_GROUP}" \
-      "${TCP_ROUTER_NSX_LB_PORT}"
-  )
-fi
-
-if [[ -n ${ROUTER_NSX_LB_EDGE_NAME} ]]; then
-  cf_resources=$(
-    decorate_nsx_lb "${cf_resources}" \
-      "router" \
-      "${ROUTER_NSX_SECURITY_GROUP}" \
-      "${ROUTER_NSX_LB_EDGE_NAME}" \
-      "${ROUTER_NSX_LB_POOL_NAME}" \
-      "${ROUTER_NSX_LB_SECURITY_GROUP}" \
-      "${ROUTER_NSX_LB_PORT}"
-  )
-fi
-
-if [[ -n ${DIEGO_BRAIN_NSX_LB_EDGE_NAME} ]]; then
-  cf_resources=$(
-    decorate_nsx_lb "${cf_resources}" \
-      "diego_brain" \
-      "${DIEGO_BRAIN_NSX_SECURITY_GROUP}" \
-      "${DIEGO_BRAIN_NSX_LB_EDGE_NAME}" \
-      "${DIEGO_BRAIN_NSX_LB_POOL_NAME}" \
-      "${DIEGO_BRAIN_NSX_LB_SECURITY_GROUP}" \
-      "${DIEGO_BRAIN_NSX_LB_PORT}"
-  )
-fi
 
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
