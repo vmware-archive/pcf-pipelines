@@ -11,6 +11,7 @@ variable "aws_region" {}
 variable "az1" {}
 variable "az2" {}
 variable "az3" {}
+variable "route53_zone_id" {}
 
 /*
 * used for configuring ingress rules to ops manager vm
@@ -136,6 +137,3 @@ variable "nat_ip_az3" {
     default = "10.0.2.6"
 }
 
-variable "route53_zone_id" {
-    default = "ZG7DC4PX2OYY4"
-}
