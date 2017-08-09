@@ -435,44 +435,34 @@ cf_network=$(
     '
 )
 
-cf_resources=$(
-  set +e
-  read -d'%' -r input <<EOF
-  {
-    "consul_server": $CONSUL_SERVER_INSTANCES,
-    "nats": $NATS_INSTANCES,
-    "etcd_tls_server": $ETCD_TLS_SERVER_INSTANCES,
-    "nfs_server": $NFS_SERVER_INSTANCES,
-    "mysql_proxy": $MYSQL_PROXY_INSTANCES,
-    "mysql": $MYSQL_INSTANCES,
-    "backup-prepare": $BACKUP_PREPARE_INSTANCES,
-    "ccdb": $CCDB_INSTANCES,
-    "diego_database": $DIEGO_DATABASE_INSTANCES,
-    "uaadb": $UAADB_INSTANCES,
-    "uaa": $UAA_INSTANCES,
-    "cloud_controller": $CLOUD_CONTROLLER_INSTANCES,
-    "ha_proxy": $HA_PROXY_INSTANCES,
-    "router": $ROUTER_INSTANCES,
-    "mysql_monitor": $MYSQL_MONITOR_INSTANCES,
-    "clock_global": $CLOCK_GLOBAL_INSTANCES,
-    "cloud_controller_worker": $CLOUD_CONTROLLER_WORKER_INSTANCES,
-    "diego_brain": $DIEGO_BRAIN_INSTANCES,
-    "diego_cell": $DIEGO_CELL_INSTANCES,
-    "loggregator_trafficcontroller": $LOGGREGATOR_TC_INSTANCES,
-    "tcp_router": $TCP_ROUTER_INSTANCES,
-    "syslog_adapter": $SYSLOG_ADAPTER_INSTANCES,
-    "syslog_scheduler": $SYSLOG_SCHEDULER_INSTANCES,
-    "doppler": $DOPPLER_INSTANCES
-  }
-  %
+cf_resources=$(cat <<EOF
+{
+  "consul_server": { "instances": $CONSUL_SERVER_INSTANCES },
+  "nats": { "instances": $NATS_INSTANCES },
+  "etcd_tls_server": { "instances": $ETCD_TLS_SERVER_INSTANCES },
+  "nfs_server": { "instances": $NFS_SERVER_INSTANCES },
+  "mysql_proxy": { "instances": $MYSQL_PROXY_INSTANCES },
+  "mysql": { "instances": $MYSQL_INSTANCES },
+  "backup-prepare": { "instances": $BACKUP_PREPARE_INSTANCES },
+  "ccdb": { "instances": $CCDB_INSTANCES },
+  "diego_database": { "instances": $DIEGO_DATABASE_INSTANCES },
+  "uaadb": { "instances": $UAADB_INSTANCES },
+  "uaa": { "instances": $UAA_INSTANCES },
+  "cloud_controller": { "instances": $CLOUD_CONTROLLER_INSTANCES },
+  "ha_proxy": { "instances": $HA_PROXY_INSTANCES },
+  "router": { "instances": $ROUTER_INSTANCES },
+  "mysql_monitor": { "instances": $MYSQL_MONITOR_INSTANCES },
+  "clock_global": { "instances": $CLOCK_GLOBAL_INSTANCES },
+  "cloud_controller_worker": { "instances": $CLOUD_CONTROLLER_WORKER_INSTANCES },
+  "diego_brain": { "instances": $DIEGO_BRAIN_INSTANCES },
+  "diego_cell": { "instances": $DIEGO_CELL_INSTANCES },
+  "loggregator_trafficcontroller": { "instances": $LOGGREGATOR_TC_INSTANCES },
+  "tcp_router": { "instances": $TCP_ROUTER_INSTANCES },
+  "syslog_adapter": { "instances": $SYSLOG_ADAPTER_INSTANCES },
+  "syslog_scheduler": { "instances": $SYSLOG_SCHEDULER_INSTANCES },
+  "doppler": $DOPPLER_INSTANCES
+}
 EOF
-  set -e
-
-  echo "$input" | jq \
-    'map_values(. = {
-      "instance_type": {"id":"automatic"},
-      "instances": .
-    })'
 )
 
 if [[ -n ${TCP_ROUTER_NSX_LB_EDGE_NAME} ]]; then
