@@ -175,6 +175,9 @@ output "db_port" {
 output "db_username" {
     value = "${aws_db_instance.pcf_rds.username}"
 }
+output "db_password" {
+    value = "${aws_db_instance.pcf_rds.password}"
+}
 output "db_database" {
     value = "${aws_db_instance.pcf_rds.name}"
 }
