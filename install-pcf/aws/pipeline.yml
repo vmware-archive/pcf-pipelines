@@ -221,7 +221,7 @@ jobs:
     file: pcf-pipelines/install-pcf/aws/tasks/prepare-rds/task.yml
     params:
       PEM: {{PEM}}
-      ERT_DOMAIN: {{ERT_DOMAIN}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       DB_APP_USAGE_SERVICE_USERNAME: {{db_app_usage_service_username}}
       DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
       DB_AUTOSCALE_USERNAME: {{db_autoscale_username}}
