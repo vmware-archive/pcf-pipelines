@@ -218,7 +218,7 @@ jobs:
           mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
 
           echo "Creating install-pcf/vsphere/pipeline.yml"
-          fly fmt -c <(
+          fly format-pipeline -c <(
             cat pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml |
               yaml_patch_linux -o pin-resource-gets.yml
           ) > pcf-pipelines-offline-pinned/install-pcf/vsphere/pipeline.yml
@@ -237,7 +237,7 @@ jobs:
             "pcf-pipelines": $root/pcf-pipelines
           EOF
           mkdir -p pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined
-          fly fmt -c <(
+          fly format-pipeline -c <(
             steamroll -p pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml -c steamroll_config.yml
           ) > pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined/pipeline.yml
 
