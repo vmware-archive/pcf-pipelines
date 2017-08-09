@@ -3,8 +3,7 @@
 set -eu
 
 iaas_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
   --arg vcenter_host "$VCENTER_HOST" \
   --arg vcenter_username "$VCENTER_USR" \
   --arg vcenter_password "$VCENTER_PWD" \
@@ -21,7 +20,7 @@ iaas_configuration=$(
   --arg nsx_username "$NSX_USERNAME" \
   --arg nsx_password "$NSX_PASSWORD" \
   --arg nsx_ca_certificate "$NSX_CA_CERTIFICATE" \
-  '. +
+  '
   {
     "vcenter_host": $vcenter_host,
     "vcenter_username": $vcenter_username,
@@ -66,8 +65,7 @@ EOF
 )
 
 network_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --argjson icmp_checks_enabled $ICMP_CHECKS_ENABLED \
     --arg infra_network_name "$INFRA_NETWORK_NAME" \
     --arg infra_vcenter_network "$INFRA_VCENTER_NETWORK" \
@@ -98,7 +96,7 @@ network_configuration=$(
     --arg dynamic_services_dns "$DYNAMIC_SERVICES_NW_DNS" \
     --arg dynamic_services_gateway "$DYNAMIC_SERVICES_NW_GATEWAY" \
     --arg dynamic_services_availability_zones "$DYNAMIC_SERVICES_NW_AZS" \
-    '. +
+    '
     {
       "icmp_checks_enabled": $icmp_checks_enabled,
       "networks": [
@@ -175,10 +173,9 @@ EOF
 )
 
 security_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg trusted_certificates "$TRUSTED_CERTIFICATES" \
-    '. +
+    '
     {
       "trusted_certificates": $trusted_certificates,
       "vm_password_type": "generate"
@@ -186,11 +183,10 @@ security_configuration=$(
 )
 
 network_assignment=$(
-echo '{}' |
-jq \
+jq -n \
   --arg infra_availability_zones "$INFRA_NW_AZS" \
   --arg network "$INFRA_NETWORK_NAME" \
-  '. +
+  '
   {
     "singleton_availability_zone": ($infra_availability_zones | split(",") | .[0]),
     "network": $network

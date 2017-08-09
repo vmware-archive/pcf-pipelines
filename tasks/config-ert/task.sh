@@ -5,8 +5,7 @@ set -eu
 source pcf-pipelines/functions/generate_cert.sh
 
 function load_cf_properties () {
-echo '{}' |
-jq \
+jq -n \
   --arg tcp_routing "$TCP_ROUTING" \
   --arg tcp_routing_ports "$TCP_ROUTING_PORTS" \
   --arg loggregator_endpoint_port "$LOGGREGATOR_ENDPOINT_PORT" \
@@ -386,13 +385,11 @@ saml_key_pem=$(echo $saml_certificates | jq --raw-output '.key')
 cf_properties=$(load_cf_properties)
 
 cf_network=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg network_name "$NETWORK_NAME" \
     --arg other_azs "$DEPLOYMENT_NW_AZS" \
     --arg singleton_az "$ERT_SINGLETON_JOB_AZ" \
     '
-    . +
     {
       "network": {
         "name": $network_name

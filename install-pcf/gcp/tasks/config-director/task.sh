@@ -3,12 +3,11 @@
 set -eu
 
 iaas_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg gcp_project "$GCP_PROJECT_ID" \
     --arg default_deployment_tag "$GCP_RESOURCE_PREFIX" \
     --arg auth_json "$GCP_SERVICE_ACCOUNT_KEY" \
-    '. +
+    '
     {
       "project": $gcp_project,
       "default_deployment_tag": $default_deployment_tag,
@@ -20,18 +19,16 @@ iaas_configuration=$(
 availability_zones="${GCP_ZONE_1},${GCP_ZONE_2},${GCP_ZONE_3}"
 
 az_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg availability_zones "$availability_zones" \
-    '. +
+    '
     {
       "availability_zones": ($availability_zones | split(",") | map({name: .}))
     }'
 )
 
 network_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --argjson icmp_checks_enabled false \
     --arg infra_network_name "infrastructure" \
     --arg infra_vcenter_network "${GCP_RESOURCE_PREFIX}-virt-net/${GCP_RESOURCE_PREFIX}-subnet-infrastructure-${GCP_REGION}/${GCP_REGION}" \
@@ -55,7 +52,7 @@ network_configuration=$(
     --arg services_dns "192.168.20.1,8.8.8.8" \
     --arg services_gateway "192.168.20.1" \
     --arg services_availability_zones "$availability_zones" \
-    '. +
+    '
     {
       "icmp_checks_enabled": $icmp_checks_enabled,
       "networks": [
@@ -129,10 +126,9 @@ EOF
 )
 
 security_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg trusted_certificates "$OPS_MGR_TRUSTED_CERTS" \
-    '. +
+    '
     {
       "trusted_certificates": $trusted_certificates,
       "vm_password_type": "generate"
@@ -140,11 +136,10 @@ security_configuration=$(
 )
 
 network_assignment=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg availability_zones "$availability_zones" \
     --arg network "infrastructure" \
-    '. +
+    '
     {
       "singleton_availability_zone": ($availability_zones | split(",") | .[0]),
       "network": $network
