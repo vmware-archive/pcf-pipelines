@@ -435,34 +435,60 @@ cf_network=$(
     '
 )
 
-cf_resources=$(cat <<EOF
-{
-  "consul_server": { "instances": $CONSUL_SERVER_INSTANCES },
-  "nats": { "instances": $NATS_INSTANCES },
-  "etcd_tls_server": { "instances": $ETCD_TLS_SERVER_INSTANCES },
-  "nfs_server": { "instances": $NFS_SERVER_INSTANCES },
-  "mysql_proxy": { "instances": $MYSQL_PROXY_INSTANCES },
-  "mysql": { "instances": $MYSQL_INSTANCES },
-  "backup-prepare": { "instances": $BACKUP_PREPARE_INSTANCES },
-  "ccdb": { "instances": $CCDB_INSTANCES },
-  "diego_database": { "instances": $DIEGO_DATABASE_INSTANCES },
-  "uaadb": { "instances": $UAADB_INSTANCES },
-  "uaa": { "instances": $UAA_INSTANCES },
-  "cloud_controller": { "instances": $CLOUD_CONTROLLER_INSTANCES },
-  "ha_proxy": { "instances": $HA_PROXY_INSTANCES },
-  "router": { "instances": $ROUTER_INSTANCES },
-  "mysql_monitor": { "instances": $MYSQL_MONITOR_INSTANCES },
-  "clock_global": { "instances": $CLOCK_GLOBAL_INSTANCES },
-  "cloud_controller_worker": { "instances": $CLOUD_CONTROLLER_WORKER_INSTANCES },
-  "diego_brain": { "instances": $DIEGO_BRAIN_INSTANCES },
-  "diego_cell": { "instances": $DIEGO_CELL_INSTANCES },
-  "loggregator_trafficcontroller": { "instances": $LOGGREGATOR_TC_INSTANCES },
-  "tcp_router": { "instances": $TCP_ROUTER_INSTANCES },
-  "syslog_adapter": { "instances": $SYSLOG_ADAPTER_INSTANCES },
-  "syslog_scheduler": { "instances": $SYSLOG_SCHEDULER_INSTANCES },
-  "doppler": { "instances": $DOPPLER_INSTANCES }
-}
-EOF
+cf_resources=$(
+  jq -n \
+    --argjson consul_server_instances $CONSUL_SERVER_INSTANCES \
+    --argjson nats_instances $NATS_INSTANCES \
+    --argjson etcd_tls_server_instances $ETCD_TLS_SERVER_INSTANCES \
+    --argjson nfs_server_instances $NFS_SERVER_INSTANCES \
+    --argjson mysql_proxy_instances $MYSQL_PROXY_INSTANCES \
+    --argjson mysql_instances $MYSQL_INSTANCES \
+    --argjson backup_prepare_instances $BACKUP_PREPARE_INSTANCES \
+    --argjson ccdb_instances $CCDB_INSTANCES \
+    --argjson diego_database_instances $DIEGO_DATABASE_INSTANCES \
+    --argjson uaadb_instances $UAADB_INSTANCES \
+    --argjson uaa_instances $UAA_INSTANCES \
+    --argjson cloud_controller_instances $CLOUD_CONTROLLER_INSTANCES \
+    --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
+    --argjson router_instances $ROUTER_INSTANCES \
+    --argjson mysql_monitor_instances $MYSQL_MONITOR_INSTANCES \
+    --argjson clock_global_instances $CLOCK_GLOBAL_INSTANCES \
+    --argjson cloud_controller_worker_instances $CLOUD_CONTROLLER_WORKER_INSTANCES \
+    --argjson diego_brain_instances $DIEGO_BRAIN_INSTANCES \
+    --argjson diego_cell_instances $DIEGO_CELL_INSTANCES \
+    --argjson loggregator_tc_instances $LOGGREGATOR_TC_INSTANCES \
+    --argjson tcp_router_instances $TCP_ROUTER_INSTANCES \
+    --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
+    --argjson syslog_scheduler_instances $SYSLOG_SCHEDULER_INSTANCES \
+    --argjson doppler_instances $DOPPLER_INSTANCES \
+    '
+    {
+      "consul_server": { "instances": $consul_server_instances },
+      "nats": { "instances": $nats_instances },
+      "etcd_tls_server": { "instances": $etcd_tls_server_instances },
+      "nfs_server": { "instances": $nfs_server_instances },
+      "mysql_proxy": { "instances": $mysql_proxy_instances },
+      "mysql": { "instances": $mysql_instances },
+      "backup-prepare": { "instances": $backup_prepare_instances },
+      "ccdb": { "instances": $ccdb_instances },
+      "diego_database": { "instances": $diego_database_instances },
+      "uaadb": { "instances": $uaadb_instances },
+      "uaa": { "instances": $uaa_instances },
+      "cloud_controller": { "instances": $cloud_controller_instances },
+      "ha_proxy": { "instances": $ha_proxy_instances },
+      "router": { "instances": $router_instances },
+      "mysql_monitor": { "instances": $mysql_monitor_instances },
+      "clock_global": { "instances": $clock_global_instances },
+      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances },
+      "diego_brain": { "instances": $diego_brain_instances },
+      "diego_cell": { "instances": $diego_cell_instances },
+      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances },
+      "tcp_router": { "instances": $tcp_router_instances },
+      "syslog_adapter": { "instances": $syslog_adapter_instances },
+      "syslog_scheduler": { "instances": $syslog_scheduler_instances },
+      "doppler": { "instances": $doppler_instances }
+    }
+    '
 )
 
 if [[ -n ${TCP_ROUTER_NSX_LB_EDGE_NAME} ]]; then
