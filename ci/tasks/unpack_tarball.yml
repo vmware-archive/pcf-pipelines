@@ -3,7 +3,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: 
+  source:
     repository: czero/cflinuxfs2
  
 inputs:
@@ -12,7 +12,7 @@ inputs:
 outputs:
 - name: unpacked_tarball
 
-run: 
+run:
  path: sh
  args:
  - -c
