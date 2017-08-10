@@ -36,10 +36,10 @@ function main() {
 
   # extract the stemcell version from the filename, e.g. 3312.21, and download the file from s3
   for stemcell in "${stemcells[@]}"; do
-    if [[ -z $(aws s3 ls "s3://${S3_BUCKET_NAME}/${stemcell}") ]]; then
+    if [[ -z $(aws s3 --endpoint-url ${S3_ENDPOINT} ls "s3://${S3_BUCKET_NAME}/${stemcell}") ]]; then
       abort "Could not find ${stemcell} in s3://${S3_BUCKET_NAME}."
     fi
-    aws s3 cp "s3://${S3_BUCKET_NAME}/${stemcell}" "${download_dir}/${stemcell}"
+    aws s3 --endpoint-url ${S3_ENDPOINT} cp "s3://${S3_BUCKET_NAME}/${stemcell}" "${download_dir}/${stemcell}"
   done
 }
 
