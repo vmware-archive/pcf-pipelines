@@ -17,15 +17,19 @@ if [[ -z "$SSL_CERT" ]]; then
   SSL_PRIVATE_KEY=`echo $certificates | jq --raw-output '.key'`
 fi
 
-saml_cert_domains=(
-  "*.${SYSTEM_DOMAIN}"
-  "*.login.${SYSTEM_DOMAIN}"
-  "*.uaa.${SYSTEM_DOMAIN}"
-)
 
-saml_certificates=$(generate_cert "${saml_cert_domains[*]}")
-saml_cert_pem=$(echo $saml_certificates | jq --raw-output '.certificate')
-saml_key_pem=$(echo $saml_certificates | jq --raw-output '.key')
+if [[ -z "$SAML_SSL_CERT" ]]; then
+  saml_cert_domains=(
+    "*.${SYSTEM_DOMAIN}"
+    "*.login.${SYSTEM_DOMAIN}"
+    "*.uaa.${SYSTEM_DOMAIN}"
+  )
+
+  saml_certificates=$(generate_cert "${saml_cert_domains[*]}")
+  SAML_SSL_CERT=$(echo $saml_certificates | jq --raw-output '.certificate')
+  SAML_SSL_PRIVATE_KEY=$(echo $saml_certificates | jq --raw-output '.key')
+fi
+
 cf_properties=$(
   jq -n \
     --arg tcp_routing "$TCP_ROUTING" \
@@ -73,8 +77,8 @@ cf_properties=$(
     --arg ldap_mail_attr_name "$MAIL_ATTR_NAME" \
     --arg ldap_first_name_attr "$FIRST_NAME_ATTR" \
     --arg ldap_last_name_attr "$LAST_NAME_ATTR" \
-    --arg saml_cert_pem "$saml_cert_pem" \
-    --arg saml_key_pem "$saml_key_pem" \
+    --arg saml_cert_pem "$SAML_SSL_CERT" \
+    --arg saml_key_pem "$SAML_SSL_PRIVATE_KEY" \
     --arg mysql_backups "$MYSQL_BACKUPS" \
     --arg mysql_backups_s3_endpoint_url "$MYSQL_BACKUPS_S3_ENDPOINT_URL" \
     --arg mysql_backups_s3_bucket_name "$MYSQL_BACKUPS_S3_BUCKET_NAME" \
