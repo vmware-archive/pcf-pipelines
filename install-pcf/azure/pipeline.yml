@@ -29,7 +29,7 @@ resource_types:
 - name: azure-blobstore
   type: docker-image
   source:
-    repository: christianang/azure-blobstore-resource
+    repository: czero/azure-blobstore-resource
 
 - name: pivnet
   type: docker-image
