@@ -120,12 +120,10 @@ syslog_drain_buffer_size: 10000
 ## Wildcard domain certs go here
 # Optional. Will be generated if blank using ssl_termination_point below.
 ssl_cert:
-# Optional. Will be generated if blank using ssl_termination_point below.
 ssl_private_key:
-ssl_termination_point: haproxy # (external_ssl|external_non_ssl|haproxy)
-
 saml_ssl_cert:
 saml_ssl_private_key:
+ssl_termination_point: haproxy # (external_ssl|external_non_ssl|haproxy)
 
 disable_http_proxy: false
 security_acknowledgement:  # Must be set to 'X'. See explanation here: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#app-security
