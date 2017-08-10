@@ -26,10 +26,10 @@ groups:
   - deploy-ert
 
 resource_types:
-- name: azure-blob
+- name: azure-blobstore
   type: docker-image
   source:
-    repository: cfcloudops/azure-blobstore-concourse-resource
+    repository: christianang/azure-blobstore-resource
 
 - name: pivnet
   type: docker-image
@@ -45,12 +45,12 @@ resource_types:
 
 resources:
 - name: terraform-state
-  type: azure-blob
+  type: azure-blobstore
   source:
-    container: {{terraform_statefile_container}}
     storage_account_name: {{terraform_azure_account_name}}
-    storage_access_key: {{terraform_azure_access_key}}
-    regexp: terraform.tfstate()
+    storage_account_key: {{terraform_azure_access_key}}
+    container: {{terraform_statefile_container}}
+    versioned_file: terraform.tfstate
 
 - name: pcf-pipelines
   type: git
@@ -108,7 +108,7 @@ jobs:
   ensure:
     put: terraform-state
     params:
-      file: terraform-state-output/*.tfstate
+      file: terraform-state-output/terraform.tfstate
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -145,7 +145,7 @@ jobs:
   ensure:
     put: terraform-state
     params:
-      file: terraform-state-output/*.tfstate
+      file: terraform-state-output/terraform.tfstate
   plan:
   - aggregate:
     - get: pcf-pipelines
