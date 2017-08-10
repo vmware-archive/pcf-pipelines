@@ -2,6 +2,7 @@ groups:
 
 - name: all
   jobs:
+  - bootstrap-terraform-state
   - wipe-env
   - create-infrastructure
   - config-opsman-auth
@@ -83,6 +84,20 @@ resources:
     sort_by: semver
 
 jobs:
+####################################
+## Job - Boostrap Terraform State ##
+####################################
+- name: bootstrap-terraform-state
+  serial_groups: [terraform]
+  plan:
+  - get: pcf-pipelines
+  - task: create-terraform-state
+    params:
+      AZURE_STORAGE_ACCOUNT: {{terraform_azure_account_name}}
+      AZURE_STORAGE_KEY: {{terraform_azure_access_key}}
+      CONTAINER: {{terraform_statefile_container}}
+    file: pcf-pipelines/install-pcf/azure/tasks/create-initial-terraform-state/task.yml
+
 #####################
 ## Job - Wipe Env  ##
 #####################
