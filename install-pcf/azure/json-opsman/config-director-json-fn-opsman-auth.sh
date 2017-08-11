@@ -22,7 +22,7 @@ function fn_opsman_auth {
     xuaacsrf=$(cat mycookiejar | grep X-Uaa-Csrf | awk '{print$7}')
     rqst_form_data="-d 'username=${pcf_opsman_admin}&password=${pcf_opsman_admin_passwd}&X-Uaa-Csrf=${xuaacsrf}'"
     chk_login=$(fn_opsman_curl "POST" "uaa/login.do" "${xuaacsrf}" "--NOENCODE" "${rqst_form_data}" | grep "Location:" | awk '{print$2}' | awk -F '&' '{print$4}')
-    url_authorize_state=$(echo "https://${opsman_host}/${url_authorize}" | awk -F '&' '{print$4}')
+    url_authorize_state=$(echo "https://${opsman_uri}/${url_authorize}" | awk -F '&' '{print$4}')
 
     # Validate
     if [[ ! ${chk_login} == ${url_authorize_state} || -z ${chk_login} ]]; then

@@ -78,12 +78,12 @@ function fn_form_gen_ert_az_and_network_assignments {
   local json=${@}
 
   # Get ERT Product ID To set URL
-  uaac target https://${opsman_host}/uaa --skip-ssl-validation > /dev/null 2>&1
+  uaac target https://${opsman_uri}/uaa --skip-ssl-validation > /dev/null 2>&1
   uaac token owner get opsman admin -s "" -p ${pcf_opsman_admin_passwd} > /dev/null 2>&1
   export opsman_bearer_token=$(uaac context | grep access_token | awk -F ":" '{print$2}' | tr -d ' ')
 
   ert_product_id=$(curl -s -k -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $opsman_bearer_token" \
-  "https://${opsman_host}/api/v0/staged/products" | \
+  "https://${opsman_uri}/api/v0/staged/products" | \
   jq '.[] | select(.type == "cf") | .guid'  | tr -d '"')
 
   # Auth to OpsMan

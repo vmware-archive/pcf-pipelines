@@ -21,7 +21,7 @@ function fn_opsman_curl() {
               curl_headers="${curl_headers} -H \"Accept-Language: en-US,en;q=0.8\""
               curl_headers="${curl_headers} -H \"Cache-Control: max-age=0\""
               curl_headers="${curl_headers} -H \"Connection: keep-alive\""
-              curl_headers="${curl_headers} -H \"Host: ${opsman_host}\""
+              curl_headers="${curl_headers} -H \"Host: ${opsman_uri}\""
               curl_headers="${curl_headers} -H \"Upgrade-Insecure-Requests: 1\""
 
 
@@ -35,7 +35,7 @@ function fn_opsman_curl() {
 
   ####### Host URL Builder #######
 
-            curl_host="https://${opsman_host}/${2}"
+  curl_host="https://${opsman_uri}/${2}"
 
   ####### Post Form Data Builder #######
 

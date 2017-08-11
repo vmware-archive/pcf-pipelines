@@ -2,7 +2,7 @@
 set -e
 
 echo "=============================================================================================="
-echo "Configuring Director @ https://opsman.$pcf_ert_domain ..."
+echo "Configuring Director @ https://${opsman_uri} ..."
 echo "=============================================================================================="
 
 # Set JSON Config Template and inster Concourse Parameter Values

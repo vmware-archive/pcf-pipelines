@@ -279,7 +279,7 @@ jobs:
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
       params:
-        pcf_ert_domain: {{pcf_ert_domain}}
+        opsman_uri: {{opsman_uri}}
         pcf_opsman_admin: {{pcf_opsman_admin_username}}
         pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
         azure_pcf_terraform_template: {{azure_pcf_terraform_template}}

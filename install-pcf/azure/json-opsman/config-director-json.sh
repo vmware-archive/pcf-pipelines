@@ -23,7 +23,6 @@ fi
 
 exec_mode_root="./pcf-pipelines/install-pcf/azure/json-opsman"
 json_file_path="${exec_mode_root}/${azure_pcf_terraform_template}"
-opsman_host="opsman.${pcf_ert_domain}"
 
 # Import reqd BASH functions
 
