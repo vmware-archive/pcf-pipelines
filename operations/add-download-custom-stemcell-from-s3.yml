@@ -7,4 +7,4 @@
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       S3_BUCKET_NAME: {{custom_stemcell_bucket_name}}
-      STEMCELL_NAME_REGEX: {{custom_stemcell_name_regex}}
+      S3_ENDPOINT: {{s3_endpoint}}
