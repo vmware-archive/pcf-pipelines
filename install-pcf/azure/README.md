@@ -1,60 +1,116 @@
-# Customer0 PCF+Azure Concourse Pipeline
+# PCF on Azure
 
+![Concourse Pipeline](embed.png)
 
-### Pre_Reqs & Instructions for POC Deployment via Concourse
+This pipeline uses Terraform to create all the infrastructure required to run an
+HA PCF deployment on Azure per the Customer[0] [reference
+architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/azure/azure_ref_arch.html).
 
-1. Create an Azure AD Service Principal for your subscription with "Contributor" Role on the target Azure Project
+## Usage
 
-        azure ad app create --name "My SVC Acct" \
-        --password 'P1v0t4l!P1v0t4l!' --home-page "http://MyBOSHAzureCPI" \
-        --identifier-uris "http://MyBOSHAzureCPI"
+This pipeline downloads artifacts from DockerHub (czero/cflinuxfs2 and custom
+docker-image resources) and the configured Azure Storage Container
+(terraform.tfstate file), and as such the Concourse instance must have access
+to those. Note that Terraform outputs a .tfstate file that contains plaintext
+secrets.
 
-        azure ad sp create --applicationId *!!![YOUR AD APP ID CREATED FROM PREVIOUS STEP]!!!*
+1. Create an Azure Active Directory Service Principal for your subscription with
+the `Contributor` Role on the target Azure Project
 
-        azure role assignment create --spn "http://MyBOSHAzureCPI" \
-        --roleName "Contributor" --subscription *!!![YOUR SUBSCRIPTION ID]!!!*
+Install jq:
 
-2. `git clone` this repo
+On MacOS X:
+```
+brew install jq
+```
 
-3. **EDIT!!!** `pcf-pipelines/install-pcf/azure/params.yml` and replace all variables/parameters you will want for your concourse individual pipeline run
+On linux:
+```
+sudo apt-get install jq
+```
 
-    - The sample pipeline params file includes 2 params that set the major/minor versions of OpsMan & ERT that will be pulled.  They will typically default to the latest RC/GA avail tiles.
+or:
+
+```
+wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 \
+  -O /usr/local/bin/jq
+chmod +x /usr/local/bin/jq
+```
+
+Set your Subscription ID to the subscription that will be used by the install-pcf pipeline:
+
+```
+export SUBSCRIPTION_ID=<YOUR-SUBSCRIPTION-ID>
+export SERVICE_PRINCIPAL_PASSWORD=<SOME-PASSWORD>
+```
+
+```
+az ad app create --display-name "PCFServiceAccount" \
+  --homepage "http://pcfserviceaccount" \
+  --identifier-uris "http://pcfserviceaccount" \
+  --password "$SERVICE_PRINCIPAL_PASSWORD" | tee app_create.json
+
+export APP_ID="$(jq -r .appId app_create.json)"
+
+az ad sp create --id "$APP_ID"
+
+az role assignment create --assignee "http://pcfserviceaccount" \
+  --role "Contributor" \
+  --scope "/subscriptions/$SUBSCRIPTION_ID"
+```
+
+2. Create an Azure Storage Account and Container to store terraform.tfstate
+
+```
+az group create --name "pcfci" \
+  --location "WestUS"
+
+az storage account create --name "pcfci" \
+  --resource-group "pcfci" \
+  --location "WestUS" \
+  --sku "Standard_LRS"
+
+AZURE_ACCOUNT_KEY=$(az storage account keys list --account-name pcfci --resource-group pcfci | jq -r .[0].value)
+
+az storage container create --name terraformstate \
+  --account-name pcfci
+```
+
+3. Clone this repo:
+
+```
+git clone https://github.com/pivotal-cf/pcf-pipelines.git
+```
+
+4. Update `pcf-pipelines/install-pcf/azure/params.yml` and replace all variables/parameters.
+
+    - The sample pipeline params file includes 2 params that set the major/minor versions of
+      OpsMan and ERT that will be pulled.  They will typically default to the latest RC/GA available tiles.
       ```
       opsman_major_minor_version: '1\.11\..*'
       ert_major_minor_version: '1\.11\..*'
       ```
 
-4. **AFTER!!!** Completing Step 3 above ... log into concourse & create the pipeline.
-      ```
-      fly -t <Target> login
-      fly -t <Target> set-pipeline -p <Pipeline-Name> -c pcf-pipelines/install-pcf/azure/pipeline.yml -l pcf-pipelines/install-pcf/azure/params.yml
-      ```
-
-5. Un-pause the pipeline
-
-6. Run the **`init-env`** job manually,  you will need to review the output and record it for the DNS records that must then be made resolvable **BEFORE!!!** continuing to the next step:
-  - Example:
+5. Log into concourse and create the pipeline.
 
 ```
-==============================================================================================
-This azure_pcf_terraform_template has an 'Init' set of terraform that has pre-created IPs...
-==============================================================================================
-info:    Executing command login
-/info:    Added subscription CF-Customer 0                                     
-info:    Setting subscription "CF-Customer 0" as default
-+
-info:    login command OK
-You have now deployed Public IPs to azure that must be resolvable to:
-----------------------------------------------------------------------------------------------
-*.sys.azure.customer0.net == 137.117.56.166
-*.cfapps.azure.customer0.net == 137.117.56.166
-ssh.sys.azure.customer0.net == 137.117.56.166
-doppler.sys.azure.customer0.net == 137.117.56.166
-loggregator.sys.azure.customer0.net == 137.117.56.166
-tcp.azure.customer0.net == 40.112.56.99
-opsman.azure.customer0.net == 137.117.57.112
-----------------------------------------------------------------------------------------------
-DO Not Start the 'deploy-iaas' Concourse Job of this Pipeline until you have confirmed that DNS is reolving correctly.  Failure to do so will result in a FAIL!!!!
+fly -t lite set-pipeline -p install-pcf-azure \
+  -c pcf-pipelines/install-pcf/azure/pipeline.yml \
+  -l pcf-pipelines/install-pcf/azure/params.yml
 ```
 
-**[DEPLOY]**. **AFTER!!!** Completing Step 6 above ... Run the **`deploy-iaas`** job manually, if valid values were passed, a successful ERT deployment on Azure will be the result.
+6. Un-pause the pipeline.
+
+7. Run the `bootstrap-terraform-state` job. This will create a `terraform.tfstate` in your storage
+container to be used by the pipeline.
+
+8. Run the `create-infrastructure` job. This will create all the infrastructure necessary for your
+PCF installation. `config-opsman-auth` will automatically trigger after `create-infrastructure`
+and fail if step 9 isn't done. After step 9 is done the job can be ran again.
+
+9. Create an NS record within the delegating zone with the name servers from the newly created zone.
+
+Get the DNS zone created by terraform for your PCF ERT domain with the following:
+```
+az network dns zone show --name <PCF-ERT-DOMAIN>
+```
