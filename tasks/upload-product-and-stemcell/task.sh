@@ -14,7 +14,12 @@ STEMCELL_VERSION=$(
       .Dependencies[]
       | select(.Release.Product.Name | contains("Stemcells"))
       | .Release.Version
-    ] | sort | last // empty
+    ]
+    | map(split(".") | map(tonumber))
+    | transpose | transpose
+    | max // empty
+    | map(tostring)
+    | join(".")
     '
 )
 
