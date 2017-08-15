@@ -72,9 +72,9 @@ function create_secgroup() {
    fi
 }
 
-create_private_network $INFRA_NETWORK $INFRA_SUBNET $INFRA_DNS
-create_private_network $ERT_NETWORK $ERT_SUBNET
-create_private_network $SERVICES_NETWORK $SERVICES_SUBNET
-create_private_network $DYNAMIC_SERVICES_NETWORK $DYNAMIC_SERVICES_SUBNET
-create_admin_router $ADMIN_ROUTER
-create_secgroup $SECURITY_GROUP
+create_private_network "$INFRA_NETWORK" "$INFRA_SUBNET" "$INFRA_DNS"
+create_private_network "$ERT_NETWORK" "$ERT_SUBNET"
+create_private_network "$SERVICES_NETWORK" "$SERVICES_SUBNET"
+create_private_network "$DYNAMIC_SERVICES_NETWORK" "$DYNAMIC_SERVICES_SUBNET"
+create_admin_router "$ADMIN_ROUTER"
+create_secgroup "$SECURITY_GROUP"
