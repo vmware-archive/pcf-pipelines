@@ -76,11 +76,7 @@ az storage container create --name terraformstate \
   --account-name pcfci
 ```
 
-3. Clone this repo:
-
-```
-git clone https://github.com/pivotal-cf/pcf-pipelines.git
-```
+3. Download `pcf-pipelines` from PivNet: https://network.pivotal.io/products/pcf-automation/
 
 4. Update `pcf-pipelines/install-pcf/azure/params.yml` and replace all variables/parameters.
 
