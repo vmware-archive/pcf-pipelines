@@ -9,6 +9,7 @@ image_resource:
 inputs:
 - name: pcf-pipelines
 - name: terraform-state
+- name: pivnet-opsmgr
 
 outputs:
 - name: create-infrastructure-output
@@ -21,6 +22,7 @@ params:
   OS_REGION_NAME:
   OS_USER_DOMAIN_NAME:
   OS_RESOURCE_PREFIX:
+  OPSMAN_PUBLIC_KEY:
   INFRA_SUBNET_CIDR:
   ERT_SUBNET_CIDR:
   SERVICES_SUBNET_CIDR:
