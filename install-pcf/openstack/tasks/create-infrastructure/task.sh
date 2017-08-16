@@ -28,6 +28,7 @@ function main() {
     -var "ert_dns=${ERT_DNS}" \
     -var "services_dns=${SERVICES_DNS}" \
     -var "dynamic_services_dns=${DYNAMIC_SERVICES_DNS}" \
+    -var "external_network=${EXTERNAL_NETWORK}" \
     -var "external_network_id=${EXTERNAL_NETWORK_ID}" \
     -var "opsman_image_name=${opsman_image_name}" \
     -var "opsman_public_key=${OPSMAN_PUBLIC_KEY}" \

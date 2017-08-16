@@ -12,7 +12,7 @@ resource "openstack_compute_instance_v2" "opsman" {
   }
 
   block_device {
-    source_type = "volume"
+    source_type = "blank"
     volume_size = 50
   }
 }
@@ -23,7 +23,7 @@ resource "openstack_compute_keypair_v2" "opsman_keypair" {
 }
 
 resource "openstack_networking_floatingip_v2" "opsman_floating_ip" {
-  pool = "public"
+  pool = "${var.external_network}"
 }
 
 resource "openstack_compute_floatingip_associate_v2" "opsman_floating_ip_association" {
