@@ -17,7 +17,7 @@ import (
 )
 
 var oldPlaceholderRegexp = regexp.MustCompile("{{([a-zA-Z0-9-_]+)}}")
-var placeholderRegexp = regexp.MustCompile("[({]{2}([a-zA-Z0-9-_]+)(?:)[)}]{2}")
+var placeholderRegexp = regexp.MustCompile("[({]{2}([a-zA-Z0-9-_]+)[)}]{2}")
 
 var _ = Describe("pcf-pipelines", func() {
 	cwd, err := os.Getwd()
