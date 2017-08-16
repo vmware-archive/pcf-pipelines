@@ -29,7 +29,6 @@ resources:
 
 - name: binary-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -37,7 +36,6 @@ resources:
 
 - name: dotnet-core-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -45,7 +43,6 @@ resources:
 
 - name: go-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -53,7 +50,6 @@ resources:
 
 - name: java-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -61,7 +57,6 @@ resources:
 
 - name: nodejs-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -69,7 +64,6 @@ resources:
 
 - name: php-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -77,7 +71,6 @@ resources:
 
 - name: python-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -85,7 +78,6 @@ resources:
 
 - name: ruby-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -93,7 +85,6 @@ resources:
 
 - name: staticfile-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
@@ -101,7 +92,6 @@ resources:
 
 - name: tc-buildpack
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks

@@ -14,7 +14,6 @@
 
 # Resource configuration
 
-check_new_opsman_every: CHANGEME
 git_private_key:
 opsman_major_minor_version: CHANGEME
 pivnet_token: CHANGEME

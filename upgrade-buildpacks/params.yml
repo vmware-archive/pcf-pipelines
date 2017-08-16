@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Interval to check on new releases from Pivotal Network
-# eg. 2h, 3h45m, 3000s
-pivnet_poll_interval: 1h
-
 # Pivotal Net Token to download binaries from https://network.pivotal.io
 pivnet_token: CHANGEME
 

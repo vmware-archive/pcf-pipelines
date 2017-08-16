@@ -8,7 +8,6 @@ resource_types:
 resources:
 - name: stemcell-pivnet
   type: pivnet
-  check_every: 1h
   source:
     api_token: {{pivnet_token}}
     product_slug: stemcells
@@ -16,7 +15,6 @@ resources:
 
 - name: ops-manager-pivnet
   type: pivnet
-  check_every: 1h
   source:
     api_token: {{pivnet_token}}
     product_slug: ops-manager
@@ -25,7 +23,6 @@ resources:
 
 - name: elastic-runtime-pivnet
   type: pivnet
-  check_every: 1h
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime

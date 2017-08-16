@@ -31,7 +31,6 @@ resources:
 
 - name: tile
   type: pivnet
-  check_every: {{pivnet_poll_interval}}
   source:
     api_token: {{pivnet_token}}
     product_slug: {{product_slug}}

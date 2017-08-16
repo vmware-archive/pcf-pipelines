@@ -33,10 +33,6 @@ opsman_domain_or_ip_address: CHANGEME
 # within the stemcell to download, e.g. "vsphere"
 iaas_type: CHANGEME
 
-# Interval to check on new releases from Pivotal Network
-# eg. 2h, 3h45m, 3000s
-pivnet_poll_interval: 1h
-
 # om-linux
 # ------------------------------
 # The name of the product on Pivotal Network. This is used to configure the
