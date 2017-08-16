@@ -5,7 +5,7 @@ set -eu
 ROOT=$PWD
 
 function get_opsman_version() {
-  return $(cut -d\# -f 1 pivnet-opsmgr/version)
+  return "$(cut -d\# -f 1 pivnet-opsmgr/version)"
 }
 
 function main() {
