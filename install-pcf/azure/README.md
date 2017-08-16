@@ -14,28 +14,10 @@ docker-image resources) and the configured Azure Storage Container
 to those. Note that Terraform outputs a .tfstate file that contains plaintext
 secrets.
 
+0. [Install jq](https://stedolan.github.io/jq/download/) to run the scripts below.
+
 1. Create an Azure Active Directory Service Principal for your subscription with
 the `Contributor` Role on the target Azure Project
-
-Install jq:
-
-On MacOS X:
-```
-brew install jq
-```
-
-On linux:
-```
-sudo apt-get install jq
-```
-
-or:
-
-```
-wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 \
-  -O /usr/local/bin/jq
-chmod +x /usr/local/bin/jq
-```
 
 Set your Subscription ID to the subscription that will be used by the install-pcf pipeline:
 
@@ -101,12 +83,21 @@ fly -t lite set-pipeline -p install-pcf-azure \
 container to be used by the pipeline.
 
 8. Run the `create-infrastructure` job. This will create all the infrastructure necessary for your
-PCF installation. `config-opsman-auth` will automatically trigger after `create-infrastructure`
-and fail if step 9 isn't done. After step 9 is done the job can be ran again.
+PCF installation.
 
 9. Create an NS record within the delegating zone with the name servers from the newly created zone.
 
-Get the DNS zone created by terraform for your PCF ERT domain with the following:
+To retrieve the nameservers that should be used for delegating to the new zone, run the following:
 ```
-az network dns zone show --name <PCF-ERT-DOMAIN>
+az network dns zone show --name "<PCF-ERT-DOMAIN>" \
+  --resource-group "pcfci"
+```
+
+This should return JSON containing a `nameServers` array.
+
+10. Run the `config-opsman-auth` job. This will require the DNS to be resolvable. To check if your domain
+is resolvable, run the following:
+
+```
+dig <PCF-ERT-DOMAIN>
 ```
