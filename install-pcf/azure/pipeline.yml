@@ -215,7 +215,6 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-      trigger: true
       passed: [create-infrastructure]
     - get: pivnet-elastic-runtime
       trigger: false
