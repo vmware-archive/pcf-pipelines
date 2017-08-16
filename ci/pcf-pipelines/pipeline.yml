@@ -52,12 +52,10 @@ resources:
     url: {{slack_webhook_url}}
 
 - name: fly
-  type: github-release
+  type: curl
   source:
-    user: concourse
-    repository: fly
-    access_token: {{pcf_pipelines_github_token}}
-    pre_release: true
+    url: "((atc_external_url))/api/v1/cli?arch=amd64&platform=linux"
+    filename: fly
 
 jobs:
 - name: bump-patch
@@ -90,7 +88,6 @@ jobs:
     - get: pcf-pipelines
       passed: [test]
     - get: fly
-      params: { globs: ["*linux*"] }
 
   - put: version
     params: {pre: rc}
@@ -290,7 +287,6 @@ jobs:
     - get: pcf-pipelines
       passed: [update-pipelines]
     - get: fly
-      params: { globs: ["*linux*"] }
 
   - task: create-release
     file: pcf-pipelines/ci/tasks/create_release.yml
