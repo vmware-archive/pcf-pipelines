@@ -5,10 +5,13 @@ set -eu
 ROOT=$PWD
 
 function get_opsman_version() {
-  return "$(cut -d\# -f 1 pivnet-opsmgr/version)"
+  cut -d\# -f 1 pivnet-opsmgr/version
 }
 
 function main() {
+  local opsman_image_name="ops-manager-$(get_opsman_version)"
+  echo "Opsman Image: ${opsman_image_name}"
+
   terraform plan \
     -var "os_tenant_name=${OS_PROJECT_NAME}" \
     -var "os_username=${OS_USERNAME}" \
@@ -26,7 +29,7 @@ function main() {
     -var "services_dns=${SERVICES_DNS}" \
     -var "dynamic_services_dns=${DYNAMIC_SERVICES_DNS}" \
     -var "external_network_id=${EXTERNAL_NETWORK_ID}" \
-    -var "opsman_image_name=ops-manager-$(get_opsman_version)" \
+    -var "opsman_image_name=${opsman_image_name}" \
     -var "opsman_public_key=${OPSMAN_PUBLIC_KEY}" \
     -out "terraform.tfplan" \
     -state "terraform-state/terraform.tfstate" \
