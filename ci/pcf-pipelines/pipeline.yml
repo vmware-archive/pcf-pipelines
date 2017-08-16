@@ -265,7 +265,7 @@ jobs:
           <<: *atc_creds
         file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
-      - task: trigger-create-and-unpack-offline-artifact
+      - task: trigger-create-offline-pinned-pipelines
         params:
           <<: *atc_creds
           JOBS: |
