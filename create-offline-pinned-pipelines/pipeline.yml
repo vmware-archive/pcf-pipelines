@@ -20,7 +20,7 @@ resources:
     product_version: {{operations_manager_regex}}
     sort_by: semver
 
-- name: operations-manager-s3
+- name: operations-manager-tarball
   type: s3
   source:
     access_key_id: {{s3_access_key_id}}
@@ -37,7 +37,7 @@ resources:
     product_version: {{elastic_runtime_regex}}
     sort_by: semver
 
-- name: elastic-runtime-s3
+- name: elastic-runtime-tarball
   type: s3
   source:
     access_key_id: {{s3_access_key_id}}
@@ -46,7 +46,7 @@ resources:
     bucket: {{s3_bucket}}
     regexp: "staging/elastic-runtime/elastic-runtime-(.*).tar"
 
-- name: stemcells-s3
+- name: stemcells-tarball
   type: s3
   source:
     access_key_id: {{s3_access_key_id}}
@@ -62,7 +62,7 @@ resources:
     repository: czero/cflinuxfs2
     tag: latest
 
-- name: czero-cflinuxfs2-s3
+- name: czero-cflinuxfs2-tarball
   type: s3
   source:
     access_key_id: {{s3_access_key_id}}
@@ -99,7 +99,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
 
-- name: pcf-pipelines-s3
+- name: pcf-pipelines-offline-pinned-tarball
   type: s3
   source:
     access_key_id: {{s3_access_key_id}}
@@ -167,7 +167,7 @@ jobs:
 
           echo "Creating tarball with version ${version}..."
           tar cf "ops-manager-tarball/ops-manager-${version}.tar" -C operations-manager-pivnet .
-  - put: operations-manager-s3
+  - put: operations-manager-tarball
     params:
       file: "ops-manager-tarball/ops-manager-*.tar"
 
@@ -235,10 +235,10 @@ jobs:
           version=$(cat elastic-runtime-pivnet/metadata.json | jq --raw-output '.Release.Version')
 
           tar cvf "elastic-runtime-tarball/elastic-runtime-${version}.tar" -C elastic-runtime-pivnet .
-  - put: elastic-runtime-s3
+  - put: elastic-runtime-tarball
     params:
       file: "elastic-runtime-tarball/elastic-runtime-*.tar"
-  - put: stemcells-s3
+  - put: stemcells-tarball
     params:
       file: "stemcell-tarball/*.tgz"
 
@@ -279,7 +279,7 @@ jobs:
           tar cf "czero-cflinuxfs2-tarball/czero-cflinuxfs2-${version}-${digest}.tar" -C czero-cflinuxfs2 .
   - put: czero-cflinuxfs2-version
     params: {bump: major}
-  - put: czero-cflinuxfs2-s3
+  - put: czero-cflinuxfs2-tarball
     params:
       file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tar"
 
@@ -420,28 +420,25 @@ jobs:
           -f "pcf-pipelines-offline-pinned-tarball/pcf-pipelines-${pcf_pipelines_version}.tgz" \
           -C pcf-pipelines-offline-pinned \
           .
-  - put: pcf-pipelines-s3
+  - put: pcf-pipelines-offline-pinned-tarball
     params:
       file: "pcf-pipelines-offline-pinned-tarball/*.tgz"
 
 - name: create-pcf-pipelines-combined
   plan:
   - aggregate:
-    - get: pcf-pipelines-s3
+    - get: pcf-pipelines-offline-pinned-tarball
       trigger: true
       passed: [create-offline-pinned-pipelines]
     - get: pcf-pipelines-combined-version
       params: { bump: major }
-    - get: pcf-pipelines-tarball
-      passed:
-      - create-offline-pinned-pipelines
-    - get: stemcells-s3
+    - get: stemcells-tarball
       passed: [create-elastic-runtime-tarball]
-    - get: czero-cflinuxfs2-s3
+    - get: czero-cflinuxfs2-tarball
       passed: [create-czero-cflinuxfs2-tarball]
-    - get: operations-manager-s3
+    - get: operations-manager-tarball
       passed: [create-ops-manager-tarball]
-    - get: elastic-runtime-s3
+    - get: elastic-runtime-tarball
       passed: [create-elastic-runtime-tarball]
   - task: create-tarball
     config:
@@ -450,12 +447,12 @@ jobs:
         type: docker-image
         source: {repository: czero/cflinuxfs2}
       inputs:
-      - name: pcf-pipelines-s3
+      - name: pcf-pipelines-offline-pinned-tarball
       - name: pcf-pipelines-combined-version
-      - name: czero-cflinuxfs2-s3
-      - name: operations-manager-s3
-      - name: elastic-runtime-s3
-      - name: stemcells-s3
+      - name: czero-cflinuxfs2-tarball
+      - name: operations-manager-tarball
+      - name: elastic-runtime-tarball
+      - name: stemcells-tarball
       outputs:
       - name: pcf-pipelines-combined
       run:
@@ -468,11 +465,11 @@ jobs:
           mkdir -p pcf-pipelines-combined-contents
 
           mv \
-            czero-cflinuxfs2-s3/*.tar \
-            operations-manager-s3/*.tar \
-            elastic-runtime-s3/*.tar \
-            stemcells-s3/*.tgz \
-            pcf-pipelines-s3/*.tgz \
+            czero-cflinuxfs2-tarball/*.tar \
+            operations-manager-tarball/*.tar \
+            elastic-runtime-tarball/*.tar \
+            stemcells-tarball/*.tgz \
+            pcf-pipelines-offline-pinned-tarball/*.tgz \
             pcf-pipelines-combined-contents
 
           pushd pcf-pipelines-combined-contents
