@@ -269,12 +269,7 @@ jobs:
         params:
           <<: *atc_creds
           JOBS: |
-            create-offline-pinned-pipelines/create-offline-pinned-pipelines
-            create-offline-pinned-pipelines/create-ops-manager-tarball
-            create-offline-pinned-pipelines/create-elastic-runtime-tarball
-            create-offline-pinned-pipelines/create-czero-cflinuxfs2-tarball
-            create-offline-pinned-pipelines/create-pcf-pipelines-combined
-            unpack-pcf-pipelines-combined/unpack-tarball
+            create-offline-pinned-pipelines/collector
         file: release/pcf-pipelines/tasks/trigger-jobs/task.yml
 
       - task: trigger-set-install-pcf-darknet-vsphere-current-pipeline
