@@ -272,13 +272,6 @@ jobs:
             create-offline-pinned-pipelines/collector
         file: release/pcf-pipelines/tasks/trigger-jobs/task.yml
 
-      - task: trigger-set-install-pcf-darknet-vsphere-current-pipeline
-        params:
-          <<: *atc_creds
-          JOBS: |
-            unpack-pcf-pipelines-combined/set-install-pcf-pipeline
-        file: release/pcf-pipelines/tasks/trigger-jobs/task.yml
-
 - name: publish-release
   serial_groups: [version]
   plan:
