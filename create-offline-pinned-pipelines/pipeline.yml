@@ -71,33 +71,11 @@ resources:
     bucket: {{s3_bucket}}
     regexp: "staging/czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
 
-- name: czero-cflinuxfs2-version
-  type: semver
-  source:
-    initial_version: 0.0.0
-    driver: s3
-    bucket: {{s3_bucket}}
-    key: "staging/czero-cflinuxfs2/version"
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-
 - name: pcf-pipelines-tarball
   type: pivnet
   source:
     api_token: {{pivnet_token}}
     product_slug: pcf-automation
-
-- name: pcf-pipelines-combined-version
-  type: semver
-  source:
-    initial_version: 0.0.0
-    driver: s3
-    bucket: {{s3_bucket}}
-    key: "pcf-pipelines-combined/version"
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
 
 - name: pcf-pipelines-offline-pinned-tarball
   type: s3
@@ -251,8 +229,6 @@ jobs:
     - get: czero-cflinuxfs2
       trigger: true
       passed: [collector]
-    - get: czero-cflinuxfs2-version
-      params: {bump: major}
   - task: create-tarball
     config:
       platform: linux
@@ -261,8 +237,8 @@ jobs:
         source:
           repository: czero/cflinuxfs2
       inputs:
+      - name: pcf-pipelines-tarball
       - name: czero-cflinuxfs2
-      - name: czero-cflinuxfs2-version
       outputs:
       - name: czero-cflinuxfs2-tarball
       run:
@@ -272,13 +248,11 @@ jobs:
         - |
           set -eu
 
-          version=$(cat czero-cflinuxfs2-version/version)
+          version=$(cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version')
           digest=$(cat czero-cflinuxfs2/digest)
 
           echo "Creating tarball with version ${version}-${digest}..."
           tar cf "czero-cflinuxfs2-tarball/czero-cflinuxfs2-${version}-${digest}.tar" -C czero-cflinuxfs2 .
-  - put: czero-cflinuxfs2-version
-    params: {bump: major}
   - put: czero-cflinuxfs2-tarball
     params:
       file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tar"
@@ -287,24 +261,18 @@ jobs:
   plan:
   - aggregate:
     - get: czero-cflinuxfs2
-      passed: [create-czero-cflinuxfs2-tarball]
-    - get: czero-cflinuxfs2-version
-      passed: [create-czero-cflinuxfs2-tarball]
+      passed: [collector]
     - get: operations-manager-pivnet
-      passed: [create-ops-manager-tarball]
+      passed: [collector]
       params: { globs: [] }
     - get: elastic-runtime-pivnet
-      passed: [create-elastic-runtime-tarball]
+      passed: [collector]
       params: { globs: [] }
     - get: fly
     - do:
       - get: pcf-pipelines-tarball
         trigger: true
-        passed:
-        - create-czero-cflinuxfs2-tarball
-        - create-ops-manager-tarball
-        - create-elastic-runtime-tarball
-
+        passed: [collector]
       - task: unpack-pcf-pipelines
         config:
           platform: linux
@@ -327,7 +295,6 @@ jobs:
         source: {repository: czero/cflinuxfs2}
       inputs:
       - name: czero-cflinuxfs2
-      - name: czero-cflinuxfs2-version
       - name: operations-manager-pivnet
       - name: elastic-runtime-pivnet
       - name: pcf-pipelines-tarball
@@ -354,7 +321,6 @@ jobs:
           ert_version=$(
             cat elastic-runtime-pivnet/metadata.json | jq --raw-output '.Release.Version'
           )
-          czero_cflinuxfs2_version=$(cat czero-cflinuxfs2-version/version)
           czero_cflinuxfs2_digest=$(cat czero-cflinuxfs2/digest)
           pcf_pipelines_version=$(
             cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version'
@@ -364,7 +330,7 @@ jobs:
           echo "  ops-manager -> ${opsman_version}"
           echo "  elastic-runtime -> ${ert_version}"
           echo "  pcf-pipelines -> ${pcf_pipelines_version}"
-          echo "  czero-cflinuxfs2 -> ${czero_cflinuxfs2_version}-${czero_cflinuxfs2_digest}"
+          echo "  czero-cflinuxfs2 -> ${pcf_pipelines_version}-${czero_cflinuxfs2_digest}"
 
           cat > pin-resource-gets.yml <<EOF
           - op: add
@@ -430,8 +396,12 @@ jobs:
     - get: pcf-pipelines-offline-pinned-tarball
       trigger: true
       passed: [create-offline-pinned-pipelines]
-    - get: pcf-pipelines-combined-version
-      params: { bump: major }
+    - get: pcf-pipelines-tarball
+      passed:
+      - create-offline-pinned-pipelines
+      - create-elastic-runtime-tarball
+      - create-czero-cflinuxfs2-tarball
+      - create-ops-manager-tarball
     - get: stemcells-tarball
       passed: [create-elastic-runtime-tarball]
     - get: czero-cflinuxfs2-tarball
@@ -448,7 +418,7 @@ jobs:
         source: {repository: czero/cflinuxfs2}
       inputs:
       - name: pcf-pipelines-offline-pinned-tarball
-      - name: pcf-pipelines-combined-version
+      - name: pcf-pipelines-tarball
       - name: czero-cflinuxfs2-tarball
       - name: operations-manager-tarball
       - name: elastic-runtime-tarball
@@ -476,7 +446,7 @@ jobs:
             shasum * > MANIFEST.MF
           popd
 
-          version=$(cat pcf-pipelines-combined-version/version)
+          version=$(cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version')
 
           tar cv \
           -f "pcf-pipelines-combined/pcf-pipelines-combined-${version}.tar" \
@@ -485,5 +455,3 @@ jobs:
   - put: pcf-pipelines-combined
     params:
       file: "pcf-pipelines-combined/*.tar"
-  - put: pcf-pipelines-combined-version
-    params: { bump: major }
