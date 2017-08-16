@@ -11,6 +11,12 @@ resource_types:
     repository: cfcommunity/slack-notification-resource
     tag: latest
 
+- name: curl
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
 resources:
 - name: pcf-pipelines
   type: git
