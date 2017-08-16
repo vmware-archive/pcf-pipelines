@@ -286,17 +286,14 @@ jobs:
 - name: create-offline-pinned-pipelines
   plan:
   - aggregate:
-    - get: czero-cflinuxfs2-s3
+    - get: czero-cflinuxfs2
       passed: [create-czero-cflinuxfs2-tarball]
     - get: czero-cflinuxfs2-version
       passed: [create-czero-cflinuxfs2-tarball]
-    - get: operations-manager-s3
+    - get: operations-manager-pivnet
       passed: [create-ops-manager-tarball]
       params: { globs: [] }
-    - get: elastic-runtime-s3
-      passed: [create-elastic-runtime-tarball]
-      params: { globs: [] }
-    - get: stemcells-s3
+    - get: elastic-runtime-pivnet
       passed: [create-elastic-runtime-tarball]
       params: { globs: [] }
     - get: fly
@@ -435,14 +432,17 @@ jobs:
       passed: [create-offline-pinned-pipelines]
     - get: pcf-pipelines-combined-version
       params: { bump: major }
-    - get: czero-cflinuxfs2-s3
-      passed: [create-offline-pinned-pipelines]
-    - get: operations-manager-s3
-      passed: [create-offline-pinned-pipelines]
-    - get: elastic-runtime-s3
-      passed: [create-offline-pinned-pipelines]
+    - get: pcf-pipelines-tarball
+      passed:
+      - create-offline-pinned-pipelines
     - get: stemcells-s3
-      passed: [create-offline-pinned-pipelines]
+      passed: [create-elastic-runtime-tarball]
+    - get: czero-cflinuxfs2-s3
+      passed: [create-czero-cflinuxfs2-tarball]
+    - get: operations-manager-s3
+      passed: [create-ops-manager-tarball]
+    - get: elastic-runtime-s3
+      passed: [create-elastic-runtime-tarball]
   - task: create-tarball
     config:
       platform: linux
