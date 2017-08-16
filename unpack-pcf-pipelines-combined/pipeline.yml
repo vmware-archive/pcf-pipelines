@@ -59,6 +59,7 @@ jobs:
 - name: unpack-tarball
   plan:
   - get: pcf-pipelines-combined
+    trigger: true
   - task: unpack-tarball
     config:
       platform: linux
