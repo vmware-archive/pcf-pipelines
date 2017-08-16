@@ -192,16 +192,16 @@ jobs:
             cat elastic-runtime-pivnet/metadata.json | jq --raw-output '.Release.Version'
           )
           czero_cflinuxfs2_version=$(cat czero-cflinuxfs2-version/version)
+          czero_cflinuxfs2_digest=$(cat czero-cflinuxfs2/digest)
           pcf_pipelines_version=$(
             cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version'
           )
 
-          echo "Pinning gets of resources to specific versions:"
+          echo "Pinning resources to specific versions:"
           echo "  ops-manager -> ${opsman_version}"
           echo "  elastic-runtime -> ${ert_version}"
-          echo "  czero-cflinuxfs2 -> ${czero_cflinuxfs2_version}"
           echo "  pcf-pipelines -> ${pcf_pipelines_version}"
-          echo
+          echo "  czero-cflinuxfs2 -> ${czero_cflinuxfs2_version}-${czero_cflinuxfs2_digest}"
 
           cat > pin-resource-gets.yml <<EOF
           - op: add
@@ -216,6 +216,10 @@ jobs:
             path: /jobs/get=pivnet-product/version
             value:
               path: "elastic-runtime/elastic-runtime-${ert_version}.tar"
+          - op: add
+            path: /jobs/type=s3/version
+            value:
+              path: "czero-cflinuxfs2/czero-cflinuxfs2-${czero_cflinuxfs2_version}-${czero_cflinuxfs2_digest}.tar"
           EOF
 
           mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
