@@ -17,48 +17,48 @@ secrets.
 0. [Install jq](https://stedolan.github.io/jq/download/) to run the scripts below.
 
 1. Create an Azure Active Directory Service Principal for your subscription with
-the `Contributor` Role on the target Azure Project
+the `Contributor` Role on the target Azure Project.
 
-Set your Subscription ID to the subscription that will be used by the install-pcf pipeline:
+   Set your Subscription ID to the subscription that will be used by the install-pcf pipeline:
 
-```
-export SUBSCRIPTION_ID=<YOUR-SUBSCRIPTION-ID>
-export SERVICE_PRINCIPAL_PASSWORD=<SOME-PASSWORD>
-```
+   ```
+   export SUBSCRIPTION_ID=<YOUR-SUBSCRIPTION-ID>
+   export SERVICE_PRINCIPAL_PASSWORD=<SOME-PASSWORD>
+   ```
 
-```
-az ad app create --display-name "PCFServiceAccount" \
-  --homepage "http://pcfserviceaccount" \
-  --identifier-uris "http://pcfserviceaccount" \
-  --password "$SERVICE_PRINCIPAL_PASSWORD" | tee app_create.json
+   ```
+   az ad app create --display-name "PCFServiceAccount" \
+     --homepage "http://pcfserviceaccount" \
+     --identifier-uris "http://pcfserviceaccount" \
+     --password "$SERVICE_PRINCIPAL_PASSWORD" | tee app_create.json
 
-export APP_ID="$(jq -r .appId app_create.json)"
+   export APP_ID="$(jq -r .appId app_create.json)"
 
-az ad sp create --id "$APP_ID"
+   az ad sp create --id "$APP_ID"
 
-az role assignment create --assignee "http://pcfserviceaccount" \
-  --role "Contributor" \
-  --scope "/subscriptions/$SUBSCRIPTION_ID"
-```
+   az role assignment create --assignee "http://pcfserviceaccount" \
+     --role "Contributor" \
+     --scope "/subscriptions/$SUBSCRIPTION_ID"
+   ```
 
 2. Create an Azure Storage Account and Container to store terraform.tfstate
 
-```
-az group create --name "pcfci" \
-  --location "WestUS"
+   ```
+   az group create --name "pcfci" \
+     --location "WestUS"
 
-az storage account create --name "pcfci" \
-  --resource-group "pcfci" \
-  --location "WestUS" \
-  --sku "Standard_LRS"
+   az storage account create --name "pcfci" \
+     --resource-group "pcfci" \
+     --location "WestUS" \
+     --sku "Standard_LRS"
 
-AZURE_ACCOUNT_KEY=$(az storage account keys list --account-name pcfci --resource-group pcfci | jq -r .[0].value)
+   AZURE_ACCOUNT_KEY=$(az storage account keys list --account-name pcfci --resource-group pcfci | jq -r .[0].value)
 
-az storage container create --name terraformstate \
-  --account-name pcfci
-```
+   az storage container create --name terraformstate \
+     --account-name pcfci
+   ```
 
-3. Download `pcf-pipelines` from PivNet: https://network.pivotal.io/products/pcf-automation/
+3. Download `pcf-pipelines` from [Pivotal Networks](https://network.pivotal.io/products/pcf-automation)
 
 4. Update `pcf-pipelines/install-pcf/azure/params.yml` and replace all variables/parameters.
 
@@ -71,11 +71,11 @@ az storage container create --name terraformstate \
 
 5. Log into concourse and create the pipeline.
 
-```
-fly -t lite set-pipeline -p install-pcf-azure \
-  -c pcf-pipelines/install-pcf/azure/pipeline.yml \
-  -l pcf-pipelines/install-pcf/azure/params.yml
-```
+   ```
+   fly -t lite set-pipeline -p install-pcf-azure \
+     -c pcf-pipelines/install-pcf/azure/pipeline.yml \
+     -l pcf-pipelines/install-pcf/azure/params.yml
+   ```
 
 6. Un-pause the pipeline.
 
@@ -85,19 +85,17 @@ container to be used by the pipeline.
 8. Run the `create-infrastructure` job. This will create all the infrastructure necessary for your
 PCF installation.
 
-9. Create an NS record within the delegating zone with the name servers from the newly created zone.
+9. Create an NS record within the delegating zone with the name servers from the newly created zone. To retrieve the nameservers that should be used for delegating to the new zone, run the following:
+   ```
+   az network dns zone show --name "<PCF-ERT-DOMAIN>" \
+     --resource-group "pcfci"
+   ```
 
-To retrieve the nameservers that should be used for delegating to the new zone, run the following:
-```
-az network dns zone show --name "<PCF-ERT-DOMAIN>" \
-  --resource-group "pcfci"
-```
-
-This should return JSON containing a `nameServers` array.
-
-10. Run the `config-opsman-auth` job. This will require the DNS to be resolvable. To check if your domain
+   This should return JSON containing a `nameServers` array. To check if your domain
 is resolvable, run the following:
 
-```
-dig <PCF-ERT-DOMAIN>
-```
+   ```
+   dig <PCF-ERT-DOMAIN>
+   ```
+
+10. Once DNS is resolvable, run the `config-opsman-auth` job. From there the pipeline should automatically run through to the end.
