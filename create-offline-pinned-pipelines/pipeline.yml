@@ -5,6 +5,12 @@ resource_types:
     repository: pivotalcf/pivnet-resource
     tag: latest-final
 
+- name: curl
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
 resources:
 - name: operations-manager-pivnet
   type: pivnet
@@ -112,12 +118,11 @@ resources:
     regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar"
 
 - name: fly
-  type: github-release
+  type: curl
   source:
-    user: concourse
-    repository: fly
-    access_token: {{github_token}}
-    pre_release: true
+    url: "((atc_external_url))/api/v1/cli?arch=amd64&platform=linux"
+    filename: fly
+    skip_ssl_verification: true
 
 jobs:
 - name: create-offline-pinned-pipelines
@@ -134,7 +139,6 @@ jobs:
       trigger: true
       params: { globs: [] }
     - get: fly
-      params: { globs: ["*linux*"] }
     - do:
       - get: pcf-pipelines-tarball
         trigger: true
@@ -178,7 +182,6 @@ jobs:
 
           root=$PWD
 
-          mv fly/{fly_linux_amd64,fly}
           chmod +x fly/fly
           export PATH="${root}/fly:${PATH}"
 
