@@ -12,7 +12,7 @@ resource_types:
     tag: latest
 
 resources:
-- name: operations-manager-pivnet
+- name: operations-manager
   type: pivnet
   source:
     api_token: {{pivnet_token}}
@@ -29,7 +29,7 @@ resources:
     bucket: {{s3_bucket}}
     regexp: "staging/ops-manager/ops-manager-(.*).tar"
 
-- name: elastic-runtime-pivnet
+- name: elastic-runtime
   type: pivnet
   source:
     api_token: {{pivnet_token}}
@@ -108,9 +108,9 @@ jobs:
   - aggregate:
     - get: pcf-pipelines-tarball
     - get: czero-cflinuxfs2
-    - get: operations-manager-pivnet
+    - get: operations-manager
       params: { globs: [] }
-    - get: elastic-runtime-pivnet
+    - get: elastic-runtime
       params: { globs: [] }
 
 - name: create-ops-manager-tarball
@@ -118,7 +118,7 @@ jobs:
   - get: pcf-pipelines-tarball
     trigger: true
     passed: [collector]
-  - get: operations-manager-pivnet
+  - get: operations-manager
     trigger: true
     params:
       globs: ["*.ova"]
@@ -131,7 +131,7 @@ jobs:
         source:
           repository: czero/cflinuxfs2
       inputs:
-      - name: operations-manager-pivnet
+      - name: operations-manager
       outputs:
       - name: ops-manager-tarball
       run:
@@ -141,10 +141,10 @@ jobs:
         - |
           set -eu
 
-          version=$(cat operations-manager-pivnet/metadata.json | jq --raw-output '.Release.Version')
+          version=$(cat operations-manager/metadata.json | jq --raw-output '.Release.Version')
 
           echo "Creating tarball with version ${version}..."
-          tar cf "ops-manager-tarball/ops-manager-${version}.tar" -C operations-manager-pivnet .
+          tar cf "ops-manager-tarball/ops-manager-${version}.tar" -C operations-manager .
   - put: operations-manager-tarball
     params:
       file: "ops-manager-tarball/ops-manager-*.tar"
@@ -154,7 +154,7 @@ jobs:
   - get: pcf-pipelines-tarball
     trigger: true
     passed: [collector]
-  - get: elastic-runtime-pivnet
+  - get: elastic-runtime
     trigger: true
     passed: [collector]
     params:
@@ -167,7 +167,7 @@ jobs:
         source:
           repository: czero/cflinuxfs2
       inputs:
-      - name: elastic-runtime-pivnet
+      - name: elastic-runtime
       outputs:
       - name: elastic-runtime-tarball
       - name: stemcell-tarball
@@ -181,7 +181,7 @@ jobs:
           set -eu
 
           stemcell_version=$(
-            cat ./elastic-runtime-pivnet/metadata.json |
+            cat ./elastic-runtime/metadata.json |
             jq --raw-output \
               '
               [
@@ -193,7 +193,7 @@ jobs:
           )
 
           if [ -z "$stemcell_version" ]; then
-            echo "Expected to find stemcell version in ./elastic-runtime-pivnet/metadata.json, did not."
+            echo "Expected to find stemcell version in ./elastic-runtime/metadata.json, did not."
             exit 1
           fi
 
@@ -210,9 +210,9 @@ jobs:
 
           mv $stemcell_path stemcell-tarball/
 
-          version=$(cat elastic-runtime-pivnet/metadata.json | jq --raw-output '.Release.Version')
+          version=$(cat elastic-runtime/metadata.json | jq --raw-output '.Release.Version')
 
-          tar cvf "elastic-runtime-tarball/elastic-runtime-${version}.tar" -C elastic-runtime-pivnet .
+          tar cvf "elastic-runtime-tarball/elastic-runtime-${version}.tar" -C elastic-runtime .
   - put: elastic-runtime-tarball
     params:
       file: "elastic-runtime-tarball/elastic-runtime-*.tar"
@@ -262,10 +262,10 @@ jobs:
   - aggregate:
     - get: czero-cflinuxfs2
       passed: [collector]
-    - get: operations-manager-pivnet
+    - get: operations-manager
       passed: [collector]
       params: { globs: [] }
-    - get: elastic-runtime-pivnet
+    - get: elastic-runtime
       passed: [collector]
       params: { globs: [] }
     - get: fly
@@ -295,8 +295,8 @@ jobs:
         source: {repository: czero/cflinuxfs2}
       inputs:
       - name: czero-cflinuxfs2
-      - name: operations-manager-pivnet
-      - name: elastic-runtime-pivnet
+      - name: operations-manager
+      - name: elastic-runtime
       - name: pcf-pipelines-tarball
       - name: pcf-pipelines
       - name: fly
@@ -316,10 +316,10 @@ jobs:
           export PATH="${root}/fly:${PATH}"
 
           opsman_version=$(
-            cat operations-manager-pivnet/metadata.json | jq --raw-output '.Release.Version'
+            cat operations-manager/metadata.json | jq --raw-output '.Release.Version'
           )
           ert_version=$(
-            cat elastic-runtime-pivnet/metadata.json | jq --raw-output '.Release.Version'
+            cat elastic-runtime/metadata.json | jq --raw-output '.Release.Version'
           )
           czero_cflinuxfs2_digest=$(cat czero-cflinuxfs2/digest)
           pcf_pipelines_version=$(
