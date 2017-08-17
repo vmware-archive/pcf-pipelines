@@ -83,12 +83,15 @@ jobs:
         - -c
         - |
           set -eu
+          echo ""
+          echo "Extracting archive..."
           tar xvf pcf-pipelines-combined/*.tar -C pcf-pipelines-separated
 
+          echo ""
           echo "Verifying SHA of extracted files..."
-          pushd pcf-pipelines-separated
+          pushd pcf-pipelines-separated 1>/dev/null
             shasum -c MANIFEST.MF
-          popd
+          popd 1>/dev/null
   - aggregate:
     - put: pcf-ops-manager
       params:
