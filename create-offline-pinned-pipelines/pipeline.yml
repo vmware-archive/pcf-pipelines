@@ -46,7 +46,7 @@ resources:
     bucket: {{s3_bucket}}
     regexp: "staging/elastic-runtime/elastic-runtime-(.*).tar"
 
-- name: stemcells-tarball
+- name: stemcell-tarball
   type: s3
   source:
     access_key_id: {{s3_access_key_id}}
@@ -216,7 +216,7 @@ jobs:
   - put: elastic-runtime-tarball
     params:
       file: "elastic-runtime-tarball/elastic-runtime-*.tar"
-  - put: stemcells-tarball
+  - put: stemcell-tarball
     params:
       file: "stemcell-tarball/*.tgz"
 
@@ -402,7 +402,7 @@ jobs:
       - create-elastic-runtime-tarball
       - create-czero-cflinuxfs2-tarball
       - create-ops-manager-tarball
-    - get: stemcells-tarball
+    - get: stemcell-tarball
       passed: [create-elastic-runtime-tarball]
     - get: czero-cflinuxfs2-tarball
       passed: [create-czero-cflinuxfs2-tarball]
@@ -422,7 +422,7 @@ jobs:
       - name: czero-cflinuxfs2-tarball
       - name: operations-manager-tarball
       - name: elastic-runtime-tarball
-      - name: stemcells-tarball
+      - name: stemcell-tarball
       outputs:
       - name: pcf-pipelines-combined
       run:
@@ -438,7 +438,7 @@ jobs:
             czero-cflinuxfs2-tarball/*.tar \
             operations-manager-tarball/*.tar \
             elastic-runtime-tarball/*.tar \
-            stemcells-tarball/*.tgz \
+            stemcell-tarball/*.tgz \
             pcf-pipelines-offline-pinned-tarball/*.tgz \
             pcf-pipelines-combined-contents
 
