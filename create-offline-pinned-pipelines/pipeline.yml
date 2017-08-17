@@ -130,12 +130,11 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines-combined-version
+      trigger: true
       passed: [collector]
     - get: pcf-pipelines-tarball
-      trigger: true
       passed: [collector]
     - get: operations-manager
-      trigger: true
       params:
         globs: ["*.ova"]
       passed: [collector]
@@ -169,12 +168,11 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines-combined-version
+      trigger: true
       passed: [collector]
     - get: pcf-pipelines-tarball
-      trigger: true
       passed: [collector]
     - get: elastic-runtime
-      trigger: true
       passed: [collector]
       params:
         globs: ["*.pivotal"]
@@ -243,12 +241,11 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines-combined-version
+      trigger: true
       passed: [collector]
     - get: pcf-pipelines-tarball
-      trigger: true
       passed: [collector]
     - get: czero-cflinuxfs2
-      trigger: true
       passed: [collector]
   - task: create-tarball
     config:
@@ -282,6 +279,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines-combined-version
+      trigger: true
       passed: [collector]
     - get: czero-cflinuxfs2
       passed: [collector]
@@ -294,7 +292,6 @@ jobs:
     - get: fly
     - do:
       - get: pcf-pipelines-tarball
-        trigger: true
         passed: [collector]
       - task: unpack-pcf-pipelines
         config:
@@ -419,20 +416,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines-combined-version
+      trigger: true
       passed:
       - create-offline-pinned-pipelines
       - create-elastic-runtime-tarball
       - create-czero-cflinuxfs2-tarball
       - create-ops-manager-tarball
     - get: pcf-pipelines-offline-pinned-tarball
-      trigger: true
       passed: [create-offline-pinned-pipelines]
-    - get: pcf-pipelines-tarball
-      passed:
-      - create-offline-pinned-pipelines
-      - create-elastic-runtime-tarball
-      - create-czero-cflinuxfs2-tarball
-      - create-ops-manager-tarball
     - get: stemcell-tarball
       passed: [create-elastic-runtime-tarball]
     - get: czero-cflinuxfs2-tarball
@@ -449,7 +440,6 @@ jobs:
         source: {repository: czero/cflinuxfs2}
       inputs:
       - name: pcf-pipelines-offline-pinned-tarball
-      - name: pcf-pipelines-tarball
       - name: pcf-pipelines-combined-version
       - name: czero-cflinuxfs2-tarball
       - name: operations-manager-tarball
