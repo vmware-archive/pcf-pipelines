@@ -132,8 +132,6 @@ jobs:
     - get: pcf-pipelines-combined-version
       trigger: true
       passed: [collector]
-    - get: pcf-pipelines-tarball
-      passed: [collector]
     - get: operations-manager
       params:
         globs: ["*.ova"]
@@ -169,8 +167,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines-combined-version
       trigger: true
-      passed: [collector]
-    - get: pcf-pipelines-tarball
       passed: [collector]
     - get: elastic-runtime
       passed: [collector]
