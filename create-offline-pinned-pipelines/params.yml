@@ -6,3 +6,5 @@ pivnet_token:
 operations_manager_regex:
 elastic_runtime_regex:
 atc_external_url:
+gpg_public_key_contents:
+gpg_public_key_email:

@@ -93,7 +93,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar"
+    regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar.gpg"
 
 - name: fly
   type: curl
@@ -443,11 +443,15 @@ jobs:
       - name: stemcell-tarball
       outputs:
       - name: pcf-pipelines-combined
+      params:
+        GPG_PUBLIC_KEY: {{gpg_public_key_contents}}
+        GPG_KEY_EMAIL: {{gpg_public_key_email}}
       run:
         path: bash
         args:
         - -c
         - |
+          set -o pipefail
           set -eu
 
           mkdir -p pcf-pipelines-combined-contents
@@ -466,10 +470,25 @@ jobs:
 
           version=$(cat pcf-pipelines-combined-version/version)
 
-          tar cv \
-          -f "pcf-pipelines-combined/pcf-pipelines-combined-${version}.tar" \
-          -C pcf-pipelines-combined-contents \
-          .
+          echo -n "Importing GPG public key..."
+          echo "$GPG_PUBLIC_KEY" | gpg --import 2>/dev/null
+          echo "done"
+
+          echo -n "Trusting public key..."
+          gpg --list-keys --fingerprint --with-colons |
+          sed -E -n -e 's/^fpr:+([0-9A-F]+):$/\1:6:/p' |
+          gpg --import-ownertrust 1>/dev/null
+          echo "done"
+
+          echo "Creating encrypted tarball..."
+          tar cv -C pcf-pipelines-combined-contents . |
+          gpg \
+            --output "pcf-pipelines-combined/pcf-pipelines-combined-${version}.tar.gpg" \
+            --encrypt \
+            -z 0 \
+            --recipient $GPG_KEY_EMAIL
+          echo ""
+
   - put: pcf-pipelines-combined
     params:
-      file: "pcf-pipelines-combined/*.tar"
+      file: "pcf-pipelines-combined/*.tar.gpg"

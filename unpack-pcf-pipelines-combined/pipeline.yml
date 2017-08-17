@@ -35,7 +35,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar"
+    regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar.gpg"
 
 - name: stemcells
   type: s3
@@ -77,15 +77,23 @@ jobs:
       - name: pcf-pipelines-combined
       outputs:
       - name: pcf-pipelines-separated
+      params:
+        GPG_PRIVATE_KEY: {{gpg_private_key_contents}}
       run:
         path: bash
         args:
         - -c
         - |
           set -eu
+          set -o pipefail
+
+          echo -n "Importing GPG private key..."
+          echo "$GPG_PRIVATE_KEY" | gpg --import 2>/dev/null
+          echo "done"
+
           echo ""
-          echo "Extracting archive..."
-          tar xvf pcf-pipelines-combined/*.tar -C pcf-pipelines-separated
+          echo "Extracting encrypted tarball..."
+          gpg --decrypt pcf-pipelines-combined/*.tar.gpg | tar xv -C pcf-pipelines-combined-contents
 
           echo ""
           echo "Verifying SHA of extracted files..."
