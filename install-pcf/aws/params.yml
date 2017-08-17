@@ -74,6 +74,7 @@ TF_VAR_az3: us-east-1d
 # For terraform state file
 S3_ENDPOINT: https://s3.amazonaws.com
 S3_OUTPUT_BUCKET:
+S3_REGION:
 
 # The ERT domain to use; *.cfapps.<ert-domain> and *.sys.<ert-domain> will be used
 ERT_DOMAIN:
