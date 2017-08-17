@@ -12,8 +12,9 @@ resource "openstack_compute_instance_v2" "opsman" {
   }
 
   block_device {
-    source_type = "blank"
-    volume_size = 50
+    source_type           = "blank"
+    volume_size           = 50
+    destination_type      = "local"
   }
 }
 
