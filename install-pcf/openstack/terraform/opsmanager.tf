@@ -10,12 +10,6 @@ resource "openstack_compute_instance_v2" "opsman" {
   network {
     name = "${openstack_networking_network_v2.infra_net.name}"
   }
-
-  block_device {
-    source_type           = "blank"
-    volume_size           = 50
-    destination_type      = "local"
-  }
 }
 
 resource "openstack_compute_keypair_v2" "opsman_keypair" {
@@ -30,4 +24,15 @@ resource "openstack_networking_floatingip_v2" "opsman_floating_ip" {
 resource "openstack_compute_floatingip_associate_v2" "opsman_floating_ip_association" {
   floating_ip = "${openstack_networking_floatingip_v2.opsman_floating_ip.address}"
   instance_id = "${openstack_compute_instance_v2.opsman.id}"
+}
+
+resource "openstack_blockstorage_volume_v2" "opsman_volume" {
+  region      = "${var.os_region}"
+  name        = "${var.prefix}-opsman-volume"
+  size        = 50
+}
+
+resource "openstack_compute_volume_attach_v2" "opsman_volume_attachment" {
+  instance_id = "${openstack_compute_instance_v2.opsman.id}"
+  volume_id   = "${openstack_blockstorage_volume_v2.opsman_volume.id}"
 }
