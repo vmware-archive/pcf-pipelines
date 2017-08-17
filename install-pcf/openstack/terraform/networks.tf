@@ -50,7 +50,7 @@ resource "openstack_networking_subnet_v2" "services_subnet" {
 }
 
 resource "openstack_networking_network_v2" "dynamic_services_net" {
-  name = "${var.prefix}-dynamic_services-net"
+  name = "${var.prefix}-dynamic-services-net"
   region = "${var.os_region}"
   admin_state_up = "true"
 }
