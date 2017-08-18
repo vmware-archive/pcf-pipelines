@@ -114,11 +114,6 @@ jobs:
     - get: pcf-pipelines
       trigger: false
     - get: terraform-state
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
 
   - task: wipe-env
     file: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.yml
