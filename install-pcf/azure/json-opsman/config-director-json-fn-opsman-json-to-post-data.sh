@@ -7,8 +7,8 @@ function fn_json_to_post_data {
      fn_metadata_keys_cmd="echo \$${1}_json | jq 'keys' | jq .[]"
      fn_metadata_cmd="echo \$${1}_json"
    elif [[ $2 == "file" ]]; then
-     fn_metadata_keys_cmd="cat ${json_file_path}/${3}.json | jq .[].${1} | jq 'keys' | jq .[]"
-     fn_metadata_cmd="cat ${json_file_path}/${3}.json | jq .[].${1}"
+     fn_metadata_keys_cmd="cat ${JSON_FILE_PATH}/${3}.json | jq .[].${1} | jq 'keys' | jq .[]"
+     fn_metadata_cmd="cat ${JSON_FILE_PATH}/${3}.json | jq .[].${1}"
    else
      fn_err "$2 is not a matching json source type!!!"
    fi

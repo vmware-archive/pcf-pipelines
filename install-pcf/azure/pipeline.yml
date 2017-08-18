@@ -334,7 +334,7 @@ jobs:
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-director.sh
       params:
-        PCF_ERT_DOMAIN: {{pcf_ert_domain}}
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
         PCF_OPSMAN_ADMIN: {{pcf_opsman_admin_username}}
         PCF_OPSMAN_ADMIN_PASSWORD: {{pcf_opsman_admin_password}}
 
