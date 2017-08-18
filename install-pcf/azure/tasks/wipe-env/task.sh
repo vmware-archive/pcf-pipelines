@@ -6,7 +6,7 @@ ROOT="${PWD}"
 function delete-opsman() {
   source "${ROOT}/pcf-pipelines/functions/check_opsman_available.sh"
 
-  opsman_available=$(check_opsman_available "${OPSMAN_DOMAIN_OR_IP_ADDRESS}")
+  OPSMAN_AVAILABLE=$(check_opsman_available "${OPSMAN_DOMAIN_OR_IP_ADDRESS}")
   if [[ ${OPSMAN_AVAILABLE} == "available" ]]; then
     om-linux \
       --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
