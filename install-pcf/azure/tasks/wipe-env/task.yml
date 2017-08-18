@@ -25,6 +25,6 @@ params:
   azure_service_principal_password:
   azure_region:
   azure_terraform_prefix:
-  OPSMAN_URI:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:

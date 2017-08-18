@@ -131,7 +131,7 @@ jobs:
       azure_service_principal_password: {{azure_service_principal_password}}
       azure_region: {{azure_region}}
       azure_terraform_prefix: {{azure_terraform_prefix}}
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
 
@@ -278,7 +278,7 @@ jobs:
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
       params:
-        opsman_uri: {{opsman_uri}}
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
         pcf_opsman_admin: {{pcf_opsman_admin_username}}
         pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
         azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
@@ -369,7 +369,7 @@ jobs:
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
-      OPS_MGR_HOST: {{opsman_uri}}
+      OPS_MGR_HOST: {{opsman_domain_or_ip_address}}
       OPS_MGR_USR: {{pcf_opsman_admin_username}}
       OPS_MGR_PWD: {{pcf_opsman_admin_password}}
       PIVNET_API_TOKEN: {{pcf_pivnet_token}}
@@ -380,7 +380,7 @@ jobs:
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
       PRODUCT_NAME: cf
@@ -507,6 +507,6 @@ jobs:
   - task: deploy-ert
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      OPSMAN_URI: {{opsman_uri}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
