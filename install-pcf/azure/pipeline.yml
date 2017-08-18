@@ -344,9 +344,9 @@ jobs:
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-director.sh
       params:
-        pcf_ert_domain: {{pcf_ert_domain}}
-        pcf_opsman_admin: {{pcf_opsman_admin_username}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
+        PCF_ERT_DOMAIN: {{pcf_ert_domain}}
+        PCF_OPSMAN_ADMIN: {{pcf_opsman_admin_username}}
+        PCF_OPSMAN_ADMIN_PASSWORD: {{pcf_opsman_admin_password}}
 
 ###########################
 ## Job - Upload ERT      ##
