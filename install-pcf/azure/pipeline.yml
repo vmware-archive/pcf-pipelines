@@ -279,32 +279,32 @@ jobs:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
       params:
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-        pcf_opsman_admin: {{pcf_opsman_admin_username}}
-        pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
-        azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
-        azure_subscription_id: {{azure_subscription_id}}
-        azure_tenant_id: {{azure_tenant_id}}
-        azure_service_principal_id: {{azure_service_principal_id}}
-        azure_service_principal_password: {{azure_service_principal_password}}
-        azure_terraform_prefix: {{azure_terraform_prefix}}
-        azure_terraform_subnet_infra_cidr: {{azure_terraform_subnet_infra_cidr}}
-        azure_terraform_subnet_infra_reserved: {{azure_terraform_subnet_infra_reserved}}
-        azure_terraform_subnet_infra_dns: {{azure_terraform_subnet_infra_dns}}
-        azure_terraform_subnet_infra_gateway: {{azure_terraform_subnet_infra_gateway}}
-        azure_terraform_subnet_ert_cidr: {{azure_terraform_subnet_ert_cidr}}
-        azure_terraform_subnet_ert_reserved: {{azure_terraform_subnet_ert_reserved}}
-        azure_terraform_subnet_ert_dns: {{azure_terraform_subnet_ert_dns}}
-        azure_terraform_subnet_ert_gateway: {{azure_terraform_subnet_ert_gateway}}
-        azure_terraform_subnet_services1_cidr: {{azure_terraform_subnet_services1_cidr}}
-        azure_terraform_subnet_services1_reserved: {{azure_terraform_subnet_services1_reserved}}
-        azure_terraform_subnet_services1_dns: {{azure_terraform_subnet_services1_dns}}
-        azure_terraform_subnet_services1_gateway: {{azure_terraform_subnet_services1_gateway}}
-        azure_terraform_subnet_dynamic_services_cidr: {{azure_terraform_subnet_dynamic_services_cidr}}
-        azure_terraform_subnet_dynamic_services_reserved: {{azure_terraform_subnet_dynamic_services_reserved}}
-        azure_terraform_subnet_dynamic_services_dns: {{azure_terraform_subnet_dynamic_services_dns}}
-        azure_terraform_subnet_dynamic_services_gateway: {{azure_terraform_subnet_dynamic_services_gateway}}
-        pcf_ssh_key_pub: {{pcf_ssh_key_pub}}
-        pcf_ssh_key_priv: {{pcf_ssh_key_priv}}
+        PCF_OPSMAN_ADMIN: {{pcf_opsman_admin_username}}
+        PCF_OPSMAN_ADMIN_PASSWD: {{pcf_opsman_admin_password}}
+        AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
+        AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
+        AZURE_TENANT_ID: {{azure_tenant_id}}
+        AZURE_SERVICE_PRINCIPAL_ID: {{azure_service_principal_id}}
+        AZURE_SERVICE_PRINCIPAL_PASSWORD: {{azure_service_principal_password}}
+        AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
+        AZURE_TERRAFORM_SUBNET_INFRA_CIDR: {{azure_terraform_subnet_infra_cidr}}
+        AZURE_TERRAFORM_SUBNET_INFRA_RESERVED: {{azure_terraform_subnet_infra_reserved}}
+        AZURE_TERRAFORM_SUBNET_INFRA_DNS: {{azure_terraform_subnet_infra_dns}}
+        AZURE_TERRAFORM_SUBNET_INFRA_GATEWAY: {{azure_terraform_subnet_infra_gateway}}
+        AZURE_TERRAFORM_SUBNET_ERT_CIDR: {{azure_terraform_subnet_ert_cidr}}
+        AZURE_TERRAFORM_SUBNET_ERT_RESERVED: {{azure_terraform_subnet_ert_reserved}}
+        AZURE_TERRAFORM_SUBNET_ERT_DNS: {{azure_terraform_subnet_ert_dns}}
+        AZURE_TERRAFORM_SUBNET_ERT_GATEWAY: {{azure_terraform_subnet_ert_gateway}}
+        AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR: {{azure_terraform_subnet_services1_cidr}}
+        AZURE_TERRAFORM_SUBNET_SERVICES1_RESERVED: {{azure_terraform_subnet_services1_reserved}}
+        AZURE_TERRAFORM_SUBNET_SERVICES1_DNS: {{azure_terraform_subnet_services1_dns}}
+        AZURE_TERRAFORM_SUBNET_SERVICES1_GATEWAY: {{azure_terraform_subnet_services1_gateway}}
+        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
+        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_RESERVED: {{azure_terraform_subnet_dynamic_services_reserved}}
+        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_DNS: {{azure_terraform_subnet_dynamic_services_dns}}
+        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_GATEWAY: {{azure_terraform_subnet_dynamic_services_gateway}}
+        PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
+        PCF_SSH_KEY_PRIV: {{pcf_ssh_key_priv}}
 
 ###########################
 ## Job - Deploy-Director ##
