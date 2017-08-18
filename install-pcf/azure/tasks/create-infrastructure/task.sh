@@ -9,8 +9,8 @@ fi
 # Get ert subnet if multi-resgroup
 az login --service-principal -u ${AZURE_SERVICE_PRINCIPAL_ID} -p ${AZURE_SERVICE_PRINCIPAL_PASSWORD} --tenant ${AZURE_TENANT_ID}
 az account set --subscription ${AZURE_SUBSCRIPTION_ID}
-ert_subnet_cmd="az network vnet subnet list -g network-core --vnet-name vnet-pcf --output json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
-ert_subnet=$(eval $ert_subnet_cmd)
+ERT_SUBNET_CMD="az network vnet subnet list -g network-core --vnet-name vnet-pcf --output json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
+ERT_SUBNET=$(eval ${ERT_SUBNET_CMD})
 echo "Found SubnetID=${ERT_SUBNET}"
 
 echo "=============================================================================================="
@@ -18,11 +18,11 @@ echo "Collecting Terraform Variables from Deployed Azure Objects ...."
 echo "=============================================================================================="
 
 # Get Opsman VHD from previous task
-pcf_opsman_image_uri=$(cat opsman-metadata/uri)
+PCF_OPSMAN_IMAGE_URI=$(cat opsman-metadata/uri)
 
 # Use prefix to strip down a Storage Account Prefix String
-env_short_name=$(echo ${AZURE_TERRAFORM_PREFIX} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
-env_short_name=$(echo ${ENV_SHORT_NAME:0:10})
+ENV_SHORT_NAME=$(echo ${AZURE_TERRAFORM_PREFIX} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
+ENV_SHORT_NAME=$(echo ${ENV_SHORT_NAME:0:10})
 
 ##########################################################
 # Detect generate for ssh keys
@@ -31,8 +31,8 @@ env_short_name=$(echo ${ENV_SHORT_NAME:0:10})
 if [[ ${PCF_SSH_KEY_PUB} == 'generate' ]]; then
   echo "Generating SSH keys for Opsman"
   ssh-keygen -t rsa -f opsman -C ubuntu -q -P ""
-  pcf_ssh_key_pub=$(cat opsman.pub)
-  pcf_ssh_key_priv=$(cat opsman)
+  PCF_SSH_KEY_PUB="$(cat opsman.pub)"
+  PCF_SSH_KEY_PRIV="$(cat opsman)"
   echo "******************************"
   echo "******************************"
   echo "pcf_ssh_key_pub = ${PCF_SSH_KEY_PUB}"
@@ -75,7 +75,7 @@ terraform plan \
   -var "azure_resources_container=${AZURE_RESOURCES_CONTAINER}" \
   -out terraform.tfplan \
   -state terraform-state/terraform.tfstate \
-  pcf-pipelines/install-pcf/azure/terraform/$azure_pcf_terraform_template
+  "pcf-pipelines/install-pcf/azure/terraform/${AZURE_PCF_TERRAFORM_TEMPLATE}"
 
 echo "=============================================================================================="
 echo "Executing Terraform Apply ..."
