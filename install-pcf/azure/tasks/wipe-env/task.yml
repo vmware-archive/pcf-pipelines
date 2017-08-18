@@ -17,14 +17,14 @@ run:
   path: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.sh
 
 params:
-  arg_wipe:
-  azure_pcf_terraform_template:
-  azure_subscription_id:
-  azure_tenant_id:
-  azure_service_principal_id:
-  azure_service_principal_password:
-  azure_region:
-  azure_terraform_prefix:
+  ARG_WIPE:
+  AZURE_PCF_TERRAFORM_TEMPLATE:
+  AZURE_SUBSCRIPTION_ID:
+  AZURE_TENANT_ID:
+  AZURE_SERVICE_PRINCIPAL_ID:
+  AZURE_SERVICE_PRINCIPAL_PASSWORD:
+  AZURE_REGION:
+  AZURE_TERRAFORM_PREFIX:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:

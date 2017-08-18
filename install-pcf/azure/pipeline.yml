@@ -123,14 +123,14 @@ jobs:
   - task: wipe-env
     file: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.yml
     params:
-      arg_wipe: {{arg_wipe}}
-      azure_pcf_terraform_template: {{azure_pcf_terraform_template}}
-      azure_subscription_id: {{azure_subscription_id}}
-      azure_tenant_id: {{azure_tenant_id}}
-      azure_service_principal_id: {{azure_service_principal_id}}
-      azure_service_principal_password: {{azure_service_principal_password}}
-      azure_region: {{azure_region}}
-      azure_terraform_prefix: {{azure_terraform_prefix}}
+      ARG_WIPE: {{arg_wipe}}
+      AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
+      AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
+      AZURE_TENANT_ID: {{azure_tenant_id}}
+      AZURE_SERVICE_PRINCIPAL_ID: {{azure_service_principal_id}}
+      AZURE_SERVICE_PRINCIPAL_PASSWORD: {{azure_service_principal_password}}
+      AZURE_REGION: {{azure_region}}
+      AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}

@@ -7,7 +7,7 @@ function delete-opsman() {
   source "${ROOT}/pcf-pipelines/functions/check_opsman_available.sh"
 
   opsman_available=$(check_opsman_available "${OPSMAN_DOMAIN_OR_IP_ADDRESS}")
-  if [[ ${opsman_available} == "available" ]]; then
+  if [[ ${OPSMAN_AVAILABLE} == "available" ]]; then
     om-linux \
       --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
       --skip-ssl-validation \
@@ -23,10 +23,10 @@ function delete-infrastructure() {
   echo "=============================================================================================="
 
   terraform destroy -force \
-    -var "subscription_id=${azure_subscription_id}" \
-    -var "client_id=${azure_service_principal_id}" \
-    -var "client_secret=${azure_service_principal_password}" \
-    -var "tenant_id=${azure_tenant_id}" \
+    -var "subscription_id=${AZURE_SUBSCRIPTION_ID}" \
+    -var "client_id=${AZURE_SERVICE_PRINCIPAL_ID}" \
+    -var "client_secret=${AZURE_SERVICE_PRINCIPAL_PASSWORD}" \
+    -var "tenant_id=${AZURE_TENANT_ID}" \
     -var "location=dontcare" \
     -var "env_name=dontcare" \
     -var "env_short_name=dontcare" \
@@ -63,11 +63,11 @@ function delete-infrastructure() {
     -var "azure_resources_container=dontcare" \
     -state "${ROOT}/terraform-state/terraform.tfstate" \
     -state-out "${ROOT}/terraform-state-output/terraform.tfstate" \
-    "pcf-pipelines/install-pcf/azure/terraform/${azure_pcf_terraform_template}"
+    "pcf-pipelines/install-pcf/azure/terraform/${AZURE_PCF_TERRAFORM_TEMPLATE}"
 }
 
 function main() {
-  if [[ "${arg_wipe}" == "wipe" ]]; then
+  if [[ "${ARG_WIPE}" == "wipe" ]]; then
     echo "Wiping Environment...."
   else
     echo "Need Args [0]=wipe, anything else and I swear I'll exit and do nothing!!! "
