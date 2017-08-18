@@ -16,7 +16,7 @@ set -e
 PROVIDER_TYPE=${1}
 CONFIG_TARGET=${2}
 
-if [[ -z ${PCF_OPSMAN_ADMIN} || -z ${PCF_OPSMAN_PASSWD} ]]; then
+if [[ -z ${PCF_OPSMAN_ADMIN} || -z ${PCF_OPSMAN_ADMIN_PASSWORD} ]]; then
   echo "config-director-json_err: Missing Key Variables!!!!"
   exit 1
 fi

@@ -20,7 +20,7 @@ function fn_opsman_auth {
 
     # POST Opsman Creds to get redirect for token
     xuaacsrf=$(cat mycookiejar | grep X-Uaa-Csrf | awk '{print$7}')
-    rqst_form_data="-d 'username=${PCF_OPSMAN_ADMIN}&password=${PCF_OPSMAN_ADMIN_PASSWD}&X-Uaa-Csrf=${xuaacsrf}'"
+    rqst_form_data="-d 'username=${PCF_OPSMAN_ADMIN}&password=${PCF_OPSMAN_ADMIN_PASSWORD}&X-Uaa-Csrf=${xuaacsrf}'"
     chk_login=$(fn_opsman_curl "POST" "uaa/login.do" "${xuaacsrf}" "--NOENCODE" "${rqst_form_data}" | grep "Location:" | awk '{print$2}' | awk -F '&' '{print$4}')
     url_authorize_state=$(echo "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}/${url_authorize}" | awk -F '&' '{print$4}')
 

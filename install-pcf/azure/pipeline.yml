@@ -181,7 +181,7 @@ jobs:
       AZURE_VM_PASSWORD: {{azure_vm_password}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
       PCF_OPSMAN_ADMIN: {{pcf_opsman_admin_username}}
-      PCF_OPSMAN_ADMIN_PASSWD: {{pcf_opsman_admin_password}}
+      PCF_OPSMAN_ADMIN_PASSWORD: {{pcf_opsman_admin_password}}
       PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
       AZURE_ACCOUNT_NAME: {{azure_account_name}}
       AZURE_BUILDPACKS_CONTAINER: {{azure_buildpacks_container}}
@@ -270,7 +270,7 @@ jobs:
       params:
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
         PCF_OPSMAN_ADMIN: {{pcf_opsman_admin_username}}
-        PCF_OPSMAN_ADMIN_PASSWD: {{pcf_opsman_admin_password}}
+        PCF_OPSMAN_ADMIN_PASSWORD: {{pcf_opsman_admin_password}}
         AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
         AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
         AZURE_TENANT_ID: {{azure_tenant_id}}
