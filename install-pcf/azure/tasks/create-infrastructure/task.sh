@@ -2,16 +2,16 @@
 set -e
 
 # Copy base template with no clobber if not using the base template
-if [[ ! ${azure_pcf_terraform_template} == "c0-azure-base" ]]; then
-  cp -rn pcf-pipelines/install-pcf/azure/terraform/c0-azure-base/* pcf-pipelines/install-pcf/azure/terraform/${azure_pcf_terraform_template}/
+if [[ ! ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-base" ]]; then
+  cp -rn pcf-pipelines/install-pcf/azure/terraform/c0-azure-base/* pcf-pipelines/install-pcf/azure/terraform/${AZURE_PCF_TERRAFORM_TEMPLATE}/
 fi
 
 # Get ert subnet if multi-resgroup
-az login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
-az account set --subscription ${azure_subscription_id}
+az login --service-principal -u ${AZURE_SERVICE_PRINCIPAL_ID} -p ${AZURE_SERVICE_PRINCIPAL_PASSWORD} --tenant ${AZURE_TENANT_ID}
+az account set --subscription ${AZURE_SUBSCRIPTION_ID}
 ert_subnet_cmd="az network vnet subnet list -g network-core --vnet-name vnet-pcf --output json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
 ert_subnet=$(eval $ert_subnet_cmd)
-echo "Found SubnetID=${ert_subnet}"
+echo "Found SubnetID=${ERT_SUBNET}"
 
 echo "=============================================================================================="
 echo "Collecting Terraform Variables from Deployed Azure Objects ...."
@@ -21,23 +21,23 @@ echo "==========================================================================
 pcf_opsman_image_uri=$(cat opsman-metadata/uri)
 
 # Use prefix to strip down a Storage Account Prefix String
-env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
-env_short_name=$(echo ${env_short_name:0:10})
+env_short_name=$(echo ${AZURE_TERRAFORM_PREFIX} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
+env_short_name=$(echo ${ENV_SHORT_NAME:0:10})
 
 ##########################################################
 # Detect generate for ssh keys
 ##########################################################
 
-if [[ ${pcf_ssh_key_pub} == 'generate' ]]; then
+if [[ ${PCF_SSH_KEY_PUB} == 'generate' ]]; then
   echo "Generating SSH keys for Opsman"
   ssh-keygen -t rsa -f opsman -C ubuntu -q -P ""
   pcf_ssh_key_pub=$(cat opsman.pub)
   pcf_ssh_key_priv=$(cat opsman)
   echo "******************************"
   echo "******************************"
-  echo "pcf_ssh_key_pub = ${pcf_ssh_key_pub}"
+  echo "pcf_ssh_key_pub = ${PCF_SSH_KEY_PUB}"
   echo "******************************"
-  echo "pcf_ssh_key_priv = ${pcf_ssh_key_priv}"
+  echo "pcf_ssh_key_priv = ${PCF_SSH_KEY_PRIV}"
   echo "******************************"
   echo "******************************"
 fi
@@ -47,32 +47,32 @@ echo "Executing Terraform Plan ..."
 echo "=============================================================================================="
 
 terraform plan \
-  -var "subscription_id=${azure_subscription_id}" \
-  -var "client_id=${azure_service_principal_id}" \
-  -var "client_secret=${azure_service_principal_password}" \
-  -var "tenant_id=${azure_tenant_id}" \
-  -var "location=${azure_region}" \
-  -var "env_name=${azure_terraform_prefix}" \
-  -var "env_short_name=${env_short_name}" \
-  -var "azure_terraform_vnet_cidr=${azure_terraform_vnet_cidr}" \
-  -var "azure_terraform_subnet_infra_cidr=${azure_terraform_subnet_infra_cidr}" \
-  -var "azure_terraform_subnet_ert_cidr=${azure_terraform_subnet_ert_cidr}" \
-  -var "azure_terraform_subnet_services1_cidr=${azure_terraform_subnet_services1_cidr}" \
-  -var "azure_terraform_subnet_dynamic_services_cidr=${azure_terraform_subnet_dynamic_services_cidr}" \
-  -var "ert_subnet_id=${ert_subnet}" \
-  -var "pcf_ert_domain=${pcf_ert_domain}" \
-  -var "ops_manager_image_uri=${pcf_opsman_image_uri}" \
-  -var "vm_admin_username=${azure_vm_admin}" \
-  -var "vm_admin_password=${azure_vm_password}" \
-  -var "vm_admin_public_key=${pcf_ssh_key_pub}" \
-  -var "azure_multi_resgroup_network=${e_multi_resgroup_network}" \
-  -var "azure_multi_resgroup_pcf=${azure_multi_resgroup_pcf}" \
-  -var "priv_ip_opsman_vm=${azure_terraform_opsman_priv_ip}" \
-  -var "azure_account_name=${azure_account_name}" \
-  -var "azure_buildpacks_container=${azure_buildpacks_container}" \
-  -var "azure_droplets_container=${azure_droplets_container}" \
-  -var "azure_packages_container=${azure_packages_container}" \
-  -var "azure_resources_container=${azure_resources_container}" \
+  -var "subscription_id=${AZURE_SUBSCRIPTION_ID}" \
+  -var "client_id=${AZURE_SERVICE_PRINCIPAL_ID}" \
+  -var "client_secret=${AZURE_SERVICE_PRINCIPAL_PASSWORD}" \
+  -var "tenant_id=${AZURE_TENANT_ID}" \
+  -var "location=${AZURE_REGION}" \
+  -var "env_name=${AZURE_TERRAFORM_PREFIX}" \
+  -var "env_short_name=${ENV_SHORT_NAME}" \
+  -var "azure_terraform_vnet_cidr=${AZURE_TERRAFORM_VNET_CIDR}" \
+  -var "azure_terraform_subnet_infra_cidr=${AZURE_TERRAFORM_SUBNET_INFRA_CIDR}" \
+  -var "azure_terraform_subnet_ert_cidr=${AZURE_TERRAFORM_SUBNET_ERT_CIDR}" \
+  -var "azure_terraform_subnet_services1_cidr=${AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR}" \
+  -var "azure_terraform_subnet_dynamic_services_cidr=${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR}" \
+  -var "ert_subnet_id=${ERT_SUBNET}" \
+  -var "pcf_ert_domain=${PCF_ERT_DOMAIN}" \
+  -var "ops_manager_image_uri=${PCF_OPSMAN_IMAGE_URI}" \
+  -var "vm_admin_username=${AZURE_VM_ADMIN}" \
+  -var "vm_admin_password=${AZURE_VM_PASSWORD}" \
+  -var "vm_admin_public_key=${PCF_SSH_KEY_PUB}" \
+  -var "azure_multi_resgroup_network=${E_MULTI_RESGROUP_NETWORK}" \
+  -var "azure_multi_resgroup_pcf=${AZURE_MULTI_RESGROUP_PCF}" \
+  -var "priv_ip_opsman_vm=${AZURE_TERRAFORM_OPSMAN_PRIV_IP}" \
+  -var "azure_account_name=${AZURE_ACCOUNT_NAME}" \
+  -var "azure_buildpacks_container=${AZURE_BUILDPACKS_CONTAINER}" \
+  -var "azure_droplets_container=${AZURE_DROPLETS_CONTAINER}" \
+  -var "azure_packages_container=${AZURE_PACKAGES_CONTAINER}" \
+  -var "azure_resources_container=${AZURE_RESOURCES_CONTAINER}" \
   -out terraform.tfplan \
   -state terraform-state/terraform.tfstate \
   pcf-pipelines/install-pcf/azure/terraform/$azure_pcf_terraform_template
