@@ -464,21 +464,22 @@ jobs:
             pcf-pipelines-offline-pinned-tarball/*.tgz \
             pcf-pipelines-combined-contents
 
-          pushd pcf-pipelines-combined-contents
+          echo "Creating SHA manifest..."
+          pushd pcf-pipelines-combined-contents 1>/dev/null
             shasum * > MANIFEST.MF
-          popd
+          popd 1>/dev/null
+          echo ""
 
           version=$(cat pcf-pipelines-combined-version/version)
 
-          echo -n "Importing GPG public key..."
+          echo "Importing GPG public key..."
           echo "$GPG_PUBLIC_KEY" | gpg --import 2>/dev/null
-          echo "done"
+          echo ""
 
-          echo -n "Trusting public key..."
+          echo "Trusting public key..."
           gpg --list-keys --fingerprint --with-colons |
           sed -E -n -e 's/^fpr:+([0-9A-F]+):$/\1:6:/p' |
           gpg --import-ownertrust 1>/dev/null
-          echo "done"
 
           echo "Creating encrypted tarball..."
           tar cv -C pcf-pipelines-combined-contents . |
