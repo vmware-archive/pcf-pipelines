@@ -93,7 +93,7 @@ jobs:
 
           echo ""
           echo "Extracting encrypted tarball..."
-          gpg --decrypt pcf-pipelines-combined/*.tar.gpg | tar xv -C pcf-pipelines-combined-contents
+          gpg --decrypt pcf-pipelines-combined/*.tar.gpg | tar xv -C pcf-pipelines-separated
 
           echo ""
           echo "Verifying SHA of extracted files..."
