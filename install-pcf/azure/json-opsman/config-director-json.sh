@@ -41,34 +41,34 @@ source ${EXEC_MODE_ROOT}/config-director-json-fn-opsman-config-director.sh
 if [[ ${PCF_SSH_KEY_PUB} == 'generate' ]]; then
   echo "Generating SSH keys for BOSH deployed VMs"
   ssh-keygen -t rsa -f bosh -C ubuntu -q -P ""
-  pcf_ssh_key_pub=$(cat bosh.pub)
-  pcf_ssh_key_priv=$(cat bosh)
+  PCF_SSH_KEY_PUB=$(cat bosh.pub)
+  PCF_SSH_KEY_PRIV=$(cat bosh)
   echo "******************************"
   echo "******************************"
-  echo "pcf_ssh_key_pub = ${PCF_SSH_KEY_PUB}"
+  echo "PCF_SSH_KEY_PUB = ${PCF_SSH_KEY_PUB}"
   echo "******************************"
-  echo "pcf_ssh_key_priv = ${PCF_SSH_KEY_PRIV}"
+  echo "PCF_SSH_KEY_PRIV = ${PCF_SSH_KEY_PRIV}"
   echo "******************************"
   echo "******************************"
 fi
 
 
 # Set Stg Acct Name Prefix and other Azure constants
-  env_short_name=$(echo ${AZURE_TERRAFORM_PREFIX} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
-  env_short_name=$(echo ${ENV_SHORT_NAME:0:10})
+  ENV_SHORT_NAME=$(echo ${AZURE_TERRAFORM_PREFIX} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
+  ENV_SHORT_NAME=$(echo ${ENV_SHORT_NAME:0:10})
 
-  azure_bosh_stg_acct="${ENV_SHORT_NAME}root"
-  azure_deployment_stg_acct_wildcard="*boshvms*"
-  azure_default_security_group="pcf-default-security-group"
+  AZURE_BOSH_STG_ACCT="${ENV_SHORT_NAME}root"
+  AZURE_DEPLOYMENT_STG_ACCT_WILDCARD="*boshvms*"
+  AZURE_DEFAULT_SECURITY_GROUP="pcf-default-security-group"
 
-  pcf_ssh_key_priv=$(echo "${PCF_SSH_KEY_PRIV}" | perl -p -e 's/\s+$/\\\\n/g')
+  PCF_SSH_KEY_PRIV=$(echo "${PCF_SSH_KEY_PRIV}" | perl -p -e 's/\s+$/\\\\n/g')
 
 if [[ ${PROVIDER_TYPE} == "azure" ]]; then
 
-  resgroup_lookup_net=${AZURE_TERRAFORM_PREFIX}
-  resgroup_lookup_pcf=${AZURE_TERRAFORM_PREFIX}
+  RESGROUP_LOOKUP_NET=${AZURE_TERRAFORM_PREFIX}
+  RESGROUP_LOOKUP_PCF=${AZURE_TERRAFORM_PREFIX}
 
-  iaas_configuration_json=$(echo "{
+  IAAS_CONFIGURATION_JSON=$(echo "{
     \"iaas_configuration[subscription_id]\": \"${AZURE_SUBSCRIPTION_ID}\",
     \"iaas_configuration[tenant_id]\": \"${AZURE_TENANT_ID}\",
     \"iaas_configuration[client_id]\": \"${AZURE_SERVICE_PRINCIPAL_ID}\",
@@ -117,14 +117,14 @@ fi
 ############################################# Main Logic ###################################################
 ############################################################################################################
 
-case ${config_target} in
+case ${CONFIG_TARGET} in
   "director")
-    echo "Starting ${config_target} config ...."
-    echo ${iaas_configuration_json} | jq .
+    echo "Starting ${CONFIG_TARGET} config ...."
+    echo ${IAAS_CONFIGURATION_JSON} | jq .
     fn_config_director
   ;;
   *)
-    fn_err "${config_target} not enabled"
+    fn_err "${CONFIG_TARGET} not enabled"
   ;;
 esac
 
