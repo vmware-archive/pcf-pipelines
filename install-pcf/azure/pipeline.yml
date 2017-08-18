@@ -146,11 +146,6 @@ jobs:
     - get: pcf-pipelines
       trigger: false
     - get: terraform-state
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
     - get: pivnet-opsmgr
       trigger: false
       params:
