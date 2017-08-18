@@ -13,24 +13,24 @@ set -e
 ############################################################################################################
 ############################################# Variables  ###################################################
 ############################################################################################################
-provider_type=${1}
-config_target=${2}
+PROVIDER_TYPE=${1}
+CONFIG_TARGET=${2}
 
-if [[ -z ${pcf_opsman_admin} || -z ${pcf_opsman_admin} ]]; then
+if [[ -z ${PCF_OPSMAN_ADMIN} || -z ${PCF_OPSMAN_PASSWD} ]]; then
   echo "config-director-json_err: Missing Key Variables!!!!"
   exit 1
 fi
 
-exec_mode_root="./pcf-pipelines/install-pcf/azure/json-opsman"
-json_file_path="${exec_mode_root}/${azure_pcf_terraform_template}"
+EXEC_MODE_ROOT="./pcf-pipelines/install-pcf/azure/json-opsman"
+JSON_FILE_PATH="${EXEC_MODE_ROOT}/${AZURE_PCF_TERRAFORM_TEMPLATE}"
 
 # Import reqd BASH functions
 
-source ${exec_mode_root}/config-director-json-fn-opsman-curl.sh
-source ${exec_mode_root}/config-director-json-fn-opsman-auth.sh
-source ${exec_mode_root}/config-director-json-fn-opsman-json-to-post-data.sh
-source ${exec_mode_root}/config-director-json-fn-opsman-extensions.sh
-source ${exec_mode_root}/config-director-json-fn-opsman-config-director.sh
+source ${EXEC_MODE_ROOT}/config-director-json-fn-opsman-curl.sh
+source ${EXEC_MODE_ROOT}/config-director-json-fn-opsman-auth.sh
+source ${EXEC_MODE_ROOT}/config-director-json-fn-opsman-json-to-post-data.sh
+source ${EXEC_MODE_ROOT}/config-director-json-fn-opsman-extensions.sh
+source ${EXEC_MODE_ROOT}/config-director-json-fn-opsman-config-director.sh
 
 
 
@@ -38,50 +38,50 @@ source ${exec_mode_root}/config-director-json-fn-opsman-config-director.sh
 ###### Create iaas_configuration JSON                                                                 ######
 ############################################################################################################
 # Detect if SSH keys are set to autogen
-if [[ ${pcf_ssh_key_pub} == 'generate' ]]; then
+if [[ ${PCF_SSH_KEY_PUB} == 'generate' ]]; then
   echo "Generating SSH keys for BOSH deployed VMs"
   ssh-keygen -t rsa -f bosh -C ubuntu -q -P ""
   pcf_ssh_key_pub=$(cat bosh.pub)
   pcf_ssh_key_priv=$(cat bosh)
   echo "******************************"
   echo "******************************"
-  echo "pcf_ssh_key_pub = ${pcf_ssh_key_pub}"
+  echo "pcf_ssh_key_pub = ${PCF_SSH_KEY_PUB}"
   echo "******************************"
-  echo "pcf_ssh_key_priv = ${pcf_ssh_key_priv}"
+  echo "pcf_ssh_key_priv = ${PCF_SSH_KEY_PRIV}"
   echo "******************************"
   echo "******************************"
 fi
 
 
 # Set Stg Acct Name Prefix and other Azure constants
-  env_short_name=$(echo ${azure_terraform_prefix} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
-  env_short_name=$(echo ${env_short_name:0:10})
+  env_short_name=$(echo ${AZURE_TERRAFORM_PREFIX} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
+  env_short_name=$(echo ${ENV_SHORT_NAME:0:10})
 
-  azure_bosh_stg_acct="${env_short_name}root"
+  azure_bosh_stg_acct="${ENV_SHORT_NAME}root"
   azure_deployment_stg_acct_wildcard="*boshvms*"
   azure_default_security_group="pcf-default-security-group"
 
-  pcf_ssh_key_priv=$(echo "${pcf_ssh_key_priv}" | perl -p -e 's/\s+$/\\\\n/g')
+  pcf_ssh_key_priv=$(echo "${PCF_SSH_KEY_PRIV}" | perl -p -e 's/\s+$/\\\\n/g')
 
-if [[ $provider_type == "azure" ]]; then
+if [[ ${PROVIDER_TYPE} == "azure" ]]; then
 
-  resgroup_lookup_net=${azure_terraform_prefix}
-  resgroup_lookup_pcf=${azure_terraform_prefix}
+  resgroup_lookup_net=${AZURE_TERRAFORM_PREFIX}
+  resgroup_lookup_pcf=${AZURE_TERRAFORM_PREFIX}
 
   iaas_configuration_json=$(echo "{
-    \"iaas_configuration[subscription_id]\": \"${azure_subscription_id}\",
-    \"iaas_configuration[tenant_id]\": \"${azure_tenant_id}\",
-    \"iaas_configuration[client_id]\": \"${azure_service_principal_id}\",
-    \"iaas_configuration[client_secret]\": \"${azure_service_principal_password}\",
-    \"iaas_configuration[resource_group_name]\": \"${resgroup_lookup_pcf}\",
-    \"iaas_configuration[bosh_storage_account_name]\": \"${azure_bosh_stg_acct}\",
-    \"iaas_configuration[deployments_storage_account_name]\": \"${azure_deployment_stg_acct_wildcard}\",
-    \"iaas_configuration[default_security_group]\": \"${azure_default_security_group}\",
-    \"iaas_configuration[ssh_public_key]\": \"${pcf_ssh_key_pub}\",
-    \"iaas_configuration[ssh_private_key]\": \"${pcf_ssh_key_priv}\"
+    \"iaas_configuration[subscription_id]\": \"${AZURE_SUBSCRIPTION_ID}\",
+    \"iaas_configuration[tenant_id]\": \"${AZURE_TENANT_ID}\",
+    \"iaas_configuration[client_id]\": \"${AZURE_SERVICE_PRINCIPAL_ID}\",
+    \"iaas_configuration[client_secret]\": \"${AZURE_SERVICE_PRINCIPAL_PASSWORD}\",
+    \"iaas_configuration[resource_group_name]\": \"${RESGROUP_LOOKUP_PCF}\",
+    \"iaas_configuration[bosh_storage_account_name]\": \"${AZURE_BOSH_STG_ACCT}\",
+    \"iaas_configuration[deployments_storage_account_name]\": \"${AZURE_DEPLOYMENT_STG_ACCT_WILDCARD}\",
+    \"iaas_configuration[default_security_group]\": \"${AZURE_DEFAULT_SECURITY_GROUP}\",
+    \"iaas_configuration[ssh_public_key]\": \"${PCF_SSH_KEY_PUB}\",
+    \"iaas_configuration[ssh_private_key]\": \"${PCF_SSH_KEY_PRIV}\"
   }")
 else
-  echo "config-director-json_err: Provider Type ${provider_type} not yet supported"
+  echo "config-director-json_err: Provider Type ${PROVIDER_TYPE} not yet supported"
   exit 1
 fi
 
@@ -92,7 +92,7 @@ fi
 
   function fn_urlencode {
      local unencoded=${@}
-     encoded=$(echo $unencoded | perl -pe 's/([^-_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
+     encoded=$(echo ${unencoded} | perl -pe 's/([^-_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
      #opsman "=,&,\crlf"" fixes, calls fail with these strings encoded
      encoded=$(echo ${encoded} | sed s'/%3D/=/g')
      encoded=$(echo ${encoded} | sed s'/%26/\&/g')
@@ -117,14 +117,14 @@ fi
 ############################################# Main Logic ###################################################
 ############################################################################################################
 
-case $config_target in
+case ${config_target} in
   "director")
-    echo "Starting $config_target config ...."
-    echo $iaas_configuration_json | jq .
+    echo "Starting ${config_target} config ...."
+    echo ${iaas_configuration_json} | jq .
     fn_config_director
   ;;
   *)
-    fn_err "$config_target not enabled"
+    fn_err "${config_target} not enabled"
   ;;
 esac
 
