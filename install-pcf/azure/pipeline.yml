@@ -206,11 +206,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
       passed: [create-infrastructure]
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
     - get: tool-om
       params:
         globs:
