@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -e
 
 echo "=============================================================================================="
 echo "Configuring Director @ https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} ..."
