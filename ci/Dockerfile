@@ -26,6 +26,9 @@ apt-get -y update && sudo apt-get -y install --no-install-recommends google-clou
 # pip
 apt-get install -y --no-install-recommends python-pip python-dev && \
 
+# vim
+ln -s /usr/bin/vim.tiny /usr/local/bin/vim && \
+
 # UAA Client
 gem install cf-uaac --no-ri --no-rdoc && \
 
