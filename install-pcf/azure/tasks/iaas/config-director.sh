@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eu
 
 echo "=============================================================================================="
 echo "Configuring Director @ https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} ..."
@@ -10,12 +10,12 @@ JSON_FILE_PATH="pcf-pipelines/install-pcf/azure/json-opsman/${AZURE_PCF_TERRAFOR
 JSON_FILE_TEMPLATE="${JSON_FILE_PATH}/opsman-template.json"
 JSON_FILE="${JSON_FILE_PATH}/opsman.json"
 
-resgroup_lookup_net=${AZURE_TERRAFORM_PREFIX}
-resgroup_lookup_pcf=${AZURE_TERRAFORM_PREFIX}
-infrastructure_subnet="${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-opsman-and-director-subnet"
-ert_subnet="${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-ert-subnet"
-services1_subnet="${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-services-01-subnet"
-dynamic_services_subnet="${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-dynamic-services-subnet"
+RESGROUP_LOOKUP_NET=${AZURE_TERRAFORM_PREFIX}
+RESGROUP_LOOKUP_PCF=${AZURE_TERRAFORM_PREFIX}
+INFRASTRUCTURE_SUBNET="${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-opsman-and-director-subnet"
+ERT_SUBNET="${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-ert-subnet"
+SERVICES1_SUBNET="${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-services-01-subnet"
+DYNAMIC_SERVICES_SUBNET="${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-dynamic-services-subnet"
 
 cp ${JSON_FILE_TEMPLATE} ${JSON_FILE}
 
