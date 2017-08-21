@@ -43,6 +43,10 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
     echo Failed to get SQL instance IP from Terraform state file
     exit 1
   fi
+elif [[ "${pcf_iaas}" == "azure" ]]; then
+  cd terraform-state
+    db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.mysql_dns.value')
+  cd -
 fi
 
 cf_network=$(
