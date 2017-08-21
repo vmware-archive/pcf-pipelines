@@ -68,7 +68,7 @@ if [[ ${PROVIDER_TYPE} == "azure" ]]; then
   RESGROUP_LOOKUP_NET=${AZURE_TERRAFORM_PREFIX}
   RESGROUP_LOOKUP_PCF=${AZURE_TERRAFORM_PREFIX}
 
-  IAAS_CONFIGURATION_JSON=$(echo "{
+  iaas_configuration_json=$(echo "{
     \"iaas_configuration[subscription_id]\": \"${AZURE_SUBSCRIPTION_ID}\",
     \"iaas_configuration[tenant_id]\": \"${AZURE_TENANT_ID}\",
     \"iaas_configuration[client_id]\": \"${AZURE_SERVICE_PRINCIPAL_ID}\",
@@ -120,7 +120,7 @@ fi
 case ${CONFIG_TARGET} in
   "director")
     echo "Starting ${CONFIG_TARGET} config ...."
-    echo ${IAAS_CONFIGURATION_JSON} | jq .
+    echo ${iaas_configuration_json} | jq .
     fn_config_director
   ;;
   *)
