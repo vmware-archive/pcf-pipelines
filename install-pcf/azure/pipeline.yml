@@ -457,14 +457,6 @@ jobs:
       gcp_storage_secret_key:
       S3_ENDPOINT:
 
-  - task: configure-ert
-    file: pcf-pipelines/tasks/install-ert/configure-ert/task.yml
-    params:
-      pcf_iaas: {{pcf_iaas}}
-      pcf_ert_domain: {{pcf_ert_domain}}
-      pcf_opsman_admin: {{pcf_opsman_admin_username}}
-      pcf_opsman_admin_passwd: {{pcf_opsman_admin_password}}
-
 ###########################
 ## Job - Deploy    ERT   ##
 ###########################
