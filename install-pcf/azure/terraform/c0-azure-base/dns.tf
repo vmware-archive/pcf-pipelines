@@ -33,7 +33,7 @@ resource "azurerm_dns_a_record" "sys" {
 }
 
 resource "azurerm_dns_a_record" "mysql" {
-  name                = "mysql-proxy-lb.sys"
+  name                = "mysql"
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   ttl                 = "60"
