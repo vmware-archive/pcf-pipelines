@@ -131,6 +131,8 @@ read -r -d '' network_assignment <<EOF
 }
 EOF
 
+set -e
+
 security_configuration=$(
   echo "{}" |
   jq \
@@ -138,14 +140,11 @@ security_configuration=$(
     --arg vm_password_type "$VM_PASSWORD_TYPE" \
     '. +
     {
-      "trusted_certificates" = $trusted_certificates,
-      "vm_password_type" = $vm_password_type
+      "trusted_certificates": $trusted_certificates,
+      "vm_password_type": $vm_password_type
     }
     '
 )
-
-
-set -e
 
 iaas_configuration=$(
   echo "$iaas_configuration" |
