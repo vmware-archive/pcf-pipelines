@@ -6,6 +6,7 @@ groups:
   - configure-director
   - deploy-director
   - upload-ert
+  - configure-ert
   - deploy-ert
   - wipe-env
 - name: infra
@@ -18,6 +19,7 @@ groups:
 - name: ert
   jobs:
   - upload-ert
+  - configure-ert
   - deploy-ert
 - name: teardown
   jobs:
@@ -262,7 +264,8 @@ jobs:
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       PRODUCT_NAME: cf
 
-- name: deploy-ert
+
+- name: configure-ert
   serial_groups: [opsman]
   plan:
   - aggregate:
@@ -271,7 +274,7 @@ jobs:
     - get: pivnet-product
       tags: [ openstack ]
       resource: elastic-runtime
-      params: {globs: ["*.pivotal"]}
+      params: {globs: []}
       passed: [upload-ert]
       trigger: true
 
@@ -388,6 +391,19 @@ jobs:
       SAML_SSL_CERT: {{pcf_ert_saml_cert}}
       SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
 
+
+- name: deploy-ert
+  serial_groups: [opsman]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      tags: [ openstack ]
+    - get: pivnet-product
+      tags: [ openstack ]
+      resource: elastic-runtime
+      params: {globs: []}
+      passed: [configure-ert]
+      trigger: true
 
   - task: deploy
     tags: [ openstack ]
