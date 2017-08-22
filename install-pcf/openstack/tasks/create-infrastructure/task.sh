@@ -40,6 +40,9 @@ function main() {
     -state-out "$ROOT/create-infrastructure-output/terraform.tfstate" \
     -parallelism=5 \
     terraform.tfplan
+
+  echo "=========== Floating IPs ==========="
+  terraform output haproxy_floating_ip
 }
 
 main
