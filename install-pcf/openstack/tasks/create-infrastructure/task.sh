@@ -41,8 +41,12 @@ function main() {
     -parallelism=5 \
     terraform.tfplan
 
+  local haproxy_floating_ip=$(terraform output \
+    -state "create-infrastructure-output/terraform.tfstate" \
+    haproxy_floating_ip)
+
   echo "=========== Floating IPs ==========="
-  terraform output haproxy_floating_ip
+  echo "HA Proxy: ${haproxy_floating_ip}"
 }
 
 main
