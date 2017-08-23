@@ -114,6 +114,53 @@ Our goal is to at least support the latest version of PCF with these pipelines. 
 
 Compatbility is generally only an issue whenever Pivotal releases a new version of PCF software that requires additional configuration in Ops Manager. These new required fields then need to be either manually configured outside the pipeline, or supplied via a new configuration added to the pipeline itself.
 
+## Pipelines for Airgapped Environments
+
+The pipelines cannot be used as-is in environments that have no outbound access to the Internet as the pipelines expect to be able to pull resources from the Internet, including from Pivotal Network and Dockerhub. Various aspects of the pipelines need to be modified to be suitable for use in airgapped environments.
+
+### Resources
+
+All resources must be provided from within the airgapped environment. The pipelines and their tasks don't care _where_ the resources come from, just that they contain the same bits that they would have gotten from the original resource. For resources that come from Pivnet this means including the metadata.json file that pivnet-resource normally downloads as some tasks use that file to determine dependencies of the resource, such as what stemcell a tile requires.
+
+### Tasks
+
+In rare cases a task will attempt to reach the Internet. An example of this is the Install PCF pipelines that reach out to Pivnet to get the appropriate stemcell for the PCF Elastic Runtime version that was pulled by Concourse. Any such task needs to be modified/replaced to support pulling those artifacts from within the airgapped environment.
+
+Additionally, tasks also define an `image_resource` for the source of the rootfs Concourse will use when executing the task. This rootfs typically is specified as a `docker-image` resource residing in Dockerhub. This `image_resource` resource must also be supplied from within the airgapped environment.
+
+### Implementation
+
+Given Concourse ships with the [s3-resource](https://github.com/concourse/s3-resource), and there are many S3-compatible blobstores that can be used from within airgapped environments such as [Minio](https://minio.io/) and [Dell EMC Elastic Cloud Storage](https://www.dellemc.com/en-us/storage/ecs/index.htm), our chosen implementation is to use S3 for supplying all of the required resources.
+
+We've created two pipelines, `create-offline-pinned-pipelines` and `unpack-pcf-pipelines-combined`, that are meant to be used to facilitate physical transfer of artifacts to the airgapped environment.
+
+`create-offline-pinned-pipelines` is used to:
+
+* Pull all required resources from their normal locations on the Internet
+* Create a tarball for each resource containing the entire contents of the resource
+* Flatten the tasks for the pipelines into the pipeline definitions
+* Replace all of the `resource` and `image_resource` definitions with resources of type `s3`
+* Hardcode the `get` of all resources and the `image_resource` definitions to the specific version of each resource that was downloaded
+* Create a GPG-encrypted tarball with each resource tarball created above and a `shasum` manifest of each resource tarball
+* Put the tarball to a location within S3 storage that can be downloaded manually and put on physical media for transfer to the airgapped environment
+
+`unpack-pcf-pipelines-combined` is used to:
+
+* Download, decrypt, and extract the GPG-encrypted tarball into its components after it has been manually copied to the `pcf-pipelines-combined/` path in S3
+* Verify the `shasum` manifest of the tarball contents
+* Put the tarball parts into their appropriate locations within the airgapped S3 storage for use by the pipelines
+
+From this point the `pcf-pipelines` folder in the configured S3 bucket in the airgapped environment contains the pcf-pipelines tarball that can then be used to set a pipeline within.
+
+### Requirements
+
+* The online environment must have access to Dockerhub and Pivnet
+* Concourse 3.3.3+ in both online and airgapped environments
+
+#### Bootstrapping
+
+For the `unpack-pcf-pipelines-combined` to work there must be a single manual transfer of the czero-cflinuxfs2 tarball to the czero-cflinuxfs2 folder within the airgapped environment's S3 storage. Only after that is done can the `unpack-pcf-pipelines-combined` pipeline be set and unpaused.
+
 ## Contributing
 
 ### Pipelines and Tasks
