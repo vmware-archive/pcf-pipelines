@@ -23,3 +23,4 @@ variable "external_network_id" {}
 
 variable "opsman_image_name" {}
 variable "opsman_public_key" {}
+variable "opsman_volume_size" {}

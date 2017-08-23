@@ -122,6 +122,7 @@ jobs:
       OS_USER_DOMAIN_NAME: {{os_user_domain_name}}
       OS_RESOURCE_PREFIX: {{os_resource_prefix}}
       OPSMAN_PUBLIC_KEY: {{opsman_public_key}}
+      OPSMAN_VOLUME_SIZE: {{opsman_volume_size}}
       INFRA_SUBNET_CIDR: {{infra_subnet_cidr}}
       ERT_SUBNET_CIDR: {{ert_subnet_cidr}}
       SERVICES_SUBNET_CIDR: {{services_subnet_cidr}}
