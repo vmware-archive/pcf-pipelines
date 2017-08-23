@@ -240,11 +240,6 @@ jobs:
     - get: pcf-pipelines
       trigger: true
       passed: [config-opsman-auth]
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
     - get: tool-om
       params:
         globs:
@@ -310,11 +305,6 @@ jobs:
       params:
         globs:
         - "om-linux"
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
 
   - task: deploy-director
     config:
