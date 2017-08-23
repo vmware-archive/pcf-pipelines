@@ -19,7 +19,7 @@ These upgrade pipelines are intended to be kept running for as long as the found
 
 These pipelines are found in any of the directories with the `upgrade-` prefix.
 
-## Prerequisites 
+## Prerequisites
 
 - [install a Concourse server](https://concourse.ci/installing.html)
 - download the [Fly CLI](https://concourse.ci/fly-cli.html) to interact with the Concourse server
@@ -29,11 +29,11 @@ third-party sources of pipeline dependencies
 
 ## Usage
 
-1. Log in to [Pivotal Networks](https://network.pivotal.io/products/pcf-automation) and download the latest version of PCF Platform Automation with Concourse (PCF Pipelines). 
+1. Log in to [Pivotal Networks](https://network.pivotal.io/products/pcf-automation) and download the latest version of PCF Platform Automation with Concourse (PCF Pipelines).
 
 1. Each pipeline has an associated `params.yml` file. Edit the `params.yml` with details related to your infrastructure.
 
-1. Log in and target your Concourse: 
+1. Log in and target your Concourse:
    ```
    fly -t yourtarget login --concourse-url https://yourtarget.example.com
    ```
@@ -46,9 +46,9 @@ third-party sources of pipeline dependencies
      --load-vars-from upgrade-ops-manager/aws/params.yml
    ```
 
-1. Navigate to the pipeline url, and unpause the pipeline. 
+1. Navigate to the pipeline url, and unpause the pipeline.
 
-1. Depending on the pipeline, the first job will either trigger on its own or the job will require manual intervention. Some pipelines may also require manual work during the duration of the run to complete the pipeline. 
+1. Depending on the pipeline, the first job will either trigger on its own or the job will require manual intervention. Some pipelines may also require manual work during the duration of the run to complete the pipeline.
 
 ## Upgrading/Extending
 
