@@ -285,6 +285,7 @@ jobs:
         AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_GATEWAY: {{azure_terraform_subnet_dynamic_services_gateway}}
         PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
         PCF_SSH_KEY_PRIV: {{pcf_ssh_key_priv}}
+        TRUSTED_CERTIFICATES: {{trusted_certificates}}
 
 ###########################
 ## Job - Deploy-Director ##
@@ -373,11 +374,6 @@ jobs:
       passed: [upload-ert]
       trigger: true
     - get: terraform-state
-    - get: pivnet-elastic-runtime
-      trigger: false
-      params:
-        globs:
-        - "*pivotal"
     - get: tool-om
       params:
         globs:
@@ -446,6 +442,30 @@ jobs:
       gcp_storage_access_key:
       gcp_storage_secret_key:
       S3_ENDPOINT:
+      CONSUL_SERVER_INSTANCES: {{consul_server_instances}}
+      NATS_INSTANCES: {{nats_instances}}
+      ETCD_TLS_SERVER_INSTANCES: {{etcd_tls_server_instances}}
+      NFS_SERVER_INSTANCES: {{nfs_server_instances}}
+      MYSQL_PROXY_INSTANCES: {{mysql_proxy_instances}}
+      MYSQL_INSTANCES: {{mysql_instances}}
+      BACKUP_PREPARE_INSTANCES: {{backup_prepare_instances}}
+      CCDB_INSTANCES: {{ccdb_instances}}
+      UAADB_INSTANCES: {{uaadb_instances}}
+      UAA_INSTANCES: {{uaa_instances}}
+      CLOUD_CONTROLLER_INSTANCES: {{cloud_controller_instances}}
+      HA_PROXY_INSTANCES: {{ha_proxy_instances}}
+      ROUTER_INSTANCES: {{router_instances}}
+      MYSQL_MONITOR_INSTANCES: {{mysql_monitor_instances}}
+      CLOCK_GLOBAL_INSTANCES: {{clock_global_instances}}
+      CLOUD_CONTROLLER_WORKER_INSTANCES: {{cloud_controller_worker_instances}}
+      DIEGO_DATABASE_INSTANCES: {{diego_database_instances}}
+      DIEGO_BRAIN_INSTANCES: {{diego_brain_instances}}
+      DIEGO_CELL_INSTANCES: {{diego_cell_instances}}
+      DOPPLER_INSTANCES: {{doppler_instances}}
+      LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
+      TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
+      SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
+      SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
 
 ###########################
 ## Job - Deploy    ERT   ##
