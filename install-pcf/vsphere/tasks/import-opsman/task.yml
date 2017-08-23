@@ -28,6 +28,7 @@ params:
   OM_RESOURCE_POOL:
   OM_DISK_TYPE:
   OM_VM_POWER_STATE:
+  OM_VM_FOLDER:
 
 
 inputs:
