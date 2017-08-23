@@ -40,4 +40,4 @@ jq \
 
 cat options.json
 
-govc import.ova -options=options.json $file_path
+govc import.ova -folder=$OM_VM_FOLDER -options=options.json $file_path
