@@ -45,3 +45,19 @@ perl -pi -e "s|{{dynamic_services_subnet_gateway}}|${AZURE_TERRAFORM_SUBNET_DYNA
 
 # Exec bash scripts to config Opsman Director Tile
 ./pcf-pipelines/install-pcf/azure/json-opsman/config-director-json.sh azure director
+
+# Fill in trusted certificates
+SECURITY_TOKENS=$(jq -n \
+  --arg trusted_cert "${TRUSTED_CERTIFICATES}" \
+  '{
+    "trusted_certificates": $trusted_cert,
+    "generate_vm_passwords": true
+  }')
+
+om-linux \
+  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
+  --skip-ssl-validation \
+  --username $PCF_OPSMAN_ADMIN \
+  --password $PCF_OPSMAN_ADMIN_PASSWORD \
+  configure-bosh \
+  --security-configuration "${SECURITY_TOKENS}"
