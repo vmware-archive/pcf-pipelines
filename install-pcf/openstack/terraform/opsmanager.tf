@@ -29,7 +29,7 @@ resource "openstack_compute_floatingip_associate_v2" "opsman_floating_ip_associa
 resource "openstack_blockstorage_volume_v2" "opsman_volume" {
   region      = "${var.os_region}"
   name        = "${var.prefix}-opsman-volume"
-  size        = "${var.opsman_volume_size}"
+  size        = "${ceil(var.opsman_volume_size)}"
 }
 
 resource "openstack_compute_volume_attach_v2" "opsman_volume_attachment" {
