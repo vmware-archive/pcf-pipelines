@@ -54,7 +54,6 @@ resources:
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
     regexp: "staging/stemcells/bosh-stemcell-(.*)-.*.tgz"
-    disable_ssl: false
 
 - name: czero-cflinuxfs2
   type: docker-image
