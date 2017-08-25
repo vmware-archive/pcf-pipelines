@@ -1,7 +1,7 @@
 resource "openstack_compute_instance_v2" "opsman" {
   name            = "${var.prefix}-opsman"
   image_name      = "${var.opsman_image_name}"
-  flavor_name     = "m1.medium"
+  flavor_name     = "${var.opsman_flavor}"
   key_pair        = "${openstack_compute_keypair_v2.opsman_keypair.name}"
   security_groups = [
     "${openstack_compute_secgroup_v2.main_security_group.name}"

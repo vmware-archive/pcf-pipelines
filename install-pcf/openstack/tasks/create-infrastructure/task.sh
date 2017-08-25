@@ -33,6 +33,7 @@ function main() {
     -var "opsman_image_name=${opsman_image_name}" \
     -var "opsman_public_key=${OPSMAN_PUBLIC_KEY}" \
     -var "opsman_volume_size=${OPSMAN_VOLUME_SIZE}" \
+    -var "opsman_flavor=${OPSMAN_FLAVOR}" \
     -out "terraform.tfplan" \
     -state "terraform-state/terraform.tfstate" \
     "$ROOT/pcf-pipelines/install-pcf/openstack/terraform"
