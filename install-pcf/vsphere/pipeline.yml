@@ -51,6 +51,7 @@ jobs:
       GOVC_RESOURCE_POOL: {{om_resource_pool}}
       GOVC_HOST: {{om_vm_host}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OM_VM_FOLDER: {{om_vm_folder}}
       OPS_MGR_SSH_PWD: {{om_ssh_pwd}}
       OM_NTP_SERVERS: {{om_ntp_servers}}
       OM_DNS_SERVERS: {{om_dns_servers}}
