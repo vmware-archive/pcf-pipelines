@@ -40,4 +40,5 @@ jq \
 
 cat options.json
 
+govc folder.create /DCoE-Lab01-Mgmt-SiteA/$OM_VM_FOLDER
 govc import.ova -folder=$OM_VM_FOLDER -options=options.json $file_path
