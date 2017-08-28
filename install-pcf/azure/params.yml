@@ -7,7 +7,6 @@ githubtoken: CHANGEME
 ##############################################
 ### PCF Object Params
 ##############################################
-pcf_iaas: "azure"
 opsman_major_minor_version: '1\.11\..*' # Reqd
 ert_major_minor_version: '1\.11\..*' # Reqd
 
@@ -16,6 +15,8 @@ pcf_pivnet_token: CHANGEME
 
 # ERT Domain Name
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
+system_domain: CHANGEME # This is usually sys.${pcf_ert_domain}
+apps_domain: CHANGEME # This is usually cfapps.${pcf_ert_domain}
 pcf_ssh_key_pub: CHANGEME
 pcf_ssh_key_priv: |
   CHANGEME
@@ -30,6 +31,8 @@ pcf_ert_networking_pointofentry: "haproxy" #This is set to HAProxy for now as Az
 pcf_ert_ssl_cert: |
   CHANGEME
 pcf_ert_ssl_key: CHANGEME
+
+trusted_certificates: # Trusted certificates to be deployed along with all VM's provisioned by BOSH
 
 # SAML Service Credential provider Cert and Key, of the string generate is passed, pipeline will autogen certs
 pcf_ert_saml_cert: generate
@@ -49,10 +52,6 @@ terraform_statefile_container: CHANGEME
 ### azure ###
 # IF the azure_access_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
 azure_account_name:
-
-# Retrieve the value of Primary access key of the Azure Storage account which ends with the value corresponding to the above parameter azure_account_name and 
-# assign it to the azure_access_key after the Deploy IaaS job in the Concourse pipeline, then do a fly to apply changes.
-azure_access_key:
 
 # REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
 azure_buildpacks_container:
@@ -114,29 +113,64 @@ mysql_backups_s3_access_key_id:
 mysql_backups_s3_secret_access_key:
 mysql_backups_s3_cron_schedule:
 
-# DB Creds
-db_diego_username: CHANGEME
-db_diego_password: CHANGEME
-db_notifications_username: CHANGEME
-db_notifications_password: CHANGEME
-db_autoscale_username: CHANGEME
-db_autoscale_password: CHANGEME
-db_uaa_username: CHANGEME
-db_uaa_password: CHANGEME
-db_app_usage_service_username: CHANGEME
-db_app_usage_service_password: CHANGEME
-db_ccdb_username: CHANGEME
-db_ccdb_password: CHANGEME
-db_routing_username: CHANGEME
-db_routing_password: CHANGEME
+## These resources can take any parameter made available in
+## the ops manager API ( https://your-ops-man/docs#configuring-resources-for-a-job )
+nats_instances: 2
+nfs_server_instances: 1
+mysql_proxy_instances: 1
+mysql_instances: 1
+backup_prepare_instances: 0
+ccdb_instances: 0
+uaadb_instances: 0
+uaa_instances: 2
+cloud_controller_instances: 2
+ha_proxy_instances: 1
+mysql_monitor_instances: 0
+clock_global_instances: 1
+cloud_controller_worker_instances: 2
+consul_server_instances: 3
+etcd_tls_server_instances: 3
+diego_database_instances: 3
+router_instances: 3
+diego_brain_instances: 3
+diego_cell_instances: 3
+loggregator_traffic_controller_instances: 3
+syslog_adapter_instances: 3
+doppler_instances: 3
+syslog_scheduler_instances: 1
+tcp_router_instances: 0
 
-db_accountdb_username: CHANGEME
-db_accountdb_password: CHANGEME
-db_networkpolicyserverdb_username: CHANGEME
-db_networkpolicyserverdb_password: CHANGEME
-db_nfsvolumedb_username: CHANGEME
-db_nfsvolumedb_password: CHANGEME
-db_silk_username: CHANGEME
-db_silk_password: CHANGEME
-db_locket_username: CHANGEME
-db_locket_password: CHANGEME
+deployment_network_name: "ert"
+enable_security_event_logging: true
+syslog_host:
+syslog_port:
+syslog_protocol:
+syslog_drain_buffer_size:
+company_name: CHANGEME
+authentication_mode: CHANGEME
+loggregator_endpoint_port:
+disable_http_proxy:
+tcp_routing: disable
+tcp_routing_ports:
+route_services: enable
+ignore_ssl_cert_verification: true
+smtp_from:
+smtp_address:
+smtp_port:
+smtp_user:
+smtp_pwd:
+smtp_auth_mechanism:
+security_acknowledgement: CHANGEME # Change to 'X'
+default_quota_memory_limit_mb: 10240
+default_quota_max_number_services: 1000
+ha_proxy_ips: CHANGEME
+skip_cert_verify: true
+disable_insecure_cookies: false
+router_static_ips:
+router_request_timeout_in_seconds: 900
+garden_network_pool_cidr: 10.254.0.0/22 # Only change this if you need to avoid address collision with a third-party service on the same subnet.
+garden_network_mtu: 1454
+allow_app_ssh_access: false
+tcp_router_static_ips:
+ssh_static_ips:
+ha_proxy_lb_name: CHANGEME
