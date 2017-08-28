@@ -65,6 +65,13 @@ azure_packages_container:
 # REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
 azure_resources_container:
 
+azure_multi_resgroup_infra_vnet_name:
+azure_multi_resgroup_infra_subnet_name:
+azure_multi_resgroup_network:
+azure_multi_resgroup_pcf:
+azure_multi_resgroup_infra_subnet_name:
+azure_multi_resgroup_infra_vnet_name:
+
 azure_pcf_terraform_template: c0-azure-base # 'Template' for pipeline to determine Terrafrom & Opsman JSON config
 azure_region:
 azure_service_principal_id:

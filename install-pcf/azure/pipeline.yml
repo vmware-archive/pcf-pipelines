@@ -180,15 +180,16 @@ jobs:
       AZURE_VM_ADMIN: {{azure_vm_admin}}
       AZURE_VM_PASSWORD: {{azure_vm_password}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
-      PCF_OPSMAN_ADMIN: {{pcf_opsman_admin_username}}
-      PCF_OPSMAN_ADMIN_PASSWORD: {{pcf_opsman_admin_password}}
       PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
+      AZURE_MULTI_RESGROUP_NETWORK: {{azure_multi_resgroup_network}}
+      AZURE_MULTI_RESGROUP_PCF: {{azure_multi_resgroup_pcf}}
+      AZURE_MULTI_RESGROUP_INFRA_SUBNET_NAME: {{azure_multi_resgroup_infra_subnet_name}}
+      AZURE_MULTI_RESGROUP_INFRA_VNET_NAME: {{azure_multi_resgroup_infra_vnet_name}}
       AZURE_ACCOUNT_NAME: {{azure_account_name}}
       AZURE_BUILDPACKS_CONTAINER: {{azure_buildpacks_container}}
       AZURE_DROPLETS_CONTAINER: {{azure_droplets_container}}
       AZURE_PACKAGES_CONTAINER: {{azure_packages_container}}
       AZURE_RESOURCES_CONTAINER: {{azure_resources_container}}
-      AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       AZURE_TERRAFORM_VNET_CIDR: {{azure_terraform_vnet_cidr}}
       AZURE_TERRAFORM_SUBNET_INFRA_CIDR: {{azure_terraform_subnet_infra_cidr}}
       AZURE_TERRAFORM_SUBNET_ERT_CIDR: {{azure_terraform_subnet_ert_cidr}}

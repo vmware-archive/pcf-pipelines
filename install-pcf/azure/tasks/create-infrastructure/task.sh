@@ -65,7 +65,7 @@ terraform plan \
   -var "vm_admin_username=${AZURE_VM_ADMIN}" \
   -var "vm_admin_password=${AZURE_VM_PASSWORD}" \
   -var "vm_admin_public_key=${PCF_SSH_KEY_PUB}" \
-  -var "azure_multi_resgroup_network=${E_MULTI_RESGROUP_NETWORK}" \
+  -var "azure_multi_resgroup_network=${AZURE_MULTI_RESGROUP_NETWORK}" \
   -var "azure_multi_resgroup_pcf=${AZURE_MULTI_RESGROUP_PCF}" \
   -var "priv_ip_opsman_vm=${AZURE_TERRAFORM_OPSMAN_PRIV_IP}" \
   -var "azure_account_name=${AZURE_ACCOUNT_NAME}" \
