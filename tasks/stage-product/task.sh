@@ -17,14 +17,7 @@ set -eu
 # limitations under the License.
 
 function main() {
-
-  local cwd
-  cwd="${1}"
-
-  local version
-  pushd "${cwd}/pivnet-product"
-    version="$(unzip -p *.pivotal 'metadata/*.yml' | grep 'product_version:' | cut -d ':' -f 2 | tr -d ' ' | tr -d "'")"
-  popd
+  local version=$(jq --raw-output '.Release.Version' < ./pivnet-product/metadata.json)
 
   om-linux --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
      --skip-ssl-validation \
@@ -35,4 +28,4 @@ function main() {
      --product-version "${version}"
 }
 
-main "${PWD}"
+main
