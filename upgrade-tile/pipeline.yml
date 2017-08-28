@@ -54,7 +54,7 @@ jobs:
   - get: tile
     params: { globs: [] }
 
-- name: upgrade-tile
+- name: upload-and-stage-tile
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -93,6 +93,16 @@ jobs:
       PRODUCT_NAME: {{product_name}}
 
 
+- name: apply-changes
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-product
+      resource: tile
+      passed: [ upload-and-stage-tile ]
+      trigger: true
+      params:
+        globs: [ ]
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:

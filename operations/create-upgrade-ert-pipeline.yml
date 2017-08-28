@@ -15,13 +15,17 @@
   value: elastic-runtime
 
 - op: replace
-  path: /jobs/name=upgrade-tile/name
-  value: upgrade-ert
+  path: /jobs/name=upload-and-stage-tile/name
+  value: upload-and-stage-ert
 
 - op: replace
-  path: /jobs/name=upgrade-ert/task=upload-tile-and-stemcell/task
+  path: /jobs/name=upload-and-stage-ert/task=upload-tile-and-stemcell/task
   value: upload-ert-and-stemcell
 
 - op: replace
   path: /jobs/PRODUCT_NAME={{product_name}}/PRODUCT_NAME
   value: cf
+
+- op: replace
+  path: /jobs/name=apply-changes/plan/0/aggregate/get=pivnet-product/passed
+  value: [upload-and-stage-ert]
