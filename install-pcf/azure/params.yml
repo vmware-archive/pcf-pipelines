@@ -34,9 +34,9 @@ pcf_ert_ssl_key: CHANGEME
 
 trusted_certificates: # Trusted certificates to be deployed along with all VM's provisioned by BOSH
 
-# SAML Service Credential provider Cert and Key, of the string generate is passed, pipeline will autogen certs
-pcf_ert_saml_cert: generate
-pcf_ert_saml_key: generate
+# SAML Service Credential provider Cert and Key, if the string is blank, then the pipeline will auto generate certs
+pcf_ert_saml_cert:
+pcf_ert_saml_key:
 
 ##############################################
 ### IaaS Specific Params
@@ -65,8 +65,6 @@ azure_packages_container:
 # REQD if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
 azure_resources_container:
 
-azure_multi_resgroup_infra_vnet_name:
-azure_multi_resgroup_infra_subnet_name:
 azure_multi_resgroup_network:
 azure_multi_resgroup_pcf:
 azure_multi_resgroup_infra_subnet_name:
