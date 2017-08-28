@@ -247,6 +247,17 @@ cf_properties=$(
 
     +
 
+    # logger_endpoint_port
+    if $iaas == "aws" then
+      {
+        ".properties.logger_endpoint_port": { "value": 4443 }
+      }
+    else
+      .
+    end
+
+    +
+
     # Blobstore
 
     if $iaas == "aws" then
