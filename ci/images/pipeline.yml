@@ -56,6 +56,8 @@ resources:
     bucket: cf-cli-releases
     regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
     region_name: us-west-1
+    access_key_id: {{images_pipeline_aws_access_key_id}}
+    secret_access_key: {{images_pipeline_aws_secret_access_key}}
 
 - name: cliaas
   type: github-release
