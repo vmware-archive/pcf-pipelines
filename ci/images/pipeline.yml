@@ -81,11 +81,13 @@ resources:
     access_token: {{images_pipeline_github_token}}
 
 - name: om-beta
-  type: github-release
+  type: s3
   source:
-    user: c0-ops
-    repository: om
-    access_token: {{images_pipeline_github_token}}
+    bucket: czero-resources
+    regexp: om-linux-v(.*)
+    region_name: us-east-1
+    access_key_id: {{images_pipeline_aws_access_key_id}}
+    secret_access_key: {{images_pipeline_aws_secret_access_key}}
 
 - name: stemcell-downloader
   type: github-release
