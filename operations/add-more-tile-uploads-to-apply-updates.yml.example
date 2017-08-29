@@ -1,0 +1,24 @@
+# vim: set ft=yaml:
+
+- op: add
+  path: /resources/-
+  value:
+    name: redis
+    type: pivnet
+    source:
+      api_token: {{pivnet_token}}
+      product_slug: p-redis
+      product_version: ^1\.9\..$
+      sort_by: semver
+
+- op: copy
+  from: /jobs/0
+  path: /jobs/1
+
+- op: replace
+  path: /jobs/1/name
+  value: upload-redis
+
+- op: replace
+  path: /jobs/1/get=tile/resource
+  value: redis

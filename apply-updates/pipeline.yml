@@ -1,0 +1,173 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: stemcells
+  type: pivnet
+  source:
+    api_token: ((pivnet_token))
+    product_slug: stemcells
+
+- name: elastic-runtime
+  type: pivnet
+  source:
+    api_token: ((pivnet_token))
+    product_slug: elastic-runtime
+    product_version: ^1\.11\..$
+    sort_by: semver
+
+jobs:
+- name: upload-ert
+  plan:
+  - get: tile
+    resource: elastic-runtime
+    trigger: true
+    params:
+      globs: ["*pivotal"]
+  - task: upload-tile
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      inputs:
+      - name: tile
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          set -eu
+
+          om-linux \
+            --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
+            --skip-ssl-validation \
+            --username "${OPSMAN_USERNAME}" \
+            --password "${OPSMAN_PASSWORD}" \
+            --request-timeout 3600 \
+            upload-product -p tile/*.pivotal
+
+- name: upload-stemcell
+  plan:
+  - get: stemcells
+    params:
+      version: every
+      globs: ["*((iaas))*"]
+    trigger: true
+  - task: upload-stemcell
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      inputs:
+      - name: stemcells
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          set -eu
+
+          for stemcell in $(ls stemcells/*.tgz); do
+            om-linux \
+              --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
+              --skip-ssl-validation \
+              --username "${OPSMAN_USERNAME}" \
+              --password "${OPSMAN_PASSWORD}" \
+              upload-stemcell --stemcell "$stemcell"
+          done
+
+- name: apply-updates
+  plan:
+  - task: apply-updates
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          set -eu
+
+          function om() {
+            om-linux \
+              --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
+              --skip-ssl-validation \
+              --username "${OPSMAN_USERNAME}" \
+              --password "${OPSMAN_PASSWORD}" \
+              $@
+          }
+
+          function stage_product() {
+            om stage-product --product-name $1 --product-version $2
+          }
+
+          available_products=$(om curl -path "/api/v0/available_products")
+          staged_products=$(om curl -path "/api/v0/staged/products")
+
+          to_stage=$(
+            jq --null-input \
+            --raw-output \
+            --argjson available "$available_products" \
+            --argjson staged "$staged_products" \
+            '
+            # Collect available versions of each product
+            reduce $available[] as $o ({};
+              .[$o.name] = .[$o.name] + [$o.product_version]
+            )
+
+            # Find the latest version of each product
+            | map_values(
+                map(split(".") | map(tonumber))
+                | transpose | transpose | max | map(tostring) | join(".")
+              )
+
+            # Filter latest available version to only those that do not match
+            # the staged version
+            | reduce to_entries[] as $entry ([];
+                if any($staged[]; select(.type == $entry.key and .product_version != $entry.value)) then
+                  . + ["\($entry.key) \($entry.value)"]
+                else
+                  .
+                end
+              )
+
+            | join("\n")'
+          )
+
+          if [[ -z "$to_stage" ]]; then
+            echo Nothing to do.
+            exit 0
+          fi
+
+          for stageable in "$to_stage"; do
+            stage_product ${stageable}
+          done
+
+          om apply-changes --ignore-warnings
