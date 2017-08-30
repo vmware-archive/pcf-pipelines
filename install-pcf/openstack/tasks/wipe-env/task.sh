@@ -36,6 +36,8 @@ terraform destroy -force \
   -var "external_network_id=dontcare" \
   -var "opsman_image_name=dontcare" \
   -var "opsman_public_key=dontcare" \
+  -var "opsman_volume_size=dontcare" \
+  -var "opsman_flavor=dontcare" \
   -state "$root/terraform-state/terraform.tfstate" \
   -state-out $root/wipe-output/terraform.tfstate \
   pcf-pipelines/install-pcf/openstack/terraform
