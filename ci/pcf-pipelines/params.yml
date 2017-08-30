@@ -12,7 +12,7 @@ install_pcf_aws_current_params:
 upgrade_ert_aws_current_params:
 upgrade_ops_manager_aws_current_params:
 install_pcf_gcp_current_params:
-upgrade_ert_gcp_current_params:
+apply_updates_gcp_current_params:
 upgrade_ops_manager_gcp_current_params:
 install_pcf_vsphere_slot1_params:
 upgrade_ert_vsphere_slot1_params:
