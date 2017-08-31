@@ -43,8 +43,20 @@ if [ -n "$STEMCELL_VERSION" ]; then
 
   if [[ -z "$stemcell" ]]; then
     echo "Downloading stemcell $STEMCELL_VERSION"
+
+    product_slug=$(
+      jq --raw-output \
+        '
+        if any(.Dependencies[]; select(.Release.Product.Name | contains("Stemcells for PCF (Windows)"))) then
+          "stemcell-windows-server"
+        else
+          "stemcells"
+        end
+        ' < pivnet-product/metadata.json
+    )
+
     pivnet-cli login --api-token="$PIVNET_API_TOKEN"
-    pivnet-cli download-product-files -p stemcells -r $STEMCELL_VERSION -g "*${IAAS}*" --accept-eula
+    pivnet-cli download-product-files -p "$product_slug" -r $STEMCELL_VERSION -g "*${IAAS}*" --accept-eula
 
     SC_FILE_PATH=`find ./ -name *.tgz`
 
