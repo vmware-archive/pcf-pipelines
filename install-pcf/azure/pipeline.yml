@@ -56,7 +56,8 @@ resources:
   type: git
   source:
     uri: https://github.com/pivotal-cf/pcf-pipelines.git
-    branch: 148603651-azure-pipeline
+    branch: master
+    private_key: "{{git_private_key}}"
 
 - name: tool-om
   type: github-release
