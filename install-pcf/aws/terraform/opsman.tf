@@ -6,7 +6,6 @@ resource "aws_instance" "opsmman_az1" {
     key_name = "${var.aws_key_name}"
     vpc_security_group_ids = ["${aws_security_group.directorSG.id}"]
     subnet_id = "${aws_subnet.PcfVpcPublicSubnet_az1.id}"
-    associate_public_ip_address = true
     private_ip = "${var.opsman_ip_az1}"
     root_block_device {
         volume_size = 100
@@ -14,4 +13,9 @@ resource "aws_instance" "opsmman_az1" {
     tags {
         Name = "${var.prefix}-OpsMan az1"
     }
+}
+
+resource "aws_eip" "opsman" {
+  instance = "${aws_instance.opsmman_az1.id}"
+  vpc      = true
 }
