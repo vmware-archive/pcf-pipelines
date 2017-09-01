@@ -336,3 +336,4 @@ jobs:
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
       AWS_ACCESS_KEY_ID: {{TF_VAR_aws_access_key}}
       AWS_SECRET_ACCESS_KEY: {{TF_VAR_aws_secret_key}}
+      AWS_REGION: {{TF_VAR_aws_region}}
