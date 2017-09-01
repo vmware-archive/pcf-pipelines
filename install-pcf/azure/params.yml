@@ -13,7 +13,7 @@ opsman_major_minor_version: '1\.11\..*' # Reqd
 ert_major_minor_version: '1\.11\..*' # Reqd
 
 # Pivent Download token
-pcf_pivnet_token: CHANGEME
+pivnet_token: CHANGEME
 
 # ERT Domain Name
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with

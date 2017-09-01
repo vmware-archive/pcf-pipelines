@@ -70,7 +70,7 @@ resources:
   type: pivnet
   check_every: 4h
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: ops-manager
     product_version: {{opsman_major_minor_version}}
     sort_by: semver
@@ -79,7 +79,7 @@ resources:
   type: pivnet
   check_every: 4h
   source:
-    api_token: {{pcf_pivnet_token}}
+    api_token: {{pivnet_token}}
     product_slug: elastic-runtime
     product_version: {{ert_major_minor_version}}
     sort_by: semver
@@ -349,7 +349,7 @@ jobs:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPS_MGR_USR: {{pcf_opsman_admin_username}}
       OPS_MGR_PWD: {{pcf_opsman_admin_password}}
-      PIVNET_API_TOKEN: {{pcf_pivnet_token}}
+      PIVNET_API_TOKEN: {{pivnet_token}}
       IAAS: "azure"
       NO_PROXY: ""
       OM_IP: ""
