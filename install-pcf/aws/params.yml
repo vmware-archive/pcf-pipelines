@@ -60,7 +60,7 @@ director_certificates:
 TF_VAR_aws_access_key:
 TF_VAR_aws_secret_key:
 
-# ARN of the wildcard certificate to use; upload this in [AWS](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html#upload-server-certificate)
+# ARN of the wildcard certificate to use; upload this in [AWS](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html#upload-server-certificate). This must be done prior to running the pipeline.
 TF_VAR_aws_cert_arn:
 
 # AMI to use for nat box
