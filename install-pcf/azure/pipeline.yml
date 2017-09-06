@@ -59,13 +59,6 @@ resources:
     branch: master
     private_key: "{{git_private_key}}"
 
-- name: tool-om
-  type: github-release
-  source:
-    user: pivotal-cf
-    repository: om
-    access_token: {{githubtoken}}
-
 - name: pivnet-opsmgr
   type: pivnet
   check_every: 4h
@@ -208,10 +201,6 @@ jobs:
       passed: [create-infrastructure]
       params:
         globs: []
-    - get: tool-om
-      params:
-        globs:
-        - "om-linux"
 
   - task: config-opsman
     config:
@@ -222,7 +211,6 @@ jobs:
           repository: czero/cflinuxfs2
       inputs:
         - name: pcf-pipelines
-        - name: tool-om
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-opsman.sh
       params:
@@ -244,10 +232,6 @@ jobs:
       passed: [config-opsman-auth]
       params:
         globs: []
-    - get: tool-om
-      params:
-        globs:
-        - "om-linux"
 
   - task: config-director
     config:
@@ -258,7 +242,6 @@ jobs:
           repository: czero/cflinuxfs2
       inputs:
         - name: pcf-pipelines
-        - name: tool-om
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
       params:
@@ -305,10 +288,6 @@ jobs:
       passed: [config-director]
       trigger: true
       params: {globs: []}
-    - get: tool-om
-      params:
-        globs:
-        - "om-linux"
 
   - task: deploy-director
     config:
@@ -319,7 +298,6 @@ jobs:
           repository: czero/cflinuxfs2
       inputs:
         - name: pcf-pipelines
-        - name: tool-om
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-director.sh
       params:
@@ -379,10 +357,6 @@ jobs:
       passed: [upload-ert]
       trigger: true
       params: {globs: []}
-    - get: tool-om
-      params:
-        globs:
-        - "om-linux"
 
   - task: configure-ert
     file: pcf-pipelines/tasks/config-ert/task.yml
@@ -512,10 +486,6 @@ jobs:
       passed: [configure-ert]
       trigger: true
       params: {globs: []}
-    - get: tool-om
-      params:
-        globs:
-        - "om-linux"
 
   - task: deploy-ert
     file: pcf-pipelines/tasks/apply-changes/task.yml

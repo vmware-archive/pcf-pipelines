@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-# Prep om tool
-sudo cp tool-om/om-linux /usr/local/bin
-sudo chmod 755 /usr/local/bin/om-linux
-
 ### Function(s) ###
 
 function fn_om_linux_curl {
