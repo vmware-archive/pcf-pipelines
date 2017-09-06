@@ -1,9 +1,6 @@
 ##############################################
 ### Concourse Objects
 ##############################################
-# github RSA private key for git resources
-githubtoken: CHANGEME
-
 git_private_key:
 
 ##############################################
