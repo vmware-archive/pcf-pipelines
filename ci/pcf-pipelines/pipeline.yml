@@ -224,6 +224,14 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
+    - task: set-install-pcf-azure-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{install_pcf_azure_current_params}}
+        PIPELINE_NAME: install-pcf-azure-current
+        PIPELINE_PATH: release/pcf-pipelines/install-pcf/azure/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
     - task: set-install-pcf-slot1-current-pipeline
       params:
         PIPELINE_PARAMS: {{install_pcf_vsphere_slot1_params}}
