@@ -415,7 +415,6 @@ cf_resources=$(
     --argjson uaa_instances $UAA_INSTANCES \
     --argjson cloud_controller_instances $CLOUD_CONTROLLER_INSTANCES \
     --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
-    --argjson ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
     --argjson router_instances $ROUTER_INSTANCES \
     --argjson mysql_monitor_instances $MYSQL_MONITOR_INSTANCES \
     --argjson clock_global_instances $CLOCK_GLOBAL_INSTANCES \
@@ -427,6 +426,7 @@ cf_resources=$(
     --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
     --argjson syslog_scheduler_instances $SYSLOG_SCHEDULER_INSTANCES \
     --argjson doppler_instances $DOPPLER_INSTANCES \
+    --arg ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
     --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
     --arg tcp_router_nsx_lb_edge_name "${TCP_ROUTER_NSX_LB_EDGE_NAME}" \
     --arg tcp_router_nsx_lb_pool_name "${TCP_ROUTER_NSX_LB_POOL_NAME}" \
