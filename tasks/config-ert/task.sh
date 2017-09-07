@@ -415,7 +415,7 @@ cf_resources=$(
     --argjson uaa_instances $UAA_INSTANCES \
     --argjson cloud_controller_instances $CLOUD_CONTROLLER_INSTANCES \
     --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
-    --argjson ha_proxy_elb_name "[ \"$HA_PROXY_LB_NAME\" ]" \
+    --argjson ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
     --argjson router_instances $ROUTER_INSTANCES \
     --argjson mysql_monitor_instances $MYSQL_MONITOR_INSTANCES \
     --argjson clock_global_instances $CLOCK_GLOBAL_INSTANCES \
@@ -456,7 +456,7 @@ cf_resources=$(
       "uaadb": { "instances": $uaadb_instances },
       "uaa": { "instances": $uaa_instances },
       "cloud_controller": { "instances": $cloud_controller_instances },
-      "ha_proxy": { "instances": $ha_proxy_instances, "elb_names": $ha_proxy_elb_name },
+      "ha_proxy": { "instances": $ha_proxy_instances },
       "router": { "instances": $router_instances },
       "mysql_monitor": { "instances": $mysql_monitor_instances },
       "clock_global": { "instances": $clock_global_instances },
@@ -469,6 +469,14 @@ cf_resources=$(
       "syslog_scheduler": { "instances": $syslog_scheduler_instances },
       "doppler": { "instances": $doppler_instances }
     }
+
+    |
+
+    if $ha_proxy_elb_name != "" then
+      .ha_proxy |= . + { "elb_names": [ "$ha_proxy_elb_name" ] }
+    else
+      .
+    end
 
     |
 
