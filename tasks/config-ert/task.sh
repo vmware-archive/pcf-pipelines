@@ -473,7 +473,7 @@ cf_resources=$(
     |
 
     if $ha_proxy_elb_name != "" then
-      .ha_proxy |= . + { "elb_names": [ "$ha_proxy_elb_name" ] }
+      .ha_proxy |= . + { "elb_names": [ $ha_proxy_elb_name ] }
     else
       .
     end
