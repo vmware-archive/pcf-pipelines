@@ -16,7 +16,38 @@ set -eu
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version=$(jq --raw-output '.Release.Version' < ./pivnet-product/metadata.json)
+desired_version=$(jq --raw-output '.Release.Version' < ./pivnet-product/metadata.json)
+
+AVAILABLE=$(om-linux \
+  --skip-ssl-validation \
+  --username "${OPSMAN_USERNAME}" \
+  --password "${OPSMAN_PASSWORD}" \
+  --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
+  curl -path /api/v0/available_products)
+STAGED=$(om-linux \
+  --skip-ssl-validation \
+  --username "${OPSMAN_USERNAME}" \
+  --password "${OPSMAN_PASSWORD}" \
+  --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
+  curl -path /api/v0/staged/products)
+
+# Figure out which products are unstaged.
+UNSTAGED_ALL=$(jq -n --argjson available "$AVAILABLE" --argjson staged "$STAGED" \
+  '$available - ($staged | map({"name": .type, "product_version": .product_version}))')
+
+UNSTAGED_PRODUCT=$(
+jq -n "$UNSTAGED_ALL" \
+  "map(select(.name == \"$PRODUCT_NAME\")) | map(select(.product_version|startswith(\"$desired_version\")))"
+)
+
+# There should be only one such unstaged product.
+if [ "$(echo $UNSTAGED_PRODUCT | jq '. | length')" -ne "1" ]; then
+  echo "Need exactly one unstaged build for $PRODUCT_NAME version $desired_version"
+  jq -n "$UNSTAGED_PRODUCT"
+  exit 1
+fi
+
+full_version=$(echo "$UNSTAGED_PRODUCT" | jq -r '.[].product_version')
 
 om-linux --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
    --skip-ssl-validation \
@@ -24,4 +55,4 @@ om-linux --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
    --password "${OPSMAN_PASSWORD}" \
    stage-product \
    --product-name "${PRODUCT_NAME}" \
-   --product-version "${version}"
+   --product-version "${full_version}"
