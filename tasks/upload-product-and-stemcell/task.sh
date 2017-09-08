@@ -48,7 +48,7 @@ if [ -n "$STEMCELL_VERSION" ]; then
       jq --raw-output \
         '
         if any(.Dependencies[]; select(.Release.Product.Name | contains("Stemcells for PCF (Windows)"))) then
-          "stemcell-windows-server"
+          "stemcells-windows-server"
         else
           "stemcells"
         end
