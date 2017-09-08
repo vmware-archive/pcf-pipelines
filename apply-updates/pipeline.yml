@@ -12,16 +12,23 @@ resources:
     api_token: ((pivnet_token))
     product_slug: stemcells
 
-- name: elastic-runtime
-  type: pivnet
+- name: schedule
+  type: time
   source:
-    api_token: ((pivnet_token))
-    product_slug: elastic-runtime
-    product_version: ^1\.11\..$
-    sort_by: semver
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
 
 jobs:
-
+- name: regulator
+  plan:
+  - aggregate:
+    - get: schedule
+      trigger: true
+    - get: stemcells
+      params: { globs: [] }
 - name: upload-stemcell
   plan:
   - get: stemcells
@@ -29,6 +36,7 @@ jobs:
       version: every
       globs: ["*((iaas))*"]
     trigger: true
+    passed: [ regulator ]
   - task: upload-stemcell
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
@@ -61,6 +69,10 @@ jobs:
 
 - name: apply-updates
   plan:
+  - get: stemcells
+    params: { globs: [] }
+    passed: [ upload-stemcell ]
+    trigger: true
   - task: apply-updates
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
