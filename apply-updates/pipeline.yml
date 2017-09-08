@@ -21,41 +21,6 @@ resources:
     sort_by: semver
 
 jobs:
-- name: upload-ert
-  plan:
-  - get: tile
-    resource: elastic-runtime
-    trigger: true
-    params:
-      globs: ["*pivotal"]
-  - task: upload-tile
-    params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
-      OPSMAN_USERNAME: ((opsman_admin_username))
-      OPSMAN_PASSWORD: ((opsman_admin_password))
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source: {repository: czero/cflinuxfs2}
-      inputs:
-      - name: tile
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          #!/bin/bash
-
-          set -eu
-
-          om-linux \
-            --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
-            --skip-ssl-validation \
-            --username "${OPSMAN_USERNAME}" \
-            --password "${OPSMAN_PASSWORD}" \
-            --request-timeout 3600 \
-            upload-product -p tile/*.pivotal
 
 - name: upload-stemcell
   plan:
