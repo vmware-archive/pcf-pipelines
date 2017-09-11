@@ -69,6 +69,11 @@ variable "services_subnet_cidr_az1" {
     description = "CIDR for the Services Subnet 1"
     default = "10.0.64.0/20"
 }
+# Dynamic Services subnet
+variable "dynamic_services_subnet_cidr_az1" {
+    description = "CIDR for the Dynamic Services Subnet 1"
+    default = "10.0.112.0/20"
+}
 
 variable "nat_ip_az1" {
     default = "10.0.0.6"
@@ -100,6 +105,11 @@ variable "services_subnet_cidr_az2" {
     description = "CIDR for the Services Subnet 2"
     default = "10.0.80.0/20"
 }
+# Dynamic Services subnet
+variable "dynamic_services_subnet_cidr_az2" {
+    description = "CIDR for the Dynamic Services Subnet 2"
+    default = "10.0.128.0/20"
+}
 
 variable "nat_ip_az2" {
     default = "10.0.1.6"
@@ -125,6 +135,11 @@ variable "rds_subnet_cidr_az3" {
 variable "services_subnet_cidr_az3" {
     description = "CIDR for the Services Subnet 3"
     default = "10.0.96.0/20"
+}
+# Dynamic Services subnet
+variable "dynamic_services_subnet_cidr_az3" {
+    description = "CIDR for the Dynamic Services Subnet 3"
+    default = "10.0.144.0/20"
 }
 
 # Services subnet

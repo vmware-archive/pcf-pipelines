@@ -48,6 +48,17 @@ resource "aws_subnet" "PcfVpcServicesSubnet_az1" {
         Name = "${var.prefix}-PcfVpc Services Subnet AZ1"
     }
 }
+# 2.4 Dynamic Services
+resource "aws_subnet" "PcfVpcDynamicServicesSubnet_az1" {
+    vpc_id = "${aws_vpc.PcfVpc.id}"
+
+    cidr_block = "${var.dynamic_services_subnet_cidr_az1}"
+    availability_zone = "${var.az1}"
+
+    tags {
+        Name = "${var.prefix}-PcfVpc Dynamic Services Subnet AZ1"
+    }
+}
 
 /*
   For Second availability zone. There will not be modification to main routing table as it was already
@@ -95,6 +106,16 @@ resource "aws_subnet" "PcfVpcServicesSubnet_az2" {
         Name = "${var.prefix}-PcfVpc Services Subnet AZ2"
     }
 }
+resource "aws_subnet" "PcfVpcDynamicServicesSubnet_az2" {
+    vpc_id = "${aws_vpc.PcfVpc.id}"
+
+    cidr_block = "${var.dynamic_services_subnet_cidr_az2}"
+    availability_zone = "${var.az2}"
+
+    tags {
+        Name = "${var.prefix}-PcfVpc Dynamic Services Subnet AZ2"
+    }
+}
 
 /*
   For Third availability zone.  There will not be modification to main routing table as it was already
@@ -140,6 +161,16 @@ resource "aws_subnet" "PcfVpcServicesSubnet_az3" {
 
     tags {
         Name = "${var.prefix}-PcfVpc Services Subnet AZ3"
+    }
+}
+resource "aws_subnet" "PcfVpcDynamicServicesSubnet_az3" {
+    vpc_id = "${aws_vpc.PcfVpc.id}"
+
+    cidr_block = "${var.dynamic_services_subnet_cidr_az3}"
+    availability_zone = "${var.az3}"
+
+    tags {
+        Name = "${var.prefix}-PcfVpc Dynamic Services Subnet AZ3"
     }
 }
 

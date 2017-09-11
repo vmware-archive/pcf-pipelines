@@ -35,6 +35,9 @@ params:
   TF_VAR_services_subnet_cidr_az1:
   TF_VAR_services_subnet_cidr_az2:
   TF_VAR_services_subnet_cidr_az3:
+  TF_VAR_dynamic_services_subnet_cidr_az1:
+  TF_VAR_dynamic_services_subnet_cidr_az2:
+  TF_VAR_dynamic_services_subnet_cidr_az3:
   TF_VAR_infra_subnet_cidr_az1:
   TF_VAR_rds_subnet_cidr_az1:
   TF_VAR_rds_subnet_cidr_az2:
