@@ -50,8 +50,10 @@ perl -pi -e "s|{{dynamic_services_subnet_gateway}}|${AZURE_TERRAFORM_SUBNET_DYNA
 SECURITY_TOKENS=$(jq -n \
   --arg trusted_cert "${TRUSTED_CERTIFICATES}" \
   '{
-    "trusted_certificates": $trusted_cert,
-    "generate_vm_passwords": true
+    "security_configuration": {
+      "trusted_certificates": $trusted_cert,
+      "generate_vm_passwords": true
+    }
   }')
 
 om-linux \
@@ -59,5 +61,7 @@ om-linux \
   --skip-ssl-validation \
   --username $PCF_OPSMAN_ADMIN \
   --password $PCF_OPSMAN_ADMIN_PASSWORD \
-  configure-bosh \
-  --security-configuration "${SECURITY_TOKENS}"
+  curl \
+  --path /api/v0/staged/director/properties \
+  --request PUT \
+  --data "${SECURITY_TOKENS}"
