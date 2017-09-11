@@ -151,7 +151,7 @@ read -r -d '' networks_configuration <<EOF
       ]
     },
     {
-      "name": "dynamic_services",
+      "name": "dynamic-services",
       "service_network": false,
       "subnets": [
         {
