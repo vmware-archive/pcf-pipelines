@@ -84,6 +84,18 @@ output "svc_net_1_subnet" {
   value = "${google_compute_subnetwork.subnet-services-1.name}"
 }
 
+output "dynamic_svc_net_1_gateway" {
+  value = "${google_compute_subnetwork.subnet-dynamic-services-1.gateway_address}"
+}
+
+output "dynamic_svc_net_1_cidr" {
+  value = "${google_compute_subnetwork.subnet-dynamic-services-1.ip_cidr_range}"
+}
+
+output "dynamic_svc_net_1_subnet" {
+  value = "${google_compute_subnetwork.subnet-dynamic-services-1.name}"
+}
+
 // Http Load Balancer Output
 
 output "http_lb_backend_name" {
