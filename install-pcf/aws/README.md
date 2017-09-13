@@ -11,18 +11,15 @@ In the `create-infrastructure` job, there is a [race condition](https://github.c
 
 #### Error message: ####
    ```
-   google_sql_user.diego: Creating...
-     host:     "" => "%"
-     instance: "" => "ph-concourse-terraform-piglet"
-     name:     "" => "admin"
-     password: "<sensitive>" => "<sensitive>"
    Error applying plan:
 
    1 error(s) occurred:
 
    * google_sql_user.diego: 1 error(s) occurred:
 
-   * google_sql_user.diego: Error, failure waiting for insertion of admin into ph-concourse-terraform-piglet: Error waiting      for Insert User (op 44940cc3-df8a-4d86-9bb8-853540fa4f35): googleapi: Error 404: The Cloud SQL instance operation does not    exist., operationDoesNotExist
+   * google_sql_user.diego: Error, failure waiting for insertion of admin into ph-concourse-terraform-piglet
+   ...
+   operationDoesNotExist
    ```
    
    **Solution:** For AWS Aurora, you cannot use "admin" as a username for MySQL. 
