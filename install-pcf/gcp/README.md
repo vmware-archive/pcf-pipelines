@@ -89,3 +89,24 @@ configured.
 There is a (private, sorry) [Pivotal Tracker
 story](https://www.pivotaltracker.com/n/projects/975916/stories/133642819) to
 address this issue.
+
+
+## Troubleshooting
+
+#### Error message: ####
+   ```
+   google_sql_user.diego: Creating...
+     host:     "" => "%"
+     instance: "" => "ph-concourse-terraform-piglet"
+     name:     "" => "admin"
+     password: "<sensitive>" => "<sensitive>"
+   Error applying plan:
+
+   1 error(s) occurred:
+
+   * google_sql_user.diego: 1 error(s) occurred:
+
+   * google_sql_user.diego: Error, failure waiting for insertion of admin into ph-concourse-terraform-piglet: Error waiting      for Insert User (op 44940cc3-df8a-4d86-9bb8-853540fa4f35): googleapi: Error 404: The Cloud SQL instance operation does not    exist., operationDoesNotExist
+   ```
+   
+   **Solution:** You cannot use "admin" as a username for MySQL. 
