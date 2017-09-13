@@ -454,7 +454,6 @@ jobs:
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
-      SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
       TCP_ROUTER_NSX_SECURITY_GROUP: ""
       TCP_ROUTER_NSX_LB_EDGE_NAME: ""
       TCP_ROUTER_NSX_LB_POOL_NAME: ""

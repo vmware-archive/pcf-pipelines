@@ -424,7 +424,6 @@ cf_resources=$(
     --argjson loggregator_tc_instances $LOGGREGATOR_TC_INSTANCES \
     --argjson tcp_router_instances $TCP_ROUTER_INSTANCES \
     --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
-    --argjson syslog_scheduler_instances $SYSLOG_SCHEDULER_INSTANCES \
     --argjson doppler_instances $DOPPLER_INSTANCES \
     --arg ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
     --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
@@ -466,7 +465,6 @@ cf_resources=$(
       "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances },
       "tcp_router": { "instances": $tcp_router_instances },
       "syslog_adapter": { "instances": $syslog_adapter_instances },
-      "syslog_scheduler": { "instances": $syslog_scheduler_instances },
       "doppler": { "instances": $doppler_instances }
     }
 
