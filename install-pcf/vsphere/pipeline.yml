@@ -185,7 +185,7 @@ jobs:
       NO_PROXY: {{company_proxy_domain}}
       OM_IP: {{om_ip}}
 
-- name: deploy-ert
+- name: stage-ert
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -195,7 +195,7 @@ jobs:
       trigger: true
     - get: pivnet-product
       resource: elastic-runtime
-      params: {globs: ["*.pivotal"]}
+      params: {globs: []}
       passed: [upload-ert]
 
   - task: stage
@@ -205,6 +205,19 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       PRODUCT_NAME: cf
+
+- name: deploy-ert
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pcf-ops-manager
+      params: {globs: []}
+      passed: [stage-ert]
+      trigger: true
+    - get: pivnet-product
+      resource: elastic-runtime
+      params: {globs: ["*.pivotal"]}
+      passed: [stage-ert]
 
   - task: configure
     file: pcf-pipelines/tasks/config-ert/task.yml
