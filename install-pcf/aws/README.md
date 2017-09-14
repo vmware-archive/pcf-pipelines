@@ -25,10 +25,10 @@ In the `create-infrastructure` job, there is a [race condition](https://github.c
    **Solution:** For AWS Aurora, you cannot use "admin" as a username for MySQL. 
    
    
-#### Error message: #### 
-    ```
+#### Error message: ####  
+
     Error 100: CPI error 'Bosh::Clouds::CloudError' with message 'Unable to create a connection to AWS. Please check your         provided settings: Region 'us-east-1', Endpoint 'Not provided'.
     IaaS Error: #<Seahorse::Client::NetworkingError: execution expired>' in 'info' CPI method
-    ```
+    
    
    **Solution:** Check your AMI for the NAT boxes.
