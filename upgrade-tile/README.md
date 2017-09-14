@@ -30,20 +30,20 @@ upgrade from `--.--.n` to `--.--.n+1`.
    allowed to trigger the pipeline. For example, if the pipeline should only
    run in the middle of the night this could be set to:
 
-   ```
-   start: "11:00 PM"
-   stop: "1:00 AM"
-   ```
+      ```
+      start: "11:00 PM"
+      stop: "1:00 AM"
+      ```
 
-   The above configuration would give a two hour window for the pipeline to
-   check for new versions.
+      The above configuration would give a two hour window for the pipeline to
+      check for new versions.
 
-   Defaults to:
+      Defaults to:
 
-   ```
-   start: "12:00 AM"
-   stop: "11:59 PM"
-   ```
+      ```
+      start: "12:00 AM"
+      stop: "11:59 PM"
+      ```
 
    * `location`: This is the timezone for `start`, `stop`, and `days`. Defaults
    to `America/Los_Angeles`.
