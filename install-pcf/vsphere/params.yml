@@ -25,7 +25,7 @@ om_netmask:               # Netmask for Ops Manager network
 om_ip:                    # IP to assign to Ops Manager VM
 om_vm_network:            # vCenter network name to use to deploy Ops Manager in
 om_vm_name:               # Name to use for Ops Manager VM
-om_disk_type: "thin"      # Disk type for Ops Manager VM (thick|thin)
+opsman_disk_type: "thin"  # Disk type for Ops Manager VM (thick|thin)
 om_vm_power_state: true   # Whether to power on Ops Manager VM after creation
 
 # vCenter Cluster or Resource Pool to use to deploy Ops Manager.

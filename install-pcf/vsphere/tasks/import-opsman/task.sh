@@ -33,7 +33,7 @@ jq \
   --arg customHostname "$OPSMAN_DOMAIN_OR_IP_ADDRESS" \
   --arg network "$OM_VM_NETWORK" \
   --arg vmName "$OM_VM_NAME" \
-  --arg diskType "$OM_DISK_TYPE" \
+  --arg diskType "$OPSMAN_DISK_TYPE" \
   --argjson powerOn $OM_VM_POWER_STATE \
   --from-file filters \
   om-import.json > options.json

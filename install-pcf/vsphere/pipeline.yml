@@ -60,7 +60,7 @@ jobs:
       OM_VM_NETWORK: {{om_vm_network}}
       OM_VM_NAME: {{om_vm_name}}
       OM_RESOURCE_POOL: {{om_resource_pool}}
-      OM_DISK_TYPE: {{om_disk_type}}
+      OPSMAN_DISK_TYPE: {{opsman_disk_type}}
       OM_VM_POWER_STATE: {{om_vm_power_state}}
 
 - name: configure-director
