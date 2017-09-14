@@ -1,9 +1,8 @@
 # Upgrade Tile Pipeline
 
 This pipeline is used to keep your PCF foundation up to date with the latest
-patch versions of PCF software from Pivotal Network. They can upgrade Ops
-Manager, Elastic Runtime, other tiles, and buildpacks. You will need one
-pipeline per tile in your foundation, to keep every tile up to date.
+patch versions of PCF software from Pivotal Network. They are used to upgrade patch versions of Elastic Runtime, and other service tiles. You will need one
+pipeline per tile in your foundation, to keep every tile up to date. 
 
 It is important to note that the pipeline does not try to upgrade major or
 minor versions, only patch versions. For example, if a new release of a tile
