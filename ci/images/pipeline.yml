@@ -207,7 +207,7 @@ jobs:
         args:
         - -c
         - |
-          set -e
+          set -xe
           which om-linux
           which yaml_patch_linux
           which cf
