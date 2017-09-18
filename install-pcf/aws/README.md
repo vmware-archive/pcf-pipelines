@@ -32,3 +32,13 @@ In the `create-infrastructure` job, there is a [race condition](https://github.c
     
    
    **Solution:** Check your AMI for the NAT boxes.
+
+
+#### Error message: ####
+
+    ssh: Could not resolve hostname opsman.sle1.aws.customer0.net: Name or service not known
+    lost connection
+
+
+
+   **Solution:** The parent zone (aws.customer0.net) is not delegating to the zone created via terraform. You need to add the NS records for (sle1.aws.customer0.net) in the parent zone in AWS Route53. 
