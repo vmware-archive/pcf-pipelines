@@ -214,7 +214,6 @@ jobs:
           which cliaas-linux
           which pivnet-cli
           which govc
-          which om-linux-beta
           which stemcell-downloader
           which jq
           which terraform
