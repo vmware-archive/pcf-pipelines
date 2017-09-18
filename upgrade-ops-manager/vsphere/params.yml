@@ -20,6 +20,7 @@ opsman_major_minor_version: ^1\.11\..*$  # Ops Manager minor version to track
 opsman_domain_or_ip_address: http://example.com
 opsman_passphrase: CHANGEME
 pivnet_token: CHANGEME
+# Do not specify with a trailing slash.
 vcenter_url: http://example.com
 vcenter_username: CHANGEME
 vcenter_password: CHANGEME
