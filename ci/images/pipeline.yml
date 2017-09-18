@@ -80,15 +80,6 @@ resources:
     repository: govmomi
     access_token: {{images_pipeline_github_token}}
 
-- name: om-beta
-  type: s3
-  source:
-    bucket: czero-resources
-    regexp: om-linux-v(.*)
-    region_name: us-east-1
-    access_key_id: {{images_pipeline_aws_access_key_id}}
-    secret_access_key: {{images_pipeline_aws_secret_access_key}}
-
 - name: stemcell-downloader
   type: github-release
   source:
@@ -136,9 +127,6 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: govc
       params: {globs: ["*linux_amd64*"]}
-    - get: om-beta
-      params: {globs: ["*linux*"]}
-      version: { tag: '0.17-beta.0' }
     - get: stemcell-downloader
       params: {globs: ["*linux*"]}
     - get: steamroll
@@ -160,7 +148,6 @@ jobs:
       - name: cliaas
       - name: pivnet-cli
       - name: govc
-      - name: om-beta
       - name: stemcell-downloader
       - name: steamroll
       - name: terraform
@@ -179,7 +166,6 @@ jobs:
             jq/jq \
             workspace
 
-          cp om-beta/om-linux workspace/om-linux-beta
           cp pivnet-cli/pivnet-linux-* workspace/pivnet-cli
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           cp steamroll/steamroll_linux workspace/steamroll
