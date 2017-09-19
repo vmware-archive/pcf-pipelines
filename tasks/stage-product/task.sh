@@ -35,9 +35,10 @@ STAGED=$(om-linux \
 UNSTAGED_ALL=$(jq -n --argjson available "$AVAILABLE" --argjson staged "$STAGED" \
   '$available - ($staged | map({"name": .type, "product_version": .product_version}))')
 
-UNSTAGED_PRODUCT=$(
-jq -n "$UNSTAGED_ALL" \
-  "map(select(.name == \"$PRODUCT_NAME\")) | map(select(.product_version|startswith(\"$desired_version\")))"
+UNSTAGED_PRODUCT=$(jq -n --argjson unstaged_all "$UNSTAGED_ALL" \
+    --arg productname "$PRODUCT_NAME" \
+    --arg productversion "$desired_version" \
+    '$unstaged_all | map(select(.name == $productname)) | map(select(.product_version|startswith($productversion)))'
 )
 
 # There should be only one such unstaged product.
