@@ -29,7 +29,7 @@ pcf_ert_networking_pointofentry: "haproxy" #This is set to HAProxy for now as Az
 
 # ERT Cert & Key, if the string is blank, then the pipeline will auto generate certs
 pcf_ert_ssl_cert:
-pcf_ert_ssl_key: 
+pcf_ert_ssl_key:
 
 trusted_certificates: # Trusted certificates to be deployed along with all VM's provisioned by BOSH
 
@@ -93,6 +93,7 @@ azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
 azure_terraform_subnet_services1_gateway: "192.168.8.1"
 azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_vnet_cidr: "192.168.0.0/20"
+pcf_opsman_disk_size_in_gb: 120
 
 # azure_vm_admin value should match with userid used to create the certs pcf_ssh_key_pub. The userid will appear towards the end of the pub key
 azure_vm_admin: CHANGEME
