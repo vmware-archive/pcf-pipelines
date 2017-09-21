@@ -5,7 +5,7 @@ gcp_project_id: CHANGEME
 gcp_service_account_key: |
   CHANGEME
 
-# Identifier to prepend to GCP infrastructure names/labels
+# Identifier to prepend to GCP infrastructure names/labels; this should be globally unique
 gcp_resource_prefix: concourse-terraform
 
 # GCP region
