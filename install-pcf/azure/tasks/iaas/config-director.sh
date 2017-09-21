@@ -18,8 +18,8 @@ iaas_configuration=$(
     --arg bosh_storage_account_name "${ENV_SHORT_NAME}root" \
     --arg deployments_storage_account_name "*boshvms*" \
     --arg default_security_group "pcf-default-security-group" \
-    --arg ssh_public_key "${PCF_SSH_KEY_PRIV}" \
-    --arg ssh_private_key "${PCF_SSH_KEY_PUB}" \
+    --arg ssh_private_key "${PCF_SSH_KEY_PRIV}" \
+    --arg ssh_public_key "${PCF_SSH_KEY_PUB}" \
     --arg cloud_storage_type "managed_disks" \
     --arg storage_account_type "Premium_LRS" \
     --arg environment "AzureCloud" \
