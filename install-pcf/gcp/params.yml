@@ -5,7 +5,7 @@ gcp_project_id: CHANGEME
 gcp_service_account_key: |
   CHANGEME
 
-# Identifier to prepend to GCP infrastructure names/labels
+# Identifier to prepend to GCP infrastructure names/labels; this should be globally unique
 gcp_resource_prefix: concourse-terraform
 
 # GCP region
@@ -88,7 +88,7 @@ db_routing_password: CHANGEME
 
 db_accountdb_username: CHANGEME
 db_accountdb_password: CHANGEME
-db_networkpolicyserverdb_username: CHANGEME
+db_networkpolicyserverdb_username: CHANGEME  # There is a 16 character limit for these values
 db_networkpolicyserverdb_password: CHANGEME
 db_nfsvolumedb_username: CHANGEME
 db_nfsvolumedb_password: CHANGEME
