@@ -90,11 +90,11 @@ jobs:
     file: pcf-pipelines/upgrade-ops-manager/azure/tasks/create-cliaas-config/task.yml
     params:
         AZURE_REGION: {{azure_region}}
-        AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}} 
+        AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
         AZURE_CLIENT_ID: {{azure_client_id}}
         AZURE_CLIENT_SECRET: {{azure_client_secret}}
-        AZURE_TENANT_ID: {{azure_tenant_id}} 
-        AZURE_RESOURCE_GROUP_NAME: {{azure_resource_group_name}} 
+        AZURE_TENANT_ID: {{azure_tenant_id}}
+        AZURE_RESOURCE_GROUP_NAME: {{azure_resource_group_name}}
         AZURE_STORAGE_ACCOUNT_NAME: {{azure_storage_account_name}}
         AZURE_STORAGE_ACCOUNT_KEY: {{azure_storage_account_key}}
         AZURE_STORAGE_CONTAINER_NAME: {{azure_storage_container_name}}
@@ -117,7 +117,7 @@ jobs:
     file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
     params:
       API_TOKEN: {{pivnet_token}}
-      IAAS_TYPE: aws
+      IAAS_TYPE: azure
 
   - task: restore-stemcells
     file: pcf-pipelines/tasks/restore-stemcells/task.yml
