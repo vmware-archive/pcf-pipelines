@@ -28,7 +28,7 @@ function main() {
     echo "Available Version: ${available_version}"
     echo "Staged Version: ${staged_version}"
 
-    if [[ $(semver compare "${available_version}" "${staged_version}") > 0 ]]; then
+    if [[ $(semver-linux compare "${available_version}" "${staged_version}") > 0 ]]; then
       stage_product "${product_name}" "${available_version}"
     else
       echo "Nothing to do for ${product_name}"
