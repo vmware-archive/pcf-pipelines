@@ -7,3 +7,5 @@ pivnet_token:             # Pivnet token for downloading resources from Pivnet. 
 # within the stemcell to download, e.g. "vsphere", "aws", "azure", "google" must be lowercase. 
 
 iaas:
+
+git_private_key:
