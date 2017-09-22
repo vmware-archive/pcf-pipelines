@@ -166,7 +166,7 @@ jobs:
             '
             # Collect available versions of each product
             reduce $available[] as $o ({};
-              .[$o.name] = .[$o.name] + [$o.product_version]
+              .[$o.name] = .[$o.name] + [$o.product_version | split("-")[0] | split("+")[0]]
             )
 
             # Find the latest version of each product
