@@ -43,6 +43,13 @@ resources:
     repository: om
     access_token: {{images_pipeline_github_token}}
 
+- name: semver-cli
+  type: github-release
+  source:
+    user: christianang
+    repository: semver-cli
+    access_token: {{images_pipeline_github_token}}
+
 - name: yaml-patch
   type: github-release
   source:
@@ -118,6 +125,8 @@ jobs:
       params: {save: true}
     - get: yaml-patch
       params: {globs: ["*linux*"]}
+    - get: semver-cli
+      params: {globs: ["*linux*"]}
     - get: om
       params: {globs: ["*linux*"]}
     - get: cf-cli-tarball
@@ -144,6 +153,7 @@ jobs:
       - name: pcf-pipelines
       - name: om
       - name: yaml-patch
+      - name: semver-cli
       - name: cf-cli-tarball
       - name: cliaas
       - name: pivnet-cli
@@ -160,6 +170,7 @@ jobs:
         - -c
         - |
           cp \
+            semver-cli/semver-linux \
             om/om-linux \
             yaml-patch/yaml_patch_linux \
             cliaas/cliaas-linux \
@@ -210,6 +221,7 @@ jobs:
           set -xe
           which om-linux
           which yaml_patch_linux
+          which semver-linux
           which cf
           which cliaas-linux
           which pivnet-cli
