@@ -117,7 +117,7 @@ jobs:
     file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
     params:
       API_TOKEN: {{pivnet_token}}
-      IAAS_TYPE: aws
+      IAAS_TYPE: azure
 
   - task: restore-stemcells
     file: pcf-pipelines/tasks/restore-stemcells/task.yml
