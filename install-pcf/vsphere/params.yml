@@ -123,7 +123,6 @@ ssl_cert:
 ssl_private_key:
 saml_ssl_cert:
 saml_ssl_private_key:
-ssl_termination_point: haproxy # (external_ssl|external_non_ssl|haproxy)
 
 disable_http_proxy: false
 security_acknowledgement:  # Must be set to 'X'. See explanation here: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#app-security

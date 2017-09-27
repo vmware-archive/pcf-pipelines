@@ -54,7 +54,6 @@ cf_properties=$(
     --arg ssh_static_ips "$SSH_STATIC_IPS" \
     --arg cert_pem "$SSL_CERT" \
     --arg private_key_pem "$SSL_PRIVATE_KEY" \
-    --arg ssl_termination "$SSL_TERMINATION" \
     --arg smtp_from "$SMTP_FROM" \
     --arg smtp_address "$SMTP_ADDRESS" \
     --arg smtp_port "$SMTP_PORT" \
@@ -176,37 +175,17 @@ cf_properties=$(
     +
 
     # SSL Termination
-    if $ssl_termination == "haproxy" then
-      {
-        ".properties.networking_point_of_entry": {
-          "value": "haproxy"
-        },
-        ".properties.networking_point_of_entry.haproxy.ssl_rsa_certificate": {
-          "value": {
-            "cert_pem": $cert_pem,
-            "private_key_pem": $private_key_pem
-          }
+    {
+      ".properties.networking_point_of_entry": {
+        "value": "haproxy"
+      },
+      ".properties.networking_point_of_entry.haproxy.ssl_rsa_certificate": {
+        "value": {
+          "cert_pem": $cert_pem,
+          "private_key_pem": $private_key_pem
         }
       }
-    elif $ssl_termination == "external_ssl" then
-      {
-        ".properties.networking_point_of_entry": {
-          "value": "external_ssl"
-        },
-        ".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate": {
-          "value": {
-            "cert_pem": $cert_pem,
-            "private_key_pem": $private_key_pem
-          }
-        }
-      }
-    else
-      {
-        ".properties.networking_point_of_entry": {
-          "value": "external_non_ssl"
-        }
-      }
-    end
+    }
 
     +
 

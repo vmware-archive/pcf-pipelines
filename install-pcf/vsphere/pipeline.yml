@@ -236,7 +236,6 @@ jobs:
       COMPANY_NAME: {{company_name}}
       AUTHENTICATION_MODE: {{authentication_mode}}
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
-      SSL_TERMINATION: {{ssl_termination_point}}
       SSL_CERT: {{ssl_cert}}
       SSL_PRIVATE_KEY: {{ssl_private_key}}
       SAML_SSL_CERT: {{saml_ssl_cert}}
