@@ -54,6 +54,8 @@ cf_properties=$(
     --arg ssh_static_ips "$SSH_STATIC_IPS" \
     --arg cert_pem "$SSL_CERT" \
     --arg private_key_pem "$SSL_PRIVATE_KEY" \
+    --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
+    --arg haproxy_backend_ca "$HAPROXY_BACKEND_CA" \
     --arg smtp_from "$SMTP_FROM" \
     --arg smtp_address "$SMTP_ADDRESS" \
     --arg smtp_port "$SMTP_PORT" \
@@ -183,6 +185,26 @@ cf_properties=$(
         }
       }
     }
+
+    +
+
+    # HAProxy Forward TLS
+    if $haproxy_forward_tls == "enable" then
+      {
+        ".properties.haproxy_forward_tls": {
+          "value": "enable"
+        },
+        ".properties.haproxy_forward_tls.enable.backend_ca": {
+          "value": $haproxy_backend_ca
+        }
+      }
+    else
+      {
+        ".properties.haproxy_forward_tls": {
+          "value": "disable"
+        }
+      }
+    end
 
     +
 

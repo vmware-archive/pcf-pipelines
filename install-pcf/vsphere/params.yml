@@ -124,12 +124,15 @@ ssl_private_key:
 saml_ssl_cert:
 saml_ssl_private_key:
 
+haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
+haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
+
 disable_http_proxy: false
 security_acknowledgement:  # Must be set to 'X'. See explanation here: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#app-security
 
 ## TCP routing and routing services
 tcp_routing: disable                    # Enable/disable TCP routing (enable|disable)
-tcp_routing_ports:                   # A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
+tcp_routing_ports:                      # A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
 route_services: disable                 # Enable/disable route services (enable|disable)
 ignore_ssl_cert_verification: false     # Whether to disable SSL cert verification for this environment
 garden_network_pool_cidr: 10.254.0.0/22 # Only change this if you need to avoid address collision with a third-party service on the same subnet.
