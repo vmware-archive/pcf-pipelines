@@ -56,6 +56,7 @@ cf_properties=$(
     --arg private_key_pem "$SSL_PRIVATE_KEY" \
     --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
     --arg haproxy_backend_ca "$HAPROXY_BACKEND_CA" \
+    --arg disable_http_proxy "$DISABLE_HTTP_PROXY" \
     --arg smtp_from "$SMTP_FROM" \
     --arg smtp_address "$SMTP_ADDRESS" \
     --arg smtp_port "$SMTP_PORT" \
@@ -205,6 +206,14 @@ cf_properties=$(
         }
       }
     end
+
+    +
+
+    {
+      ".properties.routing_disable_http": {
+        "value": $disable_http_proxy
+      }
+    }
 
     +
 
