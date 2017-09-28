@@ -118,7 +118,7 @@ enable_security_event_logging: false
 syslog_drain_buffer_size: 10000
 
 ## Wildcard domain certs go here
-# Optional. Will be generated if blank using ssl_termination_point below.
+# Optional. Will be generated if blank.
 ssl_cert:
 ssl_private_key:
 saml_ssl_cert:
