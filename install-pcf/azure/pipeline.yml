@@ -375,11 +375,14 @@ jobs:
       COMPANY_NAME: {{company_name}}
       AUTHENTICATION_MODE: {{authentication_mode}}
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
-      SSL_TERMINATION: {{pcf_ert_networking_pointofentry}}
       SSL_CERT: {{pcf_ert_ssl_cert}}
       SSL_PRIVATE_KEY: {{pcf_ert_ssl_key}}
       SAML_SSL_CERT: {{pcf_ert_saml_cert}}
       SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
+      HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
+      HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
+      ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
+      HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
       DISABLE_HTTP_PROXY: {{disable_http_proxy}}
       TCP_ROUTING: {{tcp_routing}}
       TCP_ROUTING_PORTS: {{tcp_routing_ports}}
