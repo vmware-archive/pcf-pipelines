@@ -411,14 +411,11 @@ cf_resources=$(
   jq -n \
     --argjson consul_server_instances $CONSUL_SERVER_INSTANCES \
     --argjson nats_instances $NATS_INSTANCES \
-    --argjson etcd_tls_server_instances $ETCD_TLS_SERVER_INSTANCES \
     --argjson nfs_server_instances $NFS_SERVER_INSTANCES \
     --argjson mysql_proxy_instances $MYSQL_PROXY_INSTANCES \
     --argjson mysql_instances $MYSQL_INSTANCES \
     --argjson backup_prepare_instances $BACKUP_PREPARE_INSTANCES \
-    --argjson ccdb_instances $CCDB_INSTANCES \
     --argjson diego_database_instances $DIEGO_DATABASE_INSTANCES \
-    --argjson uaadb_instances $UAADB_INSTANCES \
     --argjson uaa_instances $UAA_INSTANCES \
     --argjson cloud_controller_instances $CLOUD_CONTROLLER_INSTANCES \
     --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
@@ -452,14 +449,11 @@ cf_resources=$(
     {
       "consul_server": { "instances": $consul_server_instances },
       "nats": { "instances": $nats_instances },
-      "etcd_tls_server": { "instances": $etcd_tls_server_instances },
       "nfs_server": { "instances": $nfs_server_instances },
       "mysql_proxy": { "instances": $mysql_proxy_instances },
       "mysql": { "instances": $mysql_instances },
       "backup-prepare": { "instances": $backup_prepare_instances },
-      "ccdb": { "instances": $ccdb_instances },
       "diego_database": { "instances": $diego_database_instances },
-      "uaadb": { "instances": $uaadb_instances },
       "uaa": { "instances": $uaa_instances },
       "cloud_controller": { "instances": $cloud_controller_instances },
       "ha_proxy": { "instances": $ha_proxy_instances },
