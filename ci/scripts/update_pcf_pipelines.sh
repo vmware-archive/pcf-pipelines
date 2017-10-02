@@ -53,7 +53,7 @@ cat >> $tmpfile <<EOF
   install_pcf_pipeline_name: install-pcf-vsphere-darknet-current
 EOF
 
-fly -tlrp3 sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml \
+fly -tci sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml \
   -l $tmpfile \
   -l <(lpass show pcf-pipelines-params --notes) \
   -l <(lpass show czero-github --notes) \
