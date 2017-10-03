@@ -170,7 +170,6 @@ jobs:
         - -c
         - |
           curl \
-            --silent \
             --insecure \
             --output fly \
             "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"
