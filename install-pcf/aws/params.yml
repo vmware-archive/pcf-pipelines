@@ -1,8 +1,8 @@
 pivnet_token:
 git_private_key:
 
-opsman_major_minor_version: ^1\.11\..*$
-ert_major_minor_version: ^1\.11\..*$
+opsman_major_minor_version: ^1\.12\..*$
+ert_major_minor_version: ^1\.12\..*$
 
 # Errands to disable prior to deploying ERT
 # Valid values:
