@@ -75,7 +75,6 @@ cf_resources=$(
     {
       "consul_server": {"internet_connected": false},
       "nats": {"internet_connected": false},
-      "etcd_tls_server": {"internet_connected": false},
       "nfs_server": {"internet_connected": false},
       "mysql_proxy": {
         "instances": 0,
@@ -86,9 +85,7 @@ cf_resources=$(
         "internet_connected": false
       },
       "backup-prepare": {"internet_connected": false},
-      "ccdb": {"internet_connected": false},
       "diego_database": {"internet_connected": false},
-      "uaadb": {"internet_connected": false},
       "uaa": {"internet_connected": false},
       "cloud_controller": {"internet_connected": false},
       "ha_proxy": {"internet_connected": false},
