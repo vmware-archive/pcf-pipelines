@@ -143,6 +143,8 @@ cf_properties=$(
     --arg private_key_pem "$pcf_ert_ssl_key" \
     --arg saml_cert_pem "$saml_cert_pem" \
     --arg saml_key_pem "$saml_key_pem" \
+    --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
+    --arg haproxy_backend_ca "$HAPROXY_BACKEND_CA" \
     --arg iaas $pcf_iaas \
     --arg pcf_ert_domain "$pcf_ert_domain" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
@@ -192,13 +194,6 @@ cf_properties=$(
     --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
     '
     {
-      ".properties.networking_point_of_entry": { "value": "external_ssl" },
-      ".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate": {
-        "value": {
-          "cert_pem": $cert_pem,
-          "private_key_pem": $private_key_pem
-        }
-      },
       ".uaa.service_provider_key_credentials": {
         "value": {
           "cert_pem": $saml_cert_pem,
@@ -318,6 +313,26 @@ cf_properties=$(
     else
       {
         ".properties.mysql_backups": {"value": "disable"}
+      }
+    end
+
+    +
+
+    # HAProxy Forward TLS
+    if $haproxy_forward_tls == "enable" then
+      {
+        ".properties.haproxy_forward_tls": {
+          "value": "enable"
+        },
+        ".properties.haproxy_forward_tls.enable.backend_ca": {
+          "value": $haproxy_backend_ca
+        }
+      }
+    else
+      {
+        ".properties.haproxy_forward_tls": {
+          "value": "disable"
+        }
       }
     end
     '

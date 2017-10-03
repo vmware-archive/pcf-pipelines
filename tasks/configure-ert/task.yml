@@ -24,6 +24,8 @@ params:
   pcf_ert_ssl_cert:
   pcf_ert_ssl_key:
   terraform_prefix:
+  HAPROXY_FORWARD_TLS:
+  HAPROXY_BACKEND_CA:
   # IaaS Specific for GCP only
   gcp_storage_access_key:
   gcp_storage_secret_key:
