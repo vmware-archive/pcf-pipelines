@@ -318,6 +318,18 @@ cf_properties=$(
 
     +
 
+    # SSL Termination
+    {
+      ".properties.networking_poe_ssl_cert": {
+        "value": {
+          "cert_pem": $cert_pem,
+          "private_key_pem": $private_key_pem
+        }
+      }
+    }
+
+    +
+
     # HAProxy Forward TLS
     if $haproxy_forward_tls == "enable" then
       {
