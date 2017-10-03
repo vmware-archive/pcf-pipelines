@@ -67,10 +67,10 @@ routing_disable_http: false
 ert_errands_to_disable: none
 
 # PCF Operations Manager minor version to install
-opsman_major_minor_version: ^1\.11\..*$
+opsman_major_minor_version: ^1\.12\..*$
 
 # PCF Elastic Runtime minor version to install
-ert_major_minor_version: ^1\.11\..*$
+ert_major_minor_version: ^1\.12\..*$
 
 # DB Creds
 # Usernames must be 16 characters or fewer
