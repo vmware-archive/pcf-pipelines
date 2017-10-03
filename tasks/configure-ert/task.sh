@@ -347,6 +347,14 @@ cf_properties=$(
         }
       }
     end
+
+    +
+
+    {
+      ".properties.routing_disable_http": {
+        "value": $routing_disable_http
+      }
+    }
     '
 )
 

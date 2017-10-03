@@ -49,7 +49,7 @@ pcf_ert_ssl_key:
 
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
-
+routing_disable_http:
 # Errands to disable prior to deploying ERT
 # Valid values:
 #   all

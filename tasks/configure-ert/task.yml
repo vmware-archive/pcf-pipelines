@@ -80,3 +80,4 @@ params:
   db_locket_password:
   db_silk_username:
   db_silk_password:
+  routing_disable_http:
