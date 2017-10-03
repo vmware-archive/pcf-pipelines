@@ -73,7 +73,7 @@ EOF
   timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
   set +e
   while ! $started; do
-      OUTPUT=$(govc vm.info -vm.ip=${OPSMAN_IP} -k=true 2>&1)
+      OUTPUT=$(govc vm.info -vm.ipath=${GOVC_DATACENTER}/vm/${OPSMAN_NAME} -k=true 2>&1)
 
       if [[ $SECONDS -gt $timeout ]]; then
         echo "Timed out waiting for VM to start."
