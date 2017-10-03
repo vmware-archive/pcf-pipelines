@@ -26,6 +26,8 @@ params:
   terraform_prefix:
   HAPROXY_FORWARD_TLS:
   HAPROXY_BACKEND_CA:
+  ROUTER_TLS_CIPHERS:
+  HAPROXY_TLS_CIPHERS:
   # IaaS Specific for GCP only
   gcp_storage_access_key:
   gcp_storage_secret_key:

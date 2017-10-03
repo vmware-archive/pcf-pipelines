@@ -145,6 +145,8 @@ cf_properties=$(
     --arg saml_key_pem "$saml_key_pem" \
     --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
     --arg haproxy_backend_ca "$HAPROXY_BACKEND_CA" \
+    --arg router_tls_ciphers "$ROUTER_TLS_CIPHERS" \
+    --arg haproxy_tls_ciphers "$HAPROXY_TLS_CIPHERS" \
     --arg iaas $pcf_iaas \
     --arg pcf_ert_domain "$pcf_ert_domain" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
@@ -353,6 +355,18 @@ cf_properties=$(
     {
       ".properties.routing_disable_http": {
         "value": $routing_disable_http
+      }
+    }
+
+    +
+
+    # TLS Cipher Suites
+    {
+      ".properties.gorouter_ssl_ciphers": {
+        "value": $router_tls_ciphers
+      },
+      ".properties.haproxy_ssl_ciphers": {
+        "value": $haproxy_tls_ciphers
       }
     }
     '
