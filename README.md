@@ -1,6 +1,6 @@
 # PCF Pipelines
 
-**Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability. Using this repo directly may result in breaking the piplines that consume it. Tracking master is considered unstable.**
+**Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability. Using this repo directly may result in breaking the pipelines that consume it. Tracking master is considered unstable.**
 
 This is a collection of [Concourse](https://concourse.ci) pipelines for
 installing and upgrading [Pivotal Cloud Foundry](https://pivotal.io/platform).
