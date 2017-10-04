@@ -250,6 +250,7 @@ jobs:
         source:
           repository: czero/cflinuxfs2
       inputs:
+      - name: pcf-pipelines-combined-version
       - name: pcf-pipelines-tarball
       - name: czero-cflinuxfs2
       outputs:
