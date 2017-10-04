@@ -110,3 +110,11 @@ address this issue.
    ```
    
    **Solution:** You cannot use "admin" as a username for MySQL. 
+   
+   
+   #### Error message: ####
+   ```
+   “{”errors”:{“.properties.networking_point_of_entry.external_ssl.ssl_ciphers”:[“Value can’t be blank”]}}”
+   ```
+   
+   **Solution:** pcf-pipelines is not compatible with ERT 1.11.14. Redeploy with a [compatible](https://github.com/pivotal-cf/pcf-pipelines#install-pcf-pipelines) version. 
