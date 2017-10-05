@@ -1,26 +1,31 @@
+os_resource_prefix: #CHANGEME
+
 # These should probably be static except for the 'external-net'
 # external_network refers to the network where I request floating IP's.
-infra_network: pcf-infra
-infra_subnet: 10.1.0.0/24
+infra_network: c0-infra-net
+ert_network: c0-ert-net
+services_network: c0-services-net
+dynamic_services_network: c0-dynamic-services-net
+
+infra_subnet_cidr: 10.1.0.0/24
 infra_gateway: 10.1.0.1
 infra_reserved_ip_ranges: 10.1.0.0-10.1.0.9
-ert_network: pcf-ert
-ert_subnet: 10.2.0.0/24
+ert_subnet_cidr: 10.2.0.0/24
 ert_gateway: 10.2.0.1
 ert_reserved_ip_ranges: 10.2.0.0-10.2.0.9
-services_network: pcf-services
-services_subnet: 10.3.0.0/24
+services_subnet_cidr: 10.3.0.0/24
 services_gateway: 10.3.0.1
 services_reserved_ip_ranges: 10.3.0.0-10.3.0.9
-dynamic_services_network: pcf-dynamic-services
-dynamic_services_subnet: 10.4.0.0/24
+dynamic_services_subnet_cidr: 10.4.0.0/24
 dynamic_services_gateway: 10.4.0.1
 dynamic_services_reserved_ip_ranges: 10.4.0.0-10.4.0.9
+
 # TODO: Allow multiple DNS servers for each net (currently only 1 can be set)
 infra_dns: #CHANGEME
 ert_dns: #CHANGEME
 services_dns: #CHANGEME
 dynamic_services_dns: #CHANGEME
+external_network_id: #CHANGEME      # Set this to your floating IP network's id
 external_network: #CHANGEME         # Set this to your floating IP network
 infra_nw_azs: #CHANGEME             # Comma-separated list of AZs
 ert_nw_azs: #CHANGEME               # Comma-separated list of AZs
@@ -44,6 +49,10 @@ os_region_name: #CHANGEME
 os_interface: public
 pre_os_cacert: # Set if needed (see above)
 
+opsman_public_key: #CHANGEME # The public key of your opsman key
+
+opsman_volume_size: 100
+
 # AZ configuration for Ops Director
 az_01_name: #CHANGEME
 #az_02_name: #CHANGEME
@@ -58,7 +67,7 @@ ert_major_minor_version: 1\.10\.*    # Minor version of Elastic Runtime to track
 # Ops Manager VM Settings
 opsman_image: ops-manager        # Prefix for the ops man glance image
 opsman_flavor: m1.xlarge         # Ops man VM flavor
-opsman_uri: #CHANGEME            # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
+opsman_domain_or_ip_address: #CHANGEME            # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
 opsman_admin_username: admin     # Username for Ops Manager admin account
 opsman_admin_password: #CHANGEME # Password for Ops Manager admin account
 om_decryption_pwd: #CHANGEME     # Decryption password for Ops Manager exported settings
@@ -103,7 +112,16 @@ syslog_drain_buffer_size: 10000
 ssl_cert:
 # Optional. Will be generated if blank using ssl_termination_point below.
 ssl_private_key:
-ssl_termination_point: #CHANGEME # (external_ssl|external_non_ssl|haproxy)
+pcf_ert_saml_cert:
+pcf_ert_saml_key:
+
+haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
+haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
+
+# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
+# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
+router_tls_ciphers:         # The recommended setting is "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
+haproxy_tls_ciphers:        # The recommended setting is "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
 
 # See explanation here: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#app-security
 security_acknowledgement: #CHANGEME # Must be set to 'X'
@@ -201,7 +219,6 @@ doppler_instances: 1
 loggregator_traffic_controller_instances: 1
 tcp_router_instances: 1
 syslog_adapter_instances: 3
-syslog_scheduler_instances: 1
 
 s3_endpoint:
 s3_output_bucket:
