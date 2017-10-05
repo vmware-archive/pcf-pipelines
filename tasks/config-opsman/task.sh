@@ -14,4 +14,3 @@ om-linux \
   --username $OPS_MGR_USR \
   --password $OPS_MGR_PWD \
   --decryption-passphrase $OM_DECRYPTION_PWD
-
