@@ -12,131 +12,41 @@ This pipeline downloads artifacts from DockerHub (czero/cflinuxfs2 and custom
 docker-image resources) and Pivotal Network, and as such the Concourse instance
 must have access to those.
 
-1. Create/upload a keypair if you have not already done so:
+1. Download the `Openstack RC File v3` from `Compute > Access & Security`. This will
+   be used in your `params.yml`
 
-    ```
-    openstack keypair create
-    ```
-    
-2. Allocate a floating IP for the Ops Manager VM if you have not done so. You
-   should create a DNS entry for this IP and use that entry as your 
-   `opsman_uri`. This value will be used for `opsman_floating_ip` in `params.yml`.
-   
-   ```
-   openstack floating ip create <ext_network_name>
-   ```
+2. Update params.yml and replace all #CHANGEME values with the relevant information.
 
-3. Change all of the `#CHANGEME` values in params.yml with real values. Change
-   any other values you want in `params.yml` to reflect your deployment.
+    - The sample pipeline params file includes 2 params that set the major/minor versions of
+      OpsMan and ERT that will be pulled. They will typically default to the latest RC/GA available tiles.
+      ```
+      opsman_major_minor_version: '1\.12\..*'
+      ert_major_minor_version: '1\.12\..*'
+      ```
 
-   - `external_network` should be set to whatever network floating ips live on
+    - NOTE: The pipeline also utilizes an s3 compatible bucket for terraform state.
 
-   - Network DNS servers should be set (only 1 server can be specificed):
-   
-     ```
-     infra_dns
-     ert_dns
-     services_dns
-     dynamic_services_dns
-     ```
-
-   - Network AZs must be set to a comma-seperated list of az values that the
-     networks will live in:
-
-       ```
-       infra_nw_azs
-       ert_nw_azs
-       services_nw_azs
-       dynamic_services_nw_azs
-       ```
-
-   - The OS connection variables must be set:
-
-     ```
-     os_auth_url
-     os_identity_api_version
-     os_username
-     os_password
-     os_user_domain_name
-     os_project_name
-     os_project_id
-     os_tenant
-     os_region_name
-     os_interface
-     pre_os_cacert
-     ```
-
-   - Set your az names:
-
-     ```
-     az_01_name
-     az_02_name
-     az_03_name
-     ```
-
-   - Set `ert_singleton_job_az` to whichever availability zone single jobs
-     should be deployed to.
-
-   - Set `pivnet_token` to your Pivotal Network API token
-
-   - Change Ops Manager VM settings:
- 
-    ```
-    opsman_key
-    opsman_floating_ip
-    opsman_uri
-    opsman_admin_username
-    opsman_admin_password
-    om_decryption_pwd
-    ``` 
-    
-  - Change the Ops Man Director settings:
-  
-    ```
-    ntp_servers
-    os_keypair_name
-    os_private_key
-    ```
-    
-  - Set `ssl_termination_point` based on your Load Balancer solution (See 
-    [Deploying with internal HAProxy](#deplying-with-internal-haproxy) for 
-    dev/test purposes)
-  
-  - Set `om_generate_ssl_endpoint`
-  
-  - Set `security_acknowledgement` to `X`
-  
-  - Set PCF domain names (system/apps):
-  
-    ```
-    system_domain
-    apps_domain
-    ```
-    
-  - Set `mysql_monitor` e-mail address
-
-4. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
+3. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
 
     ```
     fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml
     ```
 
-5. Unpause the pipeline
-6. Trigger the `create-infrastructure` job.
+4. Unpause the pipeline
+5. Trigger the `create-infrastructure` job.
+6. Setup DNS.
 
-### Deplying with internal HAProxy
+    - The create infrastructure job will create floating IPs in your external net for OpsMan and HAProxy.
+      The output of the `create-infrastructure` job exposes these floating IPs. These should be set as follows:
+      ```
+      *.cfapps.openstack.customer0.net -> HAProxy Floating IP
+      opsman.openstack.customer0.net -> OpsMan Floating IP
+      *.sys.openstack.customer0.net -> HAProxy Floating IP
+      ```
 
-Before deploying determine what static IP in the `ert` pool will be used for 
-the HAProxy instance. Wildcard DNS entries should be created for this static
-IP address for your sys, apps, uaa and login domains. Alternative a service
-like `xip.io` or `nip.io` could be used.
+7. Trigger the `configure-director` job.
 
-The following values should be set in `params.yml`:
-
-  - `ssl_termination_point` should be set to `haproxy`
-  - `ha_proxy_ips` should be set to the static IP which you created the DNS
-    entries for earlier
-  - `ha_proxy_instances` should be set to `1`
+    - The rest of the pipeline should automatically trigger.
 
 ### Tearing down the environment
 
@@ -153,10 +63,6 @@ Currently this pipeline only supports a single AZ deployment. Once a test
 environment with multiple AZs is available, this functionality will be fully
 fleshed out and incorporated into the pipeline. In the meantime, the other
 two AZ defintions can remain commented out.
-
-### Floating IP setting
-
-Currently Ops Manager's API does not have an API endpoint that can configure the Floating IPs in PCF, so the pipeline does not allow configuring these fields. Ops Manager will add this API endpoint later.
 
 ### MySQL Monitor
 
@@ -179,7 +85,7 @@ steps as a workaround to this issue, and then re-run the `configure-ert` and
       - external
     ```
   - Change `mysql_monitor_instances` to `0` in your `params.yml` and fly the changes
-  
+
 After a successful deployment, navigate to the Ops Man UI and change the value
 for MySQL Monitor Instances back to 1 and apply changes
   - "Ops Manger > ERT > Resource Config", Apply Change.
