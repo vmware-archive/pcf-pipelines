@@ -47,6 +47,7 @@ os_project_id: #CHANGEME
 os_tenant: #CHANGEME
 os_region_name: #CHANGEME
 os_interface: public
+os_networking_model: #CHANGEME (nova|neutron)
 pre_os_cacert: # Set if needed (see above)
 
 opsman_public_key: #CHANGEME # The public key of your opsman key

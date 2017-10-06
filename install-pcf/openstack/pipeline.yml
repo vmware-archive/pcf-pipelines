@@ -171,6 +171,7 @@ jobs:
       OS_USER_DOMAIN_NAME: {{os_user_domain_name}}
       OS_REGION_NAME: {{os_region_name}}
       OS_TENANT: {{os_tenant}}
+      OS_NETWORKING_MODEL: {{os_networking_model}}
       SECURITY_GROUP: {{security_group}}
       KEYPAIR_NAME: {{os_keypair_name}}
       PRIVATE_KEY: {{os_private_key}}

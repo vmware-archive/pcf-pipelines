@@ -36,6 +36,7 @@ read -r -d '' iaas_configuration <<EOF
     "keystone_version": "$OS_API_VERSION",
     "domain": "$OS_USER_DOMAIN_NAME",
     "tenant": "$OS_TENANT",
+    "networking_model": "$OS_NETWORKING_MODEL",
     "security_group": "$SECURITY_GROUP",
     "key_pair_name": "$KEYPAIR_NAME",
     "ssh_private_key": "",
