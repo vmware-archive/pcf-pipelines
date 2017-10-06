@@ -1,7 +1,8 @@
+# The following should be set to a unique prefix. It will be used to prefix all
+# the terraform resources created by the pipeline
 os_resource_prefix: #CHANGEME
 
-# These should probably be static except for the 'external-net'
-# external_network refers to the network where I request floating IP's.
+# The network names should start with the prefix above.
 infra_network: c0-infra-net
 ert_network: c0-ert-net
 services_network: c0-services-net
@@ -52,7 +53,7 @@ pre_os_cacert: # Set if needed (see above)
 
 opsman_public_key: #CHANGEME # The public key of your opsman key
 
-opsman_volume_size: 100
+opsman_volume_size: 100  # OpsMan VM disk size in GB
 
 # AZ configuration for Ops Director
 az_01_name: #CHANGEME
@@ -62,8 +63,8 @@ ert_singleton_job_az: #CHANGEME # AZ to use for deployment of ERT Singleton jobs
 
 # Resource configuration
 pivnet_token: #CHANGEME               # Pivotal Network token
-opsman_major_minor_version: 1\.10\.* # Minor version of Ops Mgr to track
-ert_major_minor_version: 1\.10\.*    # Minor version of Elastic Runtime to track
+opsman_major_minor_version: 1\.12\.* # Minor version of Ops Mgr to track
+ert_major_minor_version: 1\.12\.*    # Minor version of Elastic Runtime to track
 
 # Ops Manager VM Settings
 opsman_image: ops-manager        # Prefix for the ops man glance image
@@ -221,6 +222,7 @@ loggregator_traffic_controller_instances: 1
 tcp_router_instances: 1
 syslog_adapter_instances: 3
 
+# The S3 access credentials for storing terraform state.
 s3_endpoint:
 s3_output_bucket:
 tf_aws_access_key:
