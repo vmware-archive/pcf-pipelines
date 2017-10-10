@@ -42,23 +42,11 @@ iaas_type: CHANGEME
 # is https://network.pivotal.io/products/pivotal-rabbitmq-service, and the
 # product slug is 'pivotal-rabbitmq-service'.
 product_slug: CHANGEME
-# The name of the product file found in the metadata file for the product. This
-# will be used for staging the file in Operations Manager.
+
+# The name of the product associated with the product slug.
 #
-# This can be found in the .pivotal file's manifest for the product. This can
-# be found in the .pivotal file with the following:
-# `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | head`
-# -------- | -------
-# PivNet Product | Product Name
-# Pivotal Cloud Foundry Metrics | apm
-# Pivotal Spring Cloud Services | p-spring-cloud-services
-# Redis For PCF | p-redis 
-# Pivotal Cloud Foundry Elastic Runtime | elastic-runtime
-# Pivotal Cloud Foundry Runtime for Windows | p-windows-runtime
-# MySQL for PCF | p-mysql
-# RabbitMQ for PCF | p-rabbitmq
-# Pivotal Cloud Cache | p-cloudcache
-# Pivotal Cloud Foundry JMX Bridge (Ops Metrics) | p-metrics 
+# Use this command to extract the product name from the .pivotal file:
+# `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | egrep "^name: (.+)" | cut -d" " -f 2`
 product_name: CHANGEME
 
 git_private_key:
