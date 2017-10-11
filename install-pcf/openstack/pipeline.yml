@@ -241,7 +241,7 @@ jobs:
     - get: pivnet-product
       tags: [ openstack ]
       resource: elastic-runtime
-      params: {globs: ["*.pivotal"]}
+      params: {globs: ["cf*.pivotal"]}
     - get: ops-manager
       tags: [ openstack ]
       params: {globs: []}
