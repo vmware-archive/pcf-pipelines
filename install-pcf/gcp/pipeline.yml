@@ -206,7 +206,7 @@ jobs:
       resource: pivnet-elastic-runtime
       params:
         globs:
-        - "*pivotal"
+        - "cf*.pivotal"
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
