@@ -123,9 +123,9 @@ ssl_private_key:
 pcf_ert_saml_cert:
 pcf_ert_saml_key:
 
+haproxy_floating_ips: #CHANGEME  # Floating IPs allocated to HAProxy on OpenStack
 haproxy_forward_tls: enable      # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca: #CHANGEME    # HAProxy will use the CA provided to verify the certificates provided by the router.
-
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
 # Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
 router_tls_ciphers:  #CHANGEME   # The recommended setting is "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
@@ -226,3 +226,4 @@ doppler_instances: 1
 loggregator_traffic_controller_instances: 1
 tcp_router_instances: 1
 syslog_adapter_instances: 3
+route_services:

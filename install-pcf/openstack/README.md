@@ -43,8 +43,9 @@ must have access to those.
       opsman.openstack.customer0.net -> OpsMan Floating IP
       *.sys.openstack.customer0.net -> HAProxy Floating IP
       ```
+7. Set `haproxy_floating_ips:` param to the HAProxy floating IP value, set the pipeline again like in step 3.
 
-7. Trigger the `configure-director` job.
+8. Trigger the `configure-director` job.
 
     - The rest of the pipeline should automatically trigger.
 
