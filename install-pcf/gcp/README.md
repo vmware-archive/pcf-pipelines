@@ -118,3 +118,14 @@ address this issue.
    ```
    
    **Solution:** pcf-pipelines is not compatible with ERT 1.11.14. Redeploy with a [compatible](https://github.com/pivotal-cf/pcf-pipelines#install-pcf-pipelines) version. 
+   
+   
+   
+#### Error message: ####
+
+    Error
+    pcf-pipelines/tasks/stage-product/task.sh: line 19: ./pivnet-product/metadata.json: No such file or directory
+
+
+
+   **Solution:** You are not using the PivNet resource, and are most likely using a different repository manager like Artifactory. In order to make this work, you should push the metadata.json file. Then, get the file on the downstream task - it contains the tile dependency information, including stemcell versions. This might require an additional bash task to move the file to the appropriate directory. 
