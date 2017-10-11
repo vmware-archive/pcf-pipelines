@@ -93,3 +93,12 @@ for MySQL Monitor Instances back to 1 and apply changes
 
 ### Missing Jumpbox
 * There is presently no jumpbox installed as part of the infrastructure creation.
+
+## Troubleshooting
+
+#### Error message: ####
+   ```
+   “{”errors”:{“.properties.networking_point_of_entry.external_ssl.ssl_ciphers”:[“Value can’t be blank”]}}”
+   ```
+   
+   **Solution:** pcf-pipelines is not compatible with ERT 1.11.14. Redeploy with ERT v1.11.8. 
