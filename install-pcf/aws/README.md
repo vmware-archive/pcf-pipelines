@@ -58,4 +58,4 @@ In the `create-infrastructure` job, there is a [race condition](https://github.c
 
 
 
-   **Solution:** You are not using the PivNet resource, and are most likely using a different repository manager like Artifactory. In order to make this work, you should push the metadata.json file. Then, get the file on the downstream task - it contains the tile dependency information, including stemcell versions. This might require an additional bash task to move the file to the appropriate directory. 
+   **Solution:** You are not using the PivNet resource, and are most likely using a different repository manager like Artifactory. For more information, and a possible workaround, see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/192).
