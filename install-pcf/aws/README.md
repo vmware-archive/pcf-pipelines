@@ -49,3 +49,13 @@ In the `create-infrastructure` job, there is a [race condition](https://github.c
 
 
    **Solution:** The parent zone (aws.customer0.net) is not delegating to the zone created via terraform. You need to add the NS records for (sle1.aws.customer0.net) in the parent zone in AWS Route53. 
+   
+
+#### Error message: ####
+
+    Error
+    pcf-pipelines/tasks/stage-product/task.sh: line 19: ./pivnet-product/metadata.json: No such file or directory
+
+
+
+   **Solution:** You are not using the PivNet resource, and are most likely using a different repository manager like Artifactory. In order to make this work, you should push the metadata.json file. Then, get the file on the downstream task - it contains the tile dependency information, including stemcell versions. This might require an additional bash task to move the file to the appropriate directory. 
