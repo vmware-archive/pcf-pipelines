@@ -32,6 +32,9 @@ ln -s /usr/bin/vim.tiny /usr/local/bin/vim && \
 # UAA Client
 gem install cf-uaac --no-ri --no-rdoc && \
 
+# Ensure latest version of six
+pip install six --upgrade && \
+
 # AWS Client
 pip install awscli && \
 
