@@ -37,7 +37,7 @@ pip install awscli && \
 
 # Openstack Client
 apt-get install -y --no-install-recommends libffi-dev && \
-pip install python-openstackclient pytz python-neutronclient && \
+pip install cryptography==2.0.3 python-openstackclient pytz python-neutronclient && \
 
 # Azure Client
 echo "deb https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && \
