@@ -9,6 +9,7 @@ resource "openstack_compute_instance_v2" "opsman" {
 
   network {
     name = "${openstack_networking_network_v2.infra_net.name}"
+    fixed_ip_v4 = "${var.opsman_fixed_ip}"
   }
 }
 

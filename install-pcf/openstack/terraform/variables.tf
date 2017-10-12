@@ -25,3 +25,4 @@ variable "opsman_image_name" {}
 variable "opsman_public_key" {}
 variable "opsman_volume_size" {}
 variable "opsman_flavor" {}
+variable "opsman_fixed_ip" {}

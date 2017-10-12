@@ -10,6 +10,7 @@ function get_opsman_version() {
 
 function main() {
   local opsman_image_name="ops-manager-$(get_opsman_version)"
+  local opsman_fixed_ip=$(echo $INFRA_SUBNET_CIDR|cut -d. -f 1,2,3).5
   echo "Opsman Image: ${opsman_image_name}"
 
   terraform plan \
@@ -21,6 +22,7 @@ function main() {
     -var "os_domain_name=${OS_USER_DOMAIN_NAME}" \
     -var "prefix=${OS_RESOURCE_PREFIX}" \
     -var "infra_subnet_cidr=${INFRA_SUBNET_CIDR}" \
+    -var "opsman_fixed_ip"=${opsman_fixed_ip} \
     -var "ert_subnet_cidr=${ERT_SUBNET_CIDR}" \
     -var "services_subnet_cidr=${SERVICES_SUBNET_CIDR}" \
     -var "dynamic_services_subnet_cidr=${DYNAMIC_SERVICES_SUBNET_CIDR}" \
