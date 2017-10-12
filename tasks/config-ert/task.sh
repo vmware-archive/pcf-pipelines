@@ -444,6 +444,7 @@ cf_resources=$(
     --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
     --argjson doppler_instances $DOPPLER_INSTANCES \
     --arg ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
+    --arg ha_proxy_floating_ips "$HAPROXY_FLOATING_IPS" \
     --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
     --arg tcp_router_nsx_lb_edge_name "${TCP_ROUTER_NSX_LB_EDGE_NAME}" \
     --arg tcp_router_nsx_lb_pool_name "${TCP_ROUTER_NSX_LB_POOL_NAME}" \
@@ -487,6 +488,14 @@ cf_resources=$(
 
     if $ha_proxy_elb_name != "" then
       .ha_proxy |= . + { "elb_names": [ $ha_proxy_elb_name ] }
+    else
+      .
+    end
+
+    |
+
+    if $ha_proxy_floating_ips != "" then
+      .ha_proxy |= . + { "floating_ips": $ha_proxy_floating_ips }
     else
       .
     end

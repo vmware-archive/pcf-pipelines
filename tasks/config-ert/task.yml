@@ -4,7 +4,8 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: czero/cflinuxfs2}
+  source:
+    repository: czero/cflinuxfs2
 
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
@@ -92,6 +93,7 @@ params:
   CLOUD_CONTROLLER_INSTANCES:
   HA_PROXY_INSTANCES:
   HA_PROXY_LB_NAME:
+  HAPROXY_FLOATING_IPS:
   ROUTER_INSTANCES:
   MYSQL_MONITOR_INSTANCES:
   CLOCK_GLOBAL_INSTANCES:

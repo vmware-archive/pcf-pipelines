@@ -333,6 +333,7 @@ jobs:
       DIEGO_BRAIN_NSX_LB_SECURITY_GROUP: {{diego_brain_nsx_lb_security_group}}
       DIEGO_BRAIN_NSX_LB_PORT: {{diego_brain_nsx_lb_port}}
       HA_PROXY_LB_NAME: ""
+      HAPROXY_FLOATING_IPS: ""
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
