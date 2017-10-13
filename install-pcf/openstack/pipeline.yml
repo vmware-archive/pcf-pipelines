@@ -37,7 +37,7 @@ resources:
   type: git
   source:
     uri: https://github.com/pivotal-cf/pcf-pipelines.git
-    branch: openstack
+    branch: master
 
 - name: ops-manager
   type: pivnet
