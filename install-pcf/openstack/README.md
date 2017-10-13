@@ -58,6 +58,11 @@ If you want to bring the environment up again, run `create-infrastructure`.
 
 ## Known Issues
 
+### Failing Runtime Smoke Tests
+
+The runtime smoke tests in the `deploy-ert` may fail, despite successful overall deployment. 
+Running [CF smoke tests](https://github.com/cloudfoundry/cf-smoke-tests/blob/master/README.md) manually should succeed.
+
 ### Single AZ
 
 Currently this pipeline only supports a single AZ deployment. Once a test
