@@ -188,6 +188,8 @@ For the `unpack-pcf-pipelines-combined` to work there must be a single manual tr
 
 ### Pipelines and Tasks
 
+For practicalities, please see our [Contributing](https://github.com/pivotal-cf/pcf-pipelines/blob/master/CONTRIBUTING.md) page for more information.
+
 The pipelines and tasks in this repo follow a simple pattern which must be adhered to:
 
 ```
