@@ -29,6 +29,7 @@ terraform destroy -force \
   -var "services_subnet_cidr=dontcare" \
   -var "dynamic_services_subnet_cidr=dontcare" \
   -var "infra_dns=dontcare" \
+  -var "opsman_fixed_ip=dontcare" \
   -var "ert_dns=dontcare" \
   -var "services_dns=dontcare" \
   -var "dynamic_services_dns=dontcare" \
