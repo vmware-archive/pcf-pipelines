@@ -37,14 +37,14 @@ pipelines_count = 0
 for dir, subdirs, files in os.walk('code-repo'):
   if 'pipeline.yml' in files:
     pipelines_count +=1
-  try:
-    params_file = open(os.path.join(dir, 'params.yml'))
-    params = yaml.load(params_file)
+    try:
+      params_file = open(os.path.join(dir, 'params.yml'))
+      params = yaml.load(params_file)
 
-    pipeline_name = dir[10:]  # strip 'code-repo/'
-    metrics.append({'metric': metric_name + '.' + pipeline_name, 'points': len(params), 'tags': ['params'], 'host': 'ci'})
-  except Exception, e:
-    print e
+      pipeline_name = dir[10:]  # strip 'code-repo/'
+      metrics.append({'metric': metric_name + '.' + pipeline_name, 'points': len(params), 'tags': ['params'], 'host': 'ci'})
+    except Exception, e:
+      print e
 
 metrics.append({'metric': metric_name + '.pipelines_total', 'points': pipelines_count, 'tags': [], 'host': 'ci'})
 
