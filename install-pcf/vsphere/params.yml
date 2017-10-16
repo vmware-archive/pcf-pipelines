@@ -215,7 +215,6 @@ mysql_instances: 3
 backup_prepare_instances: 0
 ccdb_instances: 0
 diego_database_instances: 3
-uaadb_instances: 0
 uaa_instances: 2
 cloud_controller_instances: 2
 ha_proxy_instances: 0
