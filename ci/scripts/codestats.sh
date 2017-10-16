@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash -eu
 
 echo "Code stats for $REPO_NAME"
 STATSJSON=/tmp/codestats.json
