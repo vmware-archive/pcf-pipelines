@@ -31,7 +31,13 @@ for lang in stats:
     count = stats[lang].get(attr)
     metrics.append({'metric': metric_name, 'points': count, 'tags': [lang, attr], 'host': 'ci'})
 
-print metrics
+pipelines_count = 0
+
+for dir, subdirs, files in os.walk('code-repo'):
+  if 'pipeline.yml' in files:
+    pipelines_count +=1
+
+metrics.append({'metric': metric_name + '.pipelines_total', 'points': pipelines_count, 'tags': [], 'host': 'ci'})
 
 api.Metric.send(metrics)
 "
