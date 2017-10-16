@@ -6,10 +6,18 @@ image_resource:
   source:
     repository: czero/cflinuxfs2
 inputs:
-  - name: pcf-pipelines 
+  - name: pcf-pipelines
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
+  GOVC_URL:
+  GOVC_USERNAME:
+  GOVC_PASSWORD:
+  GOVC_DATACENTER:
+  GOVC_CLUSTER:
+  GOVC_RESOURCE_POOL:
+  GOVC_DATASTORE:
+
 run:
   path: pcf-pipelines/install-pcf/vsphere/tasks/wipe-env/task.sh

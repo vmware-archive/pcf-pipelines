@@ -14,3 +14,15 @@ if [[ $opsman_available == "available" ]]; then
     --password $OPSMAN_PASSWORD \
     delete-installation
 fi
+
+if [ -z "$GOVC_RESOURCE_POOL" ]; then
+  echo "GOVC_RESOURCE_POOL must not be empty!"
+  exit 1
+fi
+
+# Power-off and remove any outstanding vms from the slot
+for OUTSTANDING_VM in $(govc find -k $GOVC_RESOURCE_POOL -type m); do
+  echo "Powering off and removing $OUTSTANDING_VM"
+  govc vm.power -k -vm.ipath=$OUTSTANDING_VM -off
+  govc vm.unregister -k -vm.ipath=$OUTSTANDING_VM
+done
