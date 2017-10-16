@@ -131,7 +131,6 @@ mysql_proxy_instances: 1
 mysql_instances: 1
 backup_prepare_instances: 0
 ccdb_instances: 0
-uaadb_instances: 0
 uaa_instances: 2
 cloud_controller_instances: 2
 ha_proxy_instances: 1
