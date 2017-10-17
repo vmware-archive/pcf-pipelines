@@ -212,7 +212,6 @@ nfs_server_instances: 1
 mysql_proxy_instances: 2
 mysql_instances: 3
 backup_prepare_instances: 0
-ccdb_instances: 0
 diego_database_instances: 3
 uaa_instances: 2
 cloud_controller_instances: 2
