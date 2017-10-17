@@ -23,6 +23,8 @@ fi
 # Power-off and remove any outstanding vms from the slot
 for OUTSTANDING_VM in $(govc find -k $GOVC_RESOURCE_POOL -type m); do
   echo "Powering off and removing $OUTSTANDING_VM"
+  set +e
   govc vm.power -k -vm.ipath=$OUTSTANDING_VM -off
+  set -e
   govc vm.unregister -k -vm.ipath=$OUTSTANDING_VM
 done
