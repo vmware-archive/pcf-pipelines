@@ -138,7 +138,6 @@ mysql_monitor_instances: 0
 clock_global_instances: 1
 cloud_controller_worker_instances: 2
 consul_server_instances: 3
-etcd_tls_server_instances: 3
 diego_database_instances: 3
 router_instances: 3
 diego_brain_instances: 3

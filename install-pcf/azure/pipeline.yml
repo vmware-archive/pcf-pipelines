@@ -435,7 +435,6 @@ jobs:
       SSH_STATIC_IPS: {{ssh_static_ips}}
       CONSUL_SERVER_INSTANCES: {{consul_server_instances}}
       NATS_INSTANCES: {{nats_instances}}
-      ETCD_TLS_SERVER_INSTANCES: {{etcd_tls_server_instances}}
       NFS_SERVER_INSTANCES: {{nfs_server_instances}}
       MYSQL_PROXY_INSTANCES: {{mysql_proxy_instances}}
       MYSQL_INSTANCES: {{mysql_instances}}

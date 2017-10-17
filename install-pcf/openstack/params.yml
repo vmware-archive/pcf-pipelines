@@ -205,7 +205,6 @@ mysql_backups_s3_cron_schedule:
 ## Default resource configuration
 consul_server_instances: 1
 nats_instances: 1
-etcd_tls_server_instances: 1
 nfs_server_instances: 1
 mysql_proxy_instances: 1
 mysql_instances: 1

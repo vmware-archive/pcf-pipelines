@@ -208,7 +208,6 @@ mysql_backups_s3_cron_schedule:
 ## the ops manager API ( https://<your-ops-man/docs#configuring-resources-for-a-job )
 consul_server_instances: 3
 nats_instances: 2
-etcd_tls_server_instances: 3
 nfs_server_instances: 1
 mysql_proxy_instances: 2
 mysql_instances: 3
