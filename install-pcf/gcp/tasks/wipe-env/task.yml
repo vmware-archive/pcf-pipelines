@@ -7,7 +7,7 @@ image_resource:
     repository: czero/cflinuxfs2
 
 inputs:
-- name: pcf-pipelines 
+- name: pcf-pipelines
 - name: terraform-state
 
 outputs:
@@ -17,9 +17,11 @@ params:
   GCP_PROJECT_ID:
   GCP_REGION:
   GCP_SERVICE_ACCOUNT_KEY:
+  GCP_RESOURCE_PREFIX:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
+  OPSMAN_ZONE:
 
 run:
   path: pcf-pipelines/install-pcf/gcp/tasks/wipe-env/task.sh
