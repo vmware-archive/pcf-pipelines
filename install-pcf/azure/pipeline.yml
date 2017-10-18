@@ -472,6 +472,7 @@ jobs:
       DIEGO_BRAIN_NSX_LB_SECURITY_GROUP: ""
       DIEGO_BRAIN_NSX_LB_PORT: ""
       HAPROXY_FLOATING_IPS: ""
+      INTERNET_CONNECTED: {{internet_connected}}
 ###########################
 ## Job - Deploy    ERT   ##
 ###########################
