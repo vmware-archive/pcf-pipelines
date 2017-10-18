@@ -482,7 +482,19 @@ cf_resources=$(
       "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances, "internet_connected": $internet_connected },
       "tcp_router": { "instances": $tcp_router_instances, "internet_connected": $internet_connected },
       "syslog_adapter": { "instances": $syslog_adapter_instances, "internet_connected": $internet_connected },
-      "doppler": { "instances": $doppler_instances, "internet_connected": $internet_connected }
+      "doppler": { "instances": $doppler_instances, "internet_connected": $internet_connected },
+      "syslog_scheduler": { "internet_connected": $internet_connected },
+      "smoke-tests": { "internet_connected": $internet_connected },
+      "push-apps-manager": { "internet_connected": $internet_connected },
+      "push-usage-service": { "internet_connected": $internet_connected },
+      "notifications": { "internet_connected": $internet_connected },
+      "notifications-ui": { "internet_connected": $internet_connected },
+      "push-pivotal-account": { "internet_connected": $internet_connected },
+      "autoscaling": { "internet_connected": $internet_connected },
+      "autoscaling-register-broker": { "internet_connected": $internet_connected },
+      "nfsbrokerpush": { "internet_connected": $internet_connected },
+      "bootstrap": { "internet_connected": $internet_connected },
+      "mysql-rejoin-unsafe": { "internet_connected": $internet_connected }
     }
 
     |
