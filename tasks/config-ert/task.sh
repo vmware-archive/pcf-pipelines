@@ -443,6 +443,7 @@ cf_resources=$(
     --argjson tcp_router_instances $TCP_ROUTER_INSTANCES \
     --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
     --argjson doppler_instances $DOPPLER_INSTANCES \
+    --argjson internet_connected ${INTERNET_CONNECTED:-false} \
     --arg ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
     --arg ha_proxy_floating_ips "$HAPROXY_FLOATING_IPS" \
     --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
@@ -462,26 +463,26 @@ cf_resources=$(
     --arg diego_brain_nsx_lb_port "${DIEGO_BRAIN_NSX_LB_PORT}" \
     '
     {
-      "consul_server": { "instances": $consul_server_instances },
-      "nats": { "instances": $nats_instances },
-      "nfs_server": { "instances": $nfs_server_instances },
-      "mysql_proxy": { "instances": $mysql_proxy_instances },
-      "mysql": { "instances": $mysql_instances },
-      "backup-prepare": { "instances": $backup_prepare_instances },
-      "diego_database": { "instances": $diego_database_instances },
-      "uaa": { "instances": $uaa_instances },
-      "cloud_controller": { "instances": $cloud_controller_instances },
-      "ha_proxy": { "instances": $ha_proxy_instances },
-      "router": { "instances": $router_instances },
-      "mysql_monitor": { "instances": $mysql_monitor_instances },
-      "clock_global": { "instances": $clock_global_instances },
-      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances },
-      "diego_brain": { "instances": $diego_brain_instances },
-      "diego_cell": { "instances": $diego_cell_instances },
-      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances },
-      "tcp_router": { "instances": $tcp_router_instances },
-      "syslog_adapter": { "instances": $syslog_adapter_instances },
-      "doppler": { "instances": $doppler_instances }
+      "consul_server": { "instances": $consul_server_instances, "internet_connected": $internet_connected },
+      "nats": { "instances": $nats_instances, "internet_connected": $internet_connected },
+      "nfs_server": { "instances": $nfs_server_instances, "internet_connected": $internet_connected },
+      "mysql_proxy": { "instances": $mysql_proxy_instances, "internet_connected": $internet_connected },
+      "mysql": { "instances": $mysql_instances, "internet_connected": $internet_connected },
+      "backup-prepare": { "instances": $backup_prepare_instances, "internet_connected": $internet_connected },
+      "diego_database": { "instances": $diego_database_instances, "internet_connected": $internet_connected },
+      "uaa": { "instances": $uaa_instances, "internet_connected": $internet_connected },
+      "cloud_controller": { "instances": $cloud_controller_instances, "internet_connected": $internet_connected },
+      "ha_proxy": { "instances": $ha_proxy_instances, "internet_connected": $internet_connected },
+      "router": { "instances": $router_instances, "internet_connected": $internet_connected },
+      "mysql_monitor": { "instances": $mysql_monitor_instances, "internet_connected": $internet_connected },
+      "clock_global": { "instances": $clock_global_instances, "internet_connected": $internet_connected },
+      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances, "internet_connected": $internet_connected },
+      "diego_brain": { "instances": $diego_brain_instances, "internet_connected": $internet_connected },
+      "diego_cell": { "instances": $diego_cell_instances, "internet_connected": $internet_connected },
+      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances, "internet_connected": $internet_connected },
+      "tcp_router": { "instances": $tcp_router_instances, "internet_connected": $internet_connected },
+      "syslog_adapter": { "instances": $syslog_adapter_instances, "internet_connected": $internet_connected },
+      "doppler": { "instances": $doppler_instances, "internet_connected": $internet_connected }
     }
 
     |
