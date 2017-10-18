@@ -559,23 +559,19 @@ cf_resources=$(
 )
 
 if [ "${IAAS}" = "azure" ]; then
-  internet_connected="${INTERNET_CONNECTED:-false}"
-  cf_resources=$(jq \
-    --argjson internet_connected "${internet_connected}" \
-    '.[].internet_connected = $internet_connected' <<< "${cf_resources}")
-
   for resource in syslog_scheduler smoke-tests push-apps-manager \
     push-usage-service notifications notifications-ui bootstrap \
     push-pivotal-account autoscaling autoscaling-register-broker \
     nfsbrokerpush mysql-rejoin-unsafe; do
       cf_resources=$(jq \
-        --argjson internet_connected "${internet_connected}" \
         "
-        . + {\"${resource}\":
-          {internet_connected: \$internet_connected}
-        }
+        . + {\"${resource}\": {}}
         " <<< "${cf_resources}")
   done
+
+  cf_resources=$(jq \
+    --argjson internet_connected "${INTERNET_CONNECTED:-false}" \
+    '.[].internet_connected = $internet_connected' <<< "${cf_resources}")
 fi
 
 om-linux \
