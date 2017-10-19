@@ -19,23 +19,23 @@ These pipelines are found in the `install-pcf` directory, sorted by IaaS.
 
 **Compatibility Matrix**
 
-| IAAS | pipelines release | OM version | ERT version | 
+| IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |
 | vSphere | v0.18.0 | 1.12.x  | 1.12.3  |
 | Azure | v0.18.0 | 1.12.x | 1.12.3  |
 | AWS | v0.18.0 | 1.12.x | 1.12.3  |
 | GCP | v0.18.0 | 1.12.x  | 1.12.3  |
 
-*Note: Latest known version of ERT tested against pcf-pipelines
- 
-| IAAS | pipelines release | OM version | ERT version | 
+* Note: Latest known version of ERT tested against pcf-pipelines
+
+| IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |
 | vSphere | v0.17.0 | 1.11.12  | 1.11.8  |
 | Azure | v0.17.0 | 1.11.12  | 1.11.8  |
 | AWS | v0.17.0 | 1.11.12  | 1.11.8  |
 | GCP | v0.17.0 | 1.11.12  | 1.11.8  |
 
-*Note: ERT v1.11.14 is not compatible with pcf-pipelines
+* Note: ERT v1.11.14 is not compatible with pcf-pipelines
 
 ### Upgrade pipelines
 Used to keep your PCF foundation up to date with the latest patch versions of PCF software from Pivotal Network. They can upgrade Ops Manager, Elastic Runtime, other tiles, and buildpacks. You will need one pipeline per tile in your foundation, to keep every tile up to date, and one pipeline to keep Ops Manager up to date.
@@ -75,59 +75,57 @@ third-party sources of pipeline dependencies
 
 1. Depending on the pipeline, the first job will either trigger on its own or the job will require manual intervention. Some pipelines may also require manual work during the duration of the run to complete the pipeline.
 
-## Upgrading/Extending
+## Customizing the pipelines
 
-It's possible to modify `pcf-pipelines` to suit your particular needs using
-[`yaml-patch`](https://github.com/krishicks/yaml-patch) (disclaimer: this tool is still in its early prototyping phase). We'll show you how to
-replace the `pivnet-opsmgr` resource in the AWS Upgrade Ops Manager pipeline
-(`upgrade-ops-manager/aws/pipeline.yml`) as an example below.
+It's possible to customize `pcf-pipelines` to suit your particular needs using
+[`yaml-patch`](https://github.com/krishicks/yaml-patch).
 
-This example assumes you're either using AWS S3 or running your own
-S3-compatible store and plan to download the files from Pivotal Network (Pivnet)
-manually, putting them in your S3-compatible store, with a naming format like
-**ops-mgr-v1.10.0**.
 
-First, create an ops file that has the configuration of the new resource (read
-more about resources [here](https://concourse.ci/concepts.html#section_resources)).
-We'll also remove the `resource_types` section of the pipeline as the
-pivnet-opsmgr resource is the only pivnet resource in the pipeline:
+`yaml-patch` is a tool that supports all operations from [RFC-6902](https://tools.ietf.org/html/rfc6902) but for YAML documents (instead of JSON). It allows such operations to be applied to a source YAML file, such as `pcf-pipelines` pipeline definition files, which enables for a repeatable and automated mechanism to apply the same local customization operations to one or more pipeline YAML files for every new release of `pcf-pipelines` delivered.
 
-```
-cat > use-s3-opsmgr.yml <<EOF
-- op: replace
-  path: /resources/name=pivnet-opsmgr
-  value:
-    name: pivnet-opsmgr
-    type: s3
-    source:
-      bucket: pivnet-releases
-      regexp: ops-mgr-v([\d\.]+)
 
-- op: remove
-  path: /resource_types
-EOF
-```
+#### Example of yaml-patch usage
 
-_Note: We use the same `pivnet-opsmgr` name so that the rest of the pipeline, which does `gets` on the resource by that name, continues working._
+For the source YAML file containing just one element in the `jobs` array, I want to add a second job element using `yaml-patch`.
 
-Next, use `yaml-patch` to replace the current pivnet-opsmgr resource with your
-own:
+1. Source YAML: source.yml  
+```  
+---  
+jobs:  
+- name: first-job  
+  plan:  
+  - get: my-resource  
+```  
 
-_Note: Because Concourse presently uses curly braces for `{{placeholders}}`, we
-need to wrap those placeholders in quotes to make them strings prior to parsing
-the YAML, and then unwrap the quotes after modifying the YAML. Yeah, sorry._
+1. Operations file: add-job.yml  
+```  
+- op: add  
+  path: /jobs/-  
+  value:  
+    name: second-job  
+    plan:  
+    - get: my-second-resource  
+```  
 
-```
-sed -e "s/{{/'{{/g" -e "s/}}/}}'/g" pcf-pipelines/upgrade-ops-manager/aws/pipeline.yml |
-yaml-patch -o use-s3-opsmgr.yml |
-sed -e "s/'{{/{{/g" -e "s/}}'/}}/g" > upgrade-opsmgr-with-s3.yml
-```
+1. Execute yaml-patch command  
+   `cat source.yml | yaml-patch -o add-job.yml > result.yml`    
 
-Now your pipeline has your new s3 resource in place of the pivnet resource from before.
+1. Resulting patched file: result.yml  
+```  
+---  
+jobs:  
+- name: first-job  
+  plan:  
+  - get: my-resource  
+- name: second-job  
+  plan:  
+  - get: my-second-resource  
+```  
 
-You can add as many operations as you like, chaining them with successive `-o` flags to `yaml-patch`.
+#### Additional samples of yaml-patch usage patterns
 
-See [operations](operations) for more examples of operations.
+See file [yaml-patch-examples.md](docs/yaml-patch-examples.md) for additional `yaml-patch` samples and usage patterns.
+
 
 ## Deploying and Managing Multiple Pipelines
 
