@@ -81,14 +81,14 @@ It's possible to customize `pcf-pipelines` to suit your particular needs using
 [`yaml-patch`](https://github.com/krishicks/yaml-patch).
 
 
-`yaml-patch` is a tool that supports all operations from [RFC-6902](https://tools.ietf.org/html/rfc6902) but for YAML documents (instead of JSON). It allows such operations to be applied to a source YAML file, such as `pcf-pipelines` pipeline definition files, which enables for a repeatable and automated mechanism to apply the same local customization operations to one or more pipeline YAML files for every new release of `pcf-pipelines` delivered.
+This tool supports all operations from [RFC-6902](https://tools.ietf.org/html/rfc6902) (for YAML documents instead of JSON). which can be applied to a source YAML file, such as `pcf-pipelines` pipeline definition files. It allows for a repeatable and automated mechanism to apply the same local customization operations to one or more pipeline YAML files for every new release of `pcf-pipelines` that gets delivered.
 
 
 #### Example of yaml-patch usage
 
-For the source YAML file containing just one element in the `jobs` array, I want to add a second job element using `yaml-patch`.
+For a source YAML file containing just one element in its `jobs` array, here is how to add a second job element to it.
 
-1. Source YAML: source.yml  
+1. Source YAML: `source.yml`  
 ```  
 ---  
 jobs:  
@@ -96,8 +96,7 @@ jobs:
   plan:  
   - get: my-resource  
 ```  
-
-1. Operations file: add-job.yml  
+2. Operations file: `add-job.yml`  
 ```  
 - op: add  
   path: /jobs/-  
@@ -106,11 +105,9 @@ jobs:
     plan:  
     - get: my-second-resource  
 ```  
-
-1. Execute yaml-patch command  
+3. Execute `yaml-patch` command  
    `cat source.yml | yaml-patch -o add-job.yml > result.yml`    
-
-1. Resulting patched file: result.yml  
+4. Resulting patched file: `result.yml`  
 ```  
 ---  
 jobs:  
@@ -121,6 +118,7 @@ jobs:
   plan:  
   - get: my-second-resource  
 ```  
+
 
 #### Additional samples of yaml-patch usage patterns
 

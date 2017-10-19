@@ -13,7 +13,7 @@
 
 ### <a name="add-task-to-job"></a> Add a task to a job
 
-1. Source YAML: job.yml  
+1. Source YAML: `job.yml`  
 ```  
 ---  
 jobs:  
@@ -25,8 +25,7 @@ jobs:
   - task: second-task  
     file: task2.yml    
 ```  
-
-1. Operations file: add-task.yml  
+1. Operations file: `add-task.yml`  
 ```  
 - op: add  
   path: /jobs/name=my-job/plan/-  
@@ -34,11 +33,9 @@ jobs:
     task: third-task  
     file: task3.yml  
 ```  
-
 1. Execute yaml-patch command  
    `cat job.yml | yaml-patch -o add-task.yml > result.yml`    
-
-1. Resulting patched file: result.yml  
+1. Resulting patched file: `result.yml`  
 ```  
 ---  
 jobs:  
@@ -54,11 +51,13 @@ jobs:
 ```  
 
 
+---
+
 ### <a name="add-task-to-job-after-another-task"></a> Add a task to a job after a specific task
 
 The combined use of the `replace` operation from `yaml-patch` with the `do` tasks/resources grouping in Concourse pipelines allows you to "insert" tasks into the middle of the tasks of a job.
 
-1. Source YAML: job-insert-task.yml  
+1. Source YAML: `job-insert-task.yml`  
 ```  
 ---  
 jobs:  
@@ -70,8 +69,7 @@ jobs:
   - task: last-task  
     file: taskn.yml    
 ```  
-
-1. Operations file: insert-task.yml  
+1. Operations file: `insert-task.yml`  
 ```  
 - op: replace  
   path: /jobs/name=my-job/plan/task=first-task   
@@ -82,11 +80,9 @@ jobs:
     - task: second-task   
       file: task2.yml  
 ```  
-
 1. Execute yaml-patch command  
    `cat job-insert-task.yml | yaml-patch -o insert-task.yml  > result.yml`    
-
-1. Resulting patched file: result.yml  
+1. Resulting patched file: `result.yml`  
 ```  
 ---  
 jobs:  
@@ -103,11 +99,14 @@ jobs:
 ```  
 
 
+---
+
+
 ### <a name="replace-resource-definition"> Replace a resource definition in the pipeline YML
 
-The example below is similar to the resource replacement action done by pcf-pipelines in operations file [use-pivnet-release.yml](operations/use-pivnet-release.yml) to use the pipelines release from PivNet instead of GitHub. When the resource name is updated, all the tasks that reference that name also need to be updated accordingly.    
+The example below is similar to the resource replacement action done by pcf-pipelines in operations file [use-pivnet-release.yml](https://github.com/pivotal-cf/pcf-pipelines/tree/master/operations/use-pivnet-release.yml) to use the pipelines release from PivNet instead of GitHub. When the resource name is updated, all the tasks that reference that name also need to be updated accordingly.    
 
-1. Source YAML: resource-entry.yml  
+1. Source YAML: `resource-entry.yml`  
 ```  
 ---  
 resources:  
@@ -118,8 +117,7 @@ resources:
     branch: master  
     private_key: {{git_private_key}}  
 ```  
-
-1. Operations file: replace-resource.yml  
+1. Operations file: `replace-resource.yml`  
 ```  
 ---  
 - op: replace  
@@ -132,11 +130,9 @@ resources:
       product_slug: pcf-automation  
       product_version: ~  
 ```  
-
 1. Execute yaml-patch command  
    `cat resource-entry.yml | yaml-patch -o replace-resource.yml > result.yml`    
-
-1. Resulting patched file: result.yml  
+1. Resulting patched file: `result.yml`  
 ```  
 ---   
 resources:  
@@ -149,11 +145,14 @@ resources:
 ```  
 
 
+---
+
+
 ### <a name="change-trigger-flag"> Change the Trigger flag of a job resource
 
-For a sample on how to update the *Trigger* parameter for the `apply-changes` job of the [upgrade-tile.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/upgrade-tile/pipeline.yml#L103) pipeline, see sample [gated-apply-changes-job.yml](operations/gated-apply-changes-job.yml).
+For a sample on how to update the *Trigger* parameter for the `apply-changes` job of the [upgrade-tile.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/upgrade-tile/pipeline.yml#L103) pipeline, see sample [gated-apply-changes-job.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/operations/gated-apply-changes-job.yml).
 
-1. Source YAML: job-trigger.yml  
+1. Source YAML: `job-trigger.yml`  
 ```  
 ---  
 jobs:  
@@ -166,18 +165,15 @@ jobs:
   - task: first-task  
     file: task1.yml  
 ```  
-
-1. Operations file: replace-trigger.yml  
+1. Operations file: `replace-trigger.yml`  
 ```  
 - op: replace
   path: /jobs/name=my-job/plan/get=my-resource/trigger
   value: false
 ```  
-
 1. Execute yaml-patch command  
    `cat job-trigger.yml | yaml-patch -o replace-trigger.yml > result.yml`    
-
-1. Resulting patched file: result.yml  
+1. Resulting patched file: `result.yml`  
 ```  
 ---  
 jobs:  
@@ -191,9 +187,12 @@ jobs:
     file: task1.yml  
 ```  
 
+---
+
+
 ### <a name="additional-operations-samples"> Additional operations samples
 
-See [operations](operations) for more examples of yaml-patch operations.
+See [operations](https://github.com/pivotal-cf/pcf-pipelines/tree/master/operations) for more examples of yaml-patch operations.
 
-- [Use Artifactory as the source for the Upgrade ERT pipeline resource](operations/upgrade-ert-use-artifactory.yml)
-- [Use Artifactory as the source for the Upgrade Tile pipeline resource](operations/upgrade-tile-use-artifactory.yml)
+- [Use Artifactory as the source for the Upgrade ERT pipeline resource](https://github.com/pivotal-cf/pcf-pipelines/tree/master/operations/upgrade-ert-use-artifactory.yml)
+- [Use Artifactory as the source for the Upgrade Tile pipeline resource](https://github.com/pivotal-cf/pcf-pipelines/tree/master/operations/upgrade-tile-use-artifactory.yml)
