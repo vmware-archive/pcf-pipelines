@@ -107,6 +107,7 @@ jobs:
 ```  
 3. Execute `yaml-patch` command  
    `cat source.yml | yaml-patch -o add-job.yml > result.yml`    
+
 4. Resulting patched file: `result.yml`  
 ```  
 ---  

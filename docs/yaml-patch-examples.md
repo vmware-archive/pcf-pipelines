@@ -25,7 +25,7 @@ jobs:
   - task: second-task  
     file: task2.yml    
 ```  
-1. Operations file: `add-task.yml`  
+2. Operations file: `add-task.yml`  
 ```  
 - op: add  
   path: /jobs/name=my-job/plan/-  
@@ -33,9 +33,10 @@ jobs:
     task: third-task  
     file: task3.yml  
 ```  
-1. Execute yaml-patch command  
+3. Execute yaml-patch command  
    `cat job.yml | yaml-patch -o add-task.yml > result.yml`    
-1. Resulting patched file: `result.yml`  
+
+4. Resulting patched file: `result.yml`  
 ```  
 ---  
 jobs:  
@@ -69,7 +70,7 @@ jobs:
   - task: last-task  
     file: taskn.yml    
 ```  
-1. Operations file: `insert-task.yml`  
+2. Operations file: `insert-task.yml`  
 ```  
 - op: replace  
   path: /jobs/name=my-job/plan/task=first-task   
@@ -80,9 +81,10 @@ jobs:
     - task: second-task   
       file: task2.yml  
 ```  
-1. Execute yaml-patch command  
+3. Execute yaml-patch command  
    `cat job-insert-task.yml | yaml-patch -o insert-task.yml  > result.yml`    
-1. Resulting patched file: `result.yml`  
+
+4. Resulting patched file: `result.yml`  
 ```  
 ---  
 jobs:  
@@ -117,7 +119,7 @@ resources:
     branch: master  
     private_key: {{git_private_key}}  
 ```  
-1. Operations file: `replace-resource.yml`  
+2. Operations file: `replace-resource.yml`  
 ```  
 ---  
 - op: replace  
@@ -130,9 +132,10 @@ resources:
       product_slug: pcf-automation  
       product_version: ~  
 ```  
-1. Execute yaml-patch command  
+3. Execute yaml-patch command  
    `cat resource-entry.yml | yaml-patch -o replace-resource.yml > result.yml`    
-1. Resulting patched file: `result.yml`  
+
+4. Resulting patched file: `result.yml`  
 ```  
 ---   
 resources:  
@@ -165,15 +168,16 @@ jobs:
   - task: first-task  
     file: task1.yml  
 ```  
-1. Operations file: `replace-trigger.yml`  
+2. Operations file: `replace-trigger.yml`  
 ```  
 - op: replace
   path: /jobs/name=my-job/plan/get=my-resource/trigger
   value: false
 ```  
-1. Execute yaml-patch command  
+3. Execute yaml-patch command  
    `cat job-trigger.yml | yaml-patch -o replace-trigger.yml > result.yml`    
-1. Resulting patched file: `result.yml`  
+
+4. Resulting patched file: `result.yml`  
 ```  
 ---  
 jobs:  
