@@ -33,8 +33,10 @@ opsman_instance_ids=$(
     jq -r '.Reservations[].Instances[].InstanceId'
 )
 
-echo "Terminating $opsman_identifier with the following instance ids:" $opsman_instance_ids
-aws ec2 terminate-instances --instance-ids $opsman_instance_ids
+if [ -n "$opsman_instance_ids" ]; then
+  echo "Terminating $opsman_identifier with the following instance ids:" $opsman_instance_ids
+  aws ec2 terminate-instances --instance-ids $opsman_instance_ids
+fi
 
 terraform destroy \
   -force \
