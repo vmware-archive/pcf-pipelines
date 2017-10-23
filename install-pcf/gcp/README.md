@@ -69,11 +69,11 @@ When this happens, after you've initially run create-infrastructure, update your
   from completing. Delete the director VM manually in the GCP console as a
   workaround.
 
-### Missing Jumpbox
+### Allow SSH to Ops Manager without a Jumpbox
 * There is presently no jumpbox installed as part of the Terraform scripts. If
-  you need to SSH onto the Ops Manager VM you'll need to add an SSH key from
-  within GCP to the instance, and also add the `allow-ssh` tag to the network
-  access tags.
+  you need to SSH onto the Ops Manager VM add the `allow-ssh` tag to the network
+  access tags for that vm. You'll need to add an SSH key to the instance, unless
+  you are using the `gcloud` cli which will add it for you.
 
 ### Cloud SQL Authorized Networks
 
