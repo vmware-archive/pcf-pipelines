@@ -57,7 +57,7 @@ jobs:
   serial_groups: [terraform]
   plan:
   - aggregate:
-    - get: pcf-pipelines 
+    - get: pcf-pipelines
     - get: terraform-state
     - get: pivnet-opsmgr
       params:
@@ -163,7 +163,7 @@ jobs:
   serial_groups: [opsman]
   plan:
   - aggregate:
-    - get: pcf-pipelines 
+    - get: pcf-pipelines
     - get: terraform-state
       trigger: true
       passed: [create-infrastructure]
@@ -177,7 +177,7 @@ jobs:
   - task: configure-director
     file: pcf-pipelines/install-pcf/aws/tasks/config-director/task.yml
     params:
-      ERT_DOMAIN: {{ERT_DOMAIN}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USER: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
       AWS_KEY_NAME: {{TF_VAR_aws_key_name}}
@@ -215,7 +215,7 @@ jobs:
   serial_groups: [opsman]
   plan:
   - aggregate:
-    - get: pcf-pipelines 
+    - get: pcf-pipelines
     - get: pivnet-product
       resource: pivnet-elastic-runtime
       params:
@@ -245,7 +245,7 @@ jobs:
   serial_groups: [opsman]
   plan:
   - aggregate:
-    - get: pcf-pipelines 
+    - get: pcf-pipelines
     - get: terraform-state
       trigger: true
       passed: [upload-ert]
