@@ -225,7 +225,7 @@ for json in "${jsons[@]}"; do
 done
 
 om-linux \
-  --target https://opsman.$ERT_DOMAIN \
+  --target https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} \
   --skip-ssl-validation \
   --username $OPSMAN_USER \
   --password $OPSMAN_PASSWORD \
