@@ -27,7 +27,6 @@ params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
-  PRODUCT_NAME:
 
 run:
   path: pcf-pipelines/tasks/stage-product/task.sh

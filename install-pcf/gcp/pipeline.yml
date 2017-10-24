@@ -226,7 +226,6 @@ jobs:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
       OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
-      PRODUCT_NAME: cf
 
 - name: deploy-ert
   serial_groups: [opsman]

@@ -240,7 +240,6 @@ jobs:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{OPSMAN_USER}}
       OPSMAN_PASSWORD: {{OPSMAN_PASSWORD}}
-      PRODUCT_NAME: cf
 
 - name: deploy-ert
   serial_groups: [opsman]

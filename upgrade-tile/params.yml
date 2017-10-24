@@ -43,10 +43,4 @@ iaas_type: CHANGEME
 # product slug is 'pivotal-rabbitmq-service'.
 product_slug: CHANGEME
 
-# The name of the product associated with the product slug.
-#
-# Use this command to extract the product name from the .pivotal file:
-# `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | egrep "^name: (.+)" | cut -d" " -f 2`
-product_name: CHANGEME
-
 git_private_key:

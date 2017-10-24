@@ -90,8 +90,6 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      PRODUCT_NAME: {{product_name}}
-
 
 - name: apply-changes
   plan:
