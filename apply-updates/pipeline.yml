@@ -23,16 +23,10 @@ resources:
     days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
 
 jobs:
-- name: regulator
-  plan:
-  - aggregate:
-    - get: schedule
-      trigger: true
 - name: upload-stemcell
   plan:
   - get: schedule
     trigger: true
-    passed: [ regulator ]
   - task: upload-stemcell
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
