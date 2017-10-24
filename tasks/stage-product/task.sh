@@ -33,7 +33,7 @@ STAGED=$(om-linux \
 
 # Should the slug contain more than one product, pick only the first.
 FILE_PATH=`find ./pivnet-product -name *.pivotal | sort | head -1`
-tar xvf $FILE_PATH metadata
+unzip $FILE_PATH metadata/*
 
 PRODUCT_NAME="$(cat metadata/*.yml | grep '^name' | cut -d' ' -f 2)"
 
