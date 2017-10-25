@@ -195,7 +195,7 @@ jobs:
       trigger: true
     - get: pivnet-product
       resource: elastic-runtime
-      params: {globs: []}
+      params: {globs: ["cf*.pivotal"]}
       passed: [upload-ert]
 
   - task: stage
