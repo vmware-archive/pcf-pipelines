@@ -112,6 +112,7 @@ read -r -d '' networks_configuration <<EOF
     },
     {
       "name": "$DYNAMIC_SERVICES_NETWORK",
+      "service_network": true,
       "subnets": [{
         "iaas_identifier": "$(get_network_guid $DYNAMIC_SERVICES_NETWORK)",
         "cidr": "$DYNAMIC_SERVICES_SUBNET",
