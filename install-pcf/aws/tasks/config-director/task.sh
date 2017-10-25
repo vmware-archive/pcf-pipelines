@@ -152,7 +152,7 @@ read -r -d '' networks_configuration <<EOF
     },
     {
       "name": "dynamic-services",
-      "service_network": false,
+      "service_network": true,
       "subnets": [
         {
           "iaas_identifier": "$dynamic_services_subnet_id_az1",
