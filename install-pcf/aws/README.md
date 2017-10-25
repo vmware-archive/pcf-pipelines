@@ -57,13 +57,7 @@ Do NOT use username `admin` for any of database credentials that you configure f
 
 #### Error message: ####
    ```
-   Error applying plan:
-
-   1 error(s) occurred:
-
-   * google_sql_user.diego: 1 error(s) occurred:
-
-   * google_sql_user.diego: Error, failure waiting for insertion of admin into ph-concourse-terraform-piglet
+   failure waiting for insertion of admin into ph-concourse-terraform-test
    ...
    operationDoesNotExist
    ```
