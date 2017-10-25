@@ -6,6 +6,7 @@ In the `create-infrastructure` job, there is a [race condition](https://github.c
 
 **Current workaround**: If the job fails with the aforementioned errors, manually trigger the job again. The next run of the job should complete successfully.
 
+The `create-infrastructure` job depends on a `terraform.tfstate` to exist before it can be run. To bootstrap a new `terraform.tfstate` run the `bootstrap-terraform-state` job.
 
 ## Troubleshooting
 
