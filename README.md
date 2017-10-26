@@ -21,10 +21,10 @@ These pipelines are found in the `install-pcf` directory, sorted by IaaS.
 
 | IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |
-| vSphere | v0.18.0 | 1.12.x  | 1.12.3  |
-| Azure | v0.18.0 | 1.12.x | 1.12.3  |
-| AWS | v0.18.0 | 1.12.x | 1.12.3  |
-| GCP | v0.18.0 | 1.12.x  | 1.12.3  |
+| vSphere | v0.19.1 | 1.12.x  | 1.12.x  |
+| Azure | v0.19.1 | 1.12.x | 1.12.x |
+| AWS | v0.19.1 | 1.12.x | 1.12.x |
+| GCP | v0.19.1 | 1.12.x  | 1.12.x  |
 
 * Note: ERT v1.12.4 is not compatible with pcf-pipelines as yet
 
