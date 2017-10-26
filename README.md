@@ -25,8 +25,7 @@ These pipelines are found in the `install-pcf` directory, sorted by IaaS.
 | Azure | v0.19.1 | 1.12.x | 1.12.x |
 | AWS | v0.19.1 | 1.12.x | 1.12.x |
 | GCP | v0.19.1 | 1.12.x  | 1.12.x  |
-
-* Note: ERT v1.12.4 is not compatible with pcf-pipelines as yet
+| OpenStack | v0.19.1 | 1.12.x  | 1.12.x  |
 
 
 | IAAS | pipelines release | OM version | ERT version |
