@@ -6,7 +6,7 @@ gcp_service_account_key: |
   CHANGEME
 
 # Identifier to prepend to GCP infrastructure names/labels; this should be globally unique
-gcp_resource_prefix: concourse-terraform
+gcp_resource_prefix: CHANGEME
 
 # GCP region
 gcp_region: us-central1
