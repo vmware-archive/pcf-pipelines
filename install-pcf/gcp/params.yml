@@ -25,7 +25,8 @@ gcp_storage_secret_key: CHANGEME
 
 terraform_statefile_bucket:
 
-git_private_key:
+git_private_key: |
+  CHANGEME
 
 # Pivotal Network token: https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
