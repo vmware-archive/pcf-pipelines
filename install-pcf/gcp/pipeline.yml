@@ -296,6 +296,7 @@ jobs:
       ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
       HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
       routing_disable_http: {{routing_disable_http}}
+      INTERNET_CONNECTED: {{internet_connected}}
       # aws specific
       S3_ENDPOINT:
       # azure specific

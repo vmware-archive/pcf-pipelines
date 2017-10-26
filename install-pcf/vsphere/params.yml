@@ -227,6 +227,8 @@ syslog_adapter_instances: 3
 doppler_instances: 3
 tcp_router_instances: 0
 
+internet_connected: true
+
 # leave nsx fields empty if you are not leveraging the nsx features for a given component
 tcp_router_nsx_security_group:
 tcp_router_nsx_lb_edge_name:

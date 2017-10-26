@@ -224,3 +224,5 @@ loggregator_traffic_controller_instances: 1
 tcp_router_instances: 1
 syslog_adapter_instances: 3
 route_services:
+
+internet_connected: true

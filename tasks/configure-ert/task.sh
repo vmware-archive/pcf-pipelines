@@ -71,48 +71,49 @@ cf_resources=$(
   jq -n \
     --arg terraform_prefix $terraform_prefix \
     --arg iaas $pcf_iaas \
+    --argjson internet_connected $INTERNET_CONNECTED \
     '
     {
-      "consul_server": {"internet_connected": false},
-      "nats": {"internet_connected": false},
-      "nfs_server": {"internet_connected": false},
+      "consul_server": {"internet_connected": $internet_connected},
+      "nats": {"internet_connected": $internet_connected},
+      "nfs_server": {"internet_connected": $internet_connected},
       "mysql_proxy": {
         "instances": 0,
-        "internet_connected": false
+        "internet_connected": $internet_connected
       },
       "mysql": {
         "instances": 0,
-        "internet_connected": false
+        "internet_connected": $internet_connected
       },
-      "backup-prepare": {"internet_connected": false},
-      "diego_database": {"internet_connected": false},
-      "uaa": {"internet_connected": false},
-      "cloud_controller": {"internet_connected": false},
-      "ha_proxy": {"internet_connected": false},
-      "router": {"internet_connected": false},
+      "backup-prepare": {"internet_connected": $internet_connected},
+      "diego_database": {"internet_connected": $internet_connected},
+      "uaa": {"internet_connected": $internet_connected},
+      "cloud_controller": {"internet_connected": $internet_connected},
+      "ha_proxy": {"internet_connected": $internet_connected},
+      "router": {"internet_connected": $internet_connected},
       "mysql_monitor": {
         "instances": 0,
-        "internet_connected": false
+        "internet_connected": $internet_connected
       },
-      "clock_global": {"internet_connected": false},
-      "cloud_controller_worker": {"internet_connected": false},
-      "diego_brain": {"internet_connected": false},
-      "diego_cell": {"internet_connected": false},
-      "loggregator_trafficcontroller": {"internet_connected": false},
-      "syslog_adapter": {"internet_connected": false},
-      "syslog_scheduler": {"internet_connected": false},
-      "doppler": {"internet_connected": false},
-      "tcp_router": {"internet_connected": false},
-      "smoke-tests": {"internet_connected": false},
-      "push-apps-manager": {"internet_connected": false},
-      "notifications": {"internet_connected": false},
-      "notifications-ui": {"internet_connected": false},
-      "push-pivotal-account": {"internet_connected": false},
-      "autoscaling": {"internet_connected": false},
-      "autoscaling-register-broker": {"internet_connected": false},
-      "nfsbrokerpush": {"internet_connected": false},
-      "bootstrap": {"internet_connected": false},
-      "mysql-rejoin-unsafe": {"internet_connected": false}
+      "clock_global": {"internet_connected": $internet_connected},
+      "cloud_controller_worker": {"internet_connected": $internet_connected},
+      "diego_brain": {"internet_connected": $internet_connected},
+      "diego_cell": {"internet_connected": $internet_connected},
+      "loggregator_trafficcontroller": {"internet_connected": $internet_connected},
+      "syslog_adapter": {"internet_connected": $internet_connected},
+      "syslog_scheduler": {"internet_connected": $internet_connected},
+      "doppler": {"internet_connected": $internet_connected},
+      "tcp_router": {"internet_connected": $internet_connected},
+      "smoke-tests": {"internet_connected": $internet_connected},
+      "push-apps-manager": {"internet_connected": $internet_connected},
+      "notifications": {"internet_connected": $internet_connected},
+      "notifications-ui": {"internet_connected": $internet_connected},
+      "push-pivotal-account": {"internet_connected": $internet_connected},
+      "autoscaling": {"internet_connected": $internet_connected},
+      "autoscaling-register-broker": {"internet_connected": $internet_connected},
+      "nfsbrokerpush": {"internet_connected": $internet_connected},
+      "bootstrap": {"internet_connected": $internet_connected},
+      "mysql-rejoin-unsafe": {"internet_connected": $internet_connected}
     }
 
     |

@@ -125,3 +125,5 @@ mysql_backups_s3_bucket_path:
 mysql_backups_s3_access_key_id:
 mysql_backups_s3_secret_access_key:
 mysql_backups_s3_cron_schedule:
+
+internet_connected: false

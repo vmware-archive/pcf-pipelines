@@ -146,6 +146,8 @@ syslog_adapter_instances: 3
 doppler_instances: 3
 tcp_router_instances: 0
 
+internet_connected: false
+
 deployment_network_name: "ert"
 enable_security_event_logging: true
 syslog_host:

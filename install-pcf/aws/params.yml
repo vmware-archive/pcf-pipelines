@@ -175,3 +175,5 @@ TF_VAR_opsman_ip_az1: 192.168.0.7
 TF_VAR_nat_ip_az1: 192.168.0.6
 TF_VAR_nat_ip_az2: 192.168.1.6
 TF_VAR_nat_ip_az3: 192.168.2.6
+
+internet_connected: false
