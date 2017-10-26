@@ -32,7 +32,6 @@ fi
 
 cf_properties=$(
   jq -n \
-    --arg iaas "$IAAS" \
     --arg tcp_routing "$TCP_ROUTING" \
     --arg tcp_routing_ports "$TCP_ROUTING_PORTS" \
     --arg loggregator_endpoint_port "$LOGGREGATOR_ENDPOINT_PORT" \
@@ -424,6 +423,7 @@ cf_network=$(
 
 cf_resources=$(
   jq -n \
+    --arg iaas "$IAAS" \
     --argjson consul_server_instances $CONSUL_SERVER_INSTANCES \
     --argjson nats_instances $NATS_INSTANCES \
     --argjson nfs_server_instances $NFS_SERVER_INSTANCES \
