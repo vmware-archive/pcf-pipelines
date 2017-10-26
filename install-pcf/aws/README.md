@@ -92,3 +92,11 @@ Do NOT use username `admin` for any of database credentials that you configure f
 
 
    **Solution:** You are not using the PivNet resource, and are most likely using a different repository manager like Artifactory. For more information, and a possible workaround, see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/192).
+
+#### Error: ####
+
+   The `create-infrastructure` job is waiting for `terraform-state` indefinitely.
+
+   **Solution:** Run the `bootstrap-terraform-state` job to create an initial
+   `terraform.tfstate` in the `terraform-state` bucket. The `create-infrastructure`
+   job depends on a `terraform.tfstate` to exist before it can be run.
