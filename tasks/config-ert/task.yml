@@ -8,6 +8,7 @@ image_resource:
     repository: czero/cflinuxfs2
 
 params:
+  IAAS:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPS_MGR_USR:
   OPS_MGR_PWD:

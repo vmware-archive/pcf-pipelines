@@ -32,6 +32,7 @@ fi
 
 cf_properties=$(
   jq -n \
+    --arg iaas "$IAAS" \
     --arg tcp_routing "$TCP_ROUTING" \
     --arg tcp_routing_ports "$TCP_ROUTING_PORTS" \
     --arg loggregator_endpoint_port "$LOGGREGATOR_ENDPOINT_PORT" \
@@ -462,6 +463,8 @@ cf_resources=$(
     --arg diego_brain_nsx_lb_security_group "${DIEGO_BRAIN_NSX_LB_SECURITY_GROUP}" \
     --arg diego_brain_nsx_lb_port "${DIEGO_BRAIN_NSX_LB_PORT}" \
     '
+    if $iaas == "azure" then
+
     {
       "consul_server": { "instances": $consul_server_instances, "internet_connected": $internet_connected },
       "nats": { "instances": $nats_instances, "internet_connected": $internet_connected },
@@ -495,6 +498,33 @@ cf_resources=$(
       "bootstrap": {"internet_connected": $internet_connected},
       "mysql-rejoin-unsafe": {"internet_connected": $internet_connected}
     }
+
+    else
+
+    {
+      "consul_server": { "instances": $consul_server_instances },
+      "nats": { "instances": $nats_instances },
+      "nfs_server": { "instances": $nfs_server_instances },
+      "mysql_proxy": { "instances": $mysql_proxy_instances },
+      "mysql": { "instances": $mysql_instances },
+      "backup-prepare": { "instances": $backup_prepare_instances },
+      "diego_database": { "instances": $diego_database_instances },
+      "uaa": { "instances": $uaa_instances },
+      "cloud_controller": { "instances": $cloud_controller_instances },
+      "ha_proxy": { "instances": $ha_proxy_instances },
+      "router": { "instances": $router_instances },
+      "mysql_monitor": { "instances": $mysql_monitor_instances },
+      "clock_global": { "instances": $clock_global_instances },
+      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances },
+      "diego_brain": { "instances": $diego_brain_instances },
+      "diego_cell": { "instances": $diego_cell_instances },
+      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances },
+      "tcp_router": { "instances": $tcp_router_instances },
+      "syslog_adapter": { "instances": $syslog_adapter_instances },
+      "doppler": { "instances": $doppler_instances }
+    }
+
+    end
 
     |
 
