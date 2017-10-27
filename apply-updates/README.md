@@ -31,9 +31,8 @@ This pipeline can also prevent pipeline collision so that you can schedule when 
      --load-vars-from apply-updates/params.yml
    ```
 
-1. Navigate to the pipeline url, and un-pause the `apply-updates` pipeline.
-
-1. The first job will either trigger on its own or the job will require manual intervention depending on whether or not you kept the `schedule` resource in your pipeline and on the time selected for that scheduler.   
+1. Navigate to the pipeline url, and un-pause the `apply-updates` pipeline.   
+   The first job will either trigger on its own or will require manual intervention depending on whether or not you kept the `schedule` resource in your pipeline and on the time selected for that scheduler.   
    When using the scheduler in the pipeline, you can force it to trigger an event by using the following command:
    ```
    fly -t <yourtarget> check-resource --resource=apply-updates/schedule
@@ -89,17 +88,6 @@ cat pipeline.yml | yaml-patch -o remove-scheduler.yml > new-pipeline.yml
 ```
 ![Apply Updates pipeline](embed-remove-schedule.png)
 
----
-
-#### <a name="gated-apply-changes"> Adding a gate to the `Apply-Changes` step of the `upgrade-tile` pipeline
-
-If your intent is to run `Apply-Changes` only manually or on a schedule for your tile upgrades, then you can update the `trigger` parameter for the `apply-changes` job of the [upgrade-tile.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/upgrade-tile/pipeline.yml#L103) pipelines by using the  [gated-apply-changes-job.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/operations/gated-apply-changes-job.yml) patch operation.
-
-For each one of your `upgrade-tile` pipelines, run the following [`yaml-patch`](https://github.com/krishicks/yaml-patch) command before running the corresponding `fly set-pipeline` command:
-
-```
-cat upgrade-tile/pipeline.yml | yaml-patch -o /operations/gated-apply-changes-job.yml > new-pipeline.yml
-```
 
 ---
 
