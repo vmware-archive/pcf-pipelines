@@ -455,6 +455,7 @@ jobs:
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
       INTERNET_CONNECTED: {{internet_connected}}
+      CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       TCP_ROUTER_NSX_SECURITY_GROUP: ""
       TCP_ROUTER_NSX_LB_EDGE_NAME: ""
       TCP_ROUTER_NSX_LB_POOL_NAME: ""

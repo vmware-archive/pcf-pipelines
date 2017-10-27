@@ -108,6 +108,8 @@ loggregator_endpoint_port:    # Loggegrator Port. Default is 443
 company_name:                 # Company Name for Apps Manager
 company_proxy_domain:         # If set to a non-empty string, bypass DNS when uploading stemcells to Ops Manager
 
+container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
+
 ## Syslog endpoint configuration goes here
 # Optional. If syslog_host is specified, syslog_port, syslog_protocol,
 # syslog_drain_buffer_size, and enable_security_event_logging must be set.

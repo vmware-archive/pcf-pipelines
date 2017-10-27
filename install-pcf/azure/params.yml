@@ -100,6 +100,8 @@ azure_terraform_subnet_services1_gateway: "192.168.8.1"
 azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_vnet_cidr: "192.168.0.0/20"
 
+container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
+
 # azure_vm_admin value should match with userid used to create the certs pcf_ssh_key_pub. The userid will appear towards the end of the pub key
 azure_vm_admin: CHANGEME
 azure_vm_password:

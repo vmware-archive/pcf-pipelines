@@ -29,6 +29,7 @@ params:
   ROUTER_TLS_CIPHERS:
   HAPROXY_TLS_CIPHERS:
   INTERNET_CONNECTED:
+  CONTAINER_NETWORKING_NW_CIDR:
   # IaaS Specific for GCP only
   gcp_storage_access_key:
   gcp_storage_secret_key:

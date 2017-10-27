@@ -96,6 +96,7 @@ cf_properties=$(
     --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
     --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
     --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
+    --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
       ".properties.system_blobstore": {
@@ -109,6 +110,9 @@ cf_properties=$(
       },
       ".properties.route_services.enable.ignore_ssl_cert_verification": {
         "value": $ignore_ssl_cert
+      },
+      ".properties.container_networking_network_cidr": {
+        "value": $container_networking_network_cidr
       },
       ".properties.security_acknowledgement": {
         "value": $security_acknowledgement

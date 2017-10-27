@@ -176,4 +176,6 @@ TF_VAR_nat_ip_az1: 192.168.0.6
 TF_VAR_nat_ip_az2: 192.168.1.6
 TF_VAR_nat_ip_az3: 192.168.2.6
 
+container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
+
 internet_connected: false

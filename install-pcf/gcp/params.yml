@@ -31,6 +31,8 @@ git_private_key: |
 # Pivotal Network token: https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
 
+container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
+
 # Operations Manager credentials to set
 pcf_opsman_admin_username: CHANGEME
 pcf_opsman_admin_password: CHANGEME

@@ -193,6 +193,7 @@ cf_properties=$(
     --arg mysql_backups_s3_access_key_id "$MYSQL_BACKUPS_S3_ACCESS_KEY_ID" \
     --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
     --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
+    --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
       ".uaa.service_provider_key_credentials": {
@@ -204,6 +205,7 @@ cf_properties=$(
       ".properties.tcp_routing": { "value": "disable" },
       ".properties.route_services": { "value": "enable" },
       ".ha_proxy.skip_cert_verify": { "value": true },
+      ".properties.container_networking_network_cidr": { "value": $container_networking_network_cidr },
       ".properties.route_services.enable.ignore_ssl_cert_verification": { "value": true },
       ".properties.security_acknowledgement": { "value": "X" },
       ".properties.system_database": { "value": "external" },

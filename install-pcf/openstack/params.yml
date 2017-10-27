@@ -27,6 +27,8 @@ dynamic_services_subnet_cidr: 10.4.0.0/24
 dynamic_services_gateway: 10.4.0.1
 dynamic_services_reserved_ip_ranges: 10.4.0.0-10.4.0.9
 
+container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
+
 # TODO: Allow multiple DNS servers for each net (currently only 1 can be set)
 infra_dns: #CHANGEME
 ert_dns: #CHANGEME
