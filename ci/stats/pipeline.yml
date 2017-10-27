@@ -1,0 +1,25 @@
+# Publish repo stats.
+groups: []
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    branch: master
+    private_key: {{git_private_key}}
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+resource_types: []
+jobs:
+- name: pcf-pipelines-count
+  plan:
+  - aggregate:
+    - get: code-repo
+      trigger: true
+      resource: pcf-pipelines
+    - get: ci-repo
+      resource: pcf-pipelines
+  - task: count
+    file: ci-repo/ci/tasks/codestats.yml
+    params:
+      DATADOG_API_KEY: {{datadog_api_key}}
+      DATADOG_APP_KEY: {{datadog_app_key}}
+      REPO_NAME: pcf-pipelines
