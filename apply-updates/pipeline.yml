@@ -56,6 +56,11 @@ jobs:
             echo "Stemcell Versions:"
             echo "${stemcell_versions}"
 
+            if [[ -z "${stemcell_versions}" ]]; then
+               echo "No new stemcells available, skipping upload."
+               return
+            fi
+
             pivnet-cli login --api-token="${API_TOKEN}"
             pivnet-cli eula --eula-slug=pivotal_software_eula > /dev/null
 
