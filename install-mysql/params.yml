@@ -1,0 +1,78 @@
+# Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+github_token: 
+iaas_type: 
+metadata_basename: p_mysql
+opsman_admin_password:
+opsman_admin_username:
+opsman_timeout_seconds: 300
+opsman_url:
+pivnet_token:
+product_name: p-mysql
+product_slug: p-mysql
+product_version: 1.9.*
+
+#product-properties
+# if backup_options is enable, provide the options
+backup_options_enable_backup_all_masters:
+backup_options_enable_cron_schedule:
+backup_options: disable
+# fill out the backup variable for the service you use, leave the rest blank
+# default is "No Backups", so all (backups_selector_*) variables can be blank
+# selector options "No Backups", "Ceph or Amazon S3", "SCP to a Remote Host"
+backups_selector_s3_access_key_id:
+backups_selector_s3_bucket_name:
+backups_selector_s3_endpoint_url:
+backups_selector_s3_path:
+backups_selector_s3_secret_access_key:
+backups_selector_scp_key:
+backups_selector_scp_path:
+backups_selector_scp_port:
+backups_selector_scp_server:
+backups_selector_scp_user:
+backups_selector: "No Backups"
+cf_mysql_broker_bind_hostname:
+cf_mysql_broker_quota_enforcer_pause:
+mysql_mysql_start_timeout:
+mysql_roadmin_password:
+mysql_skip_name_resolve:
+mysql_wsrep_debug:
+# if optional_protections is enable, provide the options
+optional_protections_canary_poll_frequency:
+optional_protections_canary_write_read_delay:
+optional_protections_notify_only:
+optional_protections_prevent_auto_rejoin:
+optional_protections_recipient_email:
+optional_protections_replication_canary:
+optional_protections: enable
+plan_1_description:
+plan_1_max_storage_mb:
+plan_1_max_user_connections:
+plan_1_name:
+plan_1_private:
+proxy_shutdown_delay:
+proxy_startup_delay:
+proxy_static_ips:
+server_activity_logging_enable_audit_logging_events:
+server_activity_logging:
+#product-network
+tile_network:
+tile_other_availability_zones:
+tile_singleton_availability_zone:
+#product-resources
+cf_mysql_broker_count:
+monitoring_count:
+mysql_count:
+proxy_count:

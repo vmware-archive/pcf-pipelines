@@ -1,0 +1,65 @@
+# Copyright 2017-Present Pivotal Software, Inc. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cflinuxfs2
+
+inputs:
+  - name: pcf-pipelines
+  - name: tool-om
+  - name: pivnet-product
+
+params:
+  METRICS_POLLING_INTERVAL:
+  OPSMAN_GENERATE_SSL_ENDPOINT:
+  OPSMAN_PASSWORD:
+  OPSMAN_URI:
+  OPSMAN_USERNAME:
+  PRODUCT_NAME:
+  RABBITMQ_BROKER_COUNT:
+  RABBITMQ_HAPROXY_COUNT:
+  RABBITMQ_SERVER_COUNT:
+  RMQ_BROKER_DNS_HOST:
+  RMQ_BROKER_OPERATOR_SET_POLICY_ENABLED: 
+  RMQ_BROKER_POLICY_DEFINITION:
+  RMQ_DOMAIN:
+  RMQ_HAPROXY_STATIC_IPS:
+  RMQ_SERVER_CLUSTER_PARTITION_HANDLING:
+  RMQ_SERVER_CONFIG:
+  RMQ_SERVER_COOKIE:
+  RMQ_SERVER_ENABLE_TLS_1:
+  RMQ_SERVER_PLUGINS:
+  RMQ_SERVER_PORTS:
+  RMQ_SERVER_RSA_CERTIFICATE:
+  RMQ_SERVER_RSA_PRIVATE_KEY:
+  RMQ_SERVER_SERVER_ADMIN_CREDENTIALS_PASSWORD:
+  RMQ_SERVER_SERVER_ADMIN_CREDENTIALS_USER:
+  RMQ_SERVER_SSL_CACERT:
+  RMQ_SERVER_SSL_FAIL_IF_NO_PEER_CERT:
+  RMQ_SERVER_SSL_VERIFICATION_DEPTH:
+  RMQ_SERVER_SSL_VERIFY:
+  RMQ_SERVER_STATIC_IPS:
+  SYSLOG_ADDRESS:
+  SYSLOG_PORT:
+  TILE_NETWORK:
+  TILE_OTHER_AVAILABILITY_ZONES:
+  TILE_SINGLETON_AVAILABILITY_ZONE:
+
+run:
+  path: pcf-pipelines/tasks/config-rabbitmq/task.sh
