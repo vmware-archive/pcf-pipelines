@@ -63,7 +63,7 @@ cat apply-updates/pipeline.yml | yaml-patch -o operations/change-schedule.yml  >
 ---
 
 #### <a name="remove-schedule-resource"> Removing the `schedule` resource
-If you prefer to run this pipeline only manually, then the `schedule` resource could be removed from the pipeline either manually of by using the following [`yaml-patch`](https://github.com/krishicks/yaml-patch) command:
+If you prefer to run this pipeline only manually, then the `schedule` resource could be removed from the pipeline either manually or by using the following [`yaml-patch`](https://github.com/krishicks/yaml-patch) command:
 
 ```
 cat > remove-scheduler.yml <<EOF
