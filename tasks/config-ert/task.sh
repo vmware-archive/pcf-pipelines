@@ -112,7 +112,7 @@ cf_properties=$(
         "value": $ignore_ssl_cert
       },
       ".properties.container_networking_network_cidr": {
-        "value": $container_networking_network_cidr
+        "value": $container_networking_nw_cidr
       },
       ".properties.security_acknowledgement": {
         "value": $security_acknowledgement
