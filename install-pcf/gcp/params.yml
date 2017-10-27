@@ -23,7 +23,7 @@ gcp_storage_bucket_location: US
 gcp_storage_access_key: CHANGEME
 gcp_storage_secret_key: CHANGEME
 
-terraform_statefile_bucket:
+terraform_statefile_bucket: CHANGEME
 
 git_private_key:
 
