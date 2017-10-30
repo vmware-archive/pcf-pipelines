@@ -1,15 +1,15 @@
 # Secure credential automation with Vault and Concourse
 
-Concourse allows for the [parametrization of pipelines](https://concourse.ci/fly-set-pipeline.html#parameters)
+Concourse allows for the [parameterization of pipelines](https://concourse.ci/fly-set-pipeline.html#parameters)
 when you `fly` them but it will store the pipeline and the secrets in the
 database as one single encrypted field.
 
 This might work in some environments but if you need to create an extra layer
-of security, be it for compliance reasons and/or for better security practices)
-you need to be able to split these secrets from the Concourse pipeline.
+of security, (i.e., for compliance reasons and/or for better security practices)
+you need to be able to obfuscate these secrets from the Concourse pipeline.
 
 That is the reason why the Concourse team created a [Credential Management](https://concourse.ci/creds.html)
-integration. It's first implementation is an integration with [Vault](https://www.vaultproject.io/)
+integration. Its first implementation is an integration with [Vault](https://www.vaultproject.io/)
 and this README will outline how to get started.
 
 There is an often overlooked aspect of distributed systems security
@@ -32,7 +32,7 @@ and this [sample deployment file](https://github.com/rahul-kj/concourse-vault/bl
 
 ### Create a Vault read-only token for Concourse
 
-We will need a read only token for Concourse so it can access the Vault secret.
+We will need a read-only token for Concourse so it can access the Vault secret.
 First, we have to create the Vault policy:
 
 1. Login to Vault:
