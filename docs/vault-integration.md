@@ -140,8 +140,7 @@ secrets. Because of that, we have to be careful when writing new secrets to Vaul
 If the secret that we are writing to Vault is not the currently valid one we
 will lose track of it.
 
-To rotate credentials we can create a script or a pipeline that does it
-for you. We are not going to go into the details of it but it'd basically do this:
+To rotate credentials:
 
 - Create a new random secret
 - Store it into Vault with a suffix (like: `/concourse/main/cf_password_new`)
