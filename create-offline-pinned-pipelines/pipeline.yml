@@ -70,6 +70,15 @@ resources:
     bucket: {{s3_bucket}}
     regexp: "staging/czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
 
+- name: czero-cflinuxfs2-tarball-kickstarter
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+
 - name: pcf-pipelines-tarball
   type: pivnet
   source:
@@ -270,6 +279,16 @@ jobs:
   - put: czero-cflinuxfs2-tarball
     params:
       file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tar"
+
+- name: publish-kickstarter-czero-cflinuxfs2-after-purge
+  plan:
+  - get: czero-cflinuxfs2-tarball
+    trigger: false
+    passed: [ create-czero-cflinuxfs2-tarball ]
+  - put: czero-cflinuxfs2-tarball-kickstarter
+    params:
+      file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tar"
+
 
 - name: create-offline-pinned-pipelines
   plan:
