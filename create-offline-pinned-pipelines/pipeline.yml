@@ -493,3 +493,27 @@ jobs:
   - put: pcf-pipelines-combined
     params:
       file: "pcf-pipelines-combined/*.tar.gpg"
+
+- name: purge-minio
+  plan:
+  - task: purge-minio
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/cflinuxfs2}
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -o pipefail
+          set -eu
+
+          aws configure set aws_access_key_id {{s3_access_key_id}}
+          aws configure set aws_secret_access_key {{s3_secret_access_key}}
+          aws configure set default.region us-east-1
+
+          for namespace in czero-cflinuxfs2/ elastic-runtime/ ops-manager/ pcf-pipelines-combined/ pcf-pipelines/ staging/ stemcells/; do
+            aws s3 --endpoint-url {{s3_endpoint}} rm s3://{{s3_bucket}}/$namespace --recursive
+          done
