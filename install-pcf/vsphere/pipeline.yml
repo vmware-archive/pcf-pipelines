@@ -168,7 +168,7 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-product
       resource: elastic-runtime
-      params: {globs: ["*.pivotal"]}
+      params: {globs: ["cf*.pivotal"]}
     - get: pcf-ops-manager
       params: {globs: []}
       passed: [deploy-director]
@@ -195,7 +195,7 @@ jobs:
       trigger: true
     - get: pivnet-product
       resource: elastic-runtime
-      params: {globs: []}
+      params: {globs: ["cf*.pivotal"]}
       passed: [upload-ert]
 
   - task: stage
@@ -204,7 +204,6 @@ jobs:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      PRODUCT_NAME: cf
 
 - name: deploy-ert
   plan:
@@ -216,12 +215,13 @@ jobs:
       trigger: true
     - get: pivnet-product
       resource: elastic-runtime
-      params: {globs: ["*.pivotal"]}
+      params: {globs: ["cf*.pivotal"]}
       passed: [stage-ert]
 
   - task: configure
     file: pcf-pipelines/tasks/config-ert/task.yml
     params:
+      IAAS: vsphere
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
@@ -236,11 +236,14 @@ jobs:
       COMPANY_NAME: {{company_name}}
       AUTHENTICATION_MODE: {{authentication_mode}}
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
-      SSL_TERMINATION: {{ssl_termination_point}}
       SSL_CERT: {{ssl_cert}}
       SSL_PRIVATE_KEY: {{ssl_private_key}}
       SAML_SSL_CERT: {{saml_ssl_cert}}
       SAML_SSL_PRIVATE_KEY: {{saml_ssl_private_key}}
+      HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
+      HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
+      ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
+      HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
       DISABLE_HTTP_PROXY: {{disable_http_proxy}}
       TCP_ROUTING: {{tcp_routing}}
       TCP_ROUTING_PORTS: {{tcp_routing_ports}}
@@ -293,13 +296,10 @@ jobs:
       SSH_STATIC_IPS: {{ssh_static_ips}}
       CONSUL_SERVER_INSTANCES: {{consul_server_instances}}
       NATS_INSTANCES: {{nats_instances}}
-      ETCD_TLS_SERVER_INSTANCES: {{etcd_tls_server_instances}}
       NFS_SERVER_INSTANCES: {{nfs_server_instances}}
       MYSQL_PROXY_INSTANCES: {{mysql_proxy_instances}}
       MYSQL_INSTANCES: {{mysql_instances}}
       BACKUP_PREPARE_INSTANCES: {{backup_prepare_instances}}
-      CCDB_INSTANCES: {{ccdb_instances}}
-      UAADB_INSTANCES: {{uaadb_instances}}
       UAA_INSTANCES: {{uaa_instances}}
       CLOUD_CONTROLLER_INSTANCES: {{cloud_controller_instances}}
       HA_PROXY_INSTANCES: {{ha_proxy_instances}}
@@ -314,6 +314,8 @@ jobs:
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
+      INTERNET_CONNECTED: {{internet_connected}}
+      CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       TCP_ROUTER_NSX_SECURITY_GROUP: {{tcp_router_nsx_security_group}}
       TCP_ROUTER_NSX_LB_EDGE_NAME: {{tcp_router_nsx_lb_edge_name}}
       TCP_ROUTER_NSX_LB_POOL_NAME: {{tcp_router_nsx_lb_pool_name}}
@@ -330,6 +332,7 @@ jobs:
       DIEGO_BRAIN_NSX_LB_SECURITY_GROUP: {{diego_brain_nsx_lb_security_group}}
       DIEGO_BRAIN_NSX_LB_PORT: {{diego_brain_nsx_lb_port}}
       HA_PROXY_LB_NAME: ""
+      HAPROXY_FLOATING_IPS: ""
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
@@ -357,3 +360,13 @@ jobs:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_IP: {{om_ip}}
+      GOVC_INSECURE: 1
+      GOVC_URL: {{vcenter_host}}
+      GOVC_USERNAME: {{vcenter_usr}}
+      GOVC_PASSWORD: {{vcenter_pwd}}
+      GOVC_DATACENTER: {{vcenter_data_center}}
+      GOVC_DATASTORE: {{om_data_store}}
+      GOVC_NETWORK: {{om_vm_network}}
+      GOVC_RESOURCE_POOL: {{om_resource_pool}}
+      GOVC_HOST: {{om_vm_host}}

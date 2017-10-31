@@ -103,17 +103,6 @@
         "size_mb": "automatic"
       }
     },
-    "etcd_tls_server": {
-      "instance_type": {
-        "id": "automatic"
-      },
-      "instances": 3,
-      "elb_names": [],
-      "internet_connected": false,
-      "persistent_disk": {
-        "size_mb": "automatic"
-      }
-    },
     "nfs_server": {
       "instance_type": {
         "id": "automatic"

@@ -31,6 +31,12 @@ STAGED=$(om-linux \
   --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
   curl -path /api/v0/staged/products)
 
+# Should the slug contain more than one product, pick only the first.
+FILE_PATH=`find ./pivnet-product -name *.pivotal | sort | head -1`
+unzip $FILE_PATH metadata/*
+
+PRODUCT_NAME="$(cat metadata/*.yml | grep '^name' | cut -d' ' -f 2)"
+
 # Figure out which products are unstaged.
 UNSTAGED_ALL=$(jq -n --argjson available "$AVAILABLE" --argjson staged "$STAGED" \
   '$available - ($staged | map({"name": .type, "product_version": .product_version}))')

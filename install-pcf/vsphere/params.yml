@@ -1,7 +1,7 @@
 # Pipeline resource configuration
 pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
-opsman_major_minor_version: ^1\.11\..*$ # PCF Ops Manager minor version to track
-ert_major_minor_version: ^1\.11\..*$ # PCF Elastic Runtime minor version to track
+opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
+ert_major_minor_version: ^1\.12\..*$ # PCF Elastic Runtime minor version to track
 git_private_key:
 
 # vCenter configuration
@@ -108,6 +108,8 @@ loggregator_endpoint_port:    # Loggegrator Port. Default is 443
 company_name:                 # Company Name for Apps Manager
 company_proxy_domain:         # If set to a non-empty string, bypass DNS when uploading stemcells to Ops Manager
 
+container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
+
 ## Syslog endpoint configuration goes here
 # Optional. If syslog_host is specified, syslog_port, syslog_protocol,
 # syslog_drain_buffer_size, and enable_security_event_logging must be set.
@@ -118,19 +120,26 @@ enable_security_event_logging: false
 syslog_drain_buffer_size: 10000
 
 ## Wildcard domain certs go here
-# Optional. Will be generated if blank using ssl_termination_point below.
+# Optional. Will be generated if blank.
 ssl_cert:
 ssl_private_key:
 saml_ssl_cert:
 saml_ssl_private_key:
-ssl_termination_point: haproxy # (external_ssl|external_non_ssl|haproxy)
+
+haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
+haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
+
+# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
+# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
+router_tls_ciphers:         # The recommended setting is "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
+haproxy_tls_ciphers:        # The recommended setting is "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
 
 disable_http_proxy: false
 security_acknowledgement:  # Must be set to 'X'. See explanation here: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#app-security
 
 ## TCP routing and routing services
 tcp_routing: disable                    # Enable/disable TCP routing (enable|disable)
-tcp_routing_ports:                   # A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
+tcp_routing_ports:                      # A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
 route_services: disable                 # Enable/disable route services (enable|disable)
 ignore_ssl_cert_verification: false     # Whether to disable SSL cert verification for this environment
 garden_network_pool_cidr: 10.254.0.0/22 # Only change this if you need to avoid address collision with a third-party service on the same subnet.
@@ -201,14 +210,11 @@ mysql_backups_s3_cron_schedule:
 ## the ops manager API ( https://<your-ops-man/docs#configuring-resources-for-a-job )
 consul_server_instances: 3
 nats_instances: 2
-etcd_tls_server_instances: 3
 nfs_server_instances: 1
 mysql_proxy_instances: 2
 mysql_instances: 3
 backup_prepare_instances: 0
-ccdb_instances: 0
 diego_database_instances: 3
-uaadb_instances: 0
 uaa_instances: 2
 cloud_controller_instances: 2
 ha_proxy_instances: 0
@@ -222,6 +228,8 @@ loggregator_traffic_controller_instances: 3
 syslog_adapter_instances: 3
 doppler_instances: 3
 tcp_router_instances: 0
+
+internet_connected: true
 
 # leave nsx fields empty if you are not leveraging the nsx features for a given component
 tcp_router_nsx_security_group:

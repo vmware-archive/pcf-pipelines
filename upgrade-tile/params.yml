@@ -18,7 +18,7 @@
 # on your Pivotal Network profile page:
 # https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
-# The minor product version to track, as a regexp. To track 1.11.x of a product, this would be "^1\.11\..*$"
+# The minor product version to track, as a regexp. To track 1.11.x of a product, this would be "^1\.11\..*$", as shown below.
 product_version_regex: ^1\.11\..*$
 
 # Operations Manager
@@ -42,23 +42,5 @@ iaas_type: CHANGEME
 # is https://network.pivotal.io/products/pivotal-rabbitmq-service, and the
 # product slug is 'pivotal-rabbitmq-service'.
 product_slug: CHANGEME
-# The name of the product file found in the metadata file for the product. This
-# will be used for staging the file in Operations Manager.
-#
-# This can be found in the .pivotal file's manifest for the product. This can
-# be found in the .pivotal file with the following:
-# `unzip -p p-rabbitmq-1.7.8.pivotal "metadata/*.yml" | head`
-# -------- | -------
-# PivNet Product | Product Name
-# Pivotal Cloud Foundry Metrics | apm
-# Pivotal Spring Cloud Services | p-spring-cloud-services
-# Redis For PCF | p-redis 
-# Pivotal Cloud Foundry Elastic Runtime | elastic-runtime
-# Pivotal Cloud Foundry Runtime for Windows | p-windows-runtime
-# MySQL for PCF | p-mysql
-# RabbitMQ for PCF | p-rabbitmq
-# Pivotal Cloud Cache | p-cloudcache
-# Pivotal Cloud Foundry JMX Bridge (Ops Metrics) | p-metrics 
-product_name: CHANGEME
 
 git_private_key:

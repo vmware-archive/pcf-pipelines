@@ -22,7 +22,7 @@ set +e
 echo $files | grep terraform.tfstate
 if [ "$?" -gt "0" ]; then
   echo "{\"version\": 3}" > terraform.tfstate
-  aws s3 --endpoint-url $S3_ENDPOINT cp terraform.tfstate "s3://${S3_BUCKET_TERRAFORM}/terraform.tfstate"
+  aws s3 --endpoint-url $S3_ENDPOINT --region $S3_REGION cp terraform.tfstate "s3://${S3_BUCKET_TERRAFORM}/terraform.tfstate"
   set +x
   if [ "$?" -gt "0" ]; then
     echo "Failed to upload empty tfstate file"

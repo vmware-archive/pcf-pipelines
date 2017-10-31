@@ -54,7 +54,11 @@ cf_properties=$(
     --arg ssh_static_ips "$SSH_STATIC_IPS" \
     --arg cert_pem "$SSL_CERT" \
     --arg private_key_pem "$SSL_PRIVATE_KEY" \
-    --arg ssl_termination "$SSL_TERMINATION" \
+    --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
+    --arg haproxy_backend_ca "$HAPROXY_BACKEND_CA" \
+    --arg router_tls_ciphers "$ROUTER_TLS_CIPHERS" \
+    --arg haproxy_tls_ciphers "$HAPROXY_TLS_CIPHERS" \
+    --arg disable_http_proxy "$DISABLE_HTTP_PROXY" \
     --arg smtp_from "$SMTP_FROM" \
     --arg smtp_address "$SMTP_ADDRESS" \
     --arg smtp_port "$SMTP_PORT" \
@@ -92,6 +96,7 @@ cf_properties=$(
     --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
     --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
     --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
+    --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
       ".properties.system_blobstore": {
@@ -105,6 +110,9 @@ cf_properties=$(
       },
       ".properties.route_services.enable.ignore_ssl_cert_verification": {
         "value": $ignore_ssl_cert
+      },
+      ".properties.container_networking_network_cidr": {
+        "value": $container_networking_nw_cidr
       },
       ".properties.security_acknowledgement": {
         "value": $security_acknowledgement
@@ -176,37 +184,54 @@ cf_properties=$(
     +
 
     # SSL Termination
-    if $ssl_termination == "haproxy" then
-      {
-        ".properties.networking_point_of_entry": {
-          "value": "haproxy"
-        },
-        ".properties.networking_point_of_entry.haproxy.ssl_rsa_certificate": {
-          "value": {
-            "cert_pem": $cert_pem,
-            "private_key_pem": $private_key_pem
-          }
+    {
+      ".properties.networking_poe_ssl_cert": {
+        "value": {
+          "cert_pem": $cert_pem,
+          "private_key_pem": $private_key_pem
         }
       }
-    elif $ssl_termination == "external_ssl" then
+    }
+
+    +
+
+    # HAProxy Forward TLS
+    if $haproxy_forward_tls == "enable" then
       {
-        ".properties.networking_point_of_entry": {
-          "value": "external_ssl"
+        ".properties.haproxy_forward_tls": {
+          "value": "enable"
         },
-        ".properties.networking_point_of_entry.external_ssl.ssl_rsa_certificate": {
-          "value": {
-            "cert_pem": $cert_pem,
-            "private_key_pem": $private_key_pem
-          }
+        ".properties.haproxy_forward_tls.enable.backend_ca": {
+          "value": $haproxy_backend_ca
         }
       }
     else
       {
-        ".properties.networking_point_of_entry": {
-          "value": "external_non_ssl"
+        ".properties.haproxy_forward_tls": {
+          "value": "disable"
         }
       }
     end
+
+    +
+
+    {
+      ".properties.routing_disable_http": {
+        "value": $disable_http_proxy
+      }
+    }
+
+    +
+
+    # TLS Cipher Suites
+    {
+      ".properties.gorouter_ssl_ciphers": {
+        "value": $router_tls_ciphers
+      },
+      ".properties.haproxy_ssl_ciphers": {
+        "value": $haproxy_tls_ciphers
+      }
+    }
 
     +
 
@@ -402,16 +427,14 @@ cf_network=$(
 
 cf_resources=$(
   jq -n \
+    --arg iaas "$IAAS" \
     --argjson consul_server_instances $CONSUL_SERVER_INSTANCES \
     --argjson nats_instances $NATS_INSTANCES \
-    --argjson etcd_tls_server_instances $ETCD_TLS_SERVER_INSTANCES \
     --argjson nfs_server_instances $NFS_SERVER_INSTANCES \
     --argjson mysql_proxy_instances $MYSQL_PROXY_INSTANCES \
     --argjson mysql_instances $MYSQL_INSTANCES \
     --argjson backup_prepare_instances $BACKUP_PREPARE_INSTANCES \
-    --argjson ccdb_instances $CCDB_INSTANCES \
     --argjson diego_database_instances $DIEGO_DATABASE_INSTANCES \
-    --argjson uaadb_instances $UAADB_INSTANCES \
     --argjson uaa_instances $UAA_INSTANCES \
     --argjson cloud_controller_instances $CLOUD_CONTROLLER_INSTANCES \
     --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
@@ -425,7 +448,9 @@ cf_resources=$(
     --argjson tcp_router_instances $TCP_ROUTER_INSTANCES \
     --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
     --argjson doppler_instances $DOPPLER_INSTANCES \
+    --argjson internet_connected $INTERNET_CONNECTED \
     --arg ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
+    --arg ha_proxy_floating_ips "$HAPROXY_FLOATING_IPS" \
     --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
     --arg tcp_router_nsx_lb_edge_name "${TCP_ROUTER_NSX_LB_EDGE_NAME}" \
     --arg tcp_router_nsx_lb_pool_name "${TCP_ROUTER_NSX_LB_POOL_NAME}" \
@@ -442,17 +467,52 @@ cf_resources=$(
     --arg diego_brain_nsx_lb_security_group "${DIEGO_BRAIN_NSX_LB_SECURITY_GROUP}" \
     --arg diego_brain_nsx_lb_port "${DIEGO_BRAIN_NSX_LB_PORT}" \
     '
+    if $iaas == "azure" then
+
+    {
+      "consul_server": { "instances": $consul_server_instances, "internet_connected": $internet_connected },
+      "nats": { "instances": $nats_instances, "internet_connected": $internet_connected },
+      "nfs_server": { "instances": $nfs_server_instances, "internet_connected": $internet_connected },
+      "mysql_proxy": { "instances": $mysql_proxy_instances, "internet_connected": $internet_connected },
+      "mysql": { "instances": $mysql_instances, "internet_connected": $internet_connected },
+      "backup-prepare": { "instances": $backup_prepare_instances, "internet_connected": $internet_connected },
+      "diego_database": { "instances": $diego_database_instances, "internet_connected": $internet_connected },
+      "uaa": { "instances": $uaa_instances, "internet_connected": $internet_connected },
+      "cloud_controller": { "instances": $cloud_controller_instances, "internet_connected": $internet_connected },
+      "ha_proxy": { "instances": $ha_proxy_instances, "internet_connected": $internet_connected },
+      "router": { "instances": $router_instances, "internet_connected": $internet_connected },
+      "mysql_monitor": { "instances": $mysql_monitor_instances, "internet_connected": $internet_connected },
+      "clock_global": { "instances": $clock_global_instances, "internet_connected": $internet_connected },
+      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances, "internet_connected": $internet_connected },
+      "diego_brain": { "instances": $diego_brain_instances, "internet_connected": $internet_connected },
+      "diego_cell": { "instances": $diego_cell_instances, "internet_connected": $internet_connected },
+      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances, "internet_connected": $internet_connected },
+      "tcp_router": { "instances": $tcp_router_instances, "internet_connected": $internet_connected },
+      "syslog_adapter": { "instances": $syslog_adapter_instances, "internet_connected": $internet_connected },
+      "syslog_scheduler": {"internet_connected": $internet_connected},
+      "doppler": { "instances": $doppler_instances, "internet_connected": $internet_connected },
+      "smoke-tests": {"internet_connected": $internet_connected},
+      "push-apps-manager": {"internet_connected": $internet_connected},
+      "notifications": {"internet_connected": $internet_connected},
+      "notifications-ui": {"internet_connected": $internet_connected},
+      "push-pivotal-account": {"internet_connected": $internet_connected},
+      "autoscaling": {"internet_connected": $internet_connected},
+      "autoscaling-register-broker": {"internet_connected": $internet_connected},
+      "nfsbrokerpush": {"internet_connected": $internet_connected},
+      "bootstrap": {"internet_connected": $internet_connected},
+      "mysql-rejoin-unsafe": {"internet_connected": $internet_connected}
+    }
+
+    else
+
     {
       "consul_server": { "instances": $consul_server_instances },
       "nats": { "instances": $nats_instances },
-      "etcd_tls_server": { "instances": $etcd_tls_server_instances },
       "nfs_server": { "instances": $nfs_server_instances },
       "mysql_proxy": { "instances": $mysql_proxy_instances },
       "mysql": { "instances": $mysql_instances },
       "backup-prepare": { "instances": $backup_prepare_instances },
-      "ccdb": { "instances": $ccdb_instances },
       "diego_database": { "instances": $diego_database_instances },
-      "uaadb": { "instances": $uaadb_instances },
       "uaa": { "instances": $uaa_instances },
       "cloud_controller": { "instances": $cloud_controller_instances },
       "ha_proxy": { "instances": $ha_proxy_instances },
@@ -468,10 +528,20 @@ cf_resources=$(
       "doppler": { "instances": $doppler_instances }
     }
 
+    end
+
     |
 
     if $ha_proxy_elb_name != "" then
       .ha_proxy |= . + { "elb_names": [ $ha_proxy_elb_name ] }
+    else
+      .
+    end
+
+    |
+
+    if $ha_proxy_floating_ips != "" then
+      .ha_proxy |= . + { "floating_ips": $ha_proxy_floating_ips }
     else
       .
     end

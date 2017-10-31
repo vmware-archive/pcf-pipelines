@@ -64,3 +64,19 @@ upgrade from `--.--.n` to `--.--.n+1`.
    ```
 
 5. Unpause the pipeline. The pipeline should then start triggering automatically.
+
+---
+
+## Customizing the pipeline
+
+#### <a name="gated-apply-changes"> Adding a gate to the `Apply-Changes` job
+
+If your intent is to run `Apply-Changes` only manually or on a schedule for your tile upgrades, then you can update the `trigger` parameter for the `apply-changes` job by using the  [gated-apply-changes-job.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/operations/gated-apply-changes-job.yml) patch operation.
+
+For each one of your `upgrade-tile` pipelines, run the following [`yaml-patch`](https://github.com/krishicks/yaml-patch) command before running the corresponding `fly set-pipeline` command:
+
+```
+cat upgrade-tile/pipeline.yml | yaml-patch -o /operations/gated-apply-changes-job.yml > new-pipeline.yml
+```
+
+For a mechanism to run the `Apply-Changes` job manually or on a scheduled basis, refer to the ["apply-updates"](https://github.com/pivotal-cf/pcf-pipelines/blob/master/apply-updates) pipeline.

@@ -25,6 +25,9 @@ output "pcf_security_group" {
 output "opsman_eip" {
     value = "${aws_eip.opsman.public_ip}"
 }
+output "opsman_identifier" {
+    value = "${aws_instance.opsmman_az1.tags.Name}"
+}
 # s3 buckets
 output "s3_pcf_bosh" {
     value = "${aws_s3_bucket.bosh.bucket}"
@@ -95,7 +98,7 @@ output "services_subnet_id_az1" {
     value = "${aws_subnet.PcfVpcServicesSubnet_az1.id}"
 }
 output "dynamic_services_subnet_id_az1" {
-    value = "${aws_subnet.PcfVpcServicesSubnet_az1.id}"
+    value = "${aws_subnet.PcfVpcDynamicServicesSubnet_az1.id}"
 }
 output "infra_subnet_id_az1" {
     value = "${aws_subnet.PcfVpcInfraSubnet_az1.id}"
@@ -148,7 +151,7 @@ output "services_subnet_id_az2" {
     value = "${aws_subnet.PcfVpcServicesSubnet_az2.id}"
 }
 output "dynamic_services_subnet_id_az2" {
-    value = "${aws_subnet.PcfVpcServicesSubnet_az2.id}"
+    value = "${aws_subnet.PcfVpcDynamicServicesSubnet_az2.id}"
 }
 
 #AZ3
@@ -193,7 +196,7 @@ output "services_subnet_id_az3" {
     value = "${aws_subnet.PcfVpcServicesSubnet_az3.id}"
 }
 output "dynamic_services_subnet_id_az3" {
-    value = "${aws_subnet.PcfVpcServicesSubnet_az3.id}"
+    value = "${aws_subnet.PcfVpcDynamicServicesSubnet_az3.id}"
 }
 
 # RDS info

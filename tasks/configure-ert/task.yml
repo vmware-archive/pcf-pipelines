@@ -24,6 +24,12 @@ params:
   pcf_ert_ssl_cert:
   pcf_ert_ssl_key:
   terraform_prefix:
+  HAPROXY_FORWARD_TLS:
+  HAPROXY_BACKEND_CA:
+  ROUTER_TLS_CIPHERS:
+  HAPROXY_TLS_CIPHERS:
+  INTERNET_CONNECTED:
+  CONTAINER_NETWORKING_NW_CIDR:
   # IaaS Specific for GCP only
   gcp_storage_access_key:
   gcp_storage_secret_key:
@@ -78,3 +84,4 @@ params:
   db_locket_password:
   db_silk_username:
   db_silk_password:
+  routing_disable_http:

@@ -6,8 +6,8 @@ git_private_key:
 ##############################################
 ### PCF Object Params
 ##############################################
-opsman_major_minor_version: '1\.11\..*' # Reqd
-ert_major_minor_version: '1\.11\..*' # Reqd
+opsman_major_minor_version: '1\.12\..*' # Reqd
+ert_major_minor_version: '1\.12\..*' # Reqd
 
 # Pivent Download token
 pivnet_token: CHANGEME
@@ -25,7 +25,13 @@ opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with 
 pcf_opsman_admin_username: CHANGEME
 pcf_opsman_admin_password: CHANGEME
 
-pcf_ert_networking_pointofentry: "haproxy" #This is set to HAProxy for now as Azure load balancer does not support external SSL termination now. If Azure adds suport for that, you may change it to a different value in future.
+haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
+haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
+
+# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
+# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
+router_tls_ciphers:         # The recommended setting is "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
+haproxy_tls_ciphers:        # The recommended setting is "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
 
 # ERT Cert & Key, if the string is blank, then the pipeline will auto generate certs
 pcf_ert_ssl_cert:
@@ -95,6 +101,8 @@ azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_vnet_cidr: "192.168.0.0/20"
 pcf_opsman_disk_size_in_gb: 120
 
+container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
+
 # azure_vm_admin value should match with userid used to create the certs pcf_ssh_key_pub. The userid will appear towards the end of the pub key
 azure_vm_admin: CHANGEME
 azure_vm_password:
@@ -125,8 +133,6 @@ nfs_server_instances: 1
 mysql_proxy_instances: 1
 mysql_instances: 1
 backup_prepare_instances: 0
-ccdb_instances: 0
-uaadb_instances: 0
 uaa_instances: 2
 cloud_controller_instances: 2
 ha_proxy_instances: 1
@@ -134,7 +140,6 @@ mysql_monitor_instances: 0
 clock_global_instances: 1
 cloud_controller_worker_instances: 2
 consul_server_instances: 3
-etcd_tls_server_instances: 3
 diego_database_instances: 3
 router_instances: 3
 diego_brain_instances: 3
@@ -143,6 +148,8 @@ loggregator_traffic_controller_instances: 3
 syslog_adapter_instances: 3
 doppler_instances: 3
 tcp_router_instances: 0
+
+internet_connected: false
 
 deployment_network_name: "ert"
 enable_security_event_logging: true

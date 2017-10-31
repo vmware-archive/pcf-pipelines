@@ -25,9 +25,15 @@ vcenter_url: http://example.com
 vcenter_username: CHANGEME
 vcenter_password: CHANGEME
 vcenter_datacenter: CHANGEME
-vcenter_cluster: CHANGEME
 vcenter_datastore: CHANGEME
+
+# vCenter Cluster or Resource Pool to use to deploy Ops Manager.
+# Possible formats:
+#   cluster:       /<Data Center Name>/host/<Cluster Name>
+#   resource pool: /<Data Center Name>/host/<Cluster Name>/Resources/<Resource Pool Name>
+vcenter_cluster: CHANGEME
 vcenter_resource_pool: CHANGEME
+
 opsman_vm_folder: CHANGEME
 opsman_ip: CHANGEME
 netmask: CHANGEME

@@ -3,7 +3,7 @@ set -eu
 
 ROOT="${PWD}"
 
-function delete-opsman() {
+function delete-opsman-installation() {
   source "${ROOT}/pcf-pipelines/functions/check_opsman_available.sh"
 
   OPSMAN_AVAILABLE=$(check_opsman_available "${OPSMAN_DOMAIN_OR_IP_ADDRESS}")
@@ -15,6 +15,16 @@ function delete-opsman() {
       --password ${OPSMAN_PASSWORD} \
       delete-installation
   fi
+}
+
+function delete-opsman() {
+  az login --service-principal -u $AZURE_SERVICE_PRINCIPAL_ID -p $AZURE_SERVICE_PRINCIPAL_PASSWORD --tenant $AZURE_TENANT_ID
+  local opsman_vms=$(az vm list -g $AZURE_TERRAFORM_PREFIX | jq -r ".[].name | select(. |startswith(\"$AZURE_TERRAFORM_PREFIX-ops-manager\"))")
+
+  for om_vm_name in $opsman_vms; do
+    echo "Removing $om_vm_name ..."
+    az vm delete --yes --resource-group $AZURE_TERRAFORM_PREFIX --name "$om_vm_name"
+  done
 }
 
 function delete-infrastructure() {
@@ -75,6 +85,7 @@ function main() {
     exit 0
   fi
 
+  delete-opsman-installation
   delete-opsman
   delete-infrastructure
 }

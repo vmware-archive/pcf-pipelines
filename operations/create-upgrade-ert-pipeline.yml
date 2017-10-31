@@ -23,9 +23,5 @@
   value: upload-ert-and-stemcell
 
 - op: replace
-  path: /jobs/PRODUCT_NAME={{product_name}}/PRODUCT_NAME
-  value: cf
-
-- op: replace
   path: /jobs/name=apply-changes/plan/0/aggregate/get=pivnet-product/passed
   value: [upload-and-stage-ert]

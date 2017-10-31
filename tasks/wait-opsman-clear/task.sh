@@ -55,7 +55,7 @@ function main() {
 
       grep "action" changes-status.txt
       ACTION_STATUS=$?
-      grep "\"status\": \"running\"" running-status.txt
+      jq -e -r '.installations[0] | select(.status=="running")' running-status.txt >/dev/null
       RUNNING_STATUS=$?
 
       if [[ ${ACTION_STATUS} -ne 0 && ${RUNNING_STATUS} -ne 0 ]]; then

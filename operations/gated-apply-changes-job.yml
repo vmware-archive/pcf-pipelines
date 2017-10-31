@@ -1,0 +1,3 @@
+- op: replace
+  path: /jobs/name=apply-changes/get=pivnet-product/trigger
+  value: false

@@ -152,7 +152,7 @@ read -r -d '' networks_configuration <<EOF
     },
     {
       "name": "dynamic-services",
-      "service_network": false,
+      "service_network": true,
       "subnets": [
         {
           "iaas_identifier": "$dynamic_services_subnet_id_az1",
@@ -225,7 +225,7 @@ for json in "${jsons[@]}"; do
 done
 
 om-linux \
-  --target https://opsman.$ERT_DOMAIN \
+  --target https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} \
   --skip-ssl-validation \
   --username $OPSMAN_USER \
   --password $OPSMAN_PASSWORD \

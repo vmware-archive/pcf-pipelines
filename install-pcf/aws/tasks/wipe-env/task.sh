@@ -17,6 +17,27 @@ if [[ $opsman_available == "available" ]]; then
     delete-installation
 fi
 
+# Terminate all OpsMen before terraforming
+aws configure << EOF
+$AWS_ACCESS_KEY_ID
+$AWS_SECRET_ACCESS_KEY
+$AWS_REGION
+json
+EOF
+
+aws_vpc_id=$(jq -r '.modules[0].outputs.vpc_id.value' $root/terraform-state/terraform.tfstate)
+opsman_identifier=$(jq -r '.modules[0].outputs.opsman_identifier.value' $root/terraform-state/terraform.tfstate)
+
+opsman_instance_ids=$(
+  aws ec2 describe-instances --filters "Name=vpc-id,Values=$aws_vpc_id" "Name=tag:Name,Values=\"$opsman_identifier\"" | \
+    jq -r '.Reservations[].Instances[].InstanceId'
+)
+
+if [ -n "$opsman_instance_ids" ]; then
+  echo "Terminating $opsman_identifier with the following instance ids:" $opsman_instance_ids
+  aws ec2 terminate-instances --instance-ids $opsman_instance_ids
+fi
+
 terraform destroy \
   -force \
   -var "aws_access_key=${AWS_ACCESS_KEY_ID}" \
