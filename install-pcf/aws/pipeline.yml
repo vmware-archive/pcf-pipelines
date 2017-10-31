@@ -28,8 +28,8 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@github.com:pivotal-cf/pcf-pipelines.git
-    branch: master
+    uri: git@github.com:clijockey/pcf-pipelines.git
+    branch: aws-multiRegion
     private_key: {{git_private_key}}
 
 - name: pivnet-opsmgr
@@ -52,6 +52,10 @@ jobs:
       S3_REGION: {{TF_VAR_aws_region}}
       AWS_ACCESS_KEY_ID: {{TF_VAR_aws_access_key}}
       AWS_SECRET_ACCESS_KEY: {{TF_VAR_aws_secret_key}}
+      TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
+      TF_VAR_az1: {{TF_VAR_az1}}
+      TF_VAR_az2: {{TF_VAR_az2}}
+      TF_VAR_az3: {{TF_VAR_az3}}
     file: pcf-pipelines/tasks/create-initial-terraform-state/task.yml
 
 - name: create-infrastructure
