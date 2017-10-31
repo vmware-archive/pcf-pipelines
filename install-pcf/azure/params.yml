@@ -99,6 +99,7 @@ azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
 azure_terraform_subnet_services1_gateway: "192.168.8.1"
 azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_vnet_cidr: "192.168.0.0/20"
+pcf_opsman_disk_size_in_gb: 120
 
 container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
 
