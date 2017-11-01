@@ -13,7 +13,6 @@ resources:
     access_key_id: {{TF_VAR_aws_access_key}}
     secret_access_key: {{TF_VAR_aws_secret_key}}
     endpoint: {{S3_ENDPOINT}}
-    region_name: {{TF_VAR_aws_region}}
     bucket: {{S3_OUTPUT_BUCKET}}
     region_name: {{TF_VAR_aws_region}}
     versioned_file: terraform.tfstate
