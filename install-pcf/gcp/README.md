@@ -22,7 +22,9 @@ secrets.
   * GCP Cloud Resource Manager API [here](https://console.cloud.google.com/apis/api/cloudresourcemanager.googleapis.com/overview)
   * GCP Storage Interopability [here](https://console.cloud.google.com/storage/settings)
 
-2. Create a bucket in Google Cloud Storage to hold the Terraform state file, enabling versioning for this bucket via the `gsutil` CLI: `gcloud auth activate-service-account --key-file credentials.json && gsutil versioning set on gs://<your-bucket>`
+2. Create a bucket in Google Cloud Storage to hold the Terraform state file, enabling versioning for this bucket via:
+  * the `gsutil` CLI: `gcloud auth activate-service-account --key-file credentials.json && gsutil versioning set on gs://<your-bucket>`
+  * If you already have a service account and sufficient permissions, you can run `gcloud auth login` and `gsutil versioning set on gs://<your-bucket>`
 
 3. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles:
   * Cloud SQL Admin
