@@ -19,5 +19,4 @@ jobs:
       TERRAFORM_STATEFILES_BUCKET: {{terraform_statefiles_bucket}}
       PIVNET_TOKEN: {{pivnet_token}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_email}}
-
     file: pcf-pipelines/ci/bootstrap/aws/tasks/bootstrap.yml
