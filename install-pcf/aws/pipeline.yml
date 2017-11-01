@@ -15,6 +15,7 @@ resources:
     endpoint: {{S3_ENDPOINT}}
     region_name: {{TF_VAR_aws_region}}
     bucket: {{S3_OUTPUT_BUCKET}}
+    region_name: {{TF_VAR_aws_region}}
     versioned_file: terraform.tfstate
 
 - name: pivnet-elastic-runtime

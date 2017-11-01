@@ -32,6 +32,7 @@ resource "azurerm_virtual_machine" "ops_manager_vm" {
     caching       = "ReadWrite"
     os_type       = "linux"
     create_option = "FromImage"
+    disk_size_gb  = "${var.om_disk_size_in_gb}"
   }
 
   os_profile {
