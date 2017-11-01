@@ -69,13 +69,13 @@ TF_VAR_aws_access_key: $(output aws_access_key_id)
 TF_VAR_aws_secret_key: $(output aws_secret_access_key)
 mysql_monitor_recipient_email: $MYSQL_MONITOR_EMAIL
 
-TF_VAR_amis_nat: $(output TF_VAR_amis_nat)
-TF_VAR_aws_region: $(output TF_VAR_aws_region) 
-TF_VAR_az1: $(output TF_VAR_az1)
-TF_VAR_az2: $(output TF_VAR_az2)
-TF_VAR_az3: $(output TF_VAR_az3)
+TF_VAR_amis_nat: ami-258e1f33
+TF_VAR_aws_region: us-east-1
+TF_VAR_az1: us-east-1a
+TF_VAR_az2: us-east-1b
+TF_VAR_az3: us-east-1d
 
-S3_ENDPOINT: $(output S3_ENDPOINT)
+S3_ENDPOINT: https://s3.amazonaws.com
 
 ERT_SSL_CERT:
 ERT_SSL_KEY:

@@ -19,4 +19,11 @@ jobs:
       TERRAFORM_STATEFILES_BUCKET: {{terraform_statefiles_bucket}}
       PIVNET_TOKEN: {{pivnet_token}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_email}}
+      TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
+      TF_VAR_aws_region: {{TF_VAR_aws_region}}
+      TF_VAR_az1: {{TF_VAR_az1}}
+      TF_VAR_az2: {{TF_VAR_az2}}
+      TF_VAR_az3: {{TF_VAR_az3}}
+      S3_ENDPOINT: {{S3_ENDPOINT}}
+
     file: pcf-pipelines/ci/bootstrap/aws/tasks/bootstrap.yml

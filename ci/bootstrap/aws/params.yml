@@ -6,3 +6,9 @@ route53_zone_id:
 terraform_statefiles_bucket:
 pivnet_token:
 mysql_monitor_email:
+TF_VAR_amis_nat:
+TF_VAR_aws_region:
+TF_VAR_az1:
+TF_VAR_az2:
+TF_VAR_az3:
+S3_ENDPOINT:

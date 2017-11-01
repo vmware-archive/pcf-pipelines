@@ -17,12 +17,6 @@ params:
   TERRAFORM_STATEFILES_BUCKET:
   PIVNET_TOKEN:
   MYSQL_MONITOR_EMAIL:
-  TF_VAR_amis_nat:
-  TF_VAR_aws_region:
-  TF_VAR_az1:
-  TF_VAR_az2:
-  TF_VAR_az3:
-  S3_ENDPOINT:
 
 run:
   path: pcf-pipelines/ci/bootstrap/aws/tasks/bootstrap.sh

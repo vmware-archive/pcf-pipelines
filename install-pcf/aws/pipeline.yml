@@ -52,10 +52,6 @@ jobs:
       S3_REGION: {{TF_VAR_aws_region}}
       AWS_ACCESS_KEY_ID: {{TF_VAR_aws_access_key}}
       AWS_SECRET_ACCESS_KEY: {{TF_VAR_aws_secret_key}}
-      TF_VAR_amis_nat: {{TF_VAR_amis_nat}}
-      TF_VAR_az1: {{TF_VAR_az1}}
-      TF_VAR_az2: {{TF_VAR_az2}}
-      TF_VAR_az3: {{TF_VAR_az3}}
     file: pcf-pipelines/tasks/create-initial-terraform-state/task.yml
 
 - name: create-infrastructure
