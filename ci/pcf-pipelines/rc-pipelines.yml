@@ -428,8 +428,7 @@ jobs:
       passed: [ lock-vsphere ]
     - get: pivnet-rc
       trigger: true
-      passed:
-      - update-pipelines
+      passed: [ lock-vsphere ]
   - task: trigger-vsphere-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
