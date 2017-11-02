@@ -282,7 +282,7 @@ jobs:
     output_mapping: { unpacked_tarball: unpatched-release }
 
   - task: apply-rc-pipelines-patches
-    file: pcf-pipelines/ci/tasks/apply_rc_pipelines_patches.yml
+    file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
     output_mapping: { patched-release: release }
 
   - do:
@@ -329,7 +329,7 @@ jobs:
 
     - task: set-rc-install-pcf-gcp
       params:
-        PIPELINE_PARAMS: {{install_pcf_gcp_current_params}}
+        PIPELINE_PARAMS: {{install_pcf_gcp_rc_params}}
         PIPELINE_NAME: rc-install-pcf-gcp
         PIPELINE_PATH: release/pcf-pipelines/install-pcf/gcp/pipeline.yml
         <<: *atc_creds
