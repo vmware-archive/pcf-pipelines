@@ -438,7 +438,7 @@ jobs:
   on_failure:
     <<: *notify_slack
 
-- name: trigget-install-pcf-vsphere
+- name: trigger-install-pcf-vsphere
   plan:
   - aggregate:
     - get: version
@@ -502,17 +502,16 @@ jobs:
     - get: version
       passed: [ wipe-gcp ]
     - get: pcf-pipelines
-      passed: [ wipe-gcp ]
     - get: gcp-lock
     - get: pivnet-rc
       passed: [ wipe-gcp ]
       trigger: true
-  - task: trigger-vsphere-rc-deploy-opsman
+  - task: trigger-gcp-rc-deploy-opsman
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
       <<: *atc_creds
       JOBS: |
-        install-pcf-gcp-rc/upload-opsman-image
+        rc-install-pcf-gcp/upload-opsman-image
   on_failure:
     <<: *notify_slack
 
