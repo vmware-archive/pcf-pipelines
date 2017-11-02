@@ -20,4 +20,3 @@
     - get: LOCK_RESOURCE_NAME
     - put: LOCK_RESOURCE_NAME
       params: {release: LOCK_NAME}
-EOF
