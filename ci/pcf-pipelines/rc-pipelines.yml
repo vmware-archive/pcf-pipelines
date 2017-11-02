@@ -522,11 +522,11 @@ jobs:
   plan:
   - aggregate:
     - get: version
-      passed: [ trigget-install-pcf-vsphere, trigger-install-pcf-gcp ]
+      passed: [ trigger-install-pcf-vsphere, trigger-install-pcf-gcp ]
     - get: pcf-pipelines
-      passed: [ trigget-install-pcf-vsphere, trigger-install-pcf-gcp ]
+      passed: [ trigger-install-pcf-vsphere, trigger-install-pcf-gcp ]
     - get: pivnet-rc
-      passed: [ trigget-install-pcf-vsphere, trigger-install-pcf-gcp ]
+      passed: [ trigger-install-pcf-vsphere, trigger-install-pcf-gcp ]
       trigger: true
   - get: vsphere-lock
     params: { claim: install-pcf }
