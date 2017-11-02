@@ -1,4 +1,6 @@
-#!/bin/bash -eu
+#!/bin/bash
+
+set -eu
 
 apply_yaml_patch() {
   sourceYaml="${1}"
