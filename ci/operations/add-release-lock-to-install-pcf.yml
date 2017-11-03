@@ -6,7 +6,7 @@
     source:
       uri: git@github.com:pivotal-cf/c0-ci-locks.git
       branch: master
-      pool: vsphere
+      pool: LOCK_POOL_NAME
       private_key: {{locks_git_ssh_key}}
 
 - op: add

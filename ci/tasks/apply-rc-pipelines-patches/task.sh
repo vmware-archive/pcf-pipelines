@@ -23,6 +23,7 @@ patch_install_pcf() {
 
   sed "s/LOCK_RESOURCE_NAME/${lockResourceName}/g" $operationFile > ./updatedOperationFile.yml
   sed -i "s/LOCK_NAME/${lockName}/g" ./updatedOperationFile.yml
+  sed -i "s/LOCK_POOL_NAME/${iaas}/g" ./updatedOperationFile.yml
   sed -i "s/RESOURCE_NAME/${resourceName}/g" ./updatedOperationFile.yml
   sed -i "s/LAST_JOB_NAME/${lastJobName}/g" ./updatedOperationFile.yml
 
