@@ -52,11 +52,10 @@ function remove_old_child_ns_record_set() {
     --zone ${parent_dns_zone_name} \
     --format json \
     --filter NAME~^${CHILD_DNS_ZONE}.$)"
-  local ttl="$(echo ${child_record_json} | jq -r '.[0].ttl')"
-  local rrdata="$(echo ${child_record_json} | jq -r '.[0].rrdatas[]')"
-  local zone_name="$(echo ${child_record_json} | jq -r '.[0].name')"
 
   if [[ "[]" != "${child_record_json}" ]]; then
+    local ttl="$(echo ${child_record_json} | jq -r '.[0].ttl')"
+    local rrdata="$(echo ${child_record_json} | jq -r '.[0].rrdatas[]')"
     gcloud dns record-sets transaction remove --zone "${parent_dns_zone_name}" \
       --name "${CHILD_DNS_ZONE}." \
       --ttl "${ttl}" \
