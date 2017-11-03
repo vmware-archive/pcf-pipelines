@@ -27,9 +27,5 @@
   value: [upload-and-stage-ert]
 
 - op: replace
-  path: /jobs/get=elastic-runtime/params/globs
-  value: ["cf*pivotal"]
-
-- op: replace
   path: /jobs/get=pivnet-product/params/globs
   value: ["cf*pivotal"]
