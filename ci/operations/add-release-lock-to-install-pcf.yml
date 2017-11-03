@@ -17,6 +17,7 @@
     - get: RESOURCE_NAME
       passed: [LAST_JOB_NAME]
       trigger: true
-    - get: LOCK_RESOURCE_NAME
+    - get: LOCK_NAME
+      resource: LOCK_RESURCE_NAME
     - put: LOCK_RESOURCE_NAME
       params: {release: LOCK_NAME}
