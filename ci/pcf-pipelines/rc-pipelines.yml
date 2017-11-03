@@ -54,18 +54,6 @@ resources:
     pool: gcp
     <<: *c0-ci-locks-params
 
-# - name: azure-lock
-#   type: pool
-#   source:
-#     pool: azure
-#     <<: *c0-ci-locks-params
-#
-# - name: aws-lock
-#   type: pool
-#   source:
-#     pool: aws
-#     <<: *c0-ci-locks-params
-
 - name: version
   type: semver
   source:
@@ -106,35 +94,18 @@ jobs:
       - name: vsphere-lock
       outputs:
       - name: install-pcf-generic
-      - name: upgrade-opsmgr-generic
-      - name: upgrade-ert-generic
       run:
         path: bash
         args:
         - -c
         - |
           cp -r ./vsphere-lock/* ./install-pcf-generic/.
-          cp -r ./vsphere-lock/* ./upgrade-opsmgr-generic/.
-          cp -r ./vsphere-lock/* ./upgrade-ert-generic/.
 
           echo "install-pcf" > ./install-pcf-generic/name
           echo "install-pcf" > ./install-pcf-generic/metadata
-
-          echo "upgrade-opsmgr" > ./upgrade-opsmgr-generic/name
-          echo "upgrade-opsmgr" > ./upgrade-opsmgr-generic/metadata
-
-          echo "upgrade-" > ./upgrade-ert-generic/name
-          echo "upgrade-ert" > ./upgrade-ert-generic/metadata
-  # VSPHERE
   - try:
       put: vsphere-lock
       params: {release: install-pcf-generic}
-  - try:
-      put: vsphere-lock
-      params: {release: upgrade-opsmgr-generic}
-  - try:
-      put: vsphere-lock
-      params: {release: upgrade-ert-generic}
 
 - name: force-unlock-gcp
   plan:
@@ -151,56 +122,18 @@ jobs:
       - name: gcp-lock
       outputs:
       - name: install-pcf-generic
-      - name: upgrade-opsmgr-generic
-      - name: upgrade-ert-generic
       run:
         path: bash
         args:
         - -c
         - |
           cp -r ./vsphere-lock/* ./install-pcf-generic/.
-          cp -r ./vsphere-lock/* ./upgrade-opsmgr-generic/.
-          cp -r ./vsphere-lock/* ./upgrade-ert-generic/.
 
           echo "install-pcf" > ./install-pcf-generic/name
           echo "install-pcf" > ./install-pcf-generic/metadata
-
-          echo "upgrade-opsmgr" > ./upgrade-opsmgr-generic/name
-          echo "upgrade-opsmgr" > ./upgrade-opsmgr-generic/metadata
-
-          echo "upgrade-" > ./upgrade-ert-generic/name
-          echo "upgrade-ert" > ./upgrade-ert-generic/metadata
-  # GCP
   - try:
       put: gcp-lock
       params: {release: install-pcf-generic}
-  - try:
-      put: gcp-lock
-      params: {release: upgrade-opsmgr-generic}
-  - try:
-      put: gcp-lock
-      params: {release: upgrade-ert-generic}
-
-  # AWS
-  # - try:
-  #     put: aws-lock
-  #     params: {release: install-pcf-generic}
-  # - try:
-  #     put: aws-lock
-  #     params: {release: upgrade-opsmgr-generic}
-  # - try:
-  #     put: aws-lock
-  #     params: {release: upgrade-ert-generic}
-  # AZURE
-  # - try:
-  #     put: azure-lock
-  #     params: {release: install-pcf-generic}
-  # - try:
-  #     put: azure-lock
-  #     params: {release: upgrade-opsmgr-generic}
-  # - try:
-  #     put: azure-lock
-  #     params: {release: upgrade-ert-generic}
 
 - name: bump-patch
   serial_groups: [version]
@@ -315,15 +248,7 @@ jobs:
     file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
     output_mapping: { patched-release: release }
 
-  - do:
-    # - task: set-rc-install-pcf-aws
-      # params:
-        # PIPELINE_PARAMS: {{install_pcf_aws_current_params}}
-        # PIPELINE_NAME: rc-install-pcf-aws
-        # PIPELINE_PATH: release/pcf-pipelines/install-pcf/aws/pipeline.yml
-        # <<: *atc_creds
-      # file: pcf-pipelines/ci/tasks/set_pipeline.yml
-#
+#  - do:
 #    - task: set-upgrade-ert-aws-current-pipeline
 #      params:
 #        PIPELINE_PARAMS: {{upgrade_ert_aws_current_params}}
@@ -356,23 +281,6 @@ jobs:
 #        PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
 #        <<: *atc_creds
 #      file: pcf-pipelines/ci/tasks/set_pipeline.yml
-
-    - task: set-rc-install-pcf-gcp
-      params:
-        PIPELINE_PARAMS: {{install_pcf_gcp_rc_params}}
-        PIPELINE_NAME: rc-install-pcf-gcp
-        PIPELINE_PATH: release/pcf-pipelines/install-pcf/gcp/pipeline.yml
-        <<: *atc_creds
-      file: pcf-pipelines/ci/tasks/set_pipeline.yml
-
-    # - task: set-rc-install-pcf-azure
-      # params:
-       # PIPELINE_PARAMS: {{install_pcf_azure_current_params}}
-       # PIPELINE_NAME: rc-install-pcf-azure
-       # PIPELINE_PATH: release/pcf-pipelines/install-pcf/azure/pipeline.yml
-       # <<: *atc_creds
-      # file: pcf-pipelines/ci/tasks/set_pipeline.yml
-
 #
 #    - task: set-upgrade-ert-slot1-current-pipeline
 #      params:
@@ -420,35 +328,21 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-      passed: [update-pipelines]
     - get: pivnet-rc
       passed: [update-pipelines]
       trigger: true
-    - get: version
-      passed: [update-pipelines]
-  - put: vsphere-install-pcf-lock
-    resource: vsphere-lock
+  - put: vsphere-lock
     params: { claim: install-pcf }
     timeout: 3h00m
-  # - put: vsphere-upgrade-opsmgr-lock
-  #   resource: vsphere-lock
-  #   params: { claim: upgrade-opsmgr }
-  #   timeout: 3h00m
-  # - put: vsphere-upgrade-ert-lock
-  #   resource: vsphere-lock
-  #   params: { claim: upgrade-ert }
-  #   timeout: 3h00m
-  #
-  #
 
 - name: reset-rc-install-pcf-vsphere
   plan:
-  - get: pcf-pipelines
-    passed: [ lock-vsphere ]
-    trigger: true
-  - get: pivnet-rc
-    passed: [update-pipelines]
-    trigger: true
+  - aggregate:
+    - get: pcf-pipelines
+    - get: vsphere-lock
+      passed: [ lock-vsphere ]
+      trigger: true
+    - get: pivnet-rc
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
@@ -474,20 +368,15 @@ jobs:
       <<: *atc_creds
     file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
 
-
 - name: wipe-vsphere
   plan:
   - aggregate:
-    - get: version
-      passed: [ lock-vsphere ]
     - get: pcf-pipelines
+    - get: vsphere-lock
       passed: [ reset-rc-install-pcf-vsphere ]
-    - get: vsphere-install-pcf-lock
-      resource: vsphere-lock
-      passed: [ lock-vsphere ]
-    - get: pivnet-rc
       trigger: true
-      passed: [ lock-vsphere ]
+    - get: pivnet-rc
+      passed: [ reset-rc-install-pcf-vsphere ]
   - task: trigger-vsphere-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
@@ -500,14 +389,11 @@ jobs:
 - name: trigger-install-pcf-vsphere
   plan:
   - aggregate:
-    - get: version
-      passed: [ wipe-vsphere ]
     - get: pcf-pipelines
+    - get: vsphere-lock
       passed: [ wipe-vsphere ]
-    - get: vsphere-install-pcf-lock
-      resource: vsphere-lock
-    - get: pivnet-rc
       trigger: true
+    - get: pivnet-rc
       passed: [ wipe-vsphere ]
   - task: trigger-vsphere-rc-deploy-opsman
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -525,27 +411,55 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-      passed: [update-pipelines]
     - get: pivnet-rc
       passed: [update-pipelines]
       trigger: true
-    - get: version
-      passed: [update-pipelines]
   - put: gcp-lock
     params: { claim: install-pcf }
     timeout: 3h00m
 
+- name: reset-rc-install-pcf-gcp
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: gcp-lock
+      passed: [lock-gcp]
+      trigger: true
+    - get: pivnet-rc
+  - task: unpack-rc
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: unpatched-release }
+  - task: apply-rc-pipelines-patches
+    file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
+    output_mapping: { patched-release: release }
+  - task: destroy-rc-install-pcf-gcp
+    params:
+      PIPELINE_NAME: rc-install-pcf-gcp
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
+  - task: set-rc-install-pcf-gcp
+    params:
+      PIPELINE_PARAMS: {{install_pcf_gcp_rc_params}}
+      PIPELINE_NAME: rc-install-pcf-gcp
+      PIPELINE_PATH: release/pcf-pipelines/install-pcf/gcp/pipeline.yml
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/set_pipeline.yml
+  - task: unpause-rc-install-pcf-gcp
+    params:
+      PIPELINE_NAME: rc-install-pcf-gcp
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
+
 - name: wipe-gcp
   plan:
   - aggregate:
-    - get: version
-      passed: [ lock-gcp ]
     - get: pcf-pipelines
-      passed: [ lock-gcp ]
     - get: gcp-lock
-    - get: pivnet-rc
-      passed: [ lock-gcp ]
+      passed: [ reset-rc-install-pcf-gcp ]
       trigger: true
+    - get: pivnet-rc
+      passed: [ reset-rc-install-pcf-gcp ]
   - task: trigger-gcp-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
@@ -558,13 +472,12 @@ jobs:
 - name: trigger-install-pcf-gcp
   plan:
   - aggregate:
-    - get: version
-      passed: [ wipe-gcp ]
     - get: pcf-pipelines
     - get: gcp-lock
-    - get: pivnet-rc
       passed: [ wipe-gcp ]
       trigger: true
+    - get: pivnet-rc
+      passed: [ wipe-gcp ]
   - task: trigger-gcp-rc-upload-opsman-image
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
@@ -597,29 +510,30 @@ jobs:
 - name: check-environments-complete
   plan:
   - aggregate:
-    - get: version
-      passed: [ trigger-install-pcf-vsphere, trigger-install-pcf-gcp ]
     - get: pcf-pipelines
-      passed: [ trigger-install-pcf-vsphere, trigger-install-pcf-gcp ]
     - get: pivnet-rc
-      passed: [ trigger-install-pcf-vsphere, trigger-install-pcf-gcp ]
+    - get: vsphere-lock
+      passed: [ trigger-install-pcf-vsphere ]
       trigger: true
-  - get: vsphere-lock
+    - get: gcp-lock
+      passed: [ trigger-install-pcf-gcp ]
+      trigger: true
+  - put: vsphere-lock
     params: { claim: install-pcf }
     timeout: 3h00m
   - put: gcp-lock
     params: { claim: install-pcf }
     timeout: 3h00m
 
-
 - name: publish-release
   serial_groups: [version]
   plan:
   - aggregate:
     - get: version
-      passed: [check-environments-complete]
       params: {bump: final}
     - get: pcf-pipelines
+      passed: [test-rc]
+    - get: pivnet-rc
       passed: [check-environments-complete]
     - get: fly
 
