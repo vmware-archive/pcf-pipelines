@@ -34,5 +34,4 @@ run:
       --team-name "${ATC_TEAM_NAME}"
 
     ./fly --target self unpause-pipeline \
-      --non-interactive \
       --pipeline "${PIPELINE_NAME}"
