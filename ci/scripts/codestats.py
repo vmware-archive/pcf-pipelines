@@ -1,30 +1,30 @@
-#!/bin/bash -eu
+#!/usr/bin/env python2
 
-echo "Code stats for $REPO_NAME"
-STATSJSON=/tmp/codestats.json
-cloc code-repo --json | tee $STATSJSON
-
-python -c "
 import os
 import json
 import yaml
 
+import subprocess
 from datadog import initialize, api
 
 options = {
-    'api_key': '$DATADOG_API_KEY',
-    'app_key': '$DATADOG_APP_KEY'
+    'api_key': os.environ['DATADOG_API_KEY'],
+    'app_key': os.environ['DATADOG_APP_KEY'],
 }
 
 initialize(**options)
 
-stats = json.load(open('$STATSJSON'))
+repo_name = os.environ["REPO_NAME"]
+print "Code stats for " + repo_name
+cloc_output = subprocess.check_output("cloc code-repo --json", shell=True)
+
+stats = json.loads(cloc_output)
 
 del stats['header']
 
 metrics = []
 
-metric_name = 'codestat.$REPO_NAME'
+metric_name = 'codestat.' + repo_name
 for lang in stats:
   if lang == 'SUM':
     continue
@@ -49,4 +49,3 @@ for dir, subdirs, files in os.walk('code-repo'):
 metrics.append({'metric': metric_name + '.pipelines_total', 'points': pipelines_count, 'tags': [], 'host': 'ci'})
 
 api.Metric.send(metrics)
-"

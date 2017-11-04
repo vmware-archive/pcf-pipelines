@@ -15,4 +15,4 @@ params:
   DATADOG_APP_KEY:
 
 run:
-  path: ci-repo/ci/scripts/codestats.sh
+  path: ci-repo/ci/scripts/codestats.py
