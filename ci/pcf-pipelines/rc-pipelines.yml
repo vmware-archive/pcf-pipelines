@@ -335,12 +335,26 @@ jobs:
     params: { claim: install-pcf }
     timeout: 3h00m
 
-- name: reset-rc-install-pcf-vsphere
+- name: destroy-rc-install-pcf-vsphere
   plan:
   - aggregate:
     - get: pcf-pipelines
     - get: vsphere-lock
       passed: [ lock-vsphere ]
+      trigger: true
+    - get: pivnet-rc
+  - task: destroy-rc-install-pcf-vsphere
+    params:
+      PIPELINE_NAME: rc-install-pcf-vsphere
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
+
+- name: set-rc-install-pcf-vsphere
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: vsphere-lock
+      passed: [ destroy-rc-install-pcf-vsphere ]
       trigger: true
     - get: pivnet-rc
   - task: unpack-rc
@@ -350,11 +364,6 @@ jobs:
   - task: apply-rc-pipelines-patches
     file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
     output_mapping: { patched-release: release }
-  - task: destroy-rc-install-pcf-vsphere
-    params:
-      PIPELINE_NAME: rc-install-pcf-vsphere
-      <<: *atc_creds
-    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
   - task: set-rc-install-pcf-vsphere
     params:
       PIPELINE_PARAMS: {{install_pcf_vsphere_slot9_params}}
@@ -373,10 +382,10 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: vsphere-lock
-      passed: [ reset-rc-install-pcf-vsphere ]
+      passed: [ set-rc-install-pcf-vsphere ]
       trigger: true
     - get: pivnet-rc
-      passed: [ reset-rc-install-pcf-vsphere ]
+      passed: [ set-rc-install-pcf-vsphere ]
   - task: trigger-vsphere-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
@@ -418,12 +427,26 @@ jobs:
     params: { claim: install-pcf }
     timeout: 3h00m
 
-- name: reset-rc-install-pcf-gcp
+- name: destroy-rc-install-pcf-gcp
   plan:
   - aggregate:
     - get: pcf-pipelines
     - get: gcp-lock
       passed: [lock-gcp]
+      trigger: true
+    - get: pivnet-rc
+  - task: destroy-rc-install-pcf-gcp
+    params:
+      PIPELINE_NAME: rc-install-pcf-gcp
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
+
+- name: set-rc-install-pcf-gcp
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: gcp-lock
+      passed: [ destroy-rc-install-pcf-gcp ]
       trigger: true
     - get: pivnet-rc
   - task: unpack-rc
@@ -433,11 +456,6 @@ jobs:
   - task: apply-rc-pipelines-patches
     file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
     output_mapping: { patched-release: release }
-  - task: destroy-rc-install-pcf-gcp
-    params:
-      PIPELINE_NAME: rc-install-pcf-gcp
-      <<: *atc_creds
-    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
   - task: set-rc-install-pcf-gcp
     params:
       PIPELINE_PARAMS: {{install_pcf_gcp_rc_params}}
@@ -456,10 +474,10 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: gcp-lock
-      passed: [ reset-rc-install-pcf-gcp ]
+      passed: [ set-rc-install-pcf-gcp ]
       trigger: true
     - get: pivnet-rc
-      passed: [ reset-rc-install-pcf-gcp ]
+      passed: [ set-rc-install-pcf-gcp ]
   - task: trigger-gcp-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
