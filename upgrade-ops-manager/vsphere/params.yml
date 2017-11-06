@@ -26,7 +26,7 @@ vcenter_username: CHANGEME
 vcenter_password: CHANGEME
 vcenter_datacenter: CHANGEME
 vcenter_datastore: CHANGEME
-
+vcenter_insecure: CHANGEME
 # vCenter Cluster or Resource Pool to use to deploy Ops Manager.
 # Possible formats:
 #   cluster:       /<Data Center Name>/host/<Cluster Name>
