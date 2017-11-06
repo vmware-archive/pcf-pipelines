@@ -105,12 +105,6 @@ cf_properties=$(
       ".properties.logger_endpoint_port": {
         "value": $loggregator_endpoint_port
       },
-      ".properties.route_services": {
-        "value": $route_services
-      },
-      ".properties.route_services.enable.ignore_ssl_cert_verification": {
-        "value": $ignore_ssl_cert
-      },
       ".properties.container_networking_network_cidr": {
         "value": $container_networking_nw_cidr
       },
@@ -160,6 +154,26 @@ cf_properties=$(
         "value": $ssh_static_ips
       }
     }
+
+    +
+
+    # Route Services
+    if $route_services == "enable" then
+     {
+       ".properties.route_services": {
+         "value": "enable"
+       },
+       ".properties.route_services.enable.ignore_ssl_cert_verification": {
+         "value": $ignore_ssl_cert
+       }
+     }
+    else
+     {
+       ".properties.route_services": {
+         "value": "disable"
+       }
+     }
+    end
 
     +
 
