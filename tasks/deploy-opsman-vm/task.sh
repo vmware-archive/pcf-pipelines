@@ -26,6 +26,8 @@ function main() {
   export OPSMAN_NAME=OpsManager-${OPSMGR_VERSION}-$(date +"%Y%m%d%H%M%S")
   export OPSMAN_PATH=`ls $CURR_DIR/pivnet-opsmgr/*.{yml,yaml,ova} $CURR_DIR/pivnet-opsmgr/*_image 2>/dev/null | grep -v metadata.yaml`
 
+  export GOVC_TLS_CA_CERTS=/tmp/vcenter-ca.pem
+  echo "$GOVC_CA_CERT" > $GOVC_TLS_CA_CERTS
 
 IAAS_CONFIGURATION=$(cat <<-EOF
 {

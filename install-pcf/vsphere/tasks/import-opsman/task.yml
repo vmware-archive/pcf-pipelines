@@ -8,6 +8,7 @@ image_resource:
 
 params:
   GOVC_INSECURE:
+  GOVC_CA_CERT:
   GOVC_URL:
   GOVC_USERNAME:
   GOVC_PASSWORD:

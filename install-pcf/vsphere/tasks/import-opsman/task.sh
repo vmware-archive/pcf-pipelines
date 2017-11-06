@@ -6,6 +6,9 @@ file_path=`find ./pivnet-opsman-product/ -name *.ova`
 
 echo $file_path
 
+export GOVC_TLS_CA_CERTS=/tmp/vcenter-ca.pem
+echo "$GOVC_CA_CERT" > $GOVC_TLS_CA_CERTS
+
 govc import.spec $file_path | python -m json.tool > om-import.json
 
 cat > filters <<'EOF'

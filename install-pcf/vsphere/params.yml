@@ -10,6 +10,7 @@ vcenter_usr:              # vCenter username. If user is tied to a domain, then 
 vcenter_pwd:              # vCenter password
 vcenter_data_center:      # vCenter datacenter
 vcenter_insecure:         # vCenter skip TLS cert validation
+vcenter_ca_cert:          # vCenter CA cert at the API endpoint
 
 # Ops Manager VM configuration
 om_vm_host:               # Optional - vCenter host to deploy Ops Manager in
