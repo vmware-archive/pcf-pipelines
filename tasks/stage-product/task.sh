@@ -41,8 +41,7 @@ PRODUCT_NAME="$(cat metadata/*.yml | grep '^name' | cut -d' ' -f 2)"
 UNSTAGED_ALL=$(jq -n --argjson available "$AVAILABLE" --argjson staged "$STAGED" \
   '$available - ($staged | map({"name": .type, "product_version": .product_version}))')
 
-UNSTAGED_PRODUCT=$(
-jq -n "$UNSTAGED_ALL" \
+UNSTAGED_PRODUCT=$(echo "$UNSTAGED_ALL" | jq \
   "map(select(.name == \"$PRODUCT_NAME\")) | map(select(.product_version|startswith(\"$desired_version\")))"
 )
 
