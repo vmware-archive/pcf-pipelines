@@ -32,7 +32,7 @@ function main() {
   for iteration in $(seq ${TIMEOUT_MINUTES}); do
     local JOB_JSON=$(curl_api ${concourse_token} /api/v1/teams/${ATC_TEAM_NAME}/pipelines/${PIPELINE}/jobs/${JOB})
     local CURRENT_BUILD_STATUS=$(echo ${JOB_JSON} | jq -r .next_build.status)
-    if [ "${CURRENT_BUILD_STATUS}" != "null" ];
+    if [ "${CURRENT_BUILD_STATUS}" != "null" ]; then
       dot_and_sleep
       continue
     fi
