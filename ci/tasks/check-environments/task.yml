@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+
+inputs:
+- name: pcf-pipelines
+- name: pivnet-rc
+
+params:
+  PIPELINE:
+  JOB:
+  CONCOURSE_USER:
+  CONCOURSE_PASSWORD:
+  CONCOURSE_URL:
+  TIMEOUT_MINUTES:
+run:
+  path: pcf-pipelines/ci/tasks/check-environments/task.sh
