@@ -530,18 +530,23 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-rc
-    - get: vsphere-lock
-      passed: [ trigger-install-pcf-vsphere ]
+      passed: [ trigger-install-pcf-gcp, trigger-install-pcf-vsphere ]
       trigger: true
-    - get: gcp-lock
-      passed: [ trigger-install-pcf-gcp ]
-      trigger: true
-  - put: vsphere-lock
-    params: { claim: install-pcf }
-    timeout: 3h00m
-  - put: gcp-lock
-    params: { claim: install-pcf }
-    timeout: 3h00m
+  - aggregate:
+    - task: check-gcp
+      file: pcf-pipelines/ci/tasks/check-environments/task.yml
+      params:
+        PIPELINE: rc-install-pcf-gcp
+        JOB: deploy-ert
+        TIMEOUT_MINUTES: 240
+        <<: *atc_creds
+    - task: check-gcp
+      file: pcf-pipelines/ci/tasks/check-environments/task.yml
+      params:
+        PIPELINE: rc-install-pcf-vsphere
+        JOB: deploy-ert
+        TIMEOUT_MINUTES: 240
+        <<: *atc_creds
 
 - name: publish-release
   serial_groups: [version]
