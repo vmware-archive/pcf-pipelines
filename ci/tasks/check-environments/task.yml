@@ -13,9 +13,10 @@ inputs:
 params:
   PIPELINE:
   JOB:
-  CONCOURSE_USER:
-  CONCOURSE_PASSWORD:
-  CONCOURSE_URL:
+  ATC_EXTERNAL_URL:
+  ATC_BASIC_AUTH_USERNAME:
+  ATC_BASIC_AUTH_PASSWORD:
+  ATC_TEAM_NAME:
   TIMEOUT_MINUTES:
 run:
   path: pcf-pipelines/ci/tasks/check-environments/task.sh

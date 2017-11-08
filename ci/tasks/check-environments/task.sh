@@ -11,12 +11,13 @@ function curl_api() {
   local api=$2
   curl -s -k \
     -H "cookie: ATC-Authorization=\"Bearer ${concourse_oauth_token}\"" \
-    ${CONCOURSE_URL}${api} | jq .
+    ${ATC_EXTERNAL_URL}${api} | jq .
 }
 
 function get_concourse_oauth_token() {
   curl -s -k \
-    --user "${CONCOURSE_USER}:${CONCOURSE_PASSWORD}" "${CONCOURSE_URL}/api/v1/teams/ci/auth/token" | \
+    --user "${ATC_BASIC_AUTH_USERNAME}:${ATC_BASIC_AUTH_PASSWORD}" \
+    "${ATC_EXTERNAL_URL}/api/v1/teams/${ATC_TEAM_NAME}/auth/token" | \
     jq -r .value
 }
 
@@ -29,7 +30,7 @@ function main() {
   local concourse_token=$(get_concourse_oauth_token)
 
   for iteration in $(seq ${TIMEOUT_MINUTES}); do
-    local JOB_JSON=$(curl_api ${concourse_token} /api/v1/teams/ci/pipelines/${PIPELINE}/jobs/${JOB})
+    local JOB_JSON=$(curl_api ${concourse_token} /api/v1/teams/${ATC_TEAM_NAME}/pipelines/${PIPELINE}/jobs/${JOB})
     local CURRENT_BUILD_STATUS=$(echo ${JOB_JSON} | jq -r .next_build.status)
     if [ "${CURRENT_BUILD_STATUS}" != "null" ];
       dot_and_sleep
