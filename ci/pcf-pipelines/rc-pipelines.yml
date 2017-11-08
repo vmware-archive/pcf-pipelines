@@ -86,6 +86,7 @@ resources:
 jobs:
 
 - name: force-unlock-vsphere
+  serial: true
   plan:
   - aggregate:
     - get: vsphere-lock
@@ -114,6 +115,7 @@ jobs:
       params: {release: install-pcf-generic}
 
 - name: force-unlock-gcp
+  serial: true
   plan:
   - aggregate:
     - get: gcp-lock
@@ -142,6 +144,7 @@ jobs:
       params: {release: install-pcf-generic}
 
 - name: force-unlock-azure
+  serial: true
   plan:
   - aggregate:
     - get: azure-lock
@@ -359,6 +362,7 @@ jobs:
 ########### VSPHERE
 
 - name: lock-vsphere
+  serial: true
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -451,6 +455,7 @@ jobs:
 ########### GCP
 
 - name: lock-gcp
+  serial: true
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -561,6 +566,7 @@ jobs:
 ####### Azure
 
 - name: lock-azure
+  serial: true
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -674,6 +680,7 @@ jobs:
 ####### END Azure
 
 - name: check-environments-complete
+  serial: true
   plan:
   - aggregate:
     - get: pcf-pipelines
