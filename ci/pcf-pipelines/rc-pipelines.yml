@@ -60,6 +60,12 @@ resources:
     pool: azure
     <<: *c0-ci-locks-params
 
+- name: aws-lock
+  type: pool
+  source:
+    pool: aws
+    <<: *c0-ci-locks-params
+
 - name: version
   type: semver
   source:
@@ -171,6 +177,36 @@ jobs:
   - try:
       put: azure-lock
       params: {release: install-pcf-generic}
+
+- name: force-unlock-aws
+  serial: true
+  plan:
+  - aggregate:
+    - get: aws-lock
+  - task: prepare-generic-lock-names
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/cflinuxfs2
+      inputs:
+      - name: aws-lock
+      outputs:
+      - name: install-pcf-generic
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cp -r ./vsphere-lock/* ./install-pcf-generic/.
+
+          echo "install-pcf" > ./install-pcf-generic/name
+          echo "install-pcf" > ./install-pcf-generic/metadata
+  - try:
+      put: aws-lock
+      params: {release: install-pcf-generic}
+
 
 - name: bump-patch
   serial_groups: [version]
@@ -678,6 +714,99 @@ jobs:
     <<: *notify_slack
 
 ####### END Azure
+####### AWS
+
+- name: lock-aws
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-rc
+      passed: [update-pipelines]
+      trigger: true
+  - put: aws-lock
+    params: { claim: install-pcf }
+    timeout: 3h00m
+
+- name: destroy-rc-install-pcf-aws
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: aws-lock
+      passed: [lock-aws]
+      trigger: true
+    - get: pivnet-rc
+  - task: destroy-rc-install-pcf-aws
+    params:
+      PIPELINE_NAME: rc-install-pcf-aws
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
+
+- name: set-rc-install-pcf-aws
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: aws-lock
+      passed: [ destroy-rc-install-pcf-aws ]
+      trigger: true
+    - get: pivnet-rc
+  - task: unpack-rc
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: unpatched-release }
+  - task: apply-rc-pipelines-patches
+    file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
+    output_mapping: { patched-release: release }
+  - task: set-rc-install-pcf-aws
+    params:
+      PIPELINE_PARAMS: {{install_pcf_aws_rc_params}}
+      PIPELINE_NAME: rc-install-pcf-aws
+      PIPELINE_PATH: release/pcf-pipelines/install-pcf/aws/pipeline.yml
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/set_pipeline.yml
+  - task: unpause-rc-install-pcf-aws
+    params:
+      PIPELINE_NAME: rc-install-pcf-aws
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
+
+- name: wipe-aws
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: aws-lock
+      passed: [ set-rc-install-pcf-aws ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ set-rc-install-pcf-aws ]
+  - task: trigger-aws-rc-wipe-env
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-aws/wipe-env
+  on_failure:
+    <<: *notify_slack
+
+- name: trigger-install-pcf-aws
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: aws-lock
+      passed: [ wipe-aws ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ wipe-aws ]
+  - task: trigger-aws-rc-create-infrastructure
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-aws/create-infrastructure
+  on_failure:
+    <<: *notify_slack
+
+####### END AWS
 
 - name: check-environments-complete
   serial: true
@@ -685,7 +814,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-rc
-      passed: [ trigger-install-pcf-gcp, trigger-install-pcf-vsphere, trigger-install-pcf-azure ]
+      passed: [ trigger-install-pcf-gcp, trigger-install-pcf-vsphere, trigger-install-pcf-azure, trigger-install-pcf-aws ]
       trigger: true
   - aggregate:
     - task: check-vsphere
@@ -706,6 +835,13 @@ jobs:
       file: pcf-pipelines/ci/tasks/check-environments/task.yml
       params:
         PIPELINE: rc-install-pcf-azure
+        JOB: deploy-ert
+        TIMEOUT_MINUTES: 240
+        <<: *atc_creds
+    - task: check-aws
+      file: pcf-pipelines/ci/tasks/check-environments/task.yml
+      params:
+        PIPELINE: rc-install-pcf-aws
         JOB: deploy-ert
         TIMEOUT_MINUTES: 240
         <<: *atc_creds
