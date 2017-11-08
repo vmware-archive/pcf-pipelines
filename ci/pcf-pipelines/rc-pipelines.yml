@@ -54,6 +54,12 @@ resources:
     pool: gcp
     <<: *c0-ci-locks-params
 
+- name: azure-lock
+  type: pool
+  source:
+    pool: azure
+    <<: *c0-ci-locks-params
+
 - name: version
   type: semver
   source:
@@ -133,6 +139,34 @@ jobs:
           echo "install-pcf" > ./install-pcf-generic/metadata
   - try:
       put: gcp-lock
+      params: {release: install-pcf-generic}
+
+- name: force-unlock-azure
+  plan:
+  - aggregate:
+    - get: azure-lock
+  - task: prepare-generic-lock-names
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/cflinuxfs2
+      inputs:
+      - name: azure-lock
+      outputs:
+      - name: install-pcf-generic
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cp -r ./vsphere-lock/* ./install-pcf-generic/.
+
+          echo "install-pcf" > ./install-pcf-generic/name
+          echo "install-pcf" > ./install-pcf-generic/metadata
+  - try:
+      put: azure-lock
       params: {release: install-pcf-generic}
 
 - name: bump-patch
@@ -509,7 +543,7 @@ jobs:
       JOBS: |
         rc-install-pcf-gcp/create-infrastructure
   - task: delegate-dns-zone
-    file: pcf-pipelines/ci/tasks/delegate-dns-zone/task.yml
+    file: pcf-pipelines/ci/tasks/delegate-gcp-dns-zone/task.yml
     params:
       GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
       PARENT_DNS_ZONE: {{gcp_parent_dns_zone}}
@@ -524,15 +558,136 @@ jobs:
     <<: *notify_slack
 
 ####### END GCP
+####### Azure
+
+- name: lock-azure
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-rc
+      passed: [update-pipelines]
+      trigger: true
+  - put: azure-lock
+    params: { claim: install-pcf }
+    timeout: 3h00m
+
+- name: destroy-rc-install-pcf-azure
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: azure-lock
+      passed: [lock-azure]
+      trigger: true
+    - get: pivnet-rc
+  - task: destroy-rc-install-pcf-azure
+    params:
+      PIPELINE_NAME: rc-install-pcf-azure
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
+
+- name: set-rc-install-pcf-azure
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: azure-lock
+      passed: [ destroy-rc-install-pcf-azure ]
+      trigger: true
+    - get: pivnet-rc
+  - task: unpack-rc
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: unpatched-release }
+  - task: apply-rc-pipelines-patches
+    file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
+    output_mapping: { patched-release: release }
+  - task: set-rc-install-pcf-azure
+    params:
+      PIPELINE_PARAMS: {{install_pcf_azure_rc_params}}
+      PIPELINE_NAME: rc-install-pcf-azure
+      PIPELINE_PATH: release/pcf-pipelines/install-pcf/azure/pipeline.yml
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/set_pipeline.yml
+  - task: unpause-rc-install-pcf-azure
+    params:
+      PIPELINE_NAME: rc-install-pcf-azure
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
+
+- name: wipe-azure
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: azure-lock
+      passed: [ set-rc-install-pcf-azure ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ set-rc-install-pcf-azure ]
+  - task: trigger-azure-rc-wipe-env
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-azure/wipe-env
+  on_failure:
+    <<: *notify_slack
+
+- name: trigger-install-pcf-azure
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: azure-lock
+      passed: [ wipe-azure ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ wipe-azure ]
+  - task: trigger-azure-rc-create-infrastructure
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-azure/create-infrastructure
+  - task: delegate-dns-zone
+    file: pcf-pipelines/ci/tasks/delegate-azure-dns-zone/task.yml
+    params:
+      AZURE_SERVICE_PRINCIPAL_ID: {{azure_service_principal_id}}
+      AZURE_SERVICE_PRINCIPAL_PASSWORD: {{azure_service_principal_password}}
+      AZURE_TENANT_ID: {{azure_tenant_id}}
+      PARENT_RESOURCE_GROUP: {{azure_parent_dns_resource_group}}
+      PARENT_DNS_ZONE: {{azure_parent_dns_zone}}
+      CHILD_RESOURCE_GROUP: {{azure_child_dns_resource_group}}
+      CHILD_DNS_ZONE_NAME: {{azure_child_dns_zone_name}}
+  - task: trigger-azure-rc-config-opsman-auth
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-azure/config-opsman-auth
+  - task: trigger-azure-rc-config-director
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-azure/config-director
+  on_failure:
+    <<: *notify_slack
+
+####### END Azure
 
 - name: check-environments-complete
   plan:
   - aggregate:
     - get: pcf-pipelines
     - get: pivnet-rc
-      passed: [ trigger-install-pcf-gcp, trigger-install-pcf-vsphere ]
+      passed: [ trigger-install-pcf-gcp, trigger-install-pcf-vsphere, trigger-install-pcf-azure ]
       trigger: true
   - aggregate:
+    - task: check-vsphere
+      file: pcf-pipelines/ci/tasks/check-environments/task.yml
+      params:
+        PIPELINE: rc-install-pcf-vsphere
+        JOB: deploy-ert
+        TIMEOUT_MINUTES: 240
+        <<: *atc_creds
     - task: check-gcp
       file: pcf-pipelines/ci/tasks/check-environments/task.yml
       params:
@@ -540,10 +695,10 @@ jobs:
         JOB: deploy-ert
         TIMEOUT_MINUTES: 240
         <<: *atc_creds
-    - task: check-gcp
+    - task: check-azure
       file: pcf-pipelines/ci/tasks/check-environments/task.yml
       params:
-        PIPELINE: rc-install-pcf-vsphere
+        PIPELINE: rc-install-pcf-azure
         JOB: deploy-ert
         TIMEOUT_MINUTES: 240
         <<: *atc_creds
