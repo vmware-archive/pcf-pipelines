@@ -15,4 +15,4 @@ params:
   CHILD_DNS_ZONE:
 
 run:
-  path: pcf-pipelines/ci/tasks/delegate-dns-zone/task.sh
+  path: pcf-pipelines/ci/tasks/delegate-gcp-dns-zone/task.sh
