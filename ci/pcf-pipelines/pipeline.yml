@@ -208,6 +208,14 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
+    - task: set-upgrade-ert-gcp-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{upgrade_ert_gcp_current_params}}
+        PIPELINE_NAME: upgrade-ert-gcp-current
+        PIPELINE_PATH: release/pcf-pipelines/upgrade-ert/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
     - task: set-apply-updates-gcp-current-pipeline
       params:
         PIPELINE_PARAMS: {{apply_updates_gcp_current_params}}
