@@ -46,7 +46,7 @@ jobs:
       GOVC_URL: {{vcenter_host}}
       GOVC_USERNAME: {{vcenter_usr}}
       GOVC_PASSWORD: {{vcenter_pwd}}
-      GOVC_DATACENTER: {{vcenter_data_center}}
+      GOVC_DATACENTER: {{vcenter_datacenter}}
       GOVC_DATASTORE: {{om_data_store}}
       GOVC_NETWORK: {{om_vm_network}}
       GOVC_RESOURCE_POOL: {{om_resource_pool}}
@@ -90,7 +90,7 @@ jobs:
       VCENTER_HOST: {{vcenter_host}}
       VCENTER_USR: {{vcenter_usr}}
       VCENTER_PWD: {{vcenter_pwd}}
-      VCENTER_DATA_CENTER: {{vcenter_data_center}}
+      VCENTER_DATA_CENTER: {{vcenter_datacenter}}
       VCENTER_DISK_TYPE: {{vm_disk_type}}
       EPHEMERAL_STORAGE_NAMES: {{ephemeral_storage_names}}
       PERSISTENT_STORAGE_NAMES: {{persistent_storage_names}}
@@ -367,7 +367,7 @@ jobs:
       GOVC_URL: {{vcenter_host}}
       GOVC_USERNAME: {{vcenter_usr}}
       GOVC_PASSWORD: {{vcenter_pwd}}
-      GOVC_DATACENTER: {{vcenter_data_center}}
+      GOVC_DATACENTER: {{vcenter_datacenter}}
       GOVC_DATASTORE: {{om_data_store}}
       GOVC_NETWORK: {{om_vm_network}}
       GOVC_RESOURCE_POOL: {{om_resource_pool}}

@@ -8,7 +8,7 @@ git_private_key:
 vcenter_host:             # vCenter host or IP
 vcenter_usr:              # vCenter username. If user is tied to a domain, then escape the \, example `domain\\user`
 vcenter_pwd:              # vCenter password
-vcenter_data_center:      # vCenter datacenter
+vcenter_datacenter:      # vCenter datacenter
 vcenter_insecure:         # vCenter skip TLS cert validation; enter `1` to disable cert verification, `0` to enable verification
 vcenter_ca_cert:          # vCenter CA cert at the API endpoint; enter a value if `vcenter_insecure: 0`
 
