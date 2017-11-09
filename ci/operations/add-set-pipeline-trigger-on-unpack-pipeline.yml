@@ -1,0 +1,3 @@
+- op: add
+  path: /jobs/name=set-install-pcf-pipeline/plan/get=pcf-pipelines-tarball/trigger
+  value: true
