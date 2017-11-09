@@ -47,7 +47,7 @@ jobs:
       GOVC_USERNAME: {{vcenter_usr}}
       GOVC_PASSWORD: {{vcenter_pwd}}
       GOVC_DATACENTER: {{vcenter_datacenter}}
-      GOVC_DATASTORE: {{om_data_store}}
+      GOVC_DATASTORE: {{vcenter_datastore}}
       GOVC_NETWORK: {{om_vm_network}}
       GOVC_RESOURCE_POOL: {{om_resource_pool}}
       GOVC_HOST: {{om_vm_host}}
@@ -368,7 +368,7 @@ jobs:
       GOVC_USERNAME: {{vcenter_usr}}
       GOVC_PASSWORD: {{vcenter_pwd}}
       GOVC_DATACENTER: {{vcenter_datacenter}}
-      GOVC_DATASTORE: {{om_data_store}}
+      GOVC_DATASTORE: {{vcenter_datastore}}
       GOVC_NETWORK: {{om_vm_network}}
       GOVC_RESOURCE_POOL: {{om_resource_pool}}
       GOVC_HOST: {{om_vm_host}}
