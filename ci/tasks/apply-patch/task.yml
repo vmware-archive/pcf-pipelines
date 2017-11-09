@@ -17,4 +17,4 @@ params:
   PATCH_FILES:
 
 run:
-  path: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.sh
+  path: pcf-pipelines/ci/tasks/apply-patch/task.sh
