@@ -48,6 +48,12 @@ resources:
     pool: vsphere
     <<: *c0-ci-locks-params
 
+- name: vsphere-offline-lock
+  type: pool
+  source:
+    pool: vsphere-offline
+    <<: *c0-ci-locks-params
+
 - name: gcp-lock
   type: pool
   source:
@@ -91,34 +97,23 @@ resources:
 
 jobs:
 
-- name: force-unlock-vsphere
+- name: force-unlock-vsphere-install-pcf
   serial: true
   plan:
-  - aggregate:
-    - get: vsphere-lock
-  - task: prepare-generic-lock-names
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: czero/cflinuxfs2
-      inputs:
-      - name: vsphere-lock
-      outputs:
-      - name: install-pcf-generic
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          cp -r ./vsphere-lock/* ./install-pcf-generic/.
-
-          echo "install-pcf" > ./install-pcf-generic/name
-          echo "install-pcf" > ./install-pcf-generic/metadata
+  - get: install-pcf
+    resource: vsphere-lock
   - try:
       put: vsphere-lock
-      params: {release: install-pcf-generic}
+      params: {release: install-pcf}
+
+- name: force-unlock-vsphere-install-pcf-offline
+  serial: true
+  plan:
+  - get: install-pcf
+    resource: vsphere-offline-lock
+  - try:
+      put: vsphere-offline-lock
+      params: {release: install-pcf}
 
 - name: force-unlock-gcp
   serial: true
@@ -488,6 +483,65 @@ jobs:
     <<: *notify_slack
 
 ####### END VSPHERE
+####### VSPHERE OFFLINE
+
+- name: lock-vsphere-offline
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-rc
+      passed: [update-pipelines]
+      trigger: true
+  - put: vsphere-offline-lock
+    params: { claim: install-pcf }
+    timeout: 3h00m
+
+- name: set-offline-pipelines
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: vsphere-offline-lock
+      passed: [ lock-vsphere-offline ]
+      trigger: true
+    - get: pivnet-rc
+  - task: unpack-rc
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: release }
+  - task: set-create-offline-pinned-pipelines-pipeline
+    params:
+      PIPELINE_PARAMS: {{create_offline_pinned_pipelines_params}}
+      PIPELINE_NAME: create-offline-pinned-pipelines
+      PIPELINE_PATH: release/pcf-pipelines/create-offline-pinned-pipelines/pipeline.yml
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
+  - task: set-unpack-pcf-pipelines-combined
+    params:
+      PIPELINE_PARAMS: {{unpack_pcf_pipelines_combined_params}}
+      PIPELINE_NAME: unpack-pcf-pipelines-combined
+      PIPELINE_PATH: release/pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
+- name: trigger-create-offline-pinned-pipelines
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: vsphere-offline-lock
+      passed: [ set-offline-pipelines ]
+      trigger: true
+    - get: pivnet-rc
+  - task: trigger-create-offline-pinned-pipelines
+    params:
+      <<: *atc_creds
+      JOBS: |
+        create-offline-pinned-pipelines/collector
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+
+
+####### END VSPHERE OFFLINE
 ########### GCP
 
 - name: lock-gcp
