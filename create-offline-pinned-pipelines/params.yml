@@ -1,10 +1,16 @@
+# Params for an S3-compatible repository
 s3_endpoint:
 s3_bucket:
 s3_access_key_id:
 s3_secret_access_key:
+# API Token for accessing network.pivotal.io
 pivnet_token:
+# Version regex, e.g. ^1\.12\..*
 operations_manager_regex:
 elastic_runtime_regex:
+# URL to the concourse server for CLI download
 atc_external_url:
+# Public key and email to encrypt the final tarball with
+# https://help.github.com/articles/generating-a-new-gpg-key/
 gpg_public_key_contents:
 gpg_public_key_email:
