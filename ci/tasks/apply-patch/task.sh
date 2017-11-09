@@ -8,6 +8,9 @@ function main() {
     echo "${PATCH_FILES}" | \
       xargs -n 1 echo "-o")
 
+  echo "Applying the following patch files to ${PIPELINE_FILE}:"
+  echo "${PATCH_FILES}"
+
   cat "${PIPELINE_FILE}" | \
     yaml_patch_linux ${yaml_patch_args} \
     > "${temp_pipeline_file}"
