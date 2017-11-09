@@ -14,6 +14,9 @@ function main() {
 
   cat "${temp_pipeline_file}" \
     > "${PIPELINE_FILE}"
+
+  rm -rf patched-release
+  cp unpatched-release patched-release
 }
 
 main
