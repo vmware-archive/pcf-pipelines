@@ -13,18 +13,23 @@ The Offline Pipelines rely on Concourse's [s3-resource](https://github.com/conco
 
 The offline environment is bootstrapped with help of two pipelines, `create-offline-pinned-pipelines` and `unpack-pcf-pipelines-combined`, that are meant to be used to facilitate physical transfer of artifacts to the airgapped environment.
 
-`create-offline-pinned-pipelines` is used to:
+[`create-offline-pinned-pipelines`](https://github.com/pivotal-cf/pcf-pipelines/tree/master/create-offline-pinned-pipelines) is used to:
 
 * Pull all required resources (images, products and pipelines) from their locations on the Internet and package them
 * Transform `pcf-pipelines` to consume the resources from S3-compatible blobstore,
 * Create an encrypted tarball with all resources, and a shasum manifest for each resource,
 * Put the tarball to a location within S3 storage for it to be transferred to the airgapped environment.
 
-`unpack-pcf-pipelines-combined` is used to:
+![create-offline-pinned-pipelines](images/create-offline-pinned-pipelines.png)
+
+
+[`unpack-pcf-pipelines-combined`](https://github.com/pivotal-cf/pcf-pipelines/tree/master/unpack-pcf-pipelines-combined) is used to:
 
 * Download, decrypt, and extract the GPG-encrypted tarball into its components after it has transferred to the `pcf-pipelines-combined/` path in S3-compatible store,
 * Verify the `shasum` manifest of the tarball contents,
 * Put the tarball parts into their appropriate locations within the airgapped S3 storage for use by the pipelines.
+
+![unpack-pcf-pipelines-combined](images/unpack-pcf-pipelines-combined.png)
 
 From this point the `pcf-pipelines` folder in the configured S3 bucket in the airgapped environment contains the pcf-pipelines tarball that can then be used to set a pipeline on an airgapped Concourse, in the same fashion as a standard `pcf-pipelines` setup.
 
