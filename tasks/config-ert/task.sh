@@ -618,6 +618,22 @@ cf_resources=$(
     '
 )
 
+if [ "${IAAS}" = "azure" ]; then
+  for resource in syslog_scheduler smoke-tests push-apps-manager \
+    push-usage-service notifications notifications-ui bootstrap \
+    push-pivotal-account autoscaling autoscaling-register-broker \
+    nfsbrokerpush mysql-rejoin-unsafe; do
+      cf_resources=$(jq \
+        "
+        . + {\"${resource}\": {}}
+        " <<< "${cf_resources}")
+  done
+
+  cf_resources=$(jq \
+    --argjson internet_connected "${INTERNET_CONNECTED:-false}" \
+    '.[].internet_connected = $internet_connected' <<< "${cf_resources}")
+fi
+
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --username $OPS_MGR_USR \
