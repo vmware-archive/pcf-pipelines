@@ -1,3 +1,94 @@
+groups:
+- name: all
+  jobs:
+  - bump-patch
+  - bump-minor
+  - test
+  - publish-rc
+  - test-rc
+  - update-pipelines
+  - lock-vsphere
+  - destroy-rc-install-pcf-vsphere
+  - set-rc-install-pcf-vsphere
+  - wipe-vsphere
+  - trigger-install-pcf-vsphere
+  - lock-vsphere-offline
+  - destroy-rc-install-pcf-vsphere-offline
+  - set-offline-pipelines
+  - trigger-create-offline-pinned-pipelines
+  - wipe-vsphere-offline
+  - trigger-install-pcf-vsphere-offline
+  - lock-gcp
+  - destroy-rc-install-pcf-gcp
+  - set-rc-install-pcf-gcp
+  - wipe-gcp
+  - trigger-install-pcf-gcp
+  - lock-azure
+  - destroy-rc-install-pcf-azure
+  - set-rc-install-pcf-azure
+  - wipe-azure
+  - trigger-install-pcf-azure
+  - lock-aws
+  - destroy-rc-install-pcf-aws
+  - set-rc-install-pcf-aws
+  - wipe-aws
+  - trigger-install-pcf-aws
+  - check-environments-complete
+  - publish-release
+- name: less
+  jobs:
+  - bump-patch
+  - bump-minor
+  - test
+  - publish-rc
+  - test-rc
+  - update-pipelines
+  - check-environments-complete
+  - publish-release
+- name: unlocks
+  jobs:
+  - force-unlock-vsphere-install-pcf
+  - force-unlock-vsphere-install-pcf-offline
+  - force-unlock-gcp
+  - force-unlock-azure
+  - force-unlock-aws
+- name: install-vsphere
+  jobs:
+  - lock-vsphere
+  - destroy-rc-install-pcf-vsphere
+  - set-rc-install-pcf-vsphere
+  - wipe-vsphere
+  - trigger-install-pcf-vsphere
+- name: install-darknet
+  jobs:
+  - lock-vsphere-offline
+  - destroy-rc-install-pcf-vsphere-offline
+  - set-offline-pipelines
+  - trigger-create-offline-pinned-pipelines
+  - wipe-vsphere-offline
+  - trigger-install-pcf-vsphere-offline
+- name: install-gcp
+  jobs:
+  - lock-gcp
+  - destroy-rc-install-pcf-gcp
+  - set-rc-install-pcf-gcp
+  - wipe-gcp
+  - trigger-install-pcf-gcp
+- name: install-azure
+  jobs:
+  - lock-azure
+  - destroy-rc-install-pcf-azure
+  - set-rc-install-pcf-azure
+  - wipe-azure
+  - trigger-install-pcf-azure
+- name: install-aws
+  jobs:
+  - lock-aws
+  - destroy-rc-install-pcf-aws
+  - set-rc-install-pcf-aws
+  - wipe-aws
+  - trigger-install-pcf-aws
+
 resource_types:
 - name: pivnet
   type: docker-image
