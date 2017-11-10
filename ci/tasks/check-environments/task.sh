@@ -51,8 +51,14 @@ function main() {
     jq -r '.inputs[] | select(.name=="pcf-pipelines-tarball").metadata[] | select(.name=="version" ).value')
     echo "${PIPELINE}/${JOB}@${RC_VERSION} ${JOB_STATUS}"
 
-    if [[ "${JOB_STATUS}" == "succeeded" && "${RC_VERSION}" == "${EXPECTED_RC_VERSION}" ]]; then
-      exit 0
+    if [[ "${JOB_STATUS}" == "succeeded" ]]; then
+      if [[ "${DISABLE_PIVNET_VERSION_CHECK}" == "true" ]]; then
+        exit 0
+      fi
+
+      if [[ "${RC_VERSION}" == "${EXPECTED_RC_VERSION}" ]]; then
+        exit 0
+      fi
     fi
 
     exit 1
