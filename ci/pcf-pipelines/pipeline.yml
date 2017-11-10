@@ -54,40 +54,50 @@ groups:
   - force-unlock-aws
 - name: install-vsphere
   jobs:
+  - force-unlock-vsphere-install-pcf
   - lock-vsphere
   - destroy-rc-install-pcf-vsphere
   - set-rc-install-pcf-vsphere
   - wipe-vsphere
   - trigger-install-pcf-vsphere
+  - check-environments-complete
 - name: install-darknet
   jobs:
+  - force-unlock-vsphere-install-pcf-offline
   - lock-vsphere-offline
   - destroy-rc-install-pcf-vsphere-offline
   - set-offline-pipelines
   - trigger-create-offline-pinned-pipelines
   - wipe-vsphere-offline
   - trigger-install-pcf-vsphere-offline
+  - check-environments-complete
 - name: install-gcp
   jobs:
+  - force-unlock-gcp
   - lock-gcp
   - destroy-rc-install-pcf-gcp
   - set-rc-install-pcf-gcp
   - wipe-gcp
   - trigger-install-pcf-gcp
+  - check-environments-complete
 - name: install-azure
   jobs:
+  - force-unlock-azure
   - lock-azure
   - destroy-rc-install-pcf-azure
   - set-rc-install-pcf-azure
   - wipe-azure
   - trigger-install-pcf-azure
+  - check-environments-complete
 - name: install-aws
   jobs:
+  - force-unlock-aws
   - lock-aws
   - destroy-rc-install-pcf-aws
   - set-rc-install-pcf-aws
   - wipe-aws
   - trigger-install-pcf-aws
+  - check-environments-complete
 
 resource_types:
 - name: pivnet
