@@ -1052,6 +1052,7 @@ jobs:
         PIPELINE: rc-install-pcf-vsphere-offline
         JOB: deploy-ert
         TIMEOUT_MINUTES: 240
+        DISABLE_PIVNET_VERSION_CHECK: true
         <<: *atc_creds
     - task: check-vsphere
       file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1059,6 +1060,7 @@ jobs:
         PIPELINE: rc-install-pcf-vsphere
         JOB: deploy-ert
         TIMEOUT_MINUTES: 240
+        DISABLE_PIVNET_VERSION_CHECK: false
         <<: *atc_creds
     - task: check-gcp
       file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1066,6 +1068,7 @@ jobs:
         PIPELINE: rc-install-pcf-gcp
         JOB: deploy-ert
         TIMEOUT_MINUTES: 240
+        DISABLE_PIVNET_VERSION_CHECK: false
         <<: *atc_creds
     - task: check-azure
       file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1073,6 +1076,7 @@ jobs:
         PIPELINE: rc-install-pcf-azure
         JOB: deploy-ert
         TIMEOUT_MINUTES: 240
+        DISABLE_PIVNET_VERSION_CHECK: false
         <<: *atc_creds
     - task: check-aws
       file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1080,6 +1084,7 @@ jobs:
         PIPELINE: rc-install-pcf-aws
         JOB: deploy-ert
         TIMEOUT_MINUTES: 240
+        DISABLE_PIVNET_VERSION_CHECK: false
         <<: *atc_creds
 
 - name: publish-release
