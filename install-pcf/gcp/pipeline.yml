@@ -156,7 +156,7 @@ jobs:
   - task: check-opsman-dns
     file: pcf-pipelines/install-pcf/gcp/tasks/check-opsman-dns/task.yml
     params:
-      pcf_ert_domain: {{pcf_ert_domain}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
   - task: config-opsman-auth
     file: pcf-pipelines/tasks/config-opsman/task.yml
     params:
