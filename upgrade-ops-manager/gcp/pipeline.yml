@@ -90,9 +90,9 @@ jobs:
     file: pcf-pipelines/upgrade-ops-manager/gcp/tasks/create-cliaas-config/task.yml
     params:
       PIVNET_IMAGE_REGION: {{pivnet_image_region}}
-      OPSMAN_PROJECT: {{opsman_gcp_project}}
-      OPSMAN_ZONE: {{opsman_gcp_zone}}
-      OPSMAN_GCP_CREDFILE_CONTENTS: {{opsman_gcp_credfile_contents}}
+      GCP_PROJECT_ID: {{gcp_project_id}}
+      GCP_ZONE: {{gcp_zone}}
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
 
   - task: replace-opsman-vm
     file: pcf-pipelines/tasks/replace-vm/task.yml

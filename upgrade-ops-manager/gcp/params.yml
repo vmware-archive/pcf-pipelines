@@ -20,7 +20,7 @@ opsman_domain_or_ip_address: CHANGEME
 opsman_major_minor_version: ^1\.11\..*$     # Ops Manager minor version to track
 git_private_key: CHANGEME
 existing_opsman_vm_name: CHANGEME
-opsman_gcp_project: CHANGEME
-opsman_gcp_zone: CHANGEME
-opsman_gcp_credfile_contents: CHANGEME
+gcp_project_id: CHANGEME
+gcp_zone: CHANGEME
+gcp_service_account_key: CHANGEME
 pivnet_image_region: us
