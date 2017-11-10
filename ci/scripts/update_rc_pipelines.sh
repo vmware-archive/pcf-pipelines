@@ -54,7 +54,7 @@ write_params $tmpfile "" "create_offline_pinned_pipelines_params" 'create-offlin
 write_params $tmpfile "" "unpack_pcf_pipelines_combined_params" 'unpack-pcf-pipelines-combined-params'
 write_params $tmpfile "  " "install_pcf_pipeline_params" 'vsphere-slot6/install-pcf-params'
 cat >> $tmpfile <<EOF
-  install_pcf_pipeline_name: install-pcf-vsphere-darknet-current
+  install_pcf_pipeline_name: rc-install-pcf-vsphere-offline
 EOF
 
 fly -tci sp -p rc-master -c ci/pcf-pipelines/rc-pipelines.yml \
