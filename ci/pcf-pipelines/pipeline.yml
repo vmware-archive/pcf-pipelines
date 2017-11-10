@@ -529,10 +529,7 @@ jobs:
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
-    output_mapping: { unpacked_tarball: unpatched-release }
-  - task: apply-rc-pipelines-patches
-    file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
-    output_mapping: { patched-release: release }
+    output_mapping: { unpacked_tarball: release }
   - task: set-rc-install-pcf-vsphere
     params:
       PIPELINE_PARAMS: {{install_pcf_vsphere_slot9_params}}
@@ -751,10 +748,7 @@ jobs:
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
-    output_mapping: { unpacked_tarball: unpatched-release }
-  - task: apply-rc-pipelines-patches
-    file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
-    output_mapping: { patched-release: release }
+    output_mapping: { unpacked_tarball: release }
   - task: set-rc-install-pcf-gcp
     params:
       PIPELINE_PARAMS: {{install_pcf_gcp_rc_params}}
@@ -862,10 +856,7 @@ jobs:
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
-    output_mapping: { unpacked_tarball: unpatched-release }
-  - task: apply-rc-pipelines-patches
-    file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
-    output_mapping: { patched-release: release }
+    output_mapping: { unpacked_tarball: release }
   - task: set-rc-install-pcf-azure
     params:
       PIPELINE_PARAMS: {{install_pcf_azure_rc_params}}
@@ -977,10 +968,7 @@ jobs:
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
-    output_mapping: { unpacked_tarball: unpatched-release }
-  - task: apply-rc-pipelines-patches
-    file: pcf-pipelines/ci/tasks/apply-rc-pipelines-patches/task.yml
-    output_mapping: { patched-release: release }
+    output_mapping: { unpacked_tarball: release }
   - task: set-rc-install-pcf-aws
     params:
       PIPELINE_PARAMS: {{install_pcf_aws_rc_params}}
@@ -1046,46 +1034,66 @@ jobs:
       - trigger-install-pcf-vsphere-offline
       trigger: true
   - aggregate:
-    - task: check-vsphere-offline
-      file: pcf-pipelines/ci/tasks/check-environments/task.yml
-      params:
-        PIPELINE: rc-install-pcf-vsphere-offline
-        JOB: deploy-ert
-        TIMEOUT_MINUTES: 240
-        DISABLE_PIVNET_VERSION_CHECK: true
-        <<: *atc_creds
-    - task: check-vsphere
-      file: pcf-pipelines/ci/tasks/check-environments/task.yml
-      params:
-        PIPELINE: rc-install-pcf-vsphere
-        JOB: deploy-ert
-        TIMEOUT_MINUTES: 240
-        DISABLE_PIVNET_VERSION_CHECK: false
-        <<: *atc_creds
-    - task: check-gcp
-      file: pcf-pipelines/ci/tasks/check-environments/task.yml
-      params:
-        PIPELINE: rc-install-pcf-gcp
-        JOB: deploy-ert
-        TIMEOUT_MINUTES: 240
-        DISABLE_PIVNET_VERSION_CHECK: false
-        <<: *atc_creds
-    - task: check-azure
-      file: pcf-pipelines/ci/tasks/check-environments/task.yml
-      params:
-        PIPELINE: rc-install-pcf-azure
-        JOB: deploy-ert
-        TIMEOUT_MINUTES: 240
-        DISABLE_PIVNET_VERSION_CHECK: false
-        <<: *atc_creds
-    - task: check-aws
-      file: pcf-pipelines/ci/tasks/check-environments/task.yml
-      params:
-        PIPELINE: rc-install-pcf-aws
-        JOB: deploy-ert
-        TIMEOUT_MINUTES: 240
-        DISABLE_PIVNET_VERSION_CHECK: false
-        <<: *atc_creds
+    - do:
+      - task: check-vsphere-offline
+        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+        params:
+          PIPELINE: rc-install-pcf-vsphere-offline
+          JOB: deploy-ert
+          TIMEOUT_MINUTES: 240
+          DISABLE_PIVNET_VERSION_CHECK: true
+          <<: *atc_creds
+      - get: vsphere-offline-lock
+      - put: vsphere-offline-lock
+        params: {release: vsphere-offline-lock}
+    - do:
+      - task: check-vsphere
+        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+        params:
+          PIPELINE: rc-install-pcf-vsphere
+          JOB: deploy-ert
+          TIMEOUT_MINUTES: 240
+          DISABLE_PIVNET_VERSION_CHECK: false
+          <<: *atc_creds
+      - get: vsphere-lock
+      - put: vsphere-lock
+        params: {release: vsphere-lock}
+    - do:
+      - task: check-gcp
+        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+        params:
+          PIPELINE: rc-install-pcf-gcp
+          JOB: deploy-ert
+          TIMEOUT_MINUTES: 240
+          DISABLE_PIVNET_VERSION_CHECK: false
+          <<: *atc_creds
+      - get: gcp-lock
+      - put: gcp-lock
+        params: {release: gcp-lock}
+    - do:
+      - task: check-azure
+        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+        params:
+          PIPELINE: rc-install-pcf-azure
+          JOB: deploy-ert
+          TIMEOUT_MINUTES: 240
+          DISABLE_PIVNET_VERSION_CHECK: false
+          <<: *atc_creds
+      - get: azure-lock
+      - put: azure-lock
+        params: {release: azure-lock}
+    - do:
+      - task: check-aws
+        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+        params:
+          PIPELINE: rc-install-pcf-aws
+          JOB: deploy-ert
+          TIMEOUT_MINUTES: 240
+          DISABLE_PIVNET_VERSION_CHECK: false
+          <<: *atc_creds
+      - get: aws-lock
+      - put: aws-lock
+        params: {release: aws-lock}
 
 - name: publish-release
   serial_groups: [version]
