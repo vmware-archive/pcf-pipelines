@@ -65,8 +65,8 @@ db_locket_password: $(output db_locket_password)
 db_silk_username: silk
 db_silk_password: $(output db_silk_password)
 
-aws_access_key: $(output aws_access_key_id)
-aws_secret_key: $(output aws_secret_access_key)
+aws_access_key_id: $(output aws_access_key_id)
+aws_secret_access_key: $(output aws_secret_access_key)
 mysql_monitor_recipient_email: $MYSQL_MONITOR_EMAIL
 
 amis_nat: ami-258e1f33
