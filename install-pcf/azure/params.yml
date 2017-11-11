@@ -52,7 +52,7 @@ arg_wipe: wipe
 # The storage account and container that will be used for your terraform state
 terraform_azure_account_name: CHANGEME
 terraform_azure_access_key: CHANGEME
-terraform_statefile_container: CHANGEME
+azure_storage_container_name: CHANGEME
 
 ### azure ###
 # IF the azure_access_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
