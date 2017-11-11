@@ -57,19 +57,19 @@ terraform_prefix:
 director_certificates:
 
 # This key must be a key with admin access
-TF_VAR_aws_access_key:
-TF_VAR_aws_secret_key:
+aws_access_key_id:
+aws_secret_access_key:
 
 # ARN of the wildcard certificate to use; upload this in [AWS](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html#upload-server-certificate). This must be done prior to running the pipeline.
-TF_VAR_aws_cert_arn:
+aws_cert_arn:
 
 # AMI to use for nat box
-TF_VAR_amis_nat: ami-303b1458
+amis_nat: ami-303b1458
 
-TF_VAR_aws_region: us-east-1
-TF_VAR_az1: us-east-1a
-TF_VAR_az2: us-east-1b
-TF_VAR_az3: us-east-1d
+aws_region: us-east-1
+aws_az1: us-east-1a
+aws_az2: us-east-1b
+aws_az3: us-east-1d
 
 # For terraform state file
 S3_ENDPOINT: https://s3.amazonaws.com
@@ -99,13 +99,13 @@ haproxy_tls_ciphers:        # The recommended setting is "DHE-RSA-AES128-GCM-SHA
 opsman_domain_or_ip_address:
 
 # Operations Manager credentials
-OPSMAN_USER:
-OPSMAN_PASSWORD:
+opsman_admin_username:
+opsman_admin_password:
 
 # Key to use for Operations Manager, NAT VMs.
 PEM:
 # Upload PEM to AWS as the below key pair name
-TF_VAR_aws_key_name:
+aws_key_name:
 
 # CIDRs to allow SSH access to Operations Manager from; configure PEM as well with the private key
 opsman_allow_ssh_cidr_ranges:
@@ -144,37 +144,37 @@ mysql_backups_s3_cron_schedule:
 #   * Dynamic Services network: Deploy dynamic services, **three subnets on three AZs to achieve HA**
 #   * RDS network: Deploy RDS databases, **three subnets on three AZs to achieve HA**
 #   * Infrastructure network: Deploy Bosh director
-TF_VAR_vpc_cidr: 192.168.0.0/16
-TF_VAR_public_subnet_cidr_az1: 192.168.0.0/24
-TF_VAR_public_subnet_cidr_az2: 192.168.1.0/24
-TF_VAR_public_subnet_cidr_az3: 192.168.2.0/24
-TF_VAR_ert_subnet_cidr_az1: 192.168.16.0/20
+vpc_cidr: 192.168.0.0/16
+public_subnet_cidr_az1: 192.168.0.0/24
+public_subnet_cidr_az2: 192.168.1.0/24
+public_subnet_cidr_az3: 192.168.2.0/24
+ert_subnet_cidr_az1: 192.168.16.0/20
 ert_subnet_reserved_ranges_z1: 192.168.16.0 - 192.168.16.10
-TF_VAR_ert_subnet_cidr_az2: 192.168.32.0/20
+ert_subnet_cidr_az2: 192.168.32.0/20
 ert_subnet_reserved_ranges_z2: 192.168.32.0 - 192.168.32.10
-TF_VAR_ert_subnet_cidr_az3: 192.168.48.0/20
+ert_subnet_cidr_az3: 192.168.48.0/20
 ert_subnet_reserved_ranges_z3: 192.168.48.0 - 192.168.48.10
-TF_VAR_services_subnet_cidr_az1: 192.168.64.0/20
+services_subnet_cidr_az1: 192.168.64.0/20
 services_subnet_reserved_ranges_z1: 192.168.64.0 - 192.168.64.10
-TF_VAR_services_subnet_cidr_az2: 192.168.80.0/20
+services_subnet_cidr_az2: 192.168.80.0/20
 services_subnet_reserved_ranges_z2: 192.168.80.0 - 192.168.80.10
-TF_VAR_services_subnet_cidr_az3: 192.168.96.0/20
+services_subnet_cidr_az3: 192.168.96.0/20
 services_subnet_reserved_ranges_z3: 192.168.96.0 - 192.168.96.10
-TF_VAR_dynamic_services_subnet_cidr_az1: 192.168.112.0/22
+dynamic_services_subnet_cidr_az1: 192.168.112.0/22
 dynamic_services_subnet_reserved_ranges_z1: 192.168.112.0 - 192.168.112.10
-TF_VAR_dynamic_services_subnet_cidr_az2: 192.168.128.0/22
+dynamic_services_subnet_cidr_az2: 192.168.128.0/22
 dynamic_services_subnet_reserved_ranges_z2: 192.168.128.0 - 192.168.128.10
-TF_VAR_dynamic_services_subnet_cidr_az3: 192.168.144.0/22
+dynamic_services_subnet_cidr_az3: 192.168.144.0/22
 dynamic_services_subnet_reserved_ranges_z3: 192.168.144.0 - 192.168.144.10
-TF_VAR_infra_subnet_cidr_az1: 192.168.6.0/24
+infra_subnet_cidr_az1: 192.168.6.0/24
 infra_subnet_reserved_ranges_z1: 192.168.6.0 - 192.168.6.10
-TF_VAR_rds_subnet_cidr_az1: 192.168.3.0/24
-TF_VAR_rds_subnet_cidr_az2: 192.168.4.0/24
-TF_VAR_rds_subnet_cidr_az3: 192.168.5.0/24
-TF_VAR_opsman_ip_az1: 192.168.0.7
-TF_VAR_nat_ip_az1: 192.168.0.6
-TF_VAR_nat_ip_az2: 192.168.1.6
-TF_VAR_nat_ip_az3: 192.168.2.6
+rds_subnet_cidr_az1: 192.168.3.0/24
+rds_subnet_cidr_az2: 192.168.4.0/24
+rds_subnet_cidr_az3: 192.168.5.0/24
+opsman_ip_az1: 192.168.0.7
+nat_ip_az1: 192.168.0.6
+nat_ip_az2: 192.168.1.6
+nat_ip_az3: 192.168.2.6
 
 container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
 

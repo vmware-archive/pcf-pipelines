@@ -2,13 +2,13 @@
 ***Note:*** While you can run `terraform apply` to deploy the resources, this terraform scripts are meant to be run as part of concourse pipeline.
 ### Run `terraform apply`
 ### Following Environment variables should be set in the shell
-* TF_VAR_aws_access_key=`YOUR_AWS_ACCESS_KEY`
-* TF_VAR_aws_secret_key=`YOUR_AWS_SECERT_KEY`
-* TF_VAR_aws_key_name=`AWS_KEY_NAME`
-* TF_VAR_aws_cert_urn=`AWS_CERT_URN`
-* TF_VAR_rds_db_username=`rds db username`
-* TF_VAR_rds_db_password=`rds db password`
-* TF_VAR_environment=`environment name`
+* aws_access_key_id=`YOUR_AWS_ACCESS_KEY`
+* aws_secret_access_key=`YOUR_AWS_SECERT_KEY`
+* aws_key_name=`AWS_KEY_NAME`
+* aws_cert_urn=`AWS_CERT_URN`
+* rds_db_username=`rds db username`
+* rds_db_password=`rds db password`
+* environment=`environment name`
 
 ## variables.tf
 * set environment
