@@ -18,7 +18,7 @@ function delete-opsman-installation() {
 }
 
 function delete-opsman() {
-  az login --service-principal -u $AZURE_SERVICE_PRINCIPAL_ID -p $AZURE_SERVICE_PRINCIPAL_PASSWORD --tenant $AZURE_TENANT_ID
+  az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
   local opsman_vms=$(az vm list -g $AZURE_TERRAFORM_PREFIX | jq -r ".[].name | select(. |startswith(\"$AZURE_TERRAFORM_PREFIX-ops-manager\"))")
 
   for om_vm_name in $opsman_vms; do
@@ -34,8 +34,8 @@ function delete-infrastructure() {
 
   terraform destroy -force \
     -var "subscription_id=${AZURE_SUBSCRIPTION_ID}" \
-    -var "client_id=${AZURE_SERVICE_PRINCIPAL_ID}" \
-    -var "client_secret=${AZURE_SERVICE_PRINCIPAL_PASSWORD}" \
+    -var "client_id=${AZURE_CLIENT_ID}" \
+    -var "client_secret=${AZURE_CLIENT_SECRET}" \
     -var "tenant_id=${AZURE_TENANT_ID}" \
     -var "location=dontcare" \
     -var "env_name=dontcare" \

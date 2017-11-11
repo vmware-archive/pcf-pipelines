@@ -10,7 +10,7 @@ fi
 #################### Azure Auth  & functions ##################
 #############################################################
 
-az login --service-principal -u ${azure_service_principal_id} -p ${azure_service_principal_password} --tenant ${azure_tenant_id}
+az login --service-principal -u ${azure_client_id} -p ${azure_client_secret} --tenant ${azure_tenant_id}
 
 #############################################################
 ############### Set C0 Dyn DNS             ##################

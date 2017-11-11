@@ -115,8 +115,8 @@ jobs:
       AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
       AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
       AZURE_TENANT_ID: {{azure_tenant_id}}
-      AZURE_SERVICE_PRINCIPAL_ID: {{azure_service_principal_id}}
-      AZURE_SERVICE_PRINCIPAL_PASSWORD: {{azure_service_principal_password}}
+      AZURE_CLIENT_ID: {{azure_client_id}}
+      AZURE_CLIENT_SECRET: {{azure_client_secret}}
       AZURE_REGION: {{azure_region}}
       AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
@@ -164,8 +164,8 @@ jobs:
       AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
       AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
       AZURE_TENANT_ID: {{azure_tenant_id}}
-      AZURE_SERVICE_PRINCIPAL_ID: {{azure_service_principal_id}}
-      AZURE_SERVICE_PRINCIPAL_PASSWORD: {{azure_service_principal_password}}
+      AZURE_CLIENT_ID: {{azure_client_id}}
+      AZURE_CLIENT_SECRET: {{azure_client_secret}}
       AZURE_REGION: {{azure_region}}
       AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       AZURE_VM_ADMIN: {{azure_vm_admin}}
@@ -252,8 +252,8 @@ jobs:
         AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
         AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
         AZURE_TENANT_ID: {{azure_tenant_id}}
-        AZURE_SERVICE_PRINCIPAL_ID: {{azure_service_principal_id}}
-        AZURE_SERVICE_PRINCIPAL_PASSWORD: {{azure_service_principal_password}}
+        AZURE_CLIENT_ID: {{azure_client_id}}
+        AZURE_CLIENT_SECRET: {{azure_client_secret}}
         AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
         AZURE_TERRAFORM_SUBNET_INFRA_CIDR: {{azure_terraform_subnet_infra_cidr}}
         AZURE_TERRAFORM_SUBNET_INFRA_RESERVED: {{azure_terraform_subnet_infra_reserved}}

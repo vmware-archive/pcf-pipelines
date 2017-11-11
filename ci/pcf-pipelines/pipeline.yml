@@ -916,8 +916,8 @@ jobs:
   - task: delegate-dns-zone
     file: pcf-pipelines/ci/tasks/delegate-azure-dns-zone/task.yml
     params:
-      AZURE_SERVICE_PRINCIPAL_ID: {{azure_service_principal_id}}
-      AZURE_SERVICE_PRINCIPAL_PASSWORD: {{azure_service_principal_password}}
+      AZURE_CLIENT_ID: {{azure_client_id}}
+      AZURE_CLIENT_SECRET: {{azure_client_secret}}
       AZURE_TENANT_ID: {{azure_tenant_id}}
       PARENT_RESOURCE_GROUP: {{azure_parent_dns_resource_group}}
       PARENT_DNS_ZONE: {{azure_parent_dns_zone}}

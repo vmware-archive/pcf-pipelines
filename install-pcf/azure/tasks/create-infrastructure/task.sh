@@ -7,7 +7,7 @@ if [[ ! ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-base" ]]; then
 fi
 
 # Get ert subnet if multi-resgroup
-az login --service-principal -u ${AZURE_SERVICE_PRINCIPAL_ID} -p ${AZURE_SERVICE_PRINCIPAL_PASSWORD} --tenant ${AZURE_TENANT_ID}
+az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}
 az account set --subscription ${AZURE_SUBSCRIPTION_ID}
 ERT_SUBNET_CMD="az network vnet subnet list -g network-core --vnet-name vnet-pcf --output json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
 ERT_SUBNET=$(eval ${ERT_SUBNET_CMD})
@@ -48,8 +48,8 @@ echo "==========================================================================
 
 terraform plan \
   -var "subscription_id=${AZURE_SUBSCRIPTION_ID}" \
-  -var "client_id=${AZURE_SERVICE_PRINCIPAL_ID}" \
-  -var "client_secret=${AZURE_SERVICE_PRINCIPAL_PASSWORD}" \
+  -var "client_id=${AZURE_CLIENT_ID}" \
+  -var "client_secret=${AZURE_CLIENT_SECRET}" \
   -var "tenant_id=${AZURE_TENANT_ID}" \
   -var "location=${AZURE_REGION}" \
   -var "env_name=${AZURE_TERRAFORM_PREFIX}" \
