@@ -53,7 +53,10 @@ pcf_ert_ssl_key:
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
 
-routing_disable_http: false
+# disabling http on gorouter is not yet supported because health checks can't be done in HTTPS
+# routing_disable_http: false
+# In the meantime, we only disable http on the GCP load balancer
+disable_http_on_gcp_lb: false
 
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
 # Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.

@@ -73,6 +73,8 @@ resource "google_compute_global_forwarding_rule" "cf-http" {
   ip_address = "${google_compute_global_address.pcf.address}"
   target     = "${google_compute_target_http_proxy.http_lb_proxy.self_link}"
   port_range = "80"
+
+  count = "${var.disable_http_on_gcp_lb == "false" ? 1 : 0}"
 }
 
 resource "google_compute_global_forwarding_rule" "cf-https" {
