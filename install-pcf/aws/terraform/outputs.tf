@@ -5,13 +5,13 @@ output "region" {
     value = "${var.aws_region}"
 }
 output "az1" {
-    value = "${var.az1}"
+    value = "${var.aws_az1}"
 }
 output "az2" {
-    value = "${var.az2}"
+    value = "${var.aws_az2}"
 }
 output "az3" {
-    value = "${var.az3}"
+    value = "${var.aws_az3}"
 }
 output "vpc_id" {
     value = "${aws_vpc.PcfVpc.id}"

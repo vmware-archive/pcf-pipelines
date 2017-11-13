@@ -1,7 +1,7 @@
 # Create OpsMan instance
 resource "aws_instance" "opsmman_az1" {
     ami = "${var.opsman_ami}"
-    availability_zone = "${var.az1}"
+    availability_zone = "${var.aws_az1}"
     instance_type = "${var.opsman_instance_type}"
     key_name = "${var.aws_key_name}"
     vpc_security_group_ids = ["${aws_security_group.directorSG.id}"]
