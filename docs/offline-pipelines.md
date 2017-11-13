@@ -4,16 +4,18 @@
 
 Offline Pipelines are a solution for computer networks physically isolated from the Internet.
 
-All resources must be provided from within the airgapped environment. For this to happen they first have to be downloaded and packaged in an Internet connected network.
+The pipelines require all artifacts, such as release files, Docker images and scripts, to be provided from within the airgapped environment. For this to happen they first have to be downloaded and packaged in an Internet connected network.
 
 
 ### Implementation
 
-The Offline Pipelines rely on Concourse's [s3-resource](https://github.com/concourse/s3-resource). There are many S3-compatible blobstores that can be used from within airgapped environments such as [Minio](https://minio.io/) and [Dell EMC Elastic Cloud Storage](https://www.dellemc.com/en-us/storage/ecs/index.htm).
+The offline pipelines implementation rely on Concourse's [s3-resource](https://github.com/concourse/s3-resource) to retrieve the required resources from an S3-compatible blobstore. There are many S3-compatible blobstores that can be used from within airgapped environments such as [Minio](https://minio.io/) and [Dell EMC Elastic Cloud Storage](https://www.dellemc.com/en-us/storage/ecs/index.htm).
+
+The current implementation of these pipelines applies to airgapped environments where the internal S3 repository is bootstrapped by moving packaged tar files previously packaged from another Internet connected environment. Also, it assumes the existence of one Concourse server in each environment to run the corresponding pipeline.
 
 #### Bootstrap
 
-The offline environment is bootstrapped with help of two pipelines, `create-offline-pinned-pipelines` and `unpack-pcf-pipelines-combined`, that are meant to be used to facilitate physical transfer of artifacts to the airgapped environment.
+As illustrated in the diagram, two pipelines are provided to help bootstrap the offline environment, `create-offline-pinned-pipelines` and `unpack-pcf-pipelines-combined`, that are meant to be used to facilitate physical transfer of artifacts to the airgapped environment.
 
 ![offline-full-diagram](images/offline-full-diagram.png)
 
