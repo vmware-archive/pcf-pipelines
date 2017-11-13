@@ -64,7 +64,7 @@ jobs:
       trigger: true
       params:
         globs:
-        - "*pivotal"
+        - "{{product_globs}}"
 
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml

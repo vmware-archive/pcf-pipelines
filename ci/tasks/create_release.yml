@@ -42,6 +42,7 @@ run:
       sed \
         -e 's/^product_slug:/# product_slug:/' \
         -e 's/^product_name:/# product_name:/' \
+        -e 's/\"\*pivotal\"/\"cf\*pivotal\"/' \
         upgrade-tile/params.yml > upgrade-ert/params.yml
 
       cat ci/yaml_license_header <(
@@ -145,7 +146,7 @@ run:
       user_group_ids:
       - 6   # Pivotal Internal Early Access
       - 159 # C[0] PCF Automation Pipelines Access
-      - 64  #| Pivotal SI Partners Known and Potential Partners. 
+      - 64  #| Pivotal SI Partners Known and Potential Partners.
     EOF
 
     exclusions="--exclude .git* --exclude ci --exclude *.go --exclude run_bash_testsuite.sh"

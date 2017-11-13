@@ -25,7 +25,3 @@
 - op: replace
   path: /jobs/name=apply-changes/plan/0/aggregate/get=pivnet-product/passed
   value: [upload-and-stage-ert]
-
-- op: replace
-  path: /jobs/name=upload-and-stage-ert/get=pivnet-product/params/globs
-  value: ["cf*pivotal"]
