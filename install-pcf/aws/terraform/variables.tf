@@ -8,9 +8,9 @@ variable "prefix" {}
 variable "opsman_ami" {}
 variable "amis_nat" {}
 variable "aws_region" {}
-variable "az1" {}
-variable "az2" {}
-variable "az3" {}
+variable "aws_az1" {}
+variable "aws_az2" {}
+variable "aws_az3" {}
 variable "route53_zone_id" {}
 
 /*
