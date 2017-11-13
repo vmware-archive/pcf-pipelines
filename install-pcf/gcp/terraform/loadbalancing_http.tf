@@ -3,6 +3,11 @@ resource "google_compute_instance_group" "ert-http-lb" {
   name        = "${var.prefix}-http-lb"
   description = "terraform generated pcf instance group that is multi-zone for http/https load balancing"
   zone        = "${element(list(var.gcp_zone_1,var.gcp_zone_2,var.gcp_zone_3), count.index)}"
+
+  named_port {
+    name = "http"
+    port = 80
+  }
 }
 
 resource "google_compute_backend_service" "ert_http_lb_backend_service" {
