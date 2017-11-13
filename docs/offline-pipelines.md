@@ -1,6 +1,8 @@
 ## Offline Pipelines for Airgapped Environments
 
-Offline Pipelines are a solution for computer networks physically isolated from the Internet. 
+<img src="images/offline-env-diagram.png" alt="offline-env-diagram" width="320" align="right"/>
+
+Offline Pipelines are a solution for computer networks physically isolated from the Internet.
 
 All resources must be provided from within the airgapped environment. For this to happen they first have to be downloaded and packaged in an Internet connected network.
 
@@ -12,6 +14,8 @@ The Offline Pipelines rely on Concourse's [s3-resource](https://github.com/conco
 #### Bootstrap
 
 The offline environment is bootstrapped with help of two pipelines, `create-offline-pinned-pipelines` and `unpack-pcf-pipelines-combined`, that are meant to be used to facilitate physical transfer of artifacts to the airgapped environment.
+
+![offline-full-diagram](images/offline-full-diagram.png)
 
 [`create-offline-pinned-pipelines`](https://github.com/pivotal-cf/pcf-pipelines/tree/master/create-offline-pinned-pipelines) is used to:
 
@@ -41,4 +45,3 @@ From this point the `pcf-pipelines` folder in the configured S3 bucket in the ai
 #### Bootstrapping
 
 For the `unpack-pcf-pipelines-combined` to work there must be a single manual transfer of the czero-cflinuxfs2 tarball to the czero-cflinuxfs2 folder within the airgapped environment's S3 storage. Only after that is done can the `unpack-pcf-pipelines-combined` pipeline be set and unpaused.
-
