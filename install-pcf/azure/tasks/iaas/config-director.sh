@@ -12,8 +12,8 @@ iaas_configuration=$(
   jq -n \
     --arg subscription_id "${AZURE_SUBSCRIPTION_ID}" \
     --arg tenant_id "${AZURE_TENANT_ID}" \
-    --arg client_id "${AZURE_SERVICE_PRINCIPAL_ID}" \
-    --arg client_secret "${AZURE_SERVICE_PRINCIPAL_PASSWORD}" \
+    --arg client_id "${AZURE_CLIENT_ID}" \
+    --arg client_secret "${AZURE_CLIENT_SECRET}" \
     --arg resource_group_name "${AZURE_TERRAFORM_PREFIX}" \
     --arg bosh_storage_account_name "${ENV_SHORT_NAME}root" \
     --arg deployments_storage_account_name "*boshvms*" \

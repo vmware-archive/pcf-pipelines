@@ -5,8 +5,8 @@ azure_child_dns_resource_group:
 azure_child_dns_zone_name:
 azure_parent_dns_resource_group:
 azure_parent_dns_zone:
-azure_service_principal_id:
-azure_service_principal_password:
+azure_client_id:
+azure_client_secret:
 azure_tenant_id:
 create_offline_pinned_pipelines_params:
 fly_basic_auth_password:

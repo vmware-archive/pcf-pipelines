@@ -5,8 +5,8 @@ set -eu
 function main() {
   az login \
     --service-principal \
-    -u "${AZURE_SERVICE_PRINCIPAL_ID}" \
-    -p "${AZURE_SERVICE_PRINCIPAL_PASSWORD}" \
+    -u "${AZURE_CLIENT_ID}" \
+    -p "${AZURE_CLIENT_SECRET}" \
     --tenant "${AZURE_TENANT_ID}"
 
   echo "Adding new child dns NS record set..."

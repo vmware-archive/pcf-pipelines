@@ -18,8 +18,8 @@ params:
   dyn_token:
   azure_subscription_id:
   azure_tenant_id:
-  azure_service_principal_id:
-  azure_service_principal_password:
+  azure_client_id:
+  azure_client_secret:
   azure_region:
   azure_terraform_prefix:
   azure_pcf_terraform_template:

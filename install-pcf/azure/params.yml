@@ -22,8 +22,8 @@ pcf_ssh_key_priv: |
 
 # Opsman Settings
 opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
-pcf_opsman_admin_username: CHANGEME
-pcf_opsman_admin_password: CHANGEME
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
 
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
@@ -52,7 +52,7 @@ arg_wipe: wipe
 # The storage account and container that will be used for your terraform state
 terraform_azure_account_name: CHANGEME
 terraform_azure_access_key: CHANGEME
-terraform_statefile_container: CHANGEME
+azure_storage_container_name: CHANGEME
 
 ### azure ###
 # IF the azure_access_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
@@ -77,8 +77,8 @@ azure_multi_resgroup_infra_vnet_name:
 
 azure_pcf_terraform_template: c0-azure-base # 'Template' for pipeline to determine Terrafrom & Opsman JSON config
 azure_region:
-azure_service_principal_id:
-azure_service_principal_password:
+azure_client_id:
+azure_client_secret:
 azure_subscription_id:
 azure_tenant_id:
 azure_terraform_prefix:
