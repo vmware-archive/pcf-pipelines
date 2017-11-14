@@ -74,8 +74,6 @@ TF_VAR_az3: us-east-1d
 # For terraform state file (http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region)
 S3_ENDPOINT: https://s3.amazonaws.com
 S3_OUTPUT_BUCKET:
-# Some regions do not support v2 and require v4 (http://docs.aws.amazon.com/general/latest/gr/signature-version-2.html)
-AWS_SIGNATURE_VERSION: 2
 
 # The ERT domain to use; *.cfapps.<ert-domain> and *.sys.<ert-domain> will be used
 ERT_DOMAIN:

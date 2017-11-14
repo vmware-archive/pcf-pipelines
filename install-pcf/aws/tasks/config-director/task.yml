@@ -16,7 +16,6 @@ params:
   PEM:
   AWS_REGION:
   S3_ENDPOINT:
-  AWS_SIGNATURE_VERSION:
   TRUSTED_CERTIFICATES:
   ert_subnet_reserved_ranges_z1:
   ert_subnet_reserved_ranges_z2:
