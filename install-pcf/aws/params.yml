@@ -71,7 +71,7 @@ aws_az1: us-east-1a
 aws_az2: us-east-1b
 aws_az3: us-east-1d
 
-# For terraform state file
+# For terraform state file (http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region)
 S3_ENDPOINT: https://s3.amazonaws.com
 S3_OUTPUT_BUCKET:
 

@@ -45,7 +45,7 @@ read -r -d '' director_configuration <<EOF
     "bucket_name": "$s3_pcf_bosh",
     "access_key": "$aws_access_key_id",
     "secret_key": "$aws_secret_access_key",
-    "signature_version": "2",
+    "signature_version": "4",
     "region": "$AWS_REGION"
   }
 }
