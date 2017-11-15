@@ -1,3 +1,8 @@
+# The version of pcf-pipelines used
+pcf_pipelines_version: CHANGEME # This should be the same as the git reference checked out
+                                # on the machine that you're editing this file on
+                                # e.g.: v0.19.2
+
 # GCP project to create the infrastructure in
 gcp_project_id: CHANGEME
 
