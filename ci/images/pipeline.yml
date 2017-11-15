@@ -53,7 +53,7 @@ resources:
 - name: yaml-patch
   type: github-release
   source:
-    user: krishicks
+    user: pivotal-cf
     repository: yaml-patch
     access_token: {{images_pipeline_github_token}}
 
