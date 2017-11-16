@@ -18,6 +18,7 @@ resources:
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
+    tag_filter: {{pcf_pipelines_version}}
     private_key: {{git_private_key}}
 
 - name: terraform-state
