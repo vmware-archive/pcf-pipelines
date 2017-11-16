@@ -78,7 +78,7 @@ third-party sources of pipeline dependencies
 ## Customizing the pipelines
 
 It's possible to customize `pcf-pipelines` to suit your particular needs using
-[`yaml-patch`](https://github.com/krishicks/yaml-patch).
+[`yaml-patch`](https://github.com/pivotal-cf/yaml-patch).
 
 
 This tool supports all operations from [RFC-6902](https://tools.ietf.org/html/rfc6902) (for YAML documents instead of JSON). which can be applied to a source YAML file, such as `pcf-pipelines` pipeline definition files. It allows for a repeatable and automated mechanism to apply the same local customization operations to one or more pipeline YAML files for every new release of `pcf-pipelines` that gets delivered.
