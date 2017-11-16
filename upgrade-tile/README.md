@@ -73,7 +73,7 @@ upgrade from `--.--.n` to `--.--.n+1`.
 
 If your intent is to run `Apply-Changes` only manually or on a schedule for your tile upgrades, then you can update the `trigger` parameter for the `apply-changes` job by using the  [gated-apply-changes-job.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/operations/gated-apply-changes-job.yml) patch operation.
 
-For each one of your `upgrade-tile` pipelines, run the following [`yaml-patch`](https://github.com/krishicks/yaml-patch) command before running the corresponding `fly set-pipeline` command:
+For each one of your `upgrade-tile` pipelines, run the following [`yaml-patch`](https://github.com/pivotal-cf/yaml-patch) command before running the corresponding `fly set-pipeline` command:
 
 ```
 cat upgrade-tile/pipeline.yml | yaml-patch -o /operations/gated-apply-changes-job.yml > new-pipeline.yml
