@@ -14,6 +14,8 @@ function main() {
   params="$(migrate "${params}" "om_ssh_pwd" "opsman_ssh_password")"
   params="$(migrate "${params}" "vcenter_data_center" "vcenter_datacenter")"
   params="$(migrate "${params}" "om_data_store" "vcenter_datastore")"
+  params="$(append_param "${params}" "vcenter_ca_cert")"
+  params="$(append_param "${params}" "vcenter_insecure")"
 
   echo "${params}"
 }
@@ -28,6 +30,15 @@ function migrate() {
   fi
 
   sed -e "s/^${old_param}:/${new_param}:/g" <<< "${params}"
+}
+
+function append_param() {
+  local params="${1}"
+  local new_param="${2}"
+  echo "${params}"
+  if [[ -z $(grep "^${new_param}:" <<< "${params}") ]]; then
+    echo "${new_param}: "
+  fi
 }
 
 main ${@}
