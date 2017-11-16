@@ -50,7 +50,7 @@ This pipeline can also prevent pipeline collision so that you can schedule when 
 
 #### <a name="change-time-of-scheduler"> Changing the time of the pipeline's scheduler
 
-To change the time window for the `schedule` resource in the pipeline, either manually change its time parameters by following [time resource documentation](https://github.com/concourse/time-resource) or use [`yaml-patch`](https://github.com/krishicks/yaml-patch) to do it in an automated fashion (recommended).
+To change the time window for the `schedule` resource in the pipeline, either manually change its time parameters by following [time resource documentation](https://github.com/concourse/time-resource) or use [`yaml-patch`](https://github.com/pivotal-cf/yaml-patch) to do it in an automated fashion (recommended).
 
 To use `yaml-patch`, update a local copy of the sample operation file
  [change-schedule.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/operations/change-schedule.yml) with the desired time/location/interval and then apply it to the pipeline with the following command:
