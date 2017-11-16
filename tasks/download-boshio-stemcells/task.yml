@@ -28,7 +28,6 @@ outputs:
   - name: stemcells
 
 params:
-  IAAS_TYPE:
   API_TOKEN:
 
 run:

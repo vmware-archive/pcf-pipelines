@@ -18,7 +18,6 @@ set -eu
 
 function main() {
   if [ -z "$API_TOKEN" ]; then abort "The required env var API_TOKEN was not set for pivnet"; fi
-  if [ -z "$IAAS_TYPE" ]; then abort "The required env var IAAS_TYPE was not set"; fi
 
   local cwd=$PWD
   local download_dir="${cwd}/stemcells"
