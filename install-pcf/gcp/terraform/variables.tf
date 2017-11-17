@@ -44,3 +44,6 @@ variable "db_locket_username" {}
 variable "db_locket_password" {}
 variable "db_silk_username" {}
 variable "db_silk_password" {}
+variable "disable_http_on_gcp_lb" {
+  default = false
+}

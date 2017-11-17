@@ -59,6 +59,7 @@ terraform plan \
   -var "db_locket_password=${DB_LOCKET_PASSWORD}" \
   -var "db_silk_username=${DB_SILK_USERNAME}" \
   -var "db_silk_password=${DB_SILK_PASSWORD}" \
+  -var "disable_http_on_gcp_lb=${DISABLE_HTTP_ON_GCP_LB}" \
   -out terraform.tfplan \
   -state terraform-state/terraform.tfstate \
   pcf-pipelines/install-pcf/gcp/terraform

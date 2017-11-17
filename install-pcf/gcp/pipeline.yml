@@ -144,6 +144,8 @@ jobs:
       DB_LOCKET_PASSWORD: {{db_locket_password}}
       DB_SILK_USERNAME: {{db_silk_username}}
       DB_SILK_PASSWORD: {{db_silk_password}}
+      # Temporary fix for gorouter not supporting https health checks
+      DISABLE_HTTP_ON_GCP_LB: {{disable_http_on_gcp_lb}}
 
 - name: configure-director
   serial_groups: [opsman]
@@ -295,7 +297,7 @@ jobs:
       HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
       ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
       HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
-      routing_disable_http: {{routing_disable_http}}
+      routing_disable_http: false
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       # aws specific
