@@ -97,7 +97,7 @@ resources:
 - name: steamroll
   type: github-release
   source:
-    user: krishicks
+    user: pivotal-cf
     repository: concourse-pipeline-steamroller
     access_token: {{images_pipeline_github_token}}
 
