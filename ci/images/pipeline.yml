@@ -17,7 +17,7 @@ resources:
 - name: pcf-pipelines-image
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: latest
     username: czero
     password: {{czero_dockerhub_password}}
@@ -25,7 +25,7 @@ resources:
 - name: pcf-pipelines-image-rc
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: release-candidate
     username: czero
     password: {{czero_dockerhub_password}}
@@ -148,7 +148,7 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/rootfs}
       inputs:
       - name: pcf-pipelines
       - name: om
@@ -211,7 +211,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
           tag: release-candidate
       run:
         path: sh
