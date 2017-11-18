@@ -1,0 +1,15 @@
+- op: replace
+  path: /jobs/name=upgrade-opsmgr/plan/task=download-stemcells
+  value:
+    do:
+    - task: download-stemcells
+      file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
+      params:
+        API_TOKEN: {{pivnet_token}}
+        IAAS_TYPE: {{iaas_type}}
+    - task: download-boshio-stemcells
+      file: pcf-pipelines/tasks/download-boshio-stemcells/task.yml
+      params:
+        API_TOKEN: {{pivnet_token}}
+      input_mapping:
+        pivnet-stemcells: stemcells
