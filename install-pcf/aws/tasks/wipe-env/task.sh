@@ -54,7 +54,7 @@ terraform destroy \
   -var "opsman_allow_https=0" \
   -var "opsman_allow_https_cidr_ranges=[]" \
   -var "aws_key_name=dontcare" \
-  -var "aws_cert_arn=dontcare" \
+  -var "aws_cert_arn=arn:a:a:aa-a-1:012345678912:a" \
   -var "amis_nat=dontcare" \
   -var "aws_az1=dontcare" \
   -var "aws_az2=dontcare" \
