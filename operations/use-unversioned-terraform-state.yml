@@ -43,7 +43,7 @@
         image_resource:
           type: docker
           source:
-            repository: czero/cflinuxfs2
+            repository: czero/rootfs
           inputs:
           - name: terraform-state
           - name: tfstate-version

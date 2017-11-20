@@ -58,7 +58,7 @@ resources:
 - name: czero-cflinuxfs2
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: latest
 
 - name: czero-cflinuxfs2-tarball
@@ -150,7 +150,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
       - name: operations-manager
       outputs:
@@ -186,7 +186,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
       - name: elastic-runtime
       outputs:
@@ -257,7 +257,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
       - name: pcf-pipelines-combined-version
       - name: pcf-pipelines-tarball
@@ -314,7 +314,7 @@ jobs:
           image_resource:
             type: docker-image
             source:
-              repository: czero/cflinuxfs2
+              repository: czero/rootfs
           inputs:
           - name: pcf-pipelines-tarball
           outputs:
@@ -327,7 +327,7 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/rootfs}
       inputs:
       - name: pcf-pipelines-combined-version
       - name: czero-cflinuxfs2
@@ -452,7 +452,7 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/rootfs}
       inputs:
       - name: pcf-pipelines-offline-pinned-tarball
       - name: pcf-pipelines-combined-version
@@ -521,7 +521,7 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/rootfs}
       inputs:
         - name: pcf-pipelines-combined-version
       run:
