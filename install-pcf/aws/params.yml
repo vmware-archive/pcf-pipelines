@@ -1,3 +1,10 @@
+# Setting appropriate Application Security Groups is critical for a secure
+# deployment. Change the value of the param below to "X" to acknowledge that
+# once the Elastic Runtime deployment completes, you will review and set the
+# appropriate application security groups.
+# See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
+security_acknowledgement: CHANGEME
+
 pivnet_token:
 git_private_key:
 

@@ -1,3 +1,10 @@
+# Setting appropriate Application Security Groups is critical for a secure
+# deployment. Change the value of the param below to "X" to acknowledge that
+# once the Elastic Runtime deployment completes, you will review and set the
+# appropriate application security groups.
+# See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
+security_acknowledgement:
+
 # Pipeline resource configuration
 pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
@@ -137,7 +144,6 @@ router_tls_ciphers:         # The recommended setting is "ECDHE-RSA-AES128-GCM-S
 haproxy_tls_ciphers:        # The recommended setting is "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
 
 disable_http_proxy: false
-security_acknowledgement:  # Must be set to 'X'. See explanation here: https://docs.pivotal.io/pivotalcf/latest/customizing/config-er-vmware.html#app-security
 
 ## TCP routing and routing services
 tcp_routing: disable                    # Enable/disable TCP routing (enable|disable)
