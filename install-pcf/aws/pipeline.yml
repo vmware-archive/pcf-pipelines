@@ -314,6 +314,7 @@ jobs:
       db_locket_password: {{db_locket_password}}
       db_silk_username: {{db_silk_username}}
       db_silk_password: {{db_silk_password}}
+      SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
       # azure specific
       pcf_ert_saml_cert:
       pcf_ert_saml_key:

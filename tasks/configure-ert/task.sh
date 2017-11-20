@@ -146,6 +146,7 @@ cf_properties=$(
     --arg router_tls_ciphers "$ROUTER_TLS_CIPHERS" \
     --arg haproxy_tls_ciphers "$HAPROXY_TLS_CIPHERS" \
     --arg routing_disable_http "$routing_disable_http" \
+    --arg security_acknowledgement "$SECURITY_ACKNOWLEDGEMENT" \
     --arg iaas $pcf_iaas \
     --arg pcf_ert_domain "$pcf_ert_domain" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
@@ -207,7 +208,7 @@ cf_properties=$(
       ".ha_proxy.skip_cert_verify": { "value": true },
       ".properties.container_networking_network_cidr": { "value": $container_networking_nw_cidr },
       ".properties.route_services.enable.ignore_ssl_cert_verification": { "value": true },
-      ".properties.security_acknowledgement": { "value": "X" },
+      ".properties.security_acknowledgement": { "value": $security_acknowledgement },
       ".properties.system_database": { "value": "external" },
       ".properties.system_database.external.port": { "value": "3306" },
       ".properties.system_database.external.host": { "value": $db_host },
