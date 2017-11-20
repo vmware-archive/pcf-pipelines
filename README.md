@@ -21,11 +21,11 @@ These pipelines are found in the `install-pcf` directory, sorted by IaaS.
 
 | IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |
-| vSphere | v0.19.2 | 1.12.x  | 1.12.x  |
-| Azure | v0.19.2 | 1.12.x | 1.12.x |
-| AWS | v0.19.2 | 1.12.x | 1.12.x |
-| GCP | v0.19.2 | 1.12.x  | 1.12.x  |
-| OpenStack | v0.19.2 | 1.12.x  | 1.12.x  |
+| vSphere | v21 | 1.12.x  | 1.12.x  |
+| Azure | v21 | 1.12.x | 1.12.x |
+| AWS | v21 | 1.12.x | 1.12.x |
+| GCP | v21 | 1.12.x  | 1.12.x  |
+| OpenStack | v21 | 1.12.x  | 1.12.x  |
 
 
 | IAAS | pipelines release | OM version | ERT version |
