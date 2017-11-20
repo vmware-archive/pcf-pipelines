@@ -50,6 +50,8 @@ for attempt in $(seq 60); do
   fi
 done
 
+terraform init pcf-pipelines/install-pcf/gcp/terraform
+
 echo "Deleting provisioned infrastructure..."
 terraform destroy -force \
   -state $root/terraform-state/*.tfstate \

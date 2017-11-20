@@ -18,6 +18,8 @@ if [[ -n "${OPSMAN_ALLOW_HTTPS_CIDR_RANGES// }" ]]; then
   OPSMAN_ALLOW_HTTPS_CIDR_LIST='["'${OPSMAN_ALLOW_HTTPS_CIDR_RANGES//\,/\"\,\"}'"]'
 fi
 
+terraform init pcf-pipelines/install-pcf/aws/terraform
+
 terraform plan \
   -state terraform-state/terraform.tfstate \
   -var "opsman_ami=${ami}" \

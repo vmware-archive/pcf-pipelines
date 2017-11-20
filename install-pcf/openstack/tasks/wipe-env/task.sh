@@ -15,6 +15,8 @@ if [[ $opsman_available == "available" ]]; then
     delete-installation
 fi
 
+terraform init pcf-pipelines/install-pcf/openstack/terraform
+
 echo "Deleting provisioned infrastructure..."
 terraform destroy -force \
   -var "os_tenant_name=${OS_PROJECT_NAME}" \

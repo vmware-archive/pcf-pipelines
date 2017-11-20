@@ -46,6 +46,8 @@ echo "==========================================================================
 echo "Executing Terraform Plan ..."
 echo "=============================================================================================="
 
+terraform init "pcf-pipelines/install-pcf/azure/terraform/${AZURE_PCF_TERRAFORM_TEMPLATE}"
+
 terraform plan \
   -var "subscription_id=${AZURE_SUBSCRIPTION_ID}" \
   -var "client_id=${AZURE_CLIENT_ID}" \

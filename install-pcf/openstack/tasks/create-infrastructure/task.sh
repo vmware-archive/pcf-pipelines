@@ -13,6 +13,8 @@ function main() {
   local opsman_fixed_ip=$(echo $INFRA_SUBNET_CIDR|cut -d. -f 1,2,3).5
   echo "Opsman Image: ${opsman_image_name}"
 
+  terraform init "$ROOT/pcf-pipelines/install-pcf/openstack/terraform"
+
   terraform plan \
     -var "os_tenant_name=${OS_PROJECT_NAME}" \
     -var "os_username=${OS_USERNAME}" \

@@ -38,6 +38,8 @@ if [ -n "$opsman_instance_ids" ]; then
   aws ec2 terminate-instances --instance-ids $opsman_instance_ids
 fi
 
+terraform init
+
 terraform destroy \
   -force \
   -var "aws_access_key_id=${AWS_ACCESS_KEY_ID}" \
