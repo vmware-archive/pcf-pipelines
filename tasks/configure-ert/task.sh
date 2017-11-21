@@ -5,17 +5,6 @@ export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$pcf_ert_domain"
 
 source pcf-pipelines/functions/generate_cert.sh
 
-if [[ ${pcf_ert_ssl_cert} == "" || ${pcf_ert_ssl_cert} == "generate" ]]; then
-  domains=(
-    "*.sys.${pcf_ert_domain}"
-    "*.cfapps.${pcf_ert_domain}"
-  )
-
-  certificates=$(generate_cert "${domains[*]}")
-  pcf_ert_ssl_cert=`echo $certificates | jq --raw-output '.certificate'`
-  pcf_ert_ssl_key=`echo $certificates | jq --raw-output '.key'`
-fi
-
 saml_domains=(
   "*.sys.${pcf_ert_domain}"
   "*.login.sys.${pcf_ert_domain}"
@@ -27,6 +16,17 @@ saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
 saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
 if [[ "${pcf_iaas}" == "aws" ]]; then
+  if [[ ${pcf_ert_ssl_cert} == "" || ${pcf_ert_ssl_cert} == "generate" ]]; then
+    domains=(
+      "*.sys.${pcf_ert_domain}"
+      "*.cfapps.${pcf_ert_domain}"
+    )
+
+    certificates=$(generate_cert "${domains[*]}")
+    pcf_ert_ssl_cert=`echo $certificates | jq --raw-output '.certificate'`
+    pcf_ert_ssl_key=`echo $certificates | jq --raw-output '.key'`
+  fi
+
   cd terraform-state
     output_json=$(terraform output --json -state *.tfstate)
     db_host=$(echo $output_json | jq --raw-output '.db_host.value')
@@ -37,16 +37,14 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
 elif [[ "${pcf_iaas}" == "gcp" ]]; then
   cd terraform-state
     db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.sql_instance_ip.value')
+    pcf_ert_ssl_cert="$(terraform output ert_certificate)"
+    pcf_ert_ssl_key="$(terraform output ert_certificate_key)"
   cd -
 
   if [ -z "$db_host" ]; then
     echo Failed to get SQL instance IP from Terraform state file
     exit 1
   fi
-elif [[ "${pcf_iaas}" == "azure" ]]; then
-  cd terraform-state
-    db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.mysql_dns.value')
-  cd -
 fi
 
 cf_network=$(
