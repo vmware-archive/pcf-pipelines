@@ -8,7 +8,6 @@ security_acknowledgement: CHANGEME
 pivnet_token: CHANGEME                  # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
 ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
-git_private_key:                        # Optional - if your git repo requires an SSH key.
 
 # The following should be set to a unique prefix. It will be used to prefix all
 # the terraform resources created by the pipeline
