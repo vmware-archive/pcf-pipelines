@@ -5,17 +5,16 @@
 # See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
 security_acknowledgement: CHANGEME
 
-pivnet_token:
-git_private_key:
-
-opsman_major_minor_version: ^1\.12\..*$
-ert_major_minor_version: ^1\.12\..*$
+pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
+ert_major_minor_version: ^1\.12\..*$ # PCF Elastic Runtime minor version to track
+git_private_key:          # Optional - if your git repo requires an SSH key.
 
 # Errands to disable prior to deploying ERT
 # Valid values:
 #   all
 #   none
-#   "" (empty string)
+#   "" (empty string - equivalent to none)
 #   Any combination of the following, separated by comma:
 #     smoke-tests
 #     push-apps-manager
@@ -31,7 +30,7 @@ ert_errands_to_disable: none
 db_master_username:
 db_master_password:
 
-# ERT Database Credentials
+# ERT Database Credentials - required
 db_app_usage_service_username:
 db_app_usage_service_password:
 db_autoscale_username:
@@ -58,9 +57,10 @@ db_locket_username:
 db_locket_password:
 
 # Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
+# Must be globally unique.
 terraform_prefix:
 
-# Optional certificates to add to BOSH director
+# Optional PEM-encoded certificates to add to BOSH VMs
 director_certificates:
 
 # This key must be a key with admin access
@@ -95,12 +95,14 @@ ERT_SSL_KEY:
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
 
+# Disable HTTP on gorouters (true|false)
 routing_disable_http: false
 
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
 # Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
-router_tls_ciphers:         # The recommended setting is "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
-haproxy_tls_ciphers:        # The recommended setting is "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384".
+# The recommended settings are filled in below, change as necessary.
+router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
 
 # The domain to access Operations Manager; opsman.<ert-domain>
 opsman_domain_or_ip_address:
@@ -185,4 +187,5 @@ nat_ip_az3: 192.168.2.6
 
 container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
 
+# Whether or not the ERT VMs are internet connected.
 internet_connected: false

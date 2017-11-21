@@ -5,6 +5,11 @@
 # See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
 security_acknowledgement: CHANGEME
 
+pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
+ert_major_minor_version: ^1\.12\..*$ # PCF Elastic Runtime minor version to track
+git_private_key:          # Optional - if your git repo requires an SSH key.
+
 # GCP project to create the infrastructure in
 gcp_project_id: CHANGEME
 
@@ -32,19 +37,13 @@ gcp_storage_secret_key: CHANGEME
 
 terraform_statefile_bucket: CHANGEME
 
-git_private_key: |
-  CHANGEME
-
-# Pivotal Network token: https://network.pivotal.io/users/dashboard/edit-profile
-pivnet_token: CHANGEME
-
 container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
 
 # Operations Manager credentials to set
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 
-# Operations Manager Trusted Certificates
+# Optional PEM-encoded certificates to add to BOSH director
 opsman_trusted_certs: |
 
 # Elastic Runtime Domain
@@ -60,6 +59,7 @@ pcf_ert_ssl_key:
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
 
+# Disable HTTP on gorouters (true|false)
 routing_disable_http: false
 
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
@@ -82,12 +82,6 @@ haproxy_tls_ciphers:        # The recommended setting is "DHE-RSA-AES128-GCM-SHA
 #     autoscaling-register-broker
 #     nfsbrokerpush
 ert_errands_to_disable: none
-
-# PCF Operations Manager minor version to install
-opsman_major_minor_version: ^1\.12\..*$
-
-# PCF Elastic Runtime minor version to install
-ert_major_minor_version: ^1\.12\..*$
 
 # DB Creds
 # Usernames must be 16 characters or fewer
@@ -136,4 +130,5 @@ mysql_backups_s3_access_key_id:
 mysql_backups_s3_secret_access_key:
 mysql_backups_s3_cron_schedule:
 
+# Whether or not the ERT VMs are internet connected.
 internet_connected: false
