@@ -5,10 +5,10 @@
 # See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
 security_acknowledgement: CHANGEME
 
-pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+pivnet_token: CHANGEME                  # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
-ert_major_minor_version: ^1\.12\..*$ # PCF Elastic Runtime minor version to track
-git_private_key:          # Optional - if your git repo requires an SSH key.
+ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
+git_private_key:                        # Optional - if your git repo requires an SSH key.
 
 # Errands to disable prior to deploying ERT
 # Valid values:
@@ -26,49 +26,49 @@ git_private_key:          # Optional - if your git repo requires an SSH key.
 #     nfsbrokerpush
 ert_errands_to_disable: none
 
-# RDS Master Credentials
-db_master_username:
-db_master_password:
+# RDS Master Credentials - Required
+db_master_username: CHANGEME
+db_master_password: CHANGEME
 
-# ERT Database Credentials - required
-db_app_usage_service_username:
-db_app_usage_service_password:
-db_autoscale_username:
-db_autoscale_password:
-db_diego_username:
-db_diego_password:
-db_notifications_username:
-db_notifications_password:
-db_routing_username:
-db_routing_password:
-db_uaa_username:
-db_uaa_password:
-db_ccdb_username:
-db_ccdb_password:
-db_accountdb_username:
-db_accountdb_password:
-db_networkpolicyserverdb_username:
-db_networkpolicyserverdb_password:
-db_nfsvolumedb_username:
-db_nfsvolumedb_password:
-db_silk_username:
-db_silk_password:
-db_locket_username:
-db_locket_password:
+# ERT Database Credentials - Required
+db_app_usage_service_username: CHANGEME
+db_app_usage_service_password: CHANGEME
+db_autoscale_username: CHANGEME
+db_autoscale_password: CHANGEME
+db_diego_username: CHANGEME
+db_diego_password: CHANGEME
+db_notifications_username: CHANGEME
+db_notifications_password: CHANGEME
+db_routing_username: CHANGEME
+db_routing_password: CHANGEME
+db_uaa_username: CHANGEME
+db_uaa_password: CHANGEME
+db_ccdb_username: CHANGEME
+db_ccdb_password: CHANGEME
+db_accountdb_username: CHANGEME
+db_accountdb_password: CHANGEME
+db_networkpolicyserverdb_username: CHANGEME
+db_networkpolicyserverdb_password: CHANGEME
+db_nfsvolumedb_username: CHANGEME
+db_nfsvolumedb_password: CHANGEME
+db_silk_username: CHANGEME
+db_silk_password: CHANGEME
+db_locket_username: CHANGEME
+db_locket_password: CHANGEME
 
 # Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
 # Must be globally unique.
-terraform_prefix:
+terraform_prefix: CHANGEME
 
 # Optional PEM-encoded certificates to add to BOSH VMs
 director_certificates:
 
 # This key must be a key with admin access
-aws_access_key_id:
-aws_secret_access_key:
+aws_access_key_id: CHANGEME
+aws_secret_access_key: CHANGEME
 
 # ARN of the wildcard certificate to use; upload this in [AWS](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html#upload-server-certificate). This must be done prior to running the pipeline.
-aws_cert_arn:
+aws_cert_arn: CHANGEME
 
 # AMI to use for nat box
 amis_nat: ami-303b1458
@@ -80,10 +80,10 @@ aws_az3: us-east-1d
 
 # For terraform state file (http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region)
 S3_ENDPOINT: https://s3.amazonaws.com
-S3_OUTPUT_BUCKET:
+S3_OUTPUT_BUCKET: CHANGEME
 
 # The ERT domain to use; *.cfapps.<ert-domain> and *.sys.<ert-domain> will be used
-ERT_DOMAIN:
+ERT_DOMAIN: CHANGEME
 
 # Route53 zone to add records to
 ROUTE_53_ZONE_ID:
@@ -93,7 +93,7 @@ ERT_SSL_CERT:
 ERT_SSL_KEY:
 
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
-haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
+haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
 
 # Disable HTTP on gorouters (true|false)
 routing_disable_http: false
@@ -105,16 +105,17 @@ router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
 haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
 
 # The domain to access Operations Manager; opsman.<ert-domain>
-opsman_domain_or_ip_address:
+opsman_domain_or_ip_address: CHANGEME
 
 # Operations Manager credentials
-opsman_admin_username:
-opsman_admin_password:
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
 
-# Key to use for Operations Manager, NAT VMs.
-PEM:
+# Private Key of the keypair uploaded to AWS to be used for Operations Manager, NAT VMs.
+PEM: CHANGEME
+
 # Upload PEM to AWS as the below key pair name
-aws_key_name:
+aws_key_name: CHANGEME
 
 # CIDRs to allow SSH access to Operations Manager from; configure PEM as well with the private key
 opsman_allow_ssh_cidr_ranges:

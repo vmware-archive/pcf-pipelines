@@ -5,10 +5,10 @@
 # See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
 security_acknowledgement: CHANGEME
 
-pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+pivnet_token: CHANGEME                  # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
-ert_major_minor_version: ^1\.12\..*$ # PCF Elastic Runtime minor version to track
-git_private_key:          # Optional - if your git repo requires an SSH key.
+ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
+git_private_key:                        # Optional - if your git repo requires an SSH key.
 
 # ERT Domain Name
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
@@ -26,7 +26,7 @@ opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
-haproxy_backend_ca:         # HAProxy will use the CA provided to verify the certificates provided by the router.
+haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
 
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
 # Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
@@ -83,15 +83,15 @@ azure_multi_resgroup_infra_subnet_name:
 # Required if using c0-azure-multi-res-group - The virutal network name for your Azure environment
 azure_multi_resgroup_infra_vnet_name:
 
-azure_region:
-azure_client_id:
-azure_client_secret:
-azure_subscription_id:
-azure_tenant_id:
+azure_region: CHANGEME
+azure_client_id: CHANGEME
+azure_client_secret: CHANGEME
+azure_subscription_id: CHANGEME
+azure_tenant_id: CHANGEME
 
 # Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
 # Must be globally unique.
-azure_terraform_prefix:
+azure_terraform_prefix: CHANGEME
 
 azure_terraform_subnet_dynamic_services_cidr: "192.168.12.0/22"
 azure_terraform_subnet_dynamic_services_dns: "168.63.129.16,8.8.8.8"
@@ -117,7 +117,7 @@ container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
 # azure_vm_admin value should match with user ID used to create the certs pcf_ssh_key_pub.
 # The user ID will appear towards the end of the public key.
 azure_vm_admin: CHANGEME
-azure_vm_password:
+azure_vm_password: CHANGEME
 
 mysql_monitor_recipient_email:  # Optional - Email address for sending mysql monitor notifications
 mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
@@ -201,6 +201,7 @@ default_quota_memory_limit_mb: 10240
 default_quota_max_number_services: 1000
 skip_cert_verify: true # Whether to disable SSL cert verification for this environment.
 disable_insecure_cookies: false # If true, disable insecure cookies on the router.
+
 # Request timeout for gorouter
 router_request_timeout_in_seconds: 900
 garden_network_pool_cidr: 10.254.0.0/22 # Only change this if you need to avoid address collision with a third-party service on the same subnet.
@@ -208,6 +209,7 @@ garden_network_mtu: 1454                # Applications Network Maximum Transmiss
 allow_app_ssh_access: false             # Whether to allow SSH access to application instances
 
 ha_proxy_lb_name: CHANGEME
+
 ha_proxy_ips:           # Comma-separated list of static IPs
 router_static_ips:      # Comma-separated list of static IPs
 tcp_router_static_ips:  # Comma-separated list of static IPs

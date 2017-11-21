@@ -3,22 +3,22 @@
 # once the Elastic Runtime deployment completes, you will review and set the
 # appropriate application security groups.
 # See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
-security_acknowledgement: #CHANGEME
+security_acknowledgement: CHANGEME
 
-# Pipeline resource configuration
-pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+pivnet_token: CHANGEME                  # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
-ert_major_minor_version: ^1\.12\..*$ # PCF Elastic Runtime minor version to track
+ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
+git_private_key:                        # Optional - if your git repo requires an SSH key.
 
 # The following should be set to a unique prefix. It will be used to prefix all
 # the terraform resources created by the pipeline
-os_resource_prefix: #CHANGEME
+os_resource_prefix: CHANGEME
 
 # The S3 access credentials for storing terraform state.
-s3_endpoint:
-s3_output_bucket:
-tf_aws_access_key:
-tf_aws_secret_key:
+s3_endpoint: CHANGEME
+s3_output_bucket: CHANGEME
+tf_aws_access_key: CHANGEME
+tf_aws_secret_key: CHANGEME
 
 # TODO: Allow multiple DNS servers for each net (currently only 1 can be set)
 
@@ -52,44 +52,44 @@ dynamic_services_nw_azs:                                # Dynamic Services Netwo
 
 container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
 
-external_network_id: #CHANGEME      # Set this to your floating IP network's id
-external_network: #CHANGEME         # Set this to your floating IP network
+external_network_id: CHANGEME      # Set this to your floating IP network's id
+external_network: CHANGEME         # Set this to your floating IP network
 
 security_group: pcf-secgroup   # Name of security group to create/use
 
 # These are simply the project users credentials, downloaded from Horizon.
 # The pre_os_cacert is the root CA cert, only needed if the openstack API's
 # are fronted by a self-signed SSL certificate.
-os_auth_url: #CHANGEME
-os_identity_api_version: #CHANGEME
-os_username: #CHANGEME
-os_password: #CHANGEME
-os_user_domain_name: #CHANGEME
-os_project_name: #CHANGEME
-os_project_id: #CHANGEME
-os_tenant: #CHANGEME
-os_region_name: #CHANGEME
+os_auth_url: CHANGEME
+os_identity_api_version: CHANGEME
+os_username: CHANGEME
+os_password: CHANGEME
+os_user_domain_name: CHANGEME
+os_project_name: CHANGEME
+os_project_id: CHANGEME
+os_tenant: CHANGEME
+os_region_name: CHANGEME
 os_interface: public
-os_networking_model: #CHANGEME (nova|neutron)
+os_networking_model: CHANGEME (nova|neutron)
 pre_os_cacert: # Set if needed (see above)
 
-opsman_public_key: #CHANGEME # The public key of your opsman key
+opsman_public_key: CHANGEME # The public key of your opsman key
 
 opsman_volume_size: 100  # OpsMan VM disk size in GB
 
 # AZ configuration for Ops Director
-az_01_name: #CHANGEME
-#az_02_name: #CHANGEME
-#az_03_name: #CHANGEME
-ert_singleton_job_az: #CHANGEME # AZ to use for deployment of ERT Singleton jobs
+az_01_name: CHANGEME
+#az_02_name: CHANGEME
+#az_03_name: CHANGEME
+ert_singleton_job_az: CHANGEME # AZ to use for deployment of ERT Singleton jobs
 
 # Ops Manager VM Settings
-opsman_image: ops-manager        # Prefix for the ops man glance image
-opsman_flavor: m1.xlarge         # Ops man VM flavor
-opsman_domain_or_ip_address:     # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
-opsman_admin_username: admin     # Username for Ops Manager admin account
-opsman_admin_password:           # Password for Ops Manager admin account
-om_decryption_pwd:               # Decryption password for Ops Manager exported settings
+opsman_image: ops-manager                 # Prefix for the ops man glance image
+opsman_flavor: m1.xlarge                  # Ops man VM flavor
+opsman_domain_or_ip_address: CHANGEME     # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
+opsman_admin_username: admin              # Username for Ops Manager admin account
+opsman_admin_password: CHANGEME           # Password for Ops Manager admin account
+om_decryption_pwd: CHANGEME               # Decryption password for Ops Manager exported settings
 
 # IaaS configuration for Ops Director
 ignore_server_az: false # If true, set the volume AZ to the default AZ.
@@ -100,7 +100,7 @@ trusted_certificates:         # Trusted certificates to be deployed along with a
 vm_password_type: generate    # 'generate' or 'bosh_default'
 
 # Ops Director Config
-ntp_servers: #CHANGEME       # Comma-separated list of NTP servers to use for VMs deployed by BOSH
+ntp_servers: CHANGEME       # Comma-separated list of NTP servers to use for VMs deployed by BOSH
 metrics_ip:                  # IP address of Pivotal Ops Metrics if installed
 resurrector_enabled: false   # Whether to enable BOSH VM resurrector
 max_threads: 30              # Max threads count for deploying VMs
@@ -111,8 +111,8 @@ bosh_database_type: internal # Type of DB to use (internal)
 # TODO: Add ability to use s3 blobstore
 bosh_blobstore_type: local   # Type of blobstore to use (local)
 
-os_keypair_name: #CHANGEME   # Keypair to use for bosh VMs
-os_private_key:  #CHANGEME   # Private key for keypair
+os_keypair_name: CHANGEME   # Keypair to use for bosh VMs
+os_private_key:  CHANGEME   # Private key for keypair
 
 # Network configuration for Ops Director
 icmp_checks_enabled: true    # Enable or disable ICMP checks
@@ -138,9 +138,9 @@ ssl_private_key:
 pcf_ert_saml_cert:
 pcf_ert_saml_key:
 
-haproxy_floating_ips: #CHANGEME  # Floating IPs allocated to HAProxy on OpenStack
+haproxy_floating_ips: CHANGEME  # Floating IPs allocated to HAProxy on OpenStack
 haproxy_forward_tls: enable      # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
-haproxy_backend_ca: #CHANGEME    # HAProxy will use the CA provided to verify the certificates provided by the router.
+haproxy_backend_ca: CHANGEME    # HAProxy will use the CA provided to verify the certificates provided by the router.
 
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
 # Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
@@ -182,8 +182,8 @@ first_name_attribute:
 last_name_attribute:
 
 ## Deployment domain names
-system_domain: #CHANGEME      # The System domain for your PCF environment e.g sys.pcf.example.com.
-apps_domain:   #CHANGEME      # The Apps domain for your PCF environment e.g. cfapps.pcf.example.com.
+system_domain: CHANGEME      # The System domain for your PCF environment e.g sys.pcf.example.com.
+apps_domain:   CHANGEME      # The Apps domain for your PCF environment e.g. cfapps.pcf.example.com.
 
 skip_cert_verify: false       # If true, disable SSL certificate verification for this environment.
 
@@ -201,7 +201,7 @@ router_static_ips:      # Comma-separated list of static IPs
 tcp_router_static_ips:  # Comma-separated list of static IPs
 ssh_static_ips:         # Comma-separated list of static IPs
 
-mysql_monitor_email: #CHANGEME # Email address to receive MySQL monitor notifications
+mysql_monitor_email: CHANGEME # Email address to receive MySQL monitor notifications
 mysql_backups: disable         # Whether to enable MySQL backups. (disable|s3|scp)
 
 # SCP backup config params (leave empty values if you're not using scp)
