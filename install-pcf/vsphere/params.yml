@@ -275,3 +275,8 @@ diego_brain_nsx_lb_edge_name:
 diego_brain_nsx_lb_pool_name:
 diego_brain_nsx_lb_security_group:
 diego_brain_nsx_lb_port:
+mysql_nsx_security_group:
+mysql_nsx_lb_edge_name:
+mysql_nsx_lb_pool_name:
+mysql_nsx_lb_security_group:
+mysql_nsx_lb_port:

@@ -480,6 +480,11 @@ cf_resources=$(
     --arg diego_brain_nsx_lb_pool_name "${DIEGO_BRAIN_NSX_LB_POOL_NAME}" \
     --arg diego_brain_nsx_lb_security_group "${DIEGO_BRAIN_NSX_LB_SECURITY_GROUP}" \
     --arg diego_brain_nsx_lb_port "${DIEGO_BRAIN_NSX_LB_PORT}" \
+    --arg mysql_nsx_security_group "${MYSQL_NSX_SECURITY_GROUP}" \
+    --arg mysql_nsx_lb_edge_name "${MYSQL_NSX_LB_EDGE_NAME}" \
+    --arg mysql_nsx_lb_pool_name "${MYSQL_NSX_LB_POOL_NAME}" \
+    --arg mysql_nsx_lb_security_group "${MYSQL_NSX_LB_SECURITY_GROUP}" \
+    --arg mysql_nsx_lb_port "${MYSQL_NSX_LB_PORT}" \
     '
     if $iaas == "azure" then
 
@@ -609,6 +614,26 @@ cf_resources=$(
             "pool_name": $diego_brain_nsx_lb_pool_name,
             "security_group": $diego_brain_nsx_lb_security_group,
             "port": $diego_brain_nsx_lb_port
+          }
+        ]
+      }
+    else
+      .
+    end
+
+    |
+
+    # MySQL
+
+    if $mysql_nsx_lb_edge_name != "" then
+      .mysql |= . + {
+        "nsx_security_groups": [$mysql_nsx_security_group],
+        "nsx_lbs": [
+          {
+            "edge_name": $mysql_nsx_lb_edge_name,
+            "pool_name": $mysql_nsx_lb_pool_name,
+            "security_group": $mysql_nsx_lb_security_group,
+            "port": $mysql_nsx_lb_port
           }
         ]
       }

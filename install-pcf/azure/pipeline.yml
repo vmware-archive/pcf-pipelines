@@ -472,6 +472,11 @@ jobs:
       DIEGO_BRAIN_NSX_LB_POOL_NAME: ""
       DIEGO_BRAIN_NSX_LB_SECURITY_GROUP: ""
       DIEGO_BRAIN_NSX_LB_PORT: ""
+      MYSQL_NSX_SECURITY_GROUP: ""
+      MYSQL_NSX_LB_EDGE_NAME: ""
+      MYSQL_NSX_LB_POOL_NAME: ""
+      MYSQL_NSX_LB_SECURITY_GROUP: ""
+      MYSQL_NSX_LB_PORT: ""
       HAPROXY_FLOATING_IPS: ""
 ###########################
 ## Job - Deploy    ERT   ##
