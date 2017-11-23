@@ -22,7 +22,7 @@ PCF_OPSMAN_IMAGE_URI=$(cat opsman-metadata/uri)
 
 # Use prefix to strip down a Storage Account Prefix String
 ENV_SHORT_NAME=$(echo ${AZURE_TERRAFORM_PREFIX} | tr -d "-" | tr -d "_" | tr -d "[0-9]")
-ENV_SHORT_NAME=$(echo ${ENV_SHORT_NAME:0:10})
+ENV_SHORT_NAME=$(echo ${ENV_SHORT_NAME:0:13})
 
 ##########################################################
 # Detect generate for ssh keys
