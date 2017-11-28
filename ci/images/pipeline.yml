@@ -43,6 +43,13 @@ resources:
     repository: om
     access_token: {{images_pipeline_github_token}}
 
+- name: semver-cli
+  type: github-release
+  source:
+    user: christianang
+    repository: semver-cli
+    access_token: {{images_pipeline_github_token}}
+
 - name: yaml-patch
   type: github-release
   source:
