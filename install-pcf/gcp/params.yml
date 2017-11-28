@@ -10,6 +10,22 @@ opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
 ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
 git_private_key:                        # Optional - if your git repo requires an SSH key.
 
+# Errands to disable prior to deploying ERT
+# Valid values:
+#   all
+#   none
+#   "" (empty string)
+#   Any combination of the following, separated by comma:
+#     smoke-tests
+#     push-apps-manager
+#     notifications
+#     notifications-ui
+#     push-pivotal-account
+#     autoscaling
+#     autoscaling-register-broker
+#     nfsbrokerpush
+ert_errands_to_disable: none
+
 # GCP project to create the infrastructure in
 gcp_project_id: CHANGEME
 
@@ -67,22 +83,6 @@ routing_disable_http: false
 # The recommended settings are filled in below, change as necessary.
 router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
 haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-
-# Errands to disable prior to deploying ERT
-# Valid values:
-#   all
-#   none
-#   "" (empty string)
-#   Any combination of the following, separated by comma:
-#     smoke-tests
-#     push-apps-manager
-#     notifications
-#     notifications-ui
-#     push-pivotal-account
-#     autoscaling
-#     autoscaling-register-broker
-#     nfsbrokerpush
-ert_errands_to_disable: none
 
 # DB Creds
 # Usernames must be 16 characters or fewer

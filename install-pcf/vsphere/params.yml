@@ -10,6 +10,22 @@ opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
 ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
 git_private_key:                        # Optional - if your git repo requires an SSH key.
 
+# Errands to disable prior to deploying ERT
+# Valid values:
+#   all
+#   none
+#   "" (empty string - equivalent to none)
+#   Any combination of the following, separated by comma:
+#     smoke-tests
+#     push-apps-manager
+#     notifications
+#     notifications-ui
+#     push-pivotal-account
+#     autoscaling
+#     autoscaling-register-broker
+#     nfsbrokerpush
+ert_errands_to_disable:       # Comma-separated list of errand names to disable before deploy
+
 # vCenter configuration
 vcenter_host: CHANGEME             # vCenter host or IP
 vcenter_usr: CHANGEME              # vCenter username. If user is tied to a domain, then escape the \, example `domain\\user`
@@ -112,22 +128,6 @@ dynamic_services_nw_gateway: CHANGEME          # Dynamic Services network Gatewa
 dynamic_services_nw_azs: CHANGEME              # Comma separated list of AZ's to be associated with this network
 
 ert_singleton_job_az: CHANGEME         # AZ to use for deployment of ERT Singleton jobs
-
-# Errands to disable prior to deploying ERT
-# Valid values:
-#   all
-#   none
-#   "" (empty string - equivalent to none)
-#   Any combination of the following, separated by comma:
-#     smoke-tests
-#     push-apps-manager
-#     notifications
-#     notifications-ui
-#     push-pivotal-account
-#     autoscaling
-#     autoscaling-register-broker
-#     nfsbrokerpush
-ert_errands_to_disable:       # Comma-separated list of errand names to disable before deploy
 
 loggregator_endpoint_port:    # Loggegrator Port. Default is 443
 company_name:                 # Company Name for Apps Manager
