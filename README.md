@@ -44,6 +44,8 @@ These upgrade pipelines are intended to be kept running for as long as the found
 
 These pipelines are found in any of the directories with the `upgrade-` prefix.
 
+The upgrade-tile pipeline is compatible with the latest version of pcf-pipelines. However, as discussed, this pipeline is only used for patch upgrades. 
+
 ## Prerequisites
 
 - [install a Concourse server](https://concourse.ci/installing.html)
