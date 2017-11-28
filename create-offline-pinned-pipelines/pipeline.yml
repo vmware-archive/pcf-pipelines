@@ -179,7 +179,7 @@ jobs:
     - get: elastic-runtime
       passed: [collector]
       params:
-        globs: ["*.pivotal"]
+        globs: ["cf*.pivotal"]
   - task: create-tarball
     config:
       platform: linux
