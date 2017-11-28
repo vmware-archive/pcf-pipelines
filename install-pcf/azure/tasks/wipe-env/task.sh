@@ -63,7 +63,6 @@ function delete-infrastructure() {
     -var "subnet_infra_id=dontcare" \
     -var "ops_manager_image_uri=dontcare" \
     -var "vm_admin_username=dontcare" \
-    -var "vm_admin_password=dontcare" \
     -var "vm_admin_public_key=dontcare" \
     -var "azure_multi_resgroup_network=dontcare" \
     -var "azure_multi_resgroup_pcf=dontcare" \

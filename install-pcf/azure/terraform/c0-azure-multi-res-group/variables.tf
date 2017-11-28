@@ -39,7 +39,6 @@ variable "subnet_infra_id" {}
 
 variable "ops_manager_image_uri" {}
 variable "vm_admin_username" {}
-variable "vm_admin_password" {}
 variable "vm_admin_public_key" {}
 
 variable "ert_subnet_id" {}

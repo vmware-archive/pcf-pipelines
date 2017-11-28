@@ -25,7 +25,6 @@ variable "pcf_ert_domain" {}
 
 variable "ops_manager_image_uri" {}
 variable "vm_admin_username" {}
-variable "vm_admin_password" {}
 variable "vm_admin_public_key" {}
 
 variable "azure_account_name" {}

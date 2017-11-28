@@ -35,7 +35,6 @@ pcf_ert_ssl_key:
 # azure_vm_admin value should match with user ID used to create the certs pcf_ssh_key_pub.
 # The user ID will appear towards the end of the public key.
 azure_vm_admin: CHANGEME
-azure_vm_password: CHANGEME
 
 # Optional PEM-encoded certificates to add to BOSH VMs
 trusted_certificates:
