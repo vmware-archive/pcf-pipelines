@@ -31,7 +31,6 @@ resource "azurerm_lb" "tcp" {
   }
 }
 
-
 // SSH-Proxy ALB
 resource "azurerm_lb" "ssh-proxy" {
   name                = "${var.env_name}-ssh-proxy-lb"
@@ -86,7 +85,6 @@ resource "azurerm_lb_probe" "web-https-probe" {
   port                = 443
 }
 
-
 // Go Router HTTP
 resource "azurerm_lb_probe" "web-http-probe" {
   name                = "web-http-probe"
@@ -96,7 +94,6 @@ resource "azurerm_lb_probe" "web-http-probe" {
   protocol            = "TCP"
   port                = 80
 }
-
 
 // TCP LB 80
 resource "azurerm_lb_probe" "tcp-probe" {
@@ -122,7 +119,6 @@ resource "azurerm_lb_probe" "ssh-proxy-probe" {
 //// Load Balancing Rules
 ////////////////////////////////
 
-
 // API&APPS HTTPS
 resource "azurerm_lb_rule" "web-https-rule" {
   name                = "web-https-rule"
@@ -134,6 +130,7 @@ resource "azurerm_lb_rule" "web-https-rule" {
   protocol                       = "TCP"
   frontend_port                  = 443
   backend_port                   = 443
+  idle_timeout_in_minutes        = 30
 
   # Workaround until the backend_address_pool and probe resources output their own ids
   backend_address_pool_id = "${azurerm_lb.web.id}/backendAddressPools/${azurerm_lb_backend_address_pool.web-backend-pool.name}"
@@ -151,12 +148,12 @@ resource "azurerm_lb_rule" "web-http-rule" {
   protocol                       = "TCP"
   frontend_port                  = 80
   backend_port                   = 80
+  idle_timeout_in_minutes        = 30
 
   # Workaround until the backend_address_pool and probe resources output their own ids
   backend_address_pool_id = "${azurerm_lb.web.id}/backendAddressPools/${azurerm_lb_backend_address_pool.web-backend-pool.name}"
   probe_id                = "${azurerm_lb.web.id}/probes/${azurerm_lb_probe.web-http-probe.name}"
 }
-
 
 // TCP LB
 resource "azurerm_lb_rule" "tcp-rule" {
@@ -170,6 +167,7 @@ resource "azurerm_lb_rule" "tcp-rule" {
   protocol                       = "TCP"
   frontend_port                  = "${count.index + 1024}"
   backend_port                   = "${count.index + 1024}"
+  idle_timeout_in_minutes        = 30
 
   # Workaround until the backend_address_pool and probe resources output their own ids
   backend_address_pool_id = "${azurerm_lb.tcp.id}/backendAddressPools/${azurerm_lb_backend_address_pool.tcp-backend-pool.name}"
@@ -187,6 +185,7 @@ resource "azurerm_lb_rule" "ssh-proxy-rule" {
   protocol                       = "TCP"
   frontend_port                  = 2222
   backend_port                   = 2222
+  idle_timeout_in_minutes        = 30
 
   # Workaround until the backend_address_pool and probe resources output their own ids
   backend_address_pool_id = "${azurerm_lb.ssh-proxy.id}/backendAddressPools/${azurerm_lb_backend_address_pool.ssh-backend-pool.name}"

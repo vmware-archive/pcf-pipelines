@@ -40,6 +40,7 @@ resource "azurerm_lb_rule" "mysql-rule" {
   protocol                       = "TCP"
   frontend_port                  = 3306
   backend_port                   = 3306
+  idle_timeout_in_minutes        = 30
 
   # Workaround until the backend_address_pool and probe resources output their own ids
   backend_address_pool_id = "${azurerm_lb.mysql.id}/backendAddressPools/${azurerm_lb_backend_address_pool.mysql-backend-pool.name}"
