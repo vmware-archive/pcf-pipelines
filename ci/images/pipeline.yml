@@ -118,8 +118,6 @@ jobs:
       params: {save: true}
     - get: yaml-patch
       params: {globs: ["*linux*"]}
-    - get: semver-cli
-      params: {globs: ["*linux*"]}
     - get: om
       params: {globs: ["*linux*"]}
     - get: cf-cli-tarball
@@ -146,7 +144,6 @@ jobs:
       - name: pcf-pipelines
       - name: om
       - name: yaml-patch
-      - name: semver-cli
       - name: cf-cli-tarball
       - name: cliaas
       - name: pivnet-cli
@@ -163,7 +160,6 @@ jobs:
         - -c
         - |
           cp \
-            semver-cli/semver-linux \
             om/om-linux \
             yaml-patch/yaml_patch_linux \
             cliaas/cliaas-linux \
