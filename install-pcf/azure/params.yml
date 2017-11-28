@@ -10,33 +10,32 @@ opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
 ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
 git_private_key:                        # Optional - if your git repo requires an SSH key.
 
-# ERT Domain Name
-pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
-system_domain: CHANGEME # This is usually sys.${pcf_ert_domain}
-apps_domain: CHANGEME # This is usually cfapps.${pcf_ert_domain}
+# Change to anything other than 'wipe' to bypass the wipe-env job
+arg_wipe: wipe
+
+# Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
+# Must be globally unique.
+azure_terraform_prefix: CHANGEME
+
+azure_region: CHANGEME
+azure_client_id: CHANGEME
+azure_client_secret: CHANGEME
+azure_subscription_id: CHANGEME
+azure_tenant_id: CHANGEME
 
 # SSH keys for Operations Manager director
 pcf_ssh_key_pub: CHANGEME
 pcf_ssh_key_priv: |
   CHANGEME
 
-# Opsman Settings
-opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
-opsman_admin_username: CHANGEME
-opsman_admin_password: CHANGEME
-
-haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
-haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
-
-# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
-# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
-# The recommended settings are filled in below, change as necessary.
-router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-
 # ERT Cert & Key, if the string is blank, then the pipeline will auto generate certs
 pcf_ert_ssl_cert:
 pcf_ert_ssl_key:
+
+# azure_vm_admin value should match with user ID used to create the certs pcf_ssh_key_pub.
+# The user ID will appear towards the end of the public key.
+azure_vm_admin: CHANGEME
+azure_vm_password: CHANGEME
 
 # Optional PEM-encoded certificates to add to BOSH VMs
 trusted_certificates:
@@ -44,9 +43,6 @@ trusted_certificates:
 # SAML Service Credential provider Cert and Key, if the string is blank, then the pipeline will auto generate certs
 pcf_ert_saml_cert:
 pcf_ert_saml_key:
-
-# Change to anything other than 'wipe' to bypass the wipe-env job
-arg_wipe: wipe
 
 # The storage account and container that will be used for your terraform state
 terraform_azure_account_name: CHANGEME
@@ -83,15 +79,24 @@ azure_multi_resgroup_infra_subnet_name:
 # Required if using c0-azure-multi-res-group - The virutal network name for your Azure environment
 azure_multi_resgroup_infra_vnet_name:
 
-azure_region: CHANGEME
-azure_client_id: CHANGEME
-azure_client_secret: CHANGEME
-azure_subscription_id: CHANGEME
-azure_tenant_id: CHANGEME
+# ERT Domain Name
+pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
+system_domain: CHANGEME # This is usually sys.${pcf_ert_domain}
+apps_domain: CHANGEME # This is usually cfapps.${pcf_ert_domain}
 
-# Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
-# Must be globally unique.
-azure_terraform_prefix: CHANGEME
+# Opsman Settings
+opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
+
+haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
+haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
+
+# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
+# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
+# The recommended settings are filled in below, change as necessary.
+router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
 
 azure_terraform_subnet_dynamic_services_cidr: "192.168.12.0/22"
 azure_terraform_subnet_dynamic_services_dns: "168.63.129.16,8.8.8.8"
@@ -113,11 +118,6 @@ azure_terraform_vnet_cidr: "192.168.0.0/20"
 pcf_opsman_disk_size_in_gb: 120
 
 container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
-
-# azure_vm_admin value should match with user ID used to create the certs pcf_ssh_key_pub.
-# The user ID will appear towards the end of the public key.
-azure_vm_admin: CHANGEME
-azure_vm_password: CHANGEME
 
 mysql_monitor_recipient_email:  # Optional - Email address for sending mysql monitor notifications
 mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
