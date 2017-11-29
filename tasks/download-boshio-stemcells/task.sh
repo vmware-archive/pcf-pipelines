@@ -21,7 +21,7 @@ function main() {
   local download_dir="${cwd}/stemcells"
   local diag_report="${cwd}/diagnostic-report/exported-diagnostic-report.json"
 
-  cp ${cwd}/pivnet-stemcells/* ${download_dir}
+  cp -a "${cwd}/pivnet-stemcells/." "${download_dir}"
 
   # get the deduplicated stemcell filename for each deployed release (skipping p-bosh)
   local bosh_io_stemcells=($( (jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | select (.stemcell | contains("ubuntu") | not) |.stemcell' | \
