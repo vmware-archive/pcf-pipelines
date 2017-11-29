@@ -1118,7 +1118,7 @@ jobs:
     - get: fly
 
   - task: create-release
-    file: pcf-pipelines/ci/tasks/create_release/task.yml
+    file: pcf-pipelines/ci/tasks/create-release/task.yml
     params:
       AVAILABILITY: Selected User Groups Only
 
