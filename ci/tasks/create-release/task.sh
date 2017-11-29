@@ -31,7 +31,7 @@ echo "Creating install-pcf-srt pipeline from install-pcf pipeline"
 pushd pcf-pipelines 1>/dev/null
   # apply yaml-patch for vsphere pipeline.yml
   cat install-pcf/vsphere/pipeline.yml |  \
-   yaml_patch_linux -o operations/install-pcf-srt-vsphere.yml > \
+   yaml_patch_linux -o operations/create-install-pcf-srt-vsphere.yml > \
      install-pcf/vsphere/srt/pipeline.yml
 popd 1>/dev/null
 
