@@ -27,7 +27,7 @@ function main() {
   local bosh_io_stemcells=($( (jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | select (.stemcell | contains("ubuntu") | not) |.stemcell' | \
     sort -u) < "$diag_report"))
   if [ ${#bosh_io_stemcells[@]} -eq 0 ]; then
-    echo "No installed products found that require a ubuntu stemcell"
+    echo "No installed products found that require a non-ubuntu stemcell"
     exit 0
   fi
 
