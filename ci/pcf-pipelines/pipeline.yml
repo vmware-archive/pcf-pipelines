@@ -336,7 +336,7 @@ jobs:
     params: {pre: rc}
 
   - task: create-release
-    file: pcf-pipelines/ci/tasks/create_release.yml
+    file: pcf-pipelines/ci/tasks/create-release/task.yml
     params:
       AVAILABILITY: Admins Only
 
