@@ -78,6 +78,8 @@
 - op: remove
   path: /jobs/name=deploy-ert/plan/task=configure/params/TCP_ROUTER_INSTANCES
 - op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/UAA_INSTANCES
+- op: remove
   path: /jobs/name=deploy-ert/plan/task=configure/params/SYSLOG_ADAPTER_INSTANCES
 
 ## Add SRT-specific parameters to configure task
