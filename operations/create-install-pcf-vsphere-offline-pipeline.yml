@@ -147,7 +147,7 @@
 
                 stemcell_to_download=$(
                   set +e
-                  echo $available_stemcells | grep $stemcell_version
+                  echo "$available_stemcells" | grep $stemcell_version
                   set -e
                 )
 
