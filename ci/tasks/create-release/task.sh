@@ -13,7 +13,7 @@ pushd pcf-pipelines 1>/dev/null
 popd 1>/dev/null
 
 echo "Creating upgrade-ert pipeline from upgrade-tile pipeline"
-pushd pcf-pipelines
+pushd pcf-pipelines 1>/dev/null
   mkdir -p upgrade-ert
 
   sed \
@@ -25,7 +25,15 @@ pushd pcf-pipelines
   cat ci/yaml_license_header <(
     cat upgrade-tile/pipeline.yml | yaml_patch_linux -o operations/create-upgrade-ert-pipeline.yml
   ) > upgrade-ert/pipeline.yml
-popd
+popd 1>/dev/null
+
+echo "Creating install-pcf-srt pipeline from install-pcf pipeline"
+pushd pcf-pipelines 1>/dev/null
+  # apply yaml-patch for vsphere pipeline.yml
+  cat install-pcf/vsphere/pipeline.yml |  \
+   yaml_patch_linux -o operations/install-pcf-srt-vsphere.yml > \
+     install-pcf/vsphere/srt/pipeline.yml
+popd 1>/dev/null
 
 # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
 # of GitHub

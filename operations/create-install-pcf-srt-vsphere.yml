@@ -1,0 +1,155 @@
+---
+
+### job: upload-ert => upload-srt
+
+# change glob to small footprint
+- op: replace
+  path: /jobs/name=upload-ert/plan/get=pivnet-product/params/globs
+  value:
+    - "srt*.pivotal"
+
+# change name of upload-ert job
+- op: replace
+  path: /jobs/name=upload-ert/name
+  value:
+    upload-srt
+
+### change task file and passed jobs for deploy-ert
+
+- op: replace
+  path: /jobs/name=deploy-ert/plan/get=pcf-ops-manager/passed
+  value:
+    [stage-srt]
+- op: replace
+  path: /jobs/name=deploy-ert/plan/get=pivnet-product/passed
+  value:
+    [stage-srt]
+- op: replace
+  path: /jobs/name=deploy-ert/plan/task=configure/file
+  value:
+    pcf-pipelines/tasks/config-srt/task.yml
+
+### change passed jobs for stage-ert
+- op: replace
+  path: /jobs/name=stage-ert/plan/get=pcf-ops-manager/passed
+  value:
+    [upload-srt]
+- op: replace
+  path: /jobs/name=stage-ert/plan/get=pivnet-product/passed
+  value:
+    [upload-srt]
+
+
+## remove ERT-specific parameters from configure task
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/CONSUL_SERVER_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/NATS_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/NFS_SERVER_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/MYSQL_PROXY_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/MYSQL_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/BACKUP_PREPARE_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/CLOUD_CONTROLLER_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/HA_PROXY_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/ROUTER_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/MYSQL_MONITOR_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/CLOCK_GLOBAL_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/CLOUD_CONTROLLER_WORKER_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/DIEGO_DATABASE_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/DIEGO_BRAIN_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/DIEGO_CELL_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/DOPPLER_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/LOGGREGATOR_TC_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/TCP_ROUTER_INSTANCES
+- op: remove
+  path: /jobs/name=deploy-ert/plan/task=configure/params/SYSLOG_ADAPTER_INSTANCES
+
+## Add SRT-specific parameters to configure task
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/DATABASE_INSTANCES
+  value: {{database_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/BLOBSTORE_INSTANCES
+  value: {{blobstore_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/CONTROL_INSTANCES
+  value: {{control_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/COMPUTE_INSTANCES
+  value: {{compute_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/BACKUP_PREPARE_INSTANCES
+  value: {{backup_prepare_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/HA_PROXY_INSTANCES
+  value: {{ha_proxy_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/ROUTER_INSTANCES
+  value: {{router_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/MYSQL_MONITOR_INSTANCES
+  value: {{mysql_monitor_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/TCP_ROUTER_INSTANCES
+  value: {{tcp_router_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/SMOKE_TESTS_INSTANCES
+  value: {{smoke_tests_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/PUSH_APPS_MANAGER_INSTANCES
+  value: {{push_apps_manager_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/PUSH_USAGE_SERVICE_INSTANCES
+  value: {{push_usage_service_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/NOTIFICATIONS_INSTANCES
+  value: {{notifications_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/NOTIFICATIONS_UI_INSTANCES
+  value: {{notifications_ui_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/PUSH_PIVOTAL_ACCOUNT_INSTANCES
+  value: {{push_pivotal_account_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/AUTOSCALING_INSTANCES
+  value: {{autoscaling_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/AUTOSCALING_REGISTER_BROKER_INSTANCES
+  value: {{autoscaling_register_broker_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/NFSBROKERPUSH_INSTANCES
+  value: {{nfsbrokerpush_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/BOOTSTRAP_INSTANCES
+  value: {{bootstrap_instances}}
+- op: add
+  path: /jobs/name=deploy-ert/plan/task=configure/params/MYSQL_REJOIN_UNSAFE_INSTANCES
+  value: {{mysql_rejoin_unsafe_instances}}
+
+
+# change job name from stage-ert => stage-srt
+- op: replace
+  path: /jobs/name=stage-ert/name
+  value:
+    stage-srt
+# change job name from deploy-ert => deploy-srt
+- op: replace
+  path: /jobs/name=deploy-ert/name
+  value:
+    deploy-srt
