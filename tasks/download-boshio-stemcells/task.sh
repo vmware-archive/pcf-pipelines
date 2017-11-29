@@ -17,8 +17,6 @@ set -eu
 # limitations under the License.
 
 function main() {
-  if [ -z "$API_TOKEN" ]; then abort "The required env var API_TOKEN was not set for pivnet"; fi
-
   local cwd=$PWD
   local download_dir="${cwd}/stemcells"
   local diag_report="${cwd}/diagnostic-report/exported-diagnostic-report.json"
