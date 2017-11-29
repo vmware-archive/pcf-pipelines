@@ -36,10 +36,24 @@ function main() {
   # extract the stemcell version from the filename, e.g. 3312.21, and download the file from pivnet
   for stemcell in "${bosh_io_stemcells[@]}"; do
 
-    local version=$(echo "$stemcell" | grep -Eo "[0-9]+\.[0-9]+")
-    local stemcell_type=bosh-$(ruby -e "puts '$stemcell'.split('$version-')[1].split('.')[0]")
+    echo "${stemcell}"
 
-    curl -L -J -o ${download_dir}/${stemcell} https://bosh.io/d/stemcells/${stemcell_type}?v=${version}
+    if [[ $stemcell =~ ([0-9]+\.[0-9]+) ]]; then
+      local version="${BASH_REMATCH[1]}"
+    else
+      abort "Couldn't find a stemcell version"
+    fi
+
+    if [[ $stemcell =~ $version-(.+).tgz ]]; then
+      local stemcell_type="bosh-${BASH_REMATCH[1]}"
+    else
+      abort "Couldn't find a stemcell type"
+    fi
+
+    echo "${stemcell_type}"
+    echo "${version}"
+
+    wget -O "${download_dir}/${stemcell}" "https://bosh.io/d/stemcells/${stemcell_type}?v=${version}"
   done
 }
 
