@@ -500,6 +500,14 @@ jobs:
         <<: *atc_creds
       file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
+    - task: set-install-srt-slot7-current-pipeline
+      params:
+        PIPELINE_PARAMS: {{install_srt_vsphere_slot7_params}}
+        PIPELINE_NAME: install-srt-slot7-current
+        PIPELINE_PATH: release/pcf-pipelines/install-pcf/vsphere/srt/pipeline.yml
+        <<: *atc_creds
+      file: pcf-pipelines/ci/tasks/set_pipeline.yml
+
 ########### VSPHERE
 
 - name: lock-vsphere
