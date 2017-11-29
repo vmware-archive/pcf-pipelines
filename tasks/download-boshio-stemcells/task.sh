@@ -33,7 +33,7 @@ function main() {
 
   mkdir -p "${download_dir}"
 
-  # extract the stemcell version from the filename, e.g. 3312.21, and download the file from pivnet
+  # extract the stemcell version and type from the filename and download the stemcell from bosh.io
   for stemcell in "${bosh_io_stemcells[@]}"; do
 
     echo "${stemcell}"
