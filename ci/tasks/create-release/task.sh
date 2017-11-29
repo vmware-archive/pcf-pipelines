@@ -33,6 +33,7 @@ pushd pcf-pipelines 1>/dev/null
   cat install-pcf/vsphere/pipeline.yml |  \
    yaml_patch_linux -o operations/create-install-pcf-srt-vsphere.yml > \
      install-pcf/vsphere/srt/pipeline.yml
+  fly format-pipeline --write --config install-pcf/vsphere/srt/pipeline.yml
 popd 1>/dev/null
 
 # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
