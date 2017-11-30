@@ -4,8 +4,6 @@ set -eu
 
 source pcf-pipelines/functions/generate_cert.sh
 
-set +x
-
 if [[ -z "$SSL_CERT" ]]; then
   domains=(
     "*.${SYSTEM_DOMAIN}"
@@ -445,6 +443,15 @@ cf_resources=$(
   jq -n \
     --arg iaas "$IAAS" \
     --argjson internet_connected $INTERNET_CONNECTED \
+    --argjson database_instances $DATABASE_INSTANCES \
+    --argjson blobstore_instances $BLOBSTORE_INSTANCES \
+    --argjson control_instances $CONTROL_INSTANCES \
+    --argjson compute_instances $COMPUTE_INSTANCES \
+    --argjson backup_prepare_instances $BACKUP_PREPARE_INSTANCES \
+    --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
+    --argjson router_instances $ROUTER_INSTANCES \
+    --argjson mysql_monitor_instances $MYSQL_MONITOR_INSTANCES \
+    --argjson tcp_router_instances $TCP_ROUTER_INSTANCES \
     --arg ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
     --arg ha_proxy_floating_ips "$HAPROXY_FLOATING_IPS" \
     --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
@@ -467,31 +474,7 @@ cf_resources=$(
     --arg mysql_nsx_lb_pool_name "${MYSQL_NSX_LB_POOL_NAME}" \
     --arg mysql_nsx_lb_security_group "${MYSQL_NSX_LB_SECURITY_GROUP}" \
     --arg mysql_nsx_lb_port "${MYSQL_NSX_LB_PORT}" \
-
-    --argjson database_instances $DATABASE_INSTANCES \
-    --argjson blobstore_instances $BLOBSTORE_INSTANCES \
-    --argjson control_instances $CONTROL_INSTANCES \
-    --argjson compute_instances $COMPUTE_INSTANCES \
-    --argjson backup_prepare_instances $BACKUP_PREPARE_INSTANCES \
-    --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
-    --argjson router_instances $ROUTER_INSTANCES \
-    --argjson mysql_monitor_instances $MYSQL_MONITOR_INSTANCES \
-    --argjson tcp_router_instances $TCP_ROUTER_INSTANCES \
-    --argjson smoke_tests_instances $SMOKE_TESTS_INSTANCES \
-    --argjson push_apps_manager_instances $PUSH_APPS_MANAGER_INSTANCES \
-    --argjson push_usage_service_instances $PUSH_USAGE_SERVICE_INSTANCES \
-    --argjson notifications_instances $NOTIFICATIONS_INSTANCES \
-    --argjson notifications_ui_instances $NOTIFICATIONS_UI_INSTANCES \
-    --argjson push_pivotal_account_instances $PUSH_PIVOTAL_ACCOUNT_INSTANCES \
-    --argjson autoscaling_instances $AUTOSCALING_INSTANCES \
-    --argjson autoscaling_register_broker_instances $AUTOSCALING_REGISTER_BROKER_INSTANCES \
-    --argjson nfsbrokerpush_instances $NFSBROKERPUSH_INSTANCES \
-    --argjson bootstrap_instances $BOOTSTRAP_INSTANCES \
-    --argjson mysql_rejoin_unsafe_instances $MYSQL_REJOIN_UNSAFE_INSTANCES \
-
     '
-    |
-
     {
         "database": { "instances": $database_instances },
         "blobstore": { "instances": $blobstore_instances },
@@ -501,21 +484,11 @@ cf_resources=$(
         "ha_proxy": { "instances": $ha_proxy_instances },
         "router": { "instances": $router_instances },
         "mysql_monitor": { "instances": $mysql_monitor_instances },
-        "tcp_router": { "instances": $tcp_router_instances },
-        "smoke-tests": { "instances": $smoke_tests_instances },
-        "push-apps-manager": { "instances": $push_apps_manager_instances },
-        "push-usage-service": { "instances": $push_usage_service_instances },
-        "notifications": { "instances": $notifications_instances },
-        "notifications-ui": { "instances": $notifications_ui_instances },
-        "push-pivotal-account": { "instances": $push_pivotal_account_instances },
-        "autoscaling": { "instances": $autoscaling_instances },
-        "autoscaling-register-broker": { "instances": $autoscaling_register_broker_instances },
-        "nfsbrokerpush": { "instances": $nfsbrokerpush_instances },
-        "bootstrap": { "instances": $consul_server_instances },
-        "mysql-rejoin-unsafe": { "instances": $consul_server_instances }
+        "tcp_router": { "instances": $tcp_router_instances }
+
     }
 
-    |
+    +
 
     if $iaas == "azure" then
 
