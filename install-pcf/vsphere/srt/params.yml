@@ -244,17 +244,6 @@ ha_proxy_instances: 0
 router_instances: 1
 mysql_monitor_instances: 0
 tcp_router_instances: 0
-smoke_tests_instances: 1
-push_apps_manager_instances: 1
-push_usage_service_instances: 1
-notifications_instances: 1
-notifications_ui_instances: 1
-push_pivotal_account_instances: 1
-autoscaling_instances: 1
-autoscaling_register_broker_instances: 1
-nfsbrokerpush_instances: 1
-bootstrap_instances: 1
-mysql_rejoin_unsafe_instances: 1
 
 # Whether or not the ERT VMs are internet connected.
 internet_connected: true
