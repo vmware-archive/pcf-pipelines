@@ -3,8 +3,8 @@
 set -eu
 
 function main() {
-  local configuration_properties="$(read_json_from_file ${PRODUCT_PROPERTIES_FILE})"
-  local configuration_network="$(read_json_from_file ${PRODUCT_NETWORK_FILE})"
+  local configuration_properties="$(cat ${PRODUCT_PROPERTIES_FILE})"
+  local configuration_network="$(cat ${PRODUCT_NETWORK_FILE})"
   local configuration_resources="$(read_json_from_file ${PRODUCT_RESOURCES_FILE})"
 
   om-linux \
