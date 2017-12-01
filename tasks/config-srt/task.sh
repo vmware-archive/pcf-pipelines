@@ -65,6 +65,7 @@ cf_properties=$(
     --arg smtp_port "$SMTP_PORT" \
     --arg smtp_user "$SMTP_USER" \
     --arg smtp_password "$SMTP_PWD" \
+    --arg smtp_enable_starttls_auto "$SMTP_ENABLE_STARTTLS_AUTO" \
     --arg smtp_auth_mechanism "$SMTP_AUTH_MECHANISM" \
     --arg enable_security_event_logging "$ENABLE_SECURITY_EVENT_LOGGING" \
     --arg syslog_host "$SYSLOG_HOST" \
@@ -272,7 +273,7 @@ cf_properties=$(
           }
         },
         ".properties.smtp_enable_starttls_auto": {
-          "value": true
+          "value": $smtp_enable_starttls_auto
         },
         ".properties.smtp_auth_mechanism": {
           "value": $smtp_auth_mechanism

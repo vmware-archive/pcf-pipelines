@@ -191,13 +191,14 @@ tcp_routing_ports:                      # A comma-separated list of ports and hy
 route_services: enable                  # Enable/disable route services (enable|disable)
 ignore_ssl_cert_verification: false     # Whether to disable SSL cert verification for route services
 
-# If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd, and
-# smtp_auth_mechanism must also be set.
+# If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd,
+# smtp_enable_starttls_auto, and smtp_auth_mechanism must also be set.
 smtp_address:
 smtp_from:
 smtp_port:
 smtp_user:
 smtp_pwd:
+smtp_enable_starttls_auto: true
 smtp_auth_mechanism: # (none|plain|cram-md5)
 
 default_quota_memory_limit_mb: 10240

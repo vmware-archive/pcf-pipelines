@@ -176,13 +176,14 @@ ignore_ssl_cert_verification: false     # Whether to disable SSL cert verificati
 garden_network_pool_cidr: 10.254.0.0/22 # Only change this if you need to avoid address collision with a third-party service on the same subnet.
 garden_network_mtu: 1454                # Applications Network Maximum Transmission Unit bytes
 
-# If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd, and
-# smtp_auth_mechanism must also be set.
+# If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd,
+# smtp_enable_starttls_auto, and smtp_auth_mechanism must also be set.
 smtp_address:
 smtp_from:
 smtp_port:
 smtp_user:
 smtp_pwd:
+smtp_enable_starttls_auto: true
 smtp_auth_mechanism: # (none|plain|cram-md5)
 
 ## Authentication type needed. SAML is not presently supported.

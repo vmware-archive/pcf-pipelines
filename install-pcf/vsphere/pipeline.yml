@@ -267,6 +267,7 @@ jobs:
       SMTP_PORT: {{smtp_port}}
       SMTP_USER: {{smtp_user}}
       SMTP_PWD: {{smtp_pwd}}
+      SMTP_ENABLE_STARTTLS_AUTO: {{smtp_enable_starttls_auto}}
       SMTP_AUTH_MECHANISM: {{smtp_auth_mechanism}}
       LDAP_URL: {{ldap_url}}
       LDAP_USER: {{ldap_user}}
