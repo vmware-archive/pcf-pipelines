@@ -52,6 +52,7 @@ cf_properties=$(
     --arg tcp_router_static_ips "$TCP_ROUTER_STATIC_IPS" \
     --arg company_name "$COMPANY_NAME" \
     --arg ssh_static_ips "$SSH_STATIC_IPS" \
+    --arg mysql_static_ips "$MYSQL_STATIC_IPS" \
     --arg cert_pem "$SSL_CERT" \
     --arg private_key_pem "$SSL_PRIVATE_KEY" \
     --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
@@ -152,6 +153,9 @@ cf_properties=$(
       },
       ".diego_brain.static_ips": {
         "value": $ssh_static_ips
+      },
+      ".mysql_proxy.static_ips": {
+        "value": $mysql_static_ips
       }
     }
 
