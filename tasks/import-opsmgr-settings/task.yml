@@ -24,6 +24,8 @@ inputs:
   - name: opsmgr-settings
 
 params:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_PASSPHRASE:

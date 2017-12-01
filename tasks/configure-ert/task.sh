@@ -374,8 +374,10 @@ cf_properties=$(
 
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
-  --username $OPS_MGR_USR \
-  --password $OPS_MGR_PWD \
+  --client-id "${OPSMAN_CLIENT_ID}" \
+  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+  --username "$OPS_MGR_USR" \
+  --password "$OPS_MGR_PWD" \
   --skip-ssl-validation \
   configure-product \
   --product-name cf \

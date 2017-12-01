@@ -227,8 +227,10 @@ done
 om-linux \
   --target https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} \
   --skip-ssl-validation \
-  --username $OPSMAN_USER \
-  --password $OPSMAN_PASSWORD \
+  --client-id "${OPSMAN_CLIENT_ID}" \
+  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+  --username "$OPSMAN_USER" \
+  --password "$OPSMAN_PASSWORD" \
   configure-bosh \
   --iaas-configuration "$iaas_configuration" \
   --director-configuration "$director_configuration" \

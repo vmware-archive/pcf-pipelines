@@ -29,6 +29,8 @@ jobs:
   - task: upload-stemcell
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_CLIENT_ID: ((opsman_client_id))
+      OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
       OPSMAN_USERNAME: ((opsman_admin_username))
       OPSMAN_PASSWORD: ((opsman_admin_password))
       API_TOKEN: ((pivnet_token))
@@ -82,6 +84,8 @@ jobs:
             om-linux \
               --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
               --skip-ssl-validation \
+              --client-id "${OPSMAN_CLIENT_ID}" \
+              --client-secret "${OPSMAN_CLIENT_SECRET}" \
               --username "${OPSMAN_USERNAME}" \
               --password "${OPSMAN_PASSWORD}" \
               $@
@@ -133,5 +137,7 @@ jobs:
     file: pcf-pipelines/tasks/stage-and-apply-updates/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_CLIENT_ID: ((opsman_client_id))
+      OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
       OPSMAN_USERNAME: ((opsman_admin_username))
       OPSMAN_PASSWORD: ((opsman_admin_password))

@@ -35,6 +35,8 @@ aws_vpc_id: CHANGEME
 existing_opsman_vm_name: CHANGEME
 
 # Ops Manager Admin Credentials - set during the installation of Ops Manager
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 

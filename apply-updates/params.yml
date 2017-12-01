@@ -1,4 +1,6 @@
 opsman_domain_or_ip_address:        # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
+opsman_client_id:                   # Client ID for Ops Manager admin account
+opsman_client_secret:               # Client Secret for Ops Manager admin account
 opsman_admin_username:              # Username for Ops Manager admin account
 opsman_admin_password:              # Password for Ops Manager admin account
 pivnet_token:             # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile

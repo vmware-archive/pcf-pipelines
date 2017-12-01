@@ -163,8 +163,10 @@ security_configuration=$(
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --username $PCF_OPSMAN_ADMIN \
-  --password $PCF_OPSMAN_ADMIN_PASSWORD \
+  --client-id "${OPSMAN_CLIENT_ID}" \
+  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+  --username "$PCF_OPSMAN_ADMIN" \
+  --password "$PCF_OPSMAN_ADMIN_PASSWORD" \
   configure-bosh \
   --iaas-configuration "${iaas_configuration}" \
   --director-configuration "${director_configuration}" \

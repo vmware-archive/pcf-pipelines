@@ -10,6 +10,8 @@ function fn_om_linux_curl {
     local curl_data=${3}
 
      curl_cmd="om-linux --target https://opsman.$pcf_ert_domain -k \
+            --client-id \"${OPSMAN_CLIENT_ID}\" \
+            --client-secret \"${OPSMAN_CLIENT_SECRET}\" \
             --username \"$pcf_opsman_admin\" \
             --password \"$pcf_opsman_admin_passwd\"  \
             curl \

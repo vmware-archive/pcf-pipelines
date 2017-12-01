@@ -13,6 +13,8 @@
 # limitations under the License.
 
 pivnet_token: CHANGEME
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_passphrase: CHANGEME

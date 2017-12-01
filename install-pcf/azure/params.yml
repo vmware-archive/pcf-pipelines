@@ -85,6 +85,8 @@ apps_domain: CHANGEME # This is usually cfapps.${pcf_ert_domain}
 
 # Opsman Settings
 opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 

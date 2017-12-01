@@ -197,8 +197,10 @@ echo "Configuring IaaS and Director..."
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --username $OPS_MGR_USR \
-  --password $OPS_MGR_PWD \
+  --client-id "${OPSMAN_CLIENT_ID}" \
+  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+  --username "$OPS_MGR_USR" \
+  --password "$OPS_MGR_PWD" \
   configure-bosh \
   --iaas-configuration "$iaas_configuration" \
   --director-configuration "$director_config"
@@ -210,8 +212,10 @@ om-linux -t https://$OPSMAN_DOMAIN_OR_IP_ADDRESS -k -u $OPS_MGR_USR -p $OPS_MGR_
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --username $OPS_MGR_USR \
-  --password $OPS_MGR_PWD \
+  --client-id "${OPSMAN_CLIENT_ID}" \
+  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+  --username "$OPS_MGR_USR" \
+  --password "$OPS_MGR_PWD" \
   configure-bosh \
   --networks-configuration "$network_configuration" \
   --network-assignment "$network_assignment" \
