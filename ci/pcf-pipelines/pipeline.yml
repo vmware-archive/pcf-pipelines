@@ -1062,8 +1062,9 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: true
           <<: *atc_creds
       - get: vsphere-offline-lock
-      - put: vsphere-offline-lock
-        params: {release: vsphere-offline-lock}
+      - try:
+          put: vsphere-offline-lock
+          params: {release: vsphere-offline-lock}
     - do:
       - task: check-vsphere
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1074,8 +1075,9 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: vsphere-lock
-      - put: vsphere-lock
-        params: {release: vsphere-lock}
+      - try:
+          put: vsphere-lock
+          params: {release: vsphere-lock}
     - do:
       - task: check-gcp
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1086,8 +1088,9 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: gcp-lock
-      - put: gcp-lock
-        params: {release: gcp-lock}
+      - try:
+          put: gcp-lock
+          params: {release: gcp-lock}
     - do:
       - task: check-azure
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1098,8 +1101,9 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: azure-lock
-      - put: azure-lock
-        params: {release: azure-lock}
+      - try:
+          put: azure-lock
+          params: {release: azure-lock}
     - do:
       - task: check-aws
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1110,8 +1114,9 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: aws-lock
-      - put: aws-lock
-        params: {release: aws-lock}
+      - try:
+          put: aws-lock
+          params: {release: aws-lock}
 
 - name: publish-release
   serial_groups: [version]
