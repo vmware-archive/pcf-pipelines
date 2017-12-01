@@ -38,10 +38,13 @@ vcenter_ca_cert: CHANGEME          # vCenter CA cert at the API endpoint; enter 
 om_vm_host:                           # Optional - vCenter host to deploy Ops Manager in
 vcenter_datastore: CHANGEME           # vCenter datastore name to deploy Ops Manager in
 opsman_domain_or_ip_address: CHANGEME # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
+
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
 opsman_client_id: CHANGEME            # Client ID for Ops Manager admin account
 opsman_client_secret: CHANGEME        # Client Secret for Ops Manager admin account
 opsman_admin_username: CHANGEME       # Username for Ops Manager admin account
 opsman_admin_password: CHANGEME       # Password for Ops Manager admin account
+
 opsman_ssh_password: CHANGEME         # SSH password for Ops Manager (ssh user is ubuntu)
 om_decryption_pwd: CHANGEME           # Decryption password for Ops Manager exported settings
 om_ntp_servers: CHANGEME              # Comma-separated list of NTP Servers

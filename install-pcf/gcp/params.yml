@@ -56,6 +56,7 @@ terraform_statefile_bucket: CHANGEME
 container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
 
 # Operations Manager credentials to set
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
 opsman_client_id: CHANGEME
 opsman_client_secret: CHANGEME
 opsman_admin_username: CHANGEME

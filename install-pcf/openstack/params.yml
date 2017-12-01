@@ -86,10 +86,13 @@ ert_singleton_job_az: CHANGEME # AZ to use for deployment of ERT Singleton jobs
 opsman_image: ops-manager                 # Prefix for the ops man glance image
 opsman_flavor: m1.xlarge                  # Ops man VM flavor
 opsman_domain_or_ip_address: CHANGEME     # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
+
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
 opsman_client_id: CHANGEME                # Client ID for Ops Manager admin account
 opsman_client_secret: CHANGEME            # Client Secret for Ops Manager admin account
 opsman_admin_username: admin              # Username for Ops Manager admin account
 opsman_admin_password: CHANGEME           # Password for Ops Manager admin account
+
 om_decryption_pwd: CHANGEME               # Decryption password for Ops Manager exported settings
 
 # IaaS configuration for Ops Director
