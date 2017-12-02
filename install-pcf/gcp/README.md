@@ -131,3 +131,29 @@ address this issue.
 
 
   **Solution:** You are not using the PivNet resource, and are most likely using a different repository manager like Artifactory. For more information, and a possible workaround, see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/192). 
+
+
+#### Error message: ####
+
+    Error
+    initializing
+    running pcf-pipelines/install-pcf/gcp/tasks/create-initial-terraform-state/task.sh
+     ERROR: (gcloud.auth.activate-service-account) Missing required argument [ACCOUNT]: An account is required when using .p12 keys
+
+
+  **Solution:** Ensure the `gcp_service_account_key` parameter is indented correctly. For example:
+  ```  
+  gcp_service_account_key: |
+  {
+    "type": "service_account",
+    "project_id": "cf-example",
+    "private_key_id": "REDACTED",
+    "private_key": "-----BEGIN PRIVATE KEY-----...-----END PRIVATE KEY-----\n",
+    "client_email": "customer0-example.iam.gserviceaccount.com",
+    "client_id": "REDACTED",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://accounts.google.com/o/oauth2/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/customer0-example.iam.gserviceaccount.com"
+  }
+  ```
