@@ -217,8 +217,6 @@ jobs:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-opsman.sh
       params:
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-        OPSMAN_CLIENT_ID: {{opsman_client_id}}
-        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
         PCF_OPSMAN_ADMIN: {{opsman_admin_username}}
         PCF_OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
 
