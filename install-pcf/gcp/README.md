@@ -26,7 +26,7 @@ secrets.
   * the `gsutil` CLI: `gcloud auth activate-service-account --key-file credentials.json && gsutil versioning set on gs://<your-bucket>`
   * If you already have a service account and sufficient permissions, you can run `gcloud auth login` and `gsutil versioning set on gs://<your-bucket>`
 
-3. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles:
+3. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles. (See the Troubleshooting issue below to ensure you have indented this parameter correctly):
   * Cloud SQL Admin
   * Compute Instance Admin (v1)
   * Compute Network Admin
