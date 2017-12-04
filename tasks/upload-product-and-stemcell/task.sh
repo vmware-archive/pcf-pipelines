@@ -11,7 +11,7 @@ STEMCELL_VERSION=$(
   jq --raw-output \
     '
     [
-      .Dependencies[]
+      .Dependencies[]?
       | select(.Release.Product.Name | contains("Stemcells"))
       | .Release.Version
     ]
@@ -49,7 +49,7 @@ if [ -n "$STEMCELL_VERSION" ]; then
     product_slug=$(
       jq --raw-output \
         '
-        if any(.Dependencies[]; select(.Release.Product.Name | contains("Stemcells for PCF (Windows)"))) then
+        if any(.Dependencies[]?; select(.Release.Product.Name | contains("Stemcells for PCF (Windows)"))) then
           "stemcells-windows-server"
         else
           "stemcells"
