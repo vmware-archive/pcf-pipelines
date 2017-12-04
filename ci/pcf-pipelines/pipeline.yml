@@ -320,6 +320,7 @@ jobs:
   - get: pcf-pipelines
     trigger: true
   - task: test
+    attempts: 3
     file: pcf-pipelines/ci/tasks/test.yml
 
 - name: publish-rc
