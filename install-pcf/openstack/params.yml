@@ -100,7 +100,7 @@ ignore_server_az: false # If true, set the volume AZ to the default AZ.
 disable_dhcp: false     # If true, disable DHCP
 
 # Security configuration for Ops Director
-trusted_certificates:         # Trusted certificates to be deployed along with all VM's provisioned by BOSH
+trusted_certificates:         # Optional. Trusted certificates to be deployed along with all VM's provisioned by BOSH
 vm_password_type: generate    # 'generate' or 'bosh_default'
 
 # Ops Director Config
