@@ -54,7 +54,7 @@ container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
 external_network_id: CHANGEME      # Set this to your floating IP network's id
 external_network: CHANGEME         # Set this to your floating IP network
 
-security_group: pcf-secgroup   # Name of security group to create/use
+security_group:                    # Name of security group created by terraform
 
 # These are simply the project users credentials, downloaded from Horizon.
 # The pre_os_cacert is the root CA cert, only needed if the openstack API's
