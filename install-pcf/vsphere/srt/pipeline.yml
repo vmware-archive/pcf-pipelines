@@ -229,7 +229,7 @@ jobs:
       resource: elastic-runtime
       params:
         globs:
-        - cf*.pivotal
+        - srt*.pivotal
   - task: stage
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
@@ -255,7 +255,7 @@ jobs:
       resource: elastic-runtime
       params:
         globs:
-        - cf*.pivotal
+        - srt*.pivotal
     - do:
       - get: configuration
         resource: cf-configuration
