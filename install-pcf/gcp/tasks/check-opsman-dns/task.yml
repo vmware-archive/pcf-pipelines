@@ -4,13 +4,13 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 
 inputs:
-- name: pcf-pipelines 
+- name: pcf-pipelines
 
 params:
-  pcf_ert_domain:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
 
 run:
   path: pcf-pipelines/install-pcf/gcp/tasks/check-opsman-dns/task.sh

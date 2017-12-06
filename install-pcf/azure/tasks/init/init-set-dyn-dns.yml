@@ -1,0 +1,28 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+  - name: pcf-pipelines
+
+run:
+  path: pcf-pipelines/install-pcf/azure/tasks/init/init-set-dyn-dns.sh
+
+params:
+  dyn_enabled:
+  dyn_user:
+  dyn_token:
+  azure_subscription_id:
+  azure_tenant_id:
+  azure_client_id:
+  azure_client_secret:
+  azure_region:
+  azure_terraform_prefix:
+  azure_pcf_terraform_template:
+  azure_multi_resgroup_network:
+  azure_multi_resgroup_pcf:
+  pcf_ert_domain:

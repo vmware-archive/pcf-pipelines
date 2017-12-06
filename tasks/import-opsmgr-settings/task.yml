@@ -17,13 +17,15 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: czero/cflinuxfs2}
+  source: {repository: czero/rootfs}
 
 inputs:
   - name: pcf-pipelines
   - name: opsmgr-settings
 
 params:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_PASSPHRASE:

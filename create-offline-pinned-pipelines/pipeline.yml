@@ -54,12 +54,11 @@ resources:
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
     regexp: "staging/stemcells/bosh-stemcell-(.*)-.*.tgz"
-    disable_ssl: false
 
 - name: czero-cflinuxfs2
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: latest
 
 - name: czero-cflinuxfs2-tarball
@@ -70,6 +69,15 @@ resources:
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
     regexp: "staging/czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+
+- name: czero-cflinuxfs2-tarball-kickstarter
+  type: s3
+  source:
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
+    regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
 
 - name: pcf-pipelines-tarball
   type: pivnet
@@ -142,7 +150,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
       - name: operations-manager
       outputs:
@@ -171,14 +179,14 @@ jobs:
     - get: elastic-runtime
       passed: [collector]
       params:
-        globs: ["*.pivotal"]
+        globs: ["cf*.pivotal"]
   - task: create-tarball
     config:
       platform: linux
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
       - name: elastic-runtime
       outputs:
@@ -249,8 +257,9 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
+      - name: pcf-pipelines-combined-version
       - name: pcf-pipelines-tarball
       - name: czero-cflinuxfs2
       outputs:
@@ -262,7 +271,7 @@ jobs:
         - |
           set -eu
 
-          version=$(cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version')
+          version=$(cat pcf-pipelines-combined-version/version)
           digest=$(cat czero-cflinuxfs2/digest)
 
           echo "Creating tarball with version ${version}-${digest}..."
@@ -270,6 +279,16 @@ jobs:
   - put: czero-cflinuxfs2-tarball
     params:
       file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tar"
+
+- name: publish-kickstarter-czero-cflinuxfs2-after-purge
+  plan:
+  - get: czero-cflinuxfs2-tarball
+    trigger: false
+    passed: [ create-czero-cflinuxfs2-tarball ]
+  - put: czero-cflinuxfs2-tarball-kickstarter
+    params:
+      file: "czero-cflinuxfs2-tarball/czero-cflinuxfs2-*.tar"
+
 
 - name: create-offline-pinned-pipelines
   plan:
@@ -295,7 +314,7 @@ jobs:
           image_resource:
             type: docker-image
             source:
-              repository: czero/cflinuxfs2
+              repository: czero/rootfs
           inputs:
           - name: pcf-pipelines-tarball
           outputs:
@@ -308,7 +327,7 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/rootfs}
       inputs:
       - name: pcf-pipelines-combined-version
       - name: czero-cflinuxfs2
@@ -433,7 +452,7 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/rootfs}
       inputs:
       - name: pcf-pipelines-offline-pinned-tarball
       - name: pcf-pipelines-combined-version
@@ -493,3 +512,31 @@ jobs:
   - put: pcf-pipelines-combined
     params:
       file: "pcf-pipelines-combined/*.tar.gpg"
+
+- name: purge-minio
+  plan:
+  - get: pcf-pipelines-combined-version
+  - task: purge-minio
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/rootfs}
+      inputs:
+        - name: pcf-pipelines-combined-version
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -o pipefail
+          set -eu
+
+          aws configure set aws_access_key_id {{s3_access_key_id}}
+          aws configure set aws_secret_access_key {{s3_secret_access_key}}
+          aws configure set default.region us-east-1
+
+          for namespace in czero-cflinuxfs2/ elastic-runtime/ ops-manager/ pcf-pipelines-combined/ pcf-pipelines/ staging/ stemcells/; do
+            aws s3 --endpoint-url {{s3_endpoint}} rm s3://{{s3_bucket}}/$namespace --recursive
+          done
+          aws s3 --endpoint-url {{s3_endpoint}} cp pcf-pipelines-combined-version/version s3://{{s3_bucket}}/pcf-pipelines-combined/version

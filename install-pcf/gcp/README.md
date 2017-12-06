@@ -22,9 +22,11 @@ secrets.
   * GCP Cloud Resource Manager API [here](https://console.cloud.google.com/apis/api/cloudresourcemanager.googleapis.com/overview)
   * GCP Storage Interopability [here](https://console.cloud.google.com/storage/settings)
 
-2. Create a bucket in Google Cloud Storage to hold the Terraform state file, enabling versioning for this bucket via the `gsutil` CLI: `gcloud auth activate-service-account --key-file credentials.json && gsutil versioning set on gs://<your-bucket>`
+2. Create a bucket in Google Cloud Storage to hold the Terraform state file, enabling versioning for this bucket via:
+  * the `gsutil` CLI: `gcloud auth activate-service-account --key-file credentials.json && gsutil versioning set on gs://<your-bucket>`
+  * If you already have a service account and sufficient permissions, you can run `gcloud auth login` and `gsutil versioning set on gs://<your-bucket>`
 
-3. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles:
+3. Change all of the CHANGEME values in params.yml with real values. For the gcp_service_account_key, create a new service account key that has the following IAM roles. (See the Troubleshooting issue below to ensure you have indented this parameter correctly):
   * Cloud SQL Admin
   * Compute Instance Admin (v1)
   * Compute Network Admin
@@ -69,11 +71,11 @@ When this happens, after you've initially run create-infrastructure, update your
   from completing. Delete the director VM manually in the GCP console as a
   workaround.
 
-### Missing Jumpbox
+### Allow SSH to Ops Manager without a Jumpbox
 * There is presently no jumpbox installed as part of the Terraform scripts. If
-  you need to SSH onto the Ops Manager VM you'll need to add an SSH key from
-  within GCP to the instance, and also add the `allow-ssh` tag to the network
-  access tags.
+  you need to SSH onto the Ops Manager VM add the `allow-ssh` tag to the network
+  access tags for that vm. You'll need to add an SSH key to the instance, unless
+  you are using the `gcloud` cli which will add it for you.
 
 ### Cloud SQL Authorized Networks
 
@@ -89,3 +91,69 @@ configured.
 There is a (private, sorry) [Pivotal Tracker
 story](https://www.pivotaltracker.com/n/projects/975916/stories/133642819) to
 address this issue.
+
+
+## Troubleshooting
+
+#### Error message: ####
+   ```
+   google_sql_user.diego: Creating...
+     host:     "" => "%"
+     instance: "" => "ph-concourse-terraform-piglet"
+     name:     "" => "admin"
+     password: "<sensitive>" => "<sensitive>"
+   Error applying plan:
+
+   1 error(s) occurred:
+
+   * google_sql_user.diego: 1 error(s) occurred:
+
+   * google_sql_user.diego: Error, failure waiting for insertion of admin into ph-concourse-terraform-piglet: Error waiting      for Insert User (op 44940cc3-df8a-4d86-9bb8-853540fa4f35): googleapi: Error 404: The Cloud SQL instance operation does not    exist., operationDoesNotExist
+   ```
+   
+   **Solution:** You cannot use "admin" as a username for MySQL. 
+   
+   
+   #### Error message: ####
+   ```
+   “{”errors”:{“.properties.networking_point_of_entry.external_ssl.ssl_ciphers”:[“Value can’t be blank”]}}”
+   ```
+   
+   **Solution:** pcf-pipelines is not compatible with ERT 1.11.14. Redeploy with a [compatible](https://github.com/pivotal-cf/pcf-pipelines#install-pcf-pipelines) version. 
+   
+   
+   
+#### Error message: ####
+
+    Error
+    pcf-pipelines/tasks/stage-product/task.sh: line 19: ./pivnet-product/metadata.json: No such file or directory
+
+
+
+  **Solution:** You are not using the PivNet resource, and are most likely using a different repository manager like Artifactory. For more information, and a possible workaround, see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/192). 
+
+
+#### Error message: ####
+
+    Error
+    initializing
+    running pcf-pipelines/install-pcf/gcp/tasks/create-initial-terraform-state/task.sh
+     ERROR: (gcloud.auth.activate-service-account) Missing required argument [ACCOUNT]: An account is required when using .p12 keys
+
+
+  **Solution:** Ensure the `gcp_service_account_key` parameter is indented correctly. For example:
+  ```  
+  gcp_service_account_key: |
+    {
+      "type": "service_account",
+      "project_id": "cf-example",
+      "private_key_id": "REDACTED",
+      "private_key": "-----BEGIN PRIVATE KEY-----...-----END PRIVATE KEY-----\n",
+      "client_email": "customer0-example.iam.gserviceaccount.com",
+      "client_id": "REDACTED",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://accounts.google.com/o/oauth2/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/customer0-example.iam.gserviceaccount.com"
+    }
+  ```

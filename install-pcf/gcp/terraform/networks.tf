@@ -22,3 +22,10 @@ resource "google_compute_subnetwork" "subnet-services-1" {
   ip_cidr_range = "192.168.20.0/22"
   network       = "${google_compute_network.pcf-virt-net.self_link}"
 }
+
+// Dynamic Services Tile
+resource "google_compute_subnetwork" "subnet-dynamic-services-1" {
+  name          = "${var.prefix}-subnet-dynamic-services-1-${var.gcp_region}"
+  ip_cidr_range = "192.168.24.0/22"
+  network       = "${google_compute_network.pcf-virt-net.self_link}"
+}

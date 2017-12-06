@@ -1,0 +1,6 @@
+- op: add
+  path: /jobs/name=set-install-pcf-pipeline/plan/get=pcf-pipelines-tarball
+  value:
+    get: pcf-pipelines-combined
+    passed: [ unpack-tarball ]
+    trigger: true

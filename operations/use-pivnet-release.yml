@@ -20,7 +20,7 @@
         image_resource:
           type: docker-image
           source:
-            repository: czero/cflinuxfs2
+            repository: czero/rootfs
         inputs:
         - name: pcf-pipelines-tarball
         outputs:

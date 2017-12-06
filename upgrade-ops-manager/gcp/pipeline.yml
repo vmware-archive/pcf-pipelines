@@ -67,6 +67,8 @@ jobs:
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
     params:
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
@@ -75,6 +77,8 @@ jobs:
     - task: export-opsmgr-settings
       file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
       params:
+        OPSMAN_CLIENT_ID: {{opsman_client_id}}
+        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
         OPSMAN_USERNAME: {{opsman_admin_username}}
         OPSMAN_PASSWORD: {{opsman_admin_password}}
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
@@ -82,6 +86,8 @@ jobs:
     - task: exported-opsmgr-diagnostic-report
       file: pcf-pipelines/tasks/export-opsmgr-diagnostic-report/task.yml
       params:
+        OPSMAN_CLIENT_ID: {{opsman_client_id}}
+        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
         OPSMAN_USERNAME: {{opsman_admin_username}}
         OPSMAN_PASSWORD: {{opsman_admin_password}}
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
@@ -90,9 +96,9 @@ jobs:
     file: pcf-pipelines/upgrade-ops-manager/gcp/tasks/create-cliaas-config/task.yml
     params:
       PIVNET_IMAGE_REGION: {{pivnet_image_region}}
-      OPSMAN_PROJECT: {{opsman_gcp_project}}
-      OPSMAN_ZONE: {{opsman_gcp_zone}}
-      OPSMAN_GCP_CREDFILE_CONTENTS: {{opsman_gcp_credfile_contents}}
+      GCP_PROJECT_ID: {{gcp_project_id}}
+      GCP_ZONE: {{gcp_zone}}
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
 
   - task: replace-opsman-vm
     file: pcf-pipelines/tasks/replace-vm/task.yml
@@ -102,6 +108,8 @@ jobs:
   - task: import-opsmgr-settings
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
     params:
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
@@ -117,6 +125,8 @@ jobs:
   - task: restore-stemcells
     file: pcf-pipelines/tasks/restore-stemcells/task.yml
     params:
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
@@ -124,6 +134,8 @@ jobs:
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}

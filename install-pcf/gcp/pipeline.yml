@@ -60,9 +60,13 @@ jobs:
       GCP_PROJECT_ID: {{gcp_project_id}}
       GCP_REGION: {{gcp_region}}
       GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+      GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
-      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_ZONE: {{gcp_zone_1}}
 
 - name: upload-opsman-image
   plan:
@@ -154,21 +158,23 @@ jobs:
   - task: check-opsman-dns
     file: pcf-pipelines/install-pcf/gcp/tasks/check-opsman-dns/task.yml
     params:
-      pcf_ert_domain: {{pcf_ert_domain}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
   - task: config-opsman-auth
     file: pcf-pipelines/tasks/config-opsman/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPS_MGR_USR: {{pcf_opsman_admin_username}}
-      OPS_MGR_PWD: {{pcf_opsman_admin_password}}
-      OM_DECRYPTION_PWD: {{pcf_opsman_admin_password}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      OM_DECRYPTION_PWD: {{opsman_admin_password}}
   - task: configure-director
     file: pcf-pipelines/install-pcf/gcp/tasks/config-director/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPS_MGR_USR: {{pcf_opsman_admin_username}}
-      OPS_MGR_PWD: {{pcf_opsman_admin_password}}
-      OPS_MGR_TRUSTED_CERTS: {{pcf_opsman_trusted_certs}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      OPS_MGR_TRUSTED_CERTS: {{opsman_trusted_certs}}
       GCP_PROJECT_ID: {{gcp_project_id}}
       GCP_REGION: {{gcp_region}}
       GCP_ZONE_1: {{gcp_zone_1}}
@@ -190,8 +196,10 @@ jobs:
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
-      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
 
 - name: upload-ert
   serial_groups: [opsman]
@@ -206,13 +214,15 @@ jobs:
       resource: pivnet-elastic-runtime
       params:
         globs:
-        - "*pivotal"
+        - "cf*.pivotal"
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPS_MGR_USR: {{pcf_opsman_admin_username}}
-      OPS_MGR_PWD: {{pcf_opsman_admin_password}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
       PIVNET_API_TOKEN: {{pivnet_token}}
       IAAS: "google"
       NO_PROXY: ""
@@ -222,9 +232,10 @@ jobs:
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
-      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
-      PRODUCT_NAME: cf
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
 
 - name: deploy-ert
   serial_groups: [opsman]
@@ -249,8 +260,10 @@ jobs:
       gcp_storage_access_key: {{gcp_storage_access_key}}
       gcp_storage_secret_key: {{gcp_storage_secret_key}}
       pcf_ert_domain: {{pcf_ert_domain}}
-      OPS_MGR_USR: {{pcf_opsman_admin_username}}
-      OPS_MGR_PWD: {{pcf_opsman_admin_password}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
       terraform_prefix: {{gcp_resource_prefix}}
       db_diego_username: {{db_diego_username}}
       db_diego_password: {{db_diego_password}}
@@ -290,21 +303,43 @@ jobs:
       MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
       MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
       MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
+      HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
+      HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
+      ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
+      HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
+      routing_disable_http: {{routing_disable_http}}
+      INTERNET_CONNECTED: {{internet_connected}}
+      CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
+      SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
       # aws specific
       S3_ENDPOINT:
+      # azure specific
+      pcf_ert_saml_cert:
+      pcf_ert_saml_key:
+      pcf_ert_networking_pointofentry:
+      azure_access_key:
+      azure_account_name:
+      azure_buildpacks_container:
+      azure_droplets_container:
+      azure_packages_container:
+      azure_resources_container:
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
     params:
       PRODUCT_NAME: cf
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
-      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
       ERRANDS_TO_DISABLE: {{ert_errands_to_disable}}
 
   - task: deploy-ert
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{pcf_opsman_admin_username}}
-      OPSMAN_PASSWORD: {{pcf_opsman_admin_password}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}

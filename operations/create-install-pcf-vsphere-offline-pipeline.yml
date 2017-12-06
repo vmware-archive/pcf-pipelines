@@ -91,6 +91,8 @@
           S3_ENDPOINT: {{s3_endpoint}}
           IAAS: vsphere
           OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
+          OPSMAN_CLIENT_ID: {{opsman_client_id}}
+          OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
           OPS_MGR_USERNAME: {{opsman_admin_username}}
           OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:
@@ -114,8 +116,10 @@
               diagnostic_report=$(
                 om-linux \
                   --target https://$OPS_MGR_DOMAIN \
-                  --username $OPS_MGR_USERNAME \
-                  --password $OPS_MGR_PASSWORD \
+                  --client-id "${OPSMAN_CLIENT_ID}" \
+                  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+                  --username "$OPS_MGR_USERNAME" \
+                  --password "$OPS_MGR_PASSWORD" \
                   --skip-ssl-validation \
                   curl --silent --path "/api/v0/diagnostic_report"
               )
@@ -147,7 +151,7 @@
 
                 stemcell_to_download=$(
                   set +e
-                  echo $available_stemcells | grep $stemcell_version
+                  echo "$available_stemcells" | grep $stemcell_version
                   set -e
                 )
 
@@ -162,8 +166,10 @@
 
                 om-linux \
                   --target https://$OPS_MGR_DOMAIN \
-                  --username $OPS_MGR_USERNAME \
-                  --password $OPS_MGR_PASSWORD \
+                  --client-id "${OPSMAN_CLIENT_ID}" \
+                  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+                  --username "$OPS_MGR_USERNAME" \
+                  --password "$OPS_MGR_PASSWORD" \
                   --skip-ssl-validation \
                   upload-stemcell \
                   --stemcell "./${stemcell_to_download}"
@@ -187,6 +193,8 @@
         - name: pivnet-product
         params:
           OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
+          OPSMAN_CLIENT_ID: {{opsman_client_id}}
+          OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
           OPS_MGR_USERNAME: {{opsman_admin_username}}
           OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:
@@ -200,8 +208,10 @@
 
             om-linux \
             --target https://$OPS_MGR_DOMAIN \
-            --username $OPS_MGR_USERNAME \
-            --password $OPS_MGR_PASSWORD \
+            --client-id "${OPSMAN_CLIENT_ID}" \
+            --client-secret "${OPSMAN_CLIENT_SECRET}" \
+            --username "$OPS_MGR_USERNAME" \
+            --password "$OPS_MGR_PASSWORD" \
             --request-timeout 3600 \
             --skip-ssl-validation \
             upload-product \

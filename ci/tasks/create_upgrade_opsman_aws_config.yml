@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 
 outputs:
   - name: upgrade_opsman_aws_config
@@ -40,6 +40,8 @@ run:
 
     existing_opsman_vm_name: "$EXISTING_OPSMAN_VM_NAME"
 
+    opsman_client_id: "$OPSMAN_CLIENT_ID"
+    opsman_client_secret: "$OPSMAN_CLIENT_SECRET"
     opsman_admin_username: "$OPSMAN_ADMIN_USERNAME"
     opsman_admin_password: "$OPSMAN_ADMIN_PASSWORD"
     opsman_passphrase: "$OPSMAN_ADMIN_PASSWORD"

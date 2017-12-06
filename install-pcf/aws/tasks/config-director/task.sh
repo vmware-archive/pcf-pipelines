@@ -45,7 +45,7 @@ read -r -d '' director_configuration <<EOF
     "bucket_name": "$s3_pcf_bosh",
     "access_key": "$aws_access_key_id",
     "secret_key": "$aws_secret_access_key",
-    "signature_version": "2",
+    "signature_version": "4",
     "region": "$AWS_REGION"
   }
 }
@@ -149,6 +149,36 @@ read -r -d '' networks_configuration <<EOF
           "availability_zones": ["$az3"]
         }
       ]
+    },
+    {
+      "name": "dynamic-services",
+      "service_network": true,
+      "subnets": [
+        {
+          "iaas_identifier": "$dynamic_services_subnet_id_az1",
+          "cidr": "$dynamic_services_subnet_cidr_az1",
+          "reserved_ip_ranges": "$dynamic_services_subnet_reserved_ranges_z1",
+          "dns": "$dns",
+          "gateway": "$dynamic_services_subnet_gw_az1",
+          "availability_zones": ["$az1"]
+        },
+        {
+          "iaas_identifier": "$dynamic_services_subnet_id_az2",
+          "cidr": "$dynamic_services_subnet_cidr_az2",
+          "reserved_ip_ranges": "$dynamic_services_subnet_reserved_ranges_z2",
+          "dns": "$dns",
+          "gateway": "$dynamic_services_subnet_gw_az2",
+          "availability_zones": ["$az2"]
+        },
+        {
+          "iaas_identifier": "$dynamic_services_subnet_id_az3",
+          "cidr": "$dynamic_services_subnet_cidr_az3",
+          "reserved_ip_ranges": "$dynamic_services_subnet_reserved_ranges_z3",
+          "dns": "$dns",
+          "gateway": "$dynamic_services_subnet_gw_az3",
+          "availability_zones": ["$az3"]
+        }
+      ]
     }
   ]
 }
@@ -195,10 +225,12 @@ for json in "${jsons[@]}"; do
 done
 
 om-linux \
-  --target https://opsman.$ERT_DOMAIN \
+  --target https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} \
   --skip-ssl-validation \
-  --username $OPSMAN_USER \
-  --password $OPSMAN_PASSWORD \
+  --client-id "${OPSMAN_CLIENT_ID}" \
+  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+  --username "$OPSMAN_USER" \
+  --password "$OPSMAN_PASSWORD" \
   configure-bosh \
   --iaas-configuration "$iaas_configuration" \
   --director-configuration "$director_configuration" \

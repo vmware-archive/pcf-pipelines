@@ -23,13 +23,15 @@ function main() {
 
   export CURR_DIR=$(pwd)
   export OPSMGR_VERSION=$(cat ./pivnet-opsmgr/metadata.json | jq '.Release.Version' | sed -e 's/^"//' -e 's/"$//')
-  export OPSMAN_NAME=OpsManager-${OPSMGR_VERSION}-$(date +"%Y%m%d%H%S")
+  export OPSMAN_NAME=OpsManager-${OPSMGR_VERSION}-$(date +"%Y%m%d%H%M%S")
   export OPSMAN_PATH=`ls $CURR_DIR/pivnet-opsmgr/*.{yml,yaml,ova} $CURR_DIR/pivnet-opsmgr/*_image 2>/dev/null | grep -v metadata.yaml`
 
+  export GOVC_TLS_CA_CERTS=/tmp/vcenter-ca.pem
+  echo "$GOVC_CA_CERT" > $GOVC_TLS_CA_CERTS
 
 IAAS_CONFIGURATION=$(cat <<-EOF
 {
-  "DiskProvisioning":"thin",
+  "DiskProvisioning":"$OPSMAN_DISK_TYPE",
   "IPAllocationPolicy":"dhcpPolicy",
   "IPProtocol":"IPv4",
   "Name": "$OPSMAN_NAME",
@@ -56,24 +58,26 @@ EOF
   cat ./opsman_settings.json
 
   echo "Importing OVA of new OpsMgr VM..."
-  echo "Running govc import.ova -options=opsman_settings.json -k=true ${OPSMAN_PATH}"
-  govc import.ova -options=opsman_settings.json -k=true ${OPSMAN_PATH}
+  echo "Running govc import.ova -options=opsman_settings.json ${OPSMAN_PATH}"
+  govc import.ova -options=opsman_settings.json ${OPSMAN_PATH}
   #
   # echo "Setting CPUs on new OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
-  govc vm.change -c=2 -k=true -vm=${OPSMAN_NAME}
+  govc vm.change -c=2 -vm=${OPSMAN_NAME}
   #
   # echo "Shutting down OLD OpsMgr VM... ${OPSMAN_IP}"
-  govc vm.power -off=true -k=true -vm.ip=${OPSMAN_IP}
+  opsman_path="$(govc find ${GOVC_RESOURCE_POOL} -type m -guest.ipAddress ${OPSMAN_IP} -runtime.powerState poweredOn)"
+  govc device.disconnect -vm.ipath=${opsman_path} ethernet-0
+  govc vm.power -off=true -vm.ipath=${opsman_path}
   #
   # echo "Starting OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${OPSMAN_NAME}"
-  govc vm.power -k=true -on=true ${OPSMAN_NAME}
+  govc vm.power -on=true ${OPSMAN_NAME}
 
   # make sure that vm and ops manager app is up
   started=false
   timeout=$((SECONDS+${OPSMAN_TIMEOUT}))
   set +e
   while ! $started; do
-      OUTPUT=$(govc vm.info -vm.ip=${OPSMAN_IP} -k=true 2>&1)
+      OUTPUT=$(govc vm.info -vm.ipath=${GOVC_DATACENTER}/vm/${OPSMAN_NAME} 2>&1)
 
       if [[ $SECONDS -gt $timeout ]]; then
         echo "Timed out waiting for VM to start."

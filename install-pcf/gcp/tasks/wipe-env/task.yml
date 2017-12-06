@@ -4,10 +4,10 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 
 inputs:
-- name: pcf-pipelines 
+- name: pcf-pipelines
 - name: terraform-state
 
 outputs:
@@ -17,9 +17,13 @@ params:
   GCP_PROJECT_ID:
   GCP_REGION:
   GCP_SERVICE_ACCOUNT_KEY:
+  GCP_RESOURCE_PREFIX:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
+  OPSMAN_ZONE:
 
 run:
   path: pcf-pipelines/install-pcf/gcp/tasks/wipe-env/task.sh

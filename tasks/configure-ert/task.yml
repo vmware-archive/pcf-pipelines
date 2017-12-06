@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 
 inputs:
 - name: pcf-pipelines
@@ -16,6 +16,8 @@ run:
 params:
   pcf_iaas:
   pcf_ert_domain:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPS_MGR_USR:
   OPS_MGR_PWD:
   pcf_az_1:
@@ -24,11 +26,27 @@ params:
   pcf_ert_ssl_cert:
   pcf_ert_ssl_key:
   terraform_prefix:
+  HAPROXY_FORWARD_TLS:
+  HAPROXY_BACKEND_CA:
+  ROUTER_TLS_CIPHERS:
+  HAPROXY_TLS_CIPHERS:
+  INTERNET_CONNECTED:
+  CONTAINER_NETWORKING_NW_CIDR:
   # IaaS Specific for GCP only
   gcp_storage_access_key:
   gcp_storage_secret_key:
   # aws specific
   S3_ENDPOINT:
+  # azure specific
+  pcf_ert_saml_cert:
+  pcf_ert_saml_key:
+  pcf_ert_networking_pointofentry:
+  azure_access_key:
+  azure_account_name:
+  azure_buildpacks_container:
+  azure_droplets_container:
+  azure_packages_container:
+  azure_resources_container:
   # db credentials
   db_app_usage_service_username:
   db_app_usage_service_password:
@@ -68,3 +86,5 @@ params:
   db_locket_password:
   db_silk_username:
   db_silk_password:
+  routing_disable_http:
+  SECURITY_ACKNOWLEDGEMENT:

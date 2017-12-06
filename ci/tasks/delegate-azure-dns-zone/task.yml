@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+- name: pcf-pipelines
+
+params:
+  AZURE_CLIENT_ID:
+  AZURE_CLIENT_SECRET:
+  AZURE_TENANT_ID:
+  PARENT_RESOURCE_GROUP:
+  PARENT_DNS_ZONE:
+  CHILD_RESOURCE_GROUP:
+  CHILD_DNS_ZONE_NAME:
+
+run:
+  path: pcf-pipelines/ci/tasks/delegate-azure-dns-zone/task.sh

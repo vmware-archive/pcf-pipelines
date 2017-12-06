@@ -1,0 +1,30 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+- name: pcf-pipelines
+- name: terraform-state
+
+outputs:
+- name: wipe-output
+
+params:
+  OS_PROJECT_NAME:
+  OS_USERNAME:
+  OS_PASSWORD:
+  OS_AUTH_URL:
+  OS_REGION_NAME:
+  OS_USER_DOMAIN_NAME:
+  OPSMAN_URI:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+
+run:
+  path: pcf-pipelines/install-pcf/openstack/tasks/wipe-env/task.sh

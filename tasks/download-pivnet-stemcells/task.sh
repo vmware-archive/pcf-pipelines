@@ -28,16 +28,17 @@ function main() {
   pivnet-cli eula --eula-slug=pivotal_software_eula >/dev/null
 
   # get the deduplicated stemcell filename for each deployed release (skipping p-bosh)
-  local stemcells=($( (jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | .stemcell' | sort -u) < "$diag_report"))
-  if [ ${#stemcells[@]} -eq 0 ]; then
-    echo "No installed products found that require a stemcell"
+  local ubuntu_stemcells=($( (jq --raw-output '.added_products.deployed[] | select (.name | contains("p-bosh") | not) | select (.stemcell | contains("ubuntu")) |.stemcell' | \
+    sort -u) < "$diag_report"))
+  if [ ${#ubuntu_stemcells[@]} -eq 0 ]; then
+    echo "No installed products found that require a ubuntu stemcell"
     exit 0
   fi
 
   mkdir -p "$download_dir"
 
   # extract the stemcell version from the filename, e.g. 3312.21, and download the file from pivnet
-  for stemcell in "${stemcells[@]}"; do
+  for stemcell in "${ubuntu_stemcells[@]}"; do
     local stemcell_version
     stemcell_version=$(echo "$stemcell" | grep -Eo "[0-9]+(\.[0-9]+)?")
     download_stemcell_version $stemcell_version

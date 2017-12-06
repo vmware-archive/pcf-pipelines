@@ -1,3 +1,3 @@
-# ert-concourse
+# install-ert
 
-- compatible with 1.9 ERT
+- compatible with 1.11 ERT

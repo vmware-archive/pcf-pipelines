@@ -1,0 +1,18 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: oozie/cloc}
+
+
+inputs:
+  - name: ci-repo
+  - name: code-repo
+
+params:
+  REPO_NAME:
+  DATADOG_API_KEY:
+  DATADOG_APP_KEY:
+
+run:
+  path: ci-repo/ci/scripts/codestats.py

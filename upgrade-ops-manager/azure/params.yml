@@ -31,6 +31,9 @@ azure_storage_container_name: xxxxxxxxxxxx
 
 existing_opsman_vm_name: CHANGEME
 
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_passphrase: CHANGEME

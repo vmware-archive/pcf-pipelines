@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 inputs:
   - name: pcf-pipelines 
   - name: terraform-state
@@ -12,9 +12,12 @@ outputs:
   - name: terraform-state-output
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
+  AWS_REGION:
 run:
   path: pcf-pipelines/install-pcf/aws/tasks/wipe-env/task.sh

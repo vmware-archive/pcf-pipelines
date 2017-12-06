@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 
 outputs:
   - name: update_buildpacks_config
@@ -34,6 +34,8 @@ run:
       cf_user: "${CF_USER}"
       check_new_opsman_every: "${CHECK_NEW_OPSMAN_EVERY}"
       iaas_type: "${IAAS_TYPE}"
+      opsman_client_id: "${OPSMAN_CLIENT_ID}"
+      opsman_client_secret: "${OPSMAN_CLIENT_SECRET}"
       opsman_admin_password: "${OPSMAN_ADMIN_PASSWORD}"
       opsman_admin_username: "${OPSMAN_ADMIN_USERNAME}"
       opsman_major_minor_version: "${OPSMAN_MAJOR_MINOR_VERSION}"

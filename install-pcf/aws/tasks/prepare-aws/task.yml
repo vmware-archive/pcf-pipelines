@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 inputs:
   - name: pcf-pipelines 
   - name: terraform-state
@@ -15,34 +15,37 @@ params:
   DB_MASTER_USERNAME:
   DB_MASTER_PASSWORD:
   TERRAFORM_PREFIX:
-  TF_VAR_aws_access_key:
-  TF_VAR_aws_secret_key:
-  TF_VAR_aws_key_name:
-  TF_VAR_aws_cert_arn:
-  TF_VAR_amis_nat:
-  TF_VAR_aws_region:
-  TF_VAR_az1:
-  TF_VAR_az2:
-  TF_VAR_az3:
-  TF_VAR_route53_zone_id:
-  TF_VAR_vpc_cidr:
-  TF_VAR_public_subnet_cidr_az1:
-  TF_VAR_public_subnet_cidr_az2:
-  TF_VAR_public_subnet_cidr_az3:
-  TF_VAR_ert_subnet_cidr_az1:
-  TF_VAR_ert_subnet_cidr_az2:
-  TF_VAR_ert_subnet_cidr_az3:
-  TF_VAR_services_subnet_cidr_az1:
-  TF_VAR_services_subnet_cidr_az2:
-  TF_VAR_services_subnet_cidr_az3:
-  TF_VAR_infra_subnet_cidr_az1:
-  TF_VAR_rds_subnet_cidr_az1:
-  TF_VAR_rds_subnet_cidr_az2:
-  TF_VAR_rds_subnet_cidr_az3:
-  TF_VAR_opsman_ip_az1:
-  TF_VAR_nat_ip_az1:
-  TF_VAR_nat_ip_az2:
-  TF_VAR_nat_ip_az3:
+  aws_access_key_id:
+  aws_secret_access_key:
+  aws_key_name:
+  aws_cert_arn:
+  amis_nat:
+  aws_region:
+  aws_az1:
+  aws_az2:
+  aws_az3:
+  route53_zone_id:
+  vpc_cidr:
+  public_subnet_cidr_az1:
+  public_subnet_cidr_az2:
+  public_subnet_cidr_az3:
+  ert_subnet_cidr_az1:
+  ert_subnet_cidr_az2:
+  ert_subnet_cidr_az3:
+  services_subnet_cidr_az1:
+  services_subnet_cidr_az2:
+  services_subnet_cidr_az3:
+  dynamic_services_subnet_cidr_az1:
+  dynamic_services_subnet_cidr_az2:
+  dynamic_services_subnet_cidr_az3:
+  infra_subnet_cidr_az1:
+  rds_subnet_cidr_az1:
+  rds_subnet_cidr_az2:
+  rds_subnet_cidr_az3:
+  opsman_ip_az1:
+  nat_ip_az1:
+  nat_ip_az2:
+  nat_ip_az3:
   OPSMAN_ALLOW_SSH_CIDR_RANGES:
   OPSMAN_ALLOW_HTTPS_CIDR_RANGES:
 run:

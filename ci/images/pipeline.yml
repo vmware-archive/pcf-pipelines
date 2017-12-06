@@ -17,7 +17,7 @@ resources:
 - name: pcf-pipelines-image
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: latest
     username: czero
     password: {{czero_dockerhub_password}}
@@ -25,7 +25,7 @@ resources:
 - name: pcf-pipelines-image-rc
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: release-candidate
     username: czero
     password: {{czero_dockerhub_password}}
@@ -43,10 +43,17 @@ resources:
     repository: om
     access_token: {{images_pipeline_github_token}}
 
+- name: semver-cli
+  type: github-release
+  source:
+    user: christianang
+    repository: semver-cli
+    access_token: {{images_pipeline_github_token}}
+
 - name: yaml-patch
   type: github-release
   source:
-    user: krishicks
+    user: pivotal-cf
     repository: yaml-patch
     access_token: {{images_pipeline_github_token}}
 
@@ -56,6 +63,8 @@ resources:
     bucket: cf-cli-releases
     regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
     region_name: us-west-1
+    access_key_id: {{images_pipeline_aws_access_key_id}}
+    secret_access_key: {{images_pipeline_aws_secret_access_key}}
 
 - name: cliaas
   type: github-release
@@ -78,13 +87,6 @@ resources:
     repository: govmomi
     access_token: {{images_pipeline_github_token}}
 
-- name: om-beta
-  type: github-release
-  source:
-    user: c0-ops
-    repository: om
-    access_token: {{images_pipeline_github_token}}
-
 - name: stemcell-downloader
   type: github-release
   source:
@@ -95,14 +97,14 @@ resources:
 - name: steamroll
   type: github-release
   source:
-    user: krishicks
+    user: pivotal-cf
     repository: concourse-pipeline-steamroller
     access_token: {{images_pipeline_github_token}}
 
 - name: terraform
   type: curl
   source:
-    url: https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip
+    url: https://releases.hashicorp.com/terraform/0.11.0/terraform_0.11.0_linux_amd64.zip
     filename: terraform.zip
 
 - name: jq
@@ -123,6 +125,8 @@ jobs:
       params: {save: true}
     - get: yaml-patch
       params: {globs: ["*linux*"]}
+    - get: semver-cli
+      params: {globs: ["*linux*"]}
     - get: om
       params: {globs: ["*linux*"]}
     - get: cf-cli-tarball
@@ -132,9 +136,6 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: govc
       params: {globs: ["*linux_amd64*"]}
-    - get: om-beta
-      params: {globs: ["*linux*"]}
-      version: { tag: '0.17-beta.0' }
     - get: stemcell-downloader
       params: {globs: ["*linux*"]}
     - get: steamroll
@@ -147,16 +148,16 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/rootfs}
       inputs:
       - name: pcf-pipelines
       - name: om
       - name: yaml-patch
+      - name: semver-cli
       - name: cf-cli-tarball
       - name: cliaas
       - name: pivnet-cli
       - name: govc
-      - name: om-beta
       - name: stemcell-downloader
       - name: steamroll
       - name: terraform
@@ -169,13 +170,13 @@ jobs:
         - -c
         - |
           cp \
+            semver-cli/semver-linux \
             om/om-linux \
             yaml-patch/yaml_patch_linux \
             cliaas/cliaas-linux \
             jq/jq \
             workspace
 
-          cp om-beta/om-linux workspace/om-linux-beta
           cp pivnet-cli/pivnet-linux-* workspace/pivnet-cli
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           cp steamroll/steamroll_linux workspace/steamroll
@@ -210,21 +211,21 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
           tag: release-candidate
       run:
         path: sh
         args:
         - -c
         - |
-          set -e
+          set -xe
           which om-linux
           which yaml_patch_linux
+          which semver-linux
           which cf
           which cliaas-linux
           which pivnet-cli
           which govc
-          which om-linux-beta
           which stemcell-downloader
           which jq
           which terraform

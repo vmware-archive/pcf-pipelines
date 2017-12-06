@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+  - name: pcf-pipelines
+
+params:
+  PIPELINE_NAME:
+  ATC_EXTERNAL_URL:
+  ATC_BASIC_AUTH_USERNAME:
+  ATC_BASIC_AUTH_PASSWORD:
+  ATC_TEAM_NAME:
+  TIMEOUT_MINUTES:
+
+run:
+  path: pcf-pipelines/ci/tasks/check-pipeline-exists/task.sh

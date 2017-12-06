@@ -1,0 +1,143 @@
+resource_types:
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+resources:
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    branch: master
+    private_key: ((git_private_key))
+
+- name: schedule
+  type: time
+  source:
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
+jobs:
+- name: upload-stemcell
+  plan:
+  - get: schedule
+    trigger: true
+  - task: upload-stemcell
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_CLIENT_ID: ((opsman_client_id))
+      OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+      API_TOKEN: ((pivnet_token))
+      IAAS_TYPE: ((iaas))
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: czero/rootfs}
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          #!/bin/bash
+
+          set -eu
+
+          ROOT="${PWD}"
+
+          function main() {
+            if [[ -z "${IAAS_TYPE}" ]]; then abort "The required env var IAAS_TYPE was not set"; fi
+
+            local stemcell_versions="$(get_stemcell_versions)"
+            echo "Stemcell Versions:"
+            echo "${stemcell_versions}"
+
+            if [[ -z "${stemcell_versions}" ]]; then
+               echo "No new stemcells available, skipping upload."
+               return
+            fi
+
+            pivnet-cli login --api-token="${API_TOKEN}"
+            pivnet-cli eula --eula-slug=pivotal_software_eula > /dev/null
+
+            local download_dir="${ROOT}/stemcells"
+            mkdir -p "${download_dir}"
+
+            for stemcell_version in ${stemcell_versions}; do
+              download_stemcell_version "${stemcell_version}"
+            done
+
+            for stemcell in $(ls ${download_dir}/*.tgz); do
+              echo "Uploading ${stemcell} to https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}"
+              om \
+                upload-stemcell --stemcell "${stemcell}"
+            done
+          }
+
+          function om() {
+            om-linux \
+              --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
+              --skip-ssl-validation \
+              --client-id "${OPSMAN_CLIENT_ID}" \
+              --client-secret "${OPSMAN_CLIENT_SECRET}" \
+              --username "${OPSMAN_USERNAME}" \
+              --password "${OPSMAN_PASSWORD}" \
+              $@
+          }
+
+          function get_stemcell_versions() {
+            om \
+              curl \
+              --path /api/v0/pivotal_network/stemcell_updates | \
+              jq -r '.stemcell_updates | .[].stemcell_version'
+          }
+
+          function get_product_file_ids() {
+            local stemcell_version="${1}"
+            pivnet-cli product-files \
+              -p stemcells \
+              -r "${stemcell_version}" \
+              --format json | \
+              jq .[].id
+          }
+
+          function download_stemcell_version() {
+            local stemcell_version="${1}"
+            local product_file_ids="$(get_product_file_ids "$stemcell_version")"
+            for product_file_id in ${product_file_ids}; do
+              local product_file_name="$(pivnet-cli product-file -p stemcells -r "${stemcell_version}" -i "${product_file_id}" --format=json | jq .name)"
+              if [[ -n $(echo "${product_file_name}" | grep -i "${IAAS_TYPE}") ]]; then
+                echo "Downloading ${stemcell_version} from PivNet"
+                pivnet-cli download-product-files \
+                  -p stemcells \
+                  -r "${stemcell_version}" \
+                  -i "${product_file_id}" \
+                  -d "${download_dir}" \
+                  --accept-eula
+                return 0
+              fi
+            done
+          }
+
+          main
+
+- name: apply-updates
+  plan:
+  - get: schedule
+    passed: [ upload-stemcell ]
+    trigger: true
+  - get: pcf-pipelines
+  - task: apply-updates
+    file: pcf-pipelines/tasks/stage-and-apply-updates/task.yml
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_CLIENT_ID: ((opsman_client_id))
+      OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
