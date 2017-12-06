@@ -1,10 +1,3 @@
-# Setting appropriate Application Security Groups is critical for a secure
-# deployment. Change the value of the param below to "X" to acknowledge that
-# once the Elastic Runtime deployment completes, you will review and set the
-# appropriate application security groups.
-# See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
-security_acknowledgement: CHANGEME
-
 pivnet_token: CHANGEME                  # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
 ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
@@ -132,147 +125,16 @@ dynamic_services_nw_dns: CHANGEME              # Dynamic Services network DNS
 dynamic_services_nw_gateway: CHANGEME          # Dynamic Services network Gateway
 dynamic_services_nw_azs: CHANGEME              # Comma separated list of AZ's to be associated with this network
 
-ert_singleton_job_az: CHANGEME         # AZ to use for deployment of ERT Singleton jobs
-
-loggregator_endpoint_port:    # Loggegrator Port. Default is 443
-company_name:                 # Company Name for Apps Manager
 company_proxy_domain:         # If set to a non-empty string, bypass DNS when uploading stemcells to Ops Manager
 
-container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
+# The CF Properties configuration (in yaml) to provide to Ops Manager
+cf_properties: |
+  CHANGEME
 
-## Syslog endpoint configuration goes here
-# Optional. If syslog_host is specified, syslog_port, syslog_protocol,
-# syslog_drain_buffer_size, and enable_security_event_logging must be set.
-syslog_host:
-syslog_port:
-syslog_protocol:
-enable_security_event_logging: false
-syslog_drain_buffer_size: 10000
+# The CF Network configuration (in yaml) to provide to Ops Manager
+cf_network: |
+  CHANGEME
 
-## Wildcard domain certs go here
-# Optional. Will be generated if blank.
-ssl_cert:
-ssl_private_key:
-saml_ssl_cert:
-saml_ssl_private_key:
-
-haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
-haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
-
-# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
-# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
-# The recommended settings are filled in below, change as necessary.
-router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-
-# Disable HTTP on gorouters (true|false)
-disable_http_proxy: false
-
-## TCP routing and routing services
-tcp_routing: disable                    # Enable/disable TCP routing (enable|disable)
-tcp_routing_ports:                      # A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
-route_services: disable                 # Enable/disable route services (enable|disable)
-ignore_ssl_cert_verification: false     # Whether to disable SSL cert verification for this environment
-garden_network_pool_cidr: 10.254.0.0/22 # Only change this if you need to avoid address collision with a third-party service on the same subnet.
-garden_network_mtu: 1454                # Applications Network Maximum Transmission Unit bytes
-
-# If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd,
-# smtp_enable_starttls_auto, and smtp_auth_mechanism must also be set.
-smtp_address:
-smtp_from:
-smtp_port:
-smtp_user:
-smtp_pwd:
-smtp_enable_starttls_auto: true
-smtp_auth_mechanism: # (none|plain|cram-md5)
-
-## Authentication type needed. SAML is not presently supported.
-authentication_mode: internal # (internal|ldap) If ldap, specify ldap configuration below.
-ldap_url:
-ldap_user:
-ldap_pwd:
-search_base:
-search_filter:
-group_search_base:
-group_search_filter:
-mail_attribute_name:
-first_name_attribute:
-last_name_attribute:
-
-## Deployment domain names
-system_domain: CHANGEME # e.g. system.pcf.example.com
-apps_domain: CHANGEME   # e.g. apps.pcf.example.com
-
-skip_cert_verify: false       # If true, disable SSL certificate verification for this environment.
-
-disable_insecure_cookies: false # If true, disable insecure cookies on the router.
-
-default_quota_memory_limit_mb: 10240
-default_quota_max_number_services: 1000
-allow_app_ssh_access: false             # Whether to allow SSH access to application instances
-
-# Request timeout for gorouter
-router_request_timeout_in_seconds: 900
-
-ha_proxy_ips:           # Comma-separated list of static IPs
-router_static_ips:      # Comma-separated list of static IPs
-tcp_router_static_ips:  # Comma-separated list of static IPs
-ssh_static_ips:         # Comma-separated list of static IPs
-mysql_static_ips:       # Comma-separated list of static IPs
-
-mysql_monitor_email:    # Email address to receive MySQL monitor notifications
-mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
-
-# SCP backup config params (leave empty values if you're not using scp)
-mysql_backups_scp_server:
-mysql_backups_scp_port:
-mysql_backups_scp_user:
-mysql_backups_scp_key:
-mysql_backups_scp_destination:
-mysql_backups_scp_cron_schedule:
-
-# S3 backup config params (leave empty values if you're not using s3)
-mysql_backups_s3_endpoint_url:
-mysql_backups_s3_bucket_name:
-mysql_backups_s3_bucket_path:
-mysql_backups_s3_access_key_id:
-mysql_backups_s3_secret_access_key:
-mysql_backups_s3_cron_schedule:
-
-## Default resource configuration
-## these resources can take any parameter made available in
-## the ops manager API ( https://<your-ops-man/docs#configuring-resources-for-a-job )
-database_instances: 1
-blobstore_instances: 1
-control_instances: 1
-compute_instances: 1
-backup_prepare_instances: 0
-ha_proxy_instances: 0
-router_instances: 1
-mysql_monitor_instances: 0
-tcp_router_instances: 0
-
-# Whether or not the ERT VMs are internet connected.
-internet_connected: true
-
-# leave nsx fields empty if you are not leveraging the nsx features for a given component
-tcp_router_nsx_security_group:
-tcp_router_nsx_lb_edge_name:
-tcp_router_nsx_lb_pool_name:
-tcp_router_nsx_lb_security_group:
-tcp_router_nsx_lb_port:
-router_nsx_security_group:
-router_nsx_lb_edge_name:
-router_nsx_lb_pool_name:
-router_nsx_lb_security_group:
-router_nsx_lb_port:
-diego_brain_nsx_security_group:
-diego_brain_nsx_lb_edge_name:
-diego_brain_nsx_lb_pool_name:
-diego_brain_nsx_lb_security_group:
-diego_brain_nsx_lb_port:
-mysql_nsx_security_group:
-mysql_nsx_lb_edge_name:
-mysql_nsx_lb_pool_name:
-mysql_nsx_lb_security_group:
-mysql_nsx_lb_port:
+# The CF Resources configuration (in yaml) to provide to Ops Manager
+cf_resources: |
+  CHANGEME

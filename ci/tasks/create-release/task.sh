@@ -27,15 +27,6 @@ pushd pcf-pipelines 1>/dev/null
   ) > upgrade-ert/pipeline.yml
 popd 1>/dev/null
 
-echo "Creating install-pcf-srt pipeline from install-pcf pipeline"
-pushd pcf-pipelines 1>/dev/null
-  # apply yaml-patch for vsphere pipeline.yml
-  cat install-pcf/vsphere/pipeline.yml |  \
-   yaml_patch_linux -o operations/create-install-pcf-srt-vsphere.yml > \
-     install-pcf/vsphere/srt/pipeline.yml
-  fly format-pipeline --write --config install-pcf/vsphere/srt/pipeline.yml
-popd 1>/dev/null
-
 # Switch pcf-pipelines to point at Pivnet release of pcf-pipelines instead
 # of GitHub
 version=v$(cat version/version)
