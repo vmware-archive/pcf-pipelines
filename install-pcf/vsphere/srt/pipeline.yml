@@ -38,11 +38,11 @@ resources:
   type: staticfile
   source:
     files:
-    - filename: properties.json
+    - filename: properties.yml
       data: {{cf_properties}}
-    - filename: network.json
+    - filename: network.yml
       data: {{cf_network}}
-    - filename: resources.json
+    - filename: resources.yml
       data: {{cf_resources}}
 
 jobs:
