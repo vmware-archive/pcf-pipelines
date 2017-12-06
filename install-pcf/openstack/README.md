@@ -8,7 +8,7 @@ architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/openstack/openstack_
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/cflinuxfs2 and custom
+This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
 docker-image resources) and Pivotal Network, and as such the Concourse instance
 must have access to those.
 

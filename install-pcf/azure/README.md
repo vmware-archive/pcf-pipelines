@@ -8,7 +8,7 @@ architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/azure/azure_ref_arch
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/cflinuxfs2 and custom
+This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
 docker-image resources) and the configured Azure Storage Container
 (terraform.tfstate file), and as such the Concourse instance must have access
 to those. Note that Terraform outputs a .tfstate file that contains plaintext

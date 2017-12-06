@@ -4,11 +4,11 @@
 
 This pipeline uses Terraform to create all the infrastructure required to run a
 3 AZ PCF deployment on GCP per the Customer[0] [reference
-architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/gcp/gcp_ref_arch.html).
+architecture](http://docs.pivotal.io/pivotalcf/refarch/gcp/gcp_ref_arch.html).
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/cflinuxfs2 and custom
+This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
 docker-image resources) and the configured Google Cloud Storage bucket
 (terraform.tfstate file), and as such the Concourse instance must have access
 to those. Note that Terraform outputs a .tfstate file that contains plaintext

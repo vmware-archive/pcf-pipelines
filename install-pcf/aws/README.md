@@ -8,7 +8,7 @@ architecture](http://docs.pivotal.io/pivotalcf/refarch/aws/aws_ref_arch.html).
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/cflinuxfs2 and custom
+This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
 docker-image resources) and the configured S3 bucket
 (terraform.tfstate file), and as such the Concourse instance must have access
 to those. Note that Terraform outputs a .tfstate file that contains plaintext
