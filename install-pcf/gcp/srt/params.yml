@@ -1,0 +1,104 @@
+pivnet_token: CHANGEME                  # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
+ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
+git_private_key:                        # Optional - if your git repo requires an SSH key.
+
+# Errands to disable prior to deploying ERT
+# Valid values:
+#   all
+#   none
+#   "" (empty string)
+#   Any combination of the following, separated by comma:
+#     smoke-tests
+#     push-apps-manager
+#     notifications
+#     notifications-ui
+#     push-pivotal-account
+#     autoscaling
+#     autoscaling-register-broker
+#     nfsbrokerpush
+ert_errands_to_disable: none
+
+# GCP project to create the infrastructure in
+gcp_project_id: CHANGEME
+
+# GCP credentials JSON. The service account must have the Editor role.
+gcp_service_account_key: |
+  CHANGEME
+
+# Identifier to prepend to GCP infrastructure names/labels; this should be globally unique
+gcp_resource_prefix: CHANGEME
+
+# GCP region
+gcp_region: us-central1
+
+# GCP Zones
+gcp_zone_1: us-central1-a
+gcp_zone_2: us-central1-b
+gcp_zone_3: us-central1-c
+
+# Storage Location
+gcp_storage_bucket_location: US
+
+terraform_statefile_bucket: CHANGEME
+
+# Operations Manager credentials to set
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
+
+# Optional PEM-encoded certificates to add to BOSH director
+opsman_trusted_certs: |
+
+# Elastic Runtime Domain
+pcf_ert_domain: CHANGEME # This is the top level domain that ERT apps and services will be accessible with
+                         # e.g.: if the apps domain is apps.pcf.example.org then pcf_ert_domain should be pcf.example.org
+opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
+
+# Elastic Runtime SSL configuration
+# Set pcf_ert_ssl_cert to 'generate' if you'd like a self-signed cert to be
+# made
+pcf_ert_ssl_cert: generate
+pcf_ert_ssl_key:
+
+# DB Creds
+# Usernames must be 16 characters or fewer
+db_diego_username: CHANGEME
+db_diego_password: CHANGEME
+db_notifications_username: CHANGEME
+db_notifications_password: CHANGEME
+db_autoscale_username: CHANGEME
+db_autoscale_password: CHANGEME
+db_uaa_username: CHANGEME
+db_uaa_password: CHANGEME
+db_app_usage_service_username: CHANGEME
+db_app_usage_service_password: CHANGEME
+db_ccdb_username: CHANGEME
+db_ccdb_password: CHANGEME
+db_routing_username: CHANGEME
+db_routing_password: CHANGEME
+
+db_accountdb_username: CHANGEME
+db_accountdb_password: CHANGEME
+db_networkpolicyserverdb_username: CHANGEME
+db_networkpolicyserverdb_password: CHANGEME
+db_nfsvolumedb_username: CHANGEME
+db_nfsvolumedb_password: CHANGEME
+db_silk_username: CHANGEME
+db_silk_password: CHANGEME
+db_locket_username: CHANGEME
+db_locket_password: CHANGEME
+
+# The CF Properties configuration (in yaml) to provide to Ops Manager
+cf_properties: |
+  CHANGEME
+
+# The CF Network configuration (in yaml) to provide to Ops Manager
+cf_network: |
+  CHANGEME
+
+# The CF Resources configuration (in yaml) to provide to Ops Manager
+cf_resources: |
+  CHANGEME
