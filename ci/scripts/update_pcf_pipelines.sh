@@ -42,6 +42,7 @@ write_params $tmpfile "" "upgrade_ert_aws_current_params" 'lre1-aws/ert-upgrade-
 write_params $tmpfile "" "upgrade_ops_manager_aws_current_params" 'lre1-aws/upgrade-ops-man-params'
 write_params $tmpfile "" "install_pcf_gcp_current_params" 'lre1-gcp/install-pcf-params'
 write_params $tmpfile "" "install_pcf_gcp_rc_params" 'rc-gcp-install/install-pcf-params'
+write_params $tmpfile "" "install_pcf_gcp_srt_rc_params" 'rc-gcp-srt-install/install-pcf-params'
 write_params $tmpfile "" "upgrade_ert_gcp_current_params" 'lre1-gcp/ert-upgrade-params'
 write_params $tmpfile "" "apply_updates_gcp_current_params" 'lre1-gcp/apply-updates-params'
 write_params $tmpfile "" "upgrade_ops_manager_gcp_current_params" 'lre1-gcp/opsman-upgrade-params'

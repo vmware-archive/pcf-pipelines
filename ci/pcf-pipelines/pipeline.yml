@@ -23,6 +23,11 @@ groups:
   - set-rc-install-pcf-gcp
   - wipe-gcp
   - trigger-install-pcf-gcp
+  - lock-gcp-srt
+  - destroy-rc-install-pcf-gcp-srt
+  - set-rc-install-pcf-gcp-srt
+  - wipe-gcp-srt
+  - trigger-install-pcf-gcp-srt
   - lock-azure
   - destroy-rc-install-pcf-azure
   - set-rc-install-pcf-azure
@@ -50,6 +55,7 @@ groups:
   - force-unlock-vsphere-install-pcf
   - force-unlock-vsphere-install-pcf-offline
   - force-unlock-gcp
+  - force-unlock-gcp-srt
   - force-unlock-azure
   - force-unlock-aws
 - name: install-vsphere
@@ -79,6 +85,15 @@ groups:
   - set-rc-install-pcf-gcp
   - wipe-gcp
   - trigger-install-pcf-gcp
+  - check-environments-complete
+- name: install-gcp-srt
+  jobs:
+  - force-unlock-gcp-srt
+  - lock-gcp-srt
+  - destroy-rc-install-pcf-gcp-srt
+  - set-rc-install-pcf-gcp-srt
+  - wipe-gcp-srt
+  - trigger-install-pcf-gcp-srt
   - check-environments-complete
 - name: install-azure
   jobs:
@@ -161,6 +176,12 @@ resources:
     pool: gcp
     <<: *c0-ci-locks-params
 
+- name: gcp-srt-lock
+  type: pool
+  source:
+    pool: gcp-srt
+    <<: *c0-ci-locks-params
+
 - name: azure-lock
   type: pool
   source:
@@ -241,6 +262,35 @@ jobs:
           echo "install-pcf" > ./install-pcf-generic/metadata
   - try:
       put: gcp-lock
+      params: {release: install-pcf-generic}
+
+- name: force-unlock-gcp-srt
+  serial: true
+  plan:
+  - aggregate:
+    - get: gcp-srt-lock
+  - task: prepare-generic-lock-names
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/rootfs
+      inputs:
+      - name: gcp-srt-lock
+      outputs:
+      - name: install-pcf-generic
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cp -r ./vsphere-lock/* ./install-pcf-generic/.
+
+          echo "install-pcf" > ./install-pcf-generic/name
+          echo "install-pcf" > ./install-pcf-generic/metadata
+  - try:
+      put: gcp-srt-lock
       params: {release: install-pcf-generic}
 
 - name: force-unlock-azure
@@ -836,6 +886,114 @@ jobs:
     <<: *notify_slack
 
 ####### END GCP
+########### GCP-SRT
+
+- name: lock-gcp-srt
+  serial: true
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-rc
+      passed: [update-pipelines]
+      trigger: true
+  - put: gcp-srt-lock
+    params: { claim: install-pcf }
+    timeout: 3h00m
+
+- name: destroy-rc-install-pcf-gcp-srt
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: gcp-srt-lock
+      passed: [lock-gcp-srt]
+      trigger: true
+    - get: pivnet-rc
+  - task: destroy-rc-install-pcf-gcp-srt
+    params:
+      PIPELINE_NAME: rc-install-pcf-gcp-srt
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
+
+- name: set-rc-install-pcf-gcp-srt
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: gcp-srt-lock
+      passed: [ destroy-rc-install-pcf-gcp-srt ]
+      trigger: true
+    - get: pivnet-rc
+  - task: unpack-rc
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: release }
+  - task: set-rc-install-pcf-gcp-srt
+    params:
+      PIPELINE_PARAMS: {{install_pcf_gcp_srt_rc_params}}
+      PIPELINE_NAME: rc-install-pcf-gcp-srt
+      PIPELINE_PATH: release/pcf-pipelines/install-pcf/gcp/srt/pipeline.yml
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/set_pipeline.yml
+  - task: unpause-rc-install-pcf-gcp-srt
+    params:
+      PIPELINE_NAME: rc-install-pcf-gcp-srt
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
+
+- name: wipe-gcp-srt
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: gcp-srt-lock
+      passed: [ set-rc-install-pcf-gcp-srt ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ set-rc-install-pcf-gcp-srt ]
+  - task: trigger-gcp-srt-rc-wipe-env
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-gcp-srt/wipe-env
+  on_failure:
+    <<: *notify_slack
+
+- name: trigger-install-pcf-gcp-srt
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: gcp-srt-lock
+      passed: [ wipe-gcp-srt ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ wipe-gcp-srt ]
+  - task: trigger-gcp-srt-rc-upload-opsman-image
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-gcp-srt/upload-opsman-image
+  - task: trigger-gcp-srt-rc-create-infrastructure
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-gcp-srt/create-infrastructure
+  - task: delegate-dns-zone
+    file: pcf-pipelines/ci/tasks/delegate-gcp-srt-dns-zone/task.yml
+    params:
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+      PARENT_DNS_ZONE: {{gcp_parent_dns_zone}}
+      CHILD_DNS_ZONE: {{gcp_srt_child_dns_zone}}
+  - task: trigger-gcp-srt-rc-configure-director
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-install-pcf-gcp-srt/configure-director
+  on_failure:
+    <<: *notify_slack
+
+####### END GCP-SRT
 ####### Azure
 
 - name: lock-azure
@@ -1047,6 +1205,7 @@ jobs:
     - get: pivnet-rc
       passed:
       - trigger-install-pcf-gcp
+      - trigger-install-pcf-gcp-srt
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
@@ -1092,6 +1251,19 @@ jobs:
       - try:
           put: gcp-lock
           params: {release: gcp-lock}
+    - do:
+      - task: check-gcp-srt
+        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+        params:
+          PIPELINE: rc-install-pcf-gcp-srt
+          JOB: deploy-ert
+          TIMEOUT_MINUTES: 240
+          DISABLE_PIVNET_VERSION_CHECK: false
+          <<: *atc_creds
+      - get: gcp-srt-lock
+      - try:
+          put: gcp-srt-lock
+          params: {release: gcp-srt-lock}
     - do:
       - task: check-azure
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
