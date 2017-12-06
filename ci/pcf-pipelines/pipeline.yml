@@ -979,7 +979,7 @@ jobs:
       JOBS: |
         rc-install-pcf-gcp-srt/create-infrastructure
   - task: delegate-dns-zone
-    file: pcf-pipelines/ci/tasks/delegate-gcp-srt-dns-zone/task.yml
+    file: pcf-pipelines/ci/tasks/delegate-gcp-dns-zone/task.yml
     params:
       GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
       PARENT_DNS_ZONE: {{gcp_parent_dns_zone}}
