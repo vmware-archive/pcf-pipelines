@@ -257,15 +257,14 @@ jobs:
       params:
         globs:
         - srt*.pivotal
-    - do:
-      - get: configuration
-        resource: cf-configuration
-      - task: convert-yaml-to-json
-        file: pcf-pipelines/tasks/convert-yaml-to-json/task.yml
-        input_mapping: { yaml: configuration }
-        output_mapping: { json: configuration }
-        params:
-          GLOBS: "*.yml"
+    - get: configuration
+      resource: cf-configuration
+  - task: convert-yaml-to-json
+    file: pcf-pipelines/tasks/convert-yaml-to-json/task.yml
+    input_mapping: { yaml: configuration }
+    output_mapping: { json: configuration }
+    params:
+      GLOBS: "*.yml"
   - task: configure
     file: pcf-pipelines/tasks/configure-product/task.yml
     params:
