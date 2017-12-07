@@ -11,7 +11,7 @@ resources:
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    private_key: {{git_private_key}}
+    private_key: ((git_private_key))
     paths: [ci/Dockerfile]
 
 - name: pcf-pipelines-image
@@ -20,7 +20,7 @@ resources:
     repository: czero/rootfs
     tag: latest
     username: czero
-    password: {{czero_dockerhub_password}}
+    password: ((czero_dockerhub_password))
 
 - name: pcf-pipelines-image-rc
   type: docker-image
@@ -28,7 +28,7 @@ resources:
     repository: czero/rootfs
     tag: release-candidate
     username: czero
-    password: {{czero_dockerhub_password}}
+    password: ((czero_dockerhub_password))
 
 - name: cflinuxfs2
   type: docker-image
@@ -41,21 +41,21 @@ resources:
   source:
     user: pivotal-cf
     repository: om
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: semver-cli
   type: github-release
   source:
     user: christianang
     repository: semver-cli
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: yaml-patch
   type: github-release
   source:
     user: pivotal-cf
     repository: yaml-patch
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: cf-cli-tarball
   type: s3
@@ -63,43 +63,43 @@ resources:
     bucket: cf-cli-releases
     regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
     region_name: us-west-1
-    access_key_id: {{images_pipeline_aws_access_key_id}}
-    secret_access_key: {{images_pipeline_aws_secret_access_key}}
+    access_key_id: ((aws_access_key_id))
+    secret_access_key: ((aws_secret_access_key))
 
 - name: cliaas
   type: github-release
   source:
     user: pivotal-cf
     repository: cliaas
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: pivnet-cli
   type: github-release
   source:
     user: pivotal-cf
     repository: pivnet-cli
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: govc
   type: github-release
   source:
     user: vmware
     repository: govmomi
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: stemcell-downloader
   type: github-release
   source:
     user: pivotal-cf
     repository: pcf-product-stemcell-downloader
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: steamroll
   type: github-release
   source:
     user: pivotal-cf
     repository: concourse-pipeline-steamroller
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: terraform
   type: curl
