@@ -29,6 +29,7 @@ vcenter_ca_cert: CHANGEME          # vCenter CA cert at the API endpoint; enter 
 
 # Ops Manager VM configuration
 om_vm_host:                           # Optional - vCenter host to deploy Ops Manager in
+om_vm_folder:                         # Optional - vCenter folder to put Ops Manager in
 vcenter_datastore: CHANGEME           # vCenter datastore name to deploy Ops Manager in
 opsman_domain_or_ip_address: CHANGEME # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
 

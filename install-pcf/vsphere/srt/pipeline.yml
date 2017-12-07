@@ -77,6 +77,7 @@ jobs:
       OM_VM_NAME: {{om_vm_name}}
       OM_VM_NETWORK: {{om_vm_network}}
       OM_VM_POWER_STATE: {{om_vm_power_state}}
+      OM_VM_FOLDER: {{om_vm_folder}}
       OPS_MGR_SSH_PWD: {{opsman_ssh_password}}
       OPSMAN_DISK_TYPE: {{opsman_disk_type}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
