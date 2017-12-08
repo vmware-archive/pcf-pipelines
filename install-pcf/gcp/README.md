@@ -148,7 +148,7 @@ address this issue.
       "type": "service_account",
       "project_id": "cf-example",
       "private_key_id": "REDACTED",
-      "private_key": "-----BEGIN PRIVATE KEY-----...-----END PRIVATE KEY-----\n",
+      "private_key": "-----BEGIN PRIVATE KEY-----...example...-----END PRIVATE KEY-----\n",
       "client_email": "customer0-example.iam.gserviceaccount.com",
       "client_id": "REDACTED",
       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
