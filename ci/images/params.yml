@@ -1,5 +1,5 @@
 git_private_key:
 czero_dockerhub_password:
-images_pipeline_github_token:
-images_pipeline_aws_access_key_id:
-images_pipeline_aws_secret_access_key:
+github_token:
+aws_access_key_id:
+aws_secret_access_key:
