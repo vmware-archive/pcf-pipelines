@@ -1,0 +1,78 @@
+cf_properties:
+  ".properties.system_blobstore":
+    value: internal
+  ".properties.logger_endpoint_port":
+    value: ''
+  ".properties.container_networking_network_cidr":
+    value: 10.255.0.0/16
+  ".properties.security_acknowledgement":
+    value: #CHANGEME
+  ".cloud_controller.system_domain":
+    value: #CHANGEME
+  ".cloud_controller.apps_domain":
+    value: #CHANGEME
+  ".cloud_controller.default_quota_memory_limit_mb":
+    value: '10240'
+  ".cloud_controller.default_quota_max_number_services":
+    value: '1000'
+  ".cloud_controller.allow_app_ssh_access":
+    value: 'true'
+  ".ha_proxy.static_ips":
+    value: ''
+  ".ha_proxy.skip_cert_verify":
+    value: 'true'
+  ".router.static_ips":
+    value: 192.168.20.100,192.168.20.101,192.168.20.102,192.168.20.103,192.168.20.104,192.168.20.105,192.168.20.106,192.168.20.107,192.168.20.108,192.168.20.109
+  ".router.disable_insecure_cookies":
+    value: 'false'
+  ".router.request_timeout_in_seconds":
+    value: '900'
+  ".mysql_monitor.recipient_email":
+    value: #CHANGEME
+  ".tcp_router.static_ips":
+    value: 192.168.20.110,192.168.20.111,192.168.20.112,192.168.20.113,192.168.20.114,192.168.20.115,192.168.20.116,192.168.20.117,192.168.20.118,192.168.20.119
+  ".push-apps-manager.company_name":
+    value: ''
+  ".diego_brain.static_ips":
+    value: 192.168.20.120,192.168.20.121,192.168.20.122
+  ".properties.route_services":
+    value: disable
+  ".properties.tcp_routing":
+    value: enable
+  ".properties.tcp_routing.enable.reservable_ports":
+    value: '2323'
+  ".properties.networking_poe_ssl_cert":
+    value:
+      cert_pem: |-
+        -----BEGIN EXAMPLE CERTIFICATE-----
+        ...
+        -----END EXAMPLE CERTIFICATE-----
+      private_key_pem: |-
+        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+        ...
+        -----END RSA PRIVATE KEY-----
+  ".properties.haproxy_forward_tls":
+    value: enable
+  ".properties.haproxy_forward_tls.enable.backend_ca":
+    value: |-
+      -----BEGIN EXAMPLE CERTIFICATE-----
+      ...
+      -----END EXAMPLE CERTIFICATE-----
+  ".properties.routing_disable_http":
+    value: 'false'
+  ".properties.gorouter_ssl_ciphers":
+    value: ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384
+  ".properties.haproxy_ssl_ciphers":
+    value: DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384
+  ".properties.uaa":
+    value: internal
+  ".uaa.service_provider_key_credentials":
+    value:
+      cert_pem: |-
+        -----BEGIN EXAMPLE CERTIFICATE-----
+        ...
+        -----END EXAMPLE CERTIFICATE-----
+      private_key_pem: |-
+        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+        ...
+        -----END EXAMPLE RSA PRIVATE KEY-----
