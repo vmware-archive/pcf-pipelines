@@ -1,4 +1,4 @@
-cf_properties:
+cf_properties: |
   ".properties.system_blobstore":
     value: internal
   ".properties.logger_endpoint_port":
