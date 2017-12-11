@@ -6,6 +6,8 @@
 
 This article provides samples of deployment manifests and pipelines for the integration of a BOSH-deployed Concourse server with CredHub. See the [documentation page](http://concourse.ci/creds.html) for information about CredHub integration with a Concourse server deployed using some other method.
 
+## Table of Contents
+
 - [Concourse Configuration](#concourse-configuration)
 - [Integration Topologies](#integration-topologies)
 - [Deploying a CredHub server colocated with a Concourse VM](#colocated-credhub-sample)
@@ -152,7 +154,7 @@ jobs:
 ```
 
 The parameter definition `WORLD_PARAM: ((hello))` tells Concourse to retrieve secret `/concourse/<team-name>/<pipeline-name>/hello` or `/concourse/<team-name>/hello` from CredHub during that pipeline execution.
-If the secret exists, then Concourse will proceed with running the pipeline using the retrieved value, otherwise it will halt the pipeline with the corresponding error message.
+If the secret exists, then Concourse will proceed with running the pipeline using the retrieved value (it should print "Hello World"), otherwise it will halt the pipeline with the corresponding error message.
 
 ---
 ## <a name="uaa-client-setup"></a> Configuring a UAA client for Concourse-CredHub integration
