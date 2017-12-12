@@ -79,18 +79,18 @@ aws_az2: us-east-1b
 aws_az3: us-east-1d
 
 # For terraform state file (http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region)
-S3_ENDPOINT: https://s3.amazonaws.com
-S3_OUTPUT_BUCKET: CHANGEME
+s3_endpoint: https://s3.amazonaws.com
+s3_output_bucket: CHANGEME
 
 # The ERT domain to use; *.cfapps.<ert-domain> and *.sys.<ert-domain> will be used
-ERT_DOMAIN: CHANGEME
+ert_domain: CHANGEME
 
 # Route53 zone to add records to
-ROUTE_53_ZONE_ID:
+route_53_zone_id:
 
 # Cert will be generated if left empty
-ERT_SSL_CERT:
-ERT_SSL_KEY:
+ert_ssl_cert:
+ert_ssl_key:
 
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
@@ -115,7 +115,7 @@ opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 
 # Private Key of the keypair uploaded to AWS to be used for Operations Manager, NAT VMs.
-PEM: CHANGEME
+pem: CHANGEME
 
 # Upload PEM to AWS as the below key pair name
 aws_key_name: CHANGEME
