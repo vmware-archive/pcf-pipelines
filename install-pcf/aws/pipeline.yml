@@ -12,8 +12,8 @@ resources:
     disable_ssl: false
     access_key_id: {{aws_access_key_id}}
     secret_access_key: {{aws_secret_access_key}}
-    endpoint: {{S3_ENDPOINT}}
-    bucket: {{S3_OUTPUT_BUCKET}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_output_bucket}}
     region_name: {{aws_region}}
     versioned_file: terraform.tfstate
 
@@ -47,8 +47,8 @@ jobs:
   - get: pcf-pipelines
   - task: create-terraform-state
     params:
-      S3_BUCKET_TERRAFORM: {{S3_OUTPUT_BUCKET}}
-      S3_ENDPOINT: {{S3_ENDPOINT}}
+      S3_BUCKET_TERRAFORM: {{s3_output_bucket}}
+      S3_ENDPOINT: {{s3_endpoint}}
       S3_REGION: {{aws_region}}
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
@@ -101,7 +101,7 @@ jobs:
       aws_az1: {{aws_az1}}
       aws_az2: {{aws_az2}}
       aws_az3: {{aws_az3}}
-      route53_zone_id: {{ROUTE_53_ZONE_ID}}
+      route53_zone_id: {{route_53_zone_id}}
       vpc_cidr: {{vpc_cidr}}
       public_subnet_cidr_az1: {{public_subnet_cidr_az1}}
       public_subnet_cidr_az2: {{public_subnet_cidr_az2}}
@@ -133,7 +133,7 @@ jobs:
   - task: prepare-rds
     file: pcf-pipelines/install-pcf/aws/tasks/prepare-rds/task.yml
     params:
-      PEM: {{PEM}}
+      PEM: {{pem}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       DB_APP_USAGE_SERVICE_USERNAME: {{db_app_usage_service_username}}
       DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
@@ -184,9 +184,9 @@ jobs:
       OPSMAN_USER: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       AWS_KEY_NAME: {{aws_key_name}}
-      PEM: {{PEM}}
+      PEM: {{pem}}
       AWS_REGION: {{aws_region}}
-      S3_ENDPOINT: {{S3_ENDPOINT}}
+      S3_ENDPOINT: {{s3_endpoint}}
       TRUSTED_CERTIFICATES: {{director_certificates}}
       ert_subnet_reserved_ranges_z1: {{ert_subnet_reserved_ranges_z1}}
       ert_subnet_reserved_ranges_z2: {{ert_subnet_reserved_ranges_z2}}
@@ -263,18 +263,18 @@ jobs:
     file: pcf-pipelines/tasks/configure-ert/task.yml
     params:
       pcf_iaas: aws
-      pcf_ert_domain: {{ERT_DOMAIN}}
+      pcf_ert_domain: {{ert_domain}}
       OPSMAN_CLIENT_ID: {{opsman_client_id}}
       OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
-      pcf_ert_ssl_cert: {{ERT_SSL_CERT}}
-      pcf_ert_ssl_key: {{ERT_SSL_KEY}}
+      pcf_ert_ssl_cert: {{ert_ssl_cert}}
+      pcf_ert_ssl_key: {{ert_ssl_key}}
       pcf_az_1: {{aws_az1}}
       pcf_az_2: {{aws_az2}}
       pcf_az_3: {{aws_az3}}
       terraform_prefix: {{terraform_prefix}}
-      S3_ENDPOINT: {{S3_ENDPOINT}}
+      S3_ENDPOINT: {{s3_endpoint}}
       mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
       MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
