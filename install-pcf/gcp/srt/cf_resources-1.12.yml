@@ -1,0 +1,29 @@
+# The CF Resources configuration (in yaml) to provide to Ops Manager
+cf_resources: |
+  database:
+    instances: 1
+    internet_connected: true
+  blobstore:
+    instances: 1
+    internet_connected: true
+  control:
+    instances: 1
+    internet_connected: true
+  compute:
+    instances: 1
+    internet_connected: true
+  backup-prepare:
+    instances: 1
+    internet_connected: true
+  ha_proxy:
+    instances: 1
+    internet_connected: true
+  router:
+    instances: 1
+    internet_connected: true
+  mysql_monitor:
+    instances: 1
+    internet_connected: true
+  tcp_router:
+    instances: 1
+    internet_connected: true
