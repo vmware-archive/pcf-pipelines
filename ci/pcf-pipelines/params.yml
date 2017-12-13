@@ -12,7 +12,6 @@ create_offline_pinned_pipelines_params:
 fly_basic_auth_password:
 fly_basic_auth_username:
 gcp_child_dns_zone:
-gcp_srt_child_dns_zone:
 gcp_parent_dns_zone:
 gcp_service_account_key:
 git_private_key:
@@ -23,7 +22,6 @@ install_pcf_azure_current_params:
 install_pcf_azure_rc_params:
 install_pcf_gcp_current_params:
 install_pcf_gcp_rc_params:
-install_pcf_gcp_srt_rc_params:
 install_pcf_vsphere_slot1_params:
 install_pcf_vsphere_slot9_params:
 locks_git_ssh_key:
