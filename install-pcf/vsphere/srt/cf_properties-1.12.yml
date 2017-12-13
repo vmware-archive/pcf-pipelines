@@ -14,7 +14,7 @@ cf_properties: |
 
   # Type "X" to acknowledge that you understand this message
   ".properties.security_acknowledgement":
-    value: #CHANGEME
+    value: CHANGEME
 
   # System Domain
   # This domain is for system-level PCF components, such as the API, UAA,
@@ -22,7 +22,7 @@ cf_properties: |
   # that points to your entry point load balancer or HAProxy as configured
   # on the Networking tab.
   ".cloud_controller.system_domain":
-    value: #CHANGEME
+    value: CHANGEME
 
   # Apps Domain
   # This domain is the default domain that applications will use for their
@@ -30,7 +30,7 @@ cf_properties: |
   # Cloud Foundry command line interface (cf CLI) to add or delete
   # subdomains assigned to individual apps.
   ".cloud_controller.apps_domain":
-    value: #CHANGEME
+    value: CHANGEME
 
   # Default App Memory Quota per Org (MB)
   # Default memory limit for all apps in an org. This default only applies
@@ -97,7 +97,7 @@ cf_properties: |
   # The MySQL service will send alerts when the cluster experiences a
   # replication issue or a node is not allowed to auto-rejoin the cluster.
   ".mysql_monitor.recipient_email":
-    value: #CHANGEME
+    value: CHANGEME
 
   # TCP Router IPs
   # Enter the IP address(es) you would like to designate for the TCP
