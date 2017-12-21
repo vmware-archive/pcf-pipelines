@@ -204,7 +204,7 @@ cf_properties=$(
       ".properties.tcp_routing": { "value": "disable" },
       ".properties.route_services": { "value": "enable" },
       ".ha_proxy.skip_cert_verify": { "value": true },
-      ".properties.container_networking_network_cidr": { "value": $container_networking_nw_cidr },
+      ".properties.container_networking_interface_plugin.silk.network_cidr": { "value": $container_networking_nw_cidr },
       ".properties.route_services.enable.ignore_ssl_cert_verification": { "value": true },
       ".properties.security_acknowledgement": { "value": $security_acknowledgement },
       ".properties.system_database": { "value": "external" },
