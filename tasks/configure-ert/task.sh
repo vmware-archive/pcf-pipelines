@@ -237,12 +237,12 @@ cf_properties=$(
       ".properties.uaa_database.external.port": { "value": "3306" },
       ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
       ".properties.uaa_database.external.uaa_password": { "value": { "secret": $db_uaa_password } },
+      ".properties.push_apps_manager_company_name": { "value": "pcf-\($iaas)" },
       ".cloud_controller.system_domain": { "value": "sys.\($pcf_ert_domain)" },
       ".cloud_controller.apps_domain": { "value": "cfapps.\($pcf_ert_domain)" },
       ".cloud_controller.allow_app_ssh_access": { "value": true },
       ".cloud_controller.security_event_logging_enabled": { "value": true },
       ".router.disable_insecure_cookies": { "value": false },
-      ".push-apps-manager.company_name": { "value": "pcf-\($iaas)" },
       ".mysql_monitor.recipient_email": { "value" : $mysql_monitor_recipient_email }
     }
 

@@ -113,6 +113,9 @@ cf_properties=$(
       ".properties.security_acknowledgement": {
         "value": $security_acknowledgement
       },
+      ".properties.push_apps_manager_company_name.": {
+        "value": $company_name
+      },
       ".cloud_controller.system_domain": {
         "value": $system_domain
       },
@@ -148,9 +151,6 @@ cf_properties=$(
       },
       ".tcp_router.static_ips": {
         "value": $tcp_router_static_ips
-      },
-      ".push-apps-manager.company_name": {
-        "value": $company_name
       },
       ".diego_brain.static_ips": {
         "value": $ssh_static_ips
