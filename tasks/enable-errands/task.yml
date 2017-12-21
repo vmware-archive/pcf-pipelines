@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: czero/rootfs}
+
+inputs:
+- name: pcf-pipelines
+
+params:
+  PRODUCT_NAME:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  ERRANDS_TO_ENABLE:
+
+run:
+  path: pcf-pipelines/tasks/enable-errands/task.sh
