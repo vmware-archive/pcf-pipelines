@@ -322,7 +322,7 @@ cf_properties=$(
 
     # SSL Termination
     {
-      ".properties.networking_poe_ssl_cert": {
+      ".properties.networking_poe_ssl_certs": {
         "value": {
           "cert_pem": $cert_pem,
           "private_key_pem": $private_key_pem
