@@ -70,9 +70,9 @@ This integration approach provides a CredHub server that is dedicated to the Con
   - [**Cloud Config**](https://bosh.io/docs/update-cloud-config.html) set to the Bosh Director to define network, disk and VM settings.
 
 
-1. Create and update your **Concourse deployment YML file** containing the CredHub jobs defined as part of the Concourse's `web` VM. See this [deployment file](samples/concourse-with-credhub.yml) as an example for a starting point.
+1. Create and update your **Concourse deployment YML file** containing the CredHub jobs defined as part of the Concourse's `web` VM. See this [deployment file](samples/concourse-with-credhub.yml) as an example for a starting point, or use the [operations files](samples/colocated-credhub/ops) provided in this repo to transform an existing manifest.
 
-3. Configure [concourse-with-credhub-params.yml](samples/concourse-with-credhub-params.yml) with the corresponding values for your deployment.
+2. Configure [concourse-with-credhub-params.yml](samples/concourse-with-credhub-params.yml) with the corresponding values for your deployment.
 
 3. Upload required release files to the Bosh Director.
    - [Concourse](https://bosh.io/d/github.com/concourse/concourse)
