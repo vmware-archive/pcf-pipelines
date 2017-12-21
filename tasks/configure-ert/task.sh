@@ -72,46 +72,28 @@ cf_resources=$(
     --argjson internet_connected $INTERNET_CONNECTED \
     '
     {
-      "consul_server": {"internet_connected": $internet_connected},
-      "nats": {"internet_connected": $internet_connected},
-      "nfs_server": {"internet_connected": $internet_connected},
-      "mysql_proxy": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
-      "mysql": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
       "backup-prepare": {"internet_connected": $internet_connected},
-      "diego_database": {"internet_connected": $internet_connected},
-      "uaa": {"internet_connected": $internet_connected},
-      "cloud_controller": {"internet_connected": $internet_connected},
-      "ha_proxy": {"internet_connected": $internet_connected},
-      "router": {"internet_connected": $internet_connected},
-      "mysql_monitor": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
       "clock_global": {"internet_connected": $internet_connected},
+      "cloud_controller": {"internet_connected": $internet_connected},
       "cloud_controller_worker": {"internet_connected": $internet_connected},
+      "consul_server": {"internet_connected": $internet_connected},
+      "credhub": {"internet_connected": $internet_connected},
       "diego_brain": {"internet_connected": $internet_connected},
       "diego_cell": {"internet_connected": $internet_connected},
+      "diego_database": {"internet_connected": $internet_connected},
+      "doppler": {"internet_connected": $internet_connected},
+      "ha_proxy": {"internet_connected": $internet_connected},
       "loggregator_trafficcontroller": {"internet_connected": $internet_connected},
+      "mysql": {"instances": 0, "internet_connected": $internet_connected},
+      "mysql_monitor": {"instances": 0, "internet_connected": $internet_connected},
+      "mysql_proxy": {"instances": 0, "internet_connected": $internet_connected},
+      "nats": {"internet_connected": $internet_connected},
+      "nfs_server": {"internet_connected": $internet_connected},
+      "router": {"internet_connected": $internet_connected},
       "syslog_adapter": {"internet_connected": $internet_connected},
       "syslog_scheduler": {"internet_connected": $internet_connected},
-      "doppler": {"internet_connected": $internet_connected},
       "tcp_router": {"internet_connected": $internet_connected},
-      "smoke-tests": {"internet_connected": $internet_connected},
-      "push-apps-manager": {"internet_connected": $internet_connected},
-      "notifications": {"internet_connected": $internet_connected},
-      "notifications-ui": {"internet_connected": $internet_connected},
-      "push-pivotal-account": {"internet_connected": $internet_connected},
-      "autoscaling": {"internet_connected": $internet_connected},
-      "autoscaling-register-broker": {"internet_connected": $internet_connected},
-      "nfsbrokerpush": {"internet_connected": $internet_connected},
-      "bootstrap": {"internet_connected": $internet_connected},
-      "mysql-rejoin-unsafe": {"internet_connected": $internet_connected}
+      "uaa": {"internet_connected": $internet_connected}
     }
 
     |
