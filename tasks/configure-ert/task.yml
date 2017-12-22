@@ -88,4 +88,5 @@ params:
   db_silk_password:
   routing_disable_http:
   ROUTING_CUSTOM_CA_CERTIFICATES:
+  ROUTING_TLS_TERMINATION:
   SECURITY_ACKNOWLEDGEMENT:

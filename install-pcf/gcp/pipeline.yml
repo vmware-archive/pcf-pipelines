@@ -310,6 +310,7 @@ jobs:
       HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
       routing_disable_http: {{routing_disable_http}}
       ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}

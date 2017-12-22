@@ -127,6 +127,7 @@ cf_properties=$(
     --arg haproxy_tls_ciphers "$HAPROXY_TLS_CIPHERS" \
     --arg routing_disable_http "$routing_disable_http" \
     --arg routing_custom_ca_certificates "$ROUTING_CUSTOM_CA_CERTIFICATES" \
+    --arg routing_tls_termination $ROUTING_TLS_TERMINATION \
     --arg security_acknowledgement "$SECURITY_ACKNOWLEDGEMENT" \
     --arg iaas $pcf_iaas \
     --arg pcf_ert_domain "$pcf_ert_domain" \
@@ -357,6 +358,14 @@ cf_properties=$(
         }
       }
     end
+
+    +
+
+    {
+      ".properties.routing_tls_termination": {
+        "value": $routing_tls_termination
+      }
+    }
 
     +
 
