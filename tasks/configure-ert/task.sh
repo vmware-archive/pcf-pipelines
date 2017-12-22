@@ -126,6 +126,7 @@ cf_properties=$(
     --arg router_tls_ciphers "$ROUTER_TLS_CIPHERS" \
     --arg haproxy_tls_ciphers "$HAPROXY_TLS_CIPHERS" \
     --arg routing_disable_http "$routing_disable_http" \
+    --arg routing_custom_ca_certificates "$ROUTING_CUSTOM_CA_CERTIFICATES" \
     --arg security_acknowledgement "$SECURITY_ACKNOWLEDGEMENT" \
     --arg iaas $pcf_iaas \
     --arg pcf_ert_domain "$pcf_ert_domain" \
@@ -344,6 +345,18 @@ cf_properties=$(
         "value": $routing_disable_http
       }
     }
+
+    +
+
+    if $routing_custom_ca_certificates == "" then
+      .
+    else
+      {
+        ".properties.routing_custom_ca_certificates": {
+          "value": $routing_custom_ca_certificates
+        }
+      }
+    end
 
     +
 

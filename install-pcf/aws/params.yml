@@ -98,6 +98,10 @@ haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAPro
 # Disable HTTP on gorouters (true|false)
 routing_disable_http: false
 
+# These certificates can be used to validate the certificates from incoming client requests.
+# All CA certificates should be appended together into a single collection of PEM-encoded entries.
+routing_custom_ca_certificates:
+
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
 # Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
 # The recommended settings are filled in below, change as necessary.
