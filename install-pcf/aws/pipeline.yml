@@ -337,6 +337,7 @@ jobs:
       azure_droplets_container:
       azure_packages_container:
       azure_resources_container:
+      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml

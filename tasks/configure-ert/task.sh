@@ -112,6 +112,8 @@ cf_resources=$(
     '
 )
 
+CREDHUB_ENCRYPTION_KEYS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["CREDHUB_ENCRYPTION_KEYS"]))')"
+
 cf_properties=$(
   jq -n \
     --arg terraform_prefix $terraform_prefix \
@@ -176,6 +178,7 @@ cf_properties=$(
     --arg mysql_backups_s3_access_key_id "$MYSQL_BACKUPS_S3_ACCESS_KEY_ID" \
     --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
     --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
+    --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
@@ -228,6 +231,15 @@ cf_properties=$(
       ".cloud_controller.security_event_logging_enabled": { "value": true },
       ".router.disable_insecure_cookies": { "value": false },
       ".mysql_monitor.recipient_email": { "value" : $mysql_monitor_recipient_email }
+    }
+
+    +
+
+    # Credhub encryption keys
+    {
+      ".properties.credhub_key_encryption_passwords": {
+        "value": $credhub_encryption_keys
+      }
     }
 
     +

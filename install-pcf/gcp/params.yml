@@ -139,3 +139,14 @@ mysql_backups_s3_cron_schedule:
 
 # Whether or not the ERT VMs are internet connected.
 internet_connected: false
+
+# For credhub integration, replace dummy values in the following structure
+# and set the number of credhub instances in resource config to 2
+credhub_encryption_keys: |
+  - name: dummy encryption key 1
+    key:
+      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+    primary: true
+  - name: encryption key 2
+    key:
+      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME

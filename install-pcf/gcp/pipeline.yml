@@ -314,6 +314,7 @@ jobs:
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
+      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       # aws specific
       S3_ENDPOINT:
       # azure specific
