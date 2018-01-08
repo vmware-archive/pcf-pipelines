@@ -108,9 +108,9 @@ haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-
 opsman_domain_or_ip_address: CHANGEME
 
 # Operations Manager credentials
-# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
-opsman_client_id: CHANGEME
-opsman_client_secret: CHANGEME
+# Leave opsman_client_id/opsman_client_secret blank; opsman_admin_username/opsman_admin_password needs to be specified
+opsman_client_id: 
+opsman_client_secret: 
 opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 
