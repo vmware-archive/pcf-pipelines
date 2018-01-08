@@ -30,6 +30,17 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
     pcf_ert_ssl_key=`echo $certificate | jq --raw-output '.key'`
   fi
 
+  NETWORKING_POE_SSL_CERTS_JSON="
+  [
+    {
+      \"name\": \"Certificate 1\",
+      \"certificate\": {
+        \"private_key_pem\": $pcf_ert_ssl_cert,
+        \"cert_pem\": $pcf_ert_ssl_key
+      }
+    }
+  ]
+"
   cd terraform-state
     output_json=$(terraform output --json -state *.tfstate)
     db_host=$(echo $output_json | jq --raw-output '.db_host.value')
