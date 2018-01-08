@@ -19,15 +19,15 @@ saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
 
 if [[ "${pcf_iaas}" == "aws" ]]; then
-  if [[ ${pcf_ert_ssl_cert} == "" || ${pcf_ert_ssl_cert} == "generate" ]]; then
+  if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" ]]; then
     domains=(
       "*.sys.${pcf_ert_domain}"
       "*.cfapps.${pcf_ert_domain}"
     )
 
-    certificates=$(generate_cert "${domains[*]}")
-    pcf_ert_ssl_cert=`echo $certificates | jq --raw-output '.certificate'`
-    pcf_ert_ssl_key=`echo $certificates | jq --raw-output '.key'`
+    certificate=$(generate_cert "${domains[*]}")
+    pcf_ert_ssl_cert=`echo $certificate | jq --raw-output '.certificate'`
+    pcf_ert_ssl_key=`echo $certificate | jq --raw-output '.key'`
   fi
 
   cd terraform-state
@@ -48,6 +48,15 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
     echo Failed to get SQL instance IP from Terraform state file
     exit 1
   fi
+  NETWORKING_POE_SSL_CERTS_JSON="
+    {
+      \"name\": \"Certificate 1\",
+      \"certificate\": {
+        \"private_key_pem\": $pcf_ert_ssl_cert,
+        \"cert_pem\": $pcf_ert_ssl_key
+      }
+    }
+"
 fi
 
 cf_network=$(

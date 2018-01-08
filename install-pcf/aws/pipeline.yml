@@ -298,6 +298,8 @@ jobs:
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
+      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
+      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       # IaaS Specific for GCP only
       gcp_storage_access_key:
       gcp_storage_secret_key:
@@ -337,7 +339,6 @@ jobs:
       azure_droplets_container:
       azure_packages_container:
       azure_resources_container:
-      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
