@@ -15,6 +15,9 @@ saml_certificates=$(generate_cert "${saml_domains[*]}")
 saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
 saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
+
+NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
+
 if [[ "${pcf_iaas}" == "aws" ]]; then
   if [[ ${pcf_ert_ssl_cert} == "" || ${pcf_ert_ssl_cert} == "generate" ]]; then
     domains=(
@@ -179,6 +182,7 @@ cf_properties=$(
     --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
     --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
     --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
+    --argjson networking_poe_ssl_certs "$NETWORKING_POE_SSL_CERTS_JSON" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
@@ -319,15 +323,7 @@ cf_properties=$(
     # SSL Termination
     {
       ".properties.networking_poe_ssl_certs": {
-        "value": [
-          {
-            "certificate": {
-              "cert_pem": $cert_pem,
-              "private_key_pem": $private_key_pem
-            },
-            "name": "Certificate"
-          }
-        ]
+        "value": $networking_poe_ssl_certs
       }
     }
 
