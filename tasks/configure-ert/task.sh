@@ -49,6 +49,7 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
     exit 1
   fi
   NETWORKING_POE_SSL_CERTS_JSON="
+  [
     {
       \"name\": \"Certificate 1\",
       \"certificate\": {
@@ -56,6 +57,7 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
         \"cert_pem\": $pcf_ert_ssl_key
       }
     }
+  ]
 "
 fi
 
