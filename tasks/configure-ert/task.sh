@@ -49,8 +49,8 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
 elif [[ "${pcf_iaas}" == "gcp" ]]; then
   cd terraform-state
     db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.sql_instance_ip.value')
-    pcf_ert_ssl_cert="$(terraform output ert_certificate)"
-    pcf_ert_ssl_key="$(terraform output ert_certificate_key)"
+    pcf_ert_ssl_cert="$(terraform output -json ert_certificate | jq .value)"
+    pcf_ert_ssl_key="$(terraform output -json ert_certificate_key | jq .value)"
   cd -
 
   if [ -z "$db_host" ]; then
@@ -61,8 +61,8 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
     {
       \"name\": \"Certificate 1\",
       \"certificate\": {
-        \"private_key_pem\": $pcf_ert_ssl_cert,
-        \"cert_pem\": $pcf_ert_ssl_key
+        \"cert_pem\": $pcf_ert_ssl_cert,
+        \"private_key_pem\": $pcf_ert_ssl_key
       }
     }
   ]"

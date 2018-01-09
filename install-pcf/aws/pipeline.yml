@@ -268,8 +268,6 @@ jobs:
       OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
-      pcf_ert_ssl_cert: {{ERT_SSL_CERT}}
-      pcf_ert_ssl_key: {{ERT_SSL_KEY}}
       pcf_az_1: {{aws_az1}}
       pcf_az_2: {{aws_az2}}
       pcf_az_3: {{aws_az3}}
