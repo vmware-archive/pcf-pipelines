@@ -252,8 +252,6 @@ jobs:
     file: pcf-pipelines/tasks/configure-ert/task.yml
     params:
       pcf_iaas: gcp
-      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
-      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
       pcf_az_1: {{gcp_zone_1}}
       pcf_az_2: {{gcp_zone_2}}
       pcf_az_3: {{gcp_zone_3}}
