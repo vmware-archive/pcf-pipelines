@@ -71,7 +71,7 @@ aws_secret_access_key: CHANGEME
 aws_cert_arn: CHANGEME
 
 # AMI to use for nat box
-amis_nat: ami-303b1458
+amis_nat: ami-303b1458  # Update with the correct NAT AMI for your region. List of AMIs can be found here: https://github.com/pivotal-cf/terraforming-aws/blob/master/nat.tf
 
 aws_region: us-east-1
 aws_az1: us-east-1a
