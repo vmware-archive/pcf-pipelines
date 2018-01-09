@@ -26,8 +26,8 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
     )
 
     certificate=$(generate_cert "${domains[*]}")
-    pcf_ert_ssl_cert=`echo $certificate | jq --raw-output '.certificate'`
-    pcf_ert_ssl_key=`echo $certificate | jq --raw-output '.key'`
+    pcf_ert_ssl_cert=`echo $certificate | jq '.certificate'`
+    pcf_ert_ssl_key=`echo $certificate | jq '.key'`
   fi
 
   NETWORKING_POE_SSL_CERTS_JSON="
@@ -35,8 +35,8 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
     {
       \"name\": \"Certificate 1\",
       \"certificate\": {
-        \"private_key_pem\": $pcf_ert_ssl_cert,
-        \"cert_pem\": $pcf_ert_ssl_key
+        \"cert_pem\": $pcf_ert_ssl_cert,
+        \"private_key_pem\": $pcf_ert_ssl_key
       }
     }
   ]
