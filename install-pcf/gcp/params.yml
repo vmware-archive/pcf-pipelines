@@ -70,12 +70,6 @@ pcf_ert_domain: CHANGEME # This is the top level domain that ERT apps and servic
                          # e.g.: if the apps domain is apps.pcf.example.org then pcf_ert_domain should be pcf.example.org
 opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
 
-# Elastic Runtime SSL configuration
-# Set pcf_ert_ssl_cert to 'generate' if you'd like a self-signed cert to be
-# made
-pcf_ert_ssl_cert: generate
-pcf_ert_ssl_key:
-
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
 
@@ -151,9 +145,9 @@ credhub_encryption_keys: |
     key:
       secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
 
-networking_poe_ssl_certs:
 # Optional. If using own certs, follow this format (if
 # blank the cert will be auto generated):
+networking_poe_ssl_certs:
 #networking_poe_ssl_certs: |
 #  - name: Point of Entry Certificate 1
 #    certificate:

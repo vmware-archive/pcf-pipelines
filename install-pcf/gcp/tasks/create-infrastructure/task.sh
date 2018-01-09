@@ -9,14 +9,25 @@ pcf_opsman_bucket_path=$(grep -i 'us:.*.tar.gz' pivnet-opsmgr/*GCP.yml | cut -d'
 # ops-manager-us/pcf-gcp-1.9.2.tar.gz -> opsman-pcf-gcp-1-9-2
 pcf_opsman_image_name=$(echo $pcf_opsman_bucket_path | sed 's%.*/\(.*\).tar.gz%opsman-\1%' | sed 's/\./-/g')
 
-pcf_ert_ssl_cert=$PCF_ERT_SSL_CERT
-pcf_ert_ssl_key=$PCF_ERT_SSL_KEY
+NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
 
-if [[ ${PCF_ERT_SSL_CERT} == "generate" ]]; then
+source pcf-pipelines/functions/generate_cert.sh
+
+
+if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" ]]; then
   echo "Generating Self Signed Certs for sys.${PCF_ERT_DOMAIN} & cfapps.${PCF_ERT_DOMAIN} ..."
-  pcf-pipelines/scripts/gen_ssl_certs.sh "sys.${PCF_ERT_DOMAIN}" "cfapps.${PCF_ERT_DOMAIN}"
-  pcf_ert_ssl_cert=$(cat sys.${PCF_ERT_DOMAIN}.crt)
-  pcf_ert_ssl_key=$(cat sys.${PCF_ERT_DOMAIN}.key)
+
+  domains=(
+    "*.sys.${PCF_ERT_DOMAIN}"
+    "*.cfapps.${PCF_ERT_DOMAIN}"
+  )
+
+  certificate=$(generate_cert "${domains[*]}")
+  pcf_ert_ssl_cert=`echo $certificate | jq '.certificate'`
+  pcf_ert_ssl_key=`echo $certificate | jq '.key'`
+else
+  pcf_ert_ssl_cert=`echo $NETWORKING_POE_SSL_CERTS_JSON | jq '.[0].certificate.cert_pem'`
+  pcf_ert_ssl_key=`echo $NETWORKING_POE_SSL_CERTS_JSON | jq '.[0].certificate.private_key_pem'`
 fi
 
 export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}

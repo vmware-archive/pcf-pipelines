@@ -120,8 +120,7 @@ jobs:
       GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
       GCP_STORAGE_BUCKET_LOCATION: {{gcp_storage_bucket_location}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
-      PCF_ERT_SSL_CERT: {{pcf_ert_ssl_cert}}
-      PCF_ERT_SSL_KEY: {{pcf_ert_ssl_key}}
+      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       DB_APP_USAGE_SERVICE_USERNAME: {{db_app_usage_service_username}}
       DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
       DB_AUTOSCALE_USERNAME: {{db_autoscale_username}}

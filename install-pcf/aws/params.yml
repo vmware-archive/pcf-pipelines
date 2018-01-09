@@ -212,29 +212,27 @@ credhub_encryption_keys: |
     key:
       secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
 
+# Optional. If using own certs, follow this format (if
+# blank the cert will be auto generated):
 networking_poe_ssl_certs:
 #networking_poe_ssl_certs: |
-#  - name:
-#      value: Point of Entry Certificate 1
+#  - name: Point of Entry Certificate 1
 #    certificate:
-#      value:
-#        cert_pem: |
-#          -----BEGIN EXAMPLE CERTIFICATE-----
-#          ...
-#          -----END EXAMPLE CERTIFICATE-----
-#        private_key_pem: |
-#          -----BEGIN EXAMPLE CERTIFICATE-----
-#          ...
-#          -----END EXAMPLE CERTIFICATE-----
-#  - name:
-#      value: Certificate 2
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#  - name: Certificate 2
 #    certificate:
-#      value:
-#        cert_pem: |
-#          -----BEGIN EXAMPLE CERTIFICATE-----
-#          ...
-#          -----END EXAMPLE CERTIFICATE-----
-#        private_key_pem: |
-#          -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-#          ...
-#          -----END EXAMPLE RSA PRIVATE KEY-----
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+#        ...
+#        -----END EXAMPLE RSA PRIVATE KEY-----
