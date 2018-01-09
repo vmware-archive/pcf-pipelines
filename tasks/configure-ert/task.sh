@@ -28,19 +28,17 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
     certificate=$(generate_cert "${domains[*]}")
     pcf_ert_ssl_cert=`echo $certificate | jq '.certificate'`
     pcf_ert_ssl_key=`echo $certificate | jq '.key'`
+    NETWORKING_POE_SSL_CERTS_JSON="[
+      {
+        \"name\": \"Certificate 1\",
+        \"certificate\": {
+          \"cert_pem\": $pcf_ert_ssl_cert,
+          \"private_key_pem\": $pcf_ert_ssl_key
+        }
+      }
+    ]"
   fi
 
-  NETWORKING_POE_SSL_CERTS_JSON="
-  [
-    {
-      \"name\": \"Certificate 1\",
-      \"certificate\": {
-        \"cert_pem\": $pcf_ert_ssl_cert,
-        \"private_key_pem\": $pcf_ert_ssl_key
-      }
-    }
-  ]
-"
   cd terraform-state
     output_json=$(terraform output --json -state *.tfstate)
     db_host=$(echo $output_json | jq --raw-output '.db_host.value')
@@ -59,8 +57,7 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
     echo Failed to get SQL instance IP from Terraform state file
     exit 1
   fi
-  NETWORKING_POE_SSL_CERTS_JSON="
-  [
+  NETWORKING_POE_SSL_CERTS_JSON="[
     {
       \"name\": \"Certificate 1\",
       \"certificate\": {
@@ -68,8 +65,7 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
         \"cert_pem\": $pcf_ert_ssl_key
       }
     }
-  ]
-"
+  ]"
 fi
 
 cf_network=$(
