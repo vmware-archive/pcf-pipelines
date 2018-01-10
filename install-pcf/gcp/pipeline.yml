@@ -313,6 +313,7 @@ jobs:
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       # aws specific
+      NETWORKING_POE_SSL_CERTS:
       S3_ENDPOINT:
       # azure specific
       pcf_ert_saml_cert:

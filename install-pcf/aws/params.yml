@@ -88,10 +88,6 @@ ERT_DOMAIN: CHANGEME
 # Route53 zone to add records to
 ROUTE_53_ZONE_ID:
 
-# Cert will be generated if left empty
-ERT_SSL_CERT:
-ERT_SSL_KEY:
-
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
 

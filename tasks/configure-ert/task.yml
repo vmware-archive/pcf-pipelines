@@ -23,8 +23,6 @@ params:
   pcf_az_1:
   pcf_az_2:
   pcf_az_3:
-  pcf_ert_ssl_cert:
-  pcf_ert_ssl_key:
   terraform_prefix:
   HAPROXY_FORWARD_TLS:
   HAPROXY_BACKEND_CA:
