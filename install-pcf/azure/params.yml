@@ -48,7 +48,7 @@ terraform_azure_account_name: CHANGEME
 terraform_azure_access_key: CHANGEME
 azure_storage_container_name: CHANGEME
 
-# If the azure_access_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
+# If the azure_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
 azure_account_name:
 
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
