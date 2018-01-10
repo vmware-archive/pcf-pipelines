@@ -390,6 +390,10 @@ jobs:
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
+      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
+      SAML_SSL_CERT: {{pcf_ert_saml_cert}}
+      SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       TCP_ROUTER_NSX_SECURITY_GROUP: ""
       TCP_ROUTER_NSX_LB_EDGE_NAME: ""
       TCP_ROUTER_NSX_LB_POOL_NAME: ""
@@ -411,9 +415,6 @@ jobs:
       MYSQL_NSX_LB_SECURITY_GROUP: ""
       MYSQL_NSX_LB_PORT: ""
       HA_PROXY_LB_NAME: ""
-      SAML_SSL_CERT: {{pcf_ert_saml_cert}}
-      SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
-      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
 
 
 - name: deploy-ert

@@ -30,6 +30,8 @@ if [[ -z "$SAML_SSL_CERT" ]]; then
   SAML_SSL_PRIVATE_KEY=$(echo $saml_certificates | jq --raw-output '.key')
 fi
 
+CREDHUB_ENCRYPTION_KEYS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["CREDHUB_ENCRYPTION_KEYS"]))')"
+
 cf_properties=$(
   jq -n \
     --arg tcp_routing "$TCP_ROUTING" \
@@ -99,6 +101,7 @@ cf_properties=$(
     --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
     --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
     --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
+    --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
@@ -158,6 +161,15 @@ cf_properties=$(
       },
       ".mysql_proxy.static_ips": {
         "value": $mysql_static_ips
+      }
+    }
+
+    +
+
+    # Credhub encryption keys
+    {
+      ".properties.credhub_key_encryption_passwords": {
+        "value": $credhub_encryption_keys
       }
     }
 

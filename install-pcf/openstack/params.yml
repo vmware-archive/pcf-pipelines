@@ -255,3 +255,14 @@ syslog_adapter_instances: 3
 
 # Whether or not the ERT VMs are internet connected.
 internet_connected: true
+
+# For credhub integration, replace dummy values in the following structure
+# and set the number of credhub instances in resource config to 2
+credhub_encryption_keys: |
+  - name: dummy encryption key 1
+    key:
+      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+    primary: true
+  - name: encryption key 2
+    key:
+      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME

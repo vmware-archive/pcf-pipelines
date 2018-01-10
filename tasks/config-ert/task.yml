@@ -130,6 +130,7 @@ params:
   MYSQL_NSX_LB_SECURITY_GROUP:
   MYSQL_NSX_LB_PORT:
   ROUTING_TLS_TERMINATION:
+  CREDHUB_ENCRYPTION_KEYS:
 
 inputs:
   - name: pcf-pipelines
