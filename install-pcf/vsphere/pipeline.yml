@@ -351,6 +351,7 @@ jobs:
       MYSQL_NSX_LB_SECURITY_GROUP: {{mysql_nsx_lb_security_group}}
       MYSQL_NSX_LB_PORT: {{mysql_nsx_lb_port}}
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
+      ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       HA_PROXY_LB_NAME: ""
       HAPROXY_FLOATING_IPS: ""

@@ -205,6 +205,10 @@ ignore_ssl_cert_verification: false     # Whether to disable SSL cert verificati
 # Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
 routing_tls_termination: load_balancer
 
+# These certificates can be used to validate the certificates from incoming client requests.
+# All CA certificates should be appended together into a single collection of PEM-encoded entries.
+routing_custom_ca_certificates:
+
 # If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd,
 # smtp_enable_starttls_auto, and smtp_auth_mechanism must also be set.
 smtp_address:
