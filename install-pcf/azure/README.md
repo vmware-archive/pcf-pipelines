@@ -118,3 +118,9 @@ is resolvable, run the following:
 
 
   **Solution:** You are not using the PivNet resource, and are most likely using a different repository manager like Artifactory. For more information, and a possible workaround, see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/192). 
+
+
+## Known Issues
+
+The multi resource group functionality is still WIP. Please see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/184) for more details. 
+
