@@ -28,6 +28,20 @@ output "opsman_eip" {
 output "opsman_identifier" {
     value = "${aws_instance.opsmman_az1.tags.Name}"
 }
+
+# NAT
+output "nat_az1_eip" {
+    value = "${aws_eip.nat_az1.public_ip}"
+}
+
+output "nat_az2_eip" {
+    value = "${aws_eip.nat_az2.public_ip}"
+}
+
+output "nat_az3_eip" {
+    value = "${aws_eip.nat_az3.public_ip}"
+}
+
 # s3 buckets
 output "s3_pcf_bosh" {
     value = "${aws_s3_bucket.bosh.bucket}"
