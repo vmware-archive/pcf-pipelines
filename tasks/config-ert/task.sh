@@ -4,7 +4,9 @@ set -eu
 
 source pcf-pipelines/functions/generate_cert.sh
 
-if [[ -z "$SSL_CERT" ]]; then
+NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
+
+if [[ -z "$NETWORKING_POE_SSL_CERTS" ]]; then
   domains=(
     "*.${SYSTEM_DOMAIN}"
     "*.${APPS_DOMAIN}"
@@ -12,9 +14,18 @@ if [[ -z "$SSL_CERT" ]]; then
     "*.uaa.${SYSTEM_DOMAIN}"
   )
 
-  certificates=$(generate_cert "${domains[*]}")
-  SSL_CERT=`echo $certificates | jq --raw-output '.certificate'`
-  SSL_PRIVATE_KEY=`echo $certificates | jq --raw-output '.key'`
+  certificate=$(generate_cert "${domains[*]}")
+  pcf_ert_ssl_cert=`echo $certificate | jq '.certificate'`
+  pcf_ert_ssl_key=`echo $certificate | jq '.key'`
+  NETWORKING_POE_SSL_CERTS_JSON="[
+    {
+      \"name\": \"Certificate 1\",
+      \"certificate\": {
+        \"cert_pem\": $pcf_ert_ssl_cert,
+        \"private_key_pem\": $pcf_ert_ssl_key
+      }
+    }
+  ]"
 fi
 
 
@@ -103,6 +114,7 @@ cf_properties=$(
     --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
     --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
     --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
+    --argjson networking_poe_ssl_certs "$NETWORKING_POE_SSL_CERTS_JSON" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
@@ -219,15 +231,7 @@ cf_properties=$(
     # SSL Termination
     {
       ".properties.networking_poe_ssl_certs": {
-        "value": [
-          {
-            "certificate": {
-              "cert_pem": $cert_pem,
-              "private_key_pem": $private_key_pem
-            },
-            "name": "Certificate"
-          }
-        ]
+        "value": $networking_poe_ssl_certs
       }
     }
 

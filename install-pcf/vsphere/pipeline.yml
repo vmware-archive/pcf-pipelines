@@ -248,8 +248,7 @@ jobs:
       COMPANY_NAME: {{company_name}}
       AUTHENTICATION_MODE: {{authentication_mode}}
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
-      SSL_CERT: {{ssl_cert}}
-      SSL_PRIVATE_KEY: {{ssl_private_key}}
+      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       SAML_SSL_CERT: {{saml_ssl_cert}}
       SAML_SSL_PRIVATE_KEY: {{saml_ssl_private_key}}
       HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}

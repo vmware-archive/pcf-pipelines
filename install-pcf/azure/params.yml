@@ -28,10 +28,6 @@ pcf_ssh_key_pub: CHANGEME
 pcf_ssh_key_priv: |
   CHANGEME
 
-# ERT Cert & Key, if the string is blank, then the pipeline will auto generate certs
-pcf_ert_ssl_cert:
-pcf_ert_ssl_key:
-
 # azure_vm_admin value should match with user ID used to create the certs pcf_ssh_key_pub.
 # The user ID will appear towards the end of the public key.
 azure_vm_admin: CHANGEME
@@ -180,6 +176,28 @@ credhub_encryption_keys: |
 
 deployment_network_name: "ert"
 
+networking_poe_ssl_certs:
+# networking_poe_ssl_certs: |
+#  - name: Point of Entry Certificate 1
+#    certificate:
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#  - name: PoE certificate 2
+#    certificate:
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+#        ...
+#        -----END EXAMPLE RSA PRIVATE KEY-----
 ## Syslog endpoint configuration goes here
 # Optional. If syslog_host is specified, syslog_port, syslog_protocol,
 # syslog_drain_buffer_size, and enable_security_event_logging must be set.

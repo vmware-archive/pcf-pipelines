@@ -134,11 +134,6 @@ enable_security_event_logging: false
 syslog_drain_buffer_size: 10000
 
 ## Wildcard domain certs go here
-# Optional. Will be generated if blank.
-ssl_cert:
-
-# Optional. Will be generated if blank.
-ssl_private_key:
 pcf_ert_saml_cert:
 pcf_ert_saml_key:
 
@@ -270,3 +265,26 @@ credhub_encryption_keys: |
   - name: encryption key 2
     key:
       secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+
+networking_poe_ssl_certs:
+# networking_poe_ssl_certs: |
+#  - name: Point of Entry Certificate 1
+#    certificate:
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#  - name: PoE certificate 2
+#    certificate:
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+#        ...
+#        -----END EXAMPLE RSA PRIVATE KEY-----

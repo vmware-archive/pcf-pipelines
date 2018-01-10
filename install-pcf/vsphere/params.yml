@@ -152,8 +152,6 @@ syslog_drain_buffer_size: 10000
 
 ## Wildcard domain certs go here
 # Optional. Will be generated if blank.
-ssl_cert:
-ssl_private_key:
 saml_ssl_cert:
 saml_ssl_private_key:
 
@@ -284,6 +282,30 @@ credhub_encryption_keys: |
   - name: encryption key 2
     key:
       secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+
+networking_poe_ssl_certs:
+#networking_poe_ssl_certs: |
+#  - name: Point of Entry Certificate 1
+#    certificate:
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#  - name: PoE certificate 2
+#    certificate:
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+#        ...
+#        -----END EXAMPLE RSA PRIVATE KEY-----
+
 
 # leave nsx fields empty if you are not leveraging the nsx features for a given component
 tcp_router_nsx_security_group:

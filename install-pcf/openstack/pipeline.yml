@@ -309,8 +309,6 @@ jobs:
       COMPANY_NAME: {{company_name}}
       AUTHENTICATION_MODE: {{authentication_mode}}
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
-      SSL_CERT: {{ssl_cert}}
-      SSL_PRIVATE_KEY: {{ssl_private_key}}
       HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
       HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
       ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
@@ -395,6 +393,7 @@ jobs:
       SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
+      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       TCP_ROUTER_NSX_SECURITY_GROUP: ""
       TCP_ROUTER_NSX_LB_EDGE_NAME: ""
       TCP_ROUTER_NSX_LB_POOL_NAME: ""
