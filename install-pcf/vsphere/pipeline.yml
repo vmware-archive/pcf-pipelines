@@ -350,6 +350,7 @@ jobs:
       MYSQL_NSX_LB_POOL_NAME: {{mysql_nsx_lb_pool_name}}
       MYSQL_NSX_LB_SECURITY_GROUP: {{mysql_nsx_lb_security_group}}
       MYSQL_NSX_LB_PORT: {{mysql_nsx_lb_port}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       HA_PROXY_LB_NAME: ""
       HAPROXY_FLOATING_IPS: ""
 

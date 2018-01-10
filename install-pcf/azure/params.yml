@@ -191,6 +191,9 @@ tcp_routing_ports:                      # A comma-separated list of ports and hy
 route_services: enable                  # Enable/disable route services (enable|disable)
 ignore_ssl_cert_verification: false     # Whether to disable SSL cert verification for route services
 
+# Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
+routing_tls_termination: load_balancer
+
 # If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd,
 # smtp_enable_starttls_auto, and smtp_auth_mechanism must also be set.
 smtp_address:

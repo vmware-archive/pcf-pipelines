@@ -129,6 +129,7 @@ params:
   MYSQL_NSX_LB_POOL_NAME:
   MYSQL_NSX_LB_SECURITY_GROUP:
   MYSQL_NSX_LB_PORT:
+  ROUTING_TLS_TERMINATION:
 
 inputs:
   - name: pcf-pipelines

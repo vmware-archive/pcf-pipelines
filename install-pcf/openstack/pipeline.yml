@@ -413,6 +413,7 @@ jobs:
       HA_PROXY_LB_NAME: ""
       SAML_SSL_CERT: {{pcf_ert_saml_cert}}
       SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
 
 
 - name: deploy-ert
