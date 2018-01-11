@@ -1,48 +1,10 @@
-# Setting appropriate Application Security Groups is critical for a secure
-# deployment. Change the value of the param below to "X" to acknowledge that
-# once the Elastic Runtime deployment completes, you will review and set the
-# appropriate application security groups.
-# See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
-security_acknowledgement: CHANGEME
-
-pivnet_token: CHANGEME                  # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
-opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
-ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
-git_private_key:                        # Optional - if your git repo requires an SSH key.
+# Whether to allow SSH access to application instances
+allow_app_ssh_access: false
 
 # Change to anything other than 'wipe' to bypass the wipe-env job
 arg_wipe: wipe
 
-# Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
-# Must be globally unique.
-azure_terraform_prefix: CHANGEME
-
-azure_region: CHANGEME
-azure_client_id: CHANGEME
-azure_client_secret: CHANGEME
-azure_subscription_id: CHANGEME
-azure_tenant_id: CHANGEME
-
-# SSH keys for Operations Manager director
-pcf_ssh_key_pub: CHANGEME
-pcf_ssh_key_priv: |
-  CHANGEME
-
-# azure_vm_admin value should match with user ID used to create the certs pcf_ssh_key_pub.
-# The user ID will appear towards the end of the public key.
-azure_vm_admin: CHANGEME
-
-# Optional PEM-encoded certificates to add to BOSH VMs
-trusted_certificates:
-
-# SAML Service Credential provider Cert and Key, if the string is blank, then the pipeline will auto generate certs
-pcf_ert_saml_cert:
-pcf_ert_saml_key:
-
-# The storage account and container that will be used for your terraform state
-terraform_azure_account_name: CHANGEME
-terraform_azure_access_key: CHANGEME
-azure_storage_container_name: CHANGEME
+authentication_mode: internal
 
 # If the azure_access_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
 azure_account_name:
@@ -50,23 +12,11 @@ azure_account_name:
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
 azure_buildpacks_container:
 
+azure_client_id: CHANGEME
+azure_client_secret: CHANGEME
+
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the droplets will be stored. It is similar to the S3 bucket in AWS.
 azure_droplets_container:
-
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
-azure_packages_container:
-
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
-azure_resources_container:
-
-# The set of terraform templates and opsman configuration to use in the pipeline (c0-azure-base|c0-azure-multi-res-group)
-azure_pcf_terraform_template: c0-azure-base
-
-# Required if using c0-azure-multi-res-group - An existing network for your Azure environment
-azure_multi_resgroup_network:
-
-# Required if using c0-azure-multi-res-group - The resource group name for your Azure environment
-azure_multi_resgroup_pcf:
 
 # Required if using c0-azure-multi-res-group - The ERT infrastructure subnet name for your Azure environment
 azure_multi_resgroup_infra_subnet_name:
@@ -74,28 +24,29 @@ azure_multi_resgroup_infra_subnet_name:
 # Required if using c0-azure-multi-res-group - The virutal network name for your Azure environment
 azure_multi_resgroup_infra_vnet_name:
 
-# ERT Domain Name
-pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
-system_domain: CHANGEME # This is usually sys.${pcf_ert_domain}
-apps_domain: CHANGEME # This is usually cfapps.${pcf_ert_domain}
+# Required if using c0-azure-multi-res-group - An existing network for your Azure environment
+azure_multi_resgroup_network:
 
-# Opsman Settings
-opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
+# Required if using c0-azure-multi-res-group - The resource group name for your Azure environment
+azure_multi_resgroup_pcf:
 
-# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
-opsman_client_id: CHANGEME
-opsman_client_secret: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_admin_password: CHANGEME
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
+azure_packages_container:
 
-haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
-haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
+# The set of terraform templates and opsman configuration to use in the pipeline (c0-azure-base|c0-azure-multi-res-group)
+azure_pcf_terraform_template: c0-azure-base
 
-# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
-# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
-# The recommended settings are filled in below, change as necessary.
-router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+azure_region: CHANGEME
+
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_access_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
+azure_resources_container:
+
+azure_subscription_id: CHANGEME
+azure_tenant_id: CHANGEME
+
+# Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
+# Must be globally unique.
+azure_terraform_prefix: CHANGEME
 
 azure_terraform_subnet_dynamic_services_cidr: "192.168.12.0/22"
 azure_terraform_subnet_dynamic_services_dns: "168.63.129.16,8.8.8.8"
@@ -114,54 +65,23 @@ azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
 azure_terraform_subnet_services1_gateway: "192.168.8.1"
 azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
 azure_terraform_vnet_cidr: "192.168.0.0/20"
-pcf_opsman_disk_size_in_gb: 120
 
-container_networking_nw_cidr: 10.255.0.0/16 # c2c networking network cidr
+# azure_vm_admin value should match with user ID used to create the certs pcf_ssh_key_pub.
+# The user ID will appear towards the end of the public key.
+azure_vm_admin: CHANGEME
 
-mysql_monitor_recipient_email:  # Optional - Email address for sending mysql monitor notifications
-mysql_backups: disable   # Whether to enable MySQL backups. (disable|s3|scp)
+# Ciphers
+# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
+# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
+# The recommended settings are filled in below, change as necessary.
+router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
 
-# SCP backup config params (leave empty values if you're not using scp)
-mysql_backups_scp_server:
-mysql_backups_scp_port:
-mysql_backups_scp_user:
-mysql_backups_scp_key:
-mysql_backups_scp_destination:
-mysql_backups_scp_cron_schedule:
+# Company Name for Apps Manager
+company_name:
 
-# S3 backup config params (leave empty values if you're not using s3)
-mysql_backups_s3_endpoint_url:
-mysql_backups_s3_bucket_name:
-mysql_backups_s3_bucket_path:
-mysql_backups_s3_access_key_id:
-mysql_backups_s3_secret_access_key:
-mysql_backups_s3_cron_schedule:
-
-## These resources can take any parameter made available in
-## the ops manager API ( https://your-ops-man/docs#configuring-resources-for-a-job)
-nats_instances: 2
-nfs_server_instances: 1
-mysql_proxy_instances: 1
-mysql_instances: 1
-backup_prepare_instances: 0
-uaa_instances: 2
-cloud_controller_instances: 2
-ha_proxy_instances: 1
-mysql_monitor_instances: 0
-clock_global_instances: 1
-cloud_controller_worker_instances: 2
-consul_server_instances: 3
-diego_database_instances: 3
-router_instances: 3
-diego_brain_instances: 3
-diego_cell_instances: 3
-loggregator_traffic_controller_instances: 3
-syslog_adapter_instances: 3
-doppler_instances: 3
-tcp_router_instances: 0
-
-# Whether or not the ERT VMs are internet connected.
-internet_connected: false
+# c2c networking network cidr
+container_networking_nw_cidr: 10.255.0.0/16
 
 # For credhub integration, replace dummy values in the following structure
 # and set the number of credhub instances in resource config to 2
@@ -174,7 +94,100 @@ credhub_encryption_keys: |
     key:
       secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
 
+default_quota_max_number_services: 1000
+default_quota_memory_limit_mb: 10240
+
+# Domain Names for ERT
+apps_domain: CHANGEME # This is usually cfapps.${pcf_ert_domain}
+pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
+system_domain: CHANGEME # This is usually sys.${pcf_ert_domain}
+
 deployment_network_name: "ert"
+
+# Disable HTTP on gorouters (true|false)
+disable_http_proxy: false
+
+# If true, disable insecure cookies on the router.
+disable_insecure_cookies: false
+
+# PCF Elastic Runtime minor version to track
+ert_major_minor_version: ^1\.12\..*$
+
+# Applications Network Maximum Transmission Unit bytes
+garden_network_mtu: 1454
+
+# Only change this if you need to avoid address collision with a third-party service on the same subnet.
+garden_network_pool_cidr: 10.254.0.0/22
+
+# Optional - if your git repo requires an SSH key.
+git_private_key:
+
+# Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
+haproxy_backend_ca:
+
+# If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
+haproxy_forward_tls: enable
+
+ha_proxy_lb_name: CHANGEME
+
+# Instances
+## These resources can take any parameter made available in
+## the ops manager API ( https://your-ops-man/docs#configuring-resources-for-a-job)
+backup_prepare_instances: 0
+clock_global_instances: 1
+cloud_controller_instances: 2
+cloud_controller_worker_instances: 2
+consul_server_instances: 3
+diego_brain_instances: 3
+diego_cell_instances: 3
+diego_database_instances: 3
+doppler_instances: 3
+ha_proxy_instances: 1
+loggregator_traffic_controller_instances: 3
+mysql_instances: 1
+mysql_monitor_instances: 0
+mysql_proxy_instances: 1
+nats_instances: 2
+nfs_server_instances: 1
+router_instances: 3
+syslog_adapter_instances: 3
+tcp_router_instances: 0
+uaa_instances: 2
+
+# Whether or not the ERT VMs are internet connected.
+internet_connected: false
+
+# IPs
+ha_proxy_ips:           # Comma-separated list of static IPs
+router_static_ips:      # Comma-separated list of static IPs
+tcp_router_static_ips:  # Comma-separated list of static IPs
+ssh_static_ips:         # Comma-separated list of static IPs
+mysql_static_ips:       # Comma-separated list of static IPs
+
+# Loggegrator Port. Default is 443
+loggregator_endpoint_port:
+
+# Whether to enable MySQL backups. (disable|s3|scp)
+mysql_backups: disable
+
+# S3 backup config params (leave empty values if you're not using s3)
+mysql_backups_s3_access_key_id:
+mysql_backups_s3_bucket_name:
+mysql_backups_s3_bucket_path:
+mysql_backups_s3_cron_schedule:
+mysql_backups_s3_endpoint_url:
+mysql_backups_s3_secret_access_key:
+
+# SCP backup config params (leave empty values if you're not using scp)
+mysql_backups_scp_cron_schedule:
+mysql_backups_scp_destination:
+mysql_backups_scp_key:
+mysql_backups_scp_port:
+mysql_backups_scp_server:
+mysql_backups_scp_user:
+
+# Optional - Email address for sending mysql monitor notifications
+mysql_monitor_recipient_email:
 
 networking_poe_ssl_certs:
 # networking_poe_ssl_certs: |
@@ -198,60 +211,83 @@ networking_poe_ssl_certs:
 #        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
 #        ...
 #        -----END EXAMPLE RSA PRIVATE KEY-----
-## Syslog endpoint configuration goes here
-# Optional. If syslog_host is specified, syslog_port, syslog_protocol,
-# syslog_drain_buffer_size, and enable_security_event_logging must be set.
-syslog_host:
-syslog_port:
-syslog_protocol:
-enable_security_event_logging: false
-syslog_drain_buffer_size: 10000
 
-company_name:                 # Company Name for Apps Manager
-authentication_mode: internal
-loggregator_endpoint_port:    # Loggegrator Port. Default is 443
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
+opsman_admin_password: CHANGEME
+opsman_admin_username: CHANGEME
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
 
-# Disable HTTP on gorouters (true|false)
-disable_http_proxy: false
+# Opsman Settings
+opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
 
-## TCP routing and routing services
-tcp_routing: disable                    # Enable/disable TCP routing (enable|disable)
-tcp_routing_ports:                      # A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
-route_services: enable                  # Enable/disable route services (enable|disable)
-ignore_ssl_cert_verification: false     # Whether to disable SSL cert verification for route services
+# PCF Ops Manager minor version to track
+opsman_major_minor_version: ^1\.12\..*$
 
-# Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
-routing_tls_termination: load_balancer
+# SAML Service Credential provider Cert and Key, if the string is blank, then the pipeline will auto generate certs
+pcf_ert_saml_cert:
+pcf_ert_saml_key:
+
+pcf_opsman_disk_size_in_gb: 120
+
+# SSH keys for Operations Manager director
+pcf_ssh_key_pub: CHANGEME
+pcf_ssh_key_priv: |
+  CHANGEME
+
+# Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+pivnet_token: CHANGEME
+
+# Request timeout for gorouter
+router_request_timeout_in_seconds: 900
 
 # These certificates can be used to validate the certificates from incoming client requests.
 # All CA certificates should be appended together into a single collection of PEM-encoded entries.
 routing_custom_ca_certificates:
 
+# Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
+routing_tls_termination: load_balancer
+
+
+# Setting appropriate Application Security Groups is critical for a secure
+# deployment. Change the value of the param below to "X" to acknowledge that
+# once the Elastic Runtime deployment completes, you will review and set the
+# appropriate application security groups.
+# See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
+security_acknowledgement: CHANGEME
+
+# Whether to disable SSL cert verification for this environment.
+skip_cert_verify: true
+
 # If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd,
 # smtp_enable_starttls_auto, and smtp_auth_mechanism must also be set.
 smtp_address:
+smtp_auth_mechanism: # (none|plain|cram-md5)
+smtp_enable_starttls_auto: true
 smtp_from:
 smtp_port:
-smtp_user:
 smtp_pwd:
-smtp_enable_starttls_auto: true
-smtp_auth_mechanism: # (none|plain|cram-md5)
+smtp_user:
 
-default_quota_memory_limit_mb: 10240
-default_quota_max_number_services: 1000
-skip_cert_verify: true # Whether to disable SSL cert verification for this environment.
-disable_insecure_cookies: false # If true, disable insecure cookies on the router.
+# Storage account and container that will be used for your terraform state
+azure_storage_container_name: CHANGEME
+terraform_azure_access_key: CHANGEME
+terraform_azure_account_name: CHANGEME
 
-# Request timeout for gorouter
-router_request_timeout_in_seconds: 900
-garden_network_pool_cidr: 10.254.0.0/22 # Only change this if you need to avoid address collision with a third-party service on the same subnet.
-garden_network_mtu: 1454                # Applications Network Maximum Transmission Unit bytes
-allow_app_ssh_access: false             # Whether to allow SSH access to application instances
+## Syslog endpoint configuration goes here
+# Optional. If syslog_host is specified, syslog_port, syslog_protocol,
+# syslog_drain_buffer_size, and enable_security_event_logging must be set.
+enable_security_event_logging: false
+syslog_drain_buffer_size: 10000
+syslog_host:
+syslog_port:
+syslog_protocol:
 
-ha_proxy_lb_name: CHANGEME
+## TCP routing and routing services
+ignore_ssl_cert_verification: false     # Whether to disable SSL cert verification for route services
+route_services: enable                  # Enable/disable route services (enable|disable)
+tcp_routing: disable                    # Enable/disable TCP routing (enable|disable)
+tcp_routing_ports:                      # A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
 
-ha_proxy_ips:           # Comma-separated list of static IPs
-router_static_ips:      # Comma-separated list of static IPs
-tcp_router_static_ips:  # Comma-separated list of static IPs
-ssh_static_ips:         # Comma-separated list of static IPs
-mysql_static_ips:       # Comma-separated list of static IPs
+# Optional PEM-encoded certificates to add to BOSH VMs
+trusted_certificates:
