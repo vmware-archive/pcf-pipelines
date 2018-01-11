@@ -19,7 +19,7 @@ saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
 
 if [[ "${pcf_iaas}" == "aws" ]]; then
-  if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" ]]; then
+  if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
     domains=(
       "*.sys.${pcf_ert_domain}"
       "*.cfapps.${pcf_ert_domain}"

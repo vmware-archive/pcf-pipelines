@@ -6,7 +6,7 @@ source pcf-pipelines/functions/generate_cert.sh
 
 NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
 
-if [[ -z "$NETWORKING_POE_SSL_CERTS" ]]; then
+if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
   domains=(
     "*.${SYSTEM_DOMAIN}"
     "*.${APPS_DOMAIN}"
