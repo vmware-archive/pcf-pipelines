@@ -486,7 +486,7 @@ cf_network=$(
 )
 
 JOB_RESOURCE_CONFIG="{
-  \"backup_prepare\": { \"instances\": $BACKUP_PREPARE_INSTANCES },
+  \"backup-prepare\": { \"instances\": $BACKUP_PREPARE_INSTANCES },
   \"clock_global\": { \"instances\": $CLOCK_GLOBAL_INSTANCES },
   \"cloud_controller\": { \"instances\": $CLOUD_CONTROLLER_INSTANCES },
   \"cloud_controller_worker\": { \"instances\": $CLOUD_CONTROLLER_WORKER_INSTANCES },
