@@ -543,7 +543,7 @@ cf_resources=$(
     --arg mysql_nsx_lb_pool_name "${MYSQL_NSX_LB_POOL_NAME}" \
     --arg mysql_nsx_lb_security_group "${MYSQL_NSX_LB_SECURITY_GROUP}" \
     --arg mysql_nsx_lb_port "${MYSQL_NSX_LB_PORT}" \
-    --arg job_resource_config "${JOB_RESOURCE_CONFIG}" \
+    --argjson job_resource_config "${JOB_RESOURCE_CONFIG}" \
     '
     $job_resource_config
 
