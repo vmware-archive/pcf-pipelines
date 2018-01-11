@@ -25,7 +25,9 @@ product_version_regex: ^1\.11\..*$
 # ------------------------------
 # Credentials for Operations Manager. These are used for uploading, staging,
 # and deploying the product file on Operations Manager.
-# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified. 
+# If you are using opsman_admin_username/opsman_admin_password, edit opsman_client_id/opsman_client_secret to be an empty value.
+# If you are using opsman_client_id/opsman_client_secret, edit opsman_admin_username/opsman_admin_password to be an empty value. 
 opsman_client_id: CHANGEME
 opsman_client_secret: CHANGEME
 opsman_admin_username: CHANGEME
