@@ -66,8 +66,6 @@ cf_properties=$(
     --arg company_name "$COMPANY_NAME" \
     --arg ssh_static_ips "$SSH_STATIC_IPS" \
     --arg mysql_static_ips "$MYSQL_STATIC_IPS" \
-    --arg cert_pem "$SSL_CERT" \
-    --arg private_key_pem "$SSL_PRIVATE_KEY" \
     --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
     --arg haproxy_backend_ca "$HAPROXY_BACKEND_CA" \
     --arg router_tls_ciphers "$ROUTER_TLS_CIPHERS" \
