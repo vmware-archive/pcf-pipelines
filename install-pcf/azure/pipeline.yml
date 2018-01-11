@@ -453,6 +453,7 @@ jobs:
       BACKUP_PREPARE_INSTANCES: {{backup_prepare_instances}}
       UAA_INSTANCES: {{uaa_instances}}
       CLOUD_CONTROLLER_INSTANCES: {{cloud_controller_instances}}
+      CREDHUB_INSTANCES: {{credhub_instances}}
       HA_PROXY_INSTANCES: {{ha_proxy_instances}}
       HA_PROXY_LB_NAME: {{ha_proxy_lb_name}}
       ROUTER_INSTANCES: {{router_instances}}
@@ -463,9 +464,10 @@ jobs:
       DIEGO_BRAIN_INSTANCES: {{diego_brain_instances}}
       DIEGO_CELL_INSTANCES: {{diego_cell_instances}}
       DOPPLER_INSTANCES: {{doppler_instances}}
-      LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
+      LOGGREGATOR_TC_INSTANCES: {{loggregator_trafficcontroller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
+      SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}

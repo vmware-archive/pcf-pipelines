@@ -485,30 +485,42 @@ cf_network=$(
     '
 )
 
+JOB_RESOURCE_CONFIG="{
+  \"backup_prepare\": { \"instances\": $BACKUP_PREPARE_INSTANCES },
+  \"clock_global\": { \"instances\": $CLOCK_GLOBAL_INSTANCES },
+  \"cloud_controller\": { \"instances\": $CLOUD_CONTROLLER_INSTANCES },
+  \"cloud_controller_worker\": { \"instances\": $CLOUD_CONTROLLER_WORKER_INSTANCES },
+  \"consul_server\": { \"instances\": $CONSUL_SERVER_INSTANCES },
+  \"credhub\": { \"instances\": $CREDHUB_INSTANCES },
+  \"diego_brain\": { \"instances\": $DIEGO_BRAIN_INSTANCES },
+  \"diego_cell\": { \"instances\": $DIEGO_CELL_INSTANCES },
+  \"diego_database\": { \"instances\": $DIEGO_DATABASE_INSTANCES },
+  \"doppler\": { \"instances\": $DOPPLER_INSTANCES },
+  \"ha_proxy\": { \"instances\": $HA_PROXY_INSTANCES },
+  \"loggregator_trafficcontroller\": { \"instances\": $LOGGREGATOR_TRAFFICCONTROLLER_INSTANCES },
+  \"mysql\": { \"instances\": $MYSQL_INSTANCES },
+  \"mysql_monitor\": { \"instances\": $MYSQL_MONITOR_INSTANCES },
+  \"mysql_proxy\": { \"instances\": $MYSQL_PROXY_INSTANCES },
+  \"nats\": { \"instances\": $NATS_INSTANCES },
+  \"nfs_server\": { \"instances\": $NFS_SERVER_INSTANCES },
+  \"router\": { \"instances\": $ROUTER_INSTANCES },
+  \"syslog_adapter\": { \"instances\": $SYSLOG_ADAPTER_INSTANCES },
+  \"syslog_scheduler\": { \"instances\": $SYSLOG_SCHEDULER_INSTANCES },
+  \"tcp_router\": { \"instances\": $TCP_ROUTER_INSTANCES },
+  \"uaa\": { \"instances\": $UAA_INSTANCES }
+}"
+
+if [[ "$IAAS" == "azure" ]]; then
+  JOB_RESOURCE_CONFIG=$(echo "$JOB_RESOURCE_CONFIG" | \
+    jq --argjson internet_connected $INTERNET_CONNECTED \
+    '. | to_entries[] | {"key": .key, value: (.value + {"internet_connected": $internet_connected}) } ' | \
+    jq -s "from_entries"
+  )
+fi
+
 cf_resources=$(
   jq -n \
     --arg iaas "$IAAS" \
-    --argjson consul_server_instances $CONSUL_SERVER_INSTANCES \
-    --argjson nats_instances $NATS_INSTANCES \
-    --argjson nfs_server_instances $NFS_SERVER_INSTANCES \
-    --argjson mysql_proxy_instances $MYSQL_PROXY_INSTANCES \
-    --argjson mysql_instances $MYSQL_INSTANCES \
-    --argjson backup_prepare_instances $BACKUP_PREPARE_INSTANCES \
-    --argjson diego_database_instances $DIEGO_DATABASE_INSTANCES \
-    --argjson uaa_instances $UAA_INSTANCES \
-    --argjson cloud_controller_instances $CLOUD_CONTROLLER_INSTANCES \
-    --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
-    --argjson router_instances $ROUTER_INSTANCES \
-    --argjson mysql_monitor_instances $MYSQL_MONITOR_INSTANCES \
-    --argjson clock_global_instances $CLOCK_GLOBAL_INSTANCES \
-    --argjson cloud_controller_worker_instances $CLOUD_CONTROLLER_WORKER_INSTANCES \
-    --argjson diego_brain_instances $DIEGO_BRAIN_INSTANCES \
-    --argjson diego_cell_instances $DIEGO_CELL_INSTANCES \
-    --argjson loggregator_tc_instances $LOGGREGATOR_TC_INSTANCES \
-    --argjson tcp_router_instances $TCP_ROUTER_INSTANCES \
-    --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
-    --argjson doppler_instances $DOPPLER_INSTANCES \
-    --argjson internet_connected $INTERNET_CONNECTED \
     --arg ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
     --arg ha_proxy_floating_ips "$HAPROXY_FLOATING_IPS" \
     --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
@@ -531,69 +543,9 @@ cf_resources=$(
     --arg mysql_nsx_lb_pool_name "${MYSQL_NSX_LB_POOL_NAME}" \
     --arg mysql_nsx_lb_security_group "${MYSQL_NSX_LB_SECURITY_GROUP}" \
     --arg mysql_nsx_lb_port "${MYSQL_NSX_LB_PORT}" \
+    --arg job_resource_config "${JOB_RESOURCE_CONFIG}" \
     '
-    if $iaas == "azure" then
-
-    {
-      "consul_server": { "instances": $consul_server_instances, "internet_connected": $internet_connected },
-      "nats": { "instances": $nats_instances, "internet_connected": $internet_connected },
-      "nfs_server": { "instances": $nfs_server_instances, "internet_connected": $internet_connected },
-      "mysql_proxy": { "instances": $mysql_proxy_instances, "internet_connected": $internet_connected },
-      "mysql": { "instances": $mysql_instances, "internet_connected": $internet_connected },
-      "backup-prepare": { "instances": $backup_prepare_instances, "internet_connected": $internet_connected },
-      "diego_database": { "instances": $diego_database_instances, "internet_connected": $internet_connected },
-      "uaa": { "instances": $uaa_instances, "internet_connected": $internet_connected },
-      "cloud_controller": { "instances": $cloud_controller_instances, "internet_connected": $internet_connected },
-      "ha_proxy": { "instances": $ha_proxy_instances, "internet_connected": $internet_connected },
-      "router": { "instances": $router_instances, "internet_connected": $internet_connected },
-      "mysql_monitor": { "instances": $mysql_monitor_instances, "internet_connected": $internet_connected },
-      "clock_global": { "instances": $clock_global_instances, "internet_connected": $internet_connected },
-      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances, "internet_connected": $internet_connected },
-      "diego_brain": { "instances": $diego_brain_instances, "internet_connected": $internet_connected },
-      "diego_cell": { "instances": $diego_cell_instances, "internet_connected": $internet_connected },
-      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances, "internet_connected": $internet_connected },
-      "tcp_router": { "instances": $tcp_router_instances, "internet_connected": $internet_connected },
-      "syslog_adapter": { "instances": $syslog_adapter_instances, "internet_connected": $internet_connected },
-      "syslog_scheduler": {"internet_connected": $internet_connected},
-      "doppler": { "instances": $doppler_instances, "internet_connected": $internet_connected },
-      "smoke-tests": {"internet_connected": $internet_connected},
-      "push-apps-manager": {"internet_connected": $internet_connected},
-      "notifications": {"internet_connected": $internet_connected},
-      "notifications-ui": {"internet_connected": $internet_connected},
-      "push-pivotal-account": {"internet_connected": $internet_connected},
-      "autoscaling": {"internet_connected": $internet_connected},
-      "autoscaling-register-broker": {"internet_connected": $internet_connected},
-      "nfsbrokerpush": {"internet_connected": $internet_connected},
-      "bootstrap": {"internet_connected": $internet_connected},
-      "mysql-rejoin-unsafe": {"internet_connected": $internet_connected}
-    }
-
-    else
-
-    {
-      "consul_server": { "instances": $consul_server_instances },
-      "nats": { "instances": $nats_instances },
-      "nfs_server": { "instances": $nfs_server_instances },
-      "mysql_proxy": { "instances": $mysql_proxy_instances },
-      "mysql": { "instances": $mysql_instances },
-      "backup-prepare": { "instances": $backup_prepare_instances },
-      "diego_database": { "instances": $diego_database_instances },
-      "uaa": { "instances": $uaa_instances },
-      "cloud_controller": { "instances": $cloud_controller_instances },
-      "ha_proxy": { "instances": $ha_proxy_instances },
-      "router": { "instances": $router_instances },
-      "mysql_monitor": { "instances": $mysql_monitor_instances },
-      "clock_global": { "instances": $clock_global_instances },
-      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances },
-      "diego_brain": { "instances": $diego_brain_instances },
-      "diego_cell": { "instances": $diego_cell_instances },
-      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances },
-      "tcp_router": { "instances": $tcp_router_instances },
-      "syslog_adapter": { "instances": $syslog_adapter_instances },
-      "doppler": { "instances": $doppler_instances }
-    }
-
-    end
+    $job_resource_config
 
     |
 

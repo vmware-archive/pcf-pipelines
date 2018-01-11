@@ -257,6 +257,7 @@ backup_prepare_instances: 0
 diego_database_instances: 3
 uaa_instances: 2
 cloud_controller_instances: 2
+credhub_instances: 0
 ha_proxy_instances: 0
 router_instances: 3
 mysql_monitor_instances: 1
@@ -266,6 +267,7 @@ diego_brain_instances: 3
 diego_cell_instances: 3
 loggregator_traffic_controller_instances: 3
 syslog_adapter_instances: 3
+syslog_scheduler_instances: 2
 doppler_instances: 3
 tcp_router_instances: 0
 

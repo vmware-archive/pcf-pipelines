@@ -367,6 +367,7 @@ jobs:
       SSH_STATIC_IPS: {{ssh_static_ips}}
       MYSQL_STATIC_IPS: {{mysql_static_ips}}
       CONSUL_SERVER_INSTANCES: {{consul_server_instances}}
+      CREDHUB_INSTANCES: {{credhub_instances}}
       NATS_INSTANCES: {{nats_instances}}
       NFS_SERVER_INSTANCES: {{nfs_server_instances}}
       MYSQL_PROXY_INSTANCES: {{mysql_proxy_instances}}
@@ -386,6 +387,7 @@ jobs:
       LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
+      SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
