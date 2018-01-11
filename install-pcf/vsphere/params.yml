@@ -265,7 +265,7 @@ clock_global_instances: 1
 cloud_controller_worker_instances: 2
 diego_brain_instances: 3
 diego_cell_instances: 3
-loggregator_traffic_controller_instances: 3
+loggregator_trafficcontroller_instances: 1
 syslog_adapter_instances: 3
 syslog_scheduler_instances: 2
 doppler_instances: 3

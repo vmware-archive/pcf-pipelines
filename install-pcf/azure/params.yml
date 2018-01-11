@@ -144,7 +144,7 @@ diego_cell_instances: 3
 diego_database_instances: 3
 doppler_instances: 3
 ha_proxy_instances: 1
-loggregator_trafficcontroller_instances: 3
+loggregator_trafficcontroller_instances: 1
 mysql_instances: 1
 mysql_monitor_instances: 0
 mysql_proxy_instances: 1
