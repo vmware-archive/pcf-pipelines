@@ -105,8 +105,7 @@ jobs:
       tags: [ openstack ]
     - get: terraform-state
       tags: [ openstack ]
-    - get: pivnet-opsmgr
-      resource: ops-manager
+    - get: ops-manager
       tags: [ openstack ]
       params:
         globs: []
