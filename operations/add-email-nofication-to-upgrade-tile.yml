@@ -1,0 +1,57 @@
+### EMAIL RESOURCE TYPE definition - See the resource's documentation for more details.
+### https://github.com/pivotal-cf/email-resource
+- op: add
+  path: /resource_types/-
+  value:
+    name: email
+    type: docker-image
+    source:
+      repository: pcfseceng/email-resource
+
+### EMAIL RESOURCE definition - update the source object's parameters accordingly
+### See the resource's documentation for more details:
+### https://github.com/pivotal-cf/email-resource
+- op: add
+  path: /resources/-
+  value:
+    name: send-email
+    type: email
+    source:
+      smtp:
+        host: smtp.example.com
+        port: "587" # this must be a string
+        username: ((smtp-user))
+        password: ((smtp-password))
+      from: build-system@example.com
+      to: [ "dev-team@example.com", "product@example.net")) ]
+
+### SUCCESS build notification - Update the email subject and body text below appropriately
+### This operation adds an inline send-email put action to the last job of the pipeline
+- op: add
+  path: /jobs/name=apply-changes/plan/-
+  value:
+    put: send-email
+    params:
+      subject_text: "Build finished successfully: ${BUILD_PIPELINE_NAME}/${BUILD_JOB_NAME}/${BUILD_NAME}"
+      body_text: "Build finished successfully: ${ATC_EXTERNAL_URL}/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}"
+
+
+### FAILURE build notifications - Update the email subject and body text below appropriately
+### An `on_failure` even will be added to each job of the pipeline
+- op: add
+  path: /jobs/name=upload-and-stage-tile/on_failure
+  value: &on_failure_object
+    put: send-email
+    params:
+      subject_text: "Build failed: ${BUILD_PIPELINE_NAME}/${BUILD_JOB_NAME}/${BUILD_NAME}"
+      body_text: "Build failed: ${ATC_EXTERNAL_URL}/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}"
+
+- op: add
+  path: /jobs/name=regulator/on_failure
+  value:
+    <<: *on_failure_object
+
+- op: add
+  path: /jobs/name=apply-changes/on_failure
+  value:
+    <<: *on_failure_object
