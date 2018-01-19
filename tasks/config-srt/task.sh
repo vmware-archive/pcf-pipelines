@@ -107,11 +107,14 @@ cf_properties=$(
       ".properties.logger_endpoint_port": {
         "value": $loggregator_endpoint_port
       },
-      ".properties.container_networking_network_cidr": {
+      ".properties.container_networking_interface_plugin.silk.network_cidr": {
         "value": $container_networking_nw_cidr
       },
       ".properties.security_acknowledgement": {
         "value": $security_acknowledgement
+      },
+      ".properties.push_apps_manager_company_name.": {
+        "value": $company_name
       },
       ".cloud_controller.system_domain": {
         "value": $system_domain
@@ -148,9 +151,6 @@ cf_properties=$(
       },
       ".tcp_router.static_ips": {
         "value": $tcp_router_static_ips
-      },
-      ".push-apps-manager.company_name": {
-        "value": $company_name
       },
       ".diego_brain.static_ips": {
         "value": $ssh_static_ips
@@ -204,11 +204,16 @@ cf_properties=$(
 
     # SSL Termination
     {
-      ".properties.networking_poe_ssl_cert": {
-        "value": {
-          "cert_pem": $cert_pem,
-          "private_key_pem": $private_key_pem
-        }
+      ".properties.networking_poe_ssl_certs": {
+        "value": [
+          {
+            "certificate": {
+              "cert_pem": $cert_pem,
+              "private_key_pem": $private_key_pem
+            },
+            "name": "Certificate"
+          }
+        ]
       }
     }
 

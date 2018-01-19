@@ -248,8 +248,7 @@ jobs:
       COMPANY_NAME: {{company_name}}
       AUTHENTICATION_MODE: {{authentication_mode}}
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
-      SSL_CERT: {{ssl_cert}}
-      SSL_PRIVATE_KEY: {{ssl_private_key}}
+      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       SAML_SSL_CERT: {{saml_ssl_cert}}
       SAML_SSL_PRIVATE_KEY: {{saml_ssl_private_key}}
       HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
@@ -325,9 +324,11 @@ jobs:
       DIEGO_BRAIN_INSTANCES: {{diego_brain_instances}}
       DIEGO_CELL_INSTANCES: {{diego_cell_instances}}
       DOPPLER_INSTANCES: {{doppler_instances}}
-      LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
+      LOGGREGATOR_TRAFFICCONTROLLER_INSTANCES: {{loggregator_trafficcontroller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
+      SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
+      CREDHUB_INSTANCES: {{credhub_instances}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       TCP_ROUTER_NSX_SECURITY_GROUP: {{tcp_router_nsx_security_group}}
@@ -350,6 +351,9 @@ jobs:
       MYSQL_NSX_LB_POOL_NAME: {{mysql_nsx_lb_pool_name}}
       MYSQL_NSX_LB_SECURITY_GROUP: {{mysql_nsx_lb_security_group}}
       MYSQL_NSX_LB_PORT: {{mysql_nsx_lb_port}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
+      ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
+      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       HA_PROXY_LB_NAME: ""
       HAPROXY_FLOATING_IPS: ""
 

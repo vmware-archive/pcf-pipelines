@@ -15,16 +15,28 @@ saml_certificates=$(generate_cert "${saml_domains[*]}")
 saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
 saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
+
+NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
+
 if [[ "${pcf_iaas}" == "aws" ]]; then
-  if [[ ${pcf_ert_ssl_cert} == "" || ${pcf_ert_ssl_cert} == "generate" ]]; then
+  if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
     domains=(
       "*.sys.${pcf_ert_domain}"
       "*.cfapps.${pcf_ert_domain}"
     )
 
-    certificates=$(generate_cert "${domains[*]}")
-    pcf_ert_ssl_cert=`echo $certificates | jq --raw-output '.certificate'`
-    pcf_ert_ssl_key=`echo $certificates | jq --raw-output '.key'`
+    certificate=$(generate_cert "${domains[*]}")
+    pcf_ert_ssl_cert=`echo $certificate | jq '.certificate'`
+    pcf_ert_ssl_key=`echo $certificate | jq '.key'`
+    NETWORKING_POE_SSL_CERTS_JSON="[
+      {
+        \"name\": \"Certificate 1\",
+        \"certificate\": {
+          \"cert_pem\": $pcf_ert_ssl_cert,
+          \"private_key_pem\": $pcf_ert_ssl_key
+        }
+      }
+    ]"
   fi
 
   cd terraform-state
@@ -37,14 +49,23 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
 elif [[ "${pcf_iaas}" == "gcp" ]]; then
   cd terraform-state
     db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.sql_instance_ip.value')
-    pcf_ert_ssl_cert="$(terraform output ert_certificate)"
-    pcf_ert_ssl_key="$(terraform output ert_certificate_key)"
+    pcf_ert_ssl_cert="$(terraform output -json ert_certificate | jq .value)"
+    pcf_ert_ssl_key="$(terraform output -json ert_certificate_key | jq .value)"
   cd -
 
   if [ -z "$db_host" ]; then
     echo Failed to get SQL instance IP from Terraform state file
     exit 1
   fi
+  NETWORKING_POE_SSL_CERTS_JSON="[
+    {
+      \"name\": \"Certificate 1\",
+      \"certificate\": {
+        \"cert_pem\": $pcf_ert_ssl_cert,
+        \"private_key_pem\": $pcf_ert_ssl_key
+      }
+    }
+  ]"
 fi
 
 cf_network=$(
@@ -72,46 +93,28 @@ cf_resources=$(
     --argjson internet_connected $INTERNET_CONNECTED \
     '
     {
-      "consul_server": {"internet_connected": $internet_connected},
-      "nats": {"internet_connected": $internet_connected},
-      "nfs_server": {"internet_connected": $internet_connected},
-      "mysql_proxy": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
-      "mysql": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
       "backup-prepare": {"internet_connected": $internet_connected},
-      "diego_database": {"internet_connected": $internet_connected},
-      "uaa": {"internet_connected": $internet_connected},
-      "cloud_controller": {"internet_connected": $internet_connected},
-      "ha_proxy": {"internet_connected": $internet_connected},
-      "router": {"internet_connected": $internet_connected},
-      "mysql_monitor": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
       "clock_global": {"internet_connected": $internet_connected},
+      "cloud_controller": {"internet_connected": $internet_connected},
       "cloud_controller_worker": {"internet_connected": $internet_connected},
+      "consul_server": {"internet_connected": $internet_connected},
+      "credhub": {"internet_connected": $internet_connected},
       "diego_brain": {"internet_connected": $internet_connected},
       "diego_cell": {"internet_connected": $internet_connected},
+      "diego_database": {"internet_connected": $internet_connected},
+      "doppler": {"internet_connected": $internet_connected},
+      "ha_proxy": {"internet_connected": $internet_connected},
       "loggregator_trafficcontroller": {"internet_connected": $internet_connected},
+      "mysql": {"instances": 0, "internet_connected": $internet_connected},
+      "mysql_monitor": {"instances": 0, "internet_connected": $internet_connected},
+      "mysql_proxy": {"instances": 0, "internet_connected": $internet_connected},
+      "nats": {"internet_connected": $internet_connected},
+      "nfs_server": {"internet_connected": $internet_connected},
+      "router": {"internet_connected": $internet_connected},
       "syslog_adapter": {"internet_connected": $internet_connected},
       "syslog_scheduler": {"internet_connected": $internet_connected},
-      "doppler": {"internet_connected": $internet_connected},
       "tcp_router": {"internet_connected": $internet_connected},
-      "smoke-tests": {"internet_connected": $internet_connected},
-      "push-apps-manager": {"internet_connected": $internet_connected},
-      "notifications": {"internet_connected": $internet_connected},
-      "notifications-ui": {"internet_connected": $internet_connected},
-      "push-pivotal-account": {"internet_connected": $internet_connected},
-      "autoscaling": {"internet_connected": $internet_connected},
-      "autoscaling-register-broker": {"internet_connected": $internet_connected},
-      "nfsbrokerpush": {"internet_connected": $internet_connected},
-      "bootstrap": {"internet_connected": $internet_connected},
-      "mysql-rejoin-unsafe": {"internet_connected": $internet_connected}
+      "uaa": {"internet_connected": $internet_connected}
     }
 
     |
@@ -130,6 +133,8 @@ cf_resources=$(
     '
 )
 
+CREDHUB_ENCRYPTION_KEYS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["CREDHUB_ENCRYPTION_KEYS"]))')"
+
 cf_properties=$(
   jq -n \
     --arg terraform_prefix $terraform_prefix \
@@ -144,6 +149,8 @@ cf_properties=$(
     --arg router_tls_ciphers "$ROUTER_TLS_CIPHERS" \
     --arg haproxy_tls_ciphers "$HAPROXY_TLS_CIPHERS" \
     --arg routing_disable_http "$routing_disable_http" \
+    --arg routing_custom_ca_certificates "$ROUTING_CUSTOM_CA_CERTIFICATES" \
+    --arg routing_tls_termination $ROUTING_TLS_TERMINATION \
     --arg security_acknowledgement "$SECURITY_ACKNOWLEDGEMENT" \
     --arg iaas $pcf_iaas \
     --arg pcf_ert_domain "$pcf_ert_domain" \
@@ -192,6 +199,8 @@ cf_properties=$(
     --arg mysql_backups_s3_access_key_id "$MYSQL_BACKUPS_S3_ACCESS_KEY_ID" \
     --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
     --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
+    --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
+    --argjson networking_poe_ssl_certs "$NETWORKING_POE_SSL_CERTS_JSON" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
@@ -204,7 +213,7 @@ cf_properties=$(
       ".properties.tcp_routing": { "value": "disable" },
       ".properties.route_services": { "value": "enable" },
       ".ha_proxy.skip_cert_verify": { "value": true },
-      ".properties.container_networking_network_cidr": { "value": $container_networking_nw_cidr },
+      ".properties.container_networking_interface_plugin.silk.network_cidr": { "value": $container_networking_nw_cidr },
       ".properties.route_services.enable.ignore_ssl_cert_verification": { "value": true },
       ".properties.security_acknowledgement": { "value": $security_acknowledgement },
       ".properties.system_database": { "value": "external" },
@@ -237,13 +246,22 @@ cf_properties=$(
       ".properties.uaa_database.external.port": { "value": "3306" },
       ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
       ".properties.uaa_database.external.uaa_password": { "value": { "secret": $db_uaa_password } },
+      ".properties.push_apps_manager_company_name": { "value": "pcf-\($iaas)" },
       ".cloud_controller.system_domain": { "value": "sys.\($pcf_ert_domain)" },
       ".cloud_controller.apps_domain": { "value": "cfapps.\($pcf_ert_domain)" },
       ".cloud_controller.allow_app_ssh_access": { "value": true },
       ".cloud_controller.security_event_logging_enabled": { "value": true },
       ".router.disable_insecure_cookies": { "value": false },
-      ".push-apps-manager.company_name": { "value": "pcf-\($iaas)" },
       ".mysql_monitor.recipient_email": { "value" : $mysql_monitor_recipient_email }
+    }
+
+    +
+
+    # Credhub encryption keys
+    {
+      ".properties.credhub_key_encryption_passwords": {
+        "value": $credhub_encryption_keys
+      }
     }
 
     +
@@ -322,11 +340,8 @@ cf_properties=$(
 
     # SSL Termination
     {
-      ".properties.networking_poe_ssl_cert": {
-        "value": {
-          "cert_pem": $cert_pem,
-          "private_key_pem": $private_key_pem
-        }
+      ".properties.networking_poe_ssl_certs": {
+        "value": $networking_poe_ssl_certs
       }
     }
 
@@ -355,6 +370,26 @@ cf_properties=$(
     {
       ".properties.routing_disable_http": {
         "value": $routing_disable_http
+      }
+    }
+
+    +
+
+    if $routing_custom_ca_certificates == "" then
+      .
+    else
+      {
+        ".properties.routing_custom_ca_certificates": {
+          "value": $routing_custom_ca_certificates
+        }
+      }
+    end
+
+    +
+
+    {
+      ".properties.routing_tls_termination": {
+        "value": $routing_tls_termination
       }
     }
 

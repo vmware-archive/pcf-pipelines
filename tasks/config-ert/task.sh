@@ -4,7 +4,9 @@ set -eu
 
 source pcf-pipelines/functions/generate_cert.sh
 
-if [[ -z "$SSL_CERT" ]]; then
+NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
+
+if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
   domains=(
     "*.${SYSTEM_DOMAIN}"
     "*.${APPS_DOMAIN}"
@@ -12,9 +14,18 @@ if [[ -z "$SSL_CERT" ]]; then
     "*.uaa.${SYSTEM_DOMAIN}"
   )
 
-  certificates=$(generate_cert "${domains[*]}")
-  SSL_CERT=`echo $certificates | jq --raw-output '.certificate'`
-  SSL_PRIVATE_KEY=`echo $certificates | jq --raw-output '.key'`
+  certificate=$(generate_cert "${domains[*]}")
+  pcf_ert_ssl_cert=`echo $certificate | jq '.certificate'`
+  pcf_ert_ssl_key=`echo $certificate | jq '.key'`
+  NETWORKING_POE_SSL_CERTS_JSON="[
+    {
+      \"name\": \"Certificate 1\",
+      \"certificate\": {
+        \"cert_pem\": $pcf_ert_ssl_cert,
+        \"private_key_pem\": $pcf_ert_ssl_key
+      }
+    }
+  ]"
 fi
 
 
@@ -29,6 +40,8 @@ if [[ -z "$SAML_SSL_CERT" ]]; then
   SAML_SSL_CERT=$(echo $saml_certificates | jq --raw-output '.certificate')
   SAML_SSL_PRIVATE_KEY=$(echo $saml_certificates | jq --raw-output '.key')
 fi
+
+CREDHUB_ENCRYPTION_KEYS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["CREDHUB_ENCRYPTION_KEYS"]))')"
 
 cf_properties=$(
   jq -n \
@@ -53,11 +66,11 @@ cf_properties=$(
     --arg company_name "$COMPANY_NAME" \
     --arg ssh_static_ips "$SSH_STATIC_IPS" \
     --arg mysql_static_ips "$MYSQL_STATIC_IPS" \
-    --arg cert_pem "$SSL_CERT" \
-    --arg private_key_pem "$SSL_PRIVATE_KEY" \
     --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
     --arg haproxy_backend_ca "$HAPROXY_BACKEND_CA" \
     --arg router_tls_ciphers "$ROUTER_TLS_CIPHERS" \
+    --arg routing_tls_termination $ROUTING_TLS_TERMINATION \
+    --arg routing_custom_ca_certificates "$ROUTING_CUSTOM_CA_CERTIFICATES" \
     --arg haproxy_tls_ciphers "$HAPROXY_TLS_CIPHERS" \
     --arg disable_http_proxy "$DISABLE_HTTP_PROXY" \
     --arg smtp_from "$SMTP_FROM" \
@@ -98,6 +111,8 @@ cf_properties=$(
     --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
     --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
     --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
+    --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
+    --argjson networking_poe_ssl_certs "$NETWORKING_POE_SSL_CERTS_JSON" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
@@ -107,11 +122,14 @@ cf_properties=$(
       ".properties.logger_endpoint_port": {
         "value": $loggregator_endpoint_port
       },
-      ".properties.container_networking_network_cidr": {
+      ".properties.container_networking_interface_plugin.silk.network_cidr": {
         "value": $container_networking_nw_cidr
       },
       ".properties.security_acknowledgement": {
         "value": $security_acknowledgement
+      },
+      ".properties.push_apps_manager_company_name": {
+        "value": $company_name
       },
       ".cloud_controller.system_domain": {
         "value": $system_domain
@@ -149,14 +167,20 @@ cf_properties=$(
       ".tcp_router.static_ips": {
         "value": $tcp_router_static_ips
       },
-      ".push-apps-manager.company_name": {
-        "value": $company_name
-      },
       ".diego_brain.static_ips": {
         "value": $ssh_static_ips
       },
       ".mysql_proxy.static_ips": {
         "value": $mysql_static_ips
+      }
+    }
+
+    +
+
+    # Credhub encryption keys
+    {
+      ".properties.credhub_key_encryption_passwords": {
+        "value": $credhub_encryption_keys
       }
     }
 
@@ -204,11 +228,8 @@ cf_properties=$(
 
     # SSL Termination
     {
-      ".properties.networking_poe_ssl_cert": {
-        "value": {
-          "cert_pem": $cert_pem,
-          "private_key_pem": $private_key_pem
-        }
+      ".properties.networking_poe_ssl_certs": {
+        "value": $networking_poe_ssl_certs
       }
     }
 
@@ -239,6 +260,26 @@ cf_properties=$(
         "value": $disable_http_proxy
       }
     }
+
+    +
+
+    {
+      ".properties.routing_tls_termination": {
+        "value": $routing_tls_termination
+      }
+    }
+
+    +
+
+    if $routing_custom_ca_certificates == "" then
+      .
+    else
+      {
+        ".properties.routing_custom_ca_certificates": {
+          "value": $routing_custom_ca_certificates
+        }
+      }
+    end
 
     +
 
@@ -444,30 +485,42 @@ cf_network=$(
     '
 )
 
+JOB_RESOURCE_CONFIG="{
+  \"backup-prepare\": { \"instances\": $BACKUP_PREPARE_INSTANCES },
+  \"clock_global\": { \"instances\": $CLOCK_GLOBAL_INSTANCES },
+  \"cloud_controller\": { \"instances\": $CLOUD_CONTROLLER_INSTANCES },
+  \"cloud_controller_worker\": { \"instances\": $CLOUD_CONTROLLER_WORKER_INSTANCES },
+  \"consul_server\": { \"instances\": $CONSUL_SERVER_INSTANCES },
+  \"credhub\": { \"instances\": $CREDHUB_INSTANCES },
+  \"diego_brain\": { \"instances\": $DIEGO_BRAIN_INSTANCES },
+  \"diego_cell\": { \"instances\": $DIEGO_CELL_INSTANCES },
+  \"diego_database\": { \"instances\": $DIEGO_DATABASE_INSTANCES },
+  \"doppler\": { \"instances\": $DOPPLER_INSTANCES },
+  \"ha_proxy\": { \"instances\": $HA_PROXY_INSTANCES },
+  \"loggregator_trafficcontroller\": { \"instances\": $LOGGREGATOR_TRAFFICCONTROLLER_INSTANCES },
+  \"mysql\": { \"instances\": $MYSQL_INSTANCES },
+  \"mysql_monitor\": { \"instances\": $MYSQL_MONITOR_INSTANCES },
+  \"mysql_proxy\": { \"instances\": $MYSQL_PROXY_INSTANCES },
+  \"nats\": { \"instances\": $NATS_INSTANCES },
+  \"nfs_server\": { \"instances\": $NFS_SERVER_INSTANCES },
+  \"router\": { \"instances\": $ROUTER_INSTANCES },
+  \"syslog_adapter\": { \"instances\": $SYSLOG_ADAPTER_INSTANCES },
+  \"syslog_scheduler\": { \"instances\": $SYSLOG_SCHEDULER_INSTANCES },
+  \"tcp_router\": { \"instances\": $TCP_ROUTER_INSTANCES },
+  \"uaa\": { \"instances\": $UAA_INSTANCES }
+}"
+
+if [[ "$IAAS" == "azure" ]]; then
+  JOB_RESOURCE_CONFIG=$(echo "$JOB_RESOURCE_CONFIG" | \
+    jq --argjson internet_connected $INTERNET_CONNECTED \
+    '. | to_entries[] | {"key": .key, value: (.value + {"internet_connected": $internet_connected}) } ' | \
+    jq -s "from_entries"
+  )
+fi
+
 cf_resources=$(
   jq -n \
     --arg iaas "$IAAS" \
-    --argjson consul_server_instances $CONSUL_SERVER_INSTANCES \
-    --argjson nats_instances $NATS_INSTANCES \
-    --argjson nfs_server_instances $NFS_SERVER_INSTANCES \
-    --argjson mysql_proxy_instances $MYSQL_PROXY_INSTANCES \
-    --argjson mysql_instances $MYSQL_INSTANCES \
-    --argjson backup_prepare_instances $BACKUP_PREPARE_INSTANCES \
-    --argjson diego_database_instances $DIEGO_DATABASE_INSTANCES \
-    --argjson uaa_instances $UAA_INSTANCES \
-    --argjson cloud_controller_instances $CLOUD_CONTROLLER_INSTANCES \
-    --argjson ha_proxy_instances $HA_PROXY_INSTANCES \
-    --argjson router_instances $ROUTER_INSTANCES \
-    --argjson mysql_monitor_instances $MYSQL_MONITOR_INSTANCES \
-    --argjson clock_global_instances $CLOCK_GLOBAL_INSTANCES \
-    --argjson cloud_controller_worker_instances $CLOUD_CONTROLLER_WORKER_INSTANCES \
-    --argjson diego_brain_instances $DIEGO_BRAIN_INSTANCES \
-    --argjson diego_cell_instances $DIEGO_CELL_INSTANCES \
-    --argjson loggregator_tc_instances $LOGGREGATOR_TC_INSTANCES \
-    --argjson tcp_router_instances $TCP_ROUTER_INSTANCES \
-    --argjson syslog_adapter_instances $SYSLOG_ADAPTER_INSTANCES \
-    --argjson doppler_instances $DOPPLER_INSTANCES \
-    --argjson internet_connected $INTERNET_CONNECTED \
     --arg ha_proxy_elb_name "$HA_PROXY_LB_NAME" \
     --arg ha_proxy_floating_ips "$HAPROXY_FLOATING_IPS" \
     --arg tcp_router_nsx_security_group "${TCP_ROUTER_NSX_SECURITY_GROUP}" \
@@ -490,69 +543,9 @@ cf_resources=$(
     --arg mysql_nsx_lb_pool_name "${MYSQL_NSX_LB_POOL_NAME}" \
     --arg mysql_nsx_lb_security_group "${MYSQL_NSX_LB_SECURITY_GROUP}" \
     --arg mysql_nsx_lb_port "${MYSQL_NSX_LB_PORT}" \
+    --argjson job_resource_config "${JOB_RESOURCE_CONFIG}" \
     '
-    if $iaas == "azure" then
-
-    {
-      "consul_server": { "instances": $consul_server_instances, "internet_connected": $internet_connected },
-      "nats": { "instances": $nats_instances, "internet_connected": $internet_connected },
-      "nfs_server": { "instances": $nfs_server_instances, "internet_connected": $internet_connected },
-      "mysql_proxy": { "instances": $mysql_proxy_instances, "internet_connected": $internet_connected },
-      "mysql": { "instances": $mysql_instances, "internet_connected": $internet_connected },
-      "backup-prepare": { "instances": $backup_prepare_instances, "internet_connected": $internet_connected },
-      "diego_database": { "instances": $diego_database_instances, "internet_connected": $internet_connected },
-      "uaa": { "instances": $uaa_instances, "internet_connected": $internet_connected },
-      "cloud_controller": { "instances": $cloud_controller_instances, "internet_connected": $internet_connected },
-      "ha_proxy": { "instances": $ha_proxy_instances, "internet_connected": $internet_connected },
-      "router": { "instances": $router_instances, "internet_connected": $internet_connected },
-      "mysql_monitor": { "instances": $mysql_monitor_instances, "internet_connected": $internet_connected },
-      "clock_global": { "instances": $clock_global_instances, "internet_connected": $internet_connected },
-      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances, "internet_connected": $internet_connected },
-      "diego_brain": { "instances": $diego_brain_instances, "internet_connected": $internet_connected },
-      "diego_cell": { "instances": $diego_cell_instances, "internet_connected": $internet_connected },
-      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances, "internet_connected": $internet_connected },
-      "tcp_router": { "instances": $tcp_router_instances, "internet_connected": $internet_connected },
-      "syslog_adapter": { "instances": $syslog_adapter_instances, "internet_connected": $internet_connected },
-      "syslog_scheduler": {"internet_connected": $internet_connected},
-      "doppler": { "instances": $doppler_instances, "internet_connected": $internet_connected },
-      "smoke-tests": {"internet_connected": $internet_connected},
-      "push-apps-manager": {"internet_connected": $internet_connected},
-      "notifications": {"internet_connected": $internet_connected},
-      "notifications-ui": {"internet_connected": $internet_connected},
-      "push-pivotal-account": {"internet_connected": $internet_connected},
-      "autoscaling": {"internet_connected": $internet_connected},
-      "autoscaling-register-broker": {"internet_connected": $internet_connected},
-      "nfsbrokerpush": {"internet_connected": $internet_connected},
-      "bootstrap": {"internet_connected": $internet_connected},
-      "mysql-rejoin-unsafe": {"internet_connected": $internet_connected}
-    }
-
-    else
-
-    {
-      "consul_server": { "instances": $consul_server_instances },
-      "nats": { "instances": $nats_instances },
-      "nfs_server": { "instances": $nfs_server_instances },
-      "mysql_proxy": { "instances": $mysql_proxy_instances },
-      "mysql": { "instances": $mysql_instances },
-      "backup-prepare": { "instances": $backup_prepare_instances },
-      "diego_database": { "instances": $diego_database_instances },
-      "uaa": { "instances": $uaa_instances },
-      "cloud_controller": { "instances": $cloud_controller_instances },
-      "ha_proxy": { "instances": $ha_proxy_instances },
-      "router": { "instances": $router_instances },
-      "mysql_monitor": { "instances": $mysql_monitor_instances },
-      "clock_global": { "instances": $clock_global_instances },
-      "cloud_controller_worker": { "instances": $cloud_controller_worker_instances },
-      "diego_brain": { "instances": $diego_brain_instances },
-      "diego_cell": { "instances": $diego_cell_instances },
-      "loggregator_trafficcontroller": { "instances": $loggregator_tc_instances },
-      "tcp_router": { "instances": $tcp_router_instances },
-      "syslog_adapter": { "instances": $syslog_adapter_instances },
-      "doppler": { "instances": $doppler_instances }
-    }
-
-    end
+    $job_resource_config
 
     |
 

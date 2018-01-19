@@ -120,8 +120,7 @@ jobs:
       GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
       GCP_STORAGE_BUCKET_LOCATION: {{gcp_storage_bucket_location}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
-      PCF_ERT_SSL_CERT: {{pcf_ert_ssl_cert}}
-      PCF_ERT_SSL_KEY: {{pcf_ert_ssl_key}}
+      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       DB_APP_USAGE_SERVICE_USERNAME: {{db_app_usage_service_username}}
       DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
       DB_AUTOSCALE_USERNAME: {{db_autoscale_username}}
@@ -253,8 +252,6 @@ jobs:
     file: pcf-pipelines/tasks/configure-ert/task.yml
     params:
       pcf_iaas: gcp
-      pcf_ert_ssl_cert: {{pcf_ert_ssl_cert}}
-      pcf_ert_ssl_key: {{pcf_ert_ssl_key}}
       pcf_az_1: {{gcp_zone_1}}
       pcf_az_2: {{gcp_zone_2}}
       pcf_az_3: {{gcp_zone_3}}
@@ -309,10 +306,14 @@ jobs:
       ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
       HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
       routing_disable_http: {{routing_disable_http}}
+      ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
+      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       # aws specific
+      NETWORKING_POE_SSL_CERTS:
       S3_ENDPOINT:
       # azure specific
       pcf_ert_saml_cert:
