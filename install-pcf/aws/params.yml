@@ -177,7 +177,7 @@ pivnet_token: CHANGEME
 # Route53 zone to add records to
 ROUTE_53_ZONE_ID:
 
-# These certificates can be used to validate the certificates from incoming client requests.
+# Optional - these certificates can be used to validate the certificates from incoming client requests.
 # All CA certificates should be appended together into a single collection of PEM-encoded entries.
 routing_custom_ca_certificates:
 
