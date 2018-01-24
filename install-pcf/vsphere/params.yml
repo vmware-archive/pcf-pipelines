@@ -337,6 +337,8 @@ router_request_timeout_in_seconds: 900
 # Enable/disable route services (enable|disable)
 route_services: disable
 
+# Optional - these certificates can be used to validate the certificates from incoming client requests.
+# All CA certificates should be appended together into a single collection of PEM-encoded entries.
 routing_custom_ca_certificates:
 
 routing_tls_termination:
