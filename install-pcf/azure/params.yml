@@ -214,7 +214,7 @@ networking_poe_ssl_certs:
 #        ...
 #        -----END EXAMPLE RSA PRIVATE KEY-----
 
-# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
+# If you are using opsman_admin_username/opsman_admin_password, edit opsman_client_id/opsman_client_secret to be an empty value.
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_client_id: CHANGEME
