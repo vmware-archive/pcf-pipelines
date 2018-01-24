@@ -341,6 +341,7 @@ route_services: disable
 # All CA certificates should be appended together into a single collection of PEM-encoded entries.
 routing_custom_ca_certificates:
 
+# Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
 routing_tls_termination:
 
 ## Wildcard domain certs go here
