@@ -48,7 +48,7 @@ write_params $tmpfile "" "upgrade_ops_manager_gcp_current_params" 'lre1-gcp/opsm
 write_params $tmpfile "" "install_pcf_azure_current_params" 'lre1-azure/install-pcf-params'
 write_params $tmpfile "" "install_pcf_azure_rc_params" 'rc-azure-install/install-pcf-params'
 write_params $tmpfile "" "install_pcf_vsphere_slot1_params" 'vsphere-slot1/install-pcf-params'
-write_params $tmpfile "" "install_pcf_vsphere_slot9_params" 'lrpiec0-slot9/install-pcf-params'
+write_params $tmpfile "" "install_pcf_vsphere_rc_params" 'rc-vsphere-install/install-pcf-params'
 write_params $tmpfile "" "upgrade_ert_vsphere_slot1_params" 'vsphere-slot1/upgrade-ert-params'
 write_params $tmpfile "" "upgrade_ops_manager_vsphere_slot1_params" 'vsphere-slot1/upgrade-ops-manager-params'
 write_params $tmpfile "" "create_offline_pinned_pipelines_params" 'create-offline-pinned-pipelines-params'

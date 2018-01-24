@@ -23,7 +23,7 @@ install_pcf_azure_rc_params:
 install_pcf_gcp_current_params:
 install_pcf_gcp_rc_params:
 install_pcf_vsphere_slot1_params:
-install_pcf_vsphere_slot9_params:
+install_pcf_vsphere_rc_params:
 locks_git_ssh_key:
 pivnet_aws_access_key:
 pivnet_aws_access_key:

@@ -543,7 +543,7 @@ jobs:
     output_mapping: { unpacked_tarball: release }
   - task: set-rc-install-pcf-vsphere
     params:
-      PIPELINE_PARAMS: {{install_pcf_vsphere_slot9_params}}
+      PIPELINE_PARAMS: {{install_pcf_vsphere_rc_params}}
       PIPELINE_NAME: rc-install-pcf-vsphere
       PIPELINE_PATH: release/pcf-pipelines/install-pcf/vsphere/pipeline.yml
       <<: *atc_creds
