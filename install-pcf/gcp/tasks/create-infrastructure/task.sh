@@ -16,6 +16,9 @@ if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "gener
   pcf-pipelines/scripts/gen_ssl_certs.sh "sys.${PCF_ERT_DOMAIN}" "cfapps.${PCF_ERT_DOMAIN}"
   pcf_ert_ssl_cert=$(cat sys.${PCF_ERT_DOMAIN}.crt)
   pcf_ert_ssl_key=$(cat sys.${PCF_ERT_DOMAIN}.key)
+else
+  pcf_ert_ssl_cert=`echo $NETWORKING_POE_SSL_CERTS_JSON | jq '.[0].certificate.cert_pem'`
+  pcf_ert_ssl_key=`echo $NETWORKING_POE_SSL_CERTS_JSON | jq '.[0].certificate.private_key_pem'`
 fi
 
 export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}
