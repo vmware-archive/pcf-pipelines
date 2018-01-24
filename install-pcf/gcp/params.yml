@@ -172,6 +172,8 @@ pcf_ert_domain: CHANGEME # This is the top level domain that ERT apps and servic
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
 
+# Optional - these certificates can be used to validate the certificates from incoming client requests.
+# All CA certificates should be appended together into a single collection of PEM-encoded entries.
 routing_custom_ca_certificates:
 
 # Disable HTTP on gorouters (true|false)
