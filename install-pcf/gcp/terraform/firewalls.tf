@@ -102,5 +102,5 @@ resource "google_compute_firewall" "cf-tcp" {
     ports    = ["1024-65535"]
   }
 
-  target_tags = ["${var.prefix}-cf-tcp"]
+  target_tags = ["${var.prefix}-cf-tcp-lb"]
 }
