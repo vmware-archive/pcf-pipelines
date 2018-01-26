@@ -111,7 +111,7 @@ disable_http_proxy: false
 disable_insecure_cookies: false
 
 # PCF Elastic Runtime minor version to track
-ert_major_minor_version: ^1\.12\..*$
+ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
@@ -224,7 +224,7 @@ opsman_client_secret: CHANGEME
 opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
 
 # PCF Ops Manager minor version to track
-opsman_major_minor_version: ^1\.12\..*$
+opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # SAML Service Credential provider Cert and Key, if the string is blank, then the pipeline will auto generate certs
 pcf_ert_saml_cert:
