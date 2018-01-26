@@ -63,7 +63,7 @@ db_uaa_username: CHANGEME
 ert_errands_to_disable: none
 
 # PCF Elastic Runtime minor version to track
-ert_major_minor_version: ^1\.12\..*$
+ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # GCP project to create the infrastructure in
 gcp_project_id: CHANGEME
@@ -160,7 +160,7 @@ opsman_client_secret: CHANGEME
 opsman_domain_or_ip_address: CHANGEME
 
 # PCF Ops Manager minor version to track
-opsman_major_minor_version: ^1\.12\..*$
+opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # Optional PEM-encoded certificates to add to BOSH director
 opsman_trusted_certs: |
