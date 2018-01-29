@@ -128,7 +128,8 @@ haproxy_backend_ca:
 # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_forward_tls: enable
 
-ha_proxy_lb_name: CHANGEME
+# The lb value can be obtained by prepending "web-lb" with "azure_terraform_prefix". For example, if your "azure_terraform_prefix" is "test", then the "ha_proxy_lb_name" is "test-web-lb".
+ha_proxy_lb_name: CHANGEME 
 
 # Instances
 ## These resources can take any parameter made available in
