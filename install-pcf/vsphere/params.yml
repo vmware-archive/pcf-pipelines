@@ -112,7 +112,7 @@ enable_vm_resurrector: true
 ert_errands_to_disable:       # Comma-separated list of errand names to disable before deploy
 
 # PCF Elastic Runtime minor version to track
-ert_major_minor_version: ^1\.12\..*$
+ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # AZ to use for deployment of ERT Singleton jobs
 ert_singleton_job_az: CHANGEME
@@ -323,7 +323,7 @@ opsman_disk_type: “thin”
 opsman_domain_or_ip_address: CHANGEME
 
 # PCF Ops Manager minor version to track
-opsman_major_minor_version: ^1\.12\..*$
+opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # SSH password for Ops Manager (ssh user is ubuntu)
 opsman_ssh_password: CHANGEME
