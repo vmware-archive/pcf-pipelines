@@ -54,14 +54,14 @@ resource "aws_iam_user_policy" "PcfErtPolicy" {
                 "s3:*"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.prefix}-pcf-buildpacks",
-                "arn:aws:s3:::${var.prefix}-pcf-buildpacks/*",
-                "arn:aws:s3:::${var.prefix}-pcf-droplets",
-                "arn:aws:s3:::${var.prefix}-pcf-droplets/*",
-                "arn:aws:s3:::${var.prefix}-pcf-packages",
-                "arn:aws:s3:::${var.prefix}-pcf-packages/*",
-                "arn:aws:s3:::${var.prefix}-pcf-resources",
-                "arn:aws:s3:::${var.prefix}-pcf-resources/*"
+                "arn:aws:s3:::${var.prefix}-buildpacks",
+                "arn:aws:s3:::${var.prefix}-buildpacks/*",
+                "arn:aws:s3:::${var.prefix}-droplets",
+                "arn:aws:s3:::${var.prefix}-droplets/*",
+                "arn:aws:s3:::${var.prefix}-packages",
+                "arn:aws:s3:::${var.prefix}-packages/*",
+                "arn:aws:s3:::${var.prefix}-resources",
+                "arn:aws:s3:::${var.prefix}-resources/*"
             ],
             "Effect": "Allow",
             "Sid": "ElasticRuntimeS3Permissions"
@@ -181,8 +181,8 @@ data "aws_iam_policy_document" "pcf_iam_rds_role_policy_document" {
                 "s3:*"
             ],
         resources = [
-                "arn:aws:s3:::${var.prefix}-pcf-bosh",
-                "arn:aws:s3:::${var.prefix}-pcf-bosh/*",
+                "arn:aws:s3:::${var.prefix}-bosh",
+                "arn:aws:s3:::${var.prefix}-bosh/*",
         ],
         effect = "Allow",
         sid = "PcfAdminS3Permissions"

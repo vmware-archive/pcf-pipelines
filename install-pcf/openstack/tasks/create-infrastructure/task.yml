@@ -1,0 +1,40 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+- name: pcf-pipelines
+- name: terraform-state
+- name: ops-manager
+
+outputs:
+- name: create-infrastructure-output
+
+params:
+  OS_PROJECT_NAME:
+  OS_USERNAME:
+  OS_PASSWORD:
+  OS_AUTH_URL:
+  OS_REGION_NAME:
+  OS_USER_DOMAIN_NAME:
+  OS_RESOURCE_PREFIX:
+  OPSMAN_PUBLIC_KEY:
+  OPSMAN_VOLUME_SIZE:
+  OPSMAN_FLAVOR:
+  INFRA_SUBNET_CIDR:
+  ERT_SUBNET_CIDR:
+  SERVICES_SUBNET_CIDR:
+  DYNAMIC_SERVICES_SUBNET_CIDR:
+  INFRA_DNS:
+  ERT_DNS:
+  SERVICES_DNS:
+  DYNAMIC_SERVICES_DNS:
+  EXTERNAL_NETWORK:
+  EXTERNAL_NETWORK_ID:
+
+run:
+  path: pcf-pipelines/install-pcf/openstack/tasks/create-infrastructure/task.sh

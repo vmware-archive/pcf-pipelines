@@ -6,9 +6,11 @@ resource "google_compute_instance" "ops-manager" {
 
   tags = ["${var.prefix}-opsman", "allow-https"]
 
-  disk {
-    image = "${var.pcf_opsman_image_name}"
-    size  = 50
+  boot_disk {
+    initialize_params {
+      image = "${var.pcf_opsman_image_name}"
+      size  = 50
+    }
   }
 
   network_interface {
@@ -22,5 +24,6 @@ resource "google_compute_instance" "ops-manager" {
 
 resource "google_storage_bucket" "director" {
   name          = "${var.prefix}-director"
+  location      = "${var.gcp_storage_bucket_location}"
   force_destroy = true
 }

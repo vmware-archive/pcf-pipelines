@@ -1,21 +1,14 @@
 #!/bin/bash
-set -e
+set -eu
 
 echo "$PEM" > pcf.pem
 chmod 0600 pcf.pem
 
-CWD=$(pwd)
-pushd $CWD
-  cd pcf-pipelines/install-pcf/aws/terraform/
-  cp $CWD/terraform-state/terraform.tfstate .
+output_json=$(terraform output --json -state terraform-state/terraform.tfstate)
 
-  while read -r line
-  do
-    `echo "$line" | awk '{print "export "$1"="$3}'`
-  done < <(terraform output -state *.tfstate)
-
-  export RDS_PASSWORD=`terraform state show aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
-popd
+db_host=$(echo $output_json | jq --raw-output '.db_host.value')
+db_username=$(echo $output_json | jq --raw-output '.db_username.value')
+db_password=$(echo $output_json | jq --raw-output '.db_password.value')
 
 cat > databases.sql <<EOF
 CREATE DATABASE IF NOT EXISTS console;
@@ -57,7 +50,7 @@ CREATE USER IF NOT EXISTS '$DB_DIEGO_USERNAME' IDENTIFIED BY '$DB_DIEGO_PASSWORD
 GRANT ALL ON diego.* TO '$DB_DIEGO_USERNAME'@'%';
 
 CREATE DATABASE IF NOT EXISTS account;
-CREATE USER IF NOT EXISTS '$DB_ACCOUNTDB_USERNAME' IDENTIFIED BY '$DB_ACCOUNT_PASSWORD';
+CREATE USER IF NOT EXISTS '$DB_ACCOUNTDB_USERNAME' IDENTIFIED BY '$DB_ACCOUNTDB_PASSWORD';
 GRANT ALL ON account.* TO '$DB_ACCOUNTDB_USERNAME'@'%';
 
 CREATE DATABASE IF NOT EXISTS nfsvolume;
@@ -69,5 +62,5 @@ CREATE USER IF NOT EXISTS '$DB_NETWORKPOLICYSERVERDB_USERNAME' IDENTIFIED BY '$D
 GRANT ALL ON networkpolicyserver.* TO '$DB_NETWORKPOLICYSERVERDB_USERNAME'@'%';
 EOF
 
-scp -i pcf.pem -o StrictHostKeyChecking=no databases.sql ubuntu@opsman.${ERT_DOMAIN}:/tmp/.
-ssh -i pcf.pem -o StrictHostKeyChecking=no ubuntu@opsman.${ERT_DOMAIN} "mysql -h $db_host -u $db_username -p$RDS_PASSWORD < /tmp/databases.sql"
+scp -i pcf.pem -o StrictHostKeyChecking=no databases.sql "ubuntu@${OPSMAN_DOMAIN_OR_IP_ADDRESS}:/tmp/."
+ssh -i pcf.pem -o StrictHostKeyChecking=no "ubuntu@${OPSMAN_DOMAIN_OR_IP_ADDRESS}" "mysql -h $db_host -u $db_username -p$db_password < /tmp/databases.sql"

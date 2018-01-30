@@ -1,0 +1,7 @@
+db_persistent_disk_type: 102400  # the disk type for persistence
+db_vm_type: xlarge.disk   # the VM type for Postgres DB
+web_vm_type: xlarge.disk  # the VM type for Concourse web VM
+worker_vm_type: xlarge.disk  # the VM type for worker VMs
+db_ip: 192.168.10.15  # the IP address reserved for the Postgres DB
+atc_ips: 192.168.10.16  # the IP address of Concourse web VM
+concourse_host: 192.168.10.16  # the ip address or hostname of Concourse web

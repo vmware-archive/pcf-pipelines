@@ -1,5 +1,5 @@
-variable "aws_access_key" {}
-variable "aws_secret_key" {}
+variable "aws_access_key_id" {}
+variable "aws_secret_access_key" {}
 variable "aws_key_name" {}
 variable "aws_cert_arn" {}
 variable "db_master_username" {}
@@ -8,9 +8,10 @@ variable "prefix" {}
 variable "opsman_ami" {}
 variable "amis_nat" {}
 variable "aws_region" {}
-variable "az1" {}
-variable "az2" {}
-variable "az3" {}
+variable "aws_az1" {}
+variable "aws_az2" {}
+variable "aws_az3" {}
+variable "route53_zone_id" {}
 
 /*
 * used for configuring ingress rules to ops manager vm
@@ -68,6 +69,11 @@ variable "services_subnet_cidr_az1" {
     description = "CIDR for the Services Subnet 1"
     default = "10.0.64.0/20"
 }
+# Dynamic Services subnet
+variable "dynamic_services_subnet_cidr_az1" {
+    description = "CIDR for the Dynamic Services Subnet 1"
+    default = "10.0.112.0/20"
+}
 
 variable "nat_ip_az1" {
     default = "10.0.0.6"
@@ -99,6 +105,11 @@ variable "services_subnet_cidr_az2" {
     description = "CIDR for the Services Subnet 2"
     default = "10.0.80.0/20"
 }
+# Dynamic Services subnet
+variable "dynamic_services_subnet_cidr_az2" {
+    description = "CIDR for the Dynamic Services Subnet 2"
+    default = "10.0.128.0/20"
+}
 
 variable "nat_ip_az2" {
     default = "10.0.1.6"
@@ -125,6 +136,11 @@ variable "services_subnet_cidr_az3" {
     description = "CIDR for the Services Subnet 3"
     default = "10.0.96.0/20"
 }
+# Dynamic Services subnet
+variable "dynamic_services_subnet_cidr_az3" {
+    description = "CIDR for the Dynamic Services Subnet 3"
+    default = "10.0.144.0/20"
+}
 
 # Services subnet
 variable "infra_subnet_cidr_az1" {
@@ -136,6 +152,3 @@ variable "nat_ip_az3" {
     default = "10.0.2.6"
 }
 
-variable "route53_zone_id" {
-    default = "ZG7DC4PX2OYY4"
-}

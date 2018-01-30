@@ -4,12 +4,26 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 inputs:
-  - name: pcf-pipelines 
+  - name: pcf-pipelines
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
+  OPSMAN_IP:
+  GOVC_INSECURE:
+  GOVC_CA_CERT:
+  GOVC_URL:
+  GOVC_USERNAME:
+  GOVC_PASSWORD:
+  GOVC_DATACENTER:
+  GOVC_DATASTORE:
+  GOVC_NETWORK:
+  GOVC_RESOURCE_POOL:
+  GOVC_HOST:
+
 run:
   path: pcf-pipelines/install-pcf/vsphere/tasks/wipe-env/task.sh

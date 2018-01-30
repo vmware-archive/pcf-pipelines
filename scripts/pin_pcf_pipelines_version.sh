@@ -3,6 +3,11 @@
 set -eu
 set -o pipefail
 
+if [[ ! $(which yaml-patch) ]]; then
+  echo "Did not find yaml-patch; are you sure it's in your PATH?"
+  exit 1
+fi
+
 root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 overwrite=""
@@ -20,7 +25,7 @@ while getopts v:w:d: option; do
  esac
 done
 
-if [[ $(which fly) ]] && [[ $(fly -h 2>&1 | grep fmt) ]]; then
+if [[ $(which fly) ]] && [[ $(fly -h 2>&1 | grep format-pipeline) ]]; then
   has_fly_fmt="true"
 fi
 
@@ -69,7 +74,7 @@ for f in ${files[@]}; do
     mv "${f}.pinned" $filename
 
     if [[ "$has_fly_fmt" == "true" ]]; then
-      fly fmt --write --config $filename
+      fly format-pipeline --write --config $filename
     fi
   else
     echo "Skipping $f"

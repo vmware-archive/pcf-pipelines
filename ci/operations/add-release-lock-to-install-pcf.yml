@@ -1,0 +1,23 @@
+- op: add
+  path: /resources/-
+  value:
+    name: LOCK_RESOURCE_NAME
+    type: pool
+    source:
+      uri: git@github.com:pivotal-cf/c0-ci-locks.git
+      branch: master
+      pool: LOCK_POOL_NAME
+      private_key: {{locks_git_ssh_key}}
+
+- op: add
+  path: /jobs/-
+  value:
+    name: release-lock
+    plan:
+    - get: RESOURCE_NAME
+      passed: [LAST_JOB_NAME]
+      trigger: true
+    - get: LOCK_NAME
+      resource: LOCK_RESOURCE_NAME
+    - put: LOCK_RESOURCE_NAME
+      params: {release: LOCK_NAME}

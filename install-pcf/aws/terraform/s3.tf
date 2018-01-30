@@ -1,54 +1,54 @@
-resource "aws_s3_bucket" "pcf-bosh" {
-    bucket = "${var.prefix}-pcf-bosh"
+resource "aws_s3_bucket" "bosh" {
+    bucket = "${var.prefix}-bosh"
     acl = "private"
     force_destroy= true
 
     tags {
-        Name = "${var.prefix}-pcf-bosh"
+        Name = "${var.prefix}-bosh"
         Environment = "${var.prefix}"
     }
 }
 
-resource "aws_s3_bucket" "pcf-buildpacks" {
-    bucket = "${var.prefix}-pcf-buildpacks"
+resource "aws_s3_bucket" "buildpacks" {
+    bucket = "${var.prefix}-buildpacks"
     acl = "private"
     force_destroy= true
 
     tags {
-        Name = "${var.prefix}-pcf-buildpacks"
+        Name = "${var.prefix}-buildpacks"
         Environment = "${var.prefix}"
     }
 }
 
-resource "aws_s3_bucket" "pcf-droplets" {
-    bucket = "${var.prefix}-pcf-droplets"
+resource "aws_s3_bucket" "droplets" {
+    bucket = "${var.prefix}-droplets"
     acl = "private"
     force_destroy= true
 
     tags {
-        Name = "${var.prefix}-pcf-droplets"
+        Name = "${var.prefix}-droplets"
         Environment = "${var.prefix}"
     }
 }
 
-resource "aws_s3_bucket" "pcf-packages" {
-    bucket = "${var.prefix}-pcf-packages"
+resource "aws_s3_bucket" "packages" {
+    bucket = "${var.prefix}-packages"
     acl = "private"
     force_destroy= true
 
     tags {
-        Name = "${var.prefix}-pcf-packages"
+        Name = "${var.prefix}-packages"
         Environment = "${var.prefix}"
     }
 }
 
-resource "aws_s3_bucket" "pcf-resources" {
-    bucket = "${var.prefix}-pcf-resources"
+resource "aws_s3_bucket" "resources" {
+    bucket = "${var.prefix}-resources"
     acl = "private"
     force_destroy= true
 
     tags {
-        Name = "${var.prefix}-pcf-resources"
+        Name = "${var.prefix}-resources"
         Environment = "${var.prefix}"
     }
 }

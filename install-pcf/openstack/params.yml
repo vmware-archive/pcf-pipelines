@@ -1,0 +1,349 @@
+# Whether to allow SSH access to application instances
+allow_app_ssh_access: false
+
+## Authentication type needed. SAML is not presently supported.
+authentication_mode: internal # (internal|ldap) If ldap, specify ldap configuration below.
+first_name_attribute:
+group_search_base:
+group_search_filter:
+last_name_attribute:
+ldap_pwd:
+ldap_url:
+ldap_user:
+mail_attribute_name:
+search_base:
+search_filter:
+
+# AZ configuration for Ops Director
+az_01_name: CHANGEME
+#az_02_name: CHANGEME
+#az_03_name: CHANGEME
+
+# TODO: Add ability to use s3 blobstore
+bosh_blobstore_type: local   # Type of blobstore to use (local)
+
+# TODO: Add ability to use external DB
+bosh_database_type: internal # Type of DB to use (internal)
+
+# Ciphers
+# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
+# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
+# The recommended settings are filled in below, change as necessary.
+haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+
+# Company Name for Apps Manager
+company_name:
+
+# C2C Networking network CIDR
+container_networking_nw_cidr: 10.255.0.0/16
+
+# For credhub integration, replace dummy values in the following structure
+# and set the number of credhub instances in resource config to 2
+credhub_encryption_keys: |
+  - name: dummy encryption key 1
+    key:
+      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+    primary: true
+  - name: encryption key 2
+    key:
+      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+
+default_quota_max_number_services: 1000
+
+default_quota_memory_limit_mb: 10240
+
+# Disable HTTP on gorouters (true|false)
+disable_http_proxy: false
+
+# If true, disable insecure cookies on the router.
+disable_insecure_cookies: false
+
+## Domain names
+apps_domain:   CHANGEME      # The Apps domain for your PCF environment e.g. cfapps.pcf.example.com.
+system_domain: CHANGEME      # The System domain for your PCF environment e.g sys.pcf.example.com.
+
+# TODO: Allow multiple DNS servers for each net (currently only 1 can be set)
+# Dynamic Services Network
+dynamic_services_dns:
+dynamic_services_gateway: 10.4.0.1
+dynamic_services_network:
+dynamic_services_nw_azs:
+dynamic_services_reserved_ip_ranges: 10.4.0.0-10.4.0.9
+dynamic_services_subnet_cidr: 10.4.0.0/24
+
+# PCF Elastic Runtime minor version to track
+ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
+
+# AZ to use for deployment of ERT Singleton jobs
+ert_singleton_job_az: CHANGEME
+
+# TODO: Allow multiple DNS servers for each net (currently only 1 can be set)
+# ERT Network
+ert_dns:
+ert_gateway: 10.2.0.1
+ert_network:
+ert_nw_azs:
+ert_reserved_ip_ranges: 10.2.0.0-10.2.0.9
+ert_subnet_cidr: 10.2.0.0/24
+
+# Set this to your floating IP network
+external_network: CHANGEME
+
+# Set this to your floating IP network's id
+external_network_id: CHANGEME
+
+# Applications Network Maximum Transmission Unit bytes
+garden_network_mtu: 1454
+
+# Only change this if you need to avoid address collision with a third-party service on the same subnet.
+garden_network_pool_cidr: 10.254.0.0/22
+
+# HAProxy will use the CA provided to verify the certificates provided by the router.
+haproxy_backend_ca: CHANGEME
+
+# Floating IPs allocated to HAProxy on OpenStack
+haproxy_floating_ips: CHANGEME
+
+# If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
+haproxy_forward_tls: enable
+
+# IaaS configuration for Ops Director
+disable_dhcp: false     # If true, disable DHCP
+ignore_server_az: false # If true, set the volume AZ to the default AZ.
+
+# Network configuration for Ops Director
+icmp_checks_enabled: true    # Enable or disable ICMP checks
+
+# Whether to disable SSL cert verification for this environment
+ignore_ssl_cert_verification: false
+
+# TODO: Allow multiple DNS servers for each net (currently only 1 can be set)
+# Infra Network
+infra_dns:
+infra_gateway: 10.1.0.1
+infra_network:
+infra_nw_azs:
+infra_reserved_ip_ranges: 10.1.0.0-10.1.0.9
+infra_subnet_cidr: 10.1.0.0/24
+
+# Instances
+## Default resource configuration
+## these resources can take any parameter made available in
+## the ops manager API ( https://<your-ops-man/docs#configuring-resources-for-a-job )
+backup_prepare_instances: 0
+clock_global_instances: 1
+cloud_controller_instances: 1
+cloud_controller_worker_instances: 1
+consul_server_instances: 1
+credhub_instances: 0
+diego_brain_instances: 1
+diego_cell_instances: 3
+diego_database_instances: 1
+doppler_instances: 1
+ha_proxy_instances: 1
+loggregator_trafficcontroller_instances: 1
+mysql_instances: 1
+mysql_monitor_instances: 1
+mysql_proxy_instances: 1
+nats_instances: 1
+nfs_server_instances: 1
+router_instances: 1
+syslog_adapter_instances: 3
+syslog_scheduler_instances: 2
+tcp_router_instances: 1
+uaa_instances: 1
+
+# Whether or not the ERT VMs are internet connected.
+internet_connected: true
+
+# IPs
+ha_proxy_ips:           # Comma-separated list of static IPs
+mysql_static_ips:       # Comma-separated list of static IPs
+router_static_ips:      # Comma-separated list of static IPs
+ssh_static_ips:         # Comma-separated list of static IPs
+tcp_router_static_ips:  # Comma-separated list of static IPs
+
+# Loggegrator Port. Default is 443
+loggregator_endpoint_port:
+
+# Max threads count for deploying VMs
+max_threads: 30
+
+# IP address of Pivotal Ops Metrics if installed
+metrics_ip:
+
+# Whether to enable MySQL backups. (disable|s3|scp)
+mysql_backups: disable
+
+# S3 backup config params (leave empty values if you're not using s3)
+mysql_backups_s3_access_key_id:
+mysql_backups_s3_bucket_name:
+mysql_backups_s3_bucket_path:
+mysql_backups_s3_cron_schedule:
+mysql_backups_s3_endpoint_url:
+mysql_backups_s3_secret_access_key:
+
+# SCP backup config params (leave empty values if you're not using scp)
+mysql_backups_scp_cron_schedule:
+mysql_backups_scp_destination:
+mysql_backups_scp_key:
+mysql_backups_scp_port:
+mysql_backups_scp_server:
+mysql_backups_scp_user:
+
+# Email address to receive MySQL monitor notifications
+mysql_monitor_email: CHANGEME
+
+networking_poe_ssl_certs:
+# networking_poe_ssl_certs: |
+#  - name: Point of Entry Certificate 1
+#    certificate:
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#  - name: PoE certificate 2
+#    certificate:
+#      cert_pem: |
+#        -----BEGIN EXAMPLE CERTIFICATE-----
+#        ...
+#        -----END EXAMPLE CERTIFICATE-----
+#      private_key_pem: |
+#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
+#        ...
+#        -----END EXAMPLE RSA PRIVATE KEY-----
+
+# Comma-separated list of NTP servers to use for VMs deployed by BOSH
+ntp_servers: CHANGEME
+
+# Decryption password for Ops Manager exported settings
+om_decryption_pwd: CHANGEME
+
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
+opsman_admin_password: CHANGEME           # Password for Ops Manager admin account
+opsman_admin_username: admin              # Username for Ops Manager admin account
+opsman_client_id: CHANGEME                # Client ID for Ops Manager admin account
+opsman_client_secret: CHANGEME            # Client Secret for Ops Manager admin account
+
+# Ops Manager VM Settings
+opsman_domain_or_ip_address: CHANGEME     # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
+opsman_flavor: m1.xlarge                  # Ops man VM flavor
+opsman_image: ops-manager                 # Prefix for the ops man glance image
+
+# PCF Ops Manager minor version to track
+opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
+
+# The public key of your opsman key
+opsman_public_key: CHANGEME
+
+# OpsMan VM disk size in GB
+opsman_volume_size: 100
+
+# OS Project Credentials
+# These are simply the project users credentials, downloaded from Horizon.
+# The pre_os_cacert is the root CA cert, only needed if the openstack API's
+# are fronted by a self-signed SSL certificate.
+os_auth_url: CHANGEME
+os_identity_api_version: CHANGEME
+os_interface: public
+os_networking_model: CHANGEME (nova|neutron)
+os_password: CHANGEME
+os_project_id: CHANGEME
+os_project_name: CHANGEME
+os_region_name: CHANGEME
+os_tenant: CHANGEME
+os_user_domain_name: CHANGEME
+os_username: CHANGEME
+pre_os_cacert: # Set if needed (see above)
+
+os_keypair_name: CHANGEME   # Keypair to use for bosh VMs
+os_private_key:  CHANGEME   # Private key for keypair
+
+# The following should be set to a unique prefix. It will be used to prefix all
+# the terraform resources created by the pipeline
+os_resource_prefix: CHANGEME
+
+## Wildcard domain certs go here
+pcf_ert_saml_cert:
+pcf_ert_saml_key:
+
+# Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+pivnet_token: CHANGEME
+
+# Whether to enable BOSH VM resurrector
+resurrector_enabled: false
+
+# Enable/disable route services (enable|disable)
+route_services: disable
+
+# Request timeout for gorouter
+router_request_timeout_in_seconds: 900
+
+# Optional - these certificates can be used to validate the certificates from incoming client requests.
+# All CA certificates should be appended together into a single collection of PEM-encoded entries.
+routing_custom_ca_certificates:
+
+# Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
+routing_tls_termination: load_balancer
+
+# S3 access credentials for storing terraform state.
+s3_endpoint: CHANGEME
+s3_output_bucket: CHANGEME
+tf_aws_access_key: CHANGEME
+tf_aws_secret_key: CHANGEME
+
+# Setting appropriate Application Security Groups is critical for a secure
+# deployment. Change the value of the param below to "X" to acknowledge that
+# once the Elastic Runtime deployment completes, you will review and set the
+# appropriate application security groups.
+# See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
+security_acknowledgement: CHANGEME
+
+# Security configuration for Ops Director
+trusted_certificates:         # Optional. Trusted certificates to be deployed along with all VM's provisioned by BOSH
+vm_password_type: generate    # 'generate' or 'bosh_default'
+
+# Name of security group created by terraform
+security_group:
+
+# TODO: Allow multiple DNS servers for each net (currently only 1 can be set)
+# Services Network
+services_dns:
+services_gateway: 10.3.0.1
+services_network:
+services_nw_azs:
+services_reserved_ip_ranges: 10.3.0.0-10.3.0.9
+services_subnet_cidr: 10.3.0.0/24
+
+# If true, disable SSL certificate verification for this environment.
+skip_cert_verify: false
+
+# If smtp_address is configured, smtp_from, smtp_port, smtp_user, smtp_pwd,
+# smtp_enable_starttls_auto, and smtp_auth_mechanism must also be set.
+smtp_address:
+smtp_auth_mechanism: # (none|plain|cram-md5)
+smtp_enable_starttls_auto: true
+smtp_from:
+smtp_port:
+smtp_pwd:
+smtp_user:
+
+## Syslog endpoint configuration goes here
+# Optional. If syslog_host is specified, syslog_port, syslog_protocol,
+# syslog_drain_buffer_size, and enable_security_event_logging must be set.
+enable_security_event_logging: false
+syslog_drain_buffer_size: 10000
+syslog_host:
+syslog_port:
+syslog_protocol:
+
+# Enable/disable TCP routing (enable|disable)
+tcp_routing: disable
+
+# A comma-separated list of ports and hyphen-separated port ranges, e.g. 52135,34000-35000,23478
+tcp_routing_ports:

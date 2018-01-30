@@ -10,6 +10,8 @@ variable "gcp_zone_2" {}
 
 variable "gcp_zone_3" {}
 
+variable "gcp_storage_bucket_location" {}
+
 variable "pcf_opsman_image_name" {}
 
 variable "pcf_ert_domain" {}
@@ -17,8 +19,6 @@ variable "pcf_ert_domain" {}
 variable "pcf_ert_ssl_cert" {}
 
 variable "pcf_ert_ssl_key" {}
-
-variable "ert_sql_instance_name" {}
 
 variable "db_diego_username" {}
 variable "db_diego_password" {}

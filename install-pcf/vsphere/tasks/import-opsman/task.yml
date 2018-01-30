@@ -4,10 +4,11 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: czero/cflinuxfs2}
+  source: {repository: czero/rootfs}
 
 params:
   GOVC_INSECURE:
+  GOVC_CA_CERT:
   GOVC_URL:
   GOVC_USERNAME:
   GOVC_PASSWORD:
@@ -26,8 +27,9 @@ params:
   OM_VM_NETWORK:
   OM_VM_NAME:
   OM_RESOURCE_POOL:
-  OM_DISK_TYPE:
+  OPSMAN_DISK_TYPE:
   OM_VM_POWER_STATE:
+  OM_VM_FOLDER:
 
 
 inputs:

@@ -24,7 +24,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       params:
         GIT_USER: {{git_author_user}}
         GIT_EMAIL: {{git_author_email}}

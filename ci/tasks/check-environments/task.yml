@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+- name: pcf-pipelines
+- name: pivnet-rc
+
+params:
+  PIPELINE:
+  JOB:
+  ATC_EXTERNAL_URL:
+  ATC_BASIC_AUTH_USERNAME:
+  ATC_BASIC_AUTH_PASSWORD:
+  ATC_TEAM_NAME:
+  TIMEOUT_MINUTES:
+  DISABLE_PIVNET_VERSION_CHECK:
+
+run:
+  path: pcf-pipelines/ci/tasks/check-environments/task.sh

@@ -1,7 +1,3 @@
-#!/bin/bash
-
-set -eu
-
 function check_opsman_available {
   local opsman_domain=$1
 

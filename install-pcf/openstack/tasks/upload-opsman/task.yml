@@ -1,0 +1,28 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+- name: ops-manager
+- name: pcf-pipelines
+
+params:
+  OPENSTACK_CA_CERT:
+  OPSMAN_IMAGE:
+  OS_PROJECT_ID:
+  OS_REGION_NAME:
+  OS_USER_DOMAIN_NAME:
+  OS_PROJECT_NAME:
+  OS_IDENTITY_API_VERSION:
+  OS_PASSWORD:
+  OS_AUTH_URL:
+  OS_USERNAME:
+  OPENSTACK_CA_CERT:
+  OS_INTERFACE:
+
+run:
+  path: pcf-pipelines/install-pcf/openstack/tasks/upload-opsman/task.sh

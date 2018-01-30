@@ -40,7 +40,7 @@ resource "aws_security_group" "nat_instance_sg" {
 # 3.2 Create NAT instance
 resource "aws_instance" "nat_az1" {
     ami = "${var.amis_nat}"
-    availability_zone = "${var.az1}"
+    availability_zone = "${var.aws_az1}"
     instance_type = "${var.nat_instance_type}"
     key_name = "${var.aws_key_name}"
     vpc_security_group_ids = ["${aws_security_group.nat_instance_sg.id}"]
@@ -56,7 +56,7 @@ resource "aws_instance" "nat_az1" {
 
 resource "aws_instance" "nat_az2" {
     ami = "${var.amis_nat}"
-    availability_zone = "${var.az2}"
+    availability_zone = "${var.aws_az2}"
     instance_type = "${var.nat_instance_type}"
     key_name = "${var.aws_key_name}"
     vpc_security_group_ids = ["${aws_security_group.nat_instance_sg.id}"]
@@ -73,7 +73,7 @@ resource "aws_instance" "nat_az2" {
 # NAT Insance
 resource "aws_instance" "nat_az3" {
     ami = "${var.amis_nat}"
-    availability_zone = "${var.az3}"
+    availability_zone = "${var.aws_az3}"
     instance_type = "${var.nat_instance_type}"
     key_name = "${var.aws_key_name}"
     vpc_security_group_ids = ["${aws_security_group.nat_instance_sg.id}"]

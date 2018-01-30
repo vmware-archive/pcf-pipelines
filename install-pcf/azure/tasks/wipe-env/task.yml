@@ -1,0 +1,32 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+  - name: pcf-pipelines
+  - name: terraform-state
+
+outputs:
+  - name: terraform-state-output
+
+run:
+  path: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.sh
+
+params:
+  ARG_WIPE:
+  AZURE_PCF_TERRAFORM_TEMPLATE:
+  AZURE_SUBSCRIPTION_ID:
+  AZURE_TENANT_ID:
+  AZURE_CLIENT_ID:
+  AZURE_CLIENT_SECRET:
+  AZURE_REGION:
+  AZURE_TERRAFORM_PREFIX:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:

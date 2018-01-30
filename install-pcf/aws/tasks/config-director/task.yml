@@ -4,12 +4,14 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 inputs:
-  - name: pcf-pipelines 
+  - name: pcf-pipelines
   - name: terraform-state
 params:
-  ERT_DOMAIN:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPSMAN_USER:
   OPSMAN_PASSWORD:
   AWS_KEY_NAME:
@@ -23,6 +25,9 @@ params:
   services_subnet_reserved_ranges_z1:
   services_subnet_reserved_ranges_z2:
   services_subnet_reserved_ranges_z3:
+  dynamic_services_subnet_reserved_ranges_z1:
+  dynamic_services_subnet_reserved_ranges_z2:
+  dynamic_services_subnet_reserved_ranges_z3:
   infra_subnet_reserved_ranges_z1:
 run:
   path: pcf-pipelines/install-pcf/aws/tasks/config-director/task.sh

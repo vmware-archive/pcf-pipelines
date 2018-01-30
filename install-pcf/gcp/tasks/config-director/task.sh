@@ -3,12 +3,11 @@
 set -eu
 
 iaas_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg gcp_project "$GCP_PROJECT_ID" \
     --arg default_deployment_tag "$GCP_RESOURCE_PREFIX" \
     --arg auth_json "$GCP_SERVICE_ACCOUNT_KEY" \
-    '. +
+    '
     {
       "project": $gcp_project,
       "default_deployment_tag": $default_deployment_tag,
@@ -20,18 +19,16 @@ iaas_configuration=$(
 availability_zones="${GCP_ZONE_1},${GCP_ZONE_2},${GCP_ZONE_3}"
 
 az_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg availability_zones "$availability_zones" \
-    '. +
+    '
     {
       "availability_zones": ($availability_zones | split(",") | map({name: .}))
     }'
 )
 
 network_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --argjson icmp_checks_enabled false \
     --arg infra_network_name "infrastructure" \
     --arg infra_vcenter_network "${GCP_RESOURCE_PREFIX}-virt-net/${GCP_RESOURCE_PREFIX}-subnet-infrastructure-${GCP_REGION}/${GCP_REGION}" \
@@ -55,7 +52,15 @@ network_configuration=$(
     --arg services_dns "192.168.20.1,8.8.8.8" \
     --arg services_gateway "192.168.20.1" \
     --arg services_availability_zones "$availability_zones" \
-    '. +
+    --argjson dynamic_services_network_is_service_network true \
+    --arg dynamic_services_network_name "dynamic-services-1" \
+    --arg dynamic_services_vcenter_network "${GCP_RESOURCE_PREFIX}-virt-net/${GCP_RESOURCE_PREFIX}-subnet-dynamic-services-1-${GCP_REGION}/${GCP_REGION}" \
+    --arg dynamic_services_network_cidr "192.168.24.0/22" \
+    --arg dynamic_services_reserved_ip_ranges "192.168.24.1-192.168.24.9" \
+    --arg dynamic_services_dns "192.168.24.1,8.8.8.8" \
+    --arg dynamic_services_gateway "192.168.24.1" \
+    --arg dynamic_services_availability_zones "$availability_zones" \
+    '
     {
       "icmp_checks_enabled": $icmp_checks_enabled,
       "networks": [
@@ -100,6 +105,20 @@ network_configuration=$(
               "availability_zones": ($services_availability_zones | split(","))
             }
           ]
+        },
+        {
+          "name": $dynamic_services_network_name,
+          "service_network": $dynamic_services_network_is_service_network,
+          "subnets": [
+            {
+              "iaas_identifier": $dynamic_services_vcenter_network,
+              "cidr": $dynamic_services_network_cidr,
+              "reserved_ip_ranges": $dynamic_services_reserved_ip_ranges,
+              "dns": $dynamic_services_dns,
+              "gateway": $dynamic_services_gateway,
+              "availability_zones": ($dynamic_services_availability_zones | split(","))
+            }
+          ]
         }
       ]
     }'
@@ -129,10 +148,9 @@ EOF
 )
 
 security_configuration=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg trusted_certificates "$OPS_MGR_TRUSTED_CERTS" \
-    '. +
+    '
     {
       "trusted_certificates": $trusted_certificates,
       "vm_password_type": "generate"
@@ -140,11 +158,10 @@ security_configuration=$(
 )
 
 network_assignment=$(
-  echo '{}' |
-  jq \
+  jq -n \
     --arg availability_zones "$availability_zones" \
     --arg network "infrastructure" \
-    '. +
+    '
     {
       "singleton_availability_zone": ($availability_zones | split(",") | .[0]),
       "network": $network
@@ -155,8 +172,10 @@ echo "Configuring IaaS and Director..."
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --username $OPS_MGR_USR \
-  --password $OPS_MGR_PWD \
+  --client-id "${OPSMAN_CLIENT_ID}" \
+  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+  --username "$OPS_MGR_USR" \
+  --password "$OPS_MGR_PWD" \
   configure-bosh \
   --iaas-configuration "$iaas_configuration" \
   --director-configuration "$director_config" \

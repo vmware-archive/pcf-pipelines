@@ -6,8 +6,10 @@ resource "google_compute_instance" "nat-gateway-pri" {
   can_ip_forward = true
   tags           = ["${var.prefix}-nat-instance", "nat-traverse"]
 
-  disk {
-    image = "ubuntu-1404-trusty-v20160610"
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-1404-trusty-v20160610"
+    }
   }
 
   network_interface {
@@ -33,8 +35,10 @@ resource "google_compute_instance" "nat-gateway-sec" {
   can_ip_forward = true
   tags           = ["${var.prefix}-nat-instance", "nat-traverse"]
 
-  disk {
-    image = "ubuntu-1404-trusty-v20160610"
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-1404-trusty-v20160610"
+    }
   }
 
   network_interface {
@@ -60,8 +64,10 @@ resource "google_compute_instance" "nat-gateway-ter" {
   can_ip_forward = true
   tags           = ["${var.prefix}-nat-instance", "nat-traverse"]
 
-  disk {
-    image = "ubuntu-1404-trusty-v20160610"
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-1404-trusty-v20160610"
+    }
   }
 
   network_interface {

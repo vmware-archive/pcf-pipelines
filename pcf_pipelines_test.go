@@ -16,7 +16,8 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var placeholderRegexp = regexp.MustCompile("{{([a-zA-Z0-9-_]+)}}")
+var oldPlaceholderRegexp = regexp.MustCompile("{{([a-zA-Z0-9-_]+)}}")
+var placeholderRegexp = regexp.MustCompile("[({]{2}([a-zA-Z0-9-_]+)[)}]{2}")
 
 var _ = Describe("pcf-pipelines", func() {
 	cwd, err := os.Getwd()
@@ -61,7 +62,7 @@ var _ = Describe("pcf-pipelines", func() {
 
 			It("specifies only valid job names in any `passed` definitions in the buildplan", func() {
 				var config atc.Config
-				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
+				cleanConfigBytes := oldPlaceholderRegexp.ReplaceAll(configBytes, []byte("true"))
 				err := yaml.Unmarshal(cleanConfigBytes, &config)
 				Expect(err).NotTo(HaveOccurred())
 
@@ -74,7 +75,7 @@ var _ = Describe("pcf-pipelines", func() {
 
 			It("specifies all and only the params that the pipeline's tasks expect", func() {
 				var config atc.Config
-				cleanConfigBytes := placeholderRegexp.ReplaceAll(configBytes, []byte("true"))
+				cleanConfigBytes := oldPlaceholderRegexp.ReplaceAll(configBytes, []byte("true"))
 				err := yaml.Unmarshal(cleanConfigBytes, &config)
 				Expect(err).NotTo(HaveOccurred())
 

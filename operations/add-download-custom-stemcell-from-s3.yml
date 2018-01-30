@@ -1,0 +1,10 @@
+- op: replace
+  path: /jobs/name=upgrade-opsmgr/plan/task=download-stemcells
+  value:
+    task: download-stemcells
+    file: pcf-pipelines/tasks/download-custom-stemcells-from-s3/task.yml
+    params:
+      AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
+      AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
+      S3_BUCKET_NAME: {{custom_stemcell_bucket_name}}
+      S3_ENDPOINT: {{s3_endpoint}}

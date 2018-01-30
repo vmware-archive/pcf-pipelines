@@ -59,6 +59,21 @@ resource "aws_route_table_association" "z_az3" {
     subnet_id = "${aws_subnet.PcfVpcServicesSubnet_az3.id}"
     route_table_id = "${aws_route_table.SubnetRouteTable_az3.id}"
 }
+# subnet associations for dynamic services subnet
+
+resource "aws_route_table_association" "dynamic_services_az1" {
+    subnet_id = "${aws_subnet.PcfVpcDynamicServicesSubnet_az1.id}"
+    route_table_id = "${aws_route_table.PrivateSubnetRouteTable_az1.id}"
+}
+
+resource "aws_route_table_association" "dynamic_services_az2" {
+    subnet_id = "${aws_subnet.PcfVpcDynamicServicesSubnet_az2.id}"
+    route_table_id = "${aws_route_table.SubnetRouteTable_az2.id}"
+}
+resource "aws_route_table_association" "dynamic_services_az3" {
+    subnet_id = "${aws_subnet.PcfVpcDynamicServicesSubnet_az3.id}"
+    route_table_id = "${aws_route_table.SubnetRouteTable_az3.id}"
+}
 
 # subnet associations for infrastructure subnet
 

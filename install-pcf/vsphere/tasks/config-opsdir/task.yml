@@ -4,10 +4,12 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: czero/cflinuxfs2}
+  source: {repository: czero/rootfs}
 
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPS_MGR_USR:
   OPS_MGR_PWD:
   VCENTER_HOST:

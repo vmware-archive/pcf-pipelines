@@ -1,0 +1,521 @@
+groups:
+
+- name: all
+  jobs:
+  - bootstrap-terraform-state
+  - wipe-env
+  - create-infrastructure
+  - config-opsman-auth
+  - config-director
+  - deploy-director
+  - upload-ert
+  - configure-ert
+  - deploy-ert
+
+- name: iaas
+  jobs:
+  - create-infrastructure
+  - config-opsman-auth
+  - config-director
+  - deploy-director
+
+- name: ert
+  jobs:
+  - upload-ert
+  - configure-ert
+  - deploy-ert
+
+resource_types:
+- name: azure-blobstore
+  type: docker-image
+  source:
+    repository: czero/azure-blobstore-resource
+
+- name: pivnet
+  type: docker-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
+
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+
+resources:
+- name: terraform-state
+  type: azure-blobstore
+  source:
+    storage_account_name: {{terraform_azure_account_name}}
+    storage_account_key: {{terraform_azure_access_key}}
+    container: {{azure_storage_container_name}}
+    versioned_file: terraform.tfstate
+
+- name: pcf-pipelines
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    branch: master
+    private_key: {{git_private_key}}
+
+- name: pivnet-opsmgr
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: ops-manager
+    product_version: {{opsman_major_minor_version}}
+    sort_by: semver
+
+- name: pivnet-elastic-runtime
+  type: pivnet
+  check_every: 4h
+  source:
+    api_token: {{pivnet_token}}
+    product_slug: elastic-runtime
+    product_version: {{ert_major_minor_version}}
+    sort_by: semver
+
+jobs:
+####################################
+## Job - Boostrap Terraform State ##
+####################################
+- name: bootstrap-terraform-state
+  serial_groups: [terraform]
+  plan:
+  - get: pcf-pipelines
+  - task: create-terraform-state
+    params:
+      AZURE_STORAGE_ACCOUNT: {{terraform_azure_account_name}}
+      AZURE_STORAGE_KEY: {{terraform_azure_access_key}}
+      CONTAINER: {{azure_storage_container_name}}
+    file: pcf-pipelines/install-pcf/azure/tasks/create-initial-terraform-state/task.yml
+
+#####################
+## Job - Wipe Env  ##
+#####################
+- name: wipe-env
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  ensure:
+    put: terraform-state
+    params:
+      file: terraform-state-output/terraform.tfstate
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: terraform-state
+
+  - task: wipe-env
+    file: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.yml
+    params:
+      ARG_WIPE: {{arg_wipe}}
+      AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
+      AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
+      AZURE_TENANT_ID: {{azure_tenant_id}}
+      AZURE_CLIENT_ID: {{azure_client_id}}
+      AZURE_CLIENT_SECRET: {{azure_client_secret}}
+      AZURE_REGION: {{azure_region}}
+      AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+
+#################################
+## Job - Create Infrastructure ##
+#################################
+- name: create-infrastructure
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  ensure:
+    put: terraform-state
+    params:
+      file: terraform-state-output/terraform.tfstate
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: terraform-state
+    - get: pivnet-opsmgr
+      params:
+        globs:
+        - "*Azure.yml"
+
+  - task: upload-opsman
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/rootfs
+      inputs:
+        - name: pcf-pipelines
+        - name: pivnet-opsmgr
+      outputs:
+        - name: opsman-metadata
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/upload-opsman.sh
+
+  - task: create-infrastructure
+    file: pcf-pipelines/install-pcf/azure/tasks/create-infrastructure/task.yml
+    params:
+      AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
+      AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
+      AZURE_TENANT_ID: {{azure_tenant_id}}
+      AZURE_CLIENT_ID: {{azure_client_id}}
+      AZURE_CLIENT_SECRET: {{azure_client_secret}}
+      AZURE_REGION: {{azure_region}}
+      AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
+      AZURE_VM_ADMIN: {{azure_vm_admin}}
+      PCF_ERT_DOMAIN: {{pcf_ert_domain}}
+      PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
+      AZURE_MULTI_RESGROUP_NETWORK: {{azure_multi_resgroup_network}}
+      AZURE_MULTI_RESGROUP_PCF: {{azure_multi_resgroup_pcf}}
+      AZURE_MULTI_RESGROUP_INFRA_SUBNET_NAME: {{azure_multi_resgroup_infra_subnet_name}}
+      AZURE_MULTI_RESGROUP_INFRA_VNET_NAME: {{azure_multi_resgroup_infra_vnet_name}}
+      AZURE_ACCOUNT_NAME: {{azure_account_name}}
+      AZURE_BUILDPACKS_CONTAINER: {{azure_buildpacks_container}}
+      AZURE_DROPLETS_CONTAINER: {{azure_droplets_container}}
+      AZURE_PACKAGES_CONTAINER: {{azure_packages_container}}
+      AZURE_RESOURCES_CONTAINER: {{azure_resources_container}}
+      AZURE_TERRAFORM_VNET_CIDR: {{azure_terraform_vnet_cidr}}
+      AZURE_TERRAFORM_SUBNET_INFRA_CIDR: {{azure_terraform_subnet_infra_cidr}}
+      AZURE_TERRAFORM_SUBNET_ERT_CIDR: {{azure_terraform_subnet_ert_cidr}}
+      AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR: {{azure_terraform_subnet_services1_cidr}}
+      AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
+      PCF_OPSMAN_DISK_SIZE_IN_GB: {{pcf_opsman_disk_size_in_gb}}
+
+##############################
+## Job - Config OpsMan Auth ##
+##############################
+- name: config-opsman-auth
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [create-infrastructure]
+      params:
+        globs: []
+
+  - task: config-opsman
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/rootfs
+      inputs:
+        - name: pcf-pipelines
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-opsman.sh
+      params:
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+        PCF_OPSMAN_ADMIN: {{opsman_admin_username}}
+        PCF_OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+
+###########################
+## Job - Config-Director ##
+###########################
+- name: config-director
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [config-opsman-auth]
+      params:
+        globs: []
+
+  - task: config-director
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/rootfs
+      inputs:
+        - name: pcf-pipelines
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
+      params:
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+        OPSMAN_CLIENT_ID: {{opsman_client_id}}
+        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+        PCF_OPSMAN_ADMIN: {{opsman_admin_username}}
+        PCF_OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+        AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
+        AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
+        AZURE_TENANT_ID: {{azure_tenant_id}}
+        AZURE_CLIENT_ID: {{azure_client_id}}
+        AZURE_CLIENT_SECRET: {{azure_client_secret}}
+        AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
+        AZURE_TERRAFORM_SUBNET_INFRA_CIDR: {{azure_terraform_subnet_infra_cidr}}
+        AZURE_TERRAFORM_SUBNET_INFRA_RESERVED: {{azure_terraform_subnet_infra_reserved}}
+        AZURE_TERRAFORM_SUBNET_INFRA_DNS: {{azure_terraform_subnet_infra_dns}}
+        AZURE_TERRAFORM_SUBNET_INFRA_GATEWAY: {{azure_terraform_subnet_infra_gateway}}
+        AZURE_TERRAFORM_SUBNET_ERT_CIDR: {{azure_terraform_subnet_ert_cidr}}
+        AZURE_TERRAFORM_SUBNET_ERT_RESERVED: {{azure_terraform_subnet_ert_reserved}}
+        AZURE_TERRAFORM_SUBNET_ERT_DNS: {{azure_terraform_subnet_ert_dns}}
+        AZURE_TERRAFORM_SUBNET_ERT_GATEWAY: {{azure_terraform_subnet_ert_gateway}}
+        AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR: {{azure_terraform_subnet_services1_cidr}}
+        AZURE_TERRAFORM_SUBNET_SERVICES1_RESERVED: {{azure_terraform_subnet_services1_reserved}}
+        AZURE_TERRAFORM_SUBNET_SERVICES1_DNS: {{azure_terraform_subnet_services1_dns}}
+        AZURE_TERRAFORM_SUBNET_SERVICES1_GATEWAY: {{azure_terraform_subnet_services1_gateway}}
+        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
+        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_RESERVED: {{azure_terraform_subnet_dynamic_services_reserved}}
+        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_DNS: {{azure_terraform_subnet_dynamic_services_dns}}
+        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_GATEWAY: {{azure_terraform_subnet_dynamic_services_gateway}}
+        PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
+        PCF_SSH_KEY_PRIV: {{pcf_ssh_key_priv}}
+        TRUSTED_CERTIFICATES: {{trusted_certificates}}
+
+###########################
+## Job - Deploy-Director ##
+###########################
+- name: deploy-director
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [config-director]
+      trigger: true
+      params: {globs: []}
+
+  - task: deploy-director
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: czero/rootfs
+      inputs:
+        - name: pcf-pipelines
+      run:
+        path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-director.sh
+      params:
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+        OPSMAN_CLIENT_ID: {{opsman_client_id}}
+        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+        PCF_OPSMAN_ADMIN: {{opsman_admin_username}}
+        PCF_OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
+
+###########################
+## Job - Upload ERT      ##
+###########################
+- name: upload-ert
+  serial_groups: [opsman]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [deploy-director]
+      trigger: true
+      params: {globs: []}
+    - get: pivnet-product
+      resource: pivnet-elastic-runtime
+      params:
+        globs:
+        - "cf*.pivotal"
+
+  - task: upload-tile
+    file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      PIVNET_API_TOKEN: {{pivnet_token}}
+      IAAS: "azure"
+      NO_PROXY: ""
+      OM_IP: ""
+
+  - task: stage-tile
+    file: pcf-pipelines/tasks/stage-product/task.yml
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+
+###########################
+## Job - Configure ERT   ##
+###########################
+- name: configure-ert
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: terraform-state
+    - get: pivnet-opsmgr
+      passed: [upload-ert]
+      trigger: true
+      params: {globs: []}
+
+  - task: configure-ert
+    file: pcf-pipelines/tasks/config-ert/task.yml
+    params:
+      IAAS: azure
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPS_MGR_USR: {{opsman_admin_username}}
+      OPS_MGR_PWD: {{opsman_admin_password}}
+      ERT_SINGLETON_JOB_AZ:
+      DEPLOYMENT_NW_AZS:
+      NETWORK_NAME: {{deployment_network_name}}
+      ENABLE_SECURITY_EVENT_LOGGING: {{enable_security_event_logging}}
+      SYSLOG_HOST: {{syslog_host}}
+      SYSLOG_PORT: {{syslog_port}}
+      SYSLOG_PROTOCOL: {{syslog_protocol}}
+      SYSLOG_DRAIN_BUFFER_SIZE: {{syslog_drain_buffer_size}}
+      COMPANY_NAME: {{company_name}}
+      AUTHENTICATION_MODE: {{authentication_mode}}
+      LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
+      SAML_SSL_CERT: {{pcf_ert_saml_cert}}
+      SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
+      HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
+      HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
+      ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
+      HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
+      DISABLE_HTTP_PROXY: {{disable_http_proxy}}
+      TCP_ROUTING: {{tcp_routing}}
+      TCP_ROUTING_PORTS: {{tcp_routing_ports}}
+      ROUTE_SERVICES: {{route_services}}
+      IGNORE_SSL_CERT: {{ignore_ssl_cert_verification}}
+      SMTP_FROM: {{smtp_from}}
+      SMTP_ADDRESS: {{smtp_address}}
+      SMTP_PORT: {{smtp_port}}
+      SMTP_USER: {{smtp_user}}
+      SMTP_PWD: {{smtp_pwd}}
+      SMTP_ENABLE_STARTTLS_AUTO: {{smtp_enable_starttls_auto}}
+      SMTP_AUTH_MECHANISM: {{smtp_auth_mechanism}}
+      LDAP_URL:
+      LDAP_USER:
+      LDAP_PWD:
+      SEARCH_BASE:
+      SEARCH_FILTER:
+      GROUP_SEARCH_BASE:
+      GROUP_SEARCH_FILTER:
+      MAIL_ATTR_NAME:
+      FIRST_NAME_ATTR:
+      LAST_NAME_ATTR:
+      SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
+      SYSTEM_DOMAIN: {{system_domain}}
+      APPS_DOMAIN: {{apps_domain}}
+      DEFAULT_QUOTA_MEMORY_LIMIT_IN_MB: {{default_quota_memory_limit_mb}}
+      DEFAULT_QUOTA_MAX_SERVICES_COUNT: {{default_quota_max_number_services}}
+      HA_PROXY_IPS: {{ha_proxy_ips}}
+      SKIP_CERT_VERIFY: {{skip_cert_verify}}
+      DISABLE_INSECURE_COOKIES: {{disable_insecure_cookies}}
+      ROUTER_STATIC_IPS: {{router_static_ips}}
+      ROUTER_REQUEST_TIMEOUT_IN_SEC: {{router_request_timeout_in_seconds}}
+      GARDEN_NETWORK_POOL_CIDR: {{garden_network_pool_cidr}}
+      GARDEN_NETWORK_MTU: {{garden_network_mtu}}
+      MYSQL_MONITOR_EMAIL: {{mysql_monitor_recipient_email}}
+      MYSQL_BACKUPS: {{mysql_backups}}
+      MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
+      MYSQL_BACKUPS_SCP_PORT: {{mysql_backups_scp_port}}
+      MYSQL_BACKUPS_SCP_USER: {{mysql_backups_scp_user}}
+      MYSQL_BACKUPS_SCP_KEY: {{mysql_backups_scp_key}}
+      MYSQL_BACKUPS_SCP_DESTINATION: {{mysql_backups_scp_destination}}
+      MYSQL_BACKUPS_SCP_CRON_SCHEDULE: {{mysql_backups_scp_cron_schedule}}
+      MYSQL_BACKUPS_S3_ENDPOINT_URL: {{mysql_backups_s3_endpoint_url}}
+      MYSQL_BACKUPS_S3_BUCKET_NAME: {{mysql_backups_s3_bucket_name}}
+      MYSQL_BACKUPS_S3_BUCKET_PATH: {{mysql_backups_s3_bucket_path}}
+      MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
+      MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
+      MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
+      ALLOW_APP_SSH_ACCESS: {{allow_app_ssh_access}}
+      TCP_ROUTER_STATIC_IPS: {{tcp_router_static_ips}}
+      SSH_STATIC_IPS: {{ssh_static_ips}}
+      MYSQL_STATIC_IPS: {{mysql_static_ips}}
+      CONSUL_SERVER_INSTANCES: {{consul_server_instances}}
+      NATS_INSTANCES: {{nats_instances}}
+      NFS_SERVER_INSTANCES: {{nfs_server_instances}}
+      MYSQL_PROXY_INSTANCES: {{mysql_proxy_instances}}
+      MYSQL_INSTANCES: {{mysql_instances}}
+      BACKUP_PREPARE_INSTANCES: {{backup_prepare_instances}}
+      UAA_INSTANCES: {{uaa_instances}}
+      CLOUD_CONTROLLER_INSTANCES: {{cloud_controller_instances}}
+      CREDHUB_INSTANCES: {{credhub_instances}}
+      HA_PROXY_INSTANCES: {{ha_proxy_instances}}
+      HA_PROXY_LB_NAME: {{ha_proxy_lb_name}}
+      ROUTER_INSTANCES: {{router_instances}}
+      MYSQL_MONITOR_INSTANCES: {{mysql_monitor_instances}}
+      CLOCK_GLOBAL_INSTANCES: {{clock_global_instances}}
+      CLOUD_CONTROLLER_WORKER_INSTANCES: {{cloud_controller_worker_instances}}
+      DIEGO_DATABASE_INSTANCES: {{diego_database_instances}}
+      DIEGO_BRAIN_INSTANCES: {{diego_brain_instances}}
+      DIEGO_CELL_INSTANCES: {{diego_cell_instances}}
+      DOPPLER_INSTANCES: {{doppler_instances}}
+      LOGGREGATOR_TRAFFICCONTROLLER_INSTANCES: {{loggregator_trafficcontroller_instances}}
+      TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
+      SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
+      SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
+      INTERNET_CONNECTED: {{internet_connected}}
+      CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
+      ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
+      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
+      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
+      TCP_ROUTER_NSX_SECURITY_GROUP: ""
+      TCP_ROUTER_NSX_LB_EDGE_NAME: ""
+      TCP_ROUTER_NSX_LB_POOL_NAME: ""
+      TCP_ROUTER_NSX_LB_SECURITY_GROUP: ""
+      TCP_ROUTER_NSX_LB_PORT: ""
+      ROUTER_NSX_SECURITY_GROUP: ""
+      ROUTER_NSX_LB_EDGE_NAME: ""
+      ROUTER_NSX_LB_POOL_NAME: ""
+      ROUTER_NSX_LB_SECURITY_GROUP: ""
+      ROUTER_NSX_LB_PORT: ""
+      DIEGO_BRAIN_NSX_SECURITY_GROUP: ""
+      DIEGO_BRAIN_NSX_LB_EDGE_NAME: ""
+      DIEGO_BRAIN_NSX_LB_POOL_NAME: ""
+      DIEGO_BRAIN_NSX_LB_SECURITY_GROUP: ""
+      DIEGO_BRAIN_NSX_LB_PORT: ""
+      MYSQL_NSX_SECURITY_GROUP: ""
+      MYSQL_NSX_LB_EDGE_NAME: ""
+      MYSQL_NSX_LB_POOL_NAME: ""
+      MYSQL_NSX_LB_SECURITY_GROUP: ""
+      MYSQL_NSX_LB_PORT: ""
+      HAPROXY_FLOATING_IPS: ""
+###########################
+## Job - Deploy    ERT   ##
+###########################
+- name: deploy-ert
+  serial: true
+  max_in_flight: 1
+  serial_groups: [full]
+
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+    - get: pivnet-opsmgr
+      passed: [configure-ert]
+      trigger: true
+      params: {globs: []}
+
+  - task: deploy-ert
+    file: pcf-pipelines/tasks/apply-changes/task.yml
+    params:
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}

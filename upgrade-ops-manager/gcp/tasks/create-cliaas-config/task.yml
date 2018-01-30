@@ -18,7 +18,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
 
 inputs:
   - name: pcf-pipelines
@@ -29,9 +29,9 @@ outputs:
 
 params:
   PIVNET_IMAGE_REGION:
-  OPSMAN_PROJECT:
-  OPSMAN_ZONE:
-  OPSMAN_GCP_CREDFILE_CONTENTS:
+  GCP_PROJECT_ID:
+  GCP_ZONE:
+  GCP_SERVICE_ACCOUNT_KEY:
 
 run:
   path: pcf-pipelines/upgrade-ops-manager/gcp/tasks/create-cliaas-config/task.sh

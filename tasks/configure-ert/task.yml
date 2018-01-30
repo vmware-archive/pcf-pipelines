@@ -1,0 +1,92 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+- name: pcf-pipelines
+- name: terraform-state
+
+run:
+  path: pcf-pipelines/tasks/configure-ert/task.sh
+
+params:
+  pcf_iaas:
+  pcf_ert_domain:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
+  pcf_az_1:
+  pcf_az_2:
+  pcf_az_3:
+  terraform_prefix:
+  HAPROXY_FORWARD_TLS:
+  HAPROXY_BACKEND_CA:
+  ROUTER_TLS_CIPHERS:
+  HAPROXY_TLS_CIPHERS:
+  INTERNET_CONNECTED:
+  CONTAINER_NETWORKING_NW_CIDR:
+  # IaaS Specific for GCP only
+  gcp_storage_access_key:
+  gcp_storage_secret_key:
+  # aws specific
+  S3_ENDPOINT:
+  # azure specific
+  pcf_ert_saml_cert:
+  pcf_ert_saml_key:
+  pcf_ert_networking_pointofentry:
+  azure_access_key:
+  azure_account_name:
+  azure_buildpacks_container:
+  azure_droplets_container:
+  azure_packages_container:
+  azure_resources_container:
+  # db credentials
+  db_app_usage_service_username:
+  db_app_usage_service_password:
+  db_autoscale_username:
+  db_autoscale_password:
+  db_diego_username:
+  db_diego_password:
+  db_notifications_username:
+  db_notifications_password:
+  db_routing_username:
+  db_routing_password:
+  db_uaa_username:
+  db_uaa_password:
+  db_ccdb_username:
+  db_ccdb_password:
+  mysql_monitor_recipient_email:
+  MYSQL_BACKUPS:
+  MYSQL_BACKUPS_SCP_SERVER:
+  MYSQL_BACKUPS_SCP_PORT:
+  MYSQL_BACKUPS_SCP_USER:
+  MYSQL_BACKUPS_SCP_KEY:
+  MYSQL_BACKUPS_SCP_DESTINATION:
+  MYSQL_BACKUPS_SCP_CRON_SCHEDULE:
+  MYSQL_BACKUPS_S3_ENDPOINT_URL:
+  MYSQL_BACKUPS_S3_BUCKET_NAME:
+  MYSQL_BACKUPS_S3_BUCKET_PATH:
+  MYSQL_BACKUPS_S3_ACCESS_KEY_ID:
+  MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY:
+  MYSQL_BACKUPS_S3_CRON_SCHEDULE:
+  db_accountdb_username:
+  db_accountdb_password:
+  db_networkpolicyserverdb_username:
+  db_networkpolicyserverdb_password:
+  db_nfsvolumedb_username:
+  db_nfsvolumedb_password:
+  db_locket_username:
+  db_locket_password:
+  db_silk_username:
+  db_silk_password:
+  routing_disable_http:
+  ROUTING_CUSTOM_CA_CERTIFICATES:
+  ROUTING_TLS_TERMINATION:
+  SECURITY_ACKNOWLEDGEMENT:
+  CREDHUB_ENCRYPTION_KEYS:
+  NETWORKING_POE_SSL_CERTS:

@@ -1,0 +1,255 @@
+---
+name: concourse
+
+releases:
+- name: concourse
+  version: latest
+- name: garden-runc
+  version: latest
+- name: postgres
+  version: latest
+- name: uaa
+  version: latest
+- name: credhub
+  version: latest
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+instance_groups:
+- name: db
+  instances: 1
+
+  persistent_disk_type: ((db_persistent_disk_type))
+  vm_type: ((db_vm_type))
+
+  stemcell: default
+  azs: [AZ01,AZ02,AZ03]
+  networks:
+  - name: INFRASTRUCTURE
+    static_ips: ((db_ip))
+
+  jobs:
+  - release: postgres
+    name: postgres
+    properties:
+      databases:
+        port: 5432
+        databases:
+        - name: atc
+        - name: credhub
+        - name: uaa
+        roles:
+        - name: atc
+          password: ((atc-db-password))
+        - name: credhub
+          password: ((credhub-db-password))
+        - name: uaa
+          password: ((uaa-db-password))
+
+- name: web
+  instances: 1
+  vm_type: ((web_vm_type))
+  stemcell: default
+  azs: [AZ01,AZ02,AZ03]
+  networks:
+  - name: INFRASTRUCTURE
+    static_ips: ((atc_ips))
+  jobs:
+  - release: concourse
+    name: atc
+    properties:
+      external_url: https://((concourse_host)):443
+      basic_auth_username: admin
+      basic_auth_password: ((main-team-password))
+      tls_cert: ((concourse-tls.certificate))
+      tls_key: ((concourse-tls.private_key))
+      tls_bind_port: 443
+      postgresql:
+        host: ((db_ip))
+        database: atc
+        sslmode: disable
+        role:
+          name: atc
+          password: ((atc-db-password))
+      credhub:
+        url: https://((concourse_host)):8844
+        tls:
+          ca_cert: ((concourse-ca))
+          insecure_skip_verify: true
+        client_id: concourse_to_credhub
+        client_secret: ((concourse_to_credhub_secret))
+
+  - release: concourse
+    name: tsa
+    properties: {}
+
+  - name: uaa
+    release: uaa
+    properties:
+      uaa:
+        url: &uaa-url "https://((concourse_host)):8443"
+        port: -1
+        scim:
+          users:
+          - name: admin
+            password: ((uaa-users-admin))
+            groups:
+            - scim.write
+            - scim.read
+            - bosh.admin
+            - credhub.read
+            - credhub.write
+        clients:
+          credhub_cli:
+            override: true
+            authorized-grant-types: password,refresh_token
+            scope: credhub.read,credhub.write
+            authorities: uaa.resource
+            access-token-validity: 1200
+            refresh-token-validity: 3600
+            secret: ""
+          concourse_to_credhub:
+            override: true
+            authorized-grant-types: client_credentials
+            scope: ""
+            authorities: credhub.read,credhub.write
+            access-token-validity: 30
+            refresh-token-validity: 3600
+            secret: ((concourse_to_credhub_secret))
+        admin: {client_secret: ((uaa-admin))}
+        login: {client_secret: ((uaa-login))}
+        zones: {internal: {hostnames: []}}
+        sslCertificate: ((concourse-tls.certificate))
+        sslPrivateKey: ((concourse-tls.private_key))
+        jwt:
+          revocable: true
+          policy:
+            active_key_id: key-1
+            keys:
+              key-1:
+                signingKey: ((uaa-jwt.private_key))
+      uaadb:
+        address: ((db_ip))
+        port: 5432
+        db_scheme: postgresql
+        databases:
+        - tag: uaa
+          name: uaa
+        roles:
+        - tag: admin
+          name: uaa
+          password: ((uaa-db-password))
+      login:
+        saml:
+          serviceProviderCertificate: ((concourse-tls.certificate))
+          serviceProviderKey: ((concourse-tls.private_key))
+          serviceProviderKeyPassword: ""
+
+  - name: credhub
+    release: credhub
+    properties:
+      credhub:
+        port: 8844
+        authentication:
+          uaa:
+            url: *uaa-url
+            verification_key: ((uaa-jwt.public_key))
+            ca_certs:
+            - ((concourse-tls.ca))
+        data_storage:
+          type: postgres
+          host: ((db_ip))
+          port: 5432
+          username: credhub
+          password: ((credhub-db-password))
+          database: credhub
+          require_tls: false
+        tls: ((concourse-tls))
+        log_level: info
+        encryption:
+          keys:
+          - provider_name: int
+            encryption_password: ((credhub-encryption-password))
+            active: true
+          providers:
+          - name: int
+            type: internal
+
+- name: worker
+  instances: 1
+  vm_type: ((worker_vm_type))
+  stemcell: default
+  azs: [AZ01,AZ02,AZ03]
+  networks:
+  - name: INFRASTRUCTURE
+  jobs:
+  - release: concourse
+    name: groundcrew
+    properties: {}
+
+  - release: concourse
+    name: baggageclaim
+    properties: {}
+
+  - release: garden-runc
+    name: garden
+    properties:
+      garden:
+        listen_network: tcp
+        listen_address: 0.0.0.0:7777
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  canary_watch_time: 30000-1200000
+  serial: true
+  update_watch_time: 10000-1200000
+
+variables:
+- name: atc-db-password
+  type: password
+- name: credhub-encryption-password
+  type: password
+  options:
+    length: 40
+- name: concourse-ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: Concourse CA
+- name: concourse-tls
+  type: certificate
+  options:
+    ca: concourse-ca
+    common_name: ((concourse_host))
+    alternative_names:
+    - ((concourse_host))
+- name: credhub-db-password
+  type: password
+- name: uaa-jwt
+  type: rsa
+  options:
+    key_length: 4096
+- name: uaa-users-admin
+  type: password
+- name: uaa-admin
+  type: password
+- name: uaa-login
+  type: password
+- name: uaa-credhub-admin
+  type: password
+- name: uaa-db-admin
+  type: password
+- name: uaa-db-password
+  type: password
+- name: concourse_to_credhub_secret
+  type: password
+- name: credhub_cli_password
+  type: password
+- name: concourse_client_secret
+  type: password
+- name: main-team-password
+  type: password

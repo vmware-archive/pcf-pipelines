@@ -1,7 +1,11 @@
+resource "random_pet" "sql_db" {
+  length = 1
+}
+
 resource "google_sql_database_instance" "master" {
   region           = "${var.gcp_region}"
   database_version = "MYSQL_5_6"
-  name             = "${var.ert_sql_instance_name}"
+  name             = "${var.prefix}-${random_pet.sql_db.id}"
 
   settings {
     tier = "db-f1-micro"

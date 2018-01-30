@@ -2,24 +2,20 @@ FROM cloudfoundry/cflinuxfs2
 
 COPY \
        om-linux \
+       semver-linux \
        yaml_patch_linux \
        cf \
        cliaas-linux \
        pivnet-cli \
        govc \
-       om-linux-beta \
        stemcell-downloader \
        steamroll \
+       jq \
+       terraform \
        /usr/local/bin/
 
 RUN \
 cp /usr/local/bin/yaml_patch_linux /usr/local/bin/yaml-patch && \
-
-# jq
-wget -O /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x /usr/local/bin/jq && \
-
-# Terraform
-wget -q -O- https://www.terraform.io/downloads.html | grep linux_amd64 | sed -e's/^.*"\(.*\)".*$/\1/g' | xargs wget -O /tmp/terraform.zip && unzip -d /usr/local/bin /tmp/terraform.zip && chmod +x /usr/local/bin/terraform && \
 
 # gcloud SDK
 export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
@@ -30,15 +26,21 @@ apt-get -y update && sudo apt-get -y install --no-install-recommends google-clou
 # pip
 apt-get install -y --no-install-recommends python-pip python-dev && \
 
+# vim
+ln -s /usr/bin/vim.tiny /usr/local/bin/vim && \
+
 # UAA Client
 gem install cf-uaac --no-ri --no-rdoc && \
+
+# Ensure latest version of six
+pip install six --upgrade && \
 
 # AWS Client
 pip install awscli && \
 
 # Openstack Client
 apt-get install -y --no-install-recommends libffi-dev && \
-pip install python-openstackclient pytz python-neutronclient && \
+pip install cryptography==2.0.3 pyOpenSSL==17.4.0 python-openstackclient pytz python-neutronclient && \
 
 # Azure Client
 echo "deb https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && \

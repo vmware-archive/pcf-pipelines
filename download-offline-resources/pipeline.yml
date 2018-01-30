@@ -8,7 +8,6 @@ resource_types:
 resources:
 - name: stemcell-pivnet
   type: pivnet
-  check_every: 1h
   source:
     api_token: {{pivnet_token}}
     product_slug: stemcells
@@ -16,7 +15,6 @@ resources:
 
 - name: ops-manager-pivnet
   type: pivnet
-  check_every: 1h
   source:
     api_token: {{pivnet_token}}
     product_slug: ops-manager
@@ -25,7 +23,6 @@ resources:
 
 - name: elastic-runtime-pivnet
   type: pivnet
-  check_every: 1h
   source:
     api_token: {{pivnet_token}}
     product_slug: elastic-runtime
@@ -35,7 +32,7 @@ resources:
 - name: czero-cflinuxfs2
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: latest
     username: {{dockerhub_username}}
     password: {{dockerhub_password}}
@@ -113,7 +110,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
       - name: ops-manager-pivnet
       outputs:
@@ -145,7 +142,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
       - name: elastic-runtime-pivnet
       outputs:
@@ -177,7 +174,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
       inputs:
       - name: czero-cflinuxfs2
       - name: czero-cflinuxfs2-version

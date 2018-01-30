@@ -1,27 +1,34 @@
+resource_types:
+- name: curl
+  type: docker-image
+  source:
+    repository: pivotalservices/concourse-curl-resource
+    tag: latest
+
 resources:
 - name: pcf-pipelines
   type: git
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    private_key: {{git_private_key}}
+    private_key: ((git_private_key))
     paths: [ci/Dockerfile]
 
 - name: pcf-pipelines-image
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: latest
     username: czero
-    password: {{czero_dockerhub_password}}
+    password: ((czero_dockerhub_password))
 
 - name: pcf-pipelines-image-rc
   type: docker-image
   source:
-    repository: czero/cflinuxfs2
+    repository: czero/rootfs
     tag: release-candidate
     username: czero
-    password: {{czero_dockerhub_password}}
+    password: ((czero_dockerhub_password))
 
 - name: cflinuxfs2
   type: docker-image
@@ -34,14 +41,21 @@ resources:
   source:
     user: pivotal-cf
     repository: om
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
+
+- name: semver-cli
+  type: github-release
+  source:
+    user: christianang
+    repository: semver-cli
+    access_token: ((github_token))
 
 - name: yaml-patch
   type: github-release
   source:
-    user: krishicks
+    user: pivotal-cf
     repository: yaml-patch
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: cf-cli-tarball
   type: s3
@@ -49,48 +63,55 @@ resources:
     bucket: cf-cli-releases
     regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
     region_name: us-west-1
+    access_key_id: ((aws_access_key_id))
+    secret_access_key: ((aws_secret_access_key))
 
 - name: cliaas
   type: github-release
   source:
     user: pivotal-cf
     repository: cliaas
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: pivnet-cli
   type: github-release
   source:
     user: pivotal-cf
     repository: pivnet-cli
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: govc
   type: github-release
   source:
     user: vmware
     repository: govmomi
-    access_token: {{images_pipeline_github_token}}
-
-- name: om-beta
-  type: github-release
-  source:
-    user: c0-ops
-    repository: om
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: stemcell-downloader
   type: github-release
   source:
     user: pivotal-cf
     repository: pcf-product-stemcell-downloader
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
 
 - name: steamroll
   type: github-release
   source:
-    user: krishicks
+    user: pivotal-cf
     repository: concourse-pipeline-steamroller
-    access_token: {{images_pipeline_github_token}}
+    access_token: ((github_token))
+
+- name: terraform
+  type: curl
+  source:
+    url: https://releases.hashicorp.com/terraform/0.11.0/terraform_0.11.0_linux_amd64.zip
+    filename: terraform.zip
+
+- name: jq
+  type: curl
+  source:
+    url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    filename: jq
 
 jobs:
 - name: build-pcf-pipelines-image
@@ -102,7 +123,9 @@ jobs:
     - get: cflinuxfs2
       trigger: true
       params: {save: true}
-    - get: yaml-patch 
+    - get: yaml-patch
+      params: {globs: ["*linux*"]}
+    - get: semver-cli
       params: {globs: ["*linux*"]}
     - get: om
       params: {globs: ["*linux*"]}
@@ -113,31 +136,32 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: govc
       params: {globs: ["*linux_amd64*"]}
-    - get: om-beta
-      params: {globs: ["*linux*"]}
-      version: { tag: '0.17-beta.0' }
     - get: stemcell-downloader
       params: {globs: ["*linux*"]}
     - get: steamroll
       params: {globs: ["*linux*"]}
+    - get: terraform
+    - get: jq
 
   - task: prepare-workspace
     config:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/cflinuxfs2}
+        source: {repository: czero/rootfs}
       inputs:
       - name: pcf-pipelines
       - name: om
-      - name: yaml-patch 
+      - name: yaml-patch
+      - name: semver-cli
       - name: cf-cli-tarball
       - name: cliaas
       - name: pivnet-cli
       - name: govc
-      - name: om-beta
       - name: stemcell-downloader
       - name: steamroll
+      - name: terraform
+      - name: jq
       outputs:
       - name: workspace
       run:
@@ -145,35 +169,28 @@ jobs:
         args:
         - -c
         - |
-          cp pcf-pipelines/ci/Dockerfile workspace
-
-          cp om/om-linux workspace
-          chmod +x workspace/om-linux
-
-          cp yaml-patch/yaml_patch_linux workspace
-          chmod +x workspace/yaml_patch_linux
-
-          tar -C workspace -xf cf-cli-tarball/*.tgz cf
-          chmod +x workspace/cf
-
-          cp cliaas/cliaas-linux workspace
-          chmod +x workspace/cliaas-linux
+          cp \
+            semver-cli/semver-linux \
+            om/om-linux \
+            yaml-patch/yaml_patch_linux \
+            cliaas/cliaas-linux \
+            jq/jq \
+            workspace
 
           cp pivnet-cli/pivnet-linux-* workspace/pivnet-cli
-          chmod +x workspace/pivnet-cli
+          cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
+          cp steamroll/steamroll_linux workspace/steamroll
+
+          tar -C workspace -xf cf-cli-tarball/*.tgz cf
 
           gunzip govc/govc_linux_amd64.gz
           cp govc/govc_linux_amd64 workspace/govc
-          chmod +x workspace/govc
 
-          cp om-beta/om-linux workspace/om-linux-beta
-          chmod +x workspace/om-linux-beta
+          unzip -d workspace terraform/terraform.zip
 
-          cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
-          chmod +x workspace/stemcell-downloader
+          chmod +x workspace/*
 
-          cp steamroll/steamroll_linux workspace/steamroll
-          chmod +x workspace/steamroll
+          cp pcf-pipelines/ci/Dockerfile workspace
 
   - put: pcf-pipelines-image-rc
     params:
@@ -194,21 +211,21 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/cflinuxfs2
+          repository: czero/rootfs
           tag: release-candidate
       run:
         path: sh
         args:
         - -c
         - |
-          set -e
+          set -xe
           which om-linux
           which yaml_patch_linux
+          which semver-linux
           which cf
           which cliaas-linux
           which pivnet-cli
           which govc
-          which om-linux-beta
           which stemcell-downloader
           which jq
           which terraform

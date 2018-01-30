@@ -33,4 +33,5 @@ $ cat ip-ranges.json | jq -c '.prefixes | .[] | select( .service | contains("S3"
 
 ## Docker
 **Docker hub does not provide a set of IPs so one must whitelist on domain**
-- `https://registry.hub.docker.com`
+- `*.docker.io`
+- `docker-images-prod.s3.amazonaws.com`

@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+inputs:
+- name: pcf-pipelines
+
+params:
+  GCP_SERVICE_ACCOUNT_KEY:
+  PARENT_DNS_ZONE:
+  CHILD_DNS_ZONE:
+
+run:
+  path: pcf-pipelines/ci/tasks/delegate-gcp-dns-zone/task.sh

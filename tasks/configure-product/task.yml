@@ -1,0 +1,25 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/cflinuxfs2
+
+inputs:
+  - name: pcf-pipelines
+  - name: configuration
+
+run:
+  path: pcf-pipelines/tasks/configure-product/task.sh
+
+params:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  PRODUCT_NAME:
+  PRODUCT_PROPERTIES_FILE:
+  PRODUCT_NETWORK_FILE:
+  PRODUCT_RESOURCES_FILE:

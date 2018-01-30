@@ -1,0 +1,37 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: czero/rootfs
+
+params:
+  PIPELINE_NAME:
+  ATC_EXTERNAL_URL:
+  ATC_BASIC_AUTH_USERNAME:
+  ATC_BASIC_AUTH_PASSWORD:
+  ATC_TEAM_NAME:
+
+run:
+  path: bash
+  args:
+  - -ce
+  - |
+    curl \
+      --silent \
+      --insecure \
+      --output fly \
+      "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"
+
+    chmod +x fly
+
+    ./fly --target self login \
+      --insecure \
+      --concourse-url "${ATC_EXTERNAL_URL}" \
+      --username "${ATC_BASIC_AUTH_USERNAME}" \
+      --password "${ATC_BASIC_AUTH_PASSWORD}" \
+      --team-name "${ATC_TEAM_NAME}"
+
+    ./fly --target self unpause-pipeline \
+      --pipeline "${PIPELINE_NAME}"

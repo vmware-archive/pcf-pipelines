@@ -6,6 +6,9 @@ file_path=`find ./pivnet-opsman-product/ -name *.ova`
 
 echo $file_path
 
+export GOVC_TLS_CA_CERTS=/tmp/vcenter-ca.pem
+echo "$GOVC_CA_CERT" > $GOVC_TLS_CA_CERTS
+
 govc import.spec $file_path | python -m json.tool > om-import.json
 
 cat > filters <<'EOF'
@@ -33,11 +36,18 @@ jq \
   --arg customHostname "$OPSMAN_DOMAIN_OR_IP_ADDRESS" \
   --arg network "$OM_VM_NETWORK" \
   --arg vmName "$OM_VM_NAME" \
-  --arg diskType "$OM_DISK_TYPE" \
+  --arg diskType "$OPSMAN_DISK_TYPE" \
   --argjson powerOn $OM_VM_POWER_STATE \
   --from-file filters \
   om-import.json > options.json
 
 cat options.json
 
-govc import.ova -options=options.json $file_path
+if [ -z $OM_VM_FOLDER ]; then
+  govc import.ova -options=options.json $file_path
+else
+  if [ `govc folder.info $OM_VM_FOLDER 2>&1 | grep $OM_VM_FOLDER | awk '{print $2}'` != $OM_VM_FOLDER ]; then
+    govc folder.create $OM_VM_FOLDER
+  fi
+  govc import.ova -folder=$OM_VM_FOLDER -options=options.json $file_path
+fi

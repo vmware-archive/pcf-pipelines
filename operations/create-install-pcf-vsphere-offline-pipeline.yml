@@ -1,15 +1,6 @@
 - op: remove
   path: /resource_types
 
-- op: add
-  path: /resource_types
-  value:
-  - name: czero-s3
-    type: docker-image
-    source:
-      repository: czero/s3-resource
-      tag: latest
-
 - op: remove
   path: /resources
 
@@ -24,7 +15,6 @@
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "ops-manager/ops-manager-(.*).tar"
-      unpack: true
 
   - name: elastic-runtime
     type: s3
@@ -34,18 +24,18 @@
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "elastic-runtime/elastic-runtime-(.*).tar"
-      unpack: true
 
 - op: replace
   path: /jobs/type=docker-image
   value:
-    type: czero-s3
+    type: s3
     source:
       access_key_id: {{s3_access_key_id}}
       secret_access_key: {{s3_secret_access_key}}
       endpoint: {{s3_endpoint}}
       bucket: {{s3_bucket}}
       regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
+    params:
       unpack: true
 
 - op: remove
@@ -57,11 +47,23 @@
 - op: remove
   path: /jobs/get=pivnet-opsman-product/params/globs
 
+- op: add
+  path: /jobs/get=pivnet-opsman-product/params/unpack
+  value: true
+
 - op: remove
   path: /jobs/get=pcf-ops-manager/params/globs
 
+- op: add
+  path: /jobs/get=pcf-ops-manager/params/unpack
+  value: true
+
 - op: remove
   path: /jobs/get=pivnet-product/params/globs
+
+- op: add
+  path: /jobs/get=pivnet-product/params/unpack
+  value: true
 
 - op: replace
   path: /jobs/name=upload-ert/plan/task=upload-tile
@@ -71,13 +73,14 @@
       config:
         platform: linux
         image_resource:
-          type: czero-s3
+          type: s3
           source:
             access_key_id: {{s3_access_key_id}}
             bucket: {{s3_bucket}}
             endpoint: {{s3_endpoint}}
             regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
+          params:
             unpack: true
         inputs:
         - name: pivnet-product
@@ -88,6 +91,8 @@
           S3_ENDPOINT: {{s3_endpoint}}
           IAAS: vsphere
           OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
+          OPSMAN_CLIENT_ID: {{opsman_client_id}}
+          OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
           OPS_MGR_USERNAME: {{opsman_admin_username}}
           OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:
@@ -111,8 +116,10 @@
               diagnostic_report=$(
                 om-linux \
                   --target https://$OPS_MGR_DOMAIN \
-                  --username $OPS_MGR_USERNAME \
-                  --password $OPS_MGR_PASSWORD \
+                  --client-id "${OPSMAN_CLIENT_ID}" \
+                  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+                  --username "$OPS_MGR_USERNAME" \
+                  --password "$OPS_MGR_PASSWORD" \
                   --skip-ssl-validation \
                   curl --silent --path "/api/v0/diagnostic_report"
               )
@@ -144,7 +151,7 @@
 
                 stemcell_to_download=$(
                   set +e
-                  echo $available_stemcells | grep $stemcell_version
+                  echo "$available_stemcells" | grep $stemcell_version
                   set -e
                 )
 
@@ -159,8 +166,10 @@
 
                 om-linux \
                   --target https://$OPS_MGR_DOMAIN \
-                  --username $OPS_MGR_USERNAME \
-                  --password $OPS_MGR_PASSWORD \
+                  --client-id "${OPSMAN_CLIENT_ID}" \
+                  --client-secret "${OPSMAN_CLIENT_SECRET}" \
+                  --username "$OPS_MGR_USERNAME" \
+                  --password "$OPS_MGR_PASSWORD" \
                   --skip-ssl-validation \
                   upload-stemcell \
                   --stemcell "./${stemcell_to_download}"
@@ -178,13 +187,16 @@
             endpoint: {{s3_endpoint}}
             regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
             secret_access_key: {{s3_secret_access_key}}
+          params:
             unpack: true
         inputs:
         - name: pivnet-product
         params:
-          OPS_MGR_DOMAIN:
-          OPS_MGR_USERNAME:
-          OPS_MGR_PASSWORD:
+          OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
+          OPSMAN_CLIENT_ID: {{opsman_client_id}}
+          OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+          OPS_MGR_USERNAME: {{opsman_admin_username}}
+          OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:
           path: bash
           args:
@@ -196,8 +208,10 @@
 
             om-linux \
             --target https://$OPS_MGR_DOMAIN \
-            --username $OPS_MGR_USERNAME \
-            --password $OPS_MGR_PASSWORD \
+            --client-id "${OPSMAN_CLIENT_ID}" \
+            --client-secret "${OPSMAN_CLIENT_SECRET}" \
+            --username "$OPS_MGR_USERNAME" \
+            --password "$OPS_MGR_PASSWORD" \
             --request-timeout 3600 \
             --skip-ssl-validation \
             upload-product \

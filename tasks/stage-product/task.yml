@@ -17,17 +17,18 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: czero/cflinuxfs2}
+  source: {repository: czero/rootfs}
 
 inputs:
   - name: pcf-pipelines
   - name: pivnet-product
 
 params:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
-  PRODUCT_NAME:
 
 run:
   path: pcf-pipelines/tasks/stage-product/task.sh

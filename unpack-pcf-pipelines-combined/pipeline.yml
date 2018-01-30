@@ -35,7 +35,7 @@ resources:
     secret_access_key: {{s3_secret_access_key}}
     endpoint: {{s3_endpoint}}
     bucket: {{s3_bucket}}
-    regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar"
+    regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar.gpg"
 
 - name: stemcells
   type: s3
@@ -59,6 +59,7 @@ jobs:
 - name: unpack-tarball
   plan:
   - get: pcf-pipelines-combined
+    trigger: true
   - task: unpack-tarball
     config:
       platform: linux
@@ -76,13 +77,29 @@ jobs:
       - name: pcf-pipelines-combined
       outputs:
       - name: pcf-pipelines-separated
+      params:
+        GPG_PRIVATE_KEY: {{gpg_private_key_contents}}
       run:
         path: bash
         args:
         - -c
         - |
           set -eu
-          tar xvf pcf-pipelines-combined/*.tar -C pcf-pipelines-separated
+          set -o pipefail
+
+          echo -n "Importing GPG private key..."
+          echo "$GPG_PRIVATE_KEY" | gpg --import 2>/dev/null
+          echo "done"
+
+          echo ""
+          echo "Extracting encrypted tarball..."
+          gpg --decrypt pcf-pipelines-combined/*.tar.gpg | tar xv -C pcf-pipelines-separated
+
+          echo ""
+          echo "Verifying SHA of extracted files..."
+          pushd pcf-pipelines-separated 1>/dev/null
+            shasum -c MANIFEST.MF
+          popd 1>/dev/null
   - aggregate:
     - put: pcf-ops-manager
       params:
@@ -104,6 +121,9 @@ jobs:
   plan:
   - get: pcf-pipelines-tarball
     passed: [unpack-tarball]
+  - get: pcf-pipelines-combined
+    passed: [unpack-tarball]
+    trigger: true
   - task: unpack-pcf-pipelines
     config:
       platform: linux
@@ -153,7 +173,6 @@ jobs:
         - -c
         - |
           curl \
-            --silent \
             --insecure \
             --output fly \
             "${ATC_EXTERNAL_URL}/api/v1/cli?arch=amd64&platform=linux"

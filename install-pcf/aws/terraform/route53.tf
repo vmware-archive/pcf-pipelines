@@ -3,7 +3,7 @@ resource "aws_route53_record" "opsman" {
   name = "opsman"
   type = "A"
   ttl = "900"
-  records = ["${aws_instance.opsmman_az1.public_ip}"]
+  records = ["${aws_eip.opsman.public_ip}"]
 }
 
 resource "aws_route53_record" "apps_wild_card" {
