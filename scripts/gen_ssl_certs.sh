@@ -45,6 +45,6 @@ fi
 
 openssl genrsa -out ${SYS_DOMAIN}.key 2048
 openssl req -new -out ${SYS_DOMAIN}.csr -subj "/CN=*.${SYS_DOMAIN}/O=Pivotal/C=US" -key ${SYS_DOMAIN}.key -config ${SSL_FILE} -sha256
-openssl req -text -noout -in ${SYS_DOMAIN}.csr
+openssl req -text -noout -in ${SYS_DOMAIN}.csr -sha256
 openssl x509 -req -days 3650 -in ${SYS_DOMAIN}.csr -signkey ${SYS_DOMAIN}.key -out ${SYS_DOMAIN}.crt -extensions v3_req -extfile ${SSL_FILE} -sha256
 openssl x509 -in ${SYS_DOMAIN}.crt -text -noout
