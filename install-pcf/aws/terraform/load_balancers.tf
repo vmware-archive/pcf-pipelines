@@ -24,9 +24,7 @@ resource "aws_elb" "PcfHttpElb" {
     unhealthy_threshold = 2
     healthy_threshold = 10
   }
-  tags {
-    Name = "${var.prefix}-Pcf Http Elb"
-  }
+  tags = "${merge(var.tags, map("Name", format("%s-Pcf Http Elb", var.prefix)))}"
 }
 
 resource "aws_elb" "PcfSshElb" {
@@ -47,9 +45,7 @@ resource "aws_elb" "PcfSshElb" {
     unhealthy_threshold = 2
     healthy_threshold = 10
   }
-  tags {
-    Name = "${var.prefix}-Pcf Ssh Elb"
-  }
+  tags = "${merge(var.tags, map("Name", format("%s-Pcf Ssh Elb", var.prefix)))}"
 }
 
 resource "aws_elb" "PcfTcpElb" {
@@ -665,7 +661,5 @@ resource "aws_elb" "PcfTcpElb" {
     healthy_threshold = 10
   }
 
-  tags {
-    Name = "${var.prefix}-Pcf Tcp Elb"
-  }
+  tags = "${merge(var.tags, map("Name", format("%s-Pcf Tcp Elb", var.prefix)))}"
 }

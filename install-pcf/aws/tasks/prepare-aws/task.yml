@@ -48,5 +48,6 @@ params:
   nat_ip_az3:
   OPSMAN_ALLOW_SSH_CIDR_RANGES:
   OPSMAN_ALLOW_HTTPS_CIDR_RANGES:
+  tags:
 run:
   path: pcf-pipelines/install-pcf/aws/tasks/prepare-aws/task.sh

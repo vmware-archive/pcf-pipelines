@@ -9,9 +9,8 @@ resource "aws_security_group" "directorSG" {
     name = "${var.prefix}-pcf_director_sg"
     description = "Allow incoming connections for Ops Manager."
     vpc_id = "${aws_vpc.PcfVpc.id}"
-    tags {
-        Name = "${var.prefix}-Ops Manager Director Security Group"
-    }
+
+    tags = "${merge(var.tags, map("Name", format("%s-Ops Manager Director Security Group", var.prefix)))}"
 }
 
 resource "aws_security_group_rule" "allow_directorsg_ingress_default" {
@@ -61,9 +60,9 @@ resource "aws_security_group" "rdsSG" {
     name = "${var.prefix}-pcf_rds_sg"
     description = "Allow incoming connections for RDS."
     vpc_id = "${aws_vpc.PcfVpc.id}"
-    tags {
-        Name = "${var.prefix}-RDS Security Group"
-    }
+
+    tags = "${merge(var.tags, map("Name", format("%s-RDS Security Group", var.prefix)))}"
+
     ingress {
         from_port = 3306
         to_port = 3306
@@ -86,9 +85,9 @@ resource "aws_security_group" "pcfSG" {
     name = "${var.prefix}-pcf_vms_sg"
     description = "Allow connections between PCF VMs."
     vpc_id = "${aws_vpc.PcfVpc.id}"
-    tags {
-        Name = "${var.prefix}-PCF VMs Security Group"
-    }
+
+    tags = "${merge(var.tags, map("Name", format("%s-PCF VMs Security Group", var.prefix)))}"
+
     ingress {
         from_port = 0
         to_port = 0
