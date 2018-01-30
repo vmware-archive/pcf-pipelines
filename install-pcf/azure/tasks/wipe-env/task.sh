@@ -34,6 +34,11 @@ function delete-infrastructure() {
   echo "Executing Terraform Destroy ...."
   echo "=============================================================================================="
 
+  if [[ ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-multi-res-group" ]]; then
+    AZURE_CLIENT_ID=${AZURE_MULTI_RESGROUP_NETWORK_CLIENT_ID}
+    AZURE_CLIENT_SECRET=${AZURE_MULTI_RESGROUP_NETWORK_CLIENT_SECRET}
+  fi
+
   terraform init "pcf-pipelines/install-pcf/azure/terraform/${AZURE_PCF_TERRAFORM_TEMPLATE}"
 
   terraform destroy -force \

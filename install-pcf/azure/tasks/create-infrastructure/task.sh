@@ -2,71 +2,12 @@
 set -e
 
 
-#if [[ ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-multi-res-group" ]]; then
-#  # Get ert subnet if multi-resgroup
-#  az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}
-#  az account set --subscription ${AZURE_SUBSCRIPTION_ID}
-#
-#  INFRA_SUBNET_ID=$(
-#    az network vnet subnet list \
-#      --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
-#      --vnet-name ${AZURE_MULTI_RESGROUP_INFRA_VNET_NAME}  \
-#    | jq -r '.[] | select(.name | contains( "opsman" )) | .id')
-#  echo "INFRA_SUBNET_ID=${INFRA_SUBNET_ID}"
-#
-#
-#  ERT_SUBNET_ID=$(
-#    az network vnet subnet list \
-#      --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
-#      --vnet-name ${AZURE_MULTI_RESGROUP_INFRA_VNET_NAME}  \
-#    | jq -r '.[] | select(.name | contains( "ert" )) | .id')
-#  echo "ERT_SUBNET_ID=${ERT_SUBNET_ID}"
-#
-#
-#  PUB_IP_ID_PCF_LB=$(
-#    az network public-ip show \
-#      --name "${AZURE_TERRAFORM_PREFIX}-web-lb-public-ip" \
-#      --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
-#    | jq -r '.id' )
-#  echo "PUB_IP_ID_PCF_LB=${PUB_IP_ID_PCF_LB}"
-#
-#  PUB_IP_ID_TCP_LB=$(
-#    az network public-ip show \
-#      --name "${AZURE_TERRAFORM_PREFIX}-tcp-lb-public-ip" \
-#      --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
-#    | jq -r '.id' )
-#  echo "PUB_IP_ID_TCP_LB=${PUB_IP_ID_TCP_LB}"
-#
-#  PUB_IP_ID_SSH_PROXY_LB=$(
-#    az network public-ip show \
-#      --name "${AZURE_TERRAFORM_PREFIX}-ssh-proxy-lb-public-ip" \
-#      --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
-#    | jq -r '.id' )
-#  echo "PUB_IP_ID_SSH_PROXY_LB=${PUB_IP_ID_SSH_PROXY_LB}"
-#
-#  PUB_IP_ID_JUMPBOX_VM=$(
-#    az network public-ip show \
-#      --name "${AZURE_TERRAFORM_PREFIX}-jb-lb-public-ip" \
-#      --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
-#    | jq -r '.id' )
-#  echo "PUB_IP_ID_JUMPBOX_VM=${PUB_IP_ID_JUMPBOX_VM}"
-#
-#  PUB_IP_ID_OPSMAN_VM=$(
-#    az network public-ip show \
-#      --name "${AZURE_TERRAFORM_PREFIX}-opsman-public-ip" \
-#      --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
-#    | jq -r '.id' )
-#  echo "PUB_IP_ID_OPSMAN_VM=${PUB_IP_ID_OPSMAN_VM}"
-#
-#else
-#  INFRA_SUBNET_ID=""
-#  ERT_SUBNET_ID=""
-#  PUB_IP_ID_PCF_LB=""
-#  PUB_IP_ID_TCP_LB=""
-#  PUB_IP_ID_SSH_PROXY_LB=""
-#  PUB_IP_ID_JUMPBOX_VM=""
-#  PUB_IP_ID_OPSMAN_VM=""
-#fi
+if [[ ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-multi-res-group" ]]; then
+
+  AZURE_CLIENT_ID=${AZURE_MULTI_RESGROUP_NETWORK_CLIENT_ID}
+  AZURE_CLIENT_SECRET=${AZURE_MULTI_RESGROUP_NETWORK_CLIENT_SECRET}
+
+fi
 
 
 echo "=============================================================================================="

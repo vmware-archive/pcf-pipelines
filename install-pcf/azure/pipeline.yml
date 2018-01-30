@@ -169,6 +169,8 @@ jobs:
       AZURE_TENANT_ID: {{azure_tenant_id}}
       AZURE_CLIENT_ID: {{azure_client_id}}
       AZURE_CLIENT_SECRET: {{azure_client_secret}}
+      AZURE_MULTI_RESGROUP_NETWORK_CLIENT_ID: {{azure_multi_resgroup_network_client_id}}
+      AZURE_MULTI_RESGROUP_NETWORK_CLIENT_SECRET: {{azure_multi_resgroup_network_client_secret}}
       AZURE_REGION: {{azure_region}}
       AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       AZURE_VM_ADMIN: {{azure_vm_admin}}
