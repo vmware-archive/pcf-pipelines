@@ -405,16 +405,16 @@ jobs:
       SMTP_PWD: {{smtp_pwd}}
       SMTP_ENABLE_STARTTLS_AUTO: {{smtp_enable_starttls_auto}}
       SMTP_AUTH_MECHANISM: {{smtp_auth_mechanism}}
-      LDAP_URL:
-      LDAP_USER:
-      LDAP_PWD:
-      SEARCH_BASE:
-      SEARCH_FILTER:
-      GROUP_SEARCH_BASE:
-      GROUP_SEARCH_FILTER:
-      MAIL_ATTR_NAME:
-      FIRST_NAME_ATTR:
-      LAST_NAME_ATTR:
+      LDAP_URL: {{ldap_url}}
+      LDAP_USER: {{ldap_user}}
+      LDAP_PWD: {{ldap_pwd}}
+      SEARCH_BASE: {{search_base}}
+      SEARCH_FILTER: {{search_filter}}
+      GROUP_SEARCH_BASE: {{group_search_base}}
+      GROUP_SEARCH_FILTER: {{group_search_filter}}
+      MAIL_ATTR_NAME: {{mail_attribute_name}}
+      FIRST_NAME_ATTR: {{first_name_attribute}}
+      LAST_NAME_ATTR: {{last_name_attribute}}
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
       SYSTEM_DOMAIN: {{system_domain}}
       APPS_DOMAIN: {{apps_domain}}
@@ -495,6 +495,7 @@ jobs:
       MYSQL_NSX_LB_SECURITY_GROUP: ""
       MYSQL_NSX_LB_PORT: ""
       HAPROXY_FLOATING_IPS: ""
+
 ###########################
 ## Job - Deploy    ERT   ##
 ###########################

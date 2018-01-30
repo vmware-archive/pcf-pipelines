@@ -17,31 +17,25 @@ variable "location" {}
 
 variable "pcf_ert_domain" {}
 
-variable "pub_ip_pcf_lb" {}
 variable "pub_ip_id_pcf_lb" {}
-
-variable "pub_ip_tcp_lb" {}
 variable "pub_ip_id_tcp_lb" {}
-
-variable "pub_ip_ssh_proxy_lb" {}
 variable "pub_ip_id_ssh_proxy_lb" {}
-
-variable "priv_ip_mysql_lb" {}
-variable "priv_ip_opsman_vm" {}
-
-variable "pub_ip_jumpbox_vm" {}
 variable "pub_ip_id_jumpbox_vm" {}
-
-variable "pub_ip_opsman_vm" {}
 variable "pub_ip_id_opsman_vm" {}
 
-variable "subnet_infra_id" {}
+variable "priv_ip_opsman_vm" {}
 
 variable "ops_manager_image_uri" {}
 variable "vm_admin_username" {}
 variable "vm_admin_public_key" {}
 
+variable "infra_subnet_id" {}
 variable "ert_subnet_id" {}
 variable "azure_multi_resgroup_network" {}
 variable "azure_multi_resgroup_pcf" {}
+variable "azure_account_name" {}
+variable "azure_buildpacks_container" {}
+variable "azure_droplets_container" {}
+variable "azure_packages_container" {}
+variable "azure_resources_container" {}
 variable "om_disk_size_in_gb" {}

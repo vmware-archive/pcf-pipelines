@@ -4,7 +4,19 @@ allow_app_ssh_access: false
 # Change to anything other than 'wipe' to bypass the wipe-env job
 arg_wipe: wipe
 
-authentication_mode: internal
+## Authentication type needed. SAML is not presently supported.
+authentication_mode: internal # (internal|ldap) If ldap, specify ldap configuration below.
+first_name_attribute:
+group_search_base:
+group_search_filter:
+last_name_attribute:
+ldap_pwd:
+ldap_url:
+ldap_user:
+mail_attribute_name:
+search_base:
+search_filter:
+
 
 # If the azure_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
 azure_account_name:
