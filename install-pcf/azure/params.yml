@@ -36,6 +36,9 @@ azure_multi_resgroup_infra_subnet_name:
 # Required if using c0-azure-multi-res-group - The virutal network name for your Azure environment
 azure_multi_resgroup_infra_vnet_name:
 
+azure_multi_resgroup_network_client_id:
+azure_multi_resgroup_network_client_secret:
+
 # Required if using c0-azure-multi-res-group - An existing network for your Azure environment
 azure_multi_resgroup_network:
 
@@ -234,6 +237,8 @@ opsman_client_secret: CHANGEME
 
 # Opsman Settings
 opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
+
+opsman_private_ip_address: 192.168.0.4
 
 # PCF Ops Manager minor version to track
 opsman_major_minor_version: ^1\.12\..*$
