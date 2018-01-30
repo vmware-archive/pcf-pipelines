@@ -74,4 +74,3 @@ resource "aws_instance" "nat_az3" {
 
     tags = "${merge(var.tags, map("Name", format("%s-Nat Instance az3", var.prefix)))}"
 }
-}
