@@ -11,7 +11,7 @@ if [[ ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-multi-res-group" ]]; then
     az network vnet subnet list \
       --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
       --vnet-name ${AZURE_MULTI_RESGROUP_INFRA_VNET_NAME}  \
-    | jq -r '.[] | select(.name contains( "opsman" )) | .id')
+    | jq -r '.[] | select(.name | contains( "opsman" )) | .id')
   echo "INFRA_SUBNET_ID=${INFRA_SUBNET_ID}"
 
 
@@ -19,7 +19,7 @@ if [[ ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-multi-res-group" ]]; then
     az network vnet subnet list \
       --resource-group ${AZURE_MULTI_RESGROUP_NETWORK} \
       --vnet-name ${AZURE_MULTI_RESGROUP_INFRA_VNET_NAME}  \
-    | jq -r '.[] | select(.name contains( "ert" )) | .id')
+    | jq -r '.[] | select(.name | contains( "ert" )) | .id')
   echo "ERT_SUBNET_ID=${ERT_SUBNET_ID}"
 
 
