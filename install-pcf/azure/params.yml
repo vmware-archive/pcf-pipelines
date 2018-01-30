@@ -240,6 +240,8 @@ opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with 
 
 opsman_private_ip_address: 192.168.0.4
 
+priv_ip_mysql_lb: 192.168.4.7
+
 # PCF Ops Manager minor version to track
 opsman_major_minor_version: ^1\.12\..*$
 
