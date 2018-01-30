@@ -113,6 +113,7 @@ jobs:
     params:
       ARG_WIPE: {{arg_wipe}}
       AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
+      AZURE_MULTI_RESGROUP_PCF: {{azure_multi_resgroup_pcf}}
       AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
       AZURE_TENANT_ID: {{azure_tenant_id}}
       AZURE_CLIENT_ID: {{azure_client_id}}
