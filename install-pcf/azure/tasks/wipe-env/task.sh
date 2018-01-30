@@ -21,11 +21,11 @@ function delete-opsman-installation() {
 
 function delete-opsman() {
   az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-  local opsman_vms=$(az vm list -g $AZURE_TERRAFORM_PREFIX | jq -r ".[].name | select(. |startswith(\"$AZURE_TERRAFORM_PREFIX-ops-manager\"))")
+  local opsman_vms=$(az vm list -g $AZURE_MULTI_RESGROUP_PCF | jq -r ".[].name | select(. |startswith(\"$AZURE_TERRAFORM_PREFIX-ops-manager\"))")
 
   for om_vm_name in $opsman_vms; do
     echo "Removing $om_vm_name ..."
-    az vm delete --yes --resource-group $AZURE_TERRAFORM_PREFIX --name "$om_vm_name"
+    az vm delete --yes --resource-group $AZURE_MULTI_RESGROUP_PCF --name "$om_vm_name"
   done
 }
 
@@ -62,7 +62,7 @@ function delete-infrastructure() {
     -var "pub_ip_id_opsman_vm=dontcare" \
     -var "pub_ip_jumpbox_vm=dontcare" \
     -var "pub_ip_id_jumpbox_vm=dontcare" \
-    -var "subnet_infra_id=dontcare" \
+    -var "infra_subnet_id=dontcare" \
     -var "ops_manager_image_uri=dontcare" \
     -var "vm_admin_username=dontcare" \
     -var "vm_admin_public_key=dontcare" \
