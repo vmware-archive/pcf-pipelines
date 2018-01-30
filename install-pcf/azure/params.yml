@@ -30,6 +30,9 @@ azure_multi_resgroup_network:
 # Required if using c0-azure-multi-res-group - The resource group name for your Azure environment
 azure_multi_resgroup_pcf:
 
+# Private IP for the Operations Manager VM
+azure_opsman_priv_ip: 192.168.0.4
+
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_account_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
 azure_packages_container:
 
@@ -240,9 +243,6 @@ pcf_ssh_key_priv: |
 
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
-
-# Private IP for the Operations Manager VM
-priv_ip_opsman_vm: 192.168.0.4
 
 # Request timeout for gorouter
 router_request_timeout_in_seconds: 900
