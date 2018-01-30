@@ -241,6 +241,9 @@ pcf_ssh_key_priv: |
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
 
+# Private IP for the Operations Manager VM
+priv_ip_opsman_vm: 192.168.0.4
+
 # Request timeout for gorouter
 router_request_timeout_in_seconds: 900
 

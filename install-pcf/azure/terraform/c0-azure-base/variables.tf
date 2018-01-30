@@ -33,3 +33,4 @@ variable "azure_droplets_container" {}
 variable "azure_packages_container" {}
 variable "azure_resources_container" {}
 variable "om_disk_size_in_gb" {}
+variable "priv_ip_opsman_vm" {}
