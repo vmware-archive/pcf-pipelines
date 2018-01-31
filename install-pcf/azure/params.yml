@@ -36,6 +36,7 @@ azure_multi_resgroup_infra_subnet_name:
 # Required if using c0-azure-multi-res-group - The virutal network name for your Azure environment
 azure_multi_resgroup_infra_vnet_name:
 
+# Required if using c0-azure-multi-res-group - Must have Contributor access for both resource groups
 azure_multi_resgroup_network_client_id:
 azure_multi_resgroup_network_client_secret:
 
