@@ -160,7 +160,7 @@ resource "azurerm_lb_rule" "web-http-rule" {
 
 // TCP LB
 resource "azurerm_lb_rule" "tcp-rule" {
-  count               = 150
+  count               = 2 // 150
   name                = "tcp-rule-${count.index + 1024}"
   location            = "${var.location}"
   resource_group_name = "${var.azure_multi_resgroup_pcf}"
