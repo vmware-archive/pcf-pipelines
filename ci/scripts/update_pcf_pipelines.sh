@@ -61,6 +61,6 @@ EOF
 fly -tci sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml \
   -l $tmpfile \
   -l <(lpass show pcf-pipelines-params --notes) \
-  -l <(lpass show czero-github --notes) \
+  -l <(lpass show pivotal-norm-github --notes) \
   -l <(lpass show czero-pivnet --notes) \
   -l <(lpass show minio-lrpiec03 --notes)
