@@ -266,6 +266,7 @@ jobs:
         AZURE_CLIENT_ID: {{azure_client_id}}
         AZURE_CLIENT_SECRET: {{azure_client_secret}}
         AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
+        AZURE_MULTI_RESGROUP_PCF: {{azure_multi_resgroup_pcf}}
         AZURE_TERRAFORM_OPSMAN_PRIV_IP: {{azure_opsman_priv_ip}}
         AZURE_TERRAFORM_SUBNET_INFRA_CIDR: {{azure_terraform_subnet_infra_cidr}}
         AZURE_TERRAFORM_SUBNET_INFRA_RESERVED: {{azure_terraform_subnet_infra_reserved}}
