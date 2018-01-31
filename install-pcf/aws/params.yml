@@ -91,7 +91,7 @@ ERT_DOMAIN: CHANGEME
 ert_errands_to_disable: none
 
 # PCF Elastic Runtime minor version to track
-ert_major_minor_version: ^1\.12\..*$
+ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$ 
 
 # Optional - if your git repo requires an SSH key.
 git_private_key:
@@ -166,7 +166,7 @@ opsman_allow_ssh_cidr_ranges:
 opsman_domain_or_ip_address: CHANGEME
 
 # PCF Ops Manager minor version to track
-opsman_major_minor_version: ^1\.12\..*$
+opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # Private Key of the keypair uploaded to AWS to be used for Operations Manager, NAT VMs.
 PEM: CHANGEME

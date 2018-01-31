@@ -73,7 +73,7 @@ function delete-infrastructure() {
     -var "vm_admin_public_key=dontcare" \
     -var "azure_multi_resgroup_network=dontcare" \
     -var "azure_multi_resgroup_pcf=dontcare" \
-    -var "priv_ip_opsman_vm=dontcare" \
+    -var "azure_opsman_priv_ip=dontcare" \
     -var "azure_account_name=dontcare" \
     -var "azure_buildpacks_container=dontcare" \
     -var "azure_droplets_container=dontcare" \

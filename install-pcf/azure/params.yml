@@ -46,6 +46,9 @@ azure_multi_resgroup_network:
 # Required if using c0-azure-multi-res-group - The resource group name for your Azure environment
 azure_multi_resgroup_pcf:
 
+# Private IP for the Operations Manager VM
+azure_opsman_priv_ip: 192.168.0.4
+
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_account_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
 azure_packages_container:
 
@@ -127,7 +130,7 @@ disable_http_proxy: false
 disable_insecure_cookies: false
 
 # PCF Elastic Runtime minor version to track
-ert_major_minor_version: ^1\.12\..*$
+ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
@@ -144,7 +147,8 @@ haproxy_backend_ca:
 # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_forward_tls: enable
 
-ha_proxy_lb_name: CHANGEME
+# The lb value can be obtained by prepending "web-lb" with "azure_terraform_prefix". For example, if your "azure_terraform_prefix" is "test", then the "ha_proxy_lb_name" is "test-web-lb".
+ha_proxy_lb_name: CHANGEME 
 
 # Instances
 ## These resources can take any parameter made available in
@@ -244,7 +248,7 @@ opsman_private_ip_address: 192.168.0.4
 priv_ip_mysql_lb: 192.168.4.7
 
 # PCF Ops Manager minor version to track
-opsman_major_minor_version: ^1\.12\..*$
+opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # SAML Service Credential provider Cert and Key, if the string is blank, then the pipeline will auto generate certs
 pcf_ert_saml_cert:

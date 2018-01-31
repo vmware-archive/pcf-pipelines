@@ -53,7 +53,7 @@ write_params $tmpfile "" "upgrade_ert_vsphere_slot1_params" 'vsphere-slot1/upgra
 write_params $tmpfile "" "upgrade_ops_manager_vsphere_slot1_params" 'vsphere-slot1/upgrade-ops-manager-params'
 write_params $tmpfile "" "create_offline_pinned_pipelines_params" 'create-offline-pinned-pipelines-params'
 write_params $tmpfile "" "unpack_pcf_pipelines_combined_params" 'unpack-pcf-pipelines-combined-params'
-write_params $tmpfile "  " "install_pcf_pipeline_params" 'vsphere-slot6/install-pcf-params'
+write_params $tmpfile "  " "install_pcf_pipeline_params" 'rc-vsphere-offline-install/install-pcf-params'
 cat >> $tmpfile <<EOF
   install_pcf_pipeline_name: rc-install-pcf-vsphere-offline
 EOF

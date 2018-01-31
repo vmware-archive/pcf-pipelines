@@ -63,10 +63,10 @@ the `Contributor` Role on the target Azure Project.
 4. Update `pcf-pipelines/install-pcf/azure/params.yml` and replace all variables/parameters.
 
     - The sample pipeline params file includes 2 params that set the major/minor versions of
-      OpsMan and ERT that will be pulled.  They will typically default to the latest RC/GA available tiles.
+      OpsMan and ERT that will be pulled.  They will typically default to the latest available tiles.
       ```
-      opsman_major_minor_version: '1\.11\..*'
-      ert_major_minor_version: '1\.11\..*'
+      opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
+      ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$ 
       ```
 
 5. Log into concourse and create the pipeline.

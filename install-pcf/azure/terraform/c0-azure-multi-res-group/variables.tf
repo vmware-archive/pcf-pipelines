@@ -23,8 +23,8 @@ variable "azure_terraform_subnet_ert_cidr" {}
 variable "azure_terraform_subnet_services1_cidr" {}
 variable "azure_terraform_subnet_dynamic_services_cidr" {}
 
-variable "priv_ip_opsman_vm" {}
-variable "priv_ip_mysql_lb" {}
+variable "azure_opsman_priv_ip" {}
+variable "azure_priv_ip_mysql_lb" {}
 
 variable "ops_manager_image_uri" {}
 variable "vm_admin_username" {}
