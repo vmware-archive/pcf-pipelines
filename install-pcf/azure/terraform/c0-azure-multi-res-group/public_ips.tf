@@ -9,6 +9,9 @@ resource "azurerm_public_ip" "tcp-lb-public-ip" {
   public_ip_address_allocation = "static"
 }
 
+// data sections added to address issue in azure terraform 1.1.0
+// these are not normally necessary, but are used as a workaround for the issue below:
+//   https://github.com/terraform-providers/terraform-provider-azurerm/issues/771
 data "azurerm_public_ip" "tcp-lb-public-ip" {
   name                = "${var.env_name}-tcp-lb-public-ip"
   resource_group_name = "${var.azure_multi_resgroup_network}"
