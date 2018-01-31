@@ -48,10 +48,10 @@ resource "azurerm_public_ip" "ssh-proxy-lb-public-ip" {
   public_ip_address_allocation = "static"
 }
 
-data "azurerm_public_ip" "ssh-lb-public-ip" {
-  name                = "${var.env_name}-ssh-lb-public-ip"
+data "azurerm_public_ip" "ssh-proxy-lb-public-ip" {
+  name                = "${var.env_name}-ssh-proxy-lb-public-ip"
   resource_group_name = "${var.azure_multi_resgroup_network}"
-  depends_on          = ["azurerm_public_ip.ssh-lb-public-ip"]
+  depends_on          = ["azurerm_public_ip.ssh-proxy-lb-public-ip"]
 }
 
 resource "azurerm_public_ip" "jb-lb-public-ip" {
