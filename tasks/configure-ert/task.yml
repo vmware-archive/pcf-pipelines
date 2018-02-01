@@ -15,7 +15,9 @@ run:
 
 params:
   pcf_iaas:
-  pcf_ert_domain:
+  PCF_ERT_DOMAIN:
+  SYSTEM_DOMAIN:
+  APPS_DOMAIN:
   OPSMAN_CLIENT_ID:
   OPSMAN_CLIENT_SECRET:
   OPS_MGR_USR:

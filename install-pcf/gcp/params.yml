@@ -46,6 +46,11 @@ db_silk_username: CHANGEME
 db_uaa_password: CHANGEME
 db_uaa_username: CHANGEME
 
+# Domain Names for ERT
+pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
+system_domain: CHANGEME # e.g. system.pcf.example.com
+apps_domain: CHANGEME   # e.g. apps.pcf.example.com
+
 # Errands to disable prior to deploying ERT
 # Valid values:
 #   all
@@ -164,10 +169,6 @@ opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
 # Optional PEM-encoded certificates to add to BOSH director
 opsman_trusted_certs: |
-
-# Elastic Runtime Domain
-pcf_ert_domain: CHANGEME # This is the top level domain that ERT apps and services will be accessible with
-                         # e.g.: if the apps domain is apps.pcf.example.org then pcf_ert_domain should be pcf.example.org
 
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME

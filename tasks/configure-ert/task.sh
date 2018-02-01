@@ -1,14 +1,14 @@
 #!/bin/bash
 set -eu
 
-export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$pcf_ert_domain"
+export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$PCF_ERT_DOMAIN"
 
 source pcf-pipelines/functions/generate_cert.sh
 
 saml_domains=(
-  "*.sys.${pcf_ert_domain}"
-  "*.login.sys.${pcf_ert_domain}"
-  "*.uaa.sys.${pcf_ert_domain}"
+  "*.${SYSTEM_DOMAIN}"
+  "*.login.${SYSTEM_DOMAIN}"
+  "*.uaa.${SYSTEM_DOMAIN}"
 )
 
 saml_certificates=$(generate_cert "${saml_domains[*]}")
@@ -21,8 +21,8 @@ NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.lo
 if [[ "${pcf_iaas}" == "aws" ]]; then
   if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
     domains=(
-      "*.sys.${pcf_ert_domain}"
-      "*.cfapps.${pcf_ert_domain}"
+      "*.${SYSTEM_DOMAIN}"
+      "*.${APPS_DOMAIN}"
     )
 
     certificate=$(generate_cert "${domains[*]}")
@@ -153,7 +153,7 @@ cf_properties=$(
     --arg routing_tls_termination $ROUTING_TLS_TERMINATION \
     --arg security_acknowledgement "$SECURITY_ACKNOWLEDGEMENT" \
     --arg iaas $pcf_iaas \
-    --arg pcf_ert_domain "$pcf_ert_domain" \
+    --arg pcf_ert_domain "$PCF_ERT_DOMAIN" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
     --arg db_host "$db_host" \
     --arg db_locket_username "$db_locket_username" \
@@ -247,8 +247,8 @@ cf_properties=$(
       ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
       ".properties.uaa_database.external.uaa_password": { "value": { "secret": $db_uaa_password } },
       ".properties.push_apps_manager_company_name": { "value": "pcf-\($iaas)" },
-      ".cloud_controller.system_domain": { "value": "sys.\($pcf_ert_domain)" },
-      ".cloud_controller.apps_domain": { "value": "cfapps.\($pcf_ert_domain)" },
+      ".cloud_controller.system_domain": { "value": $SYSTEM_DOMAIN },
+      ".cloud_controller.apps_domain": { "value": $APPS_DOMAIN },
       ".cloud_controller.allow_app_ssh_access": { "value": true },
       ".cloud_controller.security_event_logging_enabled": { "value": true },
       ".router.disable_insecure_cookies": { "value": false },

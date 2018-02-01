@@ -23,11 +23,11 @@ output "ops_manager_dns" {
 }
 
 output "sys_domain" {
-  value = "sys.${var.pcf_ert_domain}"
+  value = "${var.system_domain}"
 }
 
 output "apps_domain" {
-  value = "cfapps.${var.pcf_ert_domain}"
+  value = "${var.apps_domain}"
 }
 
 output "tcp_domain" {

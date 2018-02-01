@@ -18,6 +18,8 @@ variable "tenant_id" {}
 variable "location" {}
 
 variable "pcf_ert_domain" {}
+variable "apps_domain" {}
+variable "system_domain" {}
 
 variable "pub_ip_pcf_lb" {}
 variable "pub_ip_id_pcf_lb" {}

@@ -12,10 +12,10 @@ pcf_opsman_image_name=$(echo $pcf_opsman_bucket_path | sed 's%.*/\(.*\).tar.gz%o
 NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
 
 if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
-  echo "Generating Self Signed Certs for sys.${PCF_ERT_DOMAIN} & cfapps.${PCF_ERT_DOMAIN} ..."
-  pcf-pipelines/scripts/gen_ssl_certs.sh "sys.${PCF_ERT_DOMAIN}" "cfapps.${PCF_ERT_DOMAIN}"
-  pcf_ert_ssl_cert=$(cat sys.${PCF_ERT_DOMAIN}.crt)
-  pcf_ert_ssl_key=$(cat sys.${PCF_ERT_DOMAIN}.key)
+  echo "Generating Self Signed Certs for ${SYSTEM_DOMAIN} & ${APPS_DOMAIN} ..."
+  pcf-pipelines/scripts/gen_ssl_certs.sh "${SYSTEM_DOMAIN}" "${APPS_DOMAIN}"
+  pcf_ert_ssl_cert=$(cat ${SYSTEM_DOMAIN}.crt)
+  pcf_ert_ssl_key=$(cat ${SYSTEM_DOMAIN}.key)
 else
   pcf_ert_ssl_cert=`echo $NETWORKING_POE_SSL_CERTS_JSON | jq '.[0].certificate.cert_pem'`
   pcf_ert_ssl_key=`echo $NETWORKING_POE_SSL_CERTS_JSON | jq '.[0].certificate.private_key_pem'`
@@ -37,6 +37,8 @@ terraform plan \
   -var "prefix=${GCP_RESOURCE_PREFIX}" \
   -var "pcf_opsman_image_name=${pcf_opsman_image_name}" \
   -var "pcf_ert_domain=${PCF_ERT_DOMAIN}" \
+  -var "system_domain=${SYSTEM_DOMAIN}" \
+  -var "apps_domain=${APPS_DOMAIN}" \
   -var "pcf_ert_ssl_cert=${pcf_ert_ssl_cert}" \
   -var "pcf_ert_ssl_key=${pcf_ert_ssl_key}" \
   -var "db_app_usage_service_username=${DB_APP_USAGE_SERVICE_USERNAME}" \
@@ -82,11 +84,11 @@ cd -
 
 echo "Please configure DNS as follows:"
 echo "----------------------------------------------------------------------------------------------"
-echo "*.sys.${PCF_ERT_DOMAIN} == ${pub_ip_global_pcf}"
-echo "*.cfapps.${PCF_ERT_DOMAIN} == ${pub_ip_global_pcf}"
-echo "ssh.sys.${PCF_ERT_DOMAIN} == ${pub_ip_ssh_and_doppler}"
-echo "doppler.sys.${PCF_ERT_DOMAIN} == ${pub_ip_ssh_and_doppler}"
-echo "loggregator.sys.${PCF_ERT_DOMAIN} == ${pub_ip_ssh_and_doppler}"
+echo "*.${SYSTEM_DOMAIN} == ${pub_ip_global_pcf}"
+echo "*.${APPS_DOMAIN} == ${pub_ip_global_pcf}"
+echo "ssh.${SYSTEM_DOMAIN} == ${pub_ip_ssh_and_doppler}"
+echo "doppler.${SYSTEM_DOMAIN} == ${pub_ip_ssh_and_doppler}"
+echo "loggregator.${SYSTEM_DOMAIN} == ${pub_ip_ssh_and_doppler}"
 echo "tcp.${PCF_ERT_DOMAIN} == ${pub_ip_ssh_tcp_lb}"
 echo "opsman.${PCF_ERT_DOMAIN} == ${pub_ip_opsman}"
 echo "----------------------------------------------------------------------------------------------"

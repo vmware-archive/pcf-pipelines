@@ -26,7 +26,9 @@ echo $MYSQL_MONITOR_EMAIL > /dev/null
 
 cat > params.yml <<EOF
 S3_OUTPUT_BUCKET: $(output s3_bucket)
-ERT_DOMAIN: $ert_domain
+PCF_ERT_DOMAIN: $pcf_ert_domain
+SYSTEM_DOMAIN: $system_domain
+APPS_DOMAIN: $apps_domain
 OPSMAN_DOMAIN_OR_IP_ADDRESS: opsman.$ert_domain
 ROUTE_53_ZONE_ID: $(output zone_id)
 aws_key_name: $(output opsman_key_pair_name)

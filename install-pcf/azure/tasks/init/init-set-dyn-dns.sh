@@ -57,10 +57,10 @@ priv_ip_mysql=$(az network lb frontend-ip list -g ${resgroup_lookup_pcf} --lb-na
 
 fn_set_dyn_dns "api" "$pub_ip_pcf_lb"
 fn_set_dyn_dns "opsman" "$pub_ip_opsman_vm"
-fn_set_dyn_dns "ssh.sys" "$pub_ip_ssh_proxy_lb"
+fn_set_dyn_dns "ssh.${system_domain}" "$pub_ip_ssh_proxy_lb"
 fn_set_dyn_dns "tcp" "$pub_ip_tcp_lb"
 fn_set_dyn_dns "jumpbox" "$pub_ip_jumpbox_vm"
-fn_set_dyn_dns "mysql-proxy-lb.sys" "$priv_ip_mysql"
+fn_set_dyn_dns "mysql-proxy-lb.${system_domain}" "$priv_ip_mysql"
 
 echo
 echo "----------------------------------------------------------------------------------------------"
