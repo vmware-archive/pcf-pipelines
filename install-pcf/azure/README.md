@@ -63,10 +63,10 @@ the `Contributor` Role on the target Azure Project.
 4. Update `pcf-pipelines/install-pcf/azure/params.yml` and replace all variables/parameters.
 
     - The sample pipeline params file includes 2 params that set the major/minor versions of
-      OpsMan and ERT that will be pulled.  They will typically default to the latest RC/GA available tiles.
+      OpsMan and ERT that will be pulled.  They will typically default to the latest available tiles.
       ```
-      opsman_major_minor_version: '1\.11\..*'
-      ert_major_minor_version: '1\.11\..*'
+      opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
+      ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$ 
       ```
 
 5. Log into concourse and create the pipeline.
@@ -123,4 +123,6 @@ is resolvable, run the following:
 ## Known Issues
 
 The multi resource group functionality is still WIP. Please see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/184) for more details. 
+
+Terraform introduced a [bug](https://github.com/terraform-providers/terraform-provider-azurerm/pull/772) recently in the `DNSSettings` property. We've pushed out a [fix](https://www.pivotaltracker.com/story/show/154810872) but we’ve yet to release a rc. If you are using v23, you should lock the provider version to `1.0.0`
 

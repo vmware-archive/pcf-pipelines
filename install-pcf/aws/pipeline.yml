@@ -268,8 +268,6 @@ jobs:
       OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
-      pcf_ert_ssl_cert: {{ERT_SSL_CERT}}
-      pcf_ert_ssl_key: {{ERT_SSL_KEY}}
       pcf_az_1: {{aws_az1}}
       pcf_az_2: {{aws_az2}}
       pcf_az_3: {{aws_az3}}
@@ -294,8 +292,12 @@ jobs:
       ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
       HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
       routing_disable_http: {{routing_disable_http}}
+      ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
+      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
+      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       # IaaS Specific for GCP only
       gcp_storage_access_key:
       gcp_storage_secret_key:

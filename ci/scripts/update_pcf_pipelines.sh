@@ -48,12 +48,12 @@ write_params $tmpfile "" "upgrade_ops_manager_gcp_current_params" 'lre1-gcp/opsm
 write_params $tmpfile "" "install_pcf_azure_current_params" 'lre1-azure/install-pcf-params'
 write_params $tmpfile "" "install_pcf_azure_rc_params" 'rc-azure-install/install-pcf-params'
 write_params $tmpfile "" "install_pcf_vsphere_slot1_params" 'vsphere-slot1/install-pcf-params'
-write_params $tmpfile "" "install_pcf_vsphere_slot9_params" 'lrpiec0-slot9/install-pcf-params'
+write_params $tmpfile "" "install_pcf_vsphere_rc_params" 'rc-vsphere-install/install-pcf-params'
 write_params $tmpfile "" "upgrade_ert_vsphere_slot1_params" 'vsphere-slot1/upgrade-ert-params'
 write_params $tmpfile "" "upgrade_ops_manager_vsphere_slot1_params" 'vsphere-slot1/upgrade-ops-manager-params'
 write_params $tmpfile "" "create_offline_pinned_pipelines_params" 'create-offline-pinned-pipelines-params'
 write_params $tmpfile "" "unpack_pcf_pipelines_combined_params" 'unpack-pcf-pipelines-combined-params'
-write_params $tmpfile "  " "install_pcf_pipeline_params" 'vsphere-slot6/install-pcf-params'
+write_params $tmpfile "  " "install_pcf_pipeline_params" 'rc-vsphere-offline-install/install-pcf-params'
 cat >> $tmpfile <<EOF
   install_pcf_pipeline_name: rc-install-pcf-vsphere-offline
 EOF
@@ -61,6 +61,6 @@ EOF
 fly -tci sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml \
   -l $tmpfile \
   -l <(lpass show pcf-pipelines-params --notes) \
-  -l <(lpass show czero-github --notes) \
+  -l <(lpass show pivotal-norm-github --notes) \
   -l <(lpass show czero-pivnet --notes) \
   -l <(lpass show minio-lrpiec03 --notes)
