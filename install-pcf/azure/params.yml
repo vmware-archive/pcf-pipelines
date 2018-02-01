@@ -101,9 +101,9 @@ default_quota_max_number_services: 1000
 default_quota_memory_limit_mb: 10240
 
 # Domain Names for ERT
-apps_domain: CHANGEME # This is usually cfapps.${pcf_ert_domain}
 pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
-system_domain: CHANGEME # This is usually sys.${pcf_ert_domain}
+system_domain: CHANGEME # e.g. system.pcf.example.com
+apps_domain: CHANGEME   # e.g. apps.pcf.example.com
 
 deployment_network_name: "ert"
 

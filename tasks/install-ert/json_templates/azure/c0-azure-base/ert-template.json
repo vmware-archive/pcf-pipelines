@@ -50,10 +50,10 @@
         "value": "disable"
       },
       ".cloud_controller.system_domain": {
-        "value": "sys.{{pcf_ert_domain}}"
+        "value": "{{system_domain}}"
       },
       ".cloud_controller.apps_domain": {
-        "value": "cfapps.{{pcf_ert_domain}}"
+        "value": "{{apps_domain}}"
       },
       ".cloud_controller.allow_app_ssh_access": {
         "value": true
@@ -68,7 +68,7 @@
         "value": "{{terraform_prefix}}"
       },
       ".mysql_proxy.service_hostname": {
-        "value": "mysql-proxy-lb.sys.{{pcf_ert_domain}}"
+        "value": "mysql-proxy-lb.{{system_domain}}"
       },
       ".mysql_monitor.recipient_email": {
         "value": "c0-coreteam@pivotal.io"
