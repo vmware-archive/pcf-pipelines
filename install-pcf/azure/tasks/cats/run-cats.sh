@@ -63,8 +63,8 @@ function fn_compile_cats {
 
   # Setup CATs Config
   echo "{
-    \"api\": \"api.sys.${pcf_ert_domain}\",
-    \"apps_domain\": \"cfapps.${pcf_ert_domain}\",
+    \"api\": \"api.${system_domain}\",
+    \"apps_domain\": \"${apps_domain}\",
     \"admin_user\": \"${admin_user}\",
     \"admin_password\": \"${admin_password}\",
     \"skip_ssl_validation\": true,
