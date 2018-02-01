@@ -26,3 +26,5 @@ params:
   azure_multi_resgroup_network:
   azure_multi_resgroup_pcf:
   pcf_ert_domain:
+  system_domain:
+  apps_domain:

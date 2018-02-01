@@ -120,6 +120,8 @@ jobs:
       GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
       GCP_STORAGE_BUCKET_LOCATION: {{gcp_storage_bucket_location}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
+      SYSTEM_DOMAIN: {{system_domain}}
+      APPS_DOMAIN: {{apps_domain}}
       NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       DB_APP_USAGE_SERVICE_USERNAME: {{db_app_usage_service_username}}
       DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
@@ -257,7 +259,9 @@ jobs:
       pcf_az_3: {{gcp_zone_3}}
       gcp_storage_access_key: {{gcp_storage_access_key}}
       gcp_storage_secret_key: {{gcp_storage_secret_key}}
-      pcf_ert_domain: {{pcf_ert_domain}}
+      PCF_ERT_DOMAIN: {{pcf_ert_domain}}
+      SYSTEM_DOMAIN: {{system_domain}}
+      APPS_DOMAIN: {{apps_domain}}
       OPSMAN_CLIENT_ID: {{opsman_client_id}}
       OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
