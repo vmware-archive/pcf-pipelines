@@ -24,6 +24,8 @@ params:
   aws_az1:
   aws_az2:
   aws_az3:
+  sytem_domain:
+  apps_domain:
   route53_zone_id:
   vpc_cidr:
   public_subnet_cidr_az1:
