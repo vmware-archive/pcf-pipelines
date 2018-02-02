@@ -51,6 +51,9 @@ terraform destroy \
   -var "db_master_username=dontcare" \
   -var "db_master_password=dontcare" \
   -var "prefix=dontcare" \
+  -var "pcf_ert_domain=dontcare" \
+  -var "system_domain=dontcare" \
+  -var "apps_domain=dontcare" \
   -var "opsman_allow_ssh=0" \
   -var "opsman_allow_ssh_cidr_ranges=[]" \
   -var "opsman_allow_https=0" \
