@@ -272,7 +272,7 @@ router_request_timeout_in_seconds: 900
 routing_custom_ca_certificates:
 
 # Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
-routing_tls_termination: load_balancer
+routing_tls_termination: ha_proxy
 
 
 # Setting appropriate Application Security Groups is critical for a secure
