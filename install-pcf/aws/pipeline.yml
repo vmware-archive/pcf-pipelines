@@ -101,6 +101,8 @@ jobs:
       aws_az1: {{aws_az1}}
       aws_az2: {{aws_az2}}
       aws_az3: {{aws_az3}}
+      SYSTEM_DOMAIN: {{system_domain}}
+      APPS_DOMAIN: {{apps_domain}}
       route53_zone_id: {{ROUTE_53_ZONE_ID}}
       vpc_cidr: {{vpc_cidr}}
       public_subnet_cidr_az1: {{public_subnet_cidr_az1}}
