@@ -154,6 +154,8 @@ cf_properties=$(
     --arg security_acknowledgement "$SECURITY_ACKNOWLEDGEMENT" \
     --arg iaas $pcf_iaas \
     --arg pcf_ert_domain "$PCF_ERT_DOMAIN" \
+    --arg system_domain "$SYSTEM_DOMAIN"\
+    --arg apps_domain "$APPS_DOMAIN" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
     --arg db_host "$db_host" \
     --arg db_locket_username "$db_locket_username" \
@@ -247,8 +249,8 @@ cf_properties=$(
       ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
       ".properties.uaa_database.external.uaa_password": { "value": { "secret": $db_uaa_password } },
       ".properties.push_apps_manager_company_name": { "value": "pcf-\($iaas)" },
-      ".cloud_controller.system_domain": { "value": $SYSTEM_DOMAIN },
-      ".cloud_controller.apps_domain": { "value": $APPS_DOMAIN },
+      ".cloud_controller.system_domain": { "value": $system_domain },
+      ".cloud_controller.apps_domain": { "value": $apps_domain },
       ".cloud_controller.allow_app_ssh_access": { "value": true },
       ".cloud_controller.security_event_logging_enabled": { "value": true },
       ".router.disable_insecure_cookies": { "value": false },
