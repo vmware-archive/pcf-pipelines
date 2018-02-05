@@ -15,7 +15,7 @@ resource "google_dns_record_set" "ops-manager-dns" {
 }
 
 resource "google_dns_record_set" "wildcard-sys-dns" {
-  name = "*.${var.system_domain}"
+  name = "*.${var.system_domain}."
   type = "A"
   ttl  = 300
 
@@ -25,7 +25,7 @@ resource "google_dns_record_set" "wildcard-sys-dns" {
 }
 
 resource "google_dns_record_set" "wildcard-apps-dns" {
-  name = "*.${var.apps_domain}"
+  name = "*.${var.apps_domain}."
   type = "A"
   ttl  = 300
 
@@ -35,7 +35,7 @@ resource "google_dns_record_set" "wildcard-apps-dns" {
 }
 
 resource "google_dns_record_set" "app-ssh-dns" {
-  name = "ssh.${var.system_domain}"
+  name = "ssh.${var.system_domain}."
   type = "A"
   ttl  = 300
 
@@ -45,7 +45,7 @@ resource "google_dns_record_set" "app-ssh-dns" {
 }
 
 resource "google_dns_record_set" "doppler-dns" {
-  name = "doppler.${var.system_domain}"
+  name = "doppler.${var.system_domain}."
   type = "A"
   ttl  = 300
 
@@ -55,7 +55,7 @@ resource "google_dns_record_set" "doppler-dns" {
 }
 
 resource "google_dns_record_set" "loggregator-dns" {
-  name = "loggregator.${var.system_domain}"
+  name = "loggregator.${var.system_domain}."
   type = "A"
   ttl  = 300
 
