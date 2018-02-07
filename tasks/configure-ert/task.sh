@@ -140,8 +140,6 @@ cf_properties=$(
     --arg terraform_prefix $terraform_prefix \
     --arg singleton_availability_zone "$pcf_az_1" \
     --arg other_availability_zones "$pcf_az_1,$pcf_az_2,$pcf_az_3" \
-    --arg cert_pem "$pcf_ert_ssl_cert" \
-    --arg private_key_pem "$pcf_ert_ssl_key" \
     --arg saml_cert_pem "$saml_cert_pem" \
     --arg saml_key_pem "$saml_key_pem" \
     --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
