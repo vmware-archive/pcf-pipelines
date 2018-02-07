@@ -16,8 +16,7 @@ enabled_errands=$(
     --username "$OPSMAN_USERNAME" \
     --password "$OPSMAN_PASSWORD" \
     errands \
-    --product-name "$PRODUCT_NAME" |
-  tail -n+4 | head -n-1 | grep -v false | cut -d'|' -f2 | tr -d ' '
+    --product-name "$PRODUCT_NAME" | egrep '^\| [a-z]+' | cut -d" " -f 2
 )
 
 if [[ "$ERRANDS_TO_DISABLE" == "all" ]]; then

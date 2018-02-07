@@ -76,6 +76,9 @@ pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
 system_domain: CHANGEME # e.g. system.pcf.example.com
 apps_domain: CHANGEME   # e.g. apps.pcf.example.com
 
+# Set to true to enable all errands, false to disable all or leave blank to keep states the same.
+enable_errands:
+
 # Errands to disable prior to deploying ERT
 # Valid values:
 #   all

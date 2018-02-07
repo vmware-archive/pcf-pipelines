@@ -259,7 +259,7 @@ jobs:
     - get: pcf-pipelines
     - get: terraform-state
       trigger: true
-      passed: [upload-ert]
+#      passed: [upload-ert]
 
   - task: configure-ert
     file: pcf-pipelines/tasks/configure-ert/task.yml
@@ -342,8 +342,8 @@ jobs:
       azure_packages_container:
       azure_resources_container:
 
-  - task: disable-errands
-    file: pcf-pipelines/tasks/disable-errands/task.yml
+  - task: toggle-errands
+    file: pcf-pipelines/tasks/toggle-errands/task.yml
     params:
       PRODUCT_NAME: cf
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
@@ -351,7 +351,7 @@ jobs:
       OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
-      ERRANDS_TO_DISABLE: {{ert_errands_to_disable}}
+      ENABLE_ERRANDS: {{enable_errands}}
 
   - task: deploy-ert
     file: pcf-pipelines/tasks/apply-changes/task.yml
