@@ -16,6 +16,12 @@ else
   exit 1
 fi
 
+# Should the slug contain more than one product, pick only the first.
+FILE_PATH=`find ./pivnet-product -name *.pivotal | sort | head -1`
+unzip $FILE_PATH metadata/*
+
+PRODUCT_NAME="$(cat metadata/*.yml | grep '^name' | cut -d' ' -f 2)"
+
 product_errands=$(
   om-linux \
     --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \

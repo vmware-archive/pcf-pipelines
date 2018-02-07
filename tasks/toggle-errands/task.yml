@@ -7,15 +7,15 @@ image_resource:
 
 inputs:
 - name: pcf-pipelines
+- name: pivnet-product
 
 params:
   ENABLE_ERRANDS:
   OPSMAN_CLIENT_ID:
   OPSMAN_CLIENT_SECRET:
-  OPSMAN_DOMAIN_OR_IP_ADDRESS:
   OPSMAN_PASSWORD:
   OPSMAN_USERNAME:
-  PRODUCT_NAME:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
 
 run:
   path: pcf-pipelines/tasks/toggle-errands/task.sh
