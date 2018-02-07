@@ -2,7 +2,7 @@
 
 set -eu
 
-if [[ -z "$ENABLE_ERRANDS" ]]; then
+if [[ -z "$ENABLE_ERRANDS" || "$ENABLE_ERRANDS" == null ]]; then
   echo Nothing to do.
   exit 0
 fi
@@ -35,7 +35,7 @@ product_errands=$(
 )
 
 while read errand; do
-  echo "toggling $errand state..."
+  echo "toggling errands..."
   om-linux \
     --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
     --skip-ssl-validation \
