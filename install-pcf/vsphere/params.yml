@@ -310,11 +310,11 @@ om_vm_power_state: true
 # Optional DNS name for Ops Director. Should be reachable from all networks.
 ops_dir_hostname:
 
-# Leave opsman_client_id/opsman_client_secret blank; opsman_admin_username/opsman_admin_password needs to be specified
+# opsman_admin_username/opsman_admin_password needs to be specified
 opsman_admin_password: CHANGEME       # Password for Ops Manager admin account
 opsman_admin_username: CHANGEME       # Username for Ops Manager admin account
-opsman_client_id:             # Client ID for Ops Manager admin account
-opsman_client_secret:         # Client Secret for Ops Manager admin account
+opsman_client_id:             # leave blank
+opsman_client_secret:         # leave blank
 
 # Disk type for Ops Manager VM (thick|thin)
 opsman_disk_type: “thin”
