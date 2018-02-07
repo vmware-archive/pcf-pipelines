@@ -63,7 +63,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_1" {
   name                     = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}1"
   resource_group_name      = "${var.azure_multi_resgroup_pcf}"
   location                 = "${var.location}"
-  account_tier             = "Standard"
+  account_tier             = "Premium"
   account_replication_type = "LRS"
 }
 
@@ -87,7 +87,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_2" {
   name                     = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}2"
   resource_group_name      = "${var.azure_multi_resgroup_pcf}"
   location                 = "${var.location}"
-  account_tier             = "Standard"
+  account_tier             = "Premium"
   account_replication_type = "LRS"
 }
 
@@ -111,7 +111,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_3" {
   name                     = "${var.env_short_name}${data.template_file.base_storage_account_wildcard.rendered}3"
   resource_group_name      = "${var.azure_multi_resgroup_pcf}"
   location                 = "${var.location}"
-  account_tier             = "Standard"
+  account_tier             = "Premium"
   account_replication_type = "LRS"
 }
 
