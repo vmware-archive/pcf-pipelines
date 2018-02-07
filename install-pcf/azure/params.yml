@@ -218,11 +218,11 @@ networking_poe_ssl_certs:
 #        ...
 #        -----END EXAMPLE RSA PRIVATE KEY-----
 
-# If you are using opsman_admin_username/opsman_admin_password, edit opsman_client_id/opsman_client_secret to be an empty value.
+# opsman_admin_username/opsman_admin_password needs to be specified
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
-opsman_client_id: CHANGEME
-opsman_client_secret: CHANGEME
+opsman_client_id: # leave blank
+opsman_client_secret: # leave blank
 
 # Opsman Settings
 opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
