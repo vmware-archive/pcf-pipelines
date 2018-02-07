@@ -89,3 +89,19 @@ to those.
   **Solution:** You are not using the PivNet resource, and are most likely using
   a different repository manager like Artifactory. For more information, and a
   possible workaround, see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/192).
+  
+  
+  #### Error message: ####
+
+    could not execute "configure-bosh": tile failed to configure: request failed: unexpected response:
+    HTTP/1.1 422 Unprocessable Entity
+    ...
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    ...
+
+
+
+  **Solution:** If you are using pcf-pipelines v23, there is an issue in the params.yml with inverted quotations. (For example, `bosh_disk_path: “pcf_disk”`.) To resolve this issue, remove all instances of inverted quotations from your params.yml, and add regular quotations (For example, `bosh_disk_path: "pcf_disk"`.).
