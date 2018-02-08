@@ -227,8 +227,6 @@ om_decryption_pwd: CHANGEME
 # opsman_admin_username/opsman_admin_password needs to be specified
 opsman_admin_password: CHANGEME           # Password for Ops Manager admin account
 opsman_admin_username: admin              # Username for Ops Manager admin account
-opsman_client_id:                 # leave blank 
-opsman_client_secret:             # leave blank 
 
 # Ops Manager VM Settings
 opsman_domain_or_ip_address: CHANGEME     # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com

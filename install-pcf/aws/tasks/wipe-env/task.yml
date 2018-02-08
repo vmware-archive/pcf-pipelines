@@ -12,8 +12,6 @@ outputs:
   - name: terraform-state-output
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
-  OPSMAN_CLIENT_ID:
-  OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   AWS_ACCESS_KEY_ID:

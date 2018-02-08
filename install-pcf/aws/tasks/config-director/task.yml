@@ -10,8 +10,6 @@ inputs:
   - name: terraform-state
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
-  OPSMAN_CLIENT_ID:
-  OPSMAN_CLIENT_SECRET:
   OPSMAN_USER:
   OPSMAN_PASSWORD:
   AWS_KEY_NAME:

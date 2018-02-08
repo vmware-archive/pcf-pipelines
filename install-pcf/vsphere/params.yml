@@ -313,8 +313,6 @@ ops_dir_hostname:
 # opsman_admin_username/opsman_admin_password needs to be specified
 opsman_admin_password: CHANGEME       # Password for Ops Manager admin account
 opsman_admin_username: CHANGEME       # Username for Ops Manager admin account
-opsman_client_id:             # leave blank
-opsman_client_secret:         # leave blank
 
 # Disk type for Ops Manager VM (thick|thin)
 opsman_disk_type: "thin"
