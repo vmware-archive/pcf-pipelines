@@ -46,6 +46,11 @@ If you want to bring the environment up again, run `create-infrastructure`.
 
 Do NOT use username `admin` for any of database credentials that you configure for this pipeline.
 
+## Known Issues
+
+#### Issue: #### 
+If you are using pcf-pipelines v23, the functionality for entering certs for `networking_poe_ssl_certs` does not currently work. Functionality does work if you choose to leave `networking_poe_ssl_certs` blank. The fix for the aforementioned issue will be released soon. 
+
 ## Troubleshooting
 
 #### Error message: ####
