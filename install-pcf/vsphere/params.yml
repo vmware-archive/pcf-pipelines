@@ -101,15 +101,16 @@ enable_vm_resurrector: true
 #   none
 #   "" (empty string - equivalent to none)
 #   Any combination of the following, separated by comma:
-#     smoke-tests
+#     smoke_tests
+#     push-usage-service
 #     push-apps-manager
-#     notifications
-#     notifications-ui
+#     deploy-notifications
+#     deploy-notifications-ui
 #     push-pivotal-account
-#     autoscaling
-#     autoscaling-register-broker
+#     deploy-autoscaling
+#     register-broker
 #     nfsbrokerpush
-ert_errands_to_disable:       # Comma-separated list of errand names to disable before deploy
+ert_errands_to_disable: none
 
 # PCF Elastic Runtime minor version to track
 ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
