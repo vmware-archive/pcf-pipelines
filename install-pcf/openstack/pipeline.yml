@@ -413,6 +413,8 @@ jobs:
       MYSQL_NSX_LB_SECURITY_GROUP: ""
       MYSQL_NSX_LB_PORT: ""
       HA_PROXY_LB_NAME: ""
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
 
 
 - name: deploy-ert
