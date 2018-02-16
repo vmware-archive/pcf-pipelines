@@ -353,6 +353,8 @@ jobs:
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       HA_PROXY_LB_NAME: ""
       HAPROXY_FLOATING_IPS: ""
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
