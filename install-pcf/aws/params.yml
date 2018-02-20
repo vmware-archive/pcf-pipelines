@@ -126,35 +126,6 @@ mysql_backups_s3_cron_schedule:
 mysql_backups_s3_endpoint_url:
 mysql_backups_s3_secret_access_key:
 
-# Optional. If using own certs, follow this format (if
-# blank the cert will be auto generated):
-networking_poe_ssl_certs:
-#networking_poe_ssl_certs: |
-#  - name: Point of Entry Certificate 1
-#    certificate:
-#      cert_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#      private_key_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#  - name: Certificate 2
-#    certificate:
-#      cert_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#      private_key_pem: |
-#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-#        ...
-#        -----END EXAMPLE RSA PRIVATE KEY-----
-
-poe_ssl_name1:
-poe_ssl_cert1:
-poe_ssl_key1:
-
 # Operations Manager credentials
 # opsman_admin_username/opsman_admin_password needs to be specified
 opsman_admin_password: CHANGEME
@@ -177,6 +148,11 @@ PEM: CHANGEME
 
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
+
+# Optional. If blank the cert(s) will be generated:
+poe_ssl_name1:
+poe_ssl_cert1:
+poe_ssl_key1:
 
 # Route53 zone to add records to
 ROUTE_53_ZONE_ID:

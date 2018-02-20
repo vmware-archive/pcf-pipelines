@@ -120,7 +120,6 @@ jobs:
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
       SYSTEM_DOMAIN: {{system_domain}}
       APPS_DOMAIN: {{apps_domain}}
-      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
       POE_SSL_NAME1: {{poe_ssl_name1}}
       POE_SSL_CERT1: {{poe_ssl_cert1}}
       POE_SSL_KEY1: {{poe_ssl_key1}}
@@ -319,7 +318,6 @@ jobs:
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       # aws specific
-      NETWORKING_POE_SSL_CERTS:
       S3_ENDPOINT:
       # azure specific
       pcf_ert_saml_cert:
