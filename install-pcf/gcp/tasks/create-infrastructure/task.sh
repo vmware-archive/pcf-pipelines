@@ -9,16 +9,16 @@ pcf_opsman_bucket_path=$(grep -i 'us:.*.tar.gz' pivnet-opsmgr/*GCP.yml | cut -d'
 # ops-manager-us/pcf-gcp-1.9.2.tar.gz -> opsman-pcf-gcp-1-9-2
 pcf_opsman_image_name=$(echo $pcf_opsman_bucket_path | sed 's%.*/\(.*\).tar.gz%opsman-\1%' | sed 's/\./-/g')
 
-NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
 
-if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
+
+if [[ ${POE_SSL_NAME1} == "" || ${POE_SSL_NAME1} == "null" ]]; then
   echo "Generating Self Signed Certs for ${SYSTEM_DOMAIN} & ${APPS_DOMAIN} ..."
   pcf-pipelines/scripts/gen_ssl_certs.sh "${SYSTEM_DOMAIN}" "${APPS_DOMAIN}"
   pcf_ert_ssl_cert=$(cat ${SYSTEM_DOMAIN}.crt)
   pcf_ert_ssl_key=$(cat ${SYSTEM_DOMAIN}.key)
 else
-  pcf_ert_ssl_cert=`echo $NETWORKING_POE_SSL_CERTS_JSON | jq '.[0].certificate.cert_pem'`
-  pcf_ert_ssl_key=`echo $NETWORKING_POE_SSL_CERTS_JSON | jq '.[0].certificate.private_key_pem'`
+  pcf_ert_ssl_cert="$POE_SSL_CERT1"
+  pcf_ert_ssl_key="$POE_SSL_KEY1"
 fi
 
 export GOOGLE_CREDENTIALS=${GCP_SERVICE_ACCOUNT_KEY}

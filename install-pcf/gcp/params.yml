@@ -156,6 +156,11 @@ networking_poe_ssl_certs:
 
 # Operations Manager credentials to set
 # opsman_admin_username/opsman_admin_password needs to be specified
+
+poe_ssl_name1:
+poe_ssl_cert1:
+poe_ssl_key1:
+
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 

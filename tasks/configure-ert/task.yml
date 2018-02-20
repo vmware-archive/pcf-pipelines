@@ -23,6 +23,9 @@ params:
   pcf_az_1:
   pcf_az_2:
   pcf_az_3:
+  POE_SSL_NAME1:
+  POE_SSL_CERT1:
+  POE_SSL_KEY1:
   terraform_prefix:
   HAPROXY_FORWARD_TLS:
   HAPROXY_BACKEND_CA:
