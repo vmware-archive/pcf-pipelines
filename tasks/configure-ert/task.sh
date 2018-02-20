@@ -15,7 +15,6 @@ saml_certificates=$(generate_cert "${saml_domains[*]}")
 saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
 saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
-
 if [[ "${pcf_iaas}" == "aws" ]]; then
   if [[ ${POE_SSL_NAME1} == "" || ${POE_SSL_NAME1} == "null" ]]; then
     domains=(
@@ -35,6 +34,17 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
         }
       }
     ]"
+  else
+    name=${POE_SSL_NAME//$'\n'/'\\n'}
+    cert=${POE_SSL_CERT1//$'\n'/'\\n'}
+    key=${POE_SSL_KEY1//$'\n'/'\\n'}
+    NETWORKING_POE_SSL_CERTS_JSON="[{
+      \"name\": \"$name\",
+      \"certificate\": {
+        \"cert_pem\": \"$cert\",
+        \"private_key_pem\": \"$key\"
+      }
+    }]"
   fi
 
   cd terraform-state

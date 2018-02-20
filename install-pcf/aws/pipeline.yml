@@ -298,6 +298,9 @@ jobs:
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
+      POE_SSL_NAME1: {{poe_ssl_name1}}
+      POE_SSL_CERT1: {{poe_ssl_cert1}}
+      POE_SSL_KEY1: {{poe_ssl_key1}}
       # IaaS Specific for GCP only
       gcp_storage_access_key:
       gcp_storage_secret_key:

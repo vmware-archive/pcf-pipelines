@@ -151,6 +151,10 @@ networking_poe_ssl_certs:
 #        ...
 #        -----END EXAMPLE RSA PRIVATE KEY-----
 
+poe_ssl_name1:
+poe_ssl_cert1:
+poe_ssl_key1:
+
 # Operations Manager credentials
 # opsman_admin_username/opsman_admin_password needs to be specified
 opsman_admin_password: CHANGEME
