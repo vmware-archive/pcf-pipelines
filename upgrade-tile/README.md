@@ -84,6 +84,11 @@ For a mechanism to run the `Apply-Changes` job manually or on a scheduled basis,
 
 ## Troubleshooting
 
+## Known Issues
+
+#### Issue: #### 
+Since the upgrade-tile pipeline pulls stemcells from PivNet, if any of your tiles are using non-ubuntu stemcells (CentOS, for example) you won't be able to use the upgrade-tile pipeline to upgrade your tile. 
+
 #### Error message: ####
    ```
    could not resolve template vars: yaml: line 67: did not find expected key”
