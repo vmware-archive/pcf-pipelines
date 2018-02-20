@@ -39,4 +39,4 @@ opsman_client_secret: CHANGEME
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 opsman_passphrase: CHANGEME
-opsman_domain_or_ip_address: CHANGEME
+opsman_domain_or_ip_address: CHANGEME #FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
