@@ -121,9 +121,6 @@ jobs:
   plan:
   - get: pcf-pipelines-tarball
     passed: [unpack-tarball]
-  - get: pcf-pipelines-combined
-    passed: [unpack-tarball]
-    trigger: true
   - task: unpack-pcf-pipelines
     config:
       platform: linux
