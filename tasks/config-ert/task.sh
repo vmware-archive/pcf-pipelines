@@ -6,6 +6,20 @@ source pcf-pipelines/functions/generate_cert.sh
 
 declare networking_poe_ssl_certs_json
 
+function createNetworkingPoeSslCertsJson() {
+    name=$1
+    cert=${2//$'\n'/'\n'}
+    key=${3//$'\n'/'\n'}
+    networking_poe_ssl_certs_json="{
+      \"name\": \"$name\",
+      \"certificate\": {
+        \"cert_pem\": \"$cert\",
+        \"private_key_pem\": \"$key\"
+      }
+    }"
+    echo $networking_poe_ssl_certs_json
+}
+
 if [[ ${POE_SSL_NAME1} == "" || ${POE_SSL_NAME1} == "null" ]]; then
   domains=(
     "*.${SYSTEM_DOMAIN}"
@@ -27,15 +41,16 @@ if [[ ${POE_SSL_NAME1} == "" || ${POE_SSL_NAME1} == "null" ]]; then
     }
   ]"
 else
-    cert=${POE_SSL_CERT1//$'\n'/'\n'}
-    key=${POE_SSL_KEY1//$'\n'/'\n'}
-    networking_poe_ssl_certs_json="[{
-      \"name\": \"$POE_SSL_NAME1\",
-      \"certificate\": {
-        \"cert_pem\": \"$cert\",
-        \"private_key_pem\": \"$key\"
-      }
-    }]"
+    networking_poe_ssl_certs_json=$(createNetworkingPoeSslCertsJson "$POE_SSL_NAME1" "$POE_SSL_CERT1" "$POE_SSL_KEY1")
+    if [[ ! ${POE_SSL_NAME2} == "" && ! ${POE_SSL_NAME2} == "null" ]]; then
+        networking_poe_ssl_certs_json2=$(createNetworkingPoeSslCertsJson "$POE_SSL_NAME2" "$POE_SSL_CERT2" "$POE_SSL_KEY2")
+        networking_poe_ssl_certs_json="$networking_poe_ssl_certs_json,$networking_poe_ssl_certs_json2"
+    fi
+    if [[ ! ${POE_SSL_NAME3} == "" && ! ${POE_SSL_NAME3} == "null" ]]; then
+        networking_poe_ssl_certs_json3=$(createNetworkingPoeSslCertsJson "$POE_SSL_NAME3" "$POE_SSL_CERT3" "$POE_SSL_KEY3")
+        networking_poe_ssl_certs_json="$networking_poe_ssl_certs_json,$networking_poe_ssl_certs_json3"
+    fi
+    networking_poe_ssl_certs_json="[$networking_poe_ssl_certs_json]"
 fi
 
 if [[ -z "$SAML_SSL_CERT" ]]; then

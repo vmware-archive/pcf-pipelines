@@ -250,10 +250,18 @@ pcf_ert_saml_key:
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
 
-# Optional. If blank the cert(s) will be generated:
+# Optional. If blank the cert(s) will be generated
 poe_ssl_name1:
 poe_ssl_cert1:
 poe_ssl_key1:
+
+poe_ssl_name2:
+poe_ssl_cert2:
+poe_ssl_key2:
+
+poe_ssl_name3:
+poe_ssl_cert3:
+poe_ssl_key3:
 
 # Whether to enable BOSH VM resurrector
 resurrector_enabled: false

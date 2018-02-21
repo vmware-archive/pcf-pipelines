@@ -471,6 +471,12 @@ jobs:
       POE_SSL_NAME1: {{poe_ssl_name1}}
       POE_SSL_CERT1: {{poe_ssl_cert1}}
       POE_SSL_KEY1: {{poe_ssl_key1}}
+      POE_SSL_NAME2: {{poe_ssl_name2}}
+      POE_SSL_CERT2: {{poe_ssl_cert2}}
+      POE_SSL_KEY2: {{poe_ssl_key2}}
+      POE_SSL_NAME3: {{poe_ssl_name3}}
+      POE_SSL_CERT3: {{poe_ssl_cert3}}
+      POE_SSL_KEY3: {{poe_ssl_key3}}
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       TCP_ROUTER_NSX_SECURITY_GROUP: ""
       TCP_ROUTER_NSX_LB_EDGE_NAME: ""
