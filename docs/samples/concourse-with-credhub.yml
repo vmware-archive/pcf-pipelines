@@ -28,7 +28,7 @@ instance_groups:
   stemcell: default
   azs: [AZ01,AZ02,AZ03]
   networks:
-  - name:  INFRASTRUCTURE
+  - name: INFRASTRUCTURE
     static_ips: ((db_ip))
 
   jobs:
