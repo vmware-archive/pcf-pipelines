@@ -195,29 +195,6 @@ mysql_backups_scp_user:
 # Email address to receive MySQL monitor notifications
 mysql_monitor_email: CHANGEME
 
-networking_poe_ssl_certs:
-# networking_poe_ssl_certs: |
-#  - name: Point of Entry Certificate 1
-#    certificate:
-#      cert_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#      private_key_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#  - name: PoE certificate 2
-#    certificate:
-#      cert_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#      private_key_pem: |
-#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-#        ...
-#        -----END EXAMPLE RSA PRIVATE KEY-----
-
 # Comma-separated list of NTP servers to use for VMs deployed by BOSH
 ntp_servers: CHANGEME
 
@@ -272,6 +249,11 @@ pcf_ert_saml_key:
 
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
+
+# Optional. If blank the cert(s) will be generated:
+poe_ssl_name1:
+poe_ssl_cert1:
+poe_ssl_key1:
 
 # Whether to enable BOSH VM resurrector
 resurrector_enabled: false
