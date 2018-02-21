@@ -35,11 +35,10 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
       }
     ]"
   else
-    name=${POE_SSL_NAME//$'\n'/'\\n'}
     cert=${POE_SSL_CERT1//$'\n'/'\\n'}
     key=${POE_SSL_KEY1//$'\n'/'\\n'}
     NETWORKING_POE_SSL_CERTS_JSON="[{
-      \"name\": \"$name\",
+      \"name\": \"$POE_SSL_NAME1\",
       \"certificate\": {
         \"cert_pem\": \"$cert\",
         \"private_key_pem\": \"$key\"
