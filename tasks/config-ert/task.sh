@@ -80,18 +80,18 @@ if [[ -z "$SAML_SSL_CERT" ]]; then
 fi
 
 function formatCredhubEncryptionKeysJson() {
-    credhub_encryption_key_name1="${1}"
-    credhub_encryption_key_secret1=${2//$'\n'/'\n'}
-    credhub_primary_encryption_name="${3}"
-    credhub_encryption_keys_json="[{
-            \"name\": $credhub_encryption_key_name1,
+    local credhub_encryption_key_name1="${1}"
+    local credhub_encryption_key_secret1=${2//$'\n'/'\n'}
+    local credhub_primary_encryption_name="${3}"
+    credhub_encryption_keys_json="{
+            \"name\": \"$credhub_encryption_key_name1\",
             \"key\":{
-                \"secret\": $credhub_encryption_key_secret1
+                \"secret\": \"$credhub_encryption_key_secret1\"
              }"
-    if [[ $credhub_primary_encryption_name == $credhub_encryption_key_name1 ]]; then
-        credhub_encryption_keys_json="$credhub_encryption_keys_json
-        \"primary\": true
-        }"
+    if [[ "${credhub_primary_encryption_name}" == $credhub_encryption_key_name1 ]]; then
+        credhub_encryption_keys_json="$credhub_encryption_keys_json, \"primary\": true}"
+    else
+        credhub_encryption_keys_json="$credhub_encryption_keys_json}"
     fi
     echo "$credhub_encryption_keys_json"
 }
