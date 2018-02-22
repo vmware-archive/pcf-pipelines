@@ -6,7 +6,7 @@ source pcf-pipelines/functions/generate_cert.sh
 
 declare networking_poe_ssl_certs_json
 
-function createNetworkingPoeSslCertsJson() {
+function formatNetworkingPoeSslCertsJson() {
     name="${1}"
     cert=${2//$'\n'/'\n'}
     key=${3//$'\n'/'\n'}
@@ -17,10 +17,24 @@ function createNetworkingPoeSslCertsJson() {
         \"private_key_pem\": \"$key\"
       }
     }"
-    echo $networking_poe_ssl_certs_json
+    echo "$networking_poe_ssl_certs_json"
 }
 
-if [[ ${POE_SSL_NAME1} == "" || ${POE_SSL_NAME1} == "null" ]]; then
+function isPopulated() {
+    local true=0
+    local false=1
+    local envVar="${1}"
+
+    if [[ "${envVar}" == "" ]]; then
+        return ${false}
+    elif [[ "${envVar}" == null ]]; then
+        return ${false}
+    else
+        return ${true}
+    fi
+}
+
+if [[ "${POE_SSL_NAME1}" == "" || "${POE_SSL_NAME1}" == "null" ]]; then
   domains=(
     "*.${SYSTEM_DOMAIN}"
     "*.${APPS_DOMAIN}"
@@ -41,13 +55,13 @@ if [[ ${POE_SSL_NAME1} == "" || ${POE_SSL_NAME1} == "null" ]]; then
     }
   ]"
 else
-    networking_poe_ssl_certs_json=$(createNetworkingPoeSslCertsJson "$POE_SSL_NAME1" "$POE_SSL_CERT1" "$POE_SSL_KEY1")
-    if [[ ! ${POE_SSL_NAME2} == "" && ! ${POE_SSL_NAME2} == "null" ]]; then
-        networking_poe_ssl_certs_json2=$(createNetworkingPoeSslCertsJson "$POE_SSL_NAME2" "$POE_SSL_CERT2" "$POE_SSL_KEY2")
+    networking_poe_ssl_certs_json=$(formatNetworkingPoeSslCertsJson "${POE_SSL_NAME1}" "${POE_SSL_CERT1}" "${POE_SSL_KEY1}")
+    if isPopulated "${POE_SSL_NAME2}"; then
+        networking_poe_ssl_certs_json2=$(formatNetworkingPoeSslCertsJson "${POE_SSL_NAME2}" "${POE_SSL_CERT2}" "${POE_SSL_KEY2}")
         networking_poe_ssl_certs_json="$networking_poe_ssl_certs_json,$networking_poe_ssl_certs_json2"
     fi
-    if [[ ! ${POE_SSL_NAME3} == "" && ! ${POE_SSL_NAME3} == "null" ]]; then
-        networking_poe_ssl_certs_json3=$(createNetworkingPoeSslCertsJson "$POE_SSL_NAME3" "$POE_SSL_CERT3" "$POE_SSL_KEY3")
+    if isPopulated "${POE_SSL_NAME3}"; then
+        networking_poe_ssl_certs_json3=$(formatNetworkingPoeSslCertsJson "${POE_SSL_NAME3}" "${POE_SSL_CERT3}" "${POE_SSL_KEY3}")
         networking_poe_ssl_certs_json="$networking_poe_ssl_certs_json,$networking_poe_ssl_certs_json3"
     fi
     networking_poe_ssl_certs_json="[$networking_poe_ssl_certs_json]"
@@ -65,7 +79,7 @@ if [[ -z "$SAML_SSL_CERT" ]]; then
   SAML_SSL_PRIVATE_KEY=$(echo $saml_certificates | jq --raw-output '.key')
 fi
 
-function createCredhubEncryptionKeysJson() {
+function formatCredhubEncryptionKeysJson() {
     credhub_encryption_key_name1="${1}"
     credhub_encryption_key_secret1=${2//$'\n'/'\n'}
     credhub_primary_encryption_name="${3}"
@@ -79,15 +93,16 @@ function createCredhubEncryptionKeysJson() {
         \"primary\": true
         }"
     fi
+    echo "$credhub_encryption_keys_json"
 }
 
-credhub_encryption_keys_json=$(createCredhubEncryptionKeysJson "$CREDUB_ENCRYPTION_KEY_NAME1" "$CREDUB_ENCRYPTION_KEY_SECRET1" "$CREDHUB_PRIMARY_ENCRYPTION_NAME")
-if [[ ! ${CREDUB_ENCRYPTION_KEY_NAME2} == "" && ! ${CREDUB_ENCRYPTION_KEY_NAME2} == "null" ]]; then
-    credhub_encryption_keys_json2=$(createCredhubEncryptionKeysJson "$CREDUB_ENCRYPTION_KEY_NAME2" "$CREDUB_ENCRYPTION_KEY_SECRET2" "$CREDHUB_PRIMARY_ENCRYPTION_NAME")
+credhub_encryption_keys_json=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME1}" "${CREDUB_ENCRYPTION_KEY_SECRET1}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+if isPopulated $CREDUB_ENCRYPTION_KEY_NAME2; then
+    credhub_encryption_keys_json2=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME2}" "${CREDUB_ENCRYPTION_KEY_SECRET2}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
     credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json2"
 fi
-if [[ ! ${CREDUB_ENCRYPTION_KEY_NAME3} == "" && ! ${CREDUB_ENCRYPTION_KEY_NAME3} == "null" ]]; then
-    credhub_encryption_keys_json3=$(createCredhubEncryptionKeysJson "$CREDUB_ENCRYPTION_KEY_NAME3" "$CREDUB_ENCRYPTION_KEY_SECRET3" "$CREDHUB_PRIMARY_ENCRYPTION_NAME")
+if isPopulated $CREDUB_ENCRYPTION_KEY_NAME3; then
+    credhub_encryption_keys_json3=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME3}" "${CREDUB_ENCRYPTION_KEY_SECRET3}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
     credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json3"
 fi
 credhub_encryption_keys_json="[$credhub_encryption_keys_json]"
