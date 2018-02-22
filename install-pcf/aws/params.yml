@@ -27,16 +27,16 @@ haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-
 # C2C Networking network CIDR
 container_networking_nw_cidr: 10.255.0.0/16
 
-# For credhub integration, replace dummy values in the following structure
-# and set the number of credhub instances in resource config to 2
-credhub_encryption_keys: |
-  - name: dummy encryption key 1
-    key:
-      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
-    primary: true
-  - name: encryption key 2
-    key:
-      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+# For credhub integration, Set the number of credhub instances in resource config to 2
+# Primary Encryption Name MUST match one of the encryption key names provided
+# Encryption keys 2 and 3 are optional
+credhub_primary_encryption_name: dummy encryption key 1
+credhub_encryption_key_name1: dummy encryption key 1
+credhub_encryption_key_secret1: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+credhub_encryption_key_name2: # Optional Name 2
+credhub_encryption_key_secret2: # Optional Secret 2
+credhub_encryption_key_name3: # Optional Name 3
+credhub_encryption_key_secret3: # Optional Secret 2
 
 # ERT Database Credentials - Required
 db_accountdb_password: CHANGEME

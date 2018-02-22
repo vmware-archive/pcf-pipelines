@@ -358,7 +358,6 @@ jobs:
       MYSQL_NSX_LB_PORT: {{mysql_nsx_lb_port}}
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
-      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       CREDUB_ENCRYPTION_KEY_NAME1: {{credhub_encryption_key_name1}}
       CREDUB_ENCRYPTION_KEY_SECRET1: {{credhub_encryption_key_secret1}}
       CREDUB_ENCRYPTION_KEY_NAME2: {{credhub_encryption_key_name2}}

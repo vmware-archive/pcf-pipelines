@@ -477,7 +477,6 @@ jobs:
       POE_SSL_NAME3: {{poe_ssl_name3}}
       POE_SSL_CERT3: {{poe_ssl_cert3}}
       POE_SSL_KEY3: {{poe_ssl_key3}}
-      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
       CREDUB_ENCRYPTION_KEY_NAME1: {{credhub_encryption_key_name1}}
       CREDUB_ENCRYPTION_KEY_SECRET1: {{credhub_encryption_key_secret1}}
       CREDUB_ENCRYPTION_KEY_NAME2: {{credhub_encryption_key_name2}}

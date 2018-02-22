@@ -49,16 +49,6 @@ credhub_encryption_key_secret2: # Optional Secret 2
 credhub_encryption_key_name3: # Optional Name 3
 credhub_encryption_key_secret3: # Optional Secret 2
 
-# DELETE_ME
-credhub_encryption_keys: |
-  - name: dummy encryption key 1
-    key:
-      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
-    primary: true
-  - name: encryption key 2
-    key:
-      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
-
 default_quota_max_number_services: 1000
 
 default_quota_memory_limit_mb: 10240
