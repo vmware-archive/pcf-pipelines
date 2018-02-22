@@ -387,6 +387,13 @@ jobs:
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
+      CREDUB_ENCRYPTION_KEY_NAME1: {{credhub_encryption_key_name1}}
+      CREDUB_ENCRYPTION_KEY_SECRET1: {{credhub_encryption_key_secret1}}
+      CREDUB_ENCRYPTION_KEY_NAME2: {{credhub_encryption_key_name2}}
+      CREDUB_ENCRYPTION_KEY_SECRET2: {{credhub_encryption_key_secret2}}
+      CREDUB_ENCRYPTION_KEY_NAME3: {{credhub_encryption_key_name3}}
+      CREDUB_ENCRYPTION_KEY_SECRET3: {{credhub_encryption_key_secret3}}
+      CREDHUB_PRIMARY_ENCRYPTION_NAME: {{credhub_primary_encryption_name}}
       SAML_SSL_CERT: {{pcf_ert_saml_cert}}
       SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}

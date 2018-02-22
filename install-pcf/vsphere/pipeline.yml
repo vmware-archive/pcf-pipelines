@@ -359,6 +359,13 @@ jobs:
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
       CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
+      CREDUB_ENCRYPTION_KEY_NAME1: {{credhub_encryption_key_name1}}
+      CREDUB_ENCRYPTION_KEY_SECRET1: {{credhub_encryption_key_secret1}}
+      CREDUB_ENCRYPTION_KEY_NAME2: {{credhub_encryption_key_name2}}
+      CREDUB_ENCRYPTION_KEY_SECRET2: {{credhub_encryption_key_secret2}}
+      CREDUB_ENCRYPTION_KEY_NAME3: {{credhub_encryption_key_name3}}
+      CREDUB_ENCRYPTION_KEY_SECRET3: {{credhub_encryption_key_secret3}}
+      CREDHUB_PRIMARY_ENCRYPTION_NAME: {{credhub_primary_encryption_name}}
       HA_PROXY_LB_NAME: ""
       HAPROXY_FLOATING_IPS: ""
       OPSMAN_CLIENT_ID: ""

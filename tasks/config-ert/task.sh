@@ -7,7 +7,7 @@ source pcf-pipelines/functions/generate_cert.sh
 declare networking_poe_ssl_certs_json
 
 function createNetworkingPoeSslCertsJson() {
-    name=$1
+    name="${1}"
     cert=${2//$'\n'/'\n'}
     key=${3//$'\n'/'\n'}
     networking_poe_ssl_certs_json="{
@@ -65,7 +65,32 @@ if [[ -z "$SAML_SSL_CERT" ]]; then
   SAML_SSL_PRIVATE_KEY=$(echo $saml_certificates | jq --raw-output '.key')
 fi
 
-CREDHUB_ENCRYPTION_KEYS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["CREDHUB_ENCRYPTION_KEYS"]))')"
+function createCredhubEncryptionKeysJson() {
+    credhub_encryption_key_name1="${1}"
+    credhub_encryption_key_secret1=${2//$'\n'/'\n'}
+    credhub_primary_encryption_name="${3}"
+    credhub_encryption_keys_json="[{
+            \"name\": $credhub_encryption_key_name1,
+            \"key\":{
+                \"secret\": $credhub_encryption_key1
+             }"
+    if [[ $credhub_primary_encryption_name == $credhub_encryption_key_name1 ]]; then
+        credhub_encryption_keys_json="$credhub_encryption_keys_json
+        \"primary\": true
+        }"
+    fi
+}
+
+credhub_encryption_keys_json=$(createCredhubEncryptionKeysJson "$CREDUB_ENCRYPTION_KEY_NAME1" "$CREDUB_ENCRYPTION_KEY_SECRET1" "$CREDHUB_PRIMARY_ENCRYPTION_NAME")
+if [[ ! ${CREDUB_ENCRYPTION_KEY_NAME2} == "" && ! ${CREDUB_ENCRYPTION_KEY_NAME2} == "null" ]]; then
+    credhub_encryption_keys_json2=$(createCredhubEncryptionKeysJson "$CREDUB_ENCRYPTION_KEY_NAME2" "$CREDUB_ENCRYPTION_KEY_SECRET2" "$CREDHUB_PRIMARY_ENCRYPTION_NAME")
+    credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json2"
+fi
+if [[ ! ${CREDUB_ENCRYPTION_KEY_NAME3} == "" && ! ${CREDUB_ENCRYPTION_KEY_NAME3} == "null" ]]; then
+    credhub_encryption_keys_json3=$(createCredhubEncryptionKeysJson "$CREDUB_ENCRYPTION_KEY_NAME3" "$CREDUB_ENCRYPTION_KEY_SECRET3" "$CREDHUB_PRIMARY_ENCRYPTION_NAME")
+    credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json3"
+fi
+credhub_encryption_keys_json="[$credhub_encryption_keys_json]"
 
 cf_properties=$(
   jq -n \
@@ -135,7 +160,7 @@ cf_properties=$(
     --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
     --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
     --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
-    --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
+    --argjson credhub_encryption_keys "$credhub_encryption_keys_json" \
     --argjson networking_poe_ssl_certs "$networking_poe_ssl_certs_json" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
