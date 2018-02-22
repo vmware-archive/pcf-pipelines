@@ -345,7 +345,6 @@ saml_ssl_private_key:
 security_acknowledgement: CHANGEME
 
 # Services network
-is_service_network: CHANGEME           # Required select service network option in Ops man true or false
 services_excluded_range: CHANGEME      # Services network exclusion range
 services_network_name: "SERVICES"
 services_nw_azs: CHANGEME              # Comma separated list of AZ’s to be associated with this network

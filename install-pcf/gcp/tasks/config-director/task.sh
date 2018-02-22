@@ -44,7 +44,6 @@ network_configuration=$(
     --arg deployment_dns "192.168.16.1,8.8.8.8" \
     --arg deployment_gateway "192.168.16.1" \
     --arg deployment_availability_zones "$availability_zones" \
-    --argjson services_network_is_service_network true \
     --arg services_network_name "services-1" \
     --arg services_vcenter_network "${GCP_RESOURCE_PREFIX}-virt-net/${GCP_RESOURCE_PREFIX}-subnet-services-1-${GCP_REGION}/${GCP_REGION}" \
     --arg services_network_cidr "192.168.20.0/22" \
@@ -52,7 +51,6 @@ network_configuration=$(
     --arg services_dns "192.168.20.1,8.8.8.8" \
     --arg services_gateway "192.168.20.1" \
     --arg services_availability_zones "$availability_zones" \
-    --argjson dynamic_services_network_is_service_network true \
     --arg dynamic_services_network_name "dynamic-services-1" \
     --arg dynamic_services_vcenter_network "${GCP_RESOURCE_PREFIX}-virt-net/${GCP_RESOURCE_PREFIX}-subnet-dynamic-services-1-${GCP_REGION}/${GCP_REGION}" \
     --arg dynamic_services_network_cidr "192.168.24.0/22" \
@@ -94,7 +92,7 @@ network_configuration=$(
         },
         {
           "name": $services_network_name,
-          "service_network": $services_network_is_service_network,
+          "service_network": false,
           "subnets": [
             {
               "iaas_identifier": $services_vcenter_network,
@@ -108,7 +106,7 @@ network_configuration=$(
         },
         {
           "name": $dynamic_services_network_name,
-          "service_network": $dynamic_services_network_is_service_network,
+          "service_network": true,
           "subnets": [
             {
               "iaas_identifier": $dynamic_services_vcenter_network,
