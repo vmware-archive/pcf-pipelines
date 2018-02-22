@@ -18,6 +18,48 @@ saml_certificates=$(generate_cert "${saml_domains[*]}")
 saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
 saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
+function isPopulated() {
+    local true=0
+    local false=1
+    local envVar="${1}"
+
+    if [[ "${envVar}" == "" ]]; then
+        return ${false}
+    elif [[ "${envVar}" == null ]]; then
+        return ${false}
+    else
+        return ${true}
+    fi
+}
+
+function formatCredhubEncryptionKeysJson() {
+    local credhub_encryption_key_name1="${1}"
+    local credhub_encryption_key_secret1=${2//$'\n'/'\n'}
+    local credhub_primary_encryption_name="${3}"
+    credhub_encryption_keys_json="{
+            \"name\": \"$credhub_encryption_key_name1\",
+            \"key\":{
+                \"secret\": \"$credhub_encryption_key_secret1\"
+             }"
+    if [[ "${credhub_primary_encryption_name}" == $credhub_encryption_key_name1 ]]; then
+        credhub_encryption_keys_json="$credhub_encryption_keys_json, \"primary\": true}"
+    else
+        credhub_encryption_keys_json="$credhub_encryption_keys_json}"
+    fi
+    echo "$credhub_encryption_keys_json"
+}
+
+credhub_encryption_keys_json=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME1}" "${CREDUB_ENCRYPTION_KEY_SECRET1}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+if isPopulated "${CREDUB_ENCRYPTION_KEY_NAME2}"; then
+    credhub_encryption_keys_json2=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME2}" "${CREDUB_ENCRYPTION_KEY_SECRET2}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+    credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json2"
+fi
+if isPopulated "${CREDUB_ENCRYPTION_KEY_NAME3}"; then
+    credhub_encryption_keys_json3=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME3}" "${CREDUB_ENCRYPTION_KEY_SECRET3}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+    credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json3"
+fi
+credhub_encryption_keys_json="[$credhub_encryption_keys_json]"
+
 if [[ "${pcf_iaas}" == "aws" ]]; then
   if [[ ${POE_SSL_NAME1} == "" || ${POE_SSL_NAME1} == "null" ]]; then
     domains=(
@@ -145,8 +187,6 @@ cf_resources=$(
     '
 )
 
-CREDHUB_ENCRYPTION_KEYS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["CREDHUB_ENCRYPTION_KEYS"]))')"
-
 cf_properties=$(
   jq -n \
     --arg terraform_prefix $terraform_prefix \
@@ -211,7 +251,7 @@ cf_properties=$(
     --arg mysql_backups_s3_access_key_id "$MYSQL_BACKUPS_S3_ACCESS_KEY_ID" \
     --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
     --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
-    --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
+    --argjson credhub_encryption_keys "$credhub_encryption_keys_json" \
     --argjson networking_poe_ssl_certs "$networking_poe_ssl_certs_json" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
