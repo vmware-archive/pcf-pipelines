@@ -97,11 +97,11 @@ function formatCredhubEncryptionKeysJson() {
 }
 
 credhub_encryption_keys_json=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME1}" "${CREDUB_ENCRYPTION_KEY_SECRET1}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
-if isPopulated $CREDUB_ENCRYPTION_KEY_NAME2; then
+if isPopulated "${CREDUB_ENCRYPTION_KEY_NAME2}"; then
     credhub_encryption_keys_json2=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME2}" "${CREDUB_ENCRYPTION_KEY_SECRET2}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
     credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json2"
 fi
-if isPopulated $CREDUB_ENCRYPTION_KEY_NAME3; then
+if isPopulated "${CREDUB_ENCRYPTION_KEY_NAME3}"; then
     credhub_encryption_keys_json3=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME3}" "${CREDUB_ENCRYPTION_KEY_SECRET3}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
     credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json3"
 fi
