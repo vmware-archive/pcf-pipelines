@@ -194,6 +194,14 @@ if [[ ! -z "$DYNAMIC_SERVICES_NETWORK_NAME" ]]; then
   )
 fi
 
+if [[ ! -z "$CUSTOM_NETWORK_JSON" ]]; then
+  network_configuration=$(
+    echo "$network_configuration" | jq -rc \
+      --argjson custom_network_json "$CUSTOM_NETWORK_JSON" \
+      '.networks += $custom_network_json'
+  )
+fi
+
 director_config=$(cat <<-EOF
 {
   "ntp_servers_string": "$NTP_SERVERS",

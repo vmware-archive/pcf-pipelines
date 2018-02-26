@@ -353,6 +353,25 @@ services_nw_dns: CHANGEME              # Services network DNS
 services_nw_gateway: CHANGEME          # Services network Gateway
 services_vsphere_network: CHANGEME     # vCenter Services network name
 
+# Additional network to configure as a json array, example:
+# [
+#   {
+#     "name": "custom_network",
+#     "service_network": false,
+#     "subnets": [
+#       {
+#         "iaas_identifier": "custom_vcenter_network_name",
+#         "cidr": "10.9.9.0/24",
+#         "reserved_ip_ranges": "10.9.9.0-10.9.9.100,10.9.9.200-10.9.9.255",
+#         "dns": "8.8.8.8,8.8.4.4",
+#         "gateway": "10.9.9.1",
+#         "availability_zones": [ "az1","az2" ]
+#       }
+#     ]
+#   }
+# ]
+custom_network_json:
+
 # If true, disable SSL certificate verification for this environment.
 skip_cert_verify: false
 
