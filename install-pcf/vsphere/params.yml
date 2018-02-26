@@ -66,7 +66,7 @@ default_quota_memory_limit_mb: 10240
 
 # Deployment
 deployment_excluded_range: CHANGEME    # Deployment network exclusion range
-deployment_network_name: "DEPLOYMENT"
+deployment_network_name: "DEPLOYMENT"  # Leave empty to exclude from network config
 deployment_nw_azs: CHANGEME            # Comma separated list of AZ’s to be associated with this network
 deployment_nw_cidr: CHANGEME           # Deployment network CIDR, ex: 10.0.0.0/22
 deployment_nw_dns: CHANGEME            # Deployment network DNS
@@ -84,13 +84,13 @@ disable_http_proxy: false
 disable_insecure_cookies: false
 
 # Dynamic Services Network
-dynamic_services_excluded_range: CHANGEME      # Dynamic Services network exclusion range
-dynamic_services_network_name: "DYNAMIC-SERVICES"
-dynamic_services_nw_azs: CHANGEME              # Comma separated list of AZ’s to be associated with this network
-dynamic_services_nw_cidr: CHANGEME             # Dynamic Services network CIDR, ex: 10.0.0.0/22
-dynamic_services_nw_dns: CHANGEME              # Dynamic Services network DNS
-dynamic_services_nw_gateway: CHANGEME          # Dynamic Services network Gateway
-dynamic_services_vsphere_network: CHANGEME     # vCenter Dynamic Services network name
+dynamic_services_excluded_range: CHANGEME         # Dynamic Services network exclusion range
+dynamic_services_network_name: "DYNAMIC-SERVICES" # Leave empty to exclude from network config
+dynamic_services_nw_azs: CHANGEME                 # Comma separated list of AZ’s to be associated with this network
+dynamic_services_nw_cidr: CHANGEME                # Dynamic Services network CIDR, ex: 10.0.0.0/22
+dynamic_services_nw_dns: CHANGEME                 # Dynamic Services network DNS
+dynamic_services_nw_gateway: CHANGEME             # Dynamic Services network Gateway
+dynamic_services_vsphere_network: CHANGEME        # vCenter Dynamic Services network name
 
 # Whether to enable BOSH VM resurrector
 enable_vm_resurrector: true
@@ -140,7 +140,7 @@ ignore_ssl_cert_verification: false
 
 # Infrastructure Configuration
 infra_excluded_range: CHANGEME         # Infrastructure network exclusion range
-infra_network_name: "INFRASTRUCTURE"
+infra_network_name: "INFRASTRUCTURE"   # Leave empty to exclude from network config
 infra_nw_azs: CHANGEME                 # Comma separated list of AZ’s to be associated with this network
 infra_nw_cidr: CHANGEME                # Infrastructure network CIDR, ex: 10.0.0.0/22
 infra_nw_dns: CHANGEME                 # Infrastructure network DNS
@@ -346,7 +346,7 @@ security_acknowledgement: CHANGEME
 
 # Services network
 services_excluded_range: CHANGEME      # Services network exclusion range
-services_network_name: "SERVICES"
+services_network_name: "SERVICES"      # Leave empty to exclude from network config
 services_nw_azs: CHANGEME              # Comma separated list of AZ’s to be associated with this network
 services_nw_cidr: CHANGEME             # Services network CIDR, ex: 10.0.0.0/22
 services_nw_dns: CHANGEME              # Services network DNS
