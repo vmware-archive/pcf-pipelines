@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: czero/rootfs}
+
+inputs:
+- name: pcf-pipelines
+
+params:
+  PRODUCT_NAME: 
+  OPSMAN_DOMAIN_OR_IP_ADDRESS: 
+  OPSMAN_CLIENT_ID:  
+  OPSMAN_CLIENT_SECRET:
+  OPSMAN_USERNAME: 
+  OPSMAN_PASSWORD: 
+  ERRAND_STATUS: # enabled|disabled|when-changed
+  ERRANDS_TO_TOGGLE: # either STRING=all or LIST=[errand_name_1, ..]
+  ERRANDS_TO_IGNORE: # LIST=[errand_name_1, ..]; if ERRANDS_TO_IGNORE is set, an empty ERRANDS_TO_TOGGLE defaults to all
+run:
+  path: pcf-pipelines/tasks/activate-cf-errands/task.sh
