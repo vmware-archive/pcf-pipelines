@@ -127,6 +127,8 @@ jobs:
       DYNAMIC_SERVICES_NW_DNS: {{dynamic_services_nw_dns}}
       DYNAMIC_SERVICES_NW_GATEWAY: {{dynamic_services_nw_gateway}}
       DYNAMIC_SERVICES_NW_AZS: {{dynamic_services_nw_azs}}
+      DIRECTOR_NETWORK: {{director_network}}
+      DIRECTOR_AVAILABILITY_ZONE: {{director_availability_zone}}
       CUSTOM_NETWORK_JSON: {{custom_network_json}}
       AZ_1: {{az_1_name}}
       AZ_1_CLUSTER_NAME: {{az_1_cluster_name}}

@@ -226,11 +226,11 @@ security_configuration=$(
 
 network_assignment=$(
 jq -n \
-  --arg infra_availability_zones "$INFRA_NW_AZS" \
-  --arg network "$INFRA_NETWORK_NAME" \
+  --arg singleton_availability_zone "$DIRECTOR_AVAILABILITY_ZONE" \
+  --arg network "$DIRECTOR_NETWORK" \
   '
   {
-    "singleton_availability_zone": ($infra_availability_zones | split(",") | .[0]),
+    "singleton_availability_zone": $singleton_availability_zone,
     "network": $network
   }'
 )

@@ -353,6 +353,9 @@ services_nw_dns: CHANGEME              # Services network DNS
 services_nw_gateway: CHANGEME          # Services network Gateway
 services_vsphere_network: CHANGEME     # vCenter Services network name
 
+director_network: INFRASTRUCTURE       # Network to deploy the director singleton instance
+director_availability_zone: CHANGEME   # Network AZ to deploy the director singleton instance
+
 # Additional network to configure as a json array, example:
 # [
 #   {
