@@ -19,4 +19,4 @@ params:
   ERRANDS_TO_TOGGLE: # either STRING=all or LIST=[errand_name_1, ..]
   ERRANDS_TO_IGNORE: # LIST=[errand_name_1, ..]; if ERRANDS_TO_IGNORE is set, an empty ERRANDS_TO_TOGGLE defaults to all
 run:
-  path: pcf-pipelines/tasks/activate-cf-errands/task.sh
+  path: pcf-pipelines/tasks/config-tile-errand/task.sh
