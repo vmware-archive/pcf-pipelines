@@ -114,6 +114,9 @@ ert_errands_to_disable:       # Comma-separated list of errand names to disable 
 # PCF Elastic Runtime minor version to track
 ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
+# Network to use for elastic runtime
+ert_network_name: "DEPLOYMENT"
+
 # AZ to use for deployment of ERT Singleton jobs
 ert_singleton_job_az: CHANGEME
 

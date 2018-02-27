@@ -238,7 +238,7 @@ jobs:
       OPS_MGR_PWD: {{opsman_admin_password}}
       ERT_SINGLETON_JOB_AZ: {{ert_singleton_job_az}}
       DEPLOYMENT_NW_AZS: {{deployment_nw_azs}}
-      NETWORK_NAME: {{deployment_network_name}}
+      NETWORK_NAME: {{ert_network_name}}
       ENABLE_SECURITY_EVENT_LOGGING: {{enable_security_event_logging}}
       SYSLOG_HOST: {{syslog_host}}
       SYSLOG_PORT: {{syslog_port}}
