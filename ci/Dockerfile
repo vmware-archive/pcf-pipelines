@@ -50,7 +50,7 @@ sudo apt-get -y update && sudo apt-get -y install --no-install-recommends azure-
 
 # glide
 add-apt-repository ppa:masterminds/glide && apt-get -y update && \
-apt-get install -y glide
+apt-get install -y glide && \
 
 # Clean up
 apt-get remove -y python-dev apt-transport-https && \
