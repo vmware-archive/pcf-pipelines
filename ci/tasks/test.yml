@@ -18,6 +18,7 @@ run:
     export PATH=$GOPATH/bin:$PATH
 
     mkdir -p $GOPATH/bin
+    mkdir -p $GOPATH/src
 
     # install glide for dependency management
     curl -k https://glide.sh/get | sh
