@@ -23,6 +23,10 @@ echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee 
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
 apt-get -y update && sudo apt-get -y install --no-install-recommends google-cloud-sdk && \
 
+# glide
+add-apt-repository ppa:masterminds/glide && apt-get -y update && \
+apt-get install -y glide && \
+
 # pip
 apt-get install -y --no-install-recommends python-pip python-dev && \
 
@@ -47,10 +51,6 @@ echo "deb https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo te
 sudo apt-key adv --keyserver packages.microsoft.com --recv-keys 417A0893 && \
 sudo apt-get -y install --no-install-recommends apt-transport-https && \
 sudo apt-get -y update && sudo apt-get -y install --no-install-recommends azure-cli && \
-
-# glide
-add-apt-repository ppa:masterminds/glide && apt-get -y update && \
-apt-get install -y glide && \
 
 # Clean up
 apt-get remove -y python-dev apt-transport-https && \
