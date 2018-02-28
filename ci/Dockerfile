@@ -23,12 +23,12 @@ echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee 
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
 apt-get -y update && sudo apt-get -y install --no-install-recommends google-cloud-sdk && \
 
+# pip
+apt-get install -y --no-install-recommends python-pip python-dev software-properties-common python-software-properties && \
+
 # glide
 add-apt-repository ppa:masterminds/glide && apt-get -y update && \
 apt-get install -y glide && \
-
-# pip
-apt-get install -y --no-install-recommends python-pip python-dev && \
 
 # vim
 ln -s /usr/bin/vim.tiny /usr/local/bin/vim && \
