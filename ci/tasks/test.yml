@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: golang
 
 inputs:
 - name: pcf-pipelines
@@ -16,6 +16,9 @@ run:
   - |
     export GOPATH=$PWD/go
     export PATH=$GOPATH/bin:$PATH
+
+    # install glide for dependency management
+    curl -k https://glide.sh/get | sh
 
     pushd pcf-pipelines
       glide up
