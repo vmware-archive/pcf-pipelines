@@ -17,10 +17,7 @@ run:
     export GOPATH=$PWD/go
     export PATH=$GOPATH/bin:$PATH
 
-    go get github.com/onsi/ginkgo/ginkgo
-    go get github.com/onsi/gomega
-    go get github.com/concourse/atc
-
     pushd pcf-pipelines
+      glide up
       ginkgo -p -r -randomizeAllSpecs
     popd
