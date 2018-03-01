@@ -26,7 +26,11 @@ function checkDiskSize() {
   echo "$vm_disk_size"
 }
 
+diskSizeGB="$( checkDiskSize $VM_DISK_SIZE_GB )"
+
+echo "Setting disk size of vm $VM_IDENTIFIER to $diskSizeGB"
+
 cliaas-linux replace-vm \
   --config cliaas-config/config.yml \
   --identifier "$VM_IDENTIFIER" \
-  --disk-size-gb "$( checkDiskSize $VM_DISK_SIZE_GB )"
+  --disk-size-gb "$diskSizeGB"
