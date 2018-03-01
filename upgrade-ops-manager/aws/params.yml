@@ -40,7 +40,7 @@ opsman_major_minor_version: CHANGEME # (e.g. ^1\.11\..*$)
 
 # Optional
 # Overwrite the existing VM disk size for Ops Manager
-opsman_vm_disk_size_gb:
+pcf_opsman_disk_size_in_gb:
 
 # Pivotal Net Token to download Ops Manager binaries from https://network.pivotal.io
 pivnet_token: CHANGEME
