@@ -17,7 +17,7 @@
 set -eu
 
 function checkDiskSize() {
-  local vm_disk_size="${0}"
+  local vm_disk_size="${1}"
 
   if [ $vm_disk_size = "" ] || [ $vm_disk_size = "null" ]; then
     vm_disk_size="$( cliaas-linux get-vm-disk-size -c cliaas-config/config.yml -i $VM_IDENTIFIER) "
