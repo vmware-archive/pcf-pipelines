@@ -14,9 +14,6 @@ run:
   args:
   - -ce
   - |
-    export GOPATH=$PWD/go
-    export PATH=$GOPATH/bin:$PATH
-
     mkdir -p $GOPATH/src/github.com/pivotal-cf
 
     cp -R pcf-pipelines $GOPATH/src/github.com/pivotal-cf
