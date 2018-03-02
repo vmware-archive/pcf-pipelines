@@ -95,7 +95,7 @@ gcp_zone_1: us-central1-a
 gcp_zone_2: us-central1-b
 gcp_zone_3: us-central1-c
 
-# Optional - if your git repo requires an SSH key.
+# Optional - if your git repo requires an SSH key. You will need to comment out line 99 if you do not use the `git_private_key`.
 git_private_key:
 
 # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
