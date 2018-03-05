@@ -191,6 +191,7 @@ jobs:
       PCF_OPSMAN_DISK_SIZE_IN_GB: {{pcf_opsman_disk_size_in_gb}}
       AZURE_DEDICATE_RG: {{azure_dedicate_rg}}
       AZURE_DEDICATE_VNET: {{azure_dedicate_vnet}}
+      NETWORK_NAME: {{deployment_network_name}}
 
 ##############################
 ## Job - Config OpsMan Auth ##
