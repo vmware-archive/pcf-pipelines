@@ -48,3 +48,11 @@ variable "ert_subnet_id" {}
 variable "azure_multi_resgroup_network" {}
 variable "azure_multi_resgroup_pcf" {}
 variable "om_disk_size_in_gb" {}
+
+//demo
+
+variable "azure_terraform_vnet_cidr" {}
+variable "azure_terraform_subnet_infra_cidr" {}
+variable "azure_terraform_subnet_ert_cidr" {}
+variable "azure_terraform_subnet_services1_cidr" {}
+variable "azure_terraform_subnet_dynamic_services_cidr" {}
