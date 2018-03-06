@@ -20,9 +20,9 @@ resource "aws_elb" "PcfHttpElb" {
   health_check {
     target = "TCP:8080"
     timeout = 5
-    interval = 30
+    interval = 5
     unhealthy_threshold = 2
-    healthy_threshold = 10
+    healthy_threshold = 3
   }
   tags {
     Name = "${var.prefix}-Pcf Http Elb"
