@@ -19,7 +19,7 @@ resource "aws_elb" "PcfHttpElb" {
   }
   health_check {
     target = "TCP:8080"
-    timeout = 5
+    timeout = 3
     interval = 5
     unhealthy_threshold = 2
     healthy_threshold = 3
