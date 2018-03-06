@@ -24,3 +24,6 @@
 ### Pipeline fails and govc returns multiple results
 
 If you see this type of error, it is likely that you are using a space in the Ops Manager vm name. To resolve this issue, make sure your datacenter, cluster name, resource pool, and VM name does not contain a space.
+
+### Ops Manager IP address swapping
+The vSphere upgrade-ops-mgr pipelines currently do not detach the IP adddress from the old Ops Manager instance, once the new Ops Manager is added. This will be fixed soon. Similarly, on other IaaSes, the private IP address is not necessarily kept and re-used on the new Ops Manager instance.
