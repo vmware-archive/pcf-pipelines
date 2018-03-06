@@ -1,7 +1,5 @@
 # PCF on AWS
 
-![Concourse Pipeline](embed.png)
-
 This pipeline uses Terraform to create the infrastructure required to run a
 3 AZ PCF deployment on AWS per the Customer[0] [reference
 architecture](http://docs.pivotal.io/pivotalcf/refarch/aws/aws_ref_arch.html). It also assumes you are using Amazon Route 53 as your DNS web service. 
@@ -52,7 +50,10 @@ Do NOT use username `admin` for any of database credentials that you configure f
 If you are using pcf-pipelines v23, the functionality for entering certs for `networking_poe_ssl_certs` does not currently work. Functionality does work if you choose to leave `networking_poe_ssl_certs` blank. The fix for the aforementioned issue will be released soon. 
 
 #### Issue: #### 
-If the routers in the Pcf-Http-Elb show as `OutOfService`, and you have `routing_disable_http: true` in your params.yml, there is an issue with the terraform [paving](https://github.com/pivotal-cf/pcf-pipelines/blob/master/install-pcf/aws/terraform/load_balancers.tf#L21) whereby port `80` is being used for the health checks when the correct port is `8080`.
+If the routers in the Pcf-Http-Elb show as `OutOfService`, and you have `routing_disable_http: true` in your params.yml, there is an issue with the terraform [paving](https://github.com/pivotal-cf/pcf-pipelines/blob/master/install-pcf/aws/terraform/load_balancers.tf#L21) whereby port `80` is being used for the health checks when the correct port is `8080`. (Affects those using pcf-pipelines v23 and earlier)
+
+#### Issue: #### 
+If you are using pcf-pipelines v23 and earlier, there is an issue with the `aws_elb` health check `interval` and `healthy_threashold` in that they are set too [high](https://github.com/pivotal-cf/pcf-pipelines/blob/v0.23.0/install-pcf/aws/terraform/load_balancers.tf#L23). Make sure to set these at [sensible](http://docs.cloudfoundry.org/adminguide/configure-lb-healthcheck.html#router_upgrade) defaults. 
 
 ## Troubleshooting
 
