@@ -16,21 +16,19 @@
 
 set -eu
 
-function checkDiskSize() {
-  local vm_disk_size="${1}"
-
-  if [ $vm_disk_size = "" ] || [ $vm_disk_size = "null" ]; then
-    vm_disk_size="$( cliaas-linux get-vm-disk-size -c cliaas-config/config.yml -i $VM_IDENTIFIER) "
+function getDiskSize() {
+  if [[ "${VM_DISK_SIZE_GB}" == "" || "${VM_DISK_SIZE_GB}" == "null" ]]; then
+    VM_DISK_SIZE_GB="$( cliaas-linux get-vm-disk-size -c cliaas-config/config.yml -i $VM_IDENTIFIER )"
   fi
 
-  echo "$vm_disk_size"
+  echo "${VM_DISK_SIZE_GB}"
 }
 
-diskSizeGB="$( checkDiskSize $VM_DISK_SIZE_GB )"
+diskSizeGB="$( getDiskSize )"
 
-echo "Setting disk size of vm $VM_IDENTIFIER to $diskSizeGB"
+echo "Setting disk size of vm ${VM_IDENTIFIER} to ${diskSizeGB}"
 
 cliaas-linux replace-vm \
   --config cliaas-config/config.yml \
-  --identifier "$VM_IDENTIFIER" \
-  --disk-size-gb "$diskSizeGB"
+  --identifier "${VM_IDENTIFIER}" \
+  --disk-size-gb "${diskSizeGB}"
