@@ -57,7 +57,7 @@ to those.
 
 2. Update all params in the `params.yml` with the proper values.
 
-3. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated `params.yml`:
+3. [Set the pipeline](http://concourse-ci.org/single-page.html#fly-set-pipeline), using your updated `params.yml`:
   ```
   fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml
   ```
