@@ -48,7 +48,8 @@ UNSTAGED_ALL=$(jq -n --argjson available "$AVAILABLE" --argjson staged "$STAGED"
 UNSTAGED_PRODUCT=$(echo "$UNSTAGED_ALL" | jq \
   --arg product_name "$PRODUCT_NAME" \
   --arg product_version "$desired_version" \
-  'map(select(.name == $product_name)) | map(select(.product_version | startswith($product_version)))'
+  'map(select(.name == $product_name)) | map(select(.product_version | startswith($product_version) or inside($product_version)))'
+
 )
 
 # There should be only one such unstaged product.
