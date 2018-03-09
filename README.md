@@ -2,7 +2,7 @@
 
 **Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability. Using this repo directly may result in breaking the pipelines that consume it. Tracking master is considered unstable.**
 
-This is a collection of [Concourse](https://concourse.ci) pipelines for
+This is a collection of [Concourse](https://concourse-ci.org) pipelines for
 installing and upgrading [Pivotal Cloud Foundry](https://pivotal.io/platform).
 
 Other pipelines which may be of interest are listed at the end of this README.
@@ -56,8 +56,8 @@ The upgrade-tile pipeline is compatible with the latest version of pcf-pipelines
 
 ## Prerequisites
 
-- [install a Concourse server](https://concourse.ci/installing.html)
-- download the [Fly CLI](https://concourse.ci/fly-cli.html) to interact with the Concourse server
+- [install a Concourse server](https://concourse-ci.org/installing.html)
+- download the [Fly CLI](https://concourse-ci.org/fly-cli.html) to interact with the Concourse server
 - depending on where you've installed Concourse, you may need to set up
 [additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
 third-party sources of pipeline dependencies
@@ -189,7 +189,7 @@ that the pipeline requires. This template should have placeholder values,
 typically CHANGEME, or defaults where appropriate. This file should be filled
 out and stored elsewhere, such as in LastPass, and then supplied to `fly` via
 the `-l` flag. See the
-[fly documentation](http://concourse.ci/fly-set-pipeline.html) for more.
+[fly documentation](http://concourse-ci.org/fly-set-pipeline.html) for more.
 
 #### Pipelines
 
