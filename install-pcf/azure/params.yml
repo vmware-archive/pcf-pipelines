@@ -39,6 +39,7 @@ azure_packages_container:
 # The set of terraform templates and opsman configuration to use in the pipeline (c0-azure-base|c0-azure-multi-res-group)
 azure_pcf_terraform_template: c0-azure-base
 
+# a valid Azure region.
 azure_region: CHANGEME
 
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_account_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
@@ -51,6 +52,7 @@ azure_tenant_id: CHANGEME
 # Must be globally unique.
 azure_terraform_prefix: CHANGEME
 
+# ERT-specific network configurations. Leave these as default unless you need to make changes to align with existing infrastructure.
 azure_terraform_subnet_dynamic_services_cidr: "192.168.12.0/22"
 azure_terraform_subnet_dynamic_services_dns: "168.63.129.16,8.8.8.8"
 azure_terraform_subnet_dynamic_services_gateway: "192.168.12.1"
@@ -101,10 +103,11 @@ default_quota_max_number_services: 1000
 default_quota_memory_limit_mb: 10240
 
 # Domain Names for ERT
-pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
+pcf_ert_domain: CHANGEME # This is your base domain you wish to access PCF from. For example, pcf.example.com
 system_domain: CHANGEME # e.g. system.pcf.example.com
 apps_domain: CHANGEME   # e.g. apps.pcf.example.com
 
+# This defines the deployment network name within PCF.
 deployment_network_name: "ert"
 
 # Disable HTTP on gorouters (true|false)
@@ -164,6 +167,7 @@ uaa_instances: 2
 internet_connected: false
 
 # IPs
+# Leave blank if you don't need to make changes to existing network infrastructure configs.
 ha_proxy_ips:           # Comma-separated list of static IPs
 router_static_ips:      # Comma-separated list of static IPs
 tcp_router_static_ips:  # Comma-separated list of static IPs
@@ -196,11 +200,12 @@ mysql_backups_scp_user:
 mysql_monitor_recipient_email: CHANGEME
 
 # opsman_admin_username/opsman_admin_password needs to be specified
+# These define the login values for the OpsMan UI.
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 
 # Opsman Settings
-opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix
+opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix. For example, opsman.pcf.example.com
 
 # PCF Ops Manager minor version to track
 opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
@@ -212,6 +217,9 @@ pcf_ert_saml_key:
 pcf_opsman_disk_size_in_gb: 120
 
 # SSH keys for Operations Manager director
+# More information can be found in these locations.
+# 1. https://docs.pivotal.io/pivotalcf/2-0/customizing/pcf_azure.html#getting-started
+# 2. https://docs.pivotal.io/pivotalcf/2-0/customizing/azure-om-config.html#azure-config
 pcf_ssh_key_pub: CHANGEME
 pcf_ssh_key_priv: |
   CHANGEME
@@ -233,7 +241,8 @@ poe_ssl_cert3:
 poe_ssl_key3:
 
 # Request timeout for gorouter
-router_request_timeout_in_seconds: 900
+# It is recommended by both Pivotal and Microsoft that this value remain under 240 due to timeout configurations in Azure.
+router_request_timeout_in_seconds: 239
 
 # Optional - these certificates can be used to validate the certificates from incoming client requests.
 # All CA certificates should be appended together into a single collection of PEM-encoded entries.
