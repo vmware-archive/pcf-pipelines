@@ -57,7 +57,7 @@ upgrade from `--.--.n` to `--.--.n+1`.
    communicate with PivNet and OpsMan. Fill it out with the necessary values and
    store it in a safe place.
 
-4. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
+4. [Set the pipeline](http://concourse-ci.org/single-page.html#fly-set-pipeline), using your updated params.yml:
 
    ```
    fly -t lite set-pipeline -p upgrade-your-tile -c pipeline.yml -l params.yml

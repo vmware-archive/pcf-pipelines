@@ -2,9 +2,9 @@
 
 # Concourse Pipelines Integration with CredHub
 
-[Concourse](http://concourse.ci/creds.html) supports integration with [CredHub](https://github.com/pivotal-cf/credhub-release/tree/master/docs) for credentials management in its pipelines, which can reference encrypted secrets stored in a CredHub server and get them automatically interpolated during execution of tasks.
+[Concourse](http://concourse-ci.org/creds.html) supports integration with [CredHub](https://github.com/pivotal-cf/credhub-release/tree/master/docs) for credentials management in its pipelines, which can reference encrypted secrets stored in a CredHub server and get them automatically interpolated during execution of tasks.
 
-This article provides samples of deployment manifests and pipelines for the integration of a BOSH-deployed Concourse server with CredHub. See the [documentation page](http://concourse.ci/creds.html) for information about CredHub integration with a Concourse server deployed using some other method.
+This article provides samples of deployment manifests and pipelines for the integration of a BOSH-deployed Concourse server with CredHub. See the [documentation page](http://concourse-ci.org/creds.html) for information about CredHub integration with a Concourse server deployed using some other method.
 
 ## Table of Contents
 
@@ -181,7 +181,7 @@ Refer to [CredHub](https://github.com/pivotal-cf/credhub-release/tree/master/doc
 ---
 ## <a name="references"></a> References
 
-- [Concourse Credentials Management](http://concourse.ci/creds.html)
+- [Concourse Credentials Management](http://concourse-ci.org/creds.html)
 
 - [CredHub Bosh Release](https://github.com/pivotal-cf/credhub-release)
 - [CredHub CLI repository](https://github.com/cloudfoundry-incubator/credhub-cli)
