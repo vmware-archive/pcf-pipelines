@@ -17,18 +17,18 @@ resources:
 - name: pcf-pipelines-image
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
     tag: latest
-    username: czero
-    password: ((czero_dockerhub_password))
+    username: ((dockerhub_username))
+    password: ((dockerhub_password))
 
 - name: pcf-pipelines-image-rc
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
     tag: release-candidate
-    username: czero
-    password: ((czero_dockerhub_password))
+    username: ((dockerhub_username))
+    password: ((dockerhub_password))
 
 - name: cflinuxfs2
   type: docker-image
