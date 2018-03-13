@@ -243,3 +243,4 @@ jobs:
     params:
       load: pcf-pipelines-image-rc
       tag: cliaas/tag
+      tag_as_latest: true
