@@ -1,6 +1,6 @@
 # Secure credential automation with Vault and Concourse
 
-Concourse allows for the [parameterization of pipelines](https://concourse.ci/fly-set-pipeline.html#parameters)
+Concourse allows for the [parameterization of pipelines](https://concourse-ci.org/fly-set-pipeline.html#parameters)
 when you `fly` them but it will store the pipeline and the secrets in the
 database as one single encrypted field.
 
@@ -8,7 +8,7 @@ This might work in some environments but if you need to create an extra layer
 of security, (i.e., for compliance reasons and/or for better security practices)
 you need to be able to obfuscate these secrets from the Concourse pipeline.
 
-That is the reason why the Concourse team created a [Credential Management](https://concourse.ci/creds.html)
+That is the reason why the Concourse team created a [Credential Management](https://concourse-ci.org/creds.html)
 integration. Its first implementation is an integration with [Vault](https://www.vaultproject.io/)
 and this README will outline how to get started.
 
@@ -20,7 +20,7 @@ automate the rotation of credentials.
 ### Getting Started
 
 #### Requirements:
-- [Concourse](http://concourse.ci/installing.html) - We are assuming it is BOSH
+- [Concourse](http://concourse-ci.org/installing.html) - We are assuming it is BOSH
 installed in this post but it is not required.
 - [Vault](https://github.com/cloudfoundry-community/vault-boshrelease)
 
@@ -108,7 +108,7 @@ if this doesn't exist then it will look for team scoped variables at
 credentials across multiple pipelines e.g keys, tokens, etc.
 
 Not everything in a pipeline can be parametrized, you can read more about what
-can be parametrized in the [Concourse docs](http://concourse.ci/creds.html#what-can-be-parameterized).
+can be parametrized in the [Concourse docs](http://concourse-ci.org/creds.html#what-can-be-parameterized).
 Basically you can pull secrets in `source` or `params` sections of a pipeline.
 
 Here is an example:

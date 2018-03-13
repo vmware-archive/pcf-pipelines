@@ -53,6 +53,7 @@ container_networking_nw_cidr: 10.255.0.0/16
 # For credhub integration, Set the number of credhub instances in resource config to 2
 # Primary Encryption Name MUST match one of the encryption key names provided
 # Encryption keys 2 and 3 are optional
+# Note: The secret key needs to be 20 characters or more.
 credhub_primary_encryption_name: dummy encryption key 1
 credhub_encryption_key_name1: dummy encryption key 1
 credhub_encryption_key_secret1: CHANGEME_CHANGEME_CHANGEME_CHANGEME

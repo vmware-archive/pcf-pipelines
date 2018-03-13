@@ -2,10 +2,10 @@ package exec
 
 import (
 	"archive/tar"
+	"context"
 	"errors"
 	"fmt"
 	"io"
-	"os"
 	"path"
 	"path/filepath"
 	"strings"
@@ -153,21 +153,17 @@ func NewTaskAction(
 // If any inputs are not available in the worker.ArtifactRepository, MissingInputsError
 // is returned.
 //
-// Once all the inputs are satisfies, the task's script will be executed, and
-// the RunStep indicates that it's ready, and any signals will be forwarded to
-// the script.
+// Once all the inputs are satisfied, the task's script will be executed. If
+// the task is canceled via the context, the script will be interrupted.
 //
 // If the script exits successfully, the outputs specified in the TaskConfig
 // are registered with the worker.ArtifactRepository. If no outputs are specified, the
 // task's entire working directory is registered as an ArtifactSource under the
 // name of the task.
 func (action *TaskAction) Run(
+	ctx context.Context,
 	logger lager.Logger,
 	repository *worker.ArtifactRepository,
-
-	// TODO: consider passing these as context
-	signals <-chan os.Signal,
-	ready chan<- struct{},
 ) error {
 	config, err := action.configSource.GetTaskConfig()
 	if err != nil {
@@ -182,8 +178,8 @@ func (action *TaskAction) Run(
 	}
 
 	container, err := action.workerPool.FindOrCreateContainer(
+		ctx,
 		logger,
-		signals,
 		action.buildStepDelegate,
 		db.NewBuildStepContainerOwner(action.buildID, action.planID),
 		action.containerMetadata,
@@ -238,7 +234,10 @@ func (action *TaskAction) Run(
 			Args: config.Run.Args,
 
 			Dir: path.Join(action.artifactsRoot, config.Run.Dir),
-			TTY: &garden.TTYSpec{},
+
+			// Guardian sets the default TTY window size to width: 80, height: 24,
+			// which creates ANSI control sequences that do not work with other window sizes
+			TTY: &garden.TTYSpec{WindowSize: &garden.WindowSize{Columns: 500, Rows: 500}},
 		}, processIO)
 	}
 	if err != nil {
@@ -246,8 +245,6 @@ func (action *TaskAction) Run(
 	}
 
 	logger.Info("attached")
-
-	close(ready)
 
 	exited := make(chan struct{})
 	var processStatus int
@@ -259,7 +256,7 @@ func (action *TaskAction) Run(
 	}()
 
 	select {
-	case <-signals:
+	case <-ctx.Done():
 		err = action.registerOutputs(logger, repository, config, container)
 		if err != nil {
 			return err
@@ -272,7 +269,7 @@ func (action *TaskAction) Run(
 
 		<-exited
 
-		return ErrInterrupted
+		return ctx.Err()
 
 	case <-exited:
 		if processErr != nil {

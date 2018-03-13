@@ -25,9 +25,6 @@ Required Scopes and authorities are :
 
 ## Known Issues:
 
-### Ops Manager IP address swapping
-The vSphere upgrade-ops-mgr pipelines currently do not detach the IP adddress from the old Ops Manager instance, once the new Ops Manager is added. This will be fixed soon. Similarly, on other IaaSes, the private IP address is not necessarily kept and re-used on the new Ops Manager instance.
-
 ### Tiles with Stemcells not Available on PivNet
 For Ops Manager with tiles that require stemcells which are not available on PivNet, e.g. Apigee tiles, the setup of the pipeline requires an additional operations file that enables downloads from bosh.io.
 

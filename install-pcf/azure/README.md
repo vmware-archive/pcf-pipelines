@@ -122,7 +122,11 @@ is resolvable, run the following:
 
 ## Known Issues
 
-The multi resource group functionality is still WIP. Please see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/184) for more details. 
+- The multi resource group functionality is still WIP. Please see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/184) for more details. 
 
-Terraform introduced a [bug](https://github.com/terraform-providers/terraform-provider-azurerm/pull/772) recently in the `DNSSettings` property. We've pushed out a [fix](https://www.pivotaltracker.com/story/show/154810872) but we’ve yet to release a rc. If you are using v23, you should lock the provider version to `1.0.0`
+- Terraform introduced a [bug](https://github.com/terraform-providers/terraform-provider-azurerm/pull/772) recently in the `DNSSettings` property. We've pushed out a [fix](https://www.pivotaltracker.com/story/show/154810872) but we’ve yet to release a rc. If you are using v23, you should lock the provider version to `1.0.0`
+
+- If you are using pcf-pipelines v23 or older, Terraform [hardcodes](https://github.com/pivotal-cf/pcf-pipelines/blob/v0.23.0/install-pcf/azure/terraform/c0-azure-base/dns.tf#L19) the apps domain name to `cfapps`. The workaround for this is by adding `*.apps` to your Azure DNS Zone.
+
+- If you are using pcf-pipelines v17 (PCF 1.11), and you are using TCP and Spring Cloud Services with keepalives enabled, if your ALBs are not set with a timeout of 30 minutes, you could run into a situation whereby the ALB will close the idle connection prematurely. If you are on PCF 1.12 or later, the workaround for this is to go into ERT/PAS ---> Networking and set the Frontend Idle Timeout for GoRouter and HAProxy to a sensible [number](https://docs.pivotal.io/pivotalcf/2-0/customizing/azure-er-config.html#networking). 
 
