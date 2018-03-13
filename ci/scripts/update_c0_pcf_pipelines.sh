@@ -60,7 +60,7 @@ EOF
 
 fly -t c0 sp -p pcf-pipelines -c ci/pcf-pipelines/pipeline.yml \
   -l $tmpfile \
-  -l <(lpass show pcf-pipelines-params --notes) \
-  -l <(lpass show pcf-norm-github --notes) \
-  -l <(lpass show czero-pivnet --notes) \
-  -l <(lpass show minio-lrpiec03 --notes)
+  -l <(lpass show "Shared-Customer [0]/pcf-pipelines-params" --notes) \
+  -l <(lpass show "Shared-PCF-NORM/pcf-norm-github" --notes) \
+  -l <(lpass show "Shared-Customer [0]/czero-pivnet" --notes) \
+  -l <(lpass show "Shared-Customer [0]/minio-lrpiec03" --notes)
