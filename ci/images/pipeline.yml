@@ -138,7 +138,7 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/rootfs}
+        source: {repository: pcfnorm/rootfs}
       inputs:
       - name: pcf-pipelines
       - name: om
@@ -202,7 +202,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
           tag: release-candidate
       run:
         path: sh

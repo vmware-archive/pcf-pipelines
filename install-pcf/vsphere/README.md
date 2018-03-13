@@ -48,7 +48,7 @@ to be deployed on it.
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
+This pipeline downloads artifacts from DockerHub (pcfnorm/rootfs and custom
 docker-image resources), and as such the Concourse instance must have access
 to those.
 

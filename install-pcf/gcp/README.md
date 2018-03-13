@@ -8,7 +8,7 @@ architecture](http://docs.pivotal.io/pivotalcf/refarch/gcp/gcp_ref_arch.html).
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
+This pipeline downloads artifacts from DockerHub (pcfnorm/rootfs and custom
 docker-image resources) and the configured Google Cloud Storage bucket
 (terraform.tfstate file), and as such the Concourse instance must have access
 to those. Note that Terraform outputs a .tfstate file that contains plaintext
