@@ -18,7 +18,7 @@ resource "aws_elb" "PcfHttpElb" {
     ssl_certificate_id = "${var.aws_cert_arn}"
   }
   health_check {
-    target = "TCP:8080"
+    target = "HTTP:8080/health"
     timeout = 3
     interval = 5
     unhealthy_threshold = 2
