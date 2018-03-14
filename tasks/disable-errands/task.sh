@@ -34,7 +34,7 @@ will_disable=$(
     --raw-output \
     'split(" ")
     | reduce .[] as $errand ([];
-       if $to_disable | contains($errand) then
+       if $to_disable | split("\n") | index($errand) then
          . + [$errand]
        else
          .
