@@ -161,7 +161,7 @@ ROUTE_53_ZONE_ID:
 # All CA certificates should be appended together into a single collection of PEM-encoded entries.
 routing_custom_ca_certificates:
 
-# Disable HTTP on gorouters (true|false)
+# Disable HTTP on gorouters - do not set this param to anything other than `false`; ssl is terminated at the load balancer
 routing_disable_http: false
 
 # Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
