@@ -1,5 +1,9 @@
 # Upgrade Ops Manager
 
+## Requirements:
+
+In order to use the upgrade-ops-manager pipeline, you must have first used the [install-pcf](https://github.com/pivotal-cf/pcf-pipelines/tree/master/install-pcf) pipelines to install PCF. The upgrade-ops-manager pipeline will not function as expected if you installed PCF manually.
+
 ## Structure / Purpose
 The subfolders of this directory are for specific IaaS impelementations. 
 Each pipeline is meant to serve the same purpose on it's given IaaS. That
