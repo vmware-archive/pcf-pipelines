@@ -119,6 +119,11 @@ resource_types:
     tag: latest
 
 resources:
+- name: rootfs-docker-image
+  type: docker-image
+  source:
+    repository: pcfnorm/rootfs
+
 - name: pcf-pipelines
   type: git
   source:
@@ -332,6 +337,7 @@ jobs:
     - get: pcf-pipelines
       passed: [test]
     - get: fly
+    - get: rootfs-docker-image
 
   - put: version
     params: {pre: rc}

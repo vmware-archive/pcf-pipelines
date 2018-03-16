@@ -38,6 +38,12 @@ read -r -d '' hardcode_pivnet_version <<EOF
   value: $version
 EOF
 
+read -r -d '' hardcode_rootfs_version <<EOF
+- op: replace
+  path: /image_resource/source/tag?
+  value: $(cat rootfs-docker-image/tag)
+EOF
+
 read -r -d '' test_for_pcf_pipelines_git <<EOF
 - op: test
   path: /resources/name=pcf-pipelines
@@ -49,8 +55,16 @@ read -r -d '' test_for_pcf_pipelines_git <<EOF
       branch: master
       private_key: "{{git_private_key}}"
 EOF
+
+read -r -d '' test_for_docker_image <<EOF
+- op: test
+  path: /image_resource/source/repository
+  value: pcfnorm/rootfs
+EOF
+
 set -e
 
+# Add a tag to each pipeline.yml to enforce version
 files=$(
   find pcf-pipelines \
   -type f \
@@ -58,21 +72,40 @@ files=$(
   grep -v pcf-pipelines/ci
 )
 
-for f in ${files[@]}; do
-  if [[ $(cat $f | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git") 2>/dev/null ) ]]; then
+for f in "${files[@]}"; do
+  if [[ $(cat "$f" | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git") 2>/dev/null ) ]]; then
     echo "Using pivnet release for ${f}"
-    cat $f |
+    cat "$f" |
     yaml_patch_linux \
       -o pcf-pipelines/operations/use-pivnet-release.yml \
       -o <(echo "$hardcode_pivnet_version") \
-      > $f.bk
-    mv $f.bk $f
+      > "$f".bk
+    mv "$f".bk "$f"
 
-    fly format-pipeline --write --config $f
+    fly format-pipeline --write --config "$f"
 
     # Remove git_private_key from params as it is no longer needed
-    params_file=$(dirname $f)/params.yml
-    sed -i -e '/git_private_key:/d' $params_file
+    params_file=$(dirname "$f")/params.yml
+    sed -i -e '/git_private_key:/d' "$params_file"
+  fi
+done
+
+# Add a tag to the docker image in each task.yml to enforce version
+files=$(
+  find pcf-pipelines \
+  -type f \
+  -name task.yml |
+  grep -v pcf-pipelines/ci
+)
+
+for f in "${files[@]}"; do
+  if [[ $(cat "$f" | yaml_patch_linux -o <(echo "$test_for_docker_image") 2>/dev/null ) ]]; then
+    echo "Using pivnet release for ${f}"
+    cat "$f" |
+    yaml_patch_linux \
+      -o <(echo "$hardcode_rootfs_version") \
+      > "$f".bk
+    mv "$f".bk "$f"
   fi
 done
 
@@ -132,8 +165,8 @@ exclusions+=" --exclude pin-pcf-pipelines-git"
 echo "Creating release tarball, omitting the following globs:"
 echo "${exclusions}"
 tar \
-  $exclusions \
+  "$exclusions" \
   --create \
   --gzip \
-  --file pcf-pipelines-release-tarball/pcf-pipelines-$version.tgz \
+  --file pcf-pipelines-release-tarball/pcf-pipelines-"$version".tgz \
   pcf-pipelines
