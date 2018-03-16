@@ -1,13 +1,28 @@
-# PCF Pipelines
-
-**Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability. Using this repo directly may result in breaking the pipelines that consume it. Tracking master is considered unstable.**
-
 This is a collection of [Concourse](https://concourse-ci.org) pipelines for
 installing and upgrading [Pivotal Cloud Foundry](https://pivotal.io/platform).
 
 Other pipelines which may be of interest are listed at the end of this README.
 
 ![Concourse Pipeline](install-pcf/gcp/embed.png)
+
+# Downloading PCF Pipelines
+
+**Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability. Tracking master is considered unstable, and is likely to result in breaking the pipelines that consume it.  If you are an internal Pivotal person (or partner), please contact the pcf-norm team to gain access to this release.**
+
+If you do not have access to the Pivotal Network release, and you are using the GitHub release, for stability, please ensure you are tagging the pipeline.yml:
+
+```
+ resources:
+  - name: pcf-pipelines
+  type: git
+  source:
+    uri: https://github.com/pivotal-cf/pcf-pipelines
+    branch: master
+    username: {{github_username}}
+    password: {{github_token}}
+    tag_filter: v0.23.0
+```
+
 
 ### Install-PCF pipelines
 Deploys PCF for whichever IaaS you choose. For public cloud installs, such as AWS, Azure, and GCP, the pipeline will deploy the necessary infrastructure in the public cloud, such as the networks, loadbalancers, and databases, and use these resources to then deploy PCF (Ops Manager and Elastic Runtime). On-premise private datacenter install pipelines, such as with vSphere and Openstack, do not provision any infrastructure resources and only deploy PCF, using resources that are specified in the parameters of the pipeline.
