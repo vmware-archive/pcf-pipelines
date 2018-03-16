@@ -170,7 +170,9 @@ jobs:
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           cp steamroll/steamroll_linux workspace/steamroll
 
-          wget -O workspace/cf 'https://packages.cloudfoundry.org/stable?release=linux64-binary&source=github-rel'
+          wget -O /tmp/cf.tgz 'https://packages.cloudfoundry.org/stable?release=linux64-binary&source=github-rel'
+          tar xzf /tmp/cf.tgz -C /tmp
+          cp /tmp/cf workspace/cf
 
           gunzip govc/govc_linux_amd64.gz
           cp govc/govc_linux_amd64 workspace/govc
