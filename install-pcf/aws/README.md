@@ -50,6 +50,9 @@ Do NOT use username `admin` for any of database credentials that you configure f
 If you are using pcf-pipelines v23, the functionality for entering certs for `networking_poe_ssl_certs` does not currently work. Functionality does work if you choose to leave `networking_poe_ssl_certs` blank. The fix for the aforementioned issue will be released soon. 
 
 #### Issue: #### 
+`ert_errands_to_disable` does not function as expected; use caution when toggling the errands functionality. Currently the only functionality that works is it disables or enables errands; the functionality to choose which errand to disable does not function as expected. 
+
+#### Issue: #### 
 If the routers in the Pcf-Http-Elb show as `OutOfService`, and you have `routing_disable_http: true` in your params.yml, there is an issue with the terraform [paving](https://github.com/pivotal-cf/pcf-pipelines/blob/master/install-pcf/aws/terraform/load_balancers.tf#L21) whereby port `80` is being used for the health checks when the correct port is `8080`. (Affects those using pcf-pipelines v23 and earlier)
 
 #### Issue: #### 
