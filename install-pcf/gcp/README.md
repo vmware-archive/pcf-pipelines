@@ -93,6 +93,11 @@ story](https://www.pivotaltracker.com/n/projects/975916/stories/133642819) to
 address this issue.
 
 
+### Toggling Errands
+
+`ert_errands_to_disable` does not function as expected; use caution when toggling the errands functionality. Currently the only functionality that works is it disables or enables errands; the functionality to choose which errand to disable does not function as expected. 
+
+
 ## Troubleshooting
 
 #### Error message: ####
