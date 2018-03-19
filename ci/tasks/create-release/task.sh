@@ -40,7 +40,7 @@ EOF
 
 read -r -d '' hardcode_rootfs_version <<EOF
 - op: replace
-  path: /image_resource/source/tag?
+  path: /resources/type=image_resource/source/tag?
   value: $(cat rootfs-docker-image/tag)
 EOF
 
@@ -58,7 +58,7 @@ EOF
 
 read -r -d '' test_for_docker_image <<EOF
 - op: test
-  path: /image_resource/source/repository
+  path: /resources/type=image_resource/source/repository
   value: pcfnorm/rootfs
 EOF
 
