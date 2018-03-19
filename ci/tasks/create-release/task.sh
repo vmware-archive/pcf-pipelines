@@ -159,13 +159,14 @@ release:
   - 64  #| Pivotal SI Partners Known and Potential Partners.
 EOF
 
-exclusions="--exclude .git* --exclude ci --exclude *.go --exclude run_bash_testsuite.sh"
-exclusions+=" --exclude pin-pcf-pipelines-git"
+exclusions=""
+exclusions+=" "
 
 echo "Creating release tarball, omitting the following globs:"
-echo "${exclusions}"
+set -x
 tar \
-  "$exclusions" \
+  --exclude .git* --exclude ci --exclude *.go --exclude run_bash_testsuite.sh \
+  --exclude pin-pcf-pipelines-git \
   --create \
   --gzip \
   --file pcf-pipelines-release-tarball/pcf-pipelines-"$version".tgz \
