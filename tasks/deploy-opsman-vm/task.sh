@@ -65,7 +65,7 @@ EOF
   govc vm.change -c=2 -vm="${opsman_name}"
 
   echo "Shutting down OLD OpsMgr VM... ${OPSMAN_IP}"
-  old_opsman_path="$(govc find "${GOVC_RESOURCE_POOL}" -type m -guest.ipAddress "${OPSMAN_IP}" -runtime.powerState poweredOn)"
+  old_opsman_path="$(govc find "host/${GOVC_CLUSTER}/Resources/${GOVC_RESOURCE_POOL}" -type m -guest.ipAddress "${OPSMAN_IP}" -runtime.powerState poweredOn)"
   govc device.disconnect -vm.ipath="${old_opsman_path}" ethernet-0
   govc vm.power -off=true -vm.ipath="${old_opsman_path}"
 
