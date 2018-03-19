@@ -64,6 +64,25 @@ EOF
 
 set -e
 
+# Add a tag to the docker image in each task.yml to enforce version
+files=$(
+  find pcf-pipelines \
+  -type f \
+  -name task.yml |
+  grep -v pcf-pipelines/ci
+)
+
+for f in ${files[@]}; do
+  if [[ $(cat "$f" | yaml_patch_linux -o <(echo "$test_for_docker_image") 2>/dev/null ) ]]; then
+    echo "Using pivnet release for ${f}"
+    cat "$f" |
+    yaml_patch_linux \
+      -o <(echo "$hardcode_rootfs_version") \
+      > "$f".bk
+    mv "$f".bk "$f"
+  fi
+done
+
 # Add a tag to each pipeline.yml to enforce version
 files=$(
   find pcf-pipelines \
@@ -72,7 +91,7 @@ files=$(
   grep -v pcf-pipelines/ci
 )
 
-for f in "${files[@]}"; do
+for f in ${files[@]}; do
   if [[ $(cat "$f" | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git") 2>/dev/null ) ]]; then
     echo "Using pivnet release for ${f}"
     cat "$f" |
@@ -87,25 +106,6 @@ for f in "${files[@]}"; do
     # Remove git_private_key from params as it is no longer needed
     params_file=$(dirname "$f")/params.yml
     sed -i -e '/git_private_key:/d' "$params_file"
-  fi
-done
-
-# Add a tag to the docker image in each task.yml to enforce version
-files=$(
-  find pcf-pipelines \
-  -type f \
-  -name task.yml |
-  grep -v pcf-pipelines/ci
-)
-
-for f in "${files[@]}"; do
-  if [[ $(cat "$f" | yaml_patch_linux -o <(echo "$test_for_docker_image") 2>/dev/null ) ]]; then
-    echo "Using pivnet release for ${f}"
-    cat "$f" |
-    yaml_patch_linux \
-      -o <(echo "$hardcode_rootfs_version") \
-      > "$f".bk
-    mv "$f".bk "$f"
   fi
 done
 
