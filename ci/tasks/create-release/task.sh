@@ -38,12 +38,6 @@ read -r -d '' hardcode_pivnet_version <<EOF
   value: $version
 EOF
 
-read -r -d '' hardcode_rootfs_version <<EOF
-- op: replace
-  path: /resources/type=image_resource/source/tag?
-  value: $(cat rootfs-docker-image/tag)
-EOF
-
 read -r -d '' test_for_pcf_pipelines_git <<EOF
 - op: test
   path: /resources/name=pcf-pipelines
@@ -58,8 +52,14 @@ EOF
 
 read -r -d '' test_for_docker_image <<EOF
 - op: test
-  path: /resources/type=image_resource/source/repository
+  path: /image_resource/source/repository
   value: pcfnorm/rootfs
+EOF
+
+read -r -d '' hardcode_rootfs_version <<EOF
+- op: replace
+  path: /image_resource/source/tag?
+  value: $(cat rootfs-docker-image/tag)
 EOF
 
 set -e
