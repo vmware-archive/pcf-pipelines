@@ -57,8 +57,8 @@ read -r -d '' test_for_docker_image <<EOF
 EOF
 
 read -r -d '' hardcode_rootfs_version <<EOF
-- op: replace
-  path: /image_resource/source/tag?
+- op: add
+  path: /image_resource/source/tag
   value: $(cat rootfs-docker-image/tag)
 EOF
 
