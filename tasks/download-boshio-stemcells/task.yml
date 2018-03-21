@@ -17,7 +17,9 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: pcfnorm/rootfs}
+  source:
+    repository: pcfnorm/rootfs
+
 
 inputs:
   - name: pivnet-stemcells
