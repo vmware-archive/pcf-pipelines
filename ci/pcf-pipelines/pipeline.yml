@@ -100,6 +100,12 @@ groups:
   - check-environments-complete
 
 resource_types:
+- name: smuggler
+  type: docker-image
+  source:
+    repository: redfactorlabs/concourse-smuggler-resource
+    tag: ubuntu
+
 - name: pivnet
   type: docker-image
   source:
@@ -119,10 +125,15 @@ resource_types:
     tag: latest
 
 resources:
-- name: rootfs-docker-image
-  type: docker-image
+- name: rootfs-tag
+  type: smuggler
   source:
-    repository: pcfnorm/rootfs
+    commands:
+      check: |
+        curl https://registry.hub.docker.com/v1/repositories/pcfnorm/rootfs/tags | jq -r .[].name | grep "^v" | sort -V > ${SMUGGLER_OUTPUT_DIR}/versions
+      in: |
+        echo "${SMUGGLER_VERSION_ID}" > ${SMUGGLER_DESTINATION_DIR}/${SMUGGLER_target_file}
+    target_file: tag
 
 - name: pcf-pipelines
   type: git
@@ -337,7 +348,7 @@ jobs:
     - get: pcf-pipelines
       passed: [test]
     - get: fly
-    - get: rootfs-docker-image
+    - get: rootfs-tag
 
   - put: version
     params: {pre: rc}
@@ -383,7 +394,8 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: pcfnorm/rootfs}
+        source:
+          repository: pcfnorm/rootfs
       inputs:
       - name: src
       - name: pcf-pipelines-release

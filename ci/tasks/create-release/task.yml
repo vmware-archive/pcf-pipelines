@@ -10,7 +10,7 @@ inputs:
 - name: pcf-pipelines
 - name: version
 - name: fly
-- name: rootfs-docker-image
+- name: rootfs-tag
 
 outputs:
 - name: pcf-pipelines-release-tarball
