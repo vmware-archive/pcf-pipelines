@@ -61,7 +61,7 @@ files=$(
 
 for f in ${files[@]}; do
     echo "Setting docker version for ${f}"
-   sed -i -re "s/\s\s(\s*)repository: pcfnorm\/rootfs/\1  repository: pcfnorm\/rootfs\n\1version: {digest: $(cat rootfs-tag/tag)}/g" "$f"
+   sed -i -re "s/(\s+)repository: pcfnorm\/rootfs/\1repository: pcfnorm\/rootfs\n\1tag: $(cat rootfs-tag/tag)/g" "$f"
 done
 
 # Add a tag to each pipeline.yml to enforce version
