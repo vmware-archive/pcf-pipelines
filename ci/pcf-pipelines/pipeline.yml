@@ -1140,8 +1140,7 @@ jobs:
     - get: pivnet-rc
       passed: [check-environments-complete]
     - get: fly
-    - get: rootfs-docker-image
-
+    - get: rootfs-tag
   - task: create-release
     file: pcf-pipelines/ci/tasks/create-release/task.yml
     params:
