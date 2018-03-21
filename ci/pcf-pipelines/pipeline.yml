@@ -380,6 +380,8 @@ jobs:
     - get: src
       resource: pcf-pipelines
       passed: [publish-rc]
+    - get: rootfs-tag
+      passed: [publish-rc]
     - do:
       - get: pivnet-rc
         trigger: true
@@ -420,6 +422,8 @@ jobs:
     - get: version
       passed: [test-rc]
     - get: pcf-pipelines
+      passed: [test-rc]
+    - get: rootfs-tag
       passed: [test-rc]
     - get: pivnet-rc
       trigger: true
@@ -524,11 +528,15 @@ jobs:
 - name: lock-vsphere
   serial: true
   plan:
-  - aggregate:
-    - get: pcf-pipelines
+  - aggregate: &lock-resources
     - get: pivnet-rc
       passed: [update-pipelines]
       trigger: true
+    - get: pcf-pipelines
+      passed: [update-pipelines]
+    - get: rootfs-tag
+      passed: [update-pipelines]
+
   - put: vsphere-lock
     params: { claim: install-pcf }
     timeout: 3h00m
@@ -537,10 +545,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ lock-vsphere ]
     - get: vsphere-lock
       passed: [ lock-vsphere ]
       trigger: true
     - get: pivnet-rc
+      passed: [ lock-vsphere ]
+    - get: rootfs-tag
+      passed: [ lock-vsphere ]
   - task: destroy-rc-install-pcf-vsphere
     params:
       PIPELINE_NAME: rc-install-pcf-vsphere
@@ -551,10 +563,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ destroy-rc-install-pcf-vsphere ]
     - get: vsphere-lock
       passed: [ destroy-rc-install-pcf-vsphere ]
       trigger: true
     - get: pivnet-rc
+      passed: [ destroy-rc-install-pcf-vsphere ]
+    - get: rootfs-tag
+      passed: [ destroy-rc-install-pcf-vsphere ]
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
@@ -576,10 +592,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ set-rc-install-pcf-vsphere ]
     - get: vsphere-lock
       passed: [ set-rc-install-pcf-vsphere ]
       trigger: true
     - get: pivnet-rc
+      passed: [ set-rc-install-pcf-vsphere ]
+    - get: rootfs-tag
       passed: [ set-rc-install-pcf-vsphere ]
   - task: trigger-vsphere-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -594,10 +613,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ wipe-vsphere ]
     - get: vsphere-lock
       passed: [ wipe-vsphere ]
       trigger: true
     - get: pivnet-rc
+      passed: [ wipe-vsphere ]
+    - get: rootfs-tag
       passed: [ wipe-vsphere ]
   - task: trigger-vsphere-rc-deploy-opsman
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -614,11 +636,7 @@ jobs:
 - name: lock-vsphere-offline
   serial: true
   plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: pivnet-rc
-      passed: [update-pipelines]
-      trigger: true
+  - aggregate: *lock-resources
   - put: vsphere-offline-lock
     params: { claim: install-pcf }
     timeout: 3h00m
@@ -627,10 +645,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ lock-vsphere-offline ]
     - get: vsphere-offline-lock
       passed: [ lock-vsphere-offline ]
       trigger: true
     - get: pivnet-rc
+      passed: [ lock-vsphere-offline ]
+    - get: rootfs-tag
+      passed: [ lock-vsphere-offline ]
   - task: destroy-rc-install-pcf-vsphere-offline
     params:
       PIPELINE_NAME: rc-install-pcf-vsphere-offline
@@ -641,10 +663,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ destroy-rc-install-pcf-vsphere-offline ]
     - get: vsphere-offline-lock
       passed: [ destroy-rc-install-pcf-vsphere-offline ]
       trigger: true
     - get: pivnet-rc
+      passed: [ destroy-rc-install-pcf-vsphere-offline ]
+    - get: rootfs-tag
+      passed: [ destroy-rc-install-pcf-vsphere-offline ]
 
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
@@ -680,10 +706,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ set-offline-pipelines ]
     - get: vsphere-offline-lock
       passed: [ set-offline-pipelines ]
       trigger: true
     - get: pivnet-rc
+      passed: [ set-offline-pipelines ]
+    - get: rootfs-tag
+      passed: [ set-offline-pipelines ]
   - task: trigger-create-offline-pinned-pipelines
     params:
       <<: *atc_creds
@@ -695,10 +725,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ trigger-create-offline-pinned-pipelines ]
     - get: vsphere-offline-lock
       passed: [ trigger-create-offline-pinned-pipelines ]
       trigger: true
     - get: pivnet-rc
+      passed: [ trigger-create-offline-pinned-pipelines ]
+    - get: rootfs-tag
+      passed: [ trigger-create-offline-pinned-pipelines ]
   - task: check-pipeline-exists
     params:
       <<: *atc_creds
@@ -723,10 +757,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ wipe-vsphere-offline ]
     - get: vsphere-offline-lock
       passed: [ wipe-vsphere-offline ]
       trigger: true
     - get: pivnet-rc
+      passed: [ wipe-vsphere-offline ]
+    - get: rootfs-tag
       passed: [ wipe-vsphere-offline ]
   - task: trigger-rc-vsphere-offline-deploy-opsman
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -743,11 +780,7 @@ jobs:
 - name: lock-gcp
   serial: true
   plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: pivnet-rc
-      passed: [update-pipelines]
-      trigger: true
+  - aggregate: *lock-resources
   - put: gcp-lock
     params: { claim: install-pcf }
     timeout: 3h00m
@@ -756,10 +789,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [lock-gcp]
     - get: gcp-lock
       passed: [lock-gcp]
       trigger: true
     - get: pivnet-rc
+      passed: [lock-gcp]
+    - get: rootfs-tag
+      passed: [lock-gcp]
   - task: destroy-rc-install-pcf-gcp
     params:
       PIPELINE_NAME: rc-install-pcf-gcp
@@ -770,10 +807,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ destroy-rc-install-pcf-gcp ]
     - get: gcp-lock
       passed: [ destroy-rc-install-pcf-gcp ]
       trigger: true
     - get: pivnet-rc
+      passed: [ destroy-rc-install-pcf-gcp ]
+    - get: rootfs-tag
+      passed: [ destroy-rc-install-pcf-gcp ]
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
@@ -795,10 +836,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ set-rc-install-pcf-gcp ]
     - get: gcp-lock
       passed: [ set-rc-install-pcf-gcp ]
       trigger: true
     - get: pivnet-rc
+      passed: [ set-rc-install-pcf-gcp ]
+    - get: rootfs-tag
       passed: [ set-rc-install-pcf-gcp ]
   - task: trigger-gcp-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -813,10 +857,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ wipe-gcp ]
     - get: gcp-lock
       passed: [ wipe-gcp ]
       trigger: true
     - get: pivnet-rc
+      passed: [ wipe-gcp ]
+    - get: rootfs-tag
       passed: [ wipe-gcp ]
   - task: trigger-gcp-rc-upload-opsman-image
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -851,11 +898,7 @@ jobs:
 - name: lock-azure
   serial: true
   plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: pivnet-rc
-      passed: [update-pipelines]
-      trigger: true
+  - aggregate: *lock-resources
   - put: azure-lock
     params: { claim: install-pcf }
     timeout: 3h00m
@@ -864,10 +907,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [lock-azure]
     - get: azure-lock
       passed: [lock-azure]
       trigger: true
     - get: pivnet-rc
+      passed: [lock-azure]
+    - get: rootfs-tag
+      passed: [lock-azure]
   - task: destroy-rc-install-pcf-azure
     params:
       PIPELINE_NAME: rc-install-pcf-azure
@@ -878,10 +925,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ destroy-rc-install-pcf-azure ]
     - get: azure-lock
       passed: [ destroy-rc-install-pcf-azure ]
       trigger: true
     - get: pivnet-rc
+      passed: [ destroy-rc-install-pcf-azure ]
+    - get: rootfs-tag
+      passed: [ destroy-rc-install-pcf-azure ]
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
@@ -903,10 +954,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ set-rc-install-pcf-azure ]
     - get: azure-lock
       passed: [ set-rc-install-pcf-azure ]
       trigger: true
     - get: pivnet-rc
+      passed: [ set-rc-install-pcf-azure ]
+    - get: rootfs-tag
       passed: [ set-rc-install-pcf-azure ]
   - task: trigger-azure-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -921,10 +975,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ wipe-azure ]
     - get: azure-lock
       passed: [ wipe-azure ]
       trigger: true
     - get: pivnet-rc
+      passed: [ wipe-azure ]
+    - get: rootfs-tag
       passed: [ wipe-azure ]
   - task: trigger-azure-rc-create-infrastructure
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -963,11 +1020,7 @@ jobs:
 - name: lock-aws
   serial: true
   plan:
-  - aggregate:
-    - get: pcf-pipelines
-    - get: pivnet-rc
-      passed: [update-pipelines]
-      trigger: true
+  - aggregate: *lock-resources
   - put: aws-lock
     params: { claim: install-pcf }
     timeout: 3h00m
@@ -976,10 +1029,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [lock-aws]
     - get: aws-lock
       passed: [lock-aws]
       trigger: true
     - get: pivnet-rc
+      passed: [lock-aws]
+    - get: rootfs-tag
+      passed: [lock-aws]
   - task: destroy-rc-install-pcf-aws
     params:
       PIPELINE_NAME: rc-install-pcf-aws
@@ -990,10 +1047,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ destroy-rc-install-pcf-aws ]
     - get: aws-lock
       passed: [ destroy-rc-install-pcf-aws ]
       trigger: true
     - get: pivnet-rc
+      passed: [ destroy-rc-install-pcf-aws ]
+    - get: rootfs-tag
+      passed: [ destroy-rc-install-pcf-aws ]
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
     input_mapping: { tarball: pivnet-rc }
@@ -1015,10 +1076,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ set-rc-install-pcf-aws ]
     - get: aws-lock
       passed: [ set-rc-install-pcf-aws ]
       trigger: true
     - get: pivnet-rc
+      passed: [ set-rc-install-pcf-aws ]
+    - get: rootfs-tag
       passed: [ set-rc-install-pcf-aws ]
   - task: trigger-aws-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -1033,10 +1097,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed: [ wipe-aws ]
     - get: aws-lock
       passed: [ wipe-aws ]
       trigger: true
     - get: pivnet-rc
+      passed: [ wipe-aws ]
+    - get: rootfs-tag
       passed: [ wipe-aws ]
   - task: trigger-aws-rc-create-infrastructure
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
@@ -1054,14 +1121,27 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
+      passed:
+      - trigger-install-pcf-gcp
+      - trigger-install-pcf-vsphere
+      - trigger-install-pcf-azure
+      - trigger-install-pcf-aws
+#      - trigger-install-pcf-vsphere-offline
     - get: pivnet-rc
       passed:
       - trigger-install-pcf-gcp
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
-      - trigger-install-pcf-vsphere-offline
+#      - trigger-install-pcf-vsphere-offline
       trigger: true
+    - get: rootfs-tag
+      passed:
+      - trigger-install-pcf-gcp
+      - trigger-install-pcf-vsphere
+      - trigger-install-pcf-azure
+      - trigger-install-pcf-aws
+#      - trigger-install-pcf-vsphere-offline
   - aggregate:
     - do:
       - task: check-vsphere-offline
@@ -1136,7 +1216,7 @@ jobs:
     - get: version
       params: {bump: final}
     - get: pcf-pipelines
-      passed: [update-pipelines]
+      passed: [check-environments-complete]
     - get: pivnet-rc
       passed: [check-environments-complete]
     - get: fly
