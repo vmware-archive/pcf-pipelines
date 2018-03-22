@@ -31,11 +31,14 @@ terraform plan \
   -var "opsman_allow_https=${OPSMAN_ALLOW_HTTPS}" \
   -var "opsman_allow_https_cidr_ranges=${OPSMAN_ALLOW_HTTPS_CIDR_LIST}" \
   -var "aws_access_key_id=${aws_access_key_id}" \
+  -var "aws_alternate_access_key_id=${aws_alternate_access_key_id}" \
   -var "aws_secret_access_key=${aws_secret_access_key}" \
+  -var "aws_alternate_secret_access_key=${aws_alternate_secret_access_key}" \
   -var "aws_key_name=${aws_key_name}" \
   -var "aws_cert_arn=${aws_cert_arn}" \
   -var "amis_nat=${amis_nat}" \
   -var "aws_region=${aws_region}" \
+  -var "aws_alternate_region=${aws_alternate_region}" \
   -var "aws_az1=${aws_az1}" \
   -var "aws_az2=${aws_az2}" \
   -var "aws_az3=${aws_az3}" \
