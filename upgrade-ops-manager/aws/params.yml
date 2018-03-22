@@ -38,9 +38,9 @@ opsman_domain_or_ip_address: CHANGEME
 
 opsman_major_minor_version: CHANGEME # (e.g. 2\.[0-9\]+\.[0-9]+$)
 
-# Optional
-# Overwrite the existing VM disk size for Ops Manager
-pcf_opsman_disk_size_in_gb:
+# Leave this value blank; functionality does not work and will be removed in the next release.
+pcf_opsman_disk_size_in_gb: #leave this value blank
+
 
 # Pivotal Net Token to download Ops Manager binaries from https://network.pivotal.io
 pivnet_token: CHANGEME # value must be a Pivotal Network legacy token; UAA API tokens do not work currently work
