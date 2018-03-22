@@ -1,5 +1,15 @@
 # Upgrade Ops Manager
 
+**Compatibility Matrix**
+
+| IAAS | pipelines release | OM version | 
+| :--- | --- | --- | 
+| vSphere | v23.1 | 2.0.x  | 
+| Azure | v23.1 | 2.0.x | 
+| AWS | v23.1 | 2.0.x | 
+| GCP | v23.1 | 2.0.x  | 
+
+
 ## Requirements:
 
 In order to use the upgrade-ops-manager pipeline, you must have first used the [install-pcf](https://github.com/pivotal-cf/pcf-pipelines/tree/master/install-pcf) pipelines to install PCF. The upgrade-ops-manager pipeline will not function as expected if you installed PCF manually.
