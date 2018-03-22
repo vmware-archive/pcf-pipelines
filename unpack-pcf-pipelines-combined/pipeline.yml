@@ -157,8 +157,8 @@ jobs:
       inputs:
       - name: pcf-pipelines
       params:
-        PIPELINE_PARAMS: {{install_pcf_pipeline_params}}
-        PIPELINE_NAME: {{install_pcf_pipeline_name}}
+        PIPELINE_PARAMS: {{rc_offline_vsphere_install_params}}
+        PIPELINE_NAME: {{rc_offline_pipeline_name}}
         PIPELINE_PATH: pcf-pipelines/install-pcf/vsphere/pipeline.yml
         ATC_EXTERNAL_URL: {{atc_external_url}}
         ATC_BASIC_AUTH_USERNAME: {{atc_basic_auth_username}}
