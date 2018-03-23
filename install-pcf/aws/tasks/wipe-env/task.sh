@@ -43,8 +43,11 @@ terraform init
 terraform destroy \
   -force \
   -var "aws_access_key_id=${AWS_ACCESS_KEY_ID}" \
+  -var "aws_alternate_access_key_id=${AWS_ALTERNATE_ACCESS_KEY_ID}" \
   -var "aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}" \
+  -var "aws_alternate_secret_access_key=${AWS_ALTERNATE_SECRET_ACCESS_KEY}" \
   -var "aws_region=${AWS_REGION}" \
+  -var "aws_alternate_region=${AWS_ALTERNATE_REGION}" \
   -var "opsman_ami=dontcare" \
   -var "db_master_username=dontcare" \
   -var "db_master_password=dontcare" \

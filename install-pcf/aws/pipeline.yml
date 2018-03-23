@@ -390,3 +390,6 @@ jobs:
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       AWS_REGION: {{aws_region}}
+      AWS_ALTERNATE_ACCESS_KEY_ID: {{aws_alternate_access_key_id}}
+      AWS_ALTERNATE_SECRET_ACCESS_KEY: {{aws_alternate_secret_access_key}}
+      AWS_ALTERNATE_REGION: {{aws_alternate_region}}
