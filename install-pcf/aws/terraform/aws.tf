@@ -1,5 +1,8 @@
+terraform {
+  required_version = "> 0.10"
+}
+
 provider "aws" {
-    access_key = "${var.aws_access_key_id}"
-    secret_key = "${var.aws_secret_access_key}"
-    region = "${var.aws_region}"
+  version = "> 1.0.0"
+  region  = "${var.aws_region}"
 }

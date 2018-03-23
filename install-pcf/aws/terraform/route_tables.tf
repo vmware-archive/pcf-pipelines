@@ -1,56 +1,34 @@
 # Routing Tables for all subnets
 
 resource "aws_route_table" "PublicSubnetRouteTable" {
-    vpc_id = "${aws_vpc.PcfVpc.id}"
+  count  = "${length(data.aws_availability_zones.az.names)}"
+  vpc_id = "${aws_vpc.PcfVpc.id}"
 
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = "${aws_internet_gateway.internetGw.id}"
-    }
-
-    tags {
-        Name = "${var.prefix}-Public Subnet Route Table"
-    }
+  tags {
+    Name = "${var.prefix}-Public Subnet Route Table ${data.aws_availability_zones.az.names[count.index]}"
+  }
 }
 
 # AZ1 Routing table
-resource "aws_route_table" "PrivateSubnetRouteTable_az1" {
-    vpc_id = "${aws_vpc.PcfVpc.id}"
+resource "aws_route_table" "PrivateSubnetRouteTable" {
+  count  = "${length(data.aws_availability_zones.az.names)}"
+  vpc_id = "${aws_vpc.PcfVpc.id}"
 
-    route {
-        cidr_block = "0.0.0.0/0"
-        instance_id = "${aws_instance.nat_az1.id}"
-    }
-
-    tags {
-        Name = "${var.prefix}-Private Subnet Route Table AZ1"
-    }
+  tags {
+    Name = "${var.prefix}-Private Subnet Route Table ${data.aws_availability_zones.az.names[count.index]}"
+  }
 }
 
-# AZ2 Routing table
-resource "aws_route_table" "SubnetRouteTable_az2" {
-    vpc_id = "${aws_vpc.PcfVpc.id}"
-
-    route {
-        cidr_block = "0.0.0.0/0"
-        instance_id = "${aws_instance.nat_az2.id}"
-    }
-
-    tags {
-        Name = "${var.prefix}-Private Subnet Route Table AZ2"
-    }
+resource "aws_route" "PublicInternetGw" {
+  count                  = "${length(data.aws_availability_zones.az.names)}"
+  route_table_id         = "${element(aws_route_table.PublicSubnetRouteTable.*.id, count.index)}"
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = "${aws_internet_gateway.internetGw.id}"
 }
 
-# AZ3 Routing table
-resource "aws_route_table" "SubnetRouteTable_az3" {
-    vpc_id = "${aws_vpc.PcfVpc.id}"
-
-    route {
-        cidr_block = "0.0.0.0/0"
-        instance_id = "${aws_instance.nat_az3.id}"
-    }
-
-    tags {
-        Name = "${var.prefix}-Private Subnet Route Table AZ3"
-    }
+resource "aws_route" "PrivateNATGw" {
+  count                  = "${length(data.aws_availability_zones.az.names)}"
+  route_table_id         = "${element(aws_route_table.PrivateSubnetRouteTable.*.id, count.index)}"
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = "${element(aws_nat_gateway.natGw.*.id, count.index)}"
 }
