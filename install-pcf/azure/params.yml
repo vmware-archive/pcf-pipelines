@@ -294,3 +294,7 @@ tcp_routing_ports:                      # A comma-separated list of ports and hy
 
 # Optional PEM-encoded certificates to add to BOSH VMs
 trusted_certificates:
+
+# demo
+azure_dedicate_rg: CHANGEME # 
+azure_dedicate_vnet: CHANGEME #  

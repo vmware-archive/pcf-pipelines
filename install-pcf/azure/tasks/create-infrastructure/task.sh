@@ -9,7 +9,7 @@ fi
 # Get ert subnet if multi-resgroup
 az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}
 az account set --subscription ${AZURE_SUBSCRIPTION_ID}
-ERT_SUBNET_CMD="az network vnet subnet list -g network-core --vnet-name vnet-pcf --output json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
+ERT_SUBNET_CMD="az network vnet subnet list -g ${AZURE_DEDICATE_RG} --vnet-name ${AZURE_DEDICATE_VNET} --output json | jq '.[] | select(.name == \"${NETWORK_NAME}\") | .id' | tr -d '\"'"
 ERT_SUBNET=$(eval ${ERT_SUBNET_CMD})
 echo "Found SubnetID=${ERT_SUBNET}"
 
@@ -75,6 +75,8 @@ terraform plan \
   -var "azure_buildpacks_container=${AZURE_BUILDPACKS_CONTAINER}" \
   -var "azure_droplets_container=${AZURE_DROPLETS_CONTAINER}" \
   -var "azure_packages_container=${AZURE_PACKAGES_CONTAINER}" \
+  -var "azure_dedicate_rg=${AZURE_DEDICATE_RG}" \ 
+  -var "azure_dedicate_vnet=${AZURE_DEDICATE_VNET}" \ 
   -var "azure_resources_container=${AZURE_RESOURCES_CONTAINER}" \
   -var "om_disk_size_in_gb=${PCF_OPSMAN_DISK_SIZE_IN_GB}" \
   -out terraform.tfplan \

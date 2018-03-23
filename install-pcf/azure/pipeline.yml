@@ -55,7 +55,7 @@ resources:
 - name: pcf-pipelines
   type: git
   source:
-    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    uri: git@github.com:tichimura-pivotal/pcf-pipelines.git
     branch: master
     private_key: {{git_private_key}}
 
@@ -189,6 +189,9 @@ jobs:
       AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR: {{azure_terraform_subnet_services1_cidr}}
       AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
       PCF_OPSMAN_DISK_SIZE_IN_GB: {{pcf_opsman_disk_size_in_gb}}
+      AZURE_DEDICATE_RG: {{azure_dedicate_rg}}
+      AZURE_DEDICATE_VNET: {{azure_dedicate_vnet}}
+      NETWORK_NAME: {{deployment_network_name}}
 
 ##############################
 ## Job - Config OpsMan Auth ##
