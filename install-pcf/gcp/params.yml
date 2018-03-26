@@ -55,15 +55,16 @@ apps_domain: CHANGEME   # e.g. apps.pcf.example.com
 # Valid values:
 #   all
 #   none
-#   "" (empty string)
+#   "" (empty string - equivalent to none)
 #   Any combination of the following, separated by comma:
-#     smoke-tests
+#     smoke_tests
+#     push-usage-service
 #     push-apps-manager
-#     notifications
-#     notifications-ui
+#     deploy-notifications
+#     deploy-notifications-ui
 #     push-pivotal-account
-#     autoscaling
-#     autoscaling-register-broker
+#     deploy-autoscaling
+#     register-broker
 #     nfsbrokerpush
 ert_errands_to_disable: none
 
