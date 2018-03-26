@@ -25,6 +25,7 @@ load_params('rc_gcp_install_params' ,'rc/install-pcf/gcp/pipeline.yml')
 load_params('rc_azure_install_params' ,'rc/install-pcf/azure/pipeline.yml')
 load_params('rc_vsphere_install_params' ,'rc/install-pcf/vsphere/pipeline.yml')
 load_params('rc_lre_gcp_upgrade_ops_manager_params' ,'lre/upgrade-ops-manager/gcp/pipeline.yml')
+load_params('rc_lre_gcp_upgrade_pas_tile_params', 'lre/upgrade-pas-tile/gcp/pipeline.yml')
 # write_params( 'rc_offline_vsphere_install_params', 'offline/install-pcf/vsphere/pipeline.yml')
 # tempfile.write('  rc_offline_pipeline_name: rc-offline-vsphere-install')
 

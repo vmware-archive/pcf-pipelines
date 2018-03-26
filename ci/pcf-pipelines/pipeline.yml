@@ -28,9 +28,12 @@ groups:
   - trigger-install-pcf-aws
   - check-environments-complete
   - publish-release
-  - set-rc-lre-gcp-upgrade-ops-manager
   - destroy-rc-lre-gcp-upgrade-ops-manager
+  - set-rc-lre-gcp-upgrade-ops-manager
   - trigger-rc-lre-gcp-upgrade-ops-manager
+  - destroy-rc-lre-gcp-upgrade-pas-tile
+  - set-rc-lre-gcp-upgrade-pas-tile
+  - trigger-rc-lre-gcp-upgrade-pas-tile
   - lock-gcp-lre
   - force-unlock-vsphere-install-pcf
   - force-unlock-gcp-install-pcf
@@ -583,7 +586,7 @@ jobs:
   plan:
   - aggregate: *lock-resources
   - put: gcp-lock
-    params: { claim: upgrade-opsmgr }
+    params: { claim: lre-gcp }
     timeout: 3h00m
 
 - name: destroy-rc-lre-gcp-upgrade-ops-manager
@@ -659,6 +662,81 @@ jobs:
     <<: *notify_slack
 
 ####### END GCP LRE
+####### GCP upgrade tile
+- name: destroy-rc-lre-gcp-upgrade-pas-tile
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ trigger-rc-lre-gcp-upgrade-ops-manager ]
+    - get: gcp-lock
+      passed: [ trigger-rc-lre-gcp-upgrade-ops-manager ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ trigger-rc-lre-gcp-upgrade-ops-manager ]
+    - get: rootfs-tag
+      passed: [ trigger-rc-lre-gcp-upgrade-ops-manager ]
+  - task: destroy-rc-lre-gcp-upgrade-pas-tile
+    params:
+      PIPELINE_NAME: rc-lre-gcp-upgrade-pas-tile
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
+  on_failure:
+    <<: *notify_slack
+
+- name: set-rc-lre-gcp-upgrade-pas-tile
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ destroy-rc-lre-gcp-upgrade-pas-tile ]
+    - get: gcp-lock
+      passed: [ destroy-rc-lre-gcp-upgrade-pas-tile ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ destroy-rc-lre-gcp-upgrade-pas-tile ]
+    - get: rootfs-tag
+      passed: [ destroy-rc-lre-gcp-upgrade-pas-tile ]
+  - task: unpack-rc
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: release }
+  - task: set-rc-lre-gcp-upgrade-pas-tile
+    params:
+      PIPELINE_PARAMS: ((rc_lre_gcp_upgrade_pas_tile_params))
+      PIPELINE_NAME: rc-lre-gcp-upgrade-pas-tile
+      PIPELINE_PATH: release/pcf-pipelines/upgrade-tile/gcp/pipeline.yml
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/set_pipeline.yml
+  - task: unpause-rc-lre-gcp-upgrade-pas-tile
+    params:
+      PIPELINE_NAME: rc-lre-gcp-upgrade-pas-tile
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
+  on_failure:
+    <<: *notify_slack
+
+- name: trigger-rc-lre-gcp-upgrade-pas-tile
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ set-rc-lre-gcp-upgrade-pas-tile ]
+    - get: gcp-lock
+      passed: [ set-rc-lre-gcp-upgrade-pas-tile ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ set-rc-lre-gcp-upgrade-pas-tile ]
+    - get: rootfs-tag
+      passed: [ set-rc-lre-gcp-upgrade-pas-tile ]
+  - task: trigger-pas-tile
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-lre-gcp-upgrade-pas-tile/upload-and-stage-tile
+        rc-lre-gcp-upgrade-pas-tile/apply-changes
+  on_failure:
+    <<: *notify_slack
+
+####### END GCP upgrade tile
 
 ####### Azure
 
@@ -893,14 +971,16 @@ jobs:
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
-      - trigger-rc-lre-gcp-upgrade-ops-manager
+#      - trigger-rc-lre-gcp-upgrade-ops-manager
+      - trigger-rc-lre-gcp-upgrade-pas-tile
     - get: pivnet-rc
       passed:
       - trigger-install-pcf-gcp
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
-      - trigger-rc-lre-gcp-upgrade-ops-manager
+#      - trigger-rc-lre-gcp-upgrade-ops-manager
+      - trigger-rc-lre-gcp-upgrade-pas-tile
       trigger: true
     - get: rootfs-tag
       passed:
@@ -908,24 +988,40 @@ jobs:
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
-      - trigger-rc-lre-gcp-upgrade-ops-manager
+#      - trigger-rc-lre-gcp-upgrade-ops-manager
+      - trigger-rc-lre-gcp-upgrade-pas-tile
   - aggregate:
     - do:
-      - task: check-lre-gcp
+      - task: check-lre-gcp-upgrade-pas-tile
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
         params:
-          PIPELINE: trigger-rc-lre-gcp-upgrade-ops-manager
-          JOB: upgrade-opsmgr
+          PIPELINE: trigger-rc-lre-gcp-upgrade-pas-tile
+          JOB: apply-changes
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: lre-gcp-lock
         resource: gcp-lock
-        passed: [trigger-rc-lre-gcp-upgrade-ops-manager]
+        passed: [trigger-rc-lre-gcp-upgrade-pas-tile]
       - try:
           put: lre-gcp-lock
           resource: gcp-lock
           params: {release: lre-gcp-lock}
+#      - task: check-lre-gcp-upgrade-ops-manager
+#        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+#        params:
+#          PIPELINE: trigger-rc-lre-gcp-upgrade-ops-manager
+#          JOB: upgrade-opsmgr
+#          TIMEOUT_MINUTES: 240
+#          DISABLE_PIVNET_VERSION_CHECK: false
+#          <<: *atc_creds
+#      - get: lre-gcp-lock
+#        resource: gcp-lock
+#        passed: [trigger-rc-lre-gcp-upgrade-ops-manager]
+#      - try:
+#          put: lre-gcp-lock
+#          resource: gcp-lock
+#          params: {release: lre-gcp-lock}
     - do:
       - task: check-vsphere
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
