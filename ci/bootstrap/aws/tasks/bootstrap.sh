@@ -85,7 +85,7 @@ ERT_SSL_CERT:
 ERT_SSL_KEY:
 
 mysql_backups: disable
-ert_errands_to_disable: push-apps-manager,notifications,notifications-ui,push-pivotal-account,autoscaling,autoscaling-register-broker,nfsbrokerpush
+ert_errands_to_disable: push-usage-service,push-apps-manager,deploy-notifications,deploy-notifications-ui,push-pivotal-account,deploy-autoscaling,register-broker,nfsbrokerpush
 
 OPSMAN_ALLOW_ACCESS: true
 opsman_allow_cidr: '["0.0.0.0/0"]'
