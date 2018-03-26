@@ -32,6 +32,12 @@ groups:
   - destroy-rc-lre-gcp-upgrade-ops-manager
   - trigger-rc-lre-gcp-upgrade-ops-manager
   - lock-gcp-lre
+  - force-unlock-vsphere-install-pcf
+  - force-unlock-gcp-install-pcf
+  - force-unlock-gcp-install-pcf
+  - force-unlock-azure-install-pcf
+  - force-unlock-aws-install-pcf
+  - force-unlock-lre-gcp-upgrade-opsman
 - name: less
   jobs:
   - bump-patch
@@ -44,9 +50,11 @@ groups:
 - name: unlocks
   jobs:
   - force-unlock-vsphere-install-pcf
-  - force-unlock-gcp
-  - force-unlock-azure
-  - force-unlock-aws
+  - force-unlock-gcp-install-pcf
+  - force-unlock-gcp-install-pcf
+  - force-unlock-azure-install-pcf
+  - force-unlock-aws-install-pcf
+  - force-unlock-lre-gcp-upgrade-opsman
 - name: install-vsphere
   jobs:
   - force-unlock-vsphere-install-pcf
@@ -58,7 +66,7 @@ groups:
   - check-environments-complete
 - name: install-gcp
   jobs:
-  - force-unlock-gcp
+  - force-unlock-gcp-install-pcf
   - lock-gcp
   - destroy-rc-install-pcf-gcp
   - set-rc-install-pcf-gcp
@@ -67,7 +75,7 @@ groups:
   - check-environments-complete
 - name: install-azure
   jobs:
-  - force-unlock-azure
+  - force-unlock-azure-install-pcf
   - lock-azure
   - destroy-rc-install-pcf-azure
   - set-rc-install-pcf-azure
@@ -76,7 +84,7 @@ groups:
   - check-environments-complete
 - name: install-aws
   jobs:
-  - force-unlock-aws
+  - force-unlock-aws-install-pcf
   - lock-aws
   - destroy-rc-install-pcf-aws
   - set-rc-install-pcf-aws
@@ -90,6 +98,7 @@ groups:
   - trigger-rc-lre-gcp-upgrade-ops-manager
   - lock-gcp-lre
   - check-environments-complete
+  - force-unlock-lre-gcp-upgrade-opsman
 
 resource_types:
 - name: smuggler
@@ -201,98 +210,48 @@ jobs:
 - name: force-unlock-vsphere-install-pcf
   serial: true
   plan:
-  - get: install-pcf
-    resource: vsphere-lock
+  - get: vsphere-lock
+    passed: [ lock-vsphere ]
   - try:
       put: vsphere-lock
-      params: {release: install-pcf}
+      params: {release: vsphere-lock}
 
-- name: force-unlock-gcp
+- name: force-unlock-gcp-install-pcf
   serial: true
   plan:
-  - aggregate:
-    - get: gcp-lock
-  - task: prepare-generic-lock-names
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: pcfnorm/rootfs
-      inputs:
-      - name: gcp-lock
-      outputs:
-      - name: install-pcf-generic
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          cp -r ./vsphere-lock/* ./install-pcf-generic/.
-
-          echo "install-pcf" > ./install-pcf-generic/name
-          echo "install-pcf" > ./install-pcf-generic/metadata
+  - get: gcp-lock
+    passed: [ lock-gcp ]
   - try:
       put: gcp-lock
-      params: {release: install-pcf-generic}
+      params: {release: gcp-lock}
 
-- name: force-unlock-azure
+- name: force-unlock-azure-install-pcf
   serial: true
   plan:
-  - aggregate:
-    - get: azure-lock
-  - task: prepare-generic-lock-names
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: pcfnorm/rootfs
-      inputs:
-      - name: azure-lock
-      outputs:
-      - name: install-pcf-generic
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          cp -r ./vsphere-lock/* ./install-pcf-generic/.
-
-          echo "install-pcf" > ./install-pcf-generic/name
-          echo "install-pcf" > ./install-pcf-generic/metadata
+  - get: azure-lock
+    passed: [ lock-azure ]
   - try:
       put: azure-lock
-      params: {release: install-pcf-generic}
+      params: {release: azure-lock}
 
-- name: force-unlock-aws
+- name: force-unlock-aws-install-pcf
   serial: true
   plan:
-  - aggregate:
-    - get: aws-lock
-  - task: prepare-generic-lock-names
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: pcfnorm/rootfs
-      inputs:
-      - name: aws-lock
-      outputs:
-      - name: install-pcf-generic
-      run:
-        path: bash
-        args:
-        - -c
-        - |
-          cp -r ./vsphere-lock/* ./install-pcf-generic/.
-
-          echo "install-pcf" > ./install-pcf-generic/name
-          echo "install-pcf" > ./install-pcf-generic/metadata
+  - get: aws-lock
+    passed: [ lock-aws ]
   - try:
       put: aws-lock
-      params: {release: install-pcf-generic}
+      params: {release: aws-lock}
+
+- name: force-unlock-lre-gcp-upgrade-opsman
+  serial: true
+  plan:
+  - get: gcp-lock
+    passed: [ lock-gcp-lre ]
+  - try:
+      put: gcp-lock
+      params: {release: gcp-lock}
+
 
 - name: bump-patch
   serial_groups: [version]
@@ -952,6 +911,22 @@ jobs:
       - trigger-rc-lre-gcp-upgrade-ops-manager
   - aggregate:
     - do:
+      - task: check-lre-gcp
+        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+        params:
+          PIPELINE: trigger-rc-lre-gcp-upgrade-ops-manager
+          JOB: upgrade-opsmgr
+          TIMEOUT_MINUTES: 240
+          DISABLE_PIVNET_VERSION_CHECK: false
+          <<: *atc_creds
+      - get: lre-gcp-lock
+        resource: gcp-lock
+        passed: [trigger-rc-lre-gcp-upgrade-ops-manager]
+      - try:
+          put: lre-gcp-lock
+          resource: gcp-lock
+          params: {release: lre-gcp-lock}
+    - do:
       - task: check-vsphere
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
         params:
@@ -961,6 +936,7 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: vsphere-lock
+        passed: [ trigger-install-pcf-vsphere ]
       - try:
           put: vsphere-lock
           params: {release: vsphere-lock}
@@ -974,6 +950,7 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: gcp-lock
+        passed: [ trigger-install-pcf-gcp ]
       - try:
           put: gcp-lock
           params: {release: gcp-lock}
@@ -987,6 +964,7 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: azure-lock
+        passed: [ trigger-install-pcf-azure ]
       - try:
           put: azure-lock
           params: {release: azure-lock}
@@ -1000,6 +978,7 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: aws-lock
+        passed: [ trigger-install-pcf-aws ]
       - try:
           put: aws-lock
           params: {release: aws-lock}
