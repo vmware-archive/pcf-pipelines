@@ -28,6 +28,10 @@ groups:
   - trigger-install-pcf-aws
   - check-environments-complete
   - publish-release
+  - set-rc-lre-gcp-upgrade-ops-manager
+  - destroy-rc-lre-gcp-upgrade-ops-manager
+  - trigger-rc-lre-gcp-upgrade-ops-manager
+  - lock-gcp-lre
 - name: less
   jobs:
   - bump-patch
@@ -78,6 +82,13 @@ groups:
   - set-rc-install-pcf-aws
   - wipe-aws
   - trigger-install-pcf-aws
+  - check-environments-complete
+- name: upgrade-lre-gcp
+  jobs:
+  - set-rc-lre-gcp-upgrade-ops-manager
+  - destroy-rc-lre-gcp-upgrade-ops-manager
+  - trigger-rc-lre-gcp-upgrade-ops-manager
+  - lock-gcp-lre
   - check-environments-complete
 
 resource_types:
@@ -606,6 +617,90 @@ jobs:
     <<: *notify_slack
 
 ####### END GCP
+
+####### GCP LRE
+- name: lock-gcp-lre
+  serial: true
+  plan:
+  - aggregate: *lock-resources
+  - put: gcp-lock
+    params: { claim: upgrade-opsmgr }
+    timeout: 3h00m
+
+- name: destroy-rc-lre-gcp-upgrade-ops-manager
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ lock-gcp-lre ]
+    - get: gcp-lock
+      passed: [lock-gcp-lre]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ lock-gcp-lre ]
+    - get: rootfs-tag
+      passed: [ lock-gcp-lre ]
+  - task: destroy-rc-install-pcf-gcp
+    params:
+      PIPELINE_NAME: rc-lre-gcp-upgrade-ops-manager
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
+  on_failure:
+    <<: *notify_slack
+
+- name: set-rc-lre-gcp-upgrade-ops-manager
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ destroy-rc-lre-gcp-upgrade-ops-manager ]
+    - get: gcp-lock
+      passed: [destroy-rc-lre-gcp-upgrade-ops-manager]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ destroy-rc-lre-gcp-upgrade-ops-manager ]
+    - get: rootfs-tag
+      passed: [ destroy-rc-lre-gcp-upgrade-ops-manager ]
+  - task: unpack-rc
+    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
+    input_mapping: { tarball: pivnet-rc }
+    output_mapping: { unpacked_tarball: release }
+  - task: set-rc-install-pcf-gcp
+    params:
+      PIPELINE_PARAMS: ((rc_lre_gcp_upgrade_ops_manager_params))
+      PIPELINE_NAME: rc-lre-gcp-upgrade-ops-manager
+      PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/set_pipeline.yml
+  - task: unpause-rc-install-pcf-gcp
+    params:
+      PIPELINE_NAME: rc-lre-gcp-upgrade-ops-manager
+      <<: *atc_creds
+    file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
+  on_failure:
+    <<: *notify_slack
+
+- name: trigger-rc-lre-gcp-upgrade-ops-manager
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ set-rc-lre-gcp-upgrade-ops-manager ]
+    - get: gcp-lock
+      passed: [ set-rc-lre-gcp-upgrade-ops-manager ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ set-rc-lre-gcp-upgrade-ops-manager ]
+    - get: rootfs-tag
+      passed: [ set-rc-lre-gcp-upgrade-ops-manager ]
+  - task: trigger-opsman
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-lre-gcp-upgrade-ops-manager/upgrade-opsmgr
+  on_failure:
+    <<: *notify_slack
+
+####### END GCP LRE
+
 ####### Azure
 
 - name: lock-azure
@@ -839,12 +934,14 @@ jobs:
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
+      - trigger-rc-lre-gcp-upgrade-ops-manager
     - get: pivnet-rc
       passed:
       - trigger-install-pcf-gcp
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
+      - trigger-rc-lre-gcp-upgrade-ops-manager
       trigger: true
     - get: rootfs-tag
       passed:
@@ -852,6 +949,7 @@ jobs:
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
+      - trigger-rc-lre-gcp-upgrade-ops-manager
   - aggregate:
     - do:
       - task: check-vsphere
