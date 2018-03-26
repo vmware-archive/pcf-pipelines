@@ -952,6 +952,22 @@ jobs:
       - trigger-rc-lre-gcp-upgrade-ops-manager
   - aggregate:
     - do:
+      - task: check-lre-gcp
+        file: pcf-pipelines/ci/tasks/check-environments/task.yml
+        params:
+          PIPELINE: trigger-rc-lre-gcp-upgrade-ops-manager
+          JOB: upgrade-opsmgr
+          TIMEOUT_MINUTES: 240
+          DISABLE_PIVNET_VERSION_CHECK: false
+          <<: *atc_creds
+      - get: lre-gcp-lock
+        resource: gcp-lock
+        passed: [trigger-rc-lre-gcp-upgrade-ops-manager]
+      - try:
+          put: lre-gcp-lock
+          resource: gcp-lock
+          params: {release: lre-gcp-lock}
+    - do:
       - task: check-vsphere
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
         params:
@@ -961,6 +977,7 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: vsphere-lock
+        passed: [ trigger-install-pcf-vsphere ]
       - try:
           put: vsphere-lock
           params: {release: vsphere-lock}
@@ -974,6 +991,7 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: gcp-lock
+        passed: [ trigger-install-pcf-gcp ]
       - try:
           put: gcp-lock
           params: {release: gcp-lock}
@@ -987,6 +1005,7 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: azure-lock
+        passed: [ trigger-install-pcf-azure ]
       - try:
           put: azure-lock
           params: {release: azure-lock}
@@ -1000,6 +1019,7 @@ jobs:
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
       - get: aws-lock
+        passed: [ trigger-install-pcf-aws ]
       - try:
           put: aws-lock
           params: {release: aws-lock}
