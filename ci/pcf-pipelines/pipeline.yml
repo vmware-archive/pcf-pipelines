@@ -6,7 +6,6 @@ groups:
   - test
   - publish-rc
   - test-rc
-  - update-pipelines
   - lock-vsphere
   - destroy-rc-install-pcf-vsphere
   - set-rc-install-pcf-vsphere
@@ -42,7 +41,6 @@ groups:
   - test
   - publish-rc
   - test-rc
-  - update-pipelines
   - check-environments-complete
   - publish-release
 - name: unlocks
@@ -414,26 +412,6 @@ jobs:
   - task: test
     file: src/ci/tasks/test.yml
 
-- name: update-pipelines
-  on_failure:
-    <<: *notify_slack
-  plan:
-  - aggregate:
-    - get: version
-      passed: [test-rc]
-    - get: pcf-pipelines
-      passed: [test-rc]
-    - get: rootfs-tag
-      passed: [test-rc]
-    - get: pivnet-rc
-      trigger: true
-      passed: [test-rc]
-
-  - task: unpack-rc
-    file: pcf-pipelines/ci/tasks/unpack_tarball.yml
-    input_mapping: { tarball: pivnet-rc }
-    output_mapping: { unpacked_tarball: release }
-
 ########### VSPHERE
 
 - name: lock-vsphere
@@ -441,12 +419,12 @@ jobs:
   plan:
   - aggregate: &lock-resources
     - get: pivnet-rc
-      passed: [update-pipelines]
+      passed: [test-rc]
       trigger: true
     - get: pcf-pipelines
-      passed: [update-pipelines]
+      passed: [test-rc]
     - get: rootfs-tag
-      passed: [update-pipelines]
+      passed: [test-rc]
 
   - put: vsphere-lock
     params: { claim: install-pcf }
