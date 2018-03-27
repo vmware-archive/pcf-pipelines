@@ -703,7 +703,7 @@ jobs:
     params:
       PIPELINE_PARAMS: ((rc_lre_gcp_upgrade_pas_tile_params))
       PIPELINE_NAME: rc-lre-gcp-upgrade-pas-tile
-      PIPELINE_PATH: release/pcf-pipelines/upgrade-tile/gcp/pipeline.yml
+      PIPELINE_PATH: release/pcf-pipelines/upgrade-tile/pipeline.yml
       <<: *atc_creds
     file: pcf-pipelines/ci/tasks/set_pipeline.yml
   - task: unpause-rc-lre-gcp-upgrade-pas-tile
