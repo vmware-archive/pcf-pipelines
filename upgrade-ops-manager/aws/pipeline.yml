@@ -103,7 +103,7 @@ jobs:
     file: pcf-pipelines/tasks/replace-vm/task.yml
     params:
       VM_IDENTIFIER: {{existing_opsman_vm_name}}
-      VM_DISK_SIZE_GB: {{pcf_opsman_disk_size_in_gb}}
+      VM_DISK_SIZE_GB: ""
 
   - task: import-opsmgr-settings
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
