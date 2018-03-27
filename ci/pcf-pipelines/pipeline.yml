@@ -457,7 +457,33 @@ jobs:
     params:
       <<: *atc_creds
       JOBS: |
-        rc-install-pcf-vsphere/deploy-opsman
+        rc-vsphere-install/deploy-opsman
+        rc-vsphere-install/configure-director
+        rc-vsphere-install/deploy-director
+        rc-vsphere-install/upload-ert
+        rc-vsphere-install/stage-ert
+        rc-vsphere-install/deploy-ert
+  on_failure:
+    <<: *notify_slack
+
+- name: wipe-vsphere-post-install
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ trigger-install-pcf-vsphere ]
+    - get: vsphere-lock
+      passed: [ trigger-install-pcf-vsphere ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ trigger-install-pcf-vsphere ]
+    - get: rootfs-tag
+      passed: [ trigger-install-pcf-vsphere ]
+  - task: trigger-vsphere-rc-wipe-env
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-vsphere-install/wipe-env
   on_failure:
     <<: *notify_slack
 
