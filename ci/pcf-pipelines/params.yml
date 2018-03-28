@@ -22,7 +22,7 @@ pivnet_token:
 rc_aws_install_params:
 rc_azure_install_params:
 rc_lre_gcp_upgrade_ops_manager_params:
-rc_lre_gcp_upgrade_pas_tile_params:
+rc_gcp_upgrade_pas_tile_params:
 rc_gcp_install_params:
 rc_vsphere_install_params:
 slack_webhook_url:
