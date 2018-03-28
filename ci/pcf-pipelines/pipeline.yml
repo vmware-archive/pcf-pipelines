@@ -757,16 +757,29 @@ jobs:
       passed: [ wipe-gcp ]
     - get: rootfs-tag
       passed: [ wipe-gcp ]
-  - task: trigger-gcp-rc-deploy-opsman-and-ert
+  - task: trigger-gcp-rc-upload-opsman-image
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-gcp-install/upload-opsman-image
+  - task: trigger-gcp-rc-create-infrastructure
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-gcp-install/create-infrastructure
+  - task: delegate-dns-zone
+    file: pcf-pipelines/ci/tasks/delegate-gcp-dns-zone/task.yml
     params:
       GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_key))
       PARENT_DNS_ZONE: ((gcp_parent_dns_zone))
       CHILD_DNS_ZONE: ((gcp_child_dns_zone))
+  - task: trigger-gcp-rc-configure-director-and-install-pas
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
       <<: *atc_creds
       JOBS: |
-        rc-gcp-install/upload-opsman-image
-        rc-gcp-install/create-infrastructure
         rc-gcp-install/configure-director
         rc-gcp-install/deploy-director
         rc-gcp-install/upload-ert
