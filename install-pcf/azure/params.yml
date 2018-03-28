@@ -122,9 +122,6 @@ ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
 
-# Only change this if you need to avoid address collision with a third-party service on the same subnet.
-garden_network_pool_cidr: 10.254.0.0/22
-
 # Optional - if your git repo requires an SSH key.
 git_private_key:
 

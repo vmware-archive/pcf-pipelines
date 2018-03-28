@@ -96,9 +96,6 @@ external_network_id: CHANGEME
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
 
-# Only change this if you need to avoid address collision with a third-party service on the same subnet.
-garden_network_pool_cidr: 10.254.0.0/22
-
 # HAProxy will use the CA provided to verify the certificates provided by the router.
 haproxy_backend_ca: CHANGEME
 

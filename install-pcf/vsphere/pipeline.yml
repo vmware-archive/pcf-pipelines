@@ -291,7 +291,6 @@ jobs:
       DISABLE_INSECURE_COOKIES: {{disable_insecure_cookies}}
       ROUTER_STATIC_IPS: {{router_static_ips}}
       ROUTER_REQUEST_TIMEOUT_IN_SEC: {{router_request_timeout_in_seconds}}
-      GARDEN_NETWORK_POOL_CIDR: {{garden_network_pool_cidr}}
       GARDEN_NETWORK_MTU: {{garden_network_mtu}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
