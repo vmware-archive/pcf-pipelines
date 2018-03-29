@@ -48,15 +48,7 @@ groups:
   - force-unlock-azure-install-pcf
   - force-unlock-aws-install-pcf
   - force-unlock-lre-gcp-upgrade-opsman
-- name: less
-  jobs:
-  - bump-patch
-  - bump-minor
-  - test
-  - publish-rc
-  - test-rc
-  - check-environments-complete
-  - publish-release
+  - force-unlock-vsphere-offline-install-pcf
 - name: unlocks
   jobs:
   - force-unlock-vsphere-install-pcf
@@ -66,7 +58,7 @@ groups:
   - force-unlock-azure-install-pcf
   - force-unlock-aws-install-pcf
   - force-unlock-lre-gcp-upgrade-opsman
-- name: install-vsphere
+- name: vsphere
   jobs:
   - force-unlock-vsphere-install-pcf
   - lock-vsphere
@@ -76,7 +68,7 @@ groups:
   - trigger-install-pcf-vsphere
   - wipe-vsphere-post-install
   - check-environments-complete
-- name: install-offline
+- name: offline
   jobs:
   - force-unlock-vsphere-offline-install-pcf
   - lock-vsphere-offline
@@ -87,7 +79,7 @@ groups:
   - wipe-vsphere-offline
   - trigger-install-pcf-vsphere-offline
   - check-environments-complete
-- name: install-gcp
+- name: gcp
   jobs:
   - force-unlock-gcp-install-pcf
   - lock-gcp
@@ -99,7 +91,7 @@ groups:
   - set-rc-gcp-upgrade-pas-tile
   - trigger-rc-gcp-upgrade-pas-tile
   - check-environments-complete
-- name: install-azure
+- name: azure
   jobs:
   - force-unlock-azure-install-pcf
   - lock-azure
@@ -108,7 +100,7 @@ groups:
   - wipe-azure
   - trigger-install-pcf-azure
   - check-environments-complete
-- name: install-aws
+- name: aws
   jobs:
   - force-unlock-aws-install-pcf
   - lock-aws
