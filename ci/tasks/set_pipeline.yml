@@ -25,11 +25,6 @@ run:
   - |
     set -eu
 
-    IFS=$'\n'
-    for line in $PIPELINE_PARAMS; do
-      echo "$line" >> params.yml
-    done
-
     curl \
       --silent \
       --insecure \
@@ -49,4 +44,4 @@ run:
       --non-interactive \
       --pipeline "${PIPELINE_NAME}" \
       --config "${PIPELINE_PATH}" \
-      --load-vars-from params.yml
+      --load-vars-from <(echo "$PIPELINE_PARAMS")

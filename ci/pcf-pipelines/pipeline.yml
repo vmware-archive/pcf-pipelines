@@ -12,9 +12,10 @@ groups:
   - wipe-vsphere
   - trigger-install-pcf-vsphere
   - lock-vsphere-offline
-  - destroy-rc-install-pcf-vsphere-offline
+  - destroy-rc-vsphere-offline-install
   - set-offline-pipelines
   - trigger-create-offline-pinned-pipelines
+  - trigger-unpack-pipelines-combined
   - wipe-vsphere-offline
   - trigger-install-pcf-vsphere-offline
   - lock-gcp
@@ -79,9 +80,10 @@ groups:
   jobs:
   - force-unlock-vsphere-offline-install-pcf
   - lock-vsphere-offline
-  - destroy-rc-install-pcf-vsphere-offline
+  - destroy-rc-vsphere-offline-install
   - set-offline-pipelines
   - trigger-create-offline-pinned-pipelines
+  - trigger-unpack-pipelines-combined
   - wipe-vsphere-offline
   - trigger-install-pcf-vsphere-offline
   - check-environments-complete
@@ -533,7 +535,7 @@ jobs:
     params: { claim: install-pcf }
     timeout: 3h00m
 
-- name: destroy-rc-install-pcf-vsphere-offline
+- name: destroy-rc-vsphere-offline-install
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -545,9 +547,9 @@ jobs:
       passed: [ lock-vsphere-offline ]
     - get: rootfs-tag
       passed: [ lock-vsphere-offline ]
-  - task: destroy-rc-install-pcf-vsphere-offline
+  - task: destroy-rc-vsphere-offline-install
     params:
-      PIPELINE_NAME: rc-install-pcf-vsphere-offline
+      PIPELINE_NAME: ((rc_offline_pipeline_name))
       <<: *atc_creds
     file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
 
@@ -555,14 +557,14 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-      passed: [ destroy-rc-install-pcf-vsphere-offline ]
+      passed: [ destroy-rc-vsphere-offline-install ]
     - get: vsphere-offline-lock
-      passed: [ destroy-rc-install-pcf-vsphere-offline ]
+      passed: [ destroy-rc-vsphere-offline-install ]
       trigger: true
     - get: pivnet-rc
-      passed: [ destroy-rc-install-pcf-vsphere-offline ]
+      passed: [ destroy-rc-vsphere-offline-install ]
     - get: rootfs-tag
-      passed: [ destroy-rc-install-pcf-vsphere-offline ]
+      passed: [ destroy-rc-vsphere-offline-install ]
 
   - task: unpack-rc
     file: pcf-pipelines/ci/tasks/unpack_tarball.yml
@@ -611,9 +613,10 @@ jobs:
       <<: *atc_creds
       JOBS: |
         create-offline-pinned-pipelines/collector
+        create-offline-pinned-pipelines/create-pcf-pipelines-combined
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
 
-- name: wipe-vsphere-offline
+- name: trigger-unpack-pipelines-combined
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -625,15 +628,35 @@ jobs:
       passed: [ trigger-create-offline-pinned-pipelines ]
     - get: rootfs-tag
       passed: [ trigger-create-offline-pinned-pipelines ]
+  - task: trigger-unpack-pipelines-combined
+    params:
+      <<: *atc_creds
+      JOBS: |
+        unpack-pcf-pipelines-combined/unpack-tarball
+        unpack-pcf-pipelines-combined/set-install-pcf-pipeline
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+
+- name: wipe-vsphere-offline
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ trigger-unpack-pipelines-combined ]
+    - get: vsphere-offline-lock
+      passed: [ trigger-unpack-pipelines-combined ]
+      trigger: true
+    - get: pivnet-rc
+      passed: [ trigger-unpack-pipelines-combined ]
+    - get: rootfs-tag
+      passed: [ trigger-unpack-pipelines-combined ]
   - task: check-pipeline-exists
     params:
       <<: *atc_creds
-      PIPELINE_NAME: rc-install-pcf-vsphere-offline
-      TIMEOUT_MINUTES: 60
+      PIPELINE_NAME: ((rc_offline_pipeline_name))
+      TIMEOUT_MINUTES: 5
     file: pcf-pipelines/ci/tasks/check-pipeline-exists/task.yml
-  - task: unpause-rc-install-pcf-vsphere-offline
+  - task: unpause-rc-vsphere-offline-install
     params:
-      PIPELINE_NAME: rc-install-pcf-vsphere-offline
+      PIPELINE_NAME: ((rc_offline_pipeline_name))
       <<: *atc_creds
     file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
   - task: trigger-rc-vsphere-offline-wipe-env
@@ -641,7 +664,7 @@ jobs:
     params:
       <<: *atc_creds
       JOBS: |
-        rc-install-pcf-vsphere-offline/wipe-env
+        ((rc_offline_pipeline_name))/wipe-env
   on_failure:
     <<: *notify_slack
 
@@ -662,7 +685,7 @@ jobs:
     params:
       <<: *atc_creds
       JOBS: |
-        rc-install-pcf-vsphere-offline/deploy-opsman
+        ((rc_offline_pipeline_name))/deploy-opsman
   on_failure:
     <<: *notify_slack
 
@@ -1204,7 +1227,7 @@ jobs:
       - task: check-vsphere-offline
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
         params:
-          PIPELINE: rc-install-pcf-vsphere-offline
+          PIPELINE: ((rc_offline_pipeline_name))
           JOB: deploy-ert
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: true

@@ -26,9 +26,10 @@ params['rc_vsphere_install_params'] = load_param('rc/install-pcf/vsphere/pipelin
 params['rc_lre_gcp_upgrade_ops_manager_params'] = load_param('lre/upgrade-ops-manager/gcp/pipeline.yml')
 params['rc_gcp_upgrade_pas_tile_params'] = load_param('rc/upgrade-pas-tile/gcp/pipeline.yml')
 params['create_offline_pinned_pipelines_params'] = load_param('create-offline-pinned-pipelines/pipeline.yml')
+params['rc_offline_pipeline_name'] = 'rc-offline-vsphere-install'
 params['unpack_pcf_pipelines_combined_params'] = {
     'rc_offline_vsphere_install_params' => load_param('offline/install-pcf/vsphere/pipeline.yml'),
-    'rc_offline_pipeline_name' => 'rc-offline-vsphere-install',
+    'rc_offline_pipeline_name' => params['rc_offline_pipeline_name'],
 
 }.merge(YAML.load(load_param('unpack-pcf-pipelines-combined-params'))).to_yaml
 
