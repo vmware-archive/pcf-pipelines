@@ -6,7 +6,7 @@ arg_wipe: wipe
 
 authentication_mode: internal
 
-# If the azure_accunt_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_storage_account_name and azure_storage_account_key values.
+# If the azure_storage_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_storage_account_name and azure_storage_account_key values.
 azure_storage_account_name:
 azure_storage_account_key:
 
