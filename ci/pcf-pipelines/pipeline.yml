@@ -678,6 +678,10 @@ jobs:
       <<: *atc_creds
       JOBS: |
         ((rc_offline_pipeline_name))/deploy-opsman
+        ((rc_offline_pipeline_name))/configure-director
+        ((rc_offline_pipeline_name))/deploy-director
+        ((rc_offline_pipeline_name))/upload-ert
+        ((rc_offline_pipeline_name))/deploy-ert
   on_failure:
     <<: *notify_slack
 
