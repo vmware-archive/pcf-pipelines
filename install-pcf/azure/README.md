@@ -52,7 +52,7 @@ the `Contributor` Role on the target Azure Project.
      --location "WestUS" \
      --sku "Standard_LRS"
 
-   AZURE_ACCOUNT_KEY=$(az storage account keys list --account-name pcfci --resource-group pcfci | jq -r .[0].value)
+   AZURE_STORAGE_ACCOUNT_KEY=$(az storage account keys list --account-name pcfci --resource-group pcfci | jq -r .[0].value)
 
    az storage container create --name terraformstate \
      --account-name pcfci

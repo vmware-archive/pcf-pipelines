@@ -71,7 +71,7 @@ terraform plan \
   -var "azure_multi_resgroup_network=${AZURE_MULTI_RESGROUP_NETWORK}" \
   -var "azure_multi_resgroup_pcf=${AZURE_MULTI_RESGROUP_PCF}" \
   -var "azure_opsman_priv_ip=${AZURE_TERRAFORM_OPSMAN_PRIV_IP}" \
-  -var "azure_account_name=${AZURE_ACCOUNT_NAME}" \
+  -var "azure_storage_account_name=${AZURE_STORAGE_ACCOUNT_NAME}" \
   -var "azure_buildpacks_container=${AZURE_BUILDPACKS_CONTAINER}" \
   -var "azure_droplets_container=${AZURE_DROPLETS_CONTAINER}" \
   -var "azure_packages_container=${AZURE_PACKAGES_CONTAINER}" \
