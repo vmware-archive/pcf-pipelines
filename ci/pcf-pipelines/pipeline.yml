@@ -78,7 +78,6 @@ groups:
   - trigger-unpack-pipelines-combined
   - wipe-vsphere-offline
   - trigger-install-pcf-vsphere-offline
-  - check-environments-complete
 - name: gcp
   jobs:
   - force-unlock-gcp-install-pcf
