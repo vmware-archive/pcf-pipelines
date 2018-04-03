@@ -202,7 +202,7 @@ opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 
 # Opsman Settings
-opsman_domain_or_ip_address: CHANGEME # This should be your pcf_ert_domain with "opsman." as a prefix. For example, opsman.pcf.example.com
+opsman_domain_or_ip_address: CHANGEME # This must be your pcf_ert_domain with "opsman." as a prefix. For example, opsman.pcf.example.com
 
 # PCF Ops Manager minor version to track
 opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
