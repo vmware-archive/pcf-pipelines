@@ -16,6 +16,8 @@ variable "tenant_id" {}
 variable "location" {}
 
 variable "pcf_ert_domain" {}
+variable "apps_domain" {}
+variable "system_domain" {}
 
 variable "azure_terraform_vnet_cidr" {}
 variable "azure_terraform_subnet_infra_cidr" {}

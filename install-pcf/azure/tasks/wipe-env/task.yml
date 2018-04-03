@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
 
 inputs:
   - name: pcf-pipelines
@@ -29,7 +29,5 @@ params:
   AZURE_REGION:
   AZURE_TERRAFORM_PREFIX:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
-  OPSMAN_CLIENT_ID:
-  OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:

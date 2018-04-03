@@ -81,7 +81,6 @@ network_configuration=$(
     --arg deployment_dns "$DEPLOYMENT_NW_DNS" \
     --arg deployment_gateway "$DEPLOYMENT_NW_GATEWAY" \
     --arg deployment_availability_zones "$DEPLOYMENT_NW_AZS" \
-    --argjson services_network_is_service_network $IS_SERVICE_NETWORK \
     --arg services_network_name "$SERVICES_NETWORK_NAME" \
     --arg services_vcenter_network "$SERVICES_VCENTER_NETWORK" \
     --arg services_network_cidr "$SERVICES_NW_CIDR" \
@@ -130,7 +129,7 @@ network_configuration=$(
         },
         {
           "name": $services_network_name,
-          "service_network": $services_network_is_service_network,
+          "service_network": false,
           "subnets": [
             {
               "iaas_identifier": $services_vcenter_network,
@@ -197,8 +196,6 @@ echo "Configuring IaaS and Director..."
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --client-id "${OPSMAN_CLIENT_ID}" \
-  --client-secret "${OPSMAN_CLIENT_SECRET}" \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
   configure-bosh \
@@ -212,8 +209,6 @@ om-linux -t https://$OPSMAN_DOMAIN_OR_IP_ADDRESS -k -u $OPS_MGR_USR -p $OPS_MGR_
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --client-id "${OPSMAN_CLIENT_ID}" \
-  --client-secret "${OPSMAN_CLIENT_SECRET}" \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
   configure-bosh \

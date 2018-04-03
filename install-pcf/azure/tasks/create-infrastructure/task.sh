@@ -59,6 +59,8 @@ terraform plan \
   -var "azure_terraform_subnet_services1_cidr=${AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR}" \
   -var "azure_terraform_subnet_dynamic_services_cidr=${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR}" \
   -var "pcf_ert_domain=${PCF_ERT_DOMAIN}" \
+  -var "system_domain=${SYSTEM_DOMAIN}" \
+  -var "apps_domain=${APPS_DOMAIN}" \
   -var "ops_manager_image_uri=${PCF_OPSMAN_IMAGE_URI}" \
   -var "vm_admin_username=${AZURE_VM_ADMIN}" \
   -var "vm_admin_public_key=${PCF_SSH_KEY_PUB}" \

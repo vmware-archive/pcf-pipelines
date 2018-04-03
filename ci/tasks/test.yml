@@ -14,13 +14,17 @@ run:
   args:
   - -ce
   - |
-    export GOPATH=$PWD/go
-    export PATH=$GOPATH/bin:$PATH
+    mkdir -p $GOPATH/src/github.com/pivotal-cf
 
+    cp -R pcf-pipelines $GOPATH/src/github.com/pivotal-cf
+
+    # install glide for dependency management
+    curl -k https://glide.sh/get | sh
+
+    # install ginkgo
     go get github.com/onsi/ginkgo/ginkgo
-    go get github.com/onsi/gomega
-    go get github.com/concourse/atc
 
-    pushd pcf-pipelines
+    pushd $GOPATH/src/github.com/pivotal-cf/pcf-pipelines
+      glide install
       ginkgo -p -r -randomizeAllSpecs
     popd

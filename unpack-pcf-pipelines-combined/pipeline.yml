@@ -2,57 +2,57 @@ resources:
 - name: pcf-ops-manager
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "ops-manager/ops-manager-(.*).tar"
     unpack: true
 
 - name: elastic-runtime
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "elastic-runtime/elastic-runtime-(.*).tar"
     unpack: true
 
 - name: czero-cflinuxfs2
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
 
 - name: pcf-pipelines-combined
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar.gpg"
 
 - name: stemcells
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "stemcells/bosh-stemcell-(.*)-.*.tgz"
 
 - name: pcf-pipelines-tarball
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "pcf-pipelines/pcf-pipelines-(.*).tgz"
 
 jobs:
@@ -66,10 +66,10 @@ jobs:
       image_resource:
         type: s3
         source:
-          access_key_id: {{s3_access_key_id}}
-          secret_access_key: {{s3_secret_access_key}}
-          endpoint: {{s3_endpoint}}
-          bucket: {{s3_bucket}}
+          access_key_id: ((s3_access_key_id))
+          secret_access_key: ((s3_secret_access_key))
+          endpoint: ((s3_endpoint))
+          bucket: ((s3_bucket))
           regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
         params:
           unpack: true
@@ -78,7 +78,7 @@ jobs:
       outputs:
       - name: pcf-pipelines-separated
       params:
-        GPG_PRIVATE_KEY: {{gpg_private_key_contents}}
+        GPG_PRIVATE_KEY: ((gpg_private_key_contents))
       run:
         path: bash
         args:
@@ -121,19 +121,16 @@ jobs:
   plan:
   - get: pcf-pipelines-tarball
     passed: [unpack-tarball]
-  - get: pcf-pipelines-combined
-    passed: [unpack-tarball]
-    trigger: true
   - task: unpack-pcf-pipelines
     config:
       platform: linux
       image_resource:
         type: s3
         source:
-          access_key_id: {{s3_access_key_id}}
-          secret_access_key: {{s3_secret_access_key}}
-          endpoint: {{s3_endpoint}}
-          bucket: {{s3_bucket}}
+          access_key_id: ((s3_access_key_id))
+          secret_access_key: ((s3_secret_access_key))
+          endpoint: ((s3_endpoint))
+          bucket: ((s3_bucket))
           regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
         params:
           unpack: true
@@ -150,23 +147,23 @@ jobs:
       image_resource:
         type: s3
         source:
-          access_key_id: {{s3_access_key_id}}
-          secret_access_key: {{s3_secret_access_key}}
-          endpoint: {{s3_endpoint}}
-          bucket: {{s3_bucket}}
+          access_key_id: ((s3_access_key_id))
+          secret_access_key: ((s3_secret_access_key))
+          endpoint: ((s3_endpoint))
+          bucket: ((s3_bucket))
           regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
         params:
           unpack: true
       inputs:
       - name: pcf-pipelines
       params:
-        PIPELINE_PARAMS: {{install_pcf_pipeline_params}}
-        PIPELINE_NAME: {{install_pcf_pipeline_name}}
+        PIPELINE_PARAMS: ((rc_offline_vsphere_install_params))
+        PIPELINE_NAME: ((rc_offline_pipeline_name))
         PIPELINE_PATH: pcf-pipelines/install-pcf/vsphere/pipeline.yml
-        ATC_EXTERNAL_URL: {{atc_external_url}}
-        ATC_BASIC_AUTH_USERNAME: {{atc_basic_auth_username}}
-        ATC_BASIC_AUTH_PASSWORD: {{atc_basic_auth_password}}
-        ATC_TEAM_NAME: {{atc_team_name}}
+        ATC_EXTERNAL_URL: ((atc_external_url))
+        ATC_BASIC_AUTH_USERNAME: ((atc_basic_auth_username))
+        ATC_BASIC_AUTH_PASSWORD: ((atc_basic_auth_password))
+        ATC_TEAM_NAME: ((atc_team_name))
       run:
         path: bash
         args:

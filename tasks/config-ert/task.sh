@@ -1,12 +1,40 @@
 #!/bin/bash
 
-set -eu
+set -euo pipefail
 
 source pcf-pipelines/functions/generate_cert.sh
 
-NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
+declare networking_poe_ssl_certs_json
 
-if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
+function formatNetworkingPoeSslCertsJson() {
+    name="${1}"
+    cert=${2//$'\n'/'\n'}
+    key=${3//$'\n'/'\n'}
+    networking_poe_ssl_certs_json="{
+      \"name\": \"$name\",
+      \"certificate\": {
+        \"cert_pem\": \"$cert\",
+        \"private_key_pem\": \"$key\"
+      }
+    }"
+    echo "$networking_poe_ssl_certs_json"
+}
+
+function isPopulated() {
+    local true=0
+    local false=1
+    local envVar="${1}"
+
+    if [[ "${envVar}" == "" ]]; then
+        return ${false}
+    elif [[ "${envVar}" == null ]]; then
+        return ${false}
+    else
+        return ${true}
+    fi
+}
+
+if [[ "${POE_SSL_NAME1}" == "" || "${POE_SSL_NAME1}" == "null" ]]; then
   domains=(
     "*.${SYSTEM_DOMAIN}"
     "*.${APPS_DOMAIN}"
@@ -17,7 +45,7 @@ if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "gener
   certificate=$(generate_cert "${domains[*]}")
   pcf_ert_ssl_cert=`echo $certificate | jq '.certificate'`
   pcf_ert_ssl_key=`echo $certificate | jq '.key'`
-  NETWORKING_POE_SSL_CERTS_JSON="[
+  networking_poe_ssl_certs_json="[
     {
       \"name\": \"Certificate 1\",
       \"certificate\": {
@@ -26,8 +54,18 @@ if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "gener
       }
     }
   ]"
+else
+    networking_poe_ssl_certs_json=$(formatNetworkingPoeSslCertsJson "${POE_SSL_NAME1}" "${POE_SSL_CERT1}" "${POE_SSL_KEY1}")
+    if isPopulated "${POE_SSL_NAME2}"; then
+        networking_poe_ssl_certs_json2=$(formatNetworkingPoeSslCertsJson "${POE_SSL_NAME2}" "${POE_SSL_CERT2}" "${POE_SSL_KEY2}")
+        networking_poe_ssl_certs_json="$networking_poe_ssl_certs_json,$networking_poe_ssl_certs_json2"
+    fi
+    if isPopulated "${POE_SSL_NAME3}"; then
+        networking_poe_ssl_certs_json3=$(formatNetworkingPoeSslCertsJson "${POE_SSL_NAME3}" "${POE_SSL_CERT3}" "${POE_SSL_KEY3}")
+        networking_poe_ssl_certs_json="$networking_poe_ssl_certs_json,$networking_poe_ssl_certs_json3"
+    fi
+    networking_poe_ssl_certs_json="[$networking_poe_ssl_certs_json]"
 fi
-
 
 if [[ -z "$SAML_SSL_CERT" ]]; then
   saml_cert_domains=(
@@ -41,7 +79,33 @@ if [[ -z "$SAML_SSL_CERT" ]]; then
   SAML_SSL_PRIVATE_KEY=$(echo $saml_certificates | jq --raw-output '.key')
 fi
 
-CREDHUB_ENCRYPTION_KEYS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["CREDHUB_ENCRYPTION_KEYS"]))')"
+function formatCredhubEncryptionKeysJson() {
+    local credhub_encryption_key_name1="${1}"
+    local credhub_encryption_key_secret1=${2//$'\n'/'\n'}
+    local credhub_primary_encryption_name="${3}"
+    credhub_encryption_keys_json="{
+            \"name\": \"$credhub_encryption_key_name1\",
+            \"key\":{
+                \"secret\": \"$credhub_encryption_key_secret1\"
+             }"
+    if [[ "${credhub_primary_encryption_name}" == $credhub_encryption_key_name1 ]]; then
+        credhub_encryption_keys_json="$credhub_encryption_keys_json, \"primary\": true}"
+    else
+        credhub_encryption_keys_json="$credhub_encryption_keys_json}"
+    fi
+    echo "$credhub_encryption_keys_json"
+}
+
+credhub_encryption_keys_json=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME1}" "${CREDUB_ENCRYPTION_KEY_SECRET1}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+if isPopulated "${CREDUB_ENCRYPTION_KEY_NAME2}"; then
+    credhub_encryption_keys_json2=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME2}" "${CREDUB_ENCRYPTION_KEY_SECRET2}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+    credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json2"
+fi
+if isPopulated "${CREDUB_ENCRYPTION_KEY_NAME3}"; then
+    credhub_encryption_keys_json3=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME3}" "${CREDUB_ENCRYPTION_KEY_SECRET3}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+    credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json3"
+fi
+credhub_encryption_keys_json="[$credhub_encryption_keys_json]"
 
 cf_properties=$(
   jq -n \
@@ -111,8 +175,8 @@ cf_properties=$(
     --arg mysql_backups_scp_key "$MYSQL_BACKUPS_SCP_KEY" \
     --arg mysql_backups_scp_destination "$MYSQL_BACKUPS_SCP_DESTINATION" \
     --arg mysql_backups_scp_cron_schedule "$MYSQL_BACKUPS_SCP_CRON_SCHEDULE" \
-    --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
-    --argjson networking_poe_ssl_certs "$NETWORKING_POE_SSL_CERTS_JSON" \
+    --argjson credhub_encryption_keys "$credhub_encryption_keys_json" \
+    --argjson networking_poe_ssl_certs "$networking_poe_ssl_certs_json" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
@@ -643,8 +707,6 @@ cf_resources=$(
 
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
-  --client-id "${OPSMAN_CLIENT_ID}" \
-  --client-secret "${OPSMAN_CLIENT_SECRET}" \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
   --skip-ssl-validation \

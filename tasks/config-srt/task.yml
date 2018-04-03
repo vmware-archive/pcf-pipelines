@@ -5,7 +5,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
 
 inputs:
   - name: pcf-pipelines
@@ -74,7 +74,6 @@ params:
   DISABLE_INSECURE_COOKIES:
   ROUTER_STATIC_IPS:
   ROUTER_REQUEST_TIMEOUT_IN_SEC:
-  GARDEN_NETWORK_POOL_CIDR:
   GARDEN_NETWORK_MTU:
   MYSQL_MONITOR_EMAIL:
   MYSQL_BACKUPS:

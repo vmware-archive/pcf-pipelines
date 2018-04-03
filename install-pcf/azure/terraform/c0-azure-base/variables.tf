@@ -22,6 +22,8 @@ variable "azure_terraform_subnet_services1_cidr" {}
 variable "azure_terraform_subnet_dynamic_services_cidr" {}
 
 variable "pcf_ert_domain" {}
+variable "apps_domain" {}
+variable "system_domain" {}
 
 variable "ops_manager_image_uri" {}
 variable "vm_admin_username" {}

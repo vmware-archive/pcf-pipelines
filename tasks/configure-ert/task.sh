@@ -1,34 +1,78 @@
 #!/bin/bash
-set -eu
 
-export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$pcf_ert_domain"
+set -euo pipefail
+
+export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$PCF_ERT_DOMAIN"
 
 source pcf-pipelines/functions/generate_cert.sh
 
+declare networking_poe_ssl_certs_json
+
 saml_domains=(
-  "*.sys.${pcf_ert_domain}"
-  "*.login.sys.${pcf_ert_domain}"
-  "*.uaa.sys.${pcf_ert_domain}"
+  "*.${SYSTEM_DOMAIN}"
+  "*.login.${SYSTEM_DOMAIN}"
+  "*.uaa.${SYSTEM_DOMAIN}"
 )
 
 saml_certificates=$(generate_cert "${saml_domains[*]}")
 saml_cert_pem=`echo $saml_certificates | jq --raw-output '.certificate'`
 saml_key_pem=`echo $saml_certificates | jq --raw-output '.key'`
 
+function isPopulated() {
+    local true=0
+    local false=1
+    local envVar="${1}"
 
-NETWORKING_POE_SSL_CERTS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["NETWORKING_POE_SSL_CERTS"]))')"
+    if [[ "${envVar}" == "" ]]; then
+        return ${false}
+    elif [[ "${envVar}" == null ]]; then
+        return ${false}
+    else
+        return ${true}
+    fi
+}
+
+function formatCredhubEncryptionKeysJson() {
+    local credhub_encryption_key_name1="${1}"
+    local credhub_encryption_key_secret1=${2//$'\n'/'\n'}
+    local credhub_primary_encryption_name="${3}"
+    credhub_encryption_keys_json="{
+            \"name\": \"$credhub_encryption_key_name1\",
+            \"key\":{
+                \"secret\": \"$credhub_encryption_key_secret1\"
+             }"
+    if [[ "${credhub_primary_encryption_name}" == $credhub_encryption_key_name1 ]]; then
+        credhub_encryption_keys_json="$credhub_encryption_keys_json, \"primary\": true}"
+    else
+        credhub_encryption_keys_json="$credhub_encryption_keys_json}"
+    fi
+    echo "$credhub_encryption_keys_json"
+}
+
+credhub_encryption_keys_json=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME1}" "${CREDUB_ENCRYPTION_KEY_SECRET1}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+if isPopulated "${CREDUB_ENCRYPTION_KEY_NAME2}"; then
+    credhub_encryption_keys_json2=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME2}" "${CREDUB_ENCRYPTION_KEY_SECRET2}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+    credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json2"
+fi
+if isPopulated "${CREDUB_ENCRYPTION_KEY_NAME3}"; then
+    credhub_encryption_keys_json3=$(formatCredhubEncryptionKeysJson "${CREDUB_ENCRYPTION_KEY_NAME3}" "${CREDUB_ENCRYPTION_KEY_SECRET3}" "${CREDHUB_PRIMARY_ENCRYPTION_NAME}")
+    credhub_encryption_keys_json="$credhub_encryption_keys_json,$credhub_encryption_keys_json3"
+fi
+credhub_encryption_keys_json="[$credhub_encryption_keys_json]"
 
 if [[ "${pcf_iaas}" == "aws" ]]; then
-  if [[ ${NETWORKING_POE_SSL_CERTS} == "" || ${NETWORKING_POE_SSL_CERTS} == "generate" || ${NETWORKING_POE_SSL_CERTS} == null ]]; then
+  if [[ ${POE_SSL_NAME1} == "" || ${POE_SSL_NAME1} == "null" ]]; then
     domains=(
-      "*.sys.${pcf_ert_domain}"
-      "*.cfapps.${pcf_ert_domain}"
+        "*.${SYSTEM_DOMAIN}"
+        "*.${APPS_DOMAIN}"
+        "*.login.${SYSTEM_DOMAIN}"
+        "*.uaa.${SYSTEM_DOMAIN}"
     )
 
     certificate=$(generate_cert "${domains[*]}")
     pcf_ert_ssl_cert=`echo $certificate | jq '.certificate'`
     pcf_ert_ssl_key=`echo $certificate | jq '.key'`
-    NETWORKING_POE_SSL_CERTS_JSON="[
+    networking_poe_ssl_certs_json="[
       {
         \"name\": \"Certificate 1\",
         \"certificate\": {
@@ -37,6 +81,16 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
         }
       }
     ]"
+  else
+    cert=${POE_SSL_CERT1//$'\n'/'\n'}
+    key=${POE_SSL_KEY1//$'\n'/'\n'}
+    networking_poe_ssl_certs_json="[{
+      \"name\": \"$POE_SSL_NAME1\",
+      \"certificate\": {
+        \"cert_pem\": \"$cert\",
+        \"private_key_pem\": \"$key\"
+      }
+    }]"
   fi
 
   cd terraform-state
@@ -57,7 +111,7 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
     echo Failed to get SQL instance IP from Terraform state file
     exit 1
   fi
-  NETWORKING_POE_SSL_CERTS_JSON="[
+  networking_poe_ssl_certs_json="[
     {
       \"name\": \"Certificate 1\",
       \"certificate\": {
@@ -133,15 +187,11 @@ cf_resources=$(
     '
 )
 
-CREDHUB_ENCRYPTION_KEYS_JSON="$(ruby -r yaml -r json -e 'puts JSON.dump(YAML.load(ENV["CREDHUB_ENCRYPTION_KEYS"]))')"
-
 cf_properties=$(
   jq -n \
     --arg terraform_prefix $terraform_prefix \
     --arg singleton_availability_zone "$pcf_az_1" \
     --arg other_availability_zones "$pcf_az_1,$pcf_az_2,$pcf_az_3" \
-    --arg cert_pem "$pcf_ert_ssl_cert" \
-    --arg private_key_pem "$pcf_ert_ssl_key" \
     --arg saml_cert_pem "$saml_cert_pem" \
     --arg saml_key_pem "$saml_key_pem" \
     --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
@@ -153,7 +203,9 @@ cf_properties=$(
     --arg routing_tls_termination $ROUTING_TLS_TERMINATION \
     --arg security_acknowledgement "$SECURITY_ACKNOWLEDGEMENT" \
     --arg iaas $pcf_iaas \
-    --arg pcf_ert_domain "$pcf_ert_domain" \
+    --arg pcf_ert_domain "$PCF_ERT_DOMAIN" \
+    --arg system_domain "$SYSTEM_DOMAIN"\
+    --arg apps_domain "$APPS_DOMAIN" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
     --arg db_host "$db_host" \
     --arg db_locket_username "$db_locket_username" \
@@ -199,8 +251,8 @@ cf_properties=$(
     --arg mysql_backups_s3_access_key_id "$MYSQL_BACKUPS_S3_ACCESS_KEY_ID" \
     --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
     --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
-    --argjson credhub_encryption_keys "$CREDHUB_ENCRYPTION_KEYS_JSON" \
-    --argjson networking_poe_ssl_certs "$NETWORKING_POE_SSL_CERTS_JSON" \
+    --argjson credhub_encryption_keys "$credhub_encryption_keys_json" \
+    --argjson networking_poe_ssl_certs "$networking_poe_ssl_certs_json" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
     '
     {
@@ -247,8 +299,8 @@ cf_properties=$(
       ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
       ".properties.uaa_database.external.uaa_password": { "value": { "secret": $db_uaa_password } },
       ".properties.push_apps_manager_company_name": { "value": "pcf-\($iaas)" },
-      ".cloud_controller.system_domain": { "value": "sys.\($pcf_ert_domain)" },
-      ".cloud_controller.apps_domain": { "value": "cfapps.\($pcf_ert_domain)" },
+      ".cloud_controller.system_domain": { "value": $system_domain },
+      ".cloud_controller.apps_domain": { "value": $apps_domain },
       ".cloud_controller.allow_app_ssh_access": { "value": true },
       ".cloud_controller.security_event_logging_enabled": { "value": true },
       ".router.disable_insecure_cookies": { "value": false },
@@ -409,8 +461,6 @@ cf_properties=$(
 
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
-  --client-id "${OPSMAN_CLIENT_ID}" \
-  --client-secret "${OPSMAN_CLIENT_SECRET}" \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
   --skip-ssl-validation \

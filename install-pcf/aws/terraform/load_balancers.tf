@@ -18,11 +18,11 @@ resource "aws_elb" "PcfHttpElb" {
     ssl_certificate_id = "${var.aws_cert_arn}"
   }
   health_check {
-    target = "TCP:80"
-    timeout = 5
-    interval = 30
+    target = "HTTP:8080/health"
+    timeout = 3
+    interval = 5
     unhealthy_threshold = 2
-    healthy_threshold = 10
+    healthy_threshold = 3
   }
   tags {
     Name = "${var.prefix}-Pcf Http Elb"

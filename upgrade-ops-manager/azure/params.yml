@@ -14,11 +14,38 @@
 
 # Resource configuration
 
+# Existing Ops Manager VM name pattern. This should uniquely filter to a running Ops Manager instance.
+# eg.  myenv-OpsMan
+existing_opsman_vm_name: CHANGEME
+
+# Optional - if your git repo requires an SSH key.
 git_private_key:
-opsman_major_minor_version: CHANGEME
+
+# Ops Manager Admin Credentials - set during the installation of Ops Manager
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
+# If you are using opsman_admin_username/opsman_admin_password, edit opsman_client_id/opsman_client_secret to be an empty value.
+# If you are using opsman_client_id/opsman_client_secret, edit opsman_admin_username/opsman_admin_password to be an empty value.
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
+opsman_admin_password: CHANGEME
+opsman_admin_username: CHANGEME
+
+# If install pipeline has been used then the passphrase is same as the admin password
+opsman_passphrase: CHANGEME
+
+# Ops Manager Url - FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
+opsman_domain_or_ip_address: CHANGEME
+
+opsman_major_minor_version: CHANGEME # (e.g. 2\.[0-9\]+\.[0-9]+$)
+
+# Optional
+# Overwrite the existing VM disk size for Ops Manager
+pcf_opsman_disk_size_in_gb:
+
+# Pivotal Net Token to download Ops Manager binaries from https://network.pivotal.io
 pivnet_token: CHANGEME
 
-# Task configuration
+# Azure params
 azure_region: east_us
 azure_subscription_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 azure_client_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -28,15 +55,3 @@ azure_resource_group_name: xxxxxxxxxx
 azure_storage_account_name: xxxxxxxxxxxxxxx
 azure_storage_account_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 azure_storage_container_name: xxxxxxxxxxxx
-
-existing_opsman_vm_name: CHANGEME
-
-# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
-# If you are using opsman_admin_username/opsman_admin_password, edit opsman_client_id/opsman_client_secret to be an empty value.
-# If you are using opsman_client_id/opsman_client_secret, edit opsman_admin_username/opsman_admin_password to be an empty value. 
-opsman_client_id: CHANGEME
-opsman_client_secret: CHANGEME
-opsman_admin_password: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_passphrase: CHANGEME
-opsman_domain_or_ip_address: CHANGEME

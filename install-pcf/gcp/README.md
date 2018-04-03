@@ -8,7 +8,7 @@ architecture](http://docs.pivotal.io/pivotalcf/refarch/gcp/gcp_ref_arch.html).
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
+This pipeline downloads artifacts from DockerHub (pcfnorm/rootfs and custom
 docker-image resources) and the configured Google Cloud Storage bucket
 (terraform.tfstate file), and as such the Concourse instance must have access
 to those. Note that Terraform outputs a .tfstate file that contains plaintext
@@ -34,7 +34,7 @@ secrets.
   * DNS Administrator
   * Storage Admin
 
-4. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
+4. [Set the pipeline](http://concourse-ci.org/single-page.html#fly-set-pipeline), using your updated params.yml:
   ```
   fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml
   ```
@@ -91,6 +91,11 @@ configured.
 There is a (private, sorry) [Pivotal Tracker
 story](https://www.pivotaltracker.com/n/projects/975916/stories/133642819) to
 address this issue.
+
+
+### Toggling Errands
+
+`ert_errands_to_disable` does not function as expected; use caution when toggling the errands functionality. Currently the only functionality that works is it disables or enables errands; the functionality to choose which errand to disable does not function as expected. 
 
 
 ## Troubleshooting

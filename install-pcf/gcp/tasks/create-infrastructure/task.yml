@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
 
 inputs:
 - name: pcf-pipelines 
@@ -24,7 +24,11 @@ params:
   GCP_STORAGE_BUCKET_LOCATION:
   GCP_RESOURCE_PREFIX:
   PCF_ERT_DOMAIN:
-  NETWORKING_POE_SSL_CERTS:
+  SYSTEM_DOMAIN:
+  APPS_DOMAIN:
+  POE_SSL_NAME1:
+  POE_SSL_CERT1:
+  POE_SSL_KEY1:
   DB_APP_USAGE_SERVICE_USERNAME:
   DB_APP_USAGE_SERVICE_PASSWORD:
   DB_AUTOSCALE_USERNAME:

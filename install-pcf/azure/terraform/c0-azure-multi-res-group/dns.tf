@@ -18,7 +18,7 @@ resource "azurerm_dns_a_record" "ops_manager_dns" {
 }
 
 resource "azurerm_dns_a_record" "apps" {
-  name                = "*.cfapps"
+  name                = "*.${element(split(".", var.apps_domain), 0)}"
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.azure_multi_resgroup_network}"
   ttl                 = "60"
@@ -27,7 +27,7 @@ resource "azurerm_dns_a_record" "apps" {
 }
 
 resource "azurerm_dns_a_record" "sys" {
-  name                = "*.sys"
+  name                = "*.${element(split(".", var.system_domain), 0)}"
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.azure_multi_resgroup_network}"
   ttl                 = "60"
@@ -36,7 +36,7 @@ resource "azurerm_dns_a_record" "sys" {
 }
 
 resource "azurerm_dns_a_record" "mysql" {
-  name                = "mysql-proxy-lb.sys"
+  name                = "mysql-proxy-lb.${element(split(".", var.system_domain), 0)}"
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.azure_multi_resgroup_network}"
   ttl                 = "60"
@@ -44,7 +44,7 @@ resource "azurerm_dns_a_record" "mysql" {
 }
 
 resource "azurerm_dns_a_record" "ssh-proxy" {
-  name                = "ssh.sys"
+  name                = "ssh.${element(split(".", var.system_domain), 0)}"
   zone_name           = "${azurerm_dns_zone.env_dns_zone.name}"
   resource_group_name = "${var.azure_multi_resgroup_network}"
   ttl                 = "60"

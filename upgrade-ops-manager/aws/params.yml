@@ -14,30 +14,17 @@
 
 # Resource configuration
 
-git_private_key:
-
-# Ops Manager minor version to track
-opsman_major_minor_version: ^1\.11\..*$
-
-# Pivotal Net Token to download Ops Manager binaries from https://network.pivotal.io
-pivnet_token: CHANGEME
-
-# Task configuration
-
-# AWS Credentials
-aws_access_key_id: CHANGEME
-aws_secret_access_key: CHANGEME
-aws_region: CHANGEME
-aws_vpc_id: CHANGEME
-
-# Existing Ops Manager VM Name Pattern. This should uniquely filter to a running Ops Manager instance.
+# Existing Ops Manager VM name pattern. This should uniquely filter to a running Ops Manager instance.
 # eg.  myenv-OpsMan
 existing_opsman_vm_name: CHANGEME
+
+# Optional - if your git repo requires an SSH key.
+git_private_key:
 
 # Ops Manager Admin Credentials - set during the installation of Ops Manager
 # Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
 # If you are using opsman_admin_username/opsman_admin_password, edit opsman_client_id/opsman_client_secret to be an empty value.
-# If you are using opsman_client_id/opsman_client_secret, edit opsman_admin_username/opsman_admin_password to be an empty value. 
+# If you are using opsman_client_id/opsman_client_secret, edit opsman_admin_username/opsman_admin_password to be an empty value.
 opsman_client_id: CHANGEME
 opsman_client_secret: CHANGEME
 opsman_admin_password: CHANGEME
@@ -46,6 +33,16 @@ opsman_admin_username: CHANGEME
 # If install pipeline has been used then the passphrase is same as the admin password
 opsman_passphrase: CHANGEME
 
-# Ops Manager Url
-# eg. https://myopsman.mydomain.com
+# Ops Manager Url - FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
 opsman_domain_or_ip_address: CHANGEME
+
+opsman_major_minor_version: CHANGEME # (e.g. 2\.[0-9\]+\.[0-9]+$)
+
+# Pivotal Net Token to download Ops Manager binaries from https://network.pivotal.io
+pivnet_token: CHANGEME # value must be a Pivotal Network legacy token; UAA API tokens do not work currently work
+
+# AWS params
+aws_access_key_id: CHANGEME
+aws_secret_access_key: CHANGEME
+aws_region: CHANGEME
+aws_vpc_id: CHANGEME

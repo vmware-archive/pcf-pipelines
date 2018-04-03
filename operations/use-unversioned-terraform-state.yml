@@ -43,7 +43,7 @@
         image_resource:
           type: docker
           source:
-            repository: czero/rootfs
+            repository: pcfnorm/rootfs
           inputs:
           - name: terraform-state
           - name: tfstate-version

@@ -24,7 +24,7 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
 apt-get -y update && sudo apt-get -y install --no-install-recommends google-cloud-sdk && \
 
 # pip
-apt-get install -y --no-install-recommends python-pip python-dev && \
+apt-get install -y --no-install-recommends python-pip python-dev software-properties-common python-software-properties && \
 
 # vim
 ln -s /usr/bin/vim.tiny /usr/local/bin/vim && \

@@ -56,17 +56,18 @@ instance_groups:
   azs: [AZ01,AZ02,AZ03]
   networks:
   - name: INFRASTRUCTURE
-    static_ips: ((atc_ips))
+    static_ips: ((web_ip))
   jobs:
   - release: concourse
     name: atc
     properties:
       external_url: https://((concourse_host)):443
-      basic_auth_username: admin
-      basic_auth_password: ((main-team-password))
-      tls_cert: ((concourse-tls.certificate))
-      tls_key: ((concourse-tls.private_key))
+      basic_auth_username: ((atc_basic_auth.username))
+      basic_auth_password: ((atc_basic_auth.password))
+      tls_cert: ((atc_tls.certificate))
+      tls_key: ((atc_tls.private_key))
       tls_bind_port: 443
+      token_signing_key: ((token_signing_key))
       postgresql:
         host: ((db_ip))
         database: atc
@@ -84,7 +85,10 @@ instance_groups:
 
   - release: concourse
     name: tsa
-    properties: {}
+    properties:
+      host_key: ((tsa_host_key))
+      token_signing_key: ((token_signing_key))
+      authorized_keys: [((worker_key.public_key))]
 
   - name: uaa
     release: uaa
@@ -122,8 +126,8 @@ instance_groups:
         admin: {client_secret: ((uaa-admin))}
         login: {client_secret: ((uaa-login))}
         zones: {internal: {hostnames: []}}
-        sslCertificate: ((concourse-tls.certificate))
-        sslPrivateKey: ((concourse-tls.private_key))
+        sslCertificate: ((atc_tls.certificate))
+        sslPrivateKey: ((atc_tls.private_key))
         jwt:
           revocable: true
           policy:
@@ -144,8 +148,8 @@ instance_groups:
           password: ((uaa-db-password))
       login:
         saml:
-          serviceProviderCertificate: ((concourse-tls.certificate))
-          serviceProviderKey: ((concourse-tls.private_key))
+          serviceProviderCertificate: ((atc_tls.certificate))
+          serviceProviderKey: ((atc_tls.private_key))
           serviceProviderKeyPassword: ""
 
   - name: credhub
@@ -158,7 +162,7 @@ instance_groups:
             url: *uaa-url
             verification_key: ((uaa-jwt.public_key))
             ca_certs:
-            - ((concourse-tls.ca))
+            - ((atc_tls.ca))
         data_storage:
           type: postgres
           host: ((db_ip))
@@ -167,7 +171,10 @@ instance_groups:
           password: ((credhub-db-password))
           database: credhub
           require_tls: false
-        tls: ((concourse-tls))
+        tls:
+          certificate: ((atc_tls.certificate))
+          private_key: ((atc_tls.private_key))
+        ca_certificate: ((atc_tls.ca))
         log_level: info
         encryption:
           keys:
@@ -188,11 +195,15 @@ instance_groups:
   jobs:
   - release: concourse
     name: groundcrew
-    properties: {}
+    consumes: {baggageclaim: {from: worker-baggageclaim}}
+    properties:
+      drain_timeout: 10m
+      tsa: {worker_key: ((worker_key))}
 
   - release: concourse
     name: baggageclaim
-    properties: {}
+    properties: {log_level: debug}
+    provides: {baggageclaim: {as: worker-baggageclaim}}
 
   - release: garden-runc
     name: garden
@@ -220,7 +231,7 @@ variables:
   options:
     is_ca: true
     common_name: Concourse CA
-- name: concourse-tls
+- name: atc_tls
   type: certificate
   options:
     ca: concourse-ca
@@ -253,3 +264,9 @@ variables:
   type: password
 - name: main-team-password
   type: password
+- name: token_signing_key
+  type: rsa
+- name: tsa_host_key
+  type: ssh
+- name: worker_key
+  type: ssh

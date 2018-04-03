@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
 
 inputs:
   - name: pcf-pipelines
@@ -29,6 +29,8 @@ params:
   AZURE_TERRAFORM_PREFIX:
   AZURE_VM_ADMIN:
   PCF_ERT_DOMAIN:
+  SYSTEM_DOMAIN:
+  APPS_DOMAIN:
   PCF_SSH_KEY_PUB:
   AZURE_MULTI_RESGROUP_NETWORK:
   AZURE_MULTI_RESGROUP_PCF:

@@ -12,7 +12,6 @@ root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 overwrite=""
 dir="${root}/.."
-has_fly_fmt="false"
 
 while getopts v:w:d: option; do
  case "${option}" in
@@ -24,10 +23,6 @@ while getopts v:w:d: option; do
     dir=${OPTARG};;
  esac
 done
-
-if [[ $(which fly) ]] && [[ $(fly -h 2>&1 | grep format-pipeline) ]]; then
-  has_fly_fmt="true"
-fi
 
 echo "Will pin pcf-pipelines to ${version}"
 
@@ -72,10 +67,6 @@ for f in ${files[@]}; do
     fi
 
     mv "${f}.pinned" $filename
-
-    if [[ "$has_fly_fmt" == "true" ]]; then
-      fly format-pipeline --write --config $filename
-    fi
   else
     echo "Skipping $f"
   fi

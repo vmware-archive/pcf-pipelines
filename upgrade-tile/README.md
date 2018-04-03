@@ -57,7 +57,7 @@ upgrade from `--.--.n` to `--.--.n+1`.
    communicate with PivNet and OpsMan. Fill it out with the necessary values and
    store it in a safe place.
 
-4. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
+4. [Set the pipeline](http://concourse-ci.org/single-page.html#fly-set-pipeline), using your updated params.yml:
 
    ```
    fly -t lite set-pipeline -p upgrade-your-tile -c pipeline.yml -l params.yml
@@ -83,6 +83,11 @@ For a mechanism to run the `Apply-Changes` job manually or on a scheduled basis,
 
 
 ## Troubleshooting
+
+## Known Issues
+
+#### Issue: #### 
+Since the upgrade-tile pipeline pulls stemcells from PivNet, if any of your tiles are using non-ubuntu stemcells (CentOS, for example) you won't be able to use the upgrade-tile pipeline to upgrade your tile. 
 
 #### Error message: ####
    ```

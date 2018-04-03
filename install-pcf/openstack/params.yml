@@ -38,16 +38,16 @@ company_name:
 # C2C Networking network CIDR
 container_networking_nw_cidr: 10.255.0.0/16
 
-# For credhub integration, replace dummy values in the following structure
-# and set the number of credhub instances in resource config to 2
-credhub_encryption_keys: |
-  - name: dummy encryption key 1
-    key:
-      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
-    primary: true
-  - name: encryption key 2
-    key:
-      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+# For credhub integration, Set the number of credhub instances in resource config to 2
+# Primary Encryption Name MUST match one of the encryption key names provided
+# Encryption keys 2 and 3 are optional
+credhub_primary_encryption_name: dummy encryption key 1
+credhub_encryption_key_name1: dummy encryption key 1
+credhub_encryption_key_secret1: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+credhub_encryption_key_name2: # Optional Name 2
+credhub_encryption_key_secret2: # Optional Secret 2
+credhub_encryption_key_name3: # Optional Name 3
+credhub_encryption_key_secret3: # Optional Secret 2
 
 default_quota_max_number_services: 1000
 
@@ -60,8 +60,8 @@ disable_http_proxy: false
 disable_insecure_cookies: false
 
 ## Domain names
-apps_domain:   CHANGEME      # The Apps domain for your PCF environment e.g. cfapps.pcf.example.com.
-system_domain: CHANGEME      # The System domain for your PCF environment e.g sys.pcf.example.com.
+system_domain: CHANGEME # e.g. system.pcf.example.com
+apps_domain: CHANGEME   # e.g. apps.pcf.example.com
 
 # TODO: Allow multiple DNS servers for each net (currently only 1 can be set)
 # Dynamic Services Network
@@ -95,9 +95,6 @@ external_network_id: CHANGEME
 
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
-
-# Only change this if you need to avoid address collision with a third-party service on the same subnet.
-garden_network_pool_cidr: 10.254.0.0/22
 
 # HAProxy will use the CA provided to verify the certificates provided by the router.
 haproxy_backend_ca: CHANGEME
@@ -195,40 +192,15 @@ mysql_backups_scp_user:
 # Email address to receive MySQL monitor notifications
 mysql_monitor_email: CHANGEME
 
-networking_poe_ssl_certs:
-# networking_poe_ssl_certs: |
-#  - name: Point of Entry Certificate 1
-#    certificate:
-#      cert_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#      private_key_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#  - name: PoE certificate 2
-#    certificate:
-#      cert_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#      private_key_pem: |
-#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-#        ...
-#        -----END EXAMPLE RSA PRIVATE KEY-----
-
 # Comma-separated list of NTP servers to use for VMs deployed by BOSH
 ntp_servers: CHANGEME
 
 # Decryption password for Ops Manager exported settings
 om_decryption_pwd: CHANGEME
 
-# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
+# opsman_admin_username/opsman_admin_password needs to be specified
 opsman_admin_password: CHANGEME           # Password for Ops Manager admin account
 opsman_admin_username: admin              # Username for Ops Manager admin account
-opsman_client_id: CHANGEME                # Client ID for Ops Manager admin account
-opsman_client_secret: CHANGEME            # Client Secret for Ops Manager admin account
 
 # Ops Manager VM Settings
 opsman_domain_or_ip_address: CHANGEME     # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
@@ -274,6 +246,19 @@ pcf_ert_saml_key:
 
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
+
+# Optional. If blank the cert(s) will be generated
+poe_ssl_name1:
+poe_ssl_cert1:
+poe_ssl_key1:
+
+poe_ssl_name2:
+poe_ssl_cert2:
+poe_ssl_key2:
+
+poe_ssl_name3:
+poe_ssl_cert3:
+poe_ssl_key3:
 
 # Whether to enable BOSH VM resurrector
 resurrector_enabled: false

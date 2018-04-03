@@ -86,8 +86,6 @@ jobs:
     file: pcf-pipelines/install-pcf/vsphere/tasks/config-opsdir/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
       VCENTER_HOST: {{vcenter_host}}
@@ -116,7 +114,6 @@ jobs:
       DEPLOYMENT_NW_GATEWAY: {{deployment_nw_gateway}}
       DEPLOYMENT_NW_AZS: {{deployment_nw_azs}}
       SERVICES_NETWORK_NAME: {{services_network_name}}
-      IS_SERVICE_NETWORK: {{is_service_network}}
       SERVICES_VCENTER_NETWORK: {{services_vsphere_network}}
       SERVICES_NW_CIDR: {{services_nw_cidr}}
       SERVICES_EXCLUDED_RANGE: {{services_excluded_range}}
@@ -163,8 +160,8 @@ jobs:
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
 
@@ -185,10 +182,10 @@ jobs:
     params:
       IAAS: "vsphere"
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
       PIVNET_API_TOKEN: {{pivnet_token}}
       NO_PROXY: {{company_proxy_domain}}
       OM_IP: {{om_ip}}
@@ -210,10 +207,11 @@ jobs:
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
+
 
 - name: deploy-ert
   plan:
@@ -233,8 +231,6 @@ jobs:
     params:
       IAAS: vsphere
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
       ERT_SINGLETON_JOB_AZ: {{ert_singleton_job_az}}
@@ -248,7 +244,15 @@ jobs:
       COMPANY_NAME: {{company_name}}
       AUTHENTICATION_MODE: {{authentication_mode}}
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
-      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
+      POE_SSL_NAME1: {{poe_ssl_name1}}
+      POE_SSL_CERT1: {{poe_ssl_cert1}}
+      POE_SSL_KEY1: {{poe_ssl_key1}}
+      POE_SSL_NAME2: {{poe_ssl_name2}}
+      POE_SSL_CERT2: {{poe_ssl_cert2}}
+      POE_SSL_KEY2: {{poe_ssl_key2}}
+      POE_SSL_NAME3: {{poe_ssl_name3}}
+      POE_SSL_CERT3: {{poe_ssl_cert3}}
+      POE_SSL_KEY3: {{poe_ssl_key3}}
       SAML_SSL_CERT: {{saml_ssl_cert}}
       SAML_SSL_PRIVATE_KEY: {{saml_ssl_private_key}}
       HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
@@ -287,7 +291,6 @@ jobs:
       DISABLE_INSECURE_COOKIES: {{disable_insecure_cookies}}
       ROUTER_STATIC_IPS: {{router_static_ips}}
       ROUTER_REQUEST_TIMEOUT_IN_SEC: {{router_request_timeout_in_seconds}}
-      GARDEN_NETWORK_POOL_CIDR: {{garden_network_pool_cidr}}
       GARDEN_NETWORK_MTU: {{garden_network_mtu}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
@@ -353,29 +356,38 @@ jobs:
       MYSQL_NSX_LB_PORT: {{mysql_nsx_lb_port}}
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
-      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
+      CREDUB_ENCRYPTION_KEY_NAME1: {{credhub_encryption_key_name1}}
+      CREDUB_ENCRYPTION_KEY_SECRET1: {{credhub_encryption_key_secret1}}
+      CREDUB_ENCRYPTION_KEY_NAME2: {{credhub_encryption_key_name2}}
+      CREDUB_ENCRYPTION_KEY_SECRET2: {{credhub_encryption_key_secret2}}
+      CREDUB_ENCRYPTION_KEY_NAME3: {{credhub_encryption_key_name3}}
+      CREDUB_ENCRYPTION_KEY_SECRET3: {{credhub_encryption_key_secret3}}
+      CREDHUB_PRIMARY_ENCRYPTION_NAME: {{credhub_primary_encryption_name}}
       HA_PROXY_LB_NAME: ""
       HAPROXY_FLOATING_IPS: ""
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
     params:
       PRODUCT_NAME: cf
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       ERRANDS_TO_DISABLE: {{ert_errands_to_disable}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
 
   - task: deploy
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
+
 
 - name: wipe-env
   plan:
@@ -385,8 +397,6 @@ jobs:
     file: pcf-pipelines/install-pcf/vsphere/tasks/wipe-env/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_IP: {{om_ip}}

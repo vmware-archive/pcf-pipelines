@@ -15,92 +15,92 @@ resources:
 - name: operations-manager
   type: pivnet
   source:
-    api_token: {{pivnet_token}}
+    api_token: ((pivnet_token))
     product_slug: ops-manager
-    product_version: {{operations_manager_regex}}
+    product_version: ((operations_manager_regex))
     sort_by: semver
 
 - name: operations-manager-tarball
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "staging/ops-manager/ops-manager-(.*).tar"
 
 - name: elastic-runtime
   type: pivnet
   source:
-    api_token: {{pivnet_token}}
+    api_token: ((pivnet_token))
     product_slug: elastic-runtime
-    product_version: {{elastic_runtime_regex}}
+    product_version: ((elastic_runtime_regex))
     sort_by: semver
 
 - name: elastic-runtime-tarball
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "staging/elastic-runtime/elastic-runtime-(.*).tar"
 
 - name: stemcell-tarball
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "staging/stemcells/bosh-stemcell-(.*)-.*.tgz"
 
 - name: czero-cflinuxfs2
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
     tag: latest
 
 - name: czero-cflinuxfs2-tarball
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "staging/czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
 
 - name: czero-cflinuxfs2-tarball-kickstarter
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
 
 - name: pcf-pipelines-tarball
   type: pivnet
   source:
-    api_token: {{pivnet_token}}
+    api_token: ((pivnet_token))
     product_slug: pcf-automation
 
 - name: pcf-pipelines-offline-pinned-tarball
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "staging/pcf-pipelines/pcf-pipelines-v(.*).tgz"
 
 - name: pcf-pipelines-combined
   type: s3
   source:
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
-    bucket: {{s3_bucket}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
+    bucket: ((s3_bucket))
     regexp: "pcf-pipelines-combined/pcf-pipelines-combined-(.*).tar.gpg"
 
 - name: fly
@@ -115,11 +115,11 @@ resources:
   source:
     initial_version: 0.0.0
     driver: s3
-    bucket: {{s3_bucket}}
+    bucket: ((s3_bucket))
     key: "pcf-pipelines-combined/version"
-    access_key_id: {{s3_access_key_id}}
-    secret_access_key: {{s3_secret_access_key}}
-    endpoint: {{s3_endpoint}}
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+    endpoint: ((s3_endpoint))
 
 jobs:
 - name: collector
@@ -150,7 +150,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
       - name: operations-manager
       outputs:
@@ -186,14 +186,14 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
       - name: elastic-runtime
       outputs:
       - name: elastic-runtime-tarball
       - name: stemcell-tarball
       params:
-        PIVNET_API_TOKEN: {{pivnet_token}}
+        PIVNET_API_TOKEN: ((pivnet_token))
       run:
         path: bash
         args:
@@ -257,7 +257,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
       - name: pcf-pipelines-combined-version
       - name: pcf-pipelines-tarball
@@ -314,7 +314,7 @@ jobs:
           image_resource:
             type: docker-image
             source:
-              repository: czero/rootfs
+              repository: pcfnorm/rootfs
           inputs:
           - name: pcf-pipelines-tarball
           outputs:
@@ -327,7 +327,9 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/rootfs}
+        source:
+          repository: pcfnorm/rootfs
+
       inputs:
       - name: pcf-pipelines-combined-version
       - name: czero-cflinuxfs2
@@ -391,10 +393,9 @@ jobs:
           mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
 
           echo "Creating install-pcf/vsphere/pipeline.yml"
-          fly format-pipeline -c <(
-            cat pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml |
-              yaml_patch_linux -o pin-resource-gets.yml
-          ) > pcf-pipelines-offline-pinned/install-pcf/vsphere/pipeline.yml
+          cat pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml |
+            yaml_patch_linux -o pin-resource-gets.yml
+            > pcf-pipelines-offline-pinned/install-pcf/vsphere/pipeline.yml
 
           pcf_pipelines_version=$(
             cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version'
@@ -410,9 +411,8 @@ jobs:
             "pcf-pipelines": $root/pcf-pipelines
           EOF
           mkdir -p pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined
-          fly format-pipeline -c <(
-            steamroll -p pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml -c steamroll_config.yml
-          ) > pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined/pipeline.yml
+          steamroll -p pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml -c steamroll_config.yml
+            > pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined/pipeline.yml
 
           echo "Creating unpack-pcf-pipelines-combined/params.yml"
           cp pcf-pipelines/unpack-pcf-pipelines-combined/params.yml \
@@ -452,7 +452,9 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/rootfs}
+        source:
+          repository: pcfnorm/rootfs
+
       inputs:
       - name: pcf-pipelines-offline-pinned-tarball
       - name: pcf-pipelines-combined-version
@@ -463,8 +465,8 @@ jobs:
       outputs:
       - name: pcf-pipelines-combined
       params:
-        GPG_PUBLIC_KEY: {{gpg_public_key_contents}}
-        GPG_KEY_EMAIL: {{gpg_public_key_email}}
+        GPG_PUBLIC_KEY: ((gpg_public_key_contents))
+        GPG_KEY_EMAIL: ((gpg_public_key_email))
       run:
         path: bash
         args:
@@ -521,7 +523,9 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/rootfs}
+        source:
+          repository: pcfnorm/rootfs
+
       inputs:
         - name: pcf-pipelines-combined-version
       run:
@@ -532,11 +536,11 @@ jobs:
           set -o pipefail
           set -eu
 
-          aws configure set aws_access_key_id {{s3_access_key_id}}
-          aws configure set aws_secret_access_key {{s3_secret_access_key}}
+          aws configure set aws_access_key_id ((s3_access_key_id))
+          aws configure set aws_secret_access_key ((s3_secret_access_key))
           aws configure set default.region us-east-1
 
           for namespace in czero-cflinuxfs2/ elastic-runtime/ ops-manager/ pcf-pipelines-combined/ pcf-pipelines/ staging/ stemcells/; do
-            aws s3 --endpoint-url {{s3_endpoint}} rm s3://{{s3_bucket}}/$namespace --recursive
+            aws s3 --endpoint-url ((s3_endpoint)) rm s3://((s3_bucket))/$namespace --recursive
           done
-          aws s3 --endpoint-url {{s3_endpoint}} cp pcf-pipelines-combined-version/version s3://{{s3_bucket}}/pcf-pipelines-combined/version
+          aws s3 --endpoint-url ((s3_endpoint)) cp pcf-pipelines-combined-version/version s3://((s3_bucket))/pcf-pipelines-combined/version

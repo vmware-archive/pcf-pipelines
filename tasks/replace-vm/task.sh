@@ -16,8 +16,17 @@
 
 set -eu
 
-root=$PWD
+function getDiskSize() {
+  if [[ "${VM_DISK_SIZE_GB}" == "" || "${VM_DISK_SIZE_GB}" == "null" ]]; then
+    VM_DISK_SIZE_GB="$( cliaas-linux get-vm-disk-size -c cliaas-config/config.yml -i $VM_IDENTIFIER )"
+  fi
+
+  echo "${VM_DISK_SIZE_GB}"
+}
+
+diskSizeGB="$( getDiskSize )"
 
 cliaas-linux replace-vm \
   --config cliaas-config/config.yml \
-  --identifier "$VM_IDENTIFIER"
+  --identifier "${VM_IDENTIFIER}" \
+  --disk-size-gb "${diskSizeGB}"

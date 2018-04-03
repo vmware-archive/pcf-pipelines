@@ -26,20 +26,20 @@ az_3_name: CHANGEME                    # Logical name of availability zone. No s
 az_3_rp_name: CHANGEME                 # Resource pool name in vCenter for AZ3
 
 # vSphere datastore folder (such as pcf_disk) where attached disk images will be created
-bosh_disk_path: “pcf_disk”
+bosh_disk_path: "pcf_disk"
 
 # vSphere datacenter folder (such as pcf_templates) where templates will be placed
-bosh_template_folder: “pcf_templates”
+bosh_template_folder: "pcf_templates"
 
 # vSphere datacenter folder (such as pcf_vms) where VMs will be placed
-bosh_vm_folder: “pcf_vms”
+bosh_vm_folder: "pcf_vms"
 
 # Ciphers
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
 # Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
 # The recommended settings are filled in below, change as necessary.
-haproxy_tls_ciphers: “DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-router_tls_ciphers: “ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384”
+haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
 
 # Company Name for Apps Manager
 company_name:
@@ -50,23 +50,24 @@ company_proxy_domain:
 # c2c networking network cidr
 container_networking_nw_cidr: 10.255.0.0/16
 
-# For credhub integration, replace dummy values in the following structure
-# and set the number of credhub instances in resource config to 2
-credhub_encryption_keys: |
-  - name: dummy encryption key 1
-    key:
-      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
-    primary: true
-  - name: encryption key 2
-    key:
-      secret: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+# For credhub integration, Set the number of credhub instances in resource config to 2
+# Primary Encryption Name MUST match one of the encryption key names provided
+# Encryption keys 2 and 3 are optional
+# Note: The secret key needs to be 20 characters or more.
+credhub_primary_encryption_name: dummy encryption key 1
+credhub_encryption_key_name1: dummy encryption key 1
+credhub_encryption_key_secret1: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+credhub_encryption_key_name2: # Optional Name 2
+credhub_encryption_key_secret2: # Optional Secret 2
+credhub_encryption_key_name3: # Optional Name 3
+credhub_encryption_key_secret3: # Optional Secret 2
 
 default_quota_max_number_services: 1000
 default_quota_memory_limit_mb: 10240
 
 # Deployment
 deployment_excluded_range: CHANGEME    # Deployment network exclusion range
-deployment_network_name: “DEPLOYMENT”
+deployment_network_name: "DEPLOYMENT"
 deployment_nw_azs: CHANGEME            # Comma separated list of AZ’s to be associated with this network
 deployment_nw_cidr: CHANGEME           # Deployment network CIDR, ex: 10.0.0.0/22
 deployment_nw_dns: CHANGEME            # Deployment network DNS
@@ -85,7 +86,7 @@ disable_insecure_cookies: false
 
 # Dynamic Services Network
 dynamic_services_excluded_range: CHANGEME      # Dynamic Services network exclusion range
-dynamic_services_network_name: “DYNAMIC-SERVICES”
+dynamic_services_network_name: "DYNAMIC-SERVICES"
 dynamic_services_nw_azs: CHANGEME              # Comma separated list of AZ’s to be associated with this network
 dynamic_services_nw_cidr: CHANGEME             # Dynamic Services network CIDR, ex: 10.0.0.0/22
 dynamic_services_nw_dns: CHANGEME              # Dynamic Services network DNS
@@ -99,17 +100,18 @@ enable_vm_resurrector: true
 # Valid values:
 #   all
 #   none
-#   “” (empty string - equivalent to none)
+#   "" (empty string - equivalent to none)
 #   Any combination of the following, separated by comma:
-#     smoke-tests
+#     smoke_tests
+#     push-usage-service
 #     push-apps-manager
-#     notifications
-#     notifications-ui
+#     deploy-notifications
+#     deploy-notifications-ui
 #     push-pivotal-account
-#     autoscaling
-#     autoscaling-register-broker
+#     deploy-autoscaling
+#     register-broker
 #     nfsbrokerpush
-ert_errands_to_disable:       # Comma-separated list of errand names to disable before deploy
+ert_errands_to_disable: none
 
 # PCF Elastic Runtime minor version to track
 ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
@@ -119,9 +121,6 @@ ert_singleton_job_az: CHANGEME
 
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
-
-# Only change this if you need to avoid address collision with a third-party service on the same subnet.
-garden_network_pool_cidr: 10.254.0.0/22
 
 # Optional - if your git repo requires an SSH key.
 git_private_key:
@@ -140,7 +139,7 @@ ignore_ssl_cert_verification: false
 
 # Infrastructure Configuration
 infra_excluded_range: CHANGEME         # Infrastructure network exclusion range
-infra_network_name: “INFRASTRUCTURE”
+infra_network_name: "INFRASTRUCTURE"
 infra_nw_azs: CHANGEME                 # Comma separated list of AZ’s to be associated with this network
 infra_nw_cidr: CHANGEME                # Infrastructure network CIDR, ex: 10.0.0.0/22
 infra_nw_dns: CHANGEME                 # Infrastructure network DNS
@@ -212,29 +211,6 @@ mysql_backups_scp_port:
 mysql_backups_scp_server:
 mysql_backups_scp_user:
 
-networking_poe_ssl_certs:
-#networking_poe_ssl_certs: |
-#  - name: Point of Entry Certificate 1
-#    certificate:
-#      cert_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#      private_key_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#  - name: PoE certificate 2
-#    certificate:
-#      cert_pem: |
-#        -----BEGIN EXAMPLE CERTIFICATE-----
-#        ...
-#        -----END EXAMPLE CERTIFICATE-----
-#      private_key_pem: |
-#        -----BEGIN EXAMPLE RSA PRIVATE KEY-----
-#        ...
-#        -----END EXAMPLE RSA PRIVATE KEY-----
-
 #nsx configuration
 nsx_address:                      # address of nsx
 nsx_ca_certificate:               # cert for nsx
@@ -271,7 +247,7 @@ ntp_servers: CHANGEME
 # Decryption password for Ops Manager exported settings
 om_decryption_pwd: CHANGEME
 
-# Decryption password for Ops Manager exported settings
+# Comma separated list of DNS servers used by Ops Manager
 om_dns_servers: CHANGEME
 
 # Gateway for Ops Manager network
@@ -310,14 +286,12 @@ om_vm_power_state: true
 # Optional DNS name for Ops Director. Should be reachable from all networks.
 ops_dir_hostname:
 
-# Leave opsman_client_id/opsman_client_secret blank; opsman_admin_username/opsman_admin_password needs to be specified
+# opsman_admin_username/opsman_admin_password needs to be specified
 opsman_admin_password: CHANGEME       # Password for Ops Manager admin account
 opsman_admin_username: CHANGEME       # Username for Ops Manager admin account
-opsman_client_id:             # Client ID for Ops Manager admin account
-opsman_client_secret:         # Client Secret for Ops Manager admin account
 
 # Disk type for Ops Manager VM (thick|thin)
-opsman_disk_type: “thin”
+opsman_disk_type: "thin"
 
 # FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
 opsman_domain_or_ip_address: CHANGEME
@@ -330,6 +304,19 @@ opsman_ssh_password: CHANGEME
 
 # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
+
+# Optional. If blank the cert(s) will be generated
+poe_ssl_name1:
+poe_ssl_cert1:
+poe_ssl_key1:
+
+poe_ssl_name2:
+poe_ssl_cert2:
+poe_ssl_key2:
+
+poe_ssl_name3:
+poe_ssl_cert3:
+poe_ssl_key3:
 
 # Request timeout for gorouter
 router_request_timeout_in_seconds: 900
@@ -350,16 +337,15 @@ saml_ssl_cert:
 saml_ssl_private_key:
 
 # Setting appropriate Application Security Groups is critical for a secure
-# deployment. Change the value of the param below to “X” to acknowledge that
+# deployment. Change the value of the param below to "X" to acknowledge that
 # once the Elastic Runtime deployment completes, you will review and set the
 # appropriate application security groups.
 # See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
 security_acknowledgement: CHANGEME
 
 # Services network
-is_service_network: CHANGEME           # Required select service network option in Ops man true or false
 services_excluded_range: CHANGEME      # Services network exclusion range
-services_network_name: “SERVICES”
+services_network_name: "SERVICES"
 services_nw_azs: CHANGEME              # Comma separated list of AZ’s to be associated with this network
 services_nw_cidr: CHANGEME             # Services network CIDR, ex: 10.0.0.0/22
 services_nw_dns: CHANGEME              # Services network DNS
@@ -411,4 +397,4 @@ vcenter_pwd: CHANGEME              # vCenter password
 vcenter_usr: CHANGEME              # vCenter username. If user is tied to a domain, then escape the \, example `domain\\user`
 
 # Disk type for BOSH provisioned VM. (thick|thin)
-vm_disk_type: “thick”
+vm_disk_type: "thick"

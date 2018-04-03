@@ -182,7 +182,7 @@ in the following params template:
 								}
 							}
 							if !validInputMapping {
-								Fail(fmt.Sprintf("could not find input mapping for '%s' in '%s'\n", k, inputs))
+								Fail(fmt.Sprintf("could not find input mapping for '%s' in '%#v'\n", k, inputs))
 							}
 						}
 

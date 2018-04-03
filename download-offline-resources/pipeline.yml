@@ -32,7 +32,7 @@ resources:
 - name: czero-cflinuxfs2
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
     tag: latest
     username: {{dockerhub_username}}
     password: {{dockerhub_password}}
@@ -110,7 +110,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
       - name: ops-manager-pivnet
       outputs:
@@ -142,7 +142,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
       - name: elastic-runtime-pivnet
       outputs:
@@ -174,7 +174,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
       - name: czero-cflinuxfs2
       - name: czero-cflinuxfs2-version

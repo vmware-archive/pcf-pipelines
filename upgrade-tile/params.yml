@@ -12,31 +12,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Set to true to enable all errands, false to disable all or leave blank to keep states the same.
+enable_errands:
+
+# The IaaS name for which stemcell to download. This must match the IaaS name
+# within the stemcell to download, e.g. "vsphere", "aws", "azure", "google" must be lowercase.
+iaas_type: CHANGEME
+
+git_private_key:
+
+# Operations Manager
+# ------------------------------
+# Credentials for Operations Manager. These are used for uploading, staging,
+# and deploying the product file on Operations Manager.
+# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified.
+# If you are using opsman_admin_username/opsman_admin_password, edit opsman_client_id/opsman_client_secret to be an empty value.
+# If you are using opsman_client_id/opsman_client_secret, edit opsman_admin_username/opsman_admin_password to be an empty value.
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
+opsman_client_id: CHANGEME
+opsman_client_secret: CHANGEME
+opsman_domain_or_ip_address: CHANGEME
+
 # Resource
 # ------------------------------
 # The token used to download the product file from Pivotal Network. Find this
 # on your Pivotal Network profile page:
 # https://network.pivotal.io/users/dashboard/edit-profile
 pivnet_token: CHANGEME
-# The minor product version to track, as a regexp. To track 1.11.x of a product, this would be "^1\.11\..*$", as shown below.
-product_version_regex: ^1\.11\..*$
 
-# Operations Manager
-# ------------------------------
-# Credentials for Operations Manager. These are used for uploading, staging,
-# and deploying the product file on Operations Manager.
-# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified. 
-# If you are using opsman_admin_username/opsman_admin_password, edit opsman_client_id/opsman_client_secret to be an empty value.
-# If you are using opsman_client_id/opsman_client_secret, edit opsman_admin_username/opsman_admin_password to be an empty value. 
-opsman_client_id: CHANGEME
-opsman_client_secret: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_admin_password: CHANGEME
-opsman_domain_or_ip_address: CHANGEME
-
-# The IaaS name for which stemcell to download. This must match the IaaS name
-# within the stemcell to download, e.g. "vsphere", "aws", "azure", "google" must be lowercase.
-iaas_type: CHANGEME
+# The globs regular expression for the PivNet resource to download the product
+# release files. "*pivotal" is the default.
+# For products such as ERT, it is recommended to use "cf*pivotal" to avoid the
+# extra download of the SRT file in PCF 1.12.*
+product_globs: "*pivotal"
 
 # om-linux
 # ------------------------------
@@ -47,10 +56,6 @@ iaas_type: CHANGEME
 # is https://network.pivotal.io/products/pivotal-rabbitmq-service, and the
 # product slug is 'pivotal-rabbitmq-service'.
 product_slug: CHANGEME
-# The globs regular expression for the PivNet resource to download the product
-# release files. "*pivotal" is the default.
-# For products such as ERT, it is recommended to use "cf*pivotal" to avoid the
-# extra download of the SRT file in PCF 1.12.*
-product_globs: "*pivotal"
 
-git_private_key:
+# The minor product version to track, as a regexp. To track 1.11.x of a product, this would be "^1\.11\..*$", as shown below.
+product_version_regex: 2\.[0-9\]+\.[0-9]+$

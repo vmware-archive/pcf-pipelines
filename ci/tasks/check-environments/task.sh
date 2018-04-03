@@ -17,7 +17,7 @@ function curl_api() {
 function get_concourse_oauth_token() {
   curl -s -k \
     --user "${ATC_BASIC_AUTH_USERNAME}:${ATC_BASIC_AUTH_PASSWORD}" \
-    "${ATC_EXTERNAL_URL}/api/v1/teams/${ATC_TEAM_NAME}/auth/token" | \
+    "${ATC_EXTERNAL_URL}/auth/basic/token?team_name=${ATC_TEAM_NAME}" | \
     jq -r .value
 }
 

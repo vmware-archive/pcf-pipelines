@@ -123,8 +123,6 @@ jobs:
       AZURE_REGION: {{azure_region}}
       AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
 
@@ -154,7 +152,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
         - name: pivnet-opsmgr
@@ -177,6 +175,8 @@ jobs:
       AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       AZURE_VM_ADMIN: {{azure_vm_admin}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
+      SYSTEM_DOMAIN: {{system_domain}}
+      APPS_DOMAIN: {{apps_domain}}
       PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
       AZURE_TERRAFORM_OPSMAN_PRIV_IP: {{azure_opsman_priv_ip}}
       AZURE_MULTI_RESGROUP_NETWORK: {{azure_multi_resgroup_network}}
@@ -218,7 +218,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
@@ -249,15 +249,13 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
       params:
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-        OPSMAN_CLIENT_ID: {{opsman_client_id}}
-        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
         PCF_OPSMAN_ADMIN: {{opsman_admin_username}}
         PCF_OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
         AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
@@ -310,15 +308,13 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-director.sh
       params:
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-        OPSMAN_CLIENT_ID: {{opsman_client_id}}
-        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
         PCF_OPSMAN_ADMIN: {{opsman_admin_username}}
         PCF_OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
 
@@ -344,8 +340,8 @@ jobs:
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
       PIVNET_API_TOKEN: {{pivnet_token}}
@@ -357,8 +353,8 @@ jobs:
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
 
@@ -383,8 +379,6 @@ jobs:
     params:
       IAAS: azure
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
       ERT_SINGLETON_JOB_AZ:
@@ -436,7 +430,6 @@ jobs:
       DISABLE_INSECURE_COOKIES: {{disable_insecure_cookies}}
       ROUTER_STATIC_IPS: {{router_static_ips}}
       ROUTER_REQUEST_TIMEOUT_IN_SEC: {{router_request_timeout_in_seconds}}
-      GARDEN_NETWORK_POOL_CIDR: {{garden_network_pool_cidr}}
       GARDEN_NETWORK_MTU: {{garden_network_mtu}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_recipient_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
@@ -483,8 +476,22 @@ jobs:
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
       ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
       ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
-      NETWORKING_POE_SSL_CERTS: {{networking_poe_ssl_certs}}
-      CREDHUB_ENCRYPTION_KEYS: {{credhub_encryption_keys}}
+      POE_SSL_NAME1: {{poe_ssl_name1}}
+      POE_SSL_CERT1: {{poe_ssl_cert1}}
+      POE_SSL_KEY1: {{poe_ssl_key1}}
+      POE_SSL_NAME2: {{poe_ssl_name2}}
+      POE_SSL_CERT2: {{poe_ssl_cert2}}
+      POE_SSL_KEY2: {{poe_ssl_key2}}
+      POE_SSL_NAME3: {{poe_ssl_name3}}
+      POE_SSL_CERT3: {{poe_ssl_cert3}}
+      POE_SSL_KEY3: {{poe_ssl_key3}}
+      CREDUB_ENCRYPTION_KEY_NAME1: {{credhub_encryption_key_name1}}
+      CREDUB_ENCRYPTION_KEY_SECRET1: {{credhub_encryption_key_secret1}}
+      CREDUB_ENCRYPTION_KEY_NAME2: {{credhub_encryption_key_name2}}
+      CREDUB_ENCRYPTION_KEY_SECRET2: {{credhub_encryption_key_secret2}}
+      CREDUB_ENCRYPTION_KEY_NAME3: {{credhub_encryption_key_name3}}
+      CREDUB_ENCRYPTION_KEY_SECRET3: {{credhub_encryption_key_secret3}}
+      CREDHUB_PRIMARY_ENCRYPTION_NAME: {{credhub_primary_encryption_name}}
       TCP_ROUTER_NSX_SECURITY_GROUP: ""
       TCP_ROUTER_NSX_LB_EDGE_NAME: ""
       TCP_ROUTER_NSX_LB_POOL_NAME: ""
@@ -506,6 +513,8 @@ jobs:
       MYSQL_NSX_LB_SECURITY_GROUP: ""
       MYSQL_NSX_LB_PORT: ""
       HAPROXY_FLOATING_IPS: ""
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
 
 ###########################
 ## Job - Deploy    ERT   ##
@@ -527,7 +536,7 @@ jobs:
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""

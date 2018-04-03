@@ -26,7 +26,9 @@ echo $MYSQL_MONITOR_EMAIL > /dev/null
 
 cat > params.yml <<EOF
 S3_OUTPUT_BUCKET: $(output s3_bucket)
-ERT_DOMAIN: $ert_domain
+PCF_ERT_DOMAIN: $pcf_ert_domain
+SYSTEM_DOMAIN: $system_domain
+APPS_DOMAIN: $apps_domain
 OPSMAN_DOMAIN_OR_IP_ADDRESS: opsman.$ert_domain
 ROUTE_53_ZONE_ID: $(output zone_id)
 aws_key_name: $(output opsman_key_pair_name)
@@ -83,7 +85,7 @@ ERT_SSL_CERT:
 ERT_SSL_KEY:
 
 mysql_backups: disable
-ert_errands_to_disable: push-apps-manager,notifications,notifications-ui,push-pivotal-account,autoscaling,autoscaling-register-broker,nfsbrokerpush
+ert_errands_to_disable: push-usage-service,push-apps-manager,deploy-notifications,deploy-notifications-ui,push-pivotal-account,deploy-autoscaling,register-broker,nfsbrokerpush
 
 OPSMAN_ALLOW_ACCESS: true
 opsman_allow_cidr: '["0.0.0.0/0"]'
