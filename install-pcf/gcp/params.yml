@@ -47,7 +47,7 @@ db_uaa_password: CHANGEME
 db_uaa_username: CHANGEME
 
 # Domain Names for ERT
-pcf_ert_domain: CHANGEME # This is the domain you will access ERT with
+pcf_ert_domain: CHANGEME # This is the domain you will access ERT with, for example: pcf.example.com.
 system_domain: CHANGEME # e.g. system.pcf.example.com
 apps_domain: CHANGEME   # e.g. apps.pcf.example.com
 
@@ -136,8 +136,8 @@ mysql_monitor_recipient_email:  CHANGEME
 opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
 
-# This should be your pcf_ert_domain with "opsman." as a prefix
-opsman_domain_or_ip_address: CHANGEME
+# # The domain to access Operations Manager; 
+opsman_domain_or_ip_address: CHANGEME #This must be your pcf_ert_domain with "opsman." as a prefix. For example, opsman.pcf.example.com
 
 # PCF Ops Manager minor version to track
 opsman_major_minor_version: 2\.[0-9\]+\.[0-9]+$
