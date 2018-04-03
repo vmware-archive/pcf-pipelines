@@ -6,6 +6,14 @@ This pipeline assumes all of the infrastructure required to run a
 PCF deployment on Openstack per the Customer[0] has been pre-provisioned [reference
 architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/openstack/openstack_ref_arch.html).
 
+## Prerequisites
+
+- [install a Concourse server](https://concourse-ci.org/installing.html)
+- download the [Fly CLI](https://concourse-ci.org/fly-cli.html) to interact with the Concourse server
+- depending on where you've installed Concourse, you may need to set up
+[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
+third-party sources of pipeline dependencies
+
 ## Usage
 
 This pipeline downloads artifacts from DockerHub (pcfnorm/rootfs and custom

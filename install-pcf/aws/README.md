@@ -4,6 +4,15 @@ This pipeline uses Terraform to create the infrastructure required to run a
 3 AZ PCF deployment on AWS per the Customer[0] [reference
 architecture](http://docs.pivotal.io/pivotalcf/refarch/aws/aws_ref_arch.html). It also assumes you are using Amazon Route 53 as your DNS web service. 
 
+## Prerequisites
+
+- [install a Concourse server](https://concourse-ci.org/installing.html)
+- download the [Fly CLI](https://concourse-ci.org/fly-cli.html) to interact with the Concourse server
+- depending on where you've installed Concourse, you may need to set up
+[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
+third-party sources of pipeline dependencies
+- ensure you have set up DNS and certs correctly, for example, our pipelines require that you have set up the Ops Manager url with `opsman` as a prefix.
+
 ## Usage
 
 This pipeline downloads artifacts from DockerHub (pcfnorm/rootfs and custom
