@@ -1,0 +1,32 @@
+azure_terraform_prefix:
+azure_region:
+
+pcf_ert_domain:
+
+azure_multi_resgroup_network:
+azure_multi_resgroup_pcf:
+
+#azure_infra_terraform_storage_account:
+#azure_infra_terraform_container_name:
+
+#between 3 and 24 characters in length and use numbers and lower-case letters only
+azure_pcf_terraform_storage_account_name:
+azure_pcf_terraform_container_name:
+
+azure_terraform_vnet_name:
+azure_terraform_vnet_cidr:
+
+azure_terraform_subnet_infra_name:
+azure_terraform_subnet_infra_cidr:
+
+azure_terraform_subnet_ert_name:
+azure_terraform_subnet_ert_cidr:
+
+azure_terraform_subnet_services1_name:
+azure_terraform_subnet_services1_cidr:
+
+azure_terraform_subnet_dynamic_services_name:
+azure_terraform_subnet_dynamic_services_cidr:
+
+# by default, should be a private ip in the ERT subnet within the reserved range
+priv_ip_mysql_lb:
