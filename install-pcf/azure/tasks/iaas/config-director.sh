@@ -14,7 +14,7 @@ iaas_configuration=$(
     --arg tenant_id "${AZURE_TENANT_ID}" \
     --arg client_id "${AZURE_CLIENT_ID}" \
     --arg client_secret "${AZURE_CLIENT_SECRET}" \
-    --arg resource_group_name "${AZURE_TERRAFORM_PREFIX}" \
+    --arg resource_group_name "${AZURE_MULTI_RESGROUP_PCF}" \
     --arg bosh_storage_account_name "${ENV_SHORT_NAME}root" \
     --arg deployments_storage_account_name "*boshvms*" \
     --arg default_security_group "pcf-default-security-group" \
@@ -61,22 +61,22 @@ director_configuration=$(
 
 networks_configuration=$(
   jq -n \
-    --arg infra_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-opsman-and-director-subnet" \
+    --arg infra_subnet_iaas "${AZURE_MULTI_RESGROUP_NETWORK}/${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-opsman-and-director-subnet" \
     --arg infra_subnet_cidr "${AZURE_TERRAFORM_SUBNET_INFRA_CIDR}" \
     --arg infra_subnet_reserved "${AZURE_TERRAFORM_SUBNET_INFRA_RESERVED}" \
     --arg infra_subnet_dns "${AZURE_TERRAFORM_SUBNET_INFRA_DNS}" \
     --arg infra_subnet_gateway "${AZURE_TERRAFORM_SUBNET_INFRA_GATEWAY}" \
-    --arg ert_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-ert-subnet" \
+    --arg ert_subnet_iaas "${AZURE_MULTI_RESGROUP_NETWORK}/${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-ert-subnet" \
     --arg ert_subnet_cidr "${AZURE_TERRAFORM_SUBNET_ERT_CIDR}" \
     --arg ert_subnet_reserved "${AZURE_TERRAFORM_SUBNET_ERT_RESERVED}" \
     --arg ert_subnet_dns "${AZURE_TERRAFORM_SUBNET_ERT_DNS}" \
     --arg ert_subnet_gateway "${AZURE_TERRAFORM_SUBNET_ERT_GATEWAY}" \
-    --arg services1_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-services-01-subnet" \
+    --arg services1_subnet_iaas "${AZURE_MULTI_RESGROUP_NETWORK}/${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-services-01-subnet" \
     --arg services1_subnet_cidr "${AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR}" \
     --arg services1_subnet_reserved "${AZURE_TERRAFORM_SUBNET_SERVICES1_RESERVED}" \
     --arg services1_subnet_dns "${AZURE_TERRAFORM_SUBNET_SERVICES1_DNS}" \
     --arg services1_subnet_gateway "${AZURE_TERRAFORM_SUBNET_SERVICES1_GATEWAY}" \
-    --arg dynamic_services1_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-dynamic-services-subnet" \
+    --arg dynamic_services1_subnet_iaas "${AZURE_MULTI_RESGROUP_NETWORK}/${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-dynamic-services-subnet" \
     --arg dynamic_services1_subnet_cidr "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR}" \
     --arg dynamic_services1_subnet_reserved "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_RESERVED}" \
     --arg dynamic_services1_subnet_dns "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_DNS}" \
