@@ -16,13 +16,13 @@
     type: semver
     source:
      driver: s3
-     bucket: {{s3_bucket_terraform}}
+     bucket: ((s3_bucket_terraform))
      key: terraform/version
-     access_key_id: {{s3_access_key_id}}
-     secret_access_key: {{s3_secret_access_key}}
-     endpoint: {{s3_endpoint}}
+     access_key_id: ((s3_access_key_id))
+     secret_access_key: ((s3_secret_access_key))
+     endpoint: ((s3_endpoint))
      initial_version: 0.0.0
-     region_name: {{s3_region}}
+     region_name: ((s3_region))
 
 - op: replace
   path: /jobs/get=terraform-state

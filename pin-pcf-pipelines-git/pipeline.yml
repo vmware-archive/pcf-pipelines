@@ -3,7 +3,7 @@ resources:
   type: git
   source:
     branch: master
-    private_key: {{git_private_key}}
+    private_key: ((git_private_key))
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     tag_filter: v*
 
@@ -11,8 +11,8 @@ resources:
   type: git
   source:
     branch: master
-    private_key: {{git_private_key}}
-    uri: {{pcf_pipelines_pinned_git_uri}}
+    private_key: ((git_private_key))
+    uri: ((pcf_pipelines_pinned_git_uri))
 
 jobs:
 - name: pin-pipelines
@@ -26,8 +26,8 @@ jobs:
         source:
           repository: pcfnorm/rootfs
       params:
-        GIT_USER: {{git_author_user}}
-        GIT_EMAIL: {{git_author_email}}
+        GIT_USER: ((git_author_user))
+        GIT_EMAIL: ((git_author_email))
       inputs:
       - name: pcf-pipelines
       outputs:
