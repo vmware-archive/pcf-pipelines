@@ -495,10 +495,6 @@ jobs:
       <<: *atc_creds
       JOBS: |
         rc-vsphere-install/deploy-opsman
-        rc-vsphere-install/configure-director
-        rc-vsphere-install/deploy-director
-        rc-vsphere-install/upload-ert
-        rc-vsphere-install/stage-ert
         rc-vsphere-install/deploy-ert
   on_failure:
     <<: *notify_slack
@@ -645,9 +641,6 @@ jobs:
     params:
       <<: *atc_creds
       JOBS: |
-        rc-gcp-install/configure-director
-        rc-gcp-install/deploy-director
-        rc-gcp-install/upload-ert
         rc-gcp-install/deploy-ert
   on_failure:
     <<: *notify_slack
@@ -944,6 +937,7 @@ jobs:
       <<: *atc_creds
       JOBS: |
         rc-azure-install/config-director
+        rc-azure-install/deploy-ert
   on_failure:
     <<: *notify_slack
 
@@ -1051,6 +1045,7 @@ jobs:
       <<: *atc_creds
       JOBS: |
         rc-aws-install/create-infrastructure
+        rc-aws-install/deploy-ert
   on_failure:
     <<: *notify_slack
 
@@ -1396,9 +1391,6 @@ jobs:
       <<: *atc_creds
       JOBS: |
         ((rc_offline_pipeline_name))/deploy-opsman
-        ((rc_offline_pipeline_name))/configure-director
-        ((rc_offline_pipeline_name))/deploy-director
-        ((rc_offline_pipeline_name))/upload-ert
         ((rc_offline_pipeline_name))/deploy-ert
   - try:
       put: vsphere-offline-lock
