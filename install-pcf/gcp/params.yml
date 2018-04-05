@@ -71,6 +71,9 @@ ert_errands_to_disable: none
 # PCF Elastic Runtime minor version to track
 ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
+# Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
+frontend_idle_timeout: 601
+
 # GCP project to create the infrastructure in
 gcp_project_id: CHANGEME
 

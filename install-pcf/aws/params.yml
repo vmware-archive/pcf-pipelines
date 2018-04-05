@@ -98,6 +98,9 @@ ert_errands_to_disable: none
 # PCF Elastic Runtime minor version to track
 ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
+# Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
+frontend_idle_timeout: 61
+
 # Optional - if your git repo requires an SSH key.
 git_private_key:
 
