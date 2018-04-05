@@ -30,3 +30,12 @@ azure_terraform_subnet_dynamic_services_cidr:
 
 # by default, should be a private ip in the ERT subnet within the reserved range
 priv_ip_mysql_lb:
+
+azure_subscription_id:
+azure_tenant_id:
+
+# generate a secure password/secret to use for the Network service principal
+azure_network_service_principal_client_secret:
+
+# generate a secure password/secret to use for the Network service principal
+azure_pcf_service_principal_client_secret:
