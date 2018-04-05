@@ -119,6 +119,9 @@ disable_insecure_cookies: false
 # PCF Elastic Runtime minor version to track
 ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 
+# Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
+frontend_idle_timeout: 239
+
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
 
