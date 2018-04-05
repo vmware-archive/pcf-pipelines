@@ -10,19 +10,19 @@ resources:
   type: s3
   source:
     disable_ssl: false
-    access_key_id: {{aws_access_key_id}}
-    secret_access_key: {{aws_secret_access_key}}
-    endpoint: {{S3_ENDPOINT}}
-    bucket: {{S3_OUTPUT_BUCKET}}
-    region_name: {{aws_region}}
+    access_key_id: ((aws_access_key_id))
+    secret_access_key: ((aws_secret_access_key))
+    endpoint: ((S3_ENDPOINT))
+    bucket: ((S3_OUTPUT_BUCKET))
+    region_name: ((aws_region))
     versioned_file: terraform.tfstate
 
 - name: pivnet-elastic-runtime
   type: pivnet
   source:
-    api_token: {{pivnet_token}}
+    api_token: ((pivnet_token))
     product_slug: elastic-runtime
-    product_version: {{ert_major_minor_version}}
+    product_version: ((ert_major_minor_version))
     sort_by: semver
 
 - name: pcf-pipelines
@@ -30,14 +30,14 @@ resources:
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    private_key: {{git_private_key}}
+    private_key: ((git_private_key))
 
 - name: pivnet-opsmgr
   type: pivnet
   source:
-    api_token: {{pivnet_token}}
+    api_token: ((pivnet_token))
     product_slug: ops-manager
-    product_version: {{opsman_major_minor_version}}
+    product_version: ((opsman_major_minor_version))
     sort_by: semver
 
 jobs:
@@ -47,11 +47,11 @@ jobs:
   - get: pcf-pipelines
   - task: create-terraform-state
     params:
-      S3_BUCKET_TERRAFORM: {{S3_OUTPUT_BUCKET}}
-      S3_ENDPOINT: {{S3_ENDPOINT}}
-      S3_REGION: {{aws_region}}
-      AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
-      AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
+      S3_BUCKET_TERRAFORM: ((S3_OUTPUT_BUCKET))
+      S3_ENDPOINT: ((S3_ENDPOINT))
+      S3_REGION: ((aws_region))
+      AWS_ACCESS_KEY_ID: ((aws_access_key_id))
+      AWS_SECRET_ACCESS_KEY: ((aws_secret_access_key))
     file: pcf-pipelines/tasks/create-initial-terraform-state/task.yml
 
 - name: create-infrastructure
@@ -65,7 +65,7 @@ jobs:
         globs: ["*AWS.yml"]
   - task: find-ami
     params:
-      REGION: {{aws_region}}
+      REGION: ((aws_region))
     config:
       platform: linux
       image_resource:
@@ -89,44 +89,44 @@ jobs:
   - task: create-infrastructure
     file: pcf-pipelines/install-pcf/aws/tasks/prepare-aws/task.yml
     params:
-      DB_MASTER_USERNAME: {{db_master_username}}
-      DB_MASTER_PASSWORD: {{db_master_password}}
-      TERRAFORM_PREFIX: {{terraform_prefix}}
-      aws_access_key_id: {{aws_access_key_id}}
-      aws_secret_access_key: {{aws_secret_access_key}}
-      aws_key_name: {{aws_key_name}}
-      aws_cert_arn: {{aws_cert_arn}}
-      amis_nat: {{amis_nat}}
-      aws_region: {{aws_region}}
-      aws_az1: {{aws_az1}}
-      aws_az2: {{aws_az2}}
-      aws_az3: {{aws_az3}}
-      system_domain: {{system_domain}}
-      apps_domain: {{apps_domain}}
-      route53_zone_id: {{ROUTE_53_ZONE_ID}}
-      vpc_cidr: {{vpc_cidr}}
-      public_subnet_cidr_az1: {{public_subnet_cidr_az1}}
-      public_subnet_cidr_az2: {{public_subnet_cidr_az2}}
-      public_subnet_cidr_az3: {{public_subnet_cidr_az3}}
-      ert_subnet_cidr_az1: {{ert_subnet_cidr_az1}}
-      ert_subnet_cidr_az2: {{ert_subnet_cidr_az2}}
-      ert_subnet_cidr_az3: {{ert_subnet_cidr_az3}}
-      services_subnet_cidr_az1: {{services_subnet_cidr_az1}}
-      services_subnet_cidr_az2: {{services_subnet_cidr_az2}}
-      services_subnet_cidr_az3: {{services_subnet_cidr_az3}}
-      dynamic_services_subnet_cidr_az1: {{dynamic_services_subnet_cidr_az1}}
-      dynamic_services_subnet_cidr_az2: {{dynamic_services_subnet_cidr_az2}}
-      dynamic_services_subnet_cidr_az3: {{dynamic_services_subnet_cidr_az3}}
-      infra_subnet_cidr_az1: {{infra_subnet_cidr_az1}}
-      rds_subnet_cidr_az1: {{rds_subnet_cidr_az1}}
-      rds_subnet_cidr_az2: {{rds_subnet_cidr_az2}}
-      rds_subnet_cidr_az3: {{rds_subnet_cidr_az3}}
-      opsman_ip_az1: {{opsman_ip_az1}}
-      nat_ip_az1: {{nat_ip_az1}}
-      nat_ip_az2: {{nat_ip_az2}}
-      nat_ip_az3: {{nat_ip_az3}}
-      OPSMAN_ALLOW_SSH_CIDR_RANGES: {{opsman_allow_ssh_cidr_ranges}}
-      OPSMAN_ALLOW_HTTPS_CIDR_RANGES: {{opsman_allow_https_cidr_ranges}}
+      DB_MASTER_USERNAME: ((db_master_username))
+      DB_MASTER_PASSWORD: ((db_master_password))
+      TERRAFORM_PREFIX: ((terraform_prefix))
+      aws_access_key_id: ((aws_access_key_id))
+      aws_secret_access_key: ((aws_secret_access_key))
+      aws_key_name: ((aws_key_name))
+      aws_cert_arn: ((aws_cert_arn))
+      amis_nat: ((amis_nat))
+      aws_region: ((aws_region))
+      aws_az1: ((aws_az1))
+      aws_az2: ((aws_az2))
+      aws_az3: ((aws_az3))
+      system_domain: ((system_domain))
+      apps_domain: ((apps_domain))
+      route53_zone_id: ((ROUTE_53_ZONE_ID))
+      vpc_cidr: ((vpc_cidr))
+      public_subnet_cidr_az1: ((public_subnet_cidr_az1))
+      public_subnet_cidr_az2: ((public_subnet_cidr_az2))
+      public_subnet_cidr_az3: ((public_subnet_cidr_az3))
+      ert_subnet_cidr_az1: ((ert_subnet_cidr_az1))
+      ert_subnet_cidr_az2: ((ert_subnet_cidr_az2))
+      ert_subnet_cidr_az3: ((ert_subnet_cidr_az3))
+      services_subnet_cidr_az1: ((services_subnet_cidr_az1))
+      services_subnet_cidr_az2: ((services_subnet_cidr_az2))
+      services_subnet_cidr_az3: ((services_subnet_cidr_az3))
+      dynamic_services_subnet_cidr_az1: ((dynamic_services_subnet_cidr_az1))
+      dynamic_services_subnet_cidr_az2: ((dynamic_services_subnet_cidr_az2))
+      dynamic_services_subnet_cidr_az3: ((dynamic_services_subnet_cidr_az3))
+      infra_subnet_cidr_az1: ((infra_subnet_cidr_az1))
+      rds_subnet_cidr_az1: ((rds_subnet_cidr_az1))
+      rds_subnet_cidr_az2: ((rds_subnet_cidr_az2))
+      rds_subnet_cidr_az3: ((rds_subnet_cidr_az3))
+      opsman_ip_az1: ((opsman_ip_az1))
+      nat_ip_az1: ((nat_ip_az1))
+      nat_ip_az2: ((nat_ip_az2))
+      nat_ip_az3: ((nat_ip_az3))
+      OPSMAN_ALLOW_SSH_CIDR_RANGES: ((opsman_allow_ssh_cidr_ranges))
+      OPSMAN_ALLOW_HTTPS_CIDR_RANGES: ((opsman_allow_https_cidr_ranges))
     ensure:
       put: terraform-state
       params:
@@ -135,32 +135,32 @@ jobs:
   - task: prepare-rds
     file: pcf-pipelines/install-pcf/aws/tasks/prepare-rds/task.yml
     params:
-      PEM: {{PEM}}
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      DB_APP_USAGE_SERVICE_USERNAME: {{db_app_usage_service_username}}
-      DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
-      DB_AUTOSCALE_USERNAME: {{db_autoscale_username}}
-      DB_AUTOSCALE_PASSWORD: {{db_autoscale_password}}
-      DB_DIEGO_USERNAME: {{db_diego_username}}
-      DB_DIEGO_PASSWORD: {{db_diego_password}}
-      DB_NOTIFICATIONS_USERNAME: {{db_notifications_username}}
-      DB_NOTIFICATIONS_PASSWORD: {{db_notifications_password}}
-      DB_ROUTING_USERNAME: {{db_routing_username}}
-      DB_ROUTING_PASSWORD: {{db_routing_password}}
-      DB_UAA_USERNAME: {{db_uaa_username}}
-      DB_UAA_PASSWORD: {{db_uaa_password}}
-      DB_CCDB_USERNAME: {{db_ccdb_username}}
-      DB_CCDB_PASSWORD: {{db_ccdb_password}}
-      DB_ACCOUNTDB_USERNAME: {{db_accountdb_username}}
-      DB_ACCOUNTDB_PASSWORD: {{db_accountdb_password}}
-      DB_NETWORKPOLICYSERVERDB_USERNAME: {{db_networkpolicyserverdb_username}}
-      DB_NETWORKPOLICYSERVERDB_PASSWORD: {{db_networkpolicyserverdb_password}}
-      DB_NFSVOLUMEDB_USERNAME: {{db_nfsvolumedb_username}}
-      DB_NFSVOLUMEDB_PASSWORD: {{db_nfsvolumedb_password}}
-      DB_LOCKET_USERNAME: {{db_locket_username}}
-      DB_LOCKET_PASSWORD: {{db_locket_password}}
-      DB_SILK_USERNAME: {{db_silk_username}}
-      DB_SILK_PASSWORD: {{db_silk_password}}
+      PEM: ((PEM))
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      DB_APP_USAGE_SERVICE_USERNAME: ((db_app_usage_service_username))
+      DB_APP_USAGE_SERVICE_PASSWORD: ((db_app_usage_service_password))
+      DB_AUTOSCALE_USERNAME: ((db_autoscale_username))
+      DB_AUTOSCALE_PASSWORD: ((db_autoscale_password))
+      DB_DIEGO_USERNAME: ((db_diego_username))
+      DB_DIEGO_PASSWORD: ((db_diego_password))
+      DB_NOTIFICATIONS_USERNAME: ((db_notifications_username))
+      DB_NOTIFICATIONS_PASSWORD: ((db_notifications_password))
+      DB_ROUTING_USERNAME: ((db_routing_username))
+      DB_ROUTING_PASSWORD: ((db_routing_password))
+      DB_UAA_USERNAME: ((db_uaa_username))
+      DB_UAA_PASSWORD: ((db_uaa_password))
+      DB_CCDB_USERNAME: ((db_ccdb_username))
+      DB_CCDB_PASSWORD: ((db_ccdb_password))
+      DB_ACCOUNTDB_USERNAME: ((db_accountdb_username))
+      DB_ACCOUNTDB_PASSWORD: ((db_accountdb_password))
+      DB_NETWORKPOLICYSERVERDB_USERNAME: ((db_networkpolicyserverdb_username))
+      DB_NETWORKPOLICYSERVERDB_PASSWORD: ((db_networkpolicyserverdb_password))
+      DB_NFSVOLUMEDB_USERNAME: ((db_nfsvolumedb_username))
+      DB_NFSVOLUMEDB_PASSWORD: ((db_nfsvolumedb_password))
+      DB_LOCKET_USERNAME: ((db_locket_username))
+      DB_LOCKET_PASSWORD: ((db_locket_password))
+      DB_SILK_USERNAME: ((db_silk_username))
+      DB_SILK_PASSWORD: ((db_silk_password))
 
 - name: configure-director
   serial_groups: [opsman]
@@ -173,29 +173,29 @@ jobs:
   - task: config-opsman-auth
     file: pcf-pipelines/tasks/config-opsman/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPS_MGR_USR: {{opsman_admin_username}}
-      OPS_MGR_PWD: {{opsman_admin_password}}
-      OM_DECRYPTION_PWD: {{opsman_admin_password}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPS_MGR_USR: ((opsman_admin_username))
+      OPS_MGR_PWD: ((opsman_admin_password))
+      OM_DECRYPTION_PWD: ((opsman_admin_password))
   - task: configure-director
     file: pcf-pipelines/install-pcf/aws/tasks/config-director/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USER: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      AWS_KEY_NAME: {{aws_key_name}}
-      PEM: {{PEM}}
-      AWS_REGION: {{aws_region}}
-      S3_ENDPOINT: {{S3_ENDPOINT}}
-      TRUSTED_CERTIFICATES: {{director_certificates}}
-      ert_subnet_reserved_ranges_z1: {{ert_subnet_reserved_ranges_z1}}
-      ert_subnet_reserved_ranges_z2: {{ert_subnet_reserved_ranges_z2}}
-      ert_subnet_reserved_ranges_z3: {{ert_subnet_reserved_ranges_z3}}
-      services_subnet_reserved_ranges_z1: {{services_subnet_reserved_ranges_z1}}
-      services_subnet_reserved_ranges_z2: {{services_subnet_reserved_ranges_z2}}
-      services_subnet_reserved_ranges_z3: {{services_subnet_reserved_ranges_z3}}
-      dynamic_services_subnet_reserved_ranges_z1: {{dynamic_services_subnet_reserved_ranges_z1}}
-      dynamic_services_subnet_reserved_ranges_z2: {{dynamic_services_subnet_reserved_ranges_z2}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USER: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+      AWS_KEY_NAME: ((aws_key_name))
+      PEM: ((PEM))
+      AWS_REGION: ((aws_region))
+      S3_ENDPOINT: ((S3_ENDPOINT))
+      TRUSTED_CERTIFICATES: ((director_certificates))
+      ert_subnet_reserved_ranges_z1: ((ert_subnet_reserved_ranges_z1))
+      ert_subnet_reserved_ranges_z2: ((ert_subnet_reserved_ranges_z2))
+      ert_subnet_reserved_ranges_z3: ((ert_subnet_reserved_ranges_z3))
+      services_subnet_reserved_ranges_z1: ((services_subnet_reserved_ranges_z1))
+      services_subnet_reserved_ranges_z2: ((services_subnet_reserved_ranges_z2))
+      services_subnet_reserved_ranges_z3: ((services_subnet_reserved_ranges_z3))
+      dynamic_services_subnet_reserved_ranges_z1: ((dynamic_services_subnet_reserved_ranges_z1))
+      dynamic_services_subnet_reserved_ranges_z2: ((dynamic_services_subnet_reserved_ranges_z2))
       dynamic_services_subnet_reserved_ranges_z3: {{dynamic_services_subnet_reserved_ranges_z3}}
       infra_subnet_reserved_ranges_z1: {{infra_subnet_reserved_ranges_z1}}
 
