@@ -93,6 +93,9 @@ external_network: CHANGEME
 # Set this to your floating IP network's id
 external_network_id: CHANGEME
 
+# Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
+frontend_idle_timeout:
+
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
 

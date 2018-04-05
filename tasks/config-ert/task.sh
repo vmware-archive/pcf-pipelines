@@ -136,6 +136,7 @@ cf_properties=$(
     --arg routing_tls_termination $ROUTING_TLS_TERMINATION \
     --arg routing_custom_ca_certificates "$ROUTING_CUSTOM_CA_CERTIFICATES" \
     --arg haproxy_tls_ciphers "$HAPROXY_TLS_CIPHERS" \
+    --arg frontend_idle_timeout "$FRONTEND_IDLE_TIMEOUT" \
     --arg disable_http_proxy "$DISABLE_HTTP_PROXY" \
     --arg smtp_from "$SMTP_FROM" \
     --arg smtp_address "$SMTP_ADDRESS" \
@@ -224,6 +225,9 @@ cf_properties=$(
       },
       ".router.request_timeout_in_seconds": {
         "value": $router_request_timeout_seconds
+      },
+      ".router.frontend_idle_timeout": {
+        "value": $frontend_idle_timeout
       },
       ".mysql_monitor.recipient_email": {
         "value": $mysql_monitor_email

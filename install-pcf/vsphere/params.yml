@@ -119,6 +119,9 @@ ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 # AZ to use for deployment of ERT Singleton jobs
 ert_singleton_job_az: CHANGEME
 
+# Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
+frontend_idle_timeout: 601
+
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
 

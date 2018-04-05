@@ -259,6 +259,7 @@ jobs:
       HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
       ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
       HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
+      FRONTEND_IDLE_TIMEOUT: {{frontend_idle_timeout}}
       DISABLE_HTTP_PROXY: {{disable_http_proxy}}
       TCP_ROUTING: {{tcp_routing}}
       TCP_ROUTING_PORTS: {{tcp_routing_ports}}
