@@ -3,7 +3,7 @@
   value: elastic-runtime
 
 - op: replace
-  path: /product_slug=((product_slug))/product_slug
+  path: /product_slug={{product_slug}}/product_slug
   value: elastic-runtime
 
 - op: replace

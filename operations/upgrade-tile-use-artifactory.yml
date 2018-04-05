@@ -1,6 +1,6 @@
 ---
 - op: replace
-  path: /resources/name=((resource_name))
+  path: /resources/name={{resource_name}}
   value:
     name: ((resource_name))
     type: artifactory
