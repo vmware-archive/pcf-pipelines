@@ -5,7 +5,7 @@ resources:
   type: git
   source:
     branch: master
-    private_key: ((git_private_key))
+    private_key: {{git_private_key}}
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
 resource_types: []
 jobs:
@@ -20,6 +20,6 @@ jobs:
   - task: count
     file: ci-repo/ci/tasks/codestats.yml
     params:
-      DATADOG_API_KEY: ((datadog_api_key))
-      DATADOG_APP_KEY: ((datadog_app_key))
+      DATADOG_API_KEY: {{datadog_api_key}}
+      DATADOG_APP_KEY: {{datadog_app_key}}
       REPO_NAME: pcf-pipelines
