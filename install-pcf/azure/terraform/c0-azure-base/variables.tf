@@ -29,6 +29,7 @@ variable "ops_manager_image_uri" {}
 variable "vm_admin_username" {}
 variable "vm_admin_public_key" {}
 
+variable "azure_multi_resgroup_network" {}
 variable "azure_account_name" {}
 variable "azure_buildpacks_container" {}
 variable "azure_droplets_container" {}

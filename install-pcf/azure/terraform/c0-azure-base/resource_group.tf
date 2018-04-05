@@ -4,6 +4,6 @@
 ///////////////////////////////////////////////
 
 resource "azurerm_resource_group" "pcf_resource_group" {
-  name     = "${var.env_name}"
+  name     = "${var.azure_multi_resgroup_network}"
   location = "${var.location}"
 }
