@@ -23,9 +23,9 @@ resources:
 - name: pivnet-opsmgr
   type: pivnet
   source:
-    api_token: ((pivnet_token))
+    api_token: {{pivnet_token}}
     product_slug: ops-manager
-    product_version: ((opsman_major_minor_version))
+    product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
 - name: pcf-pipelines
@@ -33,7 +33,7 @@ resources:
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    private_key: ((git_private_key))
+    private_key: {{git_private_key}}
 
 - name: schedule
   type: time
@@ -67,35 +67,35 @@ jobs:
   - task: wait-opsman-clear
     file: pcf-pipelines/tasks/wait-opsman-clear/task.yml
     params:
-      OPSMAN_CLIENT_ID: ((opsman_client_id))
-      OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
-      OPSMAN_USERNAME: ((opsman_admin_username))
-      OPSMAN_PASSWORD: ((opsman_admin_password))
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
 
   - aggregate:
     - task: export-opsmgr-settings
       file: pcf-pipelines/tasks/export-opsmgr-settings/task.yml
       params:
-        OPSMAN_CLIENT_ID: ((opsman_client_id))
-        OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
-        OPSMAN_USERNAME: ((opsman_admin_username))
-        OPSMAN_PASSWORD: ((opsman_admin_password))
-        OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+        OPSMAN_CLIENT_ID: {{opsman_client_id}}
+        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+        OPSMAN_USERNAME: {{opsman_admin_username}}
+        OPSMAN_PASSWORD: {{opsman_admin_password}}
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
         OPSMAN_SETTINGS_FILENAME: installation.zip
     - task: exported-opsmgr-diagnostic-report
       file: pcf-pipelines/tasks/export-opsmgr-diagnostic-report/task.yml
       params:
-        OPSMAN_CLIENT_ID: ((opsman_client_id))
-        OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
-        OPSMAN_USERNAME: ((opsman_admin_username))
-        OPSMAN_PASSWORD: ((opsman_admin_password))
-        OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+        OPSMAN_CLIENT_ID: {{opsman_client_id}}
+        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+        OPSMAN_USERNAME: {{opsman_admin_username}}
+        OPSMAN_PASSWORD: {{opsman_admin_password}}
+        OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
 
   - task: create-cliaas-config
     file: pcf-pipelines/upgrade-ops-manager/azure/tasks/create-cliaas-config/task.yml
     params:
-        AZURE_REGION: ((azure_region))
+        AZURE_REGION: {{azure_region}}
         AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
         AZURE_CLIENT_ID: {{azure_client_id}}
         AZURE_CLIENT_SECRET: {{azure_client_secret}}
