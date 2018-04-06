@@ -274,7 +274,7 @@ smtp_user:
 
 # Storage account and container that will be used for your terraform state
 azure_storage_container_name: CHANGEME
-terraform_azure_access_key: CHANGEME
+terraform_azure_storage_access_key: CHANGEME
 terraform_azure_storage_account_name: CHANGEME
 
 ## Syslog endpoint configuration goes here

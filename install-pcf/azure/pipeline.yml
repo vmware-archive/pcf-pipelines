@@ -48,7 +48,7 @@ resources:
   type: azure-blobstore
   source:
     storage_account_name: ((terraform_azure_storage_account_name))
-    storage_account_key: ((terraform_azure_storage_account_key))
+    storage_account_key: ((terraform_azure_storage_access_key))
     container: ((azure_storage_container_name))
     versioned_file: terraform.tfstate
 
@@ -88,7 +88,7 @@ jobs:
   - task: create-terraform-state
     params:
       AZURE_STORAGE_ACCOUNT: ((terraform_azure_storage_account_name))
-      AZURE_STORAGE_KEY: ((terraform_azure_storage_account_key))
+      AZURE_STORAGE_KEY: ((terraform_azure_storage_access_key))
       CONTAINER: ((azure_storage_container_name))
     file: pcf-pipelines/install-pcf/azure/tasks/create-initial-terraform-state/task.yml
 
