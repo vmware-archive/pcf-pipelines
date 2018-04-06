@@ -178,7 +178,6 @@ jobs:
       AZURE_MULTI_RESGROUP_PCF: ((azure_multi_resgroup_pcf))
       AZURE_MULTI_RESGROUP_INFRA_SUBNET_NAME: ((azure_multi_resgroup_infra_subnet_name))
       AZURE_MULTI_RESGROUP_INFRA_VNET_NAME: ((azure_multi_resgroup_infra_vnet_name))
-      AZURE_ACCOUNT_NAME: ((azure_storage_account_name))
       AZURE_BUILDPACKS_CONTAINER: ((azure_buildpacks_container))
       AZURE_DROPLETS_CONTAINER: ((azure_droplets_container))
       AZURE_PACKAGES_CONTAINER: ((azure_packages_container))
@@ -188,6 +187,7 @@ jobs:
       AZURE_TERRAFORM_SUBNET_ERT_CIDR: ((azure_terraform_subnet_ert_cidr))
       AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR: ((azure_terraform_subnet_services1_cidr))
       AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: ((azure_terraform_subnet_dynamic_services_cidr))
+      AZURE_STORAGE_ACCOUNT_NAME: ((azure_storage_account_name))
       PCF_OPSMAN_DISK_SIZE_IN_GB: ((pcf_opsman_disk_size_in_gb))
 
 ##############################
