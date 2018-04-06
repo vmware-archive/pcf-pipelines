@@ -130,7 +130,7 @@ resource "azurerm_storage_container" "stemcell_storage_container_3" {
 }
 
 resource "azurerm_storage_account" "ert_storage_account" {
-  name                     = "${var.env_short_name}${var.azure_account_name}"
+  name                     = "${var.env_short_name}${var.azure_storage_account_name}"
   resource_group_name      = "${azurerm_resource_group.pcf_resource_group.name}"
   location                 = "${var.location}"
   account_tier             = "Standard"

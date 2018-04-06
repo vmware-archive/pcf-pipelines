@@ -47,8 +47,8 @@ resources:
 - name: terraform-state
   type: azure-blobstore
   source:
-    storage_account_name: {{terraform_azure_account_name}}
-    storage_account_key: {{terraform_azure_access_key}}
+    storage_account_name: {{terraform_azure_storage_account_name}}
+    storage_account_key: {{terraform_azure_storage_account_key}}
     container: {{azure_storage_container_name}}
     versioned_file: terraform.tfstate
 
@@ -87,8 +87,8 @@ jobs:
   - get: pcf-pipelines
   - task: create-terraform-state
     params:
-      AZURE_STORAGE_ACCOUNT: {{terraform_azure_account_name}}
-      AZURE_STORAGE_KEY: {{terraform_azure_access_key}}
+      AZURE_STORAGE_ACCOUNT: {{terraform_azure_storage_account_name}}
+      AZURE_STORAGE_KEY: {{terraform_azure_storage_account_key}}
       CONTAINER: {{azure_storage_container_name}}
     file: pcf-pipelines/install-pcf/azure/tasks/create-initial-terraform-state/task.yml
 
@@ -178,7 +178,7 @@ jobs:
       AZURE_MULTI_RESGROUP_PCF: {{azure_multi_resgroup_pcf}}
       AZURE_MULTI_RESGROUP_INFRA_SUBNET_NAME: {{azure_multi_resgroup_infra_subnet_name}}
       AZURE_MULTI_RESGROUP_INFRA_VNET_NAME: {{azure_multi_resgroup_infra_vnet_name}}
-      AZURE_ACCOUNT_NAME: {{azure_account_name}}
+      AZURE_STORAGE_ACCOUNT_NAME: {{azure_storage_account_name}}
       AZURE_BUILDPACKS_CONTAINER: {{azure_buildpacks_container}}
       AZURE_DROPLETS_CONTAINER: {{azure_droplets_container}}
       AZURE_PACKAGES_CONTAINER: {{azure_packages_container}}

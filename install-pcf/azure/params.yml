@@ -6,16 +6,16 @@ arg_wipe: wipe
 
 authentication_mode: internal
 
-# If the azure_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_account_name and azure_account_key values.
-azure_account_name:
+# If the azure_storage_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid storage account name.
+azure_storage_account_name:
 
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_account_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
 azure_buildpacks_container:
 
 azure_client_id: CHANGEME
 azure_client_secret: CHANGEME
 
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_account_name being not null. This setting is used to specify the container where the droplets will be stored. It is similar to the S3 bucket in AWS.
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the droplets will be stored. It is similar to the S3 bucket in AWS.
 azure_droplets_container:
 
 # Required if using c0-azure-multi-res-group - The ERT infrastructure subnet name for your Azure environment
@@ -33,7 +33,7 @@ azure_multi_resgroup_pcf:
 # Private IP for the Operations Manager VM
 azure_opsman_priv_ip: 192.168.0.4
 
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_account_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
 azure_packages_container:
 
 # The set of terraform templates and opsman configuration to use in the pipeline (c0-azure-base|c0-azure-multi-res-group)
@@ -42,7 +42,7 @@ azure_pcf_terraform_template: c0-azure-base
 # a valid Azure region.
 azure_region: CHANGEME
 
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_account_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
 azure_resources_container:
 
 azure_subscription_id: CHANGEME
@@ -275,7 +275,7 @@ smtp_user:
 # Storage account and container that will be used for your terraform state
 azure_storage_container_name: CHANGEME
 terraform_azure_access_key: CHANGEME
-terraform_azure_account_name: CHANGEME
+terraform_azure_storage_account_name: CHANGEME
 
 ## Syslog endpoint configuration goes here
 # Optional. If syslog_host is specified, syslog_port, syslog_protocol,
