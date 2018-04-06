@@ -201,8 +201,8 @@ mysql_monitor_recipient_email: CHANGEME
 
 # opsman_admin_username/opsman_admin_password needs to be specified
 # These define the login values for the OpsMan UI.
-opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
 
 # Opsman Settings
 opsman_domain_or_ip_address: CHANGEME # This must be your pcf_ert_domain with "opsman." as a prefix. For example, opsman.pcf.example.com

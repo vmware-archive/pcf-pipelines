@@ -134,8 +134,8 @@ mysql_backups_s3_secret_access_key:
 
 # Operations Manager credentials
 # opsman_admin_username/opsman_admin_password needs to be specified
-opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
 
 # CIDRs to allow HTTPS access to Operations Manager from
 opsman_allow_https_cidr_ranges:

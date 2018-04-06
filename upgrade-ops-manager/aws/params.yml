@@ -27,8 +27,8 @@ git_private_key:
 # If you are using opsman_client_id/opsman_client_secret, edit opsman_admin_username/opsman_admin_password to be an empty value.
 opsman_client_id: CHANGEME
 opsman_client_secret: CHANGEME
-opsman_admin_password: CHANGEME
 opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
 
 # If install pipeline has been used then the passphrase is same as the admin password
 opsman_passphrase: CHANGEME
