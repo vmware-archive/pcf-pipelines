@@ -1,17 +1,14 @@
 #!/bin/bash
 set -e
 
-# Copy base template with no clobber if not using the base template
-if [[ ! ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-base" ]]; then
-  cp -rn pcf-pipelines/install-pcf/azure/terraform/c0-azure-base/* pcf-pipelines/install-pcf/azure/terraform/${AZURE_PCF_TERRAFORM_TEMPLATE}/
+
+if [[ ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-multi-res-group" ]]; then
+
+  AZURE_CLIENT_ID=${AZURE_MULTI_RESGROUP_NETWORK_CLIENT_ID}
+  AZURE_CLIENT_SECRET=${AZURE_MULTI_RESGROUP_NETWORK_CLIENT_SECRET}
+
 fi
 
-# Get ert subnet if multi-resgroup
-az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}
-az account set --subscription ${AZURE_SUBSCRIPTION_ID}
-ERT_SUBNET_CMD="az network vnet subnet list -g network-core --vnet-name vnet-pcf --output json | jq '.[] | select(.name == \"ert\") | .id' | tr -d '\"'"
-ERT_SUBNET=$(eval ${ERT_SUBNET_CMD})
-echo "Found SubnetID=${ERT_SUBNET}"
 
 echo "=============================================================================================="
 echo "Collecting Terraform Variables from Deployed Azure Objects ...."
@@ -61,7 +58,6 @@ terraform plan \
   -var "azure_terraform_subnet_ert_cidr=${AZURE_TERRAFORM_SUBNET_ERT_CIDR}" \
   -var "azure_terraform_subnet_services1_cidr=${AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR}" \
   -var "azure_terraform_subnet_dynamic_services_cidr=${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR}" \
-  -var "ert_subnet_id=${ERT_SUBNET}" \
   -var "pcf_ert_domain=${PCF_ERT_DOMAIN}" \
   -var "system_domain=${SYSTEM_DOMAIN}" \
   -var "apps_domain=${APPS_DOMAIN}" \
@@ -71,6 +67,7 @@ terraform plan \
   -var "azure_multi_resgroup_network=${AZURE_MULTI_RESGROUP_NETWORK}" \
   -var "azure_multi_resgroup_pcf=${AZURE_MULTI_RESGROUP_PCF}" \
   -var "azure_opsman_priv_ip=${AZURE_TERRAFORM_OPSMAN_PRIV_IP}" \
+  -var "azure_priv_ip_mysql_lb=${AZURE_TERRAFORM_PRIV_IP_MYSQL_LB}" \
   -var "azure_account_name=${AZURE_ACCOUNT_NAME}" \
   -var "azure_buildpacks_container=${AZURE_BUILDPACKS_CONTAINER}" \
   -var "azure_droplets_container=${AZURE_DROPLETS_CONTAINER}" \

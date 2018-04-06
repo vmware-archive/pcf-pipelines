@@ -15,7 +15,7 @@ resource "azurerm_lb" "web" {
 
   frontend_ip_configuration = {
     name                 = "frontendip"
-    public_ip_address_id = "${var.pub_ip_id_pcf_lb}"
+    public_ip_address_id = "${azurerm_public_ip.web-lb-public-ip.id}"
   }
 }
 
@@ -27,7 +27,7 @@ resource "azurerm_lb" "tcp" {
 
   frontend_ip_configuration = {
     name                 = "frontendip"
-    public_ip_address_id = "${var.pub_ip_id_tcp_lb}"
+    public_ip_address_id = "${azurerm_public_ip.tcp-lb-public-ip.id}"
   }
 }
 
@@ -40,7 +40,7 @@ resource "azurerm_lb" "ssh-proxy" {
 
   frontend_ip_configuration = {
     name                 = "frontendip"
-    public_ip_address_id = "${var.pub_ip_id_ssh_proxy_lb}"
+    public_ip_address_id = "${azurerm_public_ip.ssh-proxy-lb-public-ip.id}"
   }
 }
 

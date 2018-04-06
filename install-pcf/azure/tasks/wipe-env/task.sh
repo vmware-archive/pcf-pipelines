@@ -19,11 +19,11 @@ function delete-opsman-installation() {
 
 function delete-opsman() {
   az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-  local opsman_vms=$(az vm list -g $AZURE_TERRAFORM_PREFIX | jq -r ".[].name | select(. |startswith(\"$AZURE_TERRAFORM_PREFIX-ops-manager\"))")
+  local opsman_vms=$(az vm list -g $AZURE_MULTI_RESGROUP_PCF | jq -r ".[].name | select(. |startswith(\"$AZURE_TERRAFORM_PREFIX-ops-manager\"))")
 
   for om_vm_name in $opsman_vms; do
     echo "Removing $om_vm_name ..."
-    az vm delete --yes --resource-group $AZURE_TERRAFORM_PREFIX --name "$om_vm_name"
+    az vm delete --yes --resource-group $AZURE_MULTI_RESGROUP_PCF --name "$om_vm_name"
   done
 }
 
@@ -31,6 +31,11 @@ function delete-infrastructure() {
   echo "=============================================================================================="
   echo "Executing Terraform Destroy ...."
   echo "=============================================================================================="
+
+  if [[ ${AZURE_PCF_TERRAFORM_TEMPLATE} == "c0-azure-multi-res-group" ]]; then
+    AZURE_CLIENT_ID=${AZURE_MULTI_RESGROUP_NETWORK_CLIENT_ID}
+    AZURE_CLIENT_SECRET=${AZURE_MULTI_RESGROUP_NETWORK_CLIENT_SECRET}
+  fi
 
   terraform init "pcf-pipelines/install-pcf/azure/terraform/${AZURE_PCF_TERRAFORM_TEMPLATE}"
 
@@ -47,7 +52,6 @@ function delete-infrastructure() {
     -var "azure_terraform_subnet_ert_cidr=dontcare" \
     -var "azure_terraform_subnet_services1_cidr=dontcare" \
     -var "azure_terraform_subnet_dynamic_services_cidr=dontcare" \
-    -var "ert_subnet_id=dontcare" \
     -var "pcf_ert_domain=dontcare" \
     -var "system_domain=dontcare" \
     -var "apps_domain=dontcare" \
@@ -63,6 +67,8 @@ function delete-infrastructure() {
     -var "pub_ip_jumpbox_vm=dontcare" \
     -var "pub_ip_id_jumpbox_vm=dontcare" \
     -var "subnet_infra_id=dontcare" \
+    -var "azure_priv_ip_mysql_lb=dontcare" \
+    -var "azure_opsman_priv_ip=dontcare" \
     -var "ops_manager_image_uri=dontcare" \
     -var "vm_admin_username=dontcare" \
     -var "vm_admin_public_key=dontcare" \
