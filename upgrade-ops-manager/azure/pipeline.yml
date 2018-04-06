@@ -96,52 +96,52 @@ jobs:
     file: pcf-pipelines/upgrade-ops-manager/azure/tasks/create-cliaas-config/task.yml
     params:
         AZURE_REGION: ((azure_region))
-        AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
-        AZURE_CLIENT_ID: {{azure_client_id}}
-        AZURE_CLIENT_SECRET: {{azure_client_secret}}
-        AZURE_TENANT_ID: {{azure_tenant_id}}
-        AZURE_RESOURCE_GROUP_NAME: {{azure_resource_group_name}}
-        AZURE_STORAGE_ACCOUNT_NAME: {{azure_storage_account_name}}
-        AZURE_STORAGE_ACCOUNT_KEY: {{azure_storage_account_key}}
-        AZURE_STORAGE_CONTAINER_NAME: {{azure_storage_container_name}}
+        AZURE_SUBSCRIPTION_ID: ((azure_subscription_id))
+        AZURE_CLIENT_ID: ((azure_client_id))
+        AZURE_CLIENT_SECRET: ((azure_client_secret))
+        AZURE_TENANT_ID: ((azure_tenant_id))
+        AZURE_RESOURCE_GROUP_NAME: ((azure_resource_group_name))
+        AZURE_STORAGE_ACCOUNT_NAME: ((azure_storage_account_name))
+        AZURE_STORAGE_ACCOUNT_KEY: ((azure_storage_account_key))
+        AZURE_STORAGE_CONTAINER_NAME: ((azure_storage_container_name))
 
   - task: replace-opsman-vm
     file: pcf-pipelines/tasks/replace-vm/task.yml
     params:
-      VM_IDENTIFIER: {{existing_opsman_vm_name}}
-      VM_DISK_SIZE_GB: {{pcf_opsman_disk_size_in_gb}}
+      VM_IDENTIFIER: ((existing_opsman_vm_name))
+      VM_DISK_SIZE_GB: ((pcf_opsman_disk_size_in_gb))
 
   - task: import-opsmgr-settings
     file: pcf-pipelines/tasks/import-opsmgr-settings/task.yml
     params:
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: ((opsman_client_id))
+      OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
       OPSMAN_SETTINGS_FILENAME: installation.zip
-      OPSMAN_PASSPHRASE: {{opsman_passphrase}}
+      OPSMAN_PASSPHRASE: ((opsman_passphrase))
 
   - task: download-stemcells
     file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
     params:
-      API_TOKEN: {{pivnet_token}}
+      API_TOKEN: ((pivnet_token))
       IAAS_TYPE: azure
 
   - task: restore-stemcells
     file: pcf-pipelines/tasks/restore-stemcells/task.yml
     params:
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: ((opsman_client_id))
+      OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
 
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_CLIENT_ID: ((opsman_client_id))
+      OPSMAN_CLIENT_SECRET: ((opsman_client_secret))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
