@@ -117,7 +117,7 @@ resources:
   source:  
     uri: git@github.com:pivotal-cf/pcf-pipelines.git  
     branch: master  
-    private_key: {{git_private_key}}  
+    private_key: ((git_private_key))  
 ```  
 2. Operations file: `replace-resource.yml`  
 ```  
@@ -128,7 +128,7 @@ resources:
     name: pcf-pipelines
     type: pivnet  
     source:  
-      api_token: "{{pivnet_token}}"  
+      api_token: "((pivnet_token))"  
       product_slug: pcf-automation  
       product_version: ~  
 ```  
@@ -142,7 +142,7 @@ resources:
 - name: pcf-pipelines
   type: pivnet  
   source:  
-    api_token: "{{pivnet_token}}"  
+    api_token: "((pivnet_token))"  
     product_slug: pcf-automation  
     product_version: ~    
 ```  

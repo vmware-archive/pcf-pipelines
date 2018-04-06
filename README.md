@@ -19,8 +19,8 @@ If you do not have access to the Pivotal Network release, and you are using the 
   source:
     uri: https://github.com/pivotal-cf/pcf-pipelines
     branch: master
-    username: {{github_username}}
-    password: {{github_token}}
+    username: ((github_username))
+    password: ((github_token))
     tag_filter: v0.23.0
 ```
 
@@ -198,7 +198,7 @@ The pipelines and tasks in this repo follow a simple pattern which must be adher
 
 Each pipeline has a `pipeline.yml`, which contains the YAML for a single
 Concourse pipeline. Pipelines typically require parameters, either for resource
-names or for credentials, which are supplied externally via `{{placeholders}}`.
+names or for credentials, which are supplied externally via `((placeholders))`.
 
 A pipeline may have a `params.yml` file which is a template for the parameters
 that the pipeline requires. This template should have placeholder values,

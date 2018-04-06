@@ -18,29 +18,29 @@ resources:
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    private_key: {{git_private_key}}
+    private_key: ((git_private_key))
 
 - name: terraform-state
   type: gcs
   source:
-    bucket: {{terraform_statefile_bucket}}
-    json_key: {{gcp_service_account_key}}
+    bucket: ((terraform_statefile_bucket))
+    json_key: ((gcp_service_account_key))
     versioned_file: terraform.tfstate
 
 - name: pivnet-opsmgr
   type: pivnet
   source:
-    api_token: {{pivnet_token}}
+    api_token: ((pivnet_token))
     product_slug: ops-manager
-    product_version: {{opsman_major_minor_version}}
+    product_version: ((opsman_major_minor_version))
     sort_by: semver
 
 - name: pivnet-elastic-runtime
   type: pivnet
   source:
-    api_token: {{pivnet_token}}
+    api_token: ((pivnet_token))
     product_slug: elastic-runtime
-    product_version: {{ert_major_minor_version}}
+    product_version: ((ert_major_minor_version))
     sort_by: semver
 
 jobs:
@@ -57,14 +57,14 @@ jobs:
   - task: wipe
     file: pcf-pipelines/install-pcf/gcp/tasks/wipe-env/task.yml
     params:
-      GCP_PROJECT_ID: {{gcp_project_id}}
-      GCP_REGION: {{gcp_region}}
-      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
-      GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_ZONE: {{gcp_zone_1}}
+      GCP_PROJECT_ID: ((gcp_project_id))
+      GCP_REGION: ((gcp_region))
+      GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_key))
+      GCP_RESOURCE_PREFIX: ((gcp_resource_prefix))
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+      OPSMAN_ZONE: ((gcp_zone_1))
 
 - name: upload-opsman-image
   plan:
@@ -77,9 +77,9 @@ jobs:
   - task: upload
     file: pcf-pipelines/install-pcf/gcp/tasks/upload-opsman/task.yml
     params:
-      GCP_PROJECT_ID: {{gcp_project_id}}
-      GCP_REGION: {{gcp_region}}
-      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+      GCP_PROJECT_ID: ((gcp_project_id))
+      GCP_REGION: ((gcp_region))
+      GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_key))
 
 - name: bootstrap-terraform-state
   serial: true
@@ -87,8 +87,8 @@ jobs:
   - get: pcf-pipelines
   - task: create-terraform-state
     params:
-      TERRAFORM_STATEFILE_BUCKET: {{terraform_statefile_bucket}}
-      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+      TERRAFORM_STATEFILE_BUCKET: ((terraform_statefile_bucket))
+      GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_key))
     file: pcf-pipelines/install-pcf/gcp/tasks/create-initial-terraform-state/task.yml
 
 - name: create-infrastructure
@@ -109,44 +109,44 @@ jobs:
   - task: create-infrastructure
     file: pcf-pipelines/install-pcf/gcp/tasks/create-infrastructure/task.yml
     params:
-      GCP_PROJECT_ID: {{gcp_project_id}}
-      GCP_REGION: {{gcp_region}}
-      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
-      GCP_ZONE_1: {{gcp_zone_1}}
-      GCP_ZONE_2: {{gcp_zone_2}}
-      GCP_ZONE_3: {{gcp_zone_3}}
-      GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
-      GCP_STORAGE_BUCKET_LOCATION: {{gcp_storage_bucket_location}}
-      PCF_ERT_DOMAIN: {{pcf_ert_domain}}
-      SYSTEM_DOMAIN: {{system_domain}}
-      APPS_DOMAIN: {{apps_domain}}
-      POE_SSL_NAME1: {{poe_ssl_name1}}
-      POE_SSL_CERT1: {{poe_ssl_cert1}}
-      POE_SSL_KEY1: {{poe_ssl_key1}}
-      DB_APP_USAGE_SERVICE_USERNAME: {{db_app_usage_service_username}}
-      DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
-      DB_AUTOSCALE_USERNAME: {{db_autoscale_username}}
-      DB_AUTOSCALE_PASSWORD: {{db_autoscale_password}}
-      DB_DIEGO_USERNAME: {{db_diego_username}}
-      DB_DIEGO_PASSWORD: {{db_diego_password}}
-      DB_NOTIFICATIONS_USERNAME: {{db_notifications_username}}
-      DB_NOTIFICATIONS_PASSWORD: {{db_notifications_password}}
-      DB_ROUTING_USERNAME: {{db_routing_username}}
-      DB_ROUTING_PASSWORD: {{db_routing_password}}
-      DB_UAA_USERNAME: {{db_uaa_username}}
-      DB_UAA_PASSWORD: {{db_uaa_password}}
-      DB_CCDB_USERNAME: {{db_ccdb_username}}
-      DB_CCDB_PASSWORD: {{db_ccdb_password}}
-      DB_ACCOUNTDB_USERNAME: {{db_accountdb_username}}
-      DB_ACCOUNTDB_PASSWORD: {{db_accountdb_password}}
-      DB_NETWORKPOLICYSERVERDB_USERNAME: {{db_networkpolicyserverdb_username}}
-      DB_NETWORKPOLICYSERVERDB_PASSWORD: {{db_networkpolicyserverdb_password}}
-      DB_NFSVOLUMEDB_USERNAME: {{db_nfsvolumedb_username}}
-      DB_NFSVOLUMEDB_PASSWORD: {{db_nfsvolumedb_password}}
-      DB_LOCKET_USERNAME: {{db_locket_username}}
-      DB_LOCKET_PASSWORD: {{db_locket_password}}
-      DB_SILK_USERNAME: {{db_silk_username}}
-      DB_SILK_PASSWORD: {{db_silk_password}}
+      GCP_PROJECT_ID: ((gcp_project_id))
+      GCP_REGION: ((gcp_region))
+      GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_key))
+      GCP_ZONE_1: ((gcp_zone_1))
+      GCP_ZONE_2: ((gcp_zone_2))
+      GCP_ZONE_3: ((gcp_zone_3))
+      GCP_RESOURCE_PREFIX: ((gcp_resource_prefix))
+      GCP_STORAGE_BUCKET_LOCATION: ((gcp_storage_bucket_location))
+      PCF_ERT_DOMAIN: ((pcf_ert_domain))
+      SYSTEM_DOMAIN: ((system_domain))
+      APPS_DOMAIN: ((apps_domain))
+      POE_SSL_NAME1: ((poe_ssl_name1))
+      POE_SSL_CERT1: ((poe_ssl_cert1))
+      POE_SSL_KEY1: ((poe_ssl_key1))
+      DB_APP_USAGE_SERVICE_USERNAME: ((db_app_usage_service_username))
+      DB_APP_USAGE_SERVICE_PASSWORD: ((db_app_usage_service_password))
+      DB_AUTOSCALE_USERNAME: ((db_autoscale_username))
+      DB_AUTOSCALE_PASSWORD: ((db_autoscale_password))
+      DB_DIEGO_USERNAME: ((db_diego_username))
+      DB_DIEGO_PASSWORD: ((db_diego_password))
+      DB_NOTIFICATIONS_USERNAME: ((db_notifications_username))
+      DB_NOTIFICATIONS_PASSWORD: ((db_notifications_password))
+      DB_ROUTING_USERNAME: ((db_routing_username))
+      DB_ROUTING_PASSWORD: ((db_routing_password))
+      DB_UAA_USERNAME: ((db_uaa_username))
+      DB_UAA_PASSWORD: ((db_uaa_password))
+      DB_CCDB_USERNAME: ((db_ccdb_username))
+      DB_CCDB_PASSWORD: ((db_ccdb_password))
+      DB_ACCOUNTDB_USERNAME: ((db_accountdb_username))
+      DB_ACCOUNTDB_PASSWORD: ((db_accountdb_password))
+      DB_NETWORKPOLICYSERVERDB_USERNAME: ((db_networkpolicyserverdb_username))
+      DB_NETWORKPOLICYSERVERDB_PASSWORD: ((db_networkpolicyserverdb_password))
+      DB_NFSVOLUMEDB_USERNAME: ((db_nfsvolumedb_username))
+      DB_NFSVOLUMEDB_PASSWORD: ((db_nfsvolumedb_password))
+      DB_LOCKET_USERNAME: ((db_locket_username))
+      DB_LOCKET_PASSWORD: ((db_locket_password))
+      DB_SILK_USERNAME: ((db_silk_username))
+      DB_SILK_PASSWORD: ((db_silk_password))
 
 - name: configure-director
   serial_groups: [opsman]
@@ -160,28 +160,28 @@ jobs:
     attempts: 3
     file: pcf-pipelines/install-pcf/gcp/tasks/check-opsman-dns/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
   - task: config-opsman-auth
     file: pcf-pipelines/tasks/config-opsman/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPS_MGR_USR: {{opsman_admin_username}}
-      OPS_MGR_PWD: {{opsman_admin_password}}
-      OM_DECRYPTION_PWD: {{opsman_admin_password}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPS_MGR_USR: ((opsman_admin_username))
+      OPS_MGR_PWD: ((opsman_admin_password))
+      OM_DECRYPTION_PWD: ((opsman_admin_password))
   - task: configure-director
     file: pcf-pipelines/install-pcf/gcp/tasks/config-director/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPS_MGR_USR: {{opsman_admin_username}}
-      OPS_MGR_PWD: {{opsman_admin_password}}
-      OPS_MGR_TRUSTED_CERTS: {{opsman_trusted_certs}}
-      GCP_PROJECT_ID: {{gcp_project_id}}
-      GCP_REGION: {{gcp_region}}
-      GCP_ZONE_1: {{gcp_zone_1}}
-      GCP_ZONE_2: {{gcp_zone_2}}
-      GCP_ZONE_3: {{gcp_zone_3}}
-      GCP_RESOURCE_PREFIX: {{gcp_resource_prefix}}
-      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPS_MGR_USR: ((opsman_admin_username))
+      OPS_MGR_PWD: ((opsman_admin_password))
+      OPS_MGR_TRUSTED_CERTS: ((opsman_trusted_certs))
+      GCP_PROJECT_ID: ((gcp_project_id))
+      GCP_REGION: ((gcp_region))
+      GCP_ZONE_1: ((gcp_zone_1))
+      GCP_ZONE_2: ((gcp_zone_2))
+      GCP_ZONE_3: ((gcp_zone_3))
+      GCP_RESOURCE_PREFIX: ((gcp_resource_prefix))
+      GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_key))
 
 - name: deploy-director
   serial_groups: [opsman]
@@ -195,11 +195,11 @@ jobs:
   - task: deploy-director
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
 
 - name: upload-ert
   serial_groups: [opsman]
@@ -218,10 +218,10 @@ jobs:
   - task: upload-tile
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPS_MGR_USR: {{opsman_admin_username}}
-      OPS_MGR_PWD: {{opsman_admin_password}}
-      PIVNET_API_TOKEN: {{pivnet_token}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPS_MGR_USR: ((opsman_admin_username))
+      OPS_MGR_PWD: ((opsman_admin_password))
+      PIVNET_API_TOKEN: ((pivnet_token))
       IAAS: "google"
       NO_PROXY: ""
       OM_IP: ""
@@ -232,9 +232,9 @@ jobs:
   - task: stage-tile
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
 
@@ -254,76 +254,76 @@ jobs:
     file: pcf-pipelines/tasks/configure-ert/task.yml
     params:
       pcf_iaas: gcp
-      pcf_az_1: {{gcp_zone_1}}
-      pcf_az_2: {{gcp_zone_2}}
-      pcf_az_3: {{gcp_zone_3}}
-      POE_SSL_NAME1: {{poe_ssl_name1}}
-      POE_SSL_CERT1: {{poe_ssl_cert1}}
-      POE_SSL_KEY1: {{poe_ssl_key1}}
-      gcp_storage_access_key: {{gcp_storage_access_key}}
-      gcp_storage_secret_key: {{gcp_storage_secret_key}}
-      PCF_ERT_DOMAIN: {{pcf_ert_domain}}
-      SYSTEM_DOMAIN: {{system_domain}}
-      APPS_DOMAIN: {{apps_domain}}
-      OPS_MGR_USR: {{opsman_admin_username}}
-      OPS_MGR_PWD: {{opsman_admin_password}}
-      terraform_prefix: {{gcp_resource_prefix}}
-      db_diego_username: {{db_diego_username}}
-      db_diego_password: {{db_diego_password}}
-      db_notifications_username: {{db_notifications_username}}
-      db_notifications_password: {{db_notifications_password}}
-      db_autoscale_username: {{db_autoscale_username}}
-      db_autoscale_password: {{db_autoscale_password}}
-      db_uaa_username: {{db_uaa_username}}
-      db_uaa_password: {{db_uaa_password}}
-      db_app_usage_service_username: {{db_app_usage_service_username}}
-      db_app_usage_service_password: {{db_app_usage_service_password}}
-      db_ccdb_username: {{db_ccdb_username}}
-      db_ccdb_password: {{db_ccdb_password}}
-      db_routing_username: {{db_routing_username}}
-      db_routing_password: {{db_routing_password}}
-      db_accountdb_username: {{db_accountdb_username}}
-      db_accountdb_password: {{db_accountdb_password}}
-      db_networkpolicyserverdb_username: {{db_networkpolicyserverdb_username}}
-      db_networkpolicyserverdb_password: {{db_networkpolicyserverdb_password}}
-      db_nfsvolumedb_username: {{db_nfsvolumedb_username}}
-      db_nfsvolumedb_password: {{db_nfsvolumedb_password}}
-      db_silk_username: {{db_silk_username}}
-      db_silk_password: {{db_silk_password}}
-      db_locket_username: {{db_locket_username}}
-      db_locket_password: {{db_locket_password}}
-      mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}
-      MYSQL_BACKUPS: {{mysql_backups}}
-      MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
-      MYSQL_BACKUPS_SCP_PORT: {{mysql_backups_scp_port}}
-      MYSQL_BACKUPS_SCP_USER: {{mysql_backups_scp_user}}
-      MYSQL_BACKUPS_SCP_KEY: {{mysql_backups_scp_key}}
-      MYSQL_BACKUPS_SCP_DESTINATION: {{mysql_backups_scp_destination}}
-      MYSQL_BACKUPS_SCP_CRON_SCHEDULE: {{mysql_backups_scp_cron_schedule}}
-      MYSQL_BACKUPS_S3_ENDPOINT_URL: {{mysql_backups_s3_endpoint_url}}
-      MYSQL_BACKUPS_S3_BUCKET_NAME: {{mysql_backups_s3_bucket_name}}
-      MYSQL_BACKUPS_S3_BUCKET_PATH: {{mysql_backups_s3_bucket_path}}
-      MYSQL_BACKUPS_S3_ACCESS_KEY_ID: {{mysql_backups_s3_access_key_id}}
-      MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: {{mysql_backups_s3_secret_access_key}}
-      MYSQL_BACKUPS_S3_CRON_SCHEDULE: {{mysql_backups_s3_cron_schedule}}
-      HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
-      HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
-      ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
-      HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
-      FRONTEND_IDLE_TIMEOUT: {{frontend_idle_timeout}}
-      routing_disable_http: {{routing_disable_http}}
-      ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
-      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
-      INTERNET_CONNECTED: {{internet_connected}}
-      CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
-      SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
-      CREDUB_ENCRYPTION_KEY_NAME1: {{credhub_encryption_key_name1}}
-      CREDUB_ENCRYPTION_KEY_SECRET1: {{credhub_encryption_key_secret1}}
-      CREDUB_ENCRYPTION_KEY_NAME2: {{credhub_encryption_key_name2}}
-      CREDUB_ENCRYPTION_KEY_SECRET2: {{credhub_encryption_key_secret2}}
-      CREDUB_ENCRYPTION_KEY_NAME3: {{credhub_encryption_key_name3}}
-      CREDUB_ENCRYPTION_KEY_SECRET3: {{credhub_encryption_key_secret3}}
-      CREDHUB_PRIMARY_ENCRYPTION_NAME: {{credhub_primary_encryption_name}}
+      pcf_az_1: ((gcp_zone_1))
+      pcf_az_2: ((gcp_zone_2))
+      pcf_az_3: ((gcp_zone_3))
+      POE_SSL_NAME1: ((poe_ssl_name1))
+      POE_SSL_CERT1: ((poe_ssl_cert1))
+      POE_SSL_KEY1: ((poe_ssl_key1))
+      gcp_storage_access_key: ((gcp_storage_access_key))
+      gcp_storage_secret_key: ((gcp_storage_secret_key))
+      PCF_ERT_DOMAIN: ((pcf_ert_domain))
+      SYSTEM_DOMAIN: ((system_domain))
+      APPS_DOMAIN: ((apps_domain))
+      OPS_MGR_USR: ((opsman_admin_username))
+      OPS_MGR_PWD: ((opsman_admin_password))
+      terraform_prefix: ((gcp_resource_prefix))
+      db_diego_username: ((db_diego_username))
+      db_diego_password: ((db_diego_password))
+      db_notifications_username: ((db_notifications_username))
+      db_notifications_password: ((db_notifications_password))
+      db_autoscale_username: ((db_autoscale_username))
+      db_autoscale_password: ((db_autoscale_password))
+      db_uaa_username: ((db_uaa_username))
+      db_uaa_password: ((db_uaa_password))
+      db_app_usage_service_username: ((db_app_usage_service_username))
+      db_app_usage_service_password: ((db_app_usage_service_password))
+      db_ccdb_username: ((db_ccdb_username))
+      db_ccdb_password: ((db_ccdb_password))
+      db_routing_username: ((db_routing_username))
+      db_routing_password: ((db_routing_password))
+      db_accountdb_username: ((db_accountdb_username))
+      db_accountdb_password: ((db_accountdb_password))
+      db_networkpolicyserverdb_username: ((db_networkpolicyserverdb_username))
+      db_networkpolicyserverdb_password: ((db_networkpolicyserverdb_password))
+      db_nfsvolumedb_username: ((db_nfsvolumedb_username))
+      db_nfsvolumedb_password: ((db_nfsvolumedb_password))
+      db_silk_username: ((db_silk_username))
+      db_silk_password: ((db_silk_password))
+      db_locket_username: ((db_locket_username))
+      db_locket_password: ((db_locket_password))
+      mysql_monitor_recipient_email: ((mysql_monitor_recipient_email))
+      MYSQL_BACKUPS: ((mysql_backups))
+      MYSQL_BACKUPS_SCP_SERVER: ((mysql_backups_scp_server))
+      MYSQL_BACKUPS_SCP_PORT: ((mysql_backups_scp_port))
+      MYSQL_BACKUPS_SCP_USER: ((mysql_backups_scp_user))
+      MYSQL_BACKUPS_SCP_KEY: ((mysql_backups_scp_key))
+      MYSQL_BACKUPS_SCP_DESTINATION: ((mysql_backups_scp_destination))
+      MYSQL_BACKUPS_SCP_CRON_SCHEDULE: ((mysql_backups_scp_cron_schedule))
+      MYSQL_BACKUPS_S3_ENDPOINT_URL: ((mysql_backups_s3_endpoint_url))
+      MYSQL_BACKUPS_S3_BUCKET_NAME: ((mysql_backups_s3_bucket_name))
+      MYSQL_BACKUPS_S3_BUCKET_PATH: ((mysql_backups_s3_bucket_path))
+      MYSQL_BACKUPS_S3_ACCESS_KEY_ID: ((mysql_backups_s3_access_key_id))
+      MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY: ((mysql_backups_s3_secret_access_key))
+      MYSQL_BACKUPS_S3_CRON_SCHEDULE: ((mysql_backups_s3_cron_schedule))
+      HAPROXY_FORWARD_TLS: ((haproxy_forward_tls))
+      HAPROXY_BACKEND_CA: ((haproxy_backend_ca))
+      ROUTER_TLS_CIPHERS: ((router_tls_ciphers))
+      HAPROXY_TLS_CIPHERS: ((haproxy_tls_ciphers))
+      FRONTEND_IDLE_TIMEOUT: ((frontend_idle_timeout))
+      routing_disable_http: ((routing_disable_http))
+      ROUTING_CUSTOM_CA_CERTIFICATES: ((routing_custom_ca_certificates))
+      ROUTING_TLS_TERMINATION: ((routing_tls_termination))
+      INTERNET_CONNECTED: ((internet_connected))
+      CONTAINER_NETWORKING_NW_CIDR: ((container_networking_nw_cidr))
+      SECURITY_ACKNOWLEDGEMENT: ((security_acknowledgement))
+      CREDUB_ENCRYPTION_KEY_NAME1: ((credhub_encryption_key_name1))
+      CREDUB_ENCRYPTION_KEY_SECRET1: ((credhub_encryption_key_secret1))
+      CREDUB_ENCRYPTION_KEY_NAME2: ((credhub_encryption_key_name2))
+      CREDUB_ENCRYPTION_KEY_SECRET2: ((credhub_encryption_key_secret2))
+      CREDUB_ENCRYPTION_KEY_NAME3: ((credhub_encryption_key_name3))
+      CREDUB_ENCRYPTION_KEY_SECRET3: ((credhub_encryption_key_secret3))
+      CREDHUB_PRIMARY_ENCRYPTION_NAME: ((credhub_primary_encryption_name))
       # aws specific
       S3_ENDPOINT:
       # azure specific
@@ -343,10 +343,10 @@ jobs:
     file: pcf-pipelines/tasks/disable-errands/task.yml
     params:
       PRODUCT_NAME: cf
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      ERRANDS_TO_DISABLE: {{ert_errands_to_disable}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
+      ERRANDS_TO_DISABLE: ((ert_errands_to_disable))
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
 
@@ -354,8 +354,8 @@ jobs:
   - task: deploy-ert
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: ((opsman_domain_or_ip_address))
+      OPSMAN_USERNAME: ((opsman_admin_username))
+      OPSMAN_PASSWORD: ((opsman_admin_password))
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""

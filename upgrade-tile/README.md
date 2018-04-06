@@ -94,5 +94,5 @@ Since the upgrade-tile pipeline pulls stemcells from PivNet, if any of your tile
    could not resolve template vars: yaml: line 67: did not find expected key”
    ```
 
-   **Solution:** Please use the PivNet release of the pipelines. You will run into this issue if you use the GitHub v0.21.1 version of the pcf-pipelines release. As a fix, navigate to the upgrade-tile pipeline and to `pipeline.yml`. Remove the quotes around `"{{product_globs}}"` on line 67. You should be able to fly the pipeline now.
+   **Solution:** Please use the PivNet release of the pipelines. You will run into this issue if you use the GitHub v0.21.1 version of the pcf-pipelines release. As a fix, navigate to the upgrade-tile pipeline and to `pipeline.yml`. Remove the quotes around `"((product_globs))"` on line 67. You should be able to fly the pipeline now.
 
