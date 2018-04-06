@@ -6,9 +6,8 @@ arg_wipe: wipe
 
 authentication_mode: internal
 
-# If the azure_storage_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid azure_storage_account_name and azure_storage_account_key values.
+# If the azure_storage_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid storage account name.
 azure_storage_account_name:
-azure_storage_account_key:
 
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
 azure_buildpacks_container:
