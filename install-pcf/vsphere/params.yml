@@ -120,7 +120,7 @@ ert_major_minor_version: 2\.[0-9\]+\.[0-9]+$
 ert_singleton_job_az: CHANGEME
 
 # Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
-frontend_idle_timeout: 601
+frontend_idle_timeout:
 
 # Applications Network Maximum Transmission Unit bytes
 garden_network_mtu: 1454
