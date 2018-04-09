@@ -3,3 +3,7 @@ provider "google" {
   region  = "${var.gcp_region}"
   version = "1.8"
 }
+
+provider "random" {
+  version = "1.2"
+}
