@@ -93,5 +93,35 @@ terraform destroy -force \
   -var "db_locket_password=dontcare" \
   -var "db_silk_username=dontcare" \
   -var "db_silk_password=dontcare" \
+  -var "droplets=dontcare" \
+  -var "ert_http_lb_backend_service=dontcare" \
+  -var "ops-manager=dontcare" \
+  -var "subnet-ert=dontcare" \
+  -var "cf-tcp=dontcare" \
+  -var "subnet-dynamic-services-1=dontcare" \
+  -var "packages=dontcare" \
+  -var "subnet-ops-manager=dontcare" \
+  -var "resources=dontcare" \
+  -var "subnet-services-1=dontcare" \
+  -var "subnet-ops-manager=dontcare" \
+  -var "subnet-services-1=dontcare" \
+  -var "pcf=dontcare" \
+  -var "master=dontcare" \
+  -var "ops-manager-dns=dontcare" \
+  -var "cf-tcp=dontcare" \
+  -var "ssh-and-doppler=dontcare" \
+  -var "subnet-dynamic-services-1=dontcare" \
+  -var "subnet-ert=dontcare" \
+  -var "opsman=dontcare" \
+  -var "pcf-virt-net=dontcare" \
+  -var "subnet-ops-manager=dontcare" \
+  -var "subnet-services-1=dontcare" \
+  -var "subnet-dynamic-services-1=dontcare" \
+  -var "ssl-cert=dontcare" \
+  -var "director=dontcare" \
+  -var "ssl-cert=dontcare" \
+  -var "buildpacks=dontcare" \
+  -var "env_dns_zone=dontcare" \
+  -var "subnet-ert=dontcare" \
   -state-out $root/wipe-output/terraform.tfstate \
   pcf-pipelines/install-pcf/gcp/terraform
