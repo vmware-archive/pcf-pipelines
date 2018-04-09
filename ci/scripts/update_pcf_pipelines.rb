@@ -7,7 +7,7 @@ params = {}
 
 def load_param(note_path)
   lpass_path = "Shared-PCF-NORM/#{note_path}"
-  creds = `lpass show #{lpass_path}  --notes`.chomp
+  creds = `lpass show #{lpass_path} --sync=now --notes`.chomp
 
   if creds.empty?
     puts "Could not fetch creds from #{lpass_path}"
