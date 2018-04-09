@@ -1,24 +1,15 @@
 #!/usr/bin/env ruby
 
 require 'tempfile'
+require 'fileutils'
 require 'yaml'
 
-params = {}
 
 def load_param(note_path)
-  lpass_path = "Shared-PCF-NORM/#{note_path}"
-  creds = `lpass show #{lpass_path} --sync=now --notes`.chomp
-
-  if creds.empty?
-    puts "Could not fetch creds from #{lpass_path}"
-    puts creds
-    exit(1)
-  end
-
-  creds
+  File.read(File.expand_path("~/workspace/secrets/#{note_path}"))
 end
 
-
+params = {}
 params['rc_aws_install_params'] = load_param('rc/install-pcf/aws/pipeline.yml')
 params['rc_gcp_install_params'] = load_param('rc/install-pcf/gcp/pipeline.yml')
 params['rc_azure_install_params'] = load_param('rc/install-pcf/azure/pipeline.yml')
@@ -37,12 +28,11 @@ file = Tempfile.new('pipeline_params')
 file.write(params.to_yaml)
 file.close
 
-flyCmd = "fly -t ci sp -p pcf-pipelines-master -c ci/pcf-pipelines/pipeline.yml \
+fly_cmd = "fly -t ci sp -p pcf-pipelines-master -c ci/pcf-pipelines/pipeline.yml \
   -l #{file.path} \
-  -l <(lpass show Shared-PCF-NORM/pcf-pipelines-params --notes) \
-  -l <(lpass show Shared-PCF-NORM/pcf-norm-github --notes) \
-  -l <(lpass show Shared-PCF-NORM/norm-pivnet --notes)"
+  -l ~/workspace/secrets/pcf-pipelines-params \
+  -l ~/workspace/secrets/pcf-norm-github \
+  -l ~/workspace/secrets/norm-pivnet"
 
-puts flyCmd
-
-exec "bash -c '#{flyCmd}'"
+puts fly_cmd
+system(fly_cmd)
