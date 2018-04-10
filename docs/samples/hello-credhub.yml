@@ -16,4 +16,4 @@ jobs:
           - |
             echo "Hello $WORLD_PARAM"
       params:
-        WORLD_PARAM: ((hello))
+        WORLD_PARAM: {{hello}}

@@ -26,9 +26,9 @@
     type: certificate
     options:
       ca: concourse-ca
-      common_name: ((concourse_host))
+      common_name: {{concourse_host}}
       alternative_names:
-      - ((concourse_host))
+      - {{concourse_host}}
 - type: replace
   path: /variables?/name=credhub-db-password?
   value:
@@ -117,12 +117,12 @@
   path: /instance_groups/name=db/jobs/name=postgres/properties/databases/roles/-
   value:
     name: credhub
-    password: ((credhub-db-password))
+    password: {{credhub-db-password}}
 - type: replace
   path: /instance_groups/name=db/jobs/name=postgres/properties/databases/roles/-
   value:
     name: uaa
-    password: ((uaa-db-password))
+    password: {{uaa-db-password}}
 
 # add credhub job to ATC instance group
 - type: replace
@@ -141,7 +141,7 @@
             - ((concourse-tls.ca))
         data_storage:
           type: postgres
-          host: ((db_ip))
+          host: {{db_ip}}
           port: 5432
           username: credhub
           password: ((credhub-db-password))

@@ -22,14 +22,14 @@ instance_groups:
 - name: db
   instances: 1
 
-  persistent_disk_type: ((db_persistent_disk_type))
-  vm_type: ((db_vm_type))
+  persistent_disk_type: {{db_persistent_disk_type}}
+  vm_type: {{db_vm_type}}
 
   stemcell: default
   azs: [AZ01,AZ02,AZ03]
   networks:
   - name: INFRASTRUCTURE
-    static_ips: ((db_ip))
+    static_ips: {{db_ip}}
 
   jobs:
   - release: postgres
@@ -43,20 +43,20 @@ instance_groups:
         - name: uaa
         roles:
         - name: atc
-          password: ((atc-db-password))
+          password: {{atc-db-password}}
         - name: credhub
-          password: ((credhub-db-password))
+          password: {{credhub-db-password}}
         - name: uaa
-          password: ((uaa-db-password))
+          password: {{uaa-db-password}}
 
 - name: web
   instances: 1
-  vm_type: ((web_vm_type))
+  vm_type: {{web_vm_type}}
   stemcell: default
   azs: [AZ01,AZ02,AZ03]
   networks:
   - name: INFRASTRUCTURE
-    static_ips: ((web_ip))
+    static_ips: {{web_ip}}
   jobs:
   - release: concourse
     name: atc
@@ -67,27 +67,27 @@ instance_groups:
       tls_cert: ((atc_tls.certificate))
       tls_key: ((atc_tls.private_key))
       tls_bind_port: 443
-      token_signing_key: ((token_signing_key))
+      token_signing_key: {{token_signing_key}}
       postgresql:
-        host: ((db_ip))
+        host: {{db_ip}}
         database: atc
         sslmode: disable
         role:
           name: atc
-          password: ((atc-db-password))
+          password: {{atc-db-password}}
       credhub:
         url: https://((concourse_host)):8844
         tls:
-          ca_cert: ((concourse-ca))
+          ca_cert: {{concourse-ca}}
           insecure_skip_verify: true
         client_id: concourse_to_credhub
-        client_secret: ((concourse_to_credhub_secret))
+        client_secret: {{concourse_to_credhub_secret}}
 
   - release: concourse
     name: tsa
     properties:
-      host_key: ((tsa_host_key))
-      token_signing_key: ((token_signing_key))
+      host_key: {{tsa_host_key}}
+      token_signing_key: {{token_signing_key}}
       authorized_keys: [((worker_key.public_key))]
 
   - name: uaa
@@ -99,7 +99,7 @@ instance_groups:
         scim:
           users:
           - name: admin
-            password: ((uaa-users-admin))
+            password: {{uaa-users-admin}}
             groups:
             - scim.write
             - scim.read
@@ -122,9 +122,9 @@ instance_groups:
             authorities: credhub.read,credhub.write
             access-token-validity: 30
             refresh-token-validity: 3600
-            secret: ((concourse_to_credhub_secret))
-        admin: {client_secret: ((uaa-admin))}
-        login: {client_secret: ((uaa-login))}
+            secret: {{concourse_to_credhub_secret}}
+        admin: {client_secret: {{uaa-admin}}}
+        login: {client_secret: {{uaa-login}}}
         zones: {internal: {hostnames: []}}
         sslCertificate: ((atc_tls.certificate))
         sslPrivateKey: ((atc_tls.private_key))
@@ -136,7 +136,7 @@ instance_groups:
               key-1:
                 signingKey: ((uaa-jwt.private_key))
       uaadb:
-        address: ((db_ip))
+        address: {{db_ip}}
         port: 5432
         db_scheme: postgresql
         databases:
@@ -145,7 +145,7 @@ instance_groups:
         roles:
         - tag: admin
           name: uaa
-          password: ((uaa-db-password))
+          password: {{uaa-db-password}}
       login:
         saml:
           serviceProviderCertificate: ((atc_tls.certificate))
@@ -165,10 +165,10 @@ instance_groups:
             - ((atc_tls.ca))
         data_storage:
           type: postgres
-          host: ((db_ip))
+          host: {{db_ip}}
           port: 5432
           username: credhub
-          password: ((credhub-db-password))
+          password: {{credhub-db-password}}
           database: credhub
           require_tls: false
         tls:
@@ -179,7 +179,7 @@ instance_groups:
         encryption:
           keys:
           - provider_name: int
-            encryption_password: ((credhub-encryption-password))
+            encryption_password: {{credhub-encryption-password}}
             active: true
           providers:
           - name: int
@@ -187,7 +187,7 @@ instance_groups:
 
 - name: worker
   instances: 1
-  vm_type: ((worker_vm_type))
+  vm_type: {{worker_vm_type}}
   stemcell: default
   azs: [AZ01,AZ02,AZ03]
   networks:
@@ -198,7 +198,7 @@ instance_groups:
     consumes: {baggageclaim: {from: worker-baggageclaim}}
     properties:
       drain_timeout: 10m
-      tsa: {worker_key: ((worker_key))}
+      tsa: {worker_key: {{worker_key}}}
 
   - release: concourse
     name: baggageclaim
@@ -235,9 +235,9 @@ variables:
   type: certificate
   options:
     ca: concourse-ca
-    common_name: ((concourse_host))
+    common_name: {{concourse_host}}
     alternative_names:
-    - ((concourse_host))
+    - {{concourse_host}}
 - name: credhub-db-password
   type: password
 - name: uaa-jwt

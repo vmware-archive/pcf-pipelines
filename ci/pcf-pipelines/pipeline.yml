@@ -167,24 +167,24 @@ resources:
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    private_key: ((git_private_key))
+    private_key: {{git_private_key}}
 
 - name: pivnet-rc
   type: pivnet
   source:
-    api_token: ((pivnet_token))
+    api_token: {{pivnet_token}}
     product_slug: pcf-automation
-    access_key_id: ((pivnet_aws_access_key))
-    secret_access_key: ((pivnet_aws_secret_key))
+    access_key_id: {{pivnet_aws_access_key}}
+    secret_access_key: {{pivnet_aws_secret_key}}
     product_version: .*-rc\.\d+
 
 - name: pivnet-release
   type: pivnet
   source:
-    api_token: ((pivnet_token))
+    api_token: {{pivnet_token}}
     product_slug: pcf-automation
-    access_key_id: ((pivnet_aws_access_key))
-    secret_access_key: ((pivnet_aws_secret_key))
+    access_key_id: {{pivnet_aws_access_key}}
+    secret_access_key: {{pivnet_aws_secret_key}}
 
 - name: vsphere-lock
   type: pool
@@ -222,14 +222,14 @@ resources:
     driver: git
     initial_version: 0.1.0-rc.1
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
-    private_key: ((git_private_key))
+    private_key: {{git_private_key}}
     branch: version
     file: version
 
 - name: slack
   type: slack-notification
   source:
-    url: ((slack_webhook_url))
+    url: {{slack_webhook_url}}
 
 - name: fly
   type: curl
@@ -339,7 +339,7 @@ jobs:
     params:
       metadata_file: pivnet-metadata/metadata.yml
       file_glob: pcf-pipelines-release-tarball/*.tgz
-      s3_filepath_prefix: ((pivnet_s3_filepath_prefix))
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
 
   - put: pcf-pipelines
     params:
@@ -445,7 +445,7 @@ jobs:
     output_mapping: { unpacked_tarball: release }
   - task: set-rc-vsphere-install
     params:
-      PIPELINE_PARAMS: ((rc_vsphere_install_params))
+      PIPELINE_PARAMS: {{rc_vsphere_install_params}}
       PIPELINE_NAME: rc-vsphere-install
       PIPELINE_PATH: release/pcf-pipelines/install-pcf/vsphere/pipeline.yml
       <<: *atc_creds
@@ -574,7 +574,7 @@ jobs:
     output_mapping: { unpacked_tarball: release }
   - task: set-rc-gcp-install
     params:
-      PIPELINE_PARAMS: ((rc_gcp_install_params))
+      PIPELINE_PARAMS: {{rc_gcp_install_params}}
       PIPELINE_NAME: rc-gcp-install
       PIPELINE_PATH: release/pcf-pipelines/install-pcf/gcp/pipeline.yml
       <<: *atc_creds
@@ -633,9 +633,9 @@ jobs:
   - task: delegate-dns-zone
     file: pcf-pipelines/ci/tasks/delegate-gcp-dns-zone/task.yml
     params:
-      GCP_SERVICE_ACCOUNT_KEY: ((gcp_service_account_key))
-      PARENT_DNS_ZONE: ((gcp_parent_dns_zone))
-      CHILD_DNS_ZONE: ((gcp_child_dns_zone))
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+      PARENT_DNS_ZONE: {{gcp_parent_dns_zone}}
+      CHILD_DNS_ZONE: {{gcp_child_dns_zone}}
   - task: trigger-gcp-rc-configure-director-and-install-pas
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
@@ -685,7 +685,7 @@ jobs:
     output_mapping: { unpacked_tarball: release }
   - task: set-rc-gcp-upgrade-pas-tile
     params:
-      PIPELINE_PARAMS: ((rc_gcp_upgrade_pas_tile_params))
+      PIPELINE_PARAMS: {{rc_gcp_upgrade_pas_tile_params}}
       PIPELINE_NAME: rc-gcp-upgrade-pas-tile
       PIPELINE_PATH: release/pcf-pipelines/upgrade-tile/pipeline.yml
       <<: *atc_creds
@@ -777,7 +777,7 @@ jobs:
     output_mapping: { unpacked_tarball: release }
   - task: set-rc-gcp-install
     params:
-      PIPELINE_PARAMS: ((rc_lre_gcp_upgrade_ops_manager_params))
+      PIPELINE_PARAMS: {{rc_lre_gcp_upgrade_ops_manager_params}}
       PIPELINE_NAME: lre-gcp-upgrade-ops-manager
       PIPELINE_PATH: release/pcf-pipelines/upgrade-ops-manager/gcp/pipeline.yml
       <<: *atc_creds
@@ -866,7 +866,7 @@ jobs:
     output_mapping: { unpacked_tarball: release }
   - task: set-rc-azure-install
     params:
-      PIPELINE_PARAMS: ((rc_azure_install_params))
+      PIPELINE_PARAMS: {{rc_azure_install_params}}
       PIPELINE_NAME: rc-azure-install
       PIPELINE_PATH: release/pcf-pipelines/install-pcf/azure/pipeline.yml
       <<: *atc_creds
@@ -919,13 +919,13 @@ jobs:
   - task: delegate-dns-zone
     file: pcf-pipelines/ci/tasks/delegate-azure-dns-zone/task.yml
     params:
-      AZURE_CLIENT_ID: ((azure_client_id))
-      AZURE_CLIENT_SECRET: ((azure_client_secret))
-      AZURE_TENANT_ID: ((azure_tenant_id))
-      PARENT_RESOURCE_GROUP: ((azure_parent_dns_resource_group))
-      PARENT_DNS_ZONE: ((azure_parent_dns_zone))
-      CHILD_RESOURCE_GROUP: ((azure_child_dns_resource_group))
-      CHILD_DNS_ZONE_NAME: ((azure_child_dns_zone_name))
+      AZURE_CLIENT_ID: {{azure_client_id}}
+      AZURE_CLIENT_SECRET: {{azure_client_secret}}
+      AZURE_TENANT_ID: {{azure_tenant_id}}
+      PARENT_RESOURCE_GROUP: {{azure_parent_dns_resource_group}}
+      PARENT_DNS_ZONE: {{azure_parent_dns_zone}}
+      CHILD_RESOURCE_GROUP: {{azure_child_dns_resource_group}}
+      CHILD_DNS_ZONE_NAME: {{azure_child_dns_zone_name}}
   - task: trigger-azure-rc-config-opsman-auth
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
@@ -996,7 +996,7 @@ jobs:
     output_mapping: { unpacked_tarball: release }
   - task: set-rc-aws-install
     params:
-      PIPELINE_PARAMS: ((rc_aws_install_params))
+      PIPELINE_PARAMS: {{rc_aws_install_params}}
       PIPELINE_NAME: rc-aws-install
       PIPELINE_PATH: release/pcf-pipelines/install-pcf/aws/pipeline.yml
       <<: *atc_creds
@@ -1176,7 +1176,7 @@ jobs:
     params:
       metadata_file: pivnet-metadata/metadata.yml
       file_glob: pcf-pipelines-release-tarball/*.tgz
-      s3_filepath_prefix: ((pivnet_s3_filepath_prefix))
+      s3_filepath_prefix: {{pivnet_s3_filepath_prefix}}
 
   - put: pcf-pipelines
     params:
@@ -1255,7 +1255,7 @@ jobs:
       passed: [ lock-vsphere-offline ]
   - task: destroy-rc-vsphere-offline-install
     params:
-      PIPELINE_NAME: ((rc_offline_pipeline_name))
+      PIPELINE_NAME: {{rc_offline_pipeline_name}}
       <<: *atc_creds
     file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
 
@@ -1279,7 +1279,7 @@ jobs:
 
   - task: set-create-offline-pinned-pipelines-pipeline
     params:
-      PIPELINE_PARAMS: ((create_offline_pinned_pipelines_params))
+      PIPELINE_PARAMS: {{create_offline_pinned_pipelines_params}}
       PIPELINE_NAME: create-offline-pinned-pipelines
       PIPELINE_PATH: release/pcf-pipelines/create-offline-pinned-pipelines/pipeline.yml
       <<: *atc_creds
@@ -1296,7 +1296,7 @@ jobs:
 
   - task: set-unpack-pcf-pipelines-combined
     params:
-      PIPELINE_PARAMS: ((unpack_pcf_pipelines_combined_params))
+      PIPELINE_PARAMS: {{unpack_pcf_pipelines_combined_params}}
       PIPELINE_NAME: unpack-pcf-pipelines-combined
       PIPELINE_PATH: release/pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml
       <<: *atc_creds
@@ -1357,12 +1357,12 @@ jobs:
   - task: check-pipeline-exists
     params:
       <<: *atc_creds
-      PIPELINE_NAME: ((rc_offline_pipeline_name))
+      PIPELINE_NAME: {{rc_offline_pipeline_name}}
       TIMEOUT_MINUTES: 5
     file: pcf-pipelines/ci/tasks/check-pipeline-exists/task.yml
   - task: unpause-rc-vsphere-offline-install
     params:
-      PIPELINE_NAME: ((rc_offline_pipeline_name))
+      PIPELINE_NAME: {{rc_offline_pipeline_name}}
       <<: *atc_creds
     file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
   - task: trigger-rc-vsphere-offline-wipe-env
@@ -1401,10 +1401,10 @@ jobs:
 ####### END VSPHERE OFFLINE
 
 atc_creds: &atc_creds
-  ATC_EXTERNAL_URL: ((atc_external_url))
-  ATC_BASIC_AUTH_USERNAME: ((fly_basic_auth_username))
-  ATC_BASIC_AUTH_PASSWORD: ((fly_basic_auth_password))
-  ATC_TEAM_NAME: ((atc_team_name))
+  ATC_EXTERNAL_URL: {{atc_external_url}}
+  ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+  ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+  ATC_TEAM_NAME: {{atc_team_name}}
 
 notify_slack: &notify_slack
   put: slack
@@ -1414,5 +1414,5 @@ notify_slack: &notify_slack
 norm-ci-locks-params: &norm-ci-locks-params
   uri: git@github.com:pivotal-cf/norm-ci-locks.git
   branch: master
-  private_key: ((locks_git_ssh_key))
+  private_key: {{locks_git_ssh_key}}
   retry_delay: 1m

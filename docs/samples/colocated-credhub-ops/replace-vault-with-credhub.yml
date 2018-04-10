@@ -8,7 +8,7 @@
   value:
     url: https://((concourse_host)):8844
     tls:
-      ca_cert: ((concourse-ca))
-      insecure_skip_verify: ((credhub_insecure_skip_verify))
+      ca_cert: {{concourse-ca}}
+      insecure_skip_verify: {{credhub_insecure_skip_verify}}
     client_id: concourse_to_credhub
-    client_secret: ((concourse_to_credhub_secret))
+    client_secret: {{concourse_to_credhub_secret}}
