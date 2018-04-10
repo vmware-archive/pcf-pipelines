@@ -35,7 +35,7 @@ test_for_pcf_pipelines_git=$(cat <<-EOF
     source:
       uri: git@github.com:pivotal-cf/pcf-pipelines.git
       branch: master
-      private_key: ((git_private_key))
+      private_key: {{git_private_key}}
 EOF
 )
 

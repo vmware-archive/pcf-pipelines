@@ -144,15 +144,15 @@
           host: {{db_ip}}
           port: 5432
           username: credhub
-          password: ((credhub-db-password))
+          password: {{credhub-db-password}}
           database: credhub
           require_tls: false
-        tls: ((concourse-tls))
+        tls: {{concourse-tls}}
         log_level: info
         encryption:
           keys:
           - provider_name: int
-            encryption_password: ((credhub-encryption-password))
+            encryption_password: {{credhub-encryption-password}}
             active: true
           providers:
           - name: int
@@ -171,7 +171,7 @@
         scim:
           users:
           - name: admin
-            password: ((uaa-users-admin))
+            password: {{uaa-users-admin}}
             groups:
             - scim.write
             - scim.read
@@ -194,9 +194,9 @@
             authorities: credhub.read,credhub.write
             access-token-validity: 30
             refresh-token-validity: 3600
-            secret: ((concourse_to_credhub_secret))
-        admin: {client_secret: ((uaa-admin))}
-        login: {client_secret: ((uaa-login))}
+            secret: {{concourse_to_credhub_secret}}
+        admin: {client_secret: {{uaa-admin}}}
+        login: {client_secret: {{uaa-login}}}
         zones: {internal: {hostnames: []}}
         sslCertificate: ((concourse-tls.certificate))
         sslPrivateKey: ((concourse-tls.private_key))
@@ -208,7 +208,7 @@
               key-1:
                 signingKey: ((uaa-jwt.private_key))
       uaadb:
-        address: ((db_ip))
+        address: {{db_ip}}
         port: 5432
         db_scheme: postgresql
         databases:
@@ -217,7 +217,7 @@
         roles:
         - tag: admin
           name: uaa
-          password: ((uaa-db-password))
+          password: {{uaa-db-password}}
       login:
         saml:
           serviceProviderCertificate: ((concourse-tls.certificate))

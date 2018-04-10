@@ -9,24 +9,24 @@ resources:
 - name: stemcell-pivnet
   type: pivnet
   source:
-    api_token: ((pivnet_token))
+    api_token: {{pivnet_token}}
     product_slug: stemcells
     sort_by: semver
 
 - name: ops-manager-pivnet
   type: pivnet
   source:
-    api_token: ((pivnet_token))
+    api_token: {{pivnet_token}}
     product_slug: ops-manager
-    product_version: ((opsman_major_minor_version))
+    product_version: {{opsman_major_minor_version}}
     sort_by: semver
 
 - name: elastic-runtime-pivnet
   type: pivnet
   source:
-    api_token: ((pivnet_token))
+    api_token: {{pivnet_token}}
     product_slug: elastic-runtime
-    product_version: ((ert_major_minor_version))
+    product_version: {{ert_major_minor_version}}
     sort_by: semver
 
 - name: czero-cflinuxfs2
@@ -34,34 +34,34 @@ resources:
   source:
     repository: pcfnorm/rootfs
     tag: latest
-    username: ((dockerhub_username))
-    password: ((dockerhub_password))
+    username: {{dockerhub_username}}
+    password: {{dockerhub_password}}
 
 - name: ops-manager-s3
   type: s3
   source:
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
-    bucket: ((s3_bucket))
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
     regexp: "ops-manager/ops-manager-(.*).tgz"
 
 - name: elastic-runtime-s3
   type: s3
   source:
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
-    bucket: ((s3_bucket))
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
     regexp: "elastic-runtime/elastic-runtime-(.*).tgz"
 
 - name: czero-cflinuxfs2-s3
   type: s3
   source:
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
-    bucket: ((s3_bucket))
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
     regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-(.*).tgz"
     disable_ssl: false
 
@@ -70,20 +70,20 @@ resources:
   source:
     initial_version: 0.0.0
     driver: s3
-    bucket: ((s3_bucket))
+    bucket: {{s3_bucket}}
     key: "czero-cflinuxfs2/version"
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
     disable_ssl: false
 
 - name: stemcell-s3
   type: s3
   source:
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
-    endpoint: ((s3_endpoint))
-    bucket: ((s3_bucket))
+    access_key_id: {{s3_access_key_id}}
+    secret_access_key: {{s3_secret_access_key}}
+    endpoint: {{s3_endpoint}}
+    bucket: {{s3_bucket}}
     regexp: "stemcells/bosh-stemcell-(.*)-.*.tgz"
     disable_ssl: false
 
