@@ -5,7 +5,7 @@
     name: pcf-pipelines-tarball
     type: pivnet
     source:
-      api_token: "((pivnet_token))"
+      api_token: "{{pivnet_token}}"
       product_slug: pcf-automation
       product_version: ~
 

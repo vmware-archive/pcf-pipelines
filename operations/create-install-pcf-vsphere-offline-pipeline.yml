@@ -10,19 +10,19 @@
   - name: pcf-ops-manager
     type: s3
     source:
-      access_key_id: ((s3_access_key_id))
-      secret_access_key: ((s3_secret_access_key))
-      endpoint: ((s3_endpoint))
-      bucket: ((s3_bucket))
+      access_key_id: {{s3_access_key_id}}
+      secret_access_key: {{s3_secret_access_key}}
+      endpoint: {{s3_endpoint}}
+      bucket: {{s3_bucket}}
       regexp: "ops-manager/ops-manager-(.*).tar"
 
   - name: elastic-runtime
     type: s3
     source:
-      access_key_id: ((s3_access_key_id))
-      secret_access_key: ((s3_secret_access_key))
-      endpoint: ((s3_endpoint))
-      bucket: ((s3_bucket))
+      access_key_id: {{s3_access_key_id}}
+      secret_access_key: {{s3_secret_access_key}}
+      endpoint: {{s3_endpoint}}
+      bucket: {{s3_bucket}}
       regexp: "elastic-runtime/elastic-runtime-(.*).tar"
 
 - op: replace
@@ -30,10 +30,10 @@
   value:
     type: s3
     source:
-      access_key_id: ((s3_access_key_id))
-      secret_access_key: ((s3_secret_access_key))
-      endpoint: ((s3_endpoint))
-      bucket: ((s3_bucket))
+      access_key_id: {{s3_access_key_id}}
+      secret_access_key: {{s3_secret_access_key}}
+      endpoint: {{s3_endpoint}}
+      bucket: {{s3_bucket}}
       regexp: "czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar"
     params:
       unpack: true
@@ -75,26 +75,26 @@
         image_resource:
           type: s3
           source:
-            access_key_id: ((s3_access_key_id))
-            bucket: ((s3_bucket))
-            endpoint: ((s3_endpoint))
+            access_key_id: {{s3_access_key_id}}
+            bucket: {{s3_bucket}}
+            endpoint: {{s3_endpoint}}
             regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
-            secret_access_key: ((s3_secret_access_key))
+            secret_access_key: {{s3_secret_access_key}}
           params:
             unpack: true
         inputs:
         - name: pivnet-product
         params:
-          S3_ACCESS_KEY_ID: ((s3_access_key_id))
-          S3_SECRET_ACCESS_KEY: ((s3_secret_access_key))
-          S3_BUCKET: ((s3_bucket))
-          S3_ENDPOINT: ((s3_endpoint))
+          S3_ACCESS_KEY_ID: {{s3_access_key_id}}
+          S3_SECRET_ACCESS_KEY: {{s3_secret_access_key}}
+          S3_BUCKET: {{s3_bucket}}
+          S3_ENDPOINT: {{s3_endpoint}}
           IAAS: vsphere
-          OPS_MGR_DOMAIN: ((opsman_domain_or_ip_address))
+          OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
           OPSMAN_CLIENT_ID: ""
           OPSMAN_CLIENT_SECRET: ""
-          OPS_MGR_USERNAME: ((opsman_admin_username))
-          OPS_MGR_PASSWORD: ((opsman_admin_password))
+          OPS_MGR_USERNAME: {{opsman_admin_username}}
+          OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:
           path: bash
           args:
@@ -182,21 +182,21 @@
         image_resource:
           type: s3
           source:
-            access_key_id: ((s3_access_key_id))
-            bucket: ((s3_bucket))
-            endpoint: ((s3_endpoint))
+            access_key_id: {{s3_access_key_id}}
+            bucket: {{s3_bucket}}
+            endpoint: {{s3_endpoint}}
             regexp: czero-cflinuxfs2/czero-cflinuxfs2-(.*)-.*.tar
-            secret_access_key: ((s3_secret_access_key))
+            secret_access_key: {{s3_secret_access_key}}
           params:
             unpack: true
         inputs:
         - name: pivnet-product
         params:
-          OPS_MGR_DOMAIN: ((opsman_domain_or_ip_address))
+          OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
           OPSMAN_CLIENT_ID: ""
           OPSMAN_CLIENT_SECRET: ""
-          OPS_MGR_USERNAME: ((opsman_admin_username))
-          OPS_MGR_PASSWORD: ((opsman_admin_password))
+          OPS_MGR_USERNAME: {{opsman_admin_username}}
+          OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:
           path: bash
           args:

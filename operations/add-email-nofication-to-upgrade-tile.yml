@@ -20,8 +20,8 @@
       smtp:
         host: smtp.example.com
         port: "587" # this must be a string
-        username: ((smtp-user))
-        password: ((smtp-password))
+        username: {{smtp-user}}
+        password: {{smtp-password}}
       from: build-system@example.com
       to: [ "dev-team@example.com", "product@example.net")) ]
 
