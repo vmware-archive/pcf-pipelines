@@ -27,7 +27,7 @@ function main() {
   opsman_path=$(ls "$curr_dir"/pivnet-opsmgr/*.{yml,yaml,ova} "$curr_dir"/pivnet-opsmgr/*_image 2>/dev/null | grep -v metadata.yaml)
 
   export GOVC_TLS_CA_CERTS=/tmp/vcenter-ca.pem
-  echo "$GOVC_CA_CERT" > $GOVC_TLS_CA_CERTS
+  echo "$GOVC_CA_CERT" > "$GOVC_TLS_CA_CERTS"
 
 IAAS_CONFIGURATION=$(cat <<-EOF
 {
@@ -59,7 +59,7 @@ EOF
 
   echo "Importing OVA of new OpsMgr VM..."
   echo "Running govc import.ova -options=opsman_settings.json ${opsman_path}"
-  govc import.ova -options=opsman_settings.json "${opsman_path}"
+  govc import.ova -options=opsman_settings.json "${opsman_path}" -folder=${OPSMAN_VM_FOLDER}
 
   echo "Setting CPUs on new OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${opsman_name}"
   govc vm.change -c=2 -vm="${opsman_name}"

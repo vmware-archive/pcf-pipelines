@@ -42,7 +42,7 @@ vcenter_ca_cert: CHANGEME
 vcenter_cluster: CHANGEME
 vcenter_resource_pool: CHANGEME
 
-opsman_vm_folder: CHANGEME
+om_vm_folder: CHANGEME
 opsman_ip: CHANGEME
 netmask: CHANGEME
 gateway: CHANGEME
