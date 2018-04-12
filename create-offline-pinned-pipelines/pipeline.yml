@@ -106,7 +106,7 @@ resources:
 - name: fly
   type: curl
   source:
-    url: "{{atc_external_url}}/api/v1/cli?arch=amd64&platform=linux"
+    url: "((atc_external_url))/api/v1/cli?arch=amd64&platform=linux"
     filename: fly
     skip_ssl_verification: true
 
