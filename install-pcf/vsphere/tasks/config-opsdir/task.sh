@@ -179,7 +179,7 @@ security_configuration=$(
     }'
 )
 
-network_assignment=$(
+`network_assignment=$(
 jq -n \
   --arg infra_availability_zones "$INFRA_NW_AZS" \
   --arg network "$INFRA_NETWORK_NAME" \
