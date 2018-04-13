@@ -14,11 +14,11 @@ COPY \
        terraform \
        /usr/local/bin/
 
-COPY terraforming-azure/ /home/vcap/app/
+COPY terraforming-azure/ /home/vcap/app/terraforming-azure
 
 RUN \
 cp /usr/local/bin/yaml_patch_linux /usr/local/bin/yaml-patch && \
-
+\
 # gcloud SDK
 export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
 echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list && \
