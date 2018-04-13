@@ -192,7 +192,7 @@ jq -n \
   }'
 )
 
-echo "Configuring IaaS and Director..."
+echo "Configuring IaaS, AZ and Director..."
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
@@ -200,12 +200,10 @@ om-linux \
   --password "$OPS_MGR_PWD" \
   configure-director \
   --iaas-configuration "$iaas_configuration" \
-  --director-configuration "$director_config"
+  --director-configuration "$director_config" \
+  --az-configuration "$az_configuration"
 
-om-linux -t https://$OPSMAN_DOMAIN_OR_IP_ADDRESS -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-  curl -p "/api/v0/staged/director/availability_zones" \
-  -x PUT -d "$az_configuration"
-
+echo "Configuring Network and Security..."
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
