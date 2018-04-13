@@ -47,9 +47,12 @@ db_uaa_password: CHANGEME
 db_uaa_username: CHANGEME
 
 # Domain Names for ERT
-pcf_ert_domain: CHANGEME # This is the domain you will access ERT with, for example: pcf.example.com.
-system_domain: CHANGEME # e.g. system.pcf.example.com
-apps_domain: CHANGEME   # e.g. apps.pcf.example.com
+# This is the domain you will access ERT with, for example: pcf.example.com.  A hosted zone will be created for this domain.
+pcf_ert_domain: CHANGEME
+# e.g. system.pcf.example.com, this needs to be a subdomain of pcf_ert_domain
+system_domain: CHANGEME
+# e.g. apps.pcf.example.com, this needs to be a subdomain of pcf_ert_domain
+apps_domain: CHANGEME   
 
 # Errands to disable prior to deploying ERT
 # Valid values:
