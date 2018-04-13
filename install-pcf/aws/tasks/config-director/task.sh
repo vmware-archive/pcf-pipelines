@@ -224,7 +224,7 @@ om-linux \
   --skip-ssl-validation \
   --username "$OPSMAN_USER" \
   --password "$OPSMAN_PASSWORD" \
-  configure-bosh \
+  configure-director \
   --iaas-configuration "$iaas_configuration" \
   --director-configuration "$director_configuration" \
   --az-configuration "$az_configuration" \
