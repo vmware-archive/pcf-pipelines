@@ -115,7 +115,6 @@ resources:
     user: pivotal-cf
     repository: terraforming-azure
     access_token: {{github_token}}
-    include_source_tarball: true
 
 - name: jq
   type: curl
@@ -151,6 +150,7 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: terraform
     - get: terraforming-azure
+      params: {include_source_tarball: true}
     - get: jq
 
   - task: prepare-workspace
@@ -207,7 +207,7 @@ jobs:
           chmod +x workspace/*
 
           mkdir workspace/terraforming-azure
-          tar xf source.tar.gz -C workspace/terraforming-azure --strip-components=1
+          tar xf terraforming-azure/source.tar.gz -C workspace/terraforming-azure --strip-components=1
 
           cp pcf-pipelines/ci/Dockerfile workspace
 
