@@ -14,6 +14,8 @@ COPY \
        terraform \
        /usr/local/bin/
 
+COPY terraforming-azure /home/vcap/app/
+
 RUN \
 cp /usr/local/bin/yaml_patch_linux /usr/local/bin/yaml-patch && \
 

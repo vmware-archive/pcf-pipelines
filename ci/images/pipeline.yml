@@ -6,6 +6,16 @@ resource_types:
     tag: latest
 
 resources:
+- name: version
+  type: semver
+  source:
+    driver: git
+    initial_version: 1.0.0
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    private_key: {{git_private_key}}
+    branch: version
+    file: docker-version
+
 - name: pcf-pipelines
   type: git
   source:
@@ -97,7 +107,15 @@ resources:
   source:
     user: hashicorp
     repository: terraform
-    access_token: ((github_token))
+    access_token: {{github_token}}
+
+- name: terraforming-azure
+  type: github-release
+  source:
+    user: pivotal-cf
+    repository: terraforming-azure
+    access_token: {{github_token}}
+    include_source_tarball: true
 
 - name: jq
   type: curl
@@ -132,6 +150,7 @@ jobs:
     - get: steamroll
       params: {globs: ["*linux*"]}
     - get: terraform
+    - get: terraforming-azure
     - get: jq
 
   - task: prepare-workspace
@@ -153,6 +172,7 @@ jobs:
       - name: stemcell-downloader
       - name: steamroll
       - name: terraform
+      - name: terraforming-azure
       - name: jq
       outputs:
       - name: workspace
@@ -185,6 +205,9 @@ jobs:
           cp govc/govc_linux_amd64 workspace/govc
 
           chmod +x workspace/*
+
+          mkdir workspace/terraforming-azure
+          tar xf source.tar.gz -C workspace/terraforming-azure --strip-components=1
 
           cp pcf-pipelines/ci/Dockerfile workspace
 
@@ -246,7 +269,13 @@ jobs:
     trigger: true
     params:
       save: true
+  - get: version
+    params:
+      bump: patch
   - put: pcf-pipelines-image
     params:
       load: pcf-pipelines-image-rc
-      tag: cliaas/tag
+      tag: version/version
+  - put: version
+    params:
+      file: version/version
