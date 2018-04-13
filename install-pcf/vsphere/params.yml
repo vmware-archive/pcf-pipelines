@@ -272,6 +272,7 @@ om_ntp_servers: CHANGEME
 om_resource_pool: CHANGEME
 
 # Optional - vCenter folder to put Ops Manager in
+# Format: /<Data Center Name>/vm/<folder_name>
 om_vm_folder:
 
 # Optional - vCenter host to deploy Ops Manager in

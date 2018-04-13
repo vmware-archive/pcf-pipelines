@@ -106,7 +106,7 @@ resources:
 - name: fly
   type: curl
   source:
-    url: "{{atc_external_url}}/api/v1/cli?arch=amd64&platform=linux"
+    url: "((atc_external_url))/api/v1/cli?arch=amd64&platform=linux"
     filename: fly
     skip_ssl_verification: true
 
@@ -393,9 +393,10 @@ jobs:
           mkdir -p pcf-pipelines-offline-pinned/install-pcf/vsphere
 
           echo "Creating install-pcf/vsphere/pipeline.yml"
-          cat pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml |
-            yaml_patch_linux -o pin-resource-gets.yml
-            > pcf-pipelines-offline-pinned/install-pcf/vsphere/pipeline.yml
+          fly format-pipeline -c <(
+            cat pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml |
+              yaml_patch_linux -o pin-resource-gets.yml
+          ) > pcf-pipelines-offline-pinned/install-pcf/vsphere/pipeline.yml
 
           pcf_pipelines_version=$(
             cat pcf-pipelines-tarball/metadata.json | jq --raw-output '.Release.Version'
@@ -411,8 +412,9 @@ jobs:
             "pcf-pipelines": $root/pcf-pipelines
           EOF
           mkdir -p pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined
-          steamroll -p pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml -c steamroll_config.yml
-            > pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined/pipeline.yml
+          fly format-pipeline -c <(
+            steamroll -p pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml -c steamroll_config.yml
+          ) > pcf-pipelines-offline-pinned/unpack-pcf-pipelines-combined/pipeline.yml
 
           echo "Creating unpack-pcf-pipelines-combined/params.yml"
           cp pcf-pipelines/unpack-pcf-pipelines-combined/params.yml \

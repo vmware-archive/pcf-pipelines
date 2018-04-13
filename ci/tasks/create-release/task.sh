@@ -82,6 +82,8 @@ for f in ${files[@]}; do
       > "$f".bk
     mv "$f".bk "$f"
 
+    fly format-pipeline --write --config "$f"
+
     # Remove git_private_key from params as it is no longer needed
     params_file=$(dirname "$f")/params.yml
     sed -i -e '/git_private_key:/d' "$params_file"
@@ -97,7 +99,8 @@ EOF
 steamroll -p pcf-pipelines/install-pcf/vsphere/pipeline.yml -c steamroll_config.yml |
 yaml_patch_linux \
   -o pcf-pipelines/operations/create-install-pcf-vsphere-offline-pipeline.yml \
-  > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
+  > vsphere-offline.yml
+fly format-pipeline -c vsphere-offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
 
 echo "Creating install-pcf/vsphere/offline/params.yml"
 cp pcf-pipelines/install-pcf/vsphere{,/offline}/params.yml

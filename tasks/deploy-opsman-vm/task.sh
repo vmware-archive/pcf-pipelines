@@ -59,7 +59,7 @@ EOF
 
   echo "Importing OVA of new OpsMgr VM..."
   echo "Running govc import.ova -options=opsman_settings.json ${opsman_path}"
-  govc import.ova -options=opsman_settings.json "${opsman_path}" -folder=${OPSMAN_VM_FOLDER}
+  govc import.ova -options=opsman_settings.json -folder=${OPSMAN_VM_FOLDER} "${opsman_path}"
 
   echo "Setting CPUs on new OpsMgr VM... /${GOVC_DATACENTER}/${OPSMAN_VM_FOLDER}/${opsman_name}"
   govc vm.change -c=2 -vm="${opsman_name}"
@@ -77,7 +77,7 @@ EOF
   timeout=$((SECONDS+OPSMAN_TIMEOUT))
   set +e
   while ! $started; do
-      OUTPUT=$(govc vm.info -vm.ipath="${GOVC_DATACENTER}"/vm/"${opsman_name}" 2>&1)
+      OUTPUT=$(govc vm.info -vm.ipath="${GOVC_DATACENTER}/vm/${OPSMAN_VM_FOLDER}/${opsman_name}" 2>&1)
 
       if [[ $SECONDS -gt $timeout ]]; then
         echo "Timed out waiting for VM to start."
