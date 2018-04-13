@@ -63,13 +63,11 @@ EOF
 )
 
 read -r -d '' az_configuration <<EOF
-{
-  "availability_zones": [
+[
     { "name": "$az1" },
     { "name": "$az2" },
     { "name": "$az3" }
-  ]
-}
+]
 EOF
 
 read -r -d '' networks_configuration <<EOF
@@ -86,7 +84,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$ert_subnet_reserved_ranges_z1",
           "dns": "$dns",
           "gateway": "$ert_subnet_gw_az1",
-          "availability_zones": ["$az1"]
+          "availability_zone_names": ["$az1"]
         },
         {
           "iaas_identifier": "$ert_subnet_id_az2",
@@ -94,7 +92,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$ert_subnet_reserved_ranges_z2",
           "dns": "$dns",
           "gateway": "$ert_subnet_gw_az2",
-          "availability_zones": ["$az2"]
+          "availability_zone_names": ["$az2"]
         },
         {
           "iaas_identifier": "$ert_subnet_id_az3",
@@ -102,7 +100,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$ert_subnet_reserved_ranges_z3",
           "dns": "$dns",
           "gateway": "$ert_subnet_gw_az3",
-          "availability_zones": ["$az3"]
+          "availability_zone_names": ["$az3"]
         }
       ]
     },
@@ -116,7 +114,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$infra_subnet_reserved_ranges_z1",
           "dns": "$dns",
           "gateway": "$infra_subnet_gw_az1",
-          "availability_zones": ["$az1"]
+          "availability_zone_names": ["$az1"]
         }
       ]
     },
@@ -130,7 +128,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$services_subnet_reserved_ranges_z1",
           "dns": "$dns",
           "gateway": "$services_subnet_gw_az1",
-          "availability_zones": ["$az1"]
+          "availability_zone_names": ["$az1"]
         },
         {
           "iaas_identifier": "$services_subnet_id_az2",
@@ -138,7 +136,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$services_subnet_reserved_ranges_z2",
           "dns": "$dns",
           "gateway": "$services_subnet_gw_az2",
-          "availability_zones": ["$az2"]
+          "availability_zone_names": ["$az2"]
         },
         {
           "iaas_identifier": "$services_subnet_id_az3",
@@ -146,7 +144,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$services_subnet_reserved_ranges_z3",
           "dns": "$dns",
           "gateway": "$services_subnet_gw_az3",
-          "availability_zones": ["$az3"]
+          "availability_zone_names": ["$az3"]
         }
       ]
     },
@@ -160,7 +158,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$dynamic_services_subnet_reserved_ranges_z1",
           "dns": "$dns",
           "gateway": "$dynamic_services_subnet_gw_az1",
-          "availability_zones": ["$az1"]
+          "availability_zone_names": ["$az1"]
         },
         {
           "iaas_identifier": "$dynamic_services_subnet_id_az2",
@@ -168,7 +166,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$dynamic_services_subnet_reserved_ranges_z2",
           "dns": "$dns",
           "gateway": "$dynamic_services_subnet_gw_az2",
-          "availability_zones": ["$az2"]
+          "availability_zone_names": ["$az2"]
         },
         {
           "iaas_identifier": "$dynamic_services_subnet_id_az3",
@@ -176,7 +174,7 @@ read -r -d '' networks_configuration <<EOF
           "reserved_ip_ranges": "$dynamic_services_subnet_reserved_ranges_z3",
           "dns": "$dns",
           "gateway": "$dynamic_services_subnet_gw_az3",
-          "availability_zones": ["$az3"]
+          "availability_zone_names": ["$az3"]
         }
       ]
     }
@@ -199,10 +197,7 @@ read -r -d '' security_configuration <<EOF
 EOF
 set -e
 
-iaas_configuration=$(
-  echo "$iaas_configuration" |
-  jq --arg ssh_private_key "$PEM" '.ssh_private_key = $ssh_private_key'
-)
+iaas_configuration=$(echo "$iaas_configuration" |jq --arg ssh_private_key "$PEM" '.ssh_private_key = $ssh_private_key')
 
 security_configuration=$(
   echo "$security_configuration" |
