@@ -10,7 +10,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
-    branch: master
+    branch: test-vsphere-configure-director
     private_key: {{git_private_key}}
 
 - name: pcf-ops-manager
