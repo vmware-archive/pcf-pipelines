@@ -17,7 +17,7 @@ iaas_configuration=$(
     --arg resource_group_name "${AZURE_TERRAFORM_PREFIX}-pcf-resource-group" \
     --arg bosh_storage_account_name "${ENV_SHORT_NAME}director" \
     --arg deployments_storage_account_name "*boshvms*" \
-    --arg default_security_group "pcf-default-security-group" \
+    --arg default_security_group "${AZURE_TERRAFORM_PREFIX}-bosh-deployed-vms-security-group" \
     --arg ssh_public_key "${PCF_SSH_KEY_PUB}" \
     --arg ssh_private_key "${PCF_SSH_KEY_PRIV}" \
     --arg cloud_storage_type "managed_disks" \
@@ -61,12 +61,12 @@ director_configuration=$(
 
 networks_configuration=$(
   jq -n \
-    --arg infra_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-opsman-and-director-subnet" \
+    --arg infra_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-management-subnet" \
     --arg infra_subnet_cidr "${AZURE_TERRAFORM_SUBNET_INFRA_CIDR}" \
     --arg infra_subnet_reserved "${AZURE_TERRAFORM_SUBNET_INFRA_RESERVED}" \
     --arg infra_subnet_dns "${AZURE_TERRAFORM_SUBNET_INFRA_DNS}" \
     --arg infra_subnet_gateway "${AZURE_TERRAFORM_SUBNET_INFRA_GATEWAY}" \
-    --arg ert_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-ert-subnet" \
+    --arg ert_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-pas-subnet" \
     --arg ert_subnet_cidr "${AZURE_TERRAFORM_SUBNET_ERT_CIDR}" \
     --arg ert_subnet_reserved "${AZURE_TERRAFORM_SUBNET_ERT_RESERVED}" \
     --arg ert_subnet_dns "${AZURE_TERRAFORM_SUBNET_ERT_DNS}" \
