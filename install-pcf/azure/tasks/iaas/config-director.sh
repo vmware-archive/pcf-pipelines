@@ -76,6 +76,11 @@ networks_configuration=$(
     --arg services_subnet_reserved "${AZURE_TERRAFORM_SUBNET_SERVICES1_RESERVED}" \
     --arg services_subnet_dns "${AZURE_TERRAFORM_SUBNET_SERVICES1_DNS}" \
     --arg services_subnet_gateway "${AZURE_TERRAFORM_SUBNET_SERVICES1_GATEWAY}" \
+    --arg dynamic_services_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-dynamic-services-subnet" \
+    --arg dynamic_services_subnet_cidr "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR}" \
+    --arg dynamic_services_subnet_reserved "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_RESERVED}" \
+    --arg dynamic_services_subnet_dns "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_DNS}" \
+    --arg dynamic_services_subnet_gateway "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_GATEWAY}" \
     '{
       "icmp_checks_enabled": false,
       "networks": [
@@ -115,6 +120,20 @@ networks_configuration=$(
               "reserved_ip_ranges": $services_subnet_reserved,
               "dns": $services_subnet_dns,
               "gateway": $services_subnet_gateway
+            }
+          ]
+        },
+        {
+          "name": "dynamic-services",
+          "service_network": true,
+          "subnets": [
+            {
+              "iaas_identifier": $dynamic_services_subnet_iaas,
+              "cidr": $dynamic_services_subnet_cidr,
+              "reserved_ip_ranges": $dynamic_services_subnet_reserved,
+              "dns": $dynamic_services_subnet_dns,
+              "gateway": $dynamic_services_subnet_gateway,
+              "availability_zone_names": ["null-az"]
             }
           ]
         }
