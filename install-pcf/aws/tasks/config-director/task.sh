@@ -184,8 +184,12 @@ EOF
 
 read -r -d '' network_assignment <<EOF
 {
-  "singleton_availability_zone": "$az1",
-  "network": "infrastructure"
+  "singleton_availability_zone": {
+    "name": "$az1"
+   },
+  "network": {
+    "name": "infrastructure"
+  }
 }
 EOF
 
