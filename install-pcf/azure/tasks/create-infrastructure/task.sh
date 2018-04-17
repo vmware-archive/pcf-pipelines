@@ -11,15 +11,15 @@ ENV_SHORT_NAME=$(echo ${AZURE_TERRAFORM_PREFIX} | tr -d "-" | tr -d "_" | tr -d 
 ENV_SHORT_NAME=$(echo ${ENV_SHORT_NAME:0:10})
 
 
-echo "subscription_id=$AZURE_SUBSCRIPTION_ID" >> terraform-vars-output/terraform.tfvars
-echo "tenant_id=$AZURE_TENANT_ID" >> terraform-vars-output/terraform.tfvars
-echo "client_id=$AZURE_CLIENT_ID" >> terraform-vars-output/terraform.tfvars
-echo "client_secret=$AZURE_CLIENT_SECRET" >> terraform-vars-output/terraform.tfvars
-echo "env_name=$AZURE_TERRAFORM_PREFIX" >> terraform-vars-output/terraform.tfvars
-echo "env_short_name=$ENV_SHORT_NAME" >> terraform-vars-output/terraform.tfvars
-echo "ops_manager_image_uri=$PCF_OPSMAN_IMAGE_URI" >> terraform-vars-output/terraform.tfvars
-echo "location=$AZURE_REGION" >> terraform-vars-output/terraform.tfvars
-echo "dns_suffix=$PCF_ERT_DOMAIN" >> terraform-vars-output/terraform.tfvars
+echo "subscription_id=\"$AZURE_SUBSCRIPTION_ID\"" >> terraform-vars-output/terraform.tfvars
+echo "tenant_id=\"$AZURE_TENANT_ID\"" >> terraform-vars-output/terraform.tfvars
+echo "client_id=\"$AZURE_CLIENT_ID\"" >> terraform-vars-output/terraform.tfvars
+echo "client_secret=\"$AZURE_CLIENT_SECRET\"" >> terraform-vars-output/terraform.tfvars
+echo "env_name=\"$AZURE_TERRAFORM_PREFIX\"" >> terraform-vars-output/terraform.tfvars
+echo "env_short_name=\"$ENV_SHORT_NAME\"" >> terraform-vars-output/terraform.tfvars
+echo "ops_manager_image_uri=\"$PCF_OPSMAN_IMAGE_URI\"" >> terraform-vars-output/terraform.tfvars
+echo "location=\"$AZURE_REGION\"" >> terraform-vars-output/terraform.tfvars
+echo "dns_suffix=\"$PCF_ERT_DOMAIN\"" >> terraform-vars-output/terraform.tfvars
 
 
 
