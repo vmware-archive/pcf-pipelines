@@ -67,17 +67,17 @@ MANAGEMENT_SUBNET=$(terraform output management_subnet_name)
 MANAGEMENT_CIDRS=$(terraform output management_subnet_cidrs)
 MANAGEMENT_GATEWAY=$(terraform output management_subnet_gateway)
 
-PAS_SUBNET=$(terraform output management_subnet_name)
-PAS_CIDRS=$(terraform output management_subnet_cidrs)
-PAS_GATEWAY=$(terraform output management_subnet_gateway)
+PAS_SUBNET=$(terraform output pas_subnet_name)
+PAS_CIDRS=$(terraform output pas_subnet_cidrs)
+PAS_GATEWAY=$(terraform output pas_subnet_gateway)
 
-SERVICES_SUBNET=$(terraform output management_subnet_name)
-SERVICES_CIDRS=$(terraform output management_subnet_cidrs)
-SERVICES_GATEWAY=$(terraform output management_subnet_gateway)
+SERVICES_SUBNET=$(terraform output services_subnet_name)
+SERVICES_CIDRS=$(terraform output services_subnet_cidrs)
+SERVICES_GATEWAY=$(terraform output services_subnet_gateway)
 
-DYNAMIC_SERVICES_SUBNET=$(terraform output management_subnet_name)
-DYNAMIC_SERVICES_CIDRS=$(terraform output management_subnet_cidrs)
-DYNAMIC_SERVICES_GATEWAY=$(terraform output management_subnet_gateway)
+DYNAMIC_SERVICES_SUBNET=$(terraform output dynamic_services_subnet_name)
+DYNAMIC_SERVICES_CIDRS=$(terraform output dynamic_services_subnet_cidrs)
+DYNAMIC_SERVICES_GATEWAY=$(terraform output dynamic_services_subnet_gateway)
 
 networks_configuration=$(
   jq -n \

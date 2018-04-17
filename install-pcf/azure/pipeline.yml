@@ -209,6 +209,8 @@ jobs:
           tag: 1.0.3
       inputs:
         - name: pcf-pipelines
+        - name: terraform-state
+        - name: terraform-vars
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
       params:
