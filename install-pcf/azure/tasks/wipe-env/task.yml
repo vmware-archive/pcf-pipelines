@@ -9,6 +9,7 @@ image_resource:
 inputs:
   - name: pcf-pipelines
   - name: terraform-state
+  - name: terraform-vars
 
 outputs:
   - name: terraform-state-output

@@ -113,6 +113,7 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: terraform-state
+    - get: terraform-vars
 
   - task: wipe-env
     file: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.yml
