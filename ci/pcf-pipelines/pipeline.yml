@@ -49,6 +49,10 @@ groups:
   - force-unlock-aws-install-pcf
   - force-unlock-lre-gcp-upgrade-opsman
   - force-unlock-vsphere-offline-install-pcf
+  - final-wipe-vsphere
+  - final-wipe-aws
+  - final-wipe-azure
+  - final-wipe-gcp
 - name: unlocks
   jobs:
   - force-unlock-vsphere-install-pcf
@@ -66,7 +70,7 @@ groups:
   - set-rc-vsphere-install
   - wipe-vsphere
   - trigger-install-pcf-vsphere
-  - wipe-vsphere-post-install
+  - final-wipe-vsphere
   - check-environments-complete
 - name: offline
   jobs:
@@ -89,6 +93,7 @@ groups:
   - destroy-rc-gcp-upgrade-pas-tile
   - set-rc-gcp-upgrade-pas-tile
   - trigger-rc-gcp-upgrade-pas-tile
+  - final-wipe-gcp
   - check-environments-complete
 - name: azure
   jobs:
@@ -98,6 +103,7 @@ groups:
   - set-rc-azure-install
   - wipe-azure
   - trigger-install-pcf-azure
+  - final-wipe-azure
   - check-environments-complete
 - name: aws
   jobs:
@@ -107,6 +113,7 @@ groups:
   - set-rc-aws-install
   - wipe-aws
   - trigger-install-pcf-aws
+  - final-wipe-aws
   - check-environments-complete
 - name: upgrade-lre-gcp
   jobs:
@@ -499,14 +506,14 @@ jobs:
   on_failure:
     <<: *notify_slack
 
-- name: wipe-vsphere-post-install
+- name: final-wipe-vsphere
   plan:
   - aggregate:
     - get: pcf-pipelines
       passed: [ trigger-install-pcf-vsphere ]
+      trigger: true
     - get: vsphere-lock
       passed: [ trigger-install-pcf-vsphere ]
-      trigger: true
     - get: pivnet-rc
       passed: [ trigger-install-pcf-vsphere ]
     - get: rootfs-tag
@@ -517,6 +524,9 @@ jobs:
       <<: *atc_creds
       JOBS: |
         rc-vsphere-install/wipe-env
+  - try:
+      put: vsphere-lock
+      params: {release: vsphere-lock}
   on_failure:
     <<: *notify_slack
 
@@ -717,6 +727,30 @@ jobs:
       JOBS: |
         rc-gcp-upgrade-pas-tile/upload-and-stage-tile
         rc-gcp-upgrade-pas-tile/apply-changes
+  on_failure:
+    <<: *notify_slack
+
+- name: final-wipe-gcp
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ trigger-rc-gcp-upgrade-pas-tile ]
+      trigger: true
+    - get: gcp-lock
+      passed: [ trigger-rc-gcp-upgrade-pas-tile ]
+    - get: pivnet-rc
+      passed: [ trigger-rc-gcp-upgrade-pas-tile ]
+    - get: rootfs-tag
+      passed: [ trigger-rc-gcp-upgrade-pas-tile ]
+  - task: trigger-gcp-rc-wipe-env
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-gcp-install/wipe-env
+  - try:
+      put: gcp-lock
+      params: {release: gcp-lock}
   on_failure:
     <<: *notify_slack
 
@@ -942,6 +976,30 @@ jobs:
   on_failure:
     <<: *notify_slack
 
+- name: final-wipe-azure
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ trigger-install-pcf-azure ]
+      trigger: true
+    - get: azure-lock
+      passed: [ trigger-install-pcf-azure ]
+    - get: pivnet-rc
+      passed: [ trigger-install-pcf-azure ]
+    - get: rootfs-tag
+      passed: [ trigger-install-pcf-azure ]
+  - task: trigger-azure-rc-wipe-env
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-azure-install/wipe-env
+  - try:
+      put: azure-lock
+      params: {release: azure-lock}
+  on_failure:
+    <<: *notify_slack
+
 ####### END Azure
 ####### AWS
 
@@ -1050,6 +1108,30 @@ jobs:
   on_failure:
     <<: *notify_slack
 
+- name: final-wipe-aws
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ trigger-install-pcf-aws ]
+      trigger: true
+    - get: aws-lock
+      passed: [ trigger-install-pcf-aws ]
+    - get: pivnet-rc
+      passed: [ trigger-install-pcf-aws ]
+    - get: rootfs-tag
+      passed: [ trigger-install-pcf-aws ]
+  - task: trigger-aws-rc-wipe-env
+    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+    params:
+      <<: *atc_creds
+      JOBS: |
+        rc-aws-install/wipe-env
+  - try:
+      put: aws-lock
+      params: {release: aws-lock}
+  on_failure:
+    <<: *notify_slack
+
 ####### END AWS
 
 - name: check-environments-complete
@@ -1104,14 +1186,6 @@ jobs:
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
-      - get: gcp-lock
-        resource: gcp-lock
-        passed: [trigger-rc-gcp-upgrade-pas-tile]
-      - try:
-          put: gcp-lock
-          resource: gcp-lock
-          params: {release: gcp-lock}
-
     - do:
       - task: check-vsphere
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1121,11 +1195,6 @@ jobs:
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
-      - get: vsphere-lock
-        passed: [ trigger-install-pcf-vsphere ]
-      - try:
-          put: vsphere-lock
-          params: {release: vsphere-lock}
     - do:
       - task: check-azure
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1135,11 +1204,6 @@ jobs:
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
-      - get: azure-lock
-        passed: [ trigger-install-pcf-azure ]
-      - try:
-          put: azure-lock
-          params: {release: azure-lock}
     - do:
       - task: check-aws
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
@@ -1149,11 +1213,6 @@ jobs:
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
-      - get: aws-lock
-        passed: [ trigger-install-pcf-aws ]
-      - try:
-          put: aws-lock
-          params: {release: aws-lock}
 
 - name: publish-release
   serial_groups: [version]
