@@ -59,28 +59,48 @@ director_configuration=$(
     }'
 )
 
+cp terraform-state/terraform.tfstate ./
+
+VIRTUAL_NETWORK=$(terraform output network_name)
+
+MANAGEMENT_SUBNET=$(terraform output management_subnet_name)
+MANAGEMENT_CIDRS=$(terraform output management_subnet_cidrs)
+MANAGEMENT_GATEWAY=$(terraform output management_subnet_gateway)
+
+PAS_SUBNET=$(terraform output management_subnet_name)
+PAS_CIDRS=$(terraform output management_subnet_cidrs)
+PAS_GATEWAY=$(terraform output management_subnet_gateway)
+
+SERVICES_SUBNET=$(terraform output management_subnet_name)
+SERVICES_CIDRS=$(terraform output management_subnet_cidrs)
+SERVICES_GATEWAY=$(terraform output management_subnet_gateway)
+
+DYNAMIC_SERVICES_SUBNET=$(terraform output management_subnet_name)
+DYNAMIC_SERVICES_CIDRS=$(terraform output management_subnet_cidrs)
+DYNAMIC_SERVICES_GATEWAY=$(terraform output management_subnet_gateway)
+
 networks_configuration=$(
   jq -n \
-    --arg infra_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-management-subnet" \
-    --arg infra_subnet_cidr "${AZURE_TERRAFORM_SUBNET_INFRA_CIDR}" \
+    --arg infra_subnet_iaas "${VIRTUAL_NETWORK}/${MANAGEMENT_SUBNET}" \
+    --arg infra_subnet_cidr "${MANAGEMENT_CIDRS}" \
     --arg infra_subnet_reserved "${AZURE_TERRAFORM_SUBNET_INFRA_RESERVED}" \
     --arg infra_subnet_dns "${AZURE_TERRAFORM_SUBNET_INFRA_DNS}" \
-    --arg infra_subnet_gateway "${AZURE_TERRAFORM_SUBNET_INFRA_GATEWAY}" \
-    --arg ert_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-pas-subnet" \
-    --arg ert_subnet_cidr "${AZURE_TERRAFORM_SUBNET_ERT_CIDR}" \
+    --arg infra_subnet_gateway "${MANAGEMENT_GATEWAY}" \
+    --arg ert_subnet_iaas "${VIRTUAL_NETWORK}/${PAS_SUBNET}" \
+    --arg ert_subnet_cidr "${PAS_CIDRS}" \
     --arg ert_subnet_reserved "${AZURE_TERRAFORM_SUBNET_ERT_RESERVED}" \
     --arg ert_subnet_dns "${AZURE_TERRAFORM_SUBNET_ERT_DNS}" \
-    --arg ert_subnet_gateway "${AZURE_TERRAFORM_SUBNET_ERT_GATEWAY}" \
-    --arg services_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-services-subnet" \
-    --arg services_subnet_cidr "${AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR}" \
+    --arg ert_subnet_gateway "${PAS_GATEWAY}" \
+    --arg services_subnet_iaas "${VIRTUAL_NETWORK}/${SERVICES_SUBNET}" \
+    --arg services_subnet_cidr "${SERVICES_CIDRS}" \
     --arg services_subnet_reserved "${AZURE_TERRAFORM_SUBNET_SERVICES1_RESERVED}" \
     --arg services_subnet_dns "${AZURE_TERRAFORM_SUBNET_SERVICES1_DNS}" \
-    --arg services_subnet_gateway "${AZURE_TERRAFORM_SUBNET_SERVICES1_GATEWAY}" \
-    --arg dynamic_services_subnet_iaas "${AZURE_TERRAFORM_PREFIX}-virtual-network/${AZURE_TERRAFORM_PREFIX}-dynamic-services-subnet" \
-    --arg dynamic_services_subnet_cidr "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR}" \
+    --arg services_subnet_gateway "${SERVICES_GATEWAY}" \
+    --arg dynamic_services_subnet_iaas "${VIRTUAL_NETWORK}/${DYNAMIC_SERVICES_SUBNET}" \
+    --arg dynamic_services_subnet_cidr "${DYNAMIC_SERVICES_CIDRS}" \
     --arg dynamic_services_subnet_reserved "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_RESERVED}" \
     --arg dynamic_services_subnet_dns "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_DNS}" \
-    --arg dynamic_services_subnet_gateway "${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_GATEWAY}" \
+    --arg dynamic_services_subnet_gateway "${DYNAMIC_SERVICES_GATEWAY}" \
     '{
       "icmp_checks_enabled": false,
       "networks": [
