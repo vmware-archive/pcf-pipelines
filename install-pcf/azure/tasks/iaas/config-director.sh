@@ -165,7 +165,7 @@ om-linux \
   --skip-ssl-validation \
   --username "$PCF_OPSMAN_ADMIN" \
   --password "$PCF_OPSMAN_ADMIN_PASSWORD" \
-  configure-bosh \
+  configure-director \
   --iaas-configuration "${iaas_configuration}" \
   --director-configuration "${director_configuration}" \
   --networks-configuration "${networks_configuration}" \
