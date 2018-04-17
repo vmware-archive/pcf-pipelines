@@ -17,7 +17,6 @@ run:
   path: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.sh
 
 params:
-  ARG_WIPE:
   AZURE_PCF_TERRAFORM_TEMPLATE:
   AZURE_SUBSCRIPTION_ID:
   AZURE_TENANT_ID:

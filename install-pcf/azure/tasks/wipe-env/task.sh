@@ -81,14 +81,6 @@ function delete-infrastructure() {
 }
 
 function main() {
-  if [[ "${ARG_WIPE}" == "wipe" ]]; then
-    echo "Wiping Environment...."
-  else
-    echo "Need Args [0]=wipe, anything else and I swear I'll exit and do nothing!!! "
-    echo "Example: ./wipe-env.sh wipe ..."
-    exit 0
-  fi
-
   delete-opsman-installation
   delete-opsman
   delete-infrastructure

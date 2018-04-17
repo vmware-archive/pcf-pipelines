@@ -117,7 +117,6 @@ jobs:
   - task: wipe-env
     file: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.yml
     params:
-      ARG_WIPE: {{arg_wipe}}
       AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
       AZURE_TENANT_ID: {{azure_tenant_id}}
       AZURE_CLIENT_ID: {{azure_client_id}}

@@ -1,9 +1,6 @@
 # Whether to allow SSH access to application instances
 allow_app_ssh_access: false
 
-# Change to anything other than 'wipe' to bypass the wipe-env job
-arg_wipe: wipe
-
 authentication_mode: internal
 
 # If the azure_storage_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid storage account name.
