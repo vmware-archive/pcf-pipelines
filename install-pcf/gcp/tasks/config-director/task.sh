@@ -158,8 +158,12 @@ network_assignment=$(
     --arg network "infrastructure" \
     '
     {
-      "singleton_availability_zone": ($availability_zones | split(",") | .[0]),
-      "network": $network
+      "singleton_availability_zone": {
+        "name": ($availability_zones | split(",") | .[0])
+      },
+      "network": {
+        "name": $network
+      }
     }'
 )
 
