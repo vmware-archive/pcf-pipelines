@@ -1083,8 +1083,8 @@ jobs:
       - task: check-lre-gcp-upgrade-ops-manager
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
         params:
-          PIPELINE: trigger-lre-gcp-upgrade-ops-manager
-          JOB: apply-changes
+          PIPELINE: lre-gcp-upgrade-ops-manager
+          JOB: upgrade-opsmgr
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
@@ -1099,7 +1099,7 @@ jobs:
       - task: check-rc-gcp-upgrade-pas-tile
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
         params:
-          PIPELINE: trigger-rc-gcp-upgrade-pas-tile
+          PIPELINE: rc-gcp-upgrade-pas-tile
           JOB: apply-changes
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
