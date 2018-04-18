@@ -4,12 +4,12 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: czero/rootfs}
+  source:
+    repository: pcfnorm/rootfs
+
 
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
-  OPSMAN_CLIENT_ID:
-  OPSMAN_CLIENT_SECRET:
   OPS_MGR_USR:
   OPS_MGR_PWD:
   VCENTER_HOST:
@@ -38,7 +38,6 @@ params:
   DEPLOYMENT_NW_GATEWAY:
   DEPLOYMENT_NW_AZS:
   SERVICES_NETWORK_NAME:
-  IS_SERVICE_NETWORK:
   SERVICES_VCENTER_NETWORK:
   SERVICES_NW_CIDR:
   SERVICES_EXCLUDED_RANGE:

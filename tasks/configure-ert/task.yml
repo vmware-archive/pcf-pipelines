@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
 
 inputs:
 - name: pcf-pipelines
@@ -15,21 +15,23 @@ run:
 
 params:
   pcf_iaas:
-  pcf_ert_domain:
-  OPSMAN_CLIENT_ID:
-  OPSMAN_CLIENT_SECRET:
+  PCF_ERT_DOMAIN:
+  SYSTEM_DOMAIN:
+  APPS_DOMAIN:
   OPS_MGR_USR:
   OPS_MGR_PWD:
   pcf_az_1:
   pcf_az_2:
   pcf_az_3:
-  pcf_ert_ssl_cert:
-  pcf_ert_ssl_key:
+  POE_SSL_NAME1:
+  POE_SSL_CERT1:
+  POE_SSL_KEY1:
   terraform_prefix:
   HAPROXY_FORWARD_TLS:
   HAPROXY_BACKEND_CA:
   ROUTER_TLS_CIPHERS:
   HAPROXY_TLS_CIPHERS:
+  FRONTEND_IDLE_TIMEOUT:
   INTERNET_CONNECTED:
   CONTAINER_NETWORKING_NW_CIDR:
   # IaaS Specific for GCP only
@@ -37,16 +39,6 @@ params:
   gcp_storage_secret_key:
   # aws specific
   S3_ENDPOINT:
-  # azure specific
-  pcf_ert_saml_cert:
-  pcf_ert_saml_key:
-  pcf_ert_networking_pointofentry:
-  azure_access_key:
-  azure_account_name:
-  azure_buildpacks_container:
-  azure_droplets_container:
-  azure_packages_container:
-  azure_resources_container:
   # db credentials
   db_app_usage_service_username:
   db_app_usage_service_password:
@@ -87,5 +79,14 @@ params:
   db_silk_username:
   db_silk_password:
   routing_disable_http:
+  ROUTING_CUSTOM_CA_CERTIFICATES:
+  ROUTING_TLS_TERMINATION:
   SECURITY_ACKNOWLEDGEMENT:
   ert_database_type:
+  CREDUB_ENCRYPTION_KEY_NAME1:
+  CREDUB_ENCRYPTION_KEY_SECRET1:
+  CREDUB_ENCRYPTION_KEY_NAME2:
+  CREDUB_ENCRYPTION_KEY_SECRET2:
+  CREDUB_ENCRYPTION_KEY_NAME3:
+  CREDUB_ENCRYPTION_KEY_SECRET3:
+  CREDHUB_PRIMARY_ENCRYPTION_NAME:

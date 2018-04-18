@@ -5,9 +5,9 @@
 - [Add a task to a job](#add-task-to-job)
 - [Add a task to a job after a specific task](#add-task-to-job-after-another-task)
 - [Replace a resource definition in the pipeline YML](#replace-resource-definition)
+- [Add email notifications to an existing pipeline](#add-email-nofitications)
 - [Change the trigger flag of a job resource](#change-trigger-flag)
 - [Additional operations samples](#additional-operations-samples)
-
 
 ---
 
@@ -117,7 +117,7 @@ resources:
   source:  
     uri: git@github.com:pivotal-cf/pcf-pipelines.git  
     branch: master  
-    private_key: {{git_private_key}}  
+    private_key: ((git_private_key))  
 ```  
 2. Operations file: `replace-resource.yml`  
 ```  
@@ -128,7 +128,7 @@ resources:
     name: pcf-pipelines
     type: pivnet  
     source:  
-      api_token: "{{pivnet_token}}"  
+      api_token: "((pivnet_token))"  
       product_slug: pcf-automation  
       product_version: ~  
 ```  
@@ -142,10 +142,29 @@ resources:
 - name: pcf-pipelines
   type: pivnet  
   source:  
-    api_token: "{{pivnet_token}}"  
+    api_token: "((pivnet_token))"  
     product_slug: pcf-automation  
     product_version: ~    
 ```  
+
+
+---
+
+
+### <a name="add-email-nofitications"> Add email notification to an existing pipeline
+
+For a sample on how to add email notification to all jobs of a pipeline (e.g. for [upgrade-tile.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/upgrade-tile/pipeline.yml)), see  [add-email-nofication-to-upgrade-tile.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/operations/add-email-nofication-to-upgrade-tile.yml).
+
+The operations file injects entries to `resource_types` and `resources` arrays for the email resource and then adds email notification actions for *success* and *failure* scenarios to the pipeline jobs.
+
+1. Source YAML:  [upgrade-tile.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/upgrade-tile/pipeline.yml)  
+
+2. Operations file:  [add-email-nofication-to-upgrade-tile.yml](https://github.com/pivotal-cf/pcf-pipelines/blob/master/operations/add-email-nofication-to-upgrade-tile.yml)  
+
+3. Execute yaml-patch command  
+   `cat upgrade-tile.yml | yaml-patch -o add-email-nofication-to-upgrade-tile.yml > upgrade-tile-with-notifications.yml`    
+
+4. Resulting patched file: `upgrade-tile-with-notifications.yml`  
 
 
 ---

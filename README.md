@@ -1,13 +1,29 @@
-# PCF Pipelines
-
-**Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability. Using this repo directly may result in breaking the pipelines that consume it. Tracking master is considered unstable.**
-
-This is a collection of [Concourse](https://concourse.ci) pipelines for
+This is a collection of [Concourse](https://concourse-ci.org) pipelines for
 installing and upgrading [Pivotal Cloud Foundry](https://pivotal.io/platform).
 
 Other pipelines which may be of interest are listed at the end of this README.
 
 ![Concourse Pipeline](install-pcf/gcp/embed.png)
+
+
+### Downloading PCF Pipelines
+
+**Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability. Tracking master is considered unstable, and is likely to result in breaking the pipelines that consume it.  If you are an internal Pivotal person (or partner), please contact the pcf-norm team to gain access to this release.**
+
+If you do not have access to the Pivotal Network release, and you are using the GitHub release, for stability, please ensure you are tagging the pipeline.yml:
+
+```
+ resources:
+  - name: pcf-pipelines
+  type: git
+  source:
+    uri: https://github.com/pivotal-cf/pcf-pipelines
+    branch: master
+    username: ((github_username))
+    password: ((github_token))
+    tag_filter: v0.23.0
+```
+
 
 ### Install-PCF pipelines
 Deploys PCF for whichever IaaS you choose. For public cloud installs, such as AWS, Azure, and GCP, the pipeline will deploy the necessary infrastructure in the public cloud, such as the networks, loadbalancers, and databases, and use these resources to then deploy PCF (Ops Manager and Elastic Runtime). On-premise private datacenter install pipelines, such as with vSphere and Openstack, do not provision any infrastructure resources and only deploy PCF, using resources that are specified in the parameters of the pipeline.
@@ -21,11 +37,19 @@ These pipelines are found in the `install-pcf` directory, sorted by IaaS.
 
 | IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |
-| vSphere | v21 | 1.12.x  | 1.12.x  |
-| Azure | v21 | 1.12.x | 1.12.x |
-| AWS | v21 | 1.12.x | 1.12.x |
-| GCP | v21 | 1.12.x  | 1.12.x  |
-| OpenStack | v21 | 1.12.x  | 1.12.x  |
+| vSphere | v23.1 | 2.0.x  | 2.0.x  |
+| Azure | v23.1 | 2.0.x | 2.0.x |
+| AWS | v23.1 | 2.0.x | 2.0.x |
+| GCP | v23.1 | 2.0.x  | 2.0.x  |
+| OpenStack | v23 | 2.0.x  | 2.0.x  |
+
+| IAAS | pipelines release | OM version | ERT version |
+| :--- | --- | --- | --- |
+| vSphere | v22 | 1.12.x  | 1.12.x  |
+| Azure | v22 | 1.12.x | 1.12.x |
+| AWS | v22 | 1.12.x | 1.12.x |
+| GCP | v22 | 1.12.x  | 1.12.x  |
+| OpenStack | v22 | 1.12.x  | 1.12.x  |
 
 
 | IAAS | pipelines release | OM version | ERT version |
@@ -48,8 +72,8 @@ The upgrade-tile pipeline is compatible with the latest version of pcf-pipelines
 
 ## Prerequisites
 
-- [install a Concourse server](https://concourse.ci/installing.html)
-- download the [Fly CLI](https://concourse.ci/fly-cli.html) to interact with the Concourse server
+- [install a Concourse server](https://concourse-ci.org/installing.html)
+- download the [Fly CLI](https://concourse-ci.org/fly-cli.html) to interact with the Concourse server
 - depending on where you've installed Concourse, you may need to set up
 [additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
 third-party sources of pipeline dependencies
@@ -174,14 +198,14 @@ The pipelines and tasks in this repo follow a simple pattern which must be adher
 
 Each pipeline has a `pipeline.yml`, which contains the YAML for a single
 Concourse pipeline. Pipelines typically require parameters, either for resource
-names or for credentials, which are supplied externally via `{{placeholders}}`.
+names or for credentials, which are supplied externally via `((placeholders))`.
 
 A pipeline may have a `params.yml` file which is a template for the parameters
 that the pipeline requires. This template should have placeholder values,
 typically CHANGEME, or defaults where appropriate. This file should be filled
 out and stored elsewhere, such as in LastPass, and then supplied to `fly` via
 the `-l` flag. See the
-[fly documentation](http://concourse.ci/fly-set-pipeline.html) for more.
+[fly documentation](http://concourse-ci.org/fly-set-pipeline.html) for more.
 
 #### Pipelines
 

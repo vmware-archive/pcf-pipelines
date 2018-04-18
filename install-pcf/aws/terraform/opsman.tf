@@ -1,5 +1,5 @@
 # Create OpsMan instance
-resource "aws_instance" "opsmman_az1" {
+resource "aws_instance" "opsman_az1" {
     ami = "${var.opsman_ami}"
     availability_zone = "${var.aws_az1}"
     instance_type = "${var.opsman_instance_type}"
@@ -16,6 +16,6 @@ resource "aws_instance" "opsmman_az1" {
 }
 
 resource "aws_eip" "opsman" {
-  instance = "${aws_instance.opsmman_az1.id}"
+  instance = "${aws_instance.opsman_az1.id}"
   vpc      = true
 }

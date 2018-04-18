@@ -7,7 +7,7 @@
     source:
       endpoint: {{artifactory_endpoint}}
       repository: {{artifactory_repository}}
-      regex: {{artifactory_regex}} 
+      regex: {{artifactory_regex}}
       username: {{artifactory_username}}
       password: {{artifactory_password}}
       skip_ssl_verification: true

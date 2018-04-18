@@ -63,13 +63,15 @@ terraform plan \
   -var "azure_terraform_subnet_dynamic_services_cidr=${AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR}" \
   -var "ert_subnet_id=${ERT_SUBNET}" \
   -var "pcf_ert_domain=${PCF_ERT_DOMAIN}" \
+  -var "system_domain=${SYSTEM_DOMAIN}" \
+  -var "apps_domain=${APPS_DOMAIN}" \
   -var "ops_manager_image_uri=${PCF_OPSMAN_IMAGE_URI}" \
   -var "vm_admin_username=${AZURE_VM_ADMIN}" \
   -var "vm_admin_public_key=${PCF_SSH_KEY_PUB}" \
   -var "azure_multi_resgroup_network=${AZURE_MULTI_RESGROUP_NETWORK}" \
   -var "azure_multi_resgroup_pcf=${AZURE_MULTI_RESGROUP_PCF}" \
-  -var "priv_ip_opsman_vm=${AZURE_TERRAFORM_OPSMAN_PRIV_IP}" \
-  -var "azure_account_name=${AZURE_ACCOUNT_NAME}" \
+  -var "azure_opsman_priv_ip=${AZURE_TERRAFORM_OPSMAN_PRIV_IP}" \
+  -var "azure_storage_account_name=${AZURE_STORAGE_ACCOUNT_NAME}" \
   -var "azure_buildpacks_container=${AZURE_BUILDPACKS_CONTAINER}" \
   -var "azure_droplets_container=${AZURE_DROPLETS_CONTAINER}" \
   -var "azure_packages_container=${AZURE_PACKAGES_CONTAINER}" \

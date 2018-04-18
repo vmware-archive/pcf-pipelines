@@ -26,7 +26,7 @@ output "opsman_eip" {
     value = "${aws_eip.opsman.public_ip}"
 }
 output "opsman_identifier" {
-    value = "${aws_instance.opsmman_az1.tags.Name}"
+    value = "${aws_instance.opsman_az1.tags.Name}"
 }
 # s3 buckets
 output "s3_pcf_bosh" {

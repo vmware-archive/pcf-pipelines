@@ -6,9 +6,17 @@ This pipeline assumes all of the infrastructure required to run a
 PCF deployment on Openstack per the Customer[0] has been pre-provisioned [reference
 architecture](http://docs.pivotal.io/pivotalcf/1-10/refarch/openstack/openstack_ref_arch.html).
 
+## Prerequisites
+
+- [install a Concourse server](https://concourse-ci.org/installing.html)
+- download the [Fly CLI](https://concourse-ci.org/fly-cli.html) to interact with the Concourse server
+- depending on where you've installed Concourse, you may need to set up
+[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
+third-party sources of pipeline dependencies
+
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
+This pipeline downloads artifacts from DockerHub (pcfnorm/rootfs and custom
 docker-image resources) and Pivotal Network, and as such the Concourse instance
 must have access to those.
 
@@ -18,15 +26,15 @@ must have access to those.
 2. Update params.yml and replace all #CHANGEME values with the relevant information.
 
     - The sample pipeline params file includes 2 params that set the major/minor versions of
-      OpsMan and ERT that will be pulled. They will typically default to the latest RC/GA available tiles.
+      OpsMan and ERT that will be pulled. They will typically default to the latest available tiles.
       ```
-      opsman_major_minor_version: '1\.12\..*'
-      ert_major_minor_version: '1\.12\..*'
+      opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions) 
+      ert_major_minor_version: ^2\.0\.[0-9]+$ # ERT minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions) 
       ```
 
     - NOTE: The pipeline also utilizes an s3 compatible bucket for terraform state.
 
-3. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
+3. [Set the pipeline](http://concourse-ci.org/single-page.html#fly-set-pipeline), using your updated params.yml:
 
     ```
     fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml

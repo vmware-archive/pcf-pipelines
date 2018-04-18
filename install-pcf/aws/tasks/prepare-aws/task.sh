@@ -41,6 +41,8 @@ terraform plan \
   -var "aws_az3=${aws_az3}" \
   -var "route53_zone_id=${route53_zone_id}" \
   -var "vpc_cidr=${vpc_cidr}" \
+  -var "system_domain=${system_domain}" \
+  -var "apps_domain=${apps_domain}" \
   -var "public_subnet_cidr_az1=${public_subnet_cidr_az1}" \
   -var "public_subnet_cidr_az2=${public_subnet_cidr_az2}" \
   -var "public_subnet_cidr_az3=${public_subnet_cidr_az3}" \

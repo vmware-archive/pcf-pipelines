@@ -1,0 +1,5 @@
+# service principal id for NETWORK (generated - populate after running azure-prepare-env.sh)
+azure_network_service_principal_client_id:
+
+# service principal id for PCF BOSH to use (generated - populate after running azure-prepare-env.sh)
+azure_pcf_service_principal_client_id:

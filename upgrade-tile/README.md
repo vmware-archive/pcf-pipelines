@@ -57,7 +57,7 @@ upgrade from `--.--.n` to `--.--.n+1`.
    communicate with PivNet and OpsMan. Fill it out with the necessary values and
    store it in a safe place.
 
-4. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
+4. [Set the pipeline](http://concourse-ci.org/single-page.html#fly-set-pipeline), using your updated params.yml:
 
    ```
    fly -t lite set-pipeline -p upgrade-your-tile -c pipeline.yml -l params.yml
@@ -80,3 +80,19 @@ cat upgrade-tile/pipeline.yml | yaml-patch -o /operations/gated-apply-changes-jo
 ```
 
 For a mechanism to run the `Apply-Changes` job manually or on a scheduled basis, refer to the ["apply-updates"](https://github.com/pivotal-cf/pcf-pipelines/blob/master/apply-updates) pipeline.
+
+
+## Troubleshooting
+
+## Known Issues
+
+#### Issue: #### 
+Since the upgrade-tile pipeline pulls stemcells from PivNet, if any of your tiles are using non-ubuntu stemcells (CentOS, for example) you won't be able to use the upgrade-tile pipeline to upgrade your tile. 
+
+#### Error message: ####
+   ```
+   could not resolve template vars: yaml: line 67: did not find expected key”
+   ```
+
+   **Solution:** Please use the PivNet release of the pipelines. You will run into this issue if you use the GitHub v0.21.1 version of the pcf-pipelines release. As a fix, navigate to the upgrade-tile pipeline and to `pipeline.yml`. Remove the quotes around `"((product_globs))"` on line 67. You should be able to fly the pipeline now.
+

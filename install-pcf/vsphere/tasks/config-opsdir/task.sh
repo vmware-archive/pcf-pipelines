@@ -42,8 +42,7 @@ iaas_configuration=$(
 )
 
 az_configuration=$(cat <<-EOF
-{
-  "availability_zones": [
+ [
     {
       "name": "$AZ_1",
       "cluster": "$AZ_1_CLUSTER_NAME",
@@ -59,8 +58,7 @@ az_configuration=$(cat <<-EOF
       "cluster": "$AZ_3_CLUSTER_NAME",
       "resource_pool": "$AZ_3_RP_NAME"
     }
-  ]
-}
+ ]
 EOF
 )
 
@@ -81,7 +79,6 @@ network_configuration=$(
     --arg deployment_dns "$DEPLOYMENT_NW_DNS" \
     --arg deployment_gateway "$DEPLOYMENT_NW_GATEWAY" \
     --arg deployment_availability_zones "$DEPLOYMENT_NW_AZS" \
-    --argjson services_network_is_service_network $IS_SERVICE_NETWORK \
     --arg services_network_name "$SERVICES_NETWORK_NAME" \
     --arg services_vcenter_network "$SERVICES_VCENTER_NETWORK" \
     --arg services_network_cidr "$SERVICES_NW_CIDR" \
@@ -110,7 +107,7 @@ network_configuration=$(
               "reserved_ip_ranges": $infra_reserved_ip_ranges,
               "dns": $infra_dns,
               "gateway": $infra_gateway,
-              "availability_zones": ($infra_availability_zones | split(","))
+              "availability_zone_names": ($infra_availability_zones | split(","))
             }
           ]
         },
@@ -124,13 +121,13 @@ network_configuration=$(
               "reserved_ip_ranges": $deployment_reserved_ip_ranges,
               "dns": $deployment_dns,
               "gateway": $deployment_gateway,
-              "availability_zones": ($deployment_availability_zones | split(","))
+              "availability_zone_names": ($deployment_availability_zones | split(","))
             }
           ]
         },
         {
           "name": $services_network_name,
-          "service_network": $services_network_is_service_network,
+          "service_network": false,
           "subnets": [
             {
               "iaas_identifier": $services_vcenter_network,
@@ -138,7 +135,7 @@ network_configuration=$(
               "reserved_ip_ranges": $services_reserved_ip_ranges,
               "dns": $services_dns,
               "gateway": $services_gateway,
-              "availability_zones": ($services_availability_zones | split(","))
+              "availability_zone_names": ($services_availability_zones | split(","))
             }
           ]
         },
@@ -152,7 +149,7 @@ network_configuration=$(
               "reserved_ip_ranges": $dynamic_services_reserved_ip_ranges,
               "dns": $dynamic_services_dns,
               "gateway": $dynamic_services_gateway,
-              "availability_zones": ($dynamic_services_availability_zones | split(","))
+              "availability_zone_names": ($dynamic_services_availability_zones | split(","))
             }
           ]
         }
@@ -188,35 +185,33 @@ jq -n \
   --arg network "$INFRA_NETWORK_NAME" \
   '
   {
-    "singleton_availability_zone": ($infra_availability_zones | split(",") | .[0]),
-    "network": $network
+  "singleton_availability_zone": {
+    "name": ($infra_availability_zones | split(",") | .[0])
+  },
+  "network": {
+    "name": $network
+  }
   }'
 )
 
-echo "Configuring IaaS and Director..."
+echo "Configuring IaaS, AZ and Director..."
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --client-id "${OPSMAN_CLIENT_ID}" \
-  --client-secret "${OPSMAN_CLIENT_SECRET}" \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
-  configure-bosh \
+  configure-director \
   --iaas-configuration "$iaas_configuration" \
-  --director-configuration "$director_config"
+  --director-configuration "$director_config" \
+  --az-configuration "$az_configuration"
 
-om-linux -t https://$OPSMAN_DOMAIN_OR_IP_ADDRESS -k -u $OPS_MGR_USR -p $OPS_MGR_PWD \
-  curl -p "/api/v0/staged/director/availability_zones" \
-  -x PUT -d "$az_configuration"
-
+echo "Configuring Network and Security..."
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --client-id "${OPSMAN_CLIENT_ID}" \
-  --client-secret "${OPSMAN_CLIENT_SECRET}" \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
-  configure-bosh \
+  configure-director \
   --networks-configuration "$network_configuration" \
   --network-assignment "$network_assignment" \
   --security-configuration "$security_configuration"

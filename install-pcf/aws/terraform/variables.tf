@@ -115,6 +115,9 @@ variable "nat_ip_az2" {
     default = "10.0.1.6"
 }
 
+variable "apps_domain" {}
+variable "system_domain" {}
+
 /*
   Availability Zone 3
 */

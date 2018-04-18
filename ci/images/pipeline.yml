@@ -6,29 +6,39 @@ resource_types:
     tag: latest
 
 resources:
+- name: version
+  type: semver
+  source:
+    driver: git
+    initial_version: 1.0.0
+    uri: git@github.com:pivotal-cf/pcf-pipelines.git
+    private_key: {{git_private_key}}
+    branch: version
+    file: docker-version
+
 - name: pcf-pipelines
   type: git
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
     branch: master
-    private_key: ((git_private_key))
+    private_key: {{git_private_key}}
     paths: [ci/Dockerfile]
 
 - name: pcf-pipelines-image
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
     tag: latest
-    username: czero
-    password: ((czero_dockerhub_password))
+    username: {{dockerhub_username}}
+    password: {{dockerhub_password}}
 
 - name: pcf-pipelines-image-rc
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
     tag: release-candidate
-    username: czero
-    password: ((czero_dockerhub_password))
+    username: {{dockerhub_username}}
+    password: {{dockerhub_password}}
 
 - name: cflinuxfs2
   type: docker-image
@@ -41,71 +51,69 @@ resources:
   source:
     user: pivotal-cf
     repository: om
-    access_token: ((github_token))
+    access_token: {{github_token}}
 
 - name: semver-cli
   type: github-release
   source:
     user: christianang
     repository: semver-cli
-    access_token: ((github_token))
+    access_token: {{github_token}}
 
 - name: yaml-patch
   type: github-release
   source:
     user: pivotal-cf
     repository: yaml-patch
-    access_token: ((github_token))
-
-- name: cf-cli-tarball
-  type: s3
-  source:
-    bucket: cf-cli-releases
-    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
-    region_name: us-west-1
-    access_key_id: ((aws_access_key_id))
-    secret_access_key: ((aws_secret_access_key))
+    access_token: {{github_token}}
 
 - name: cliaas
   type: github-release
   source:
     user: pivotal-cf
     repository: cliaas
-    access_token: ((github_token))
+    access_token: {{github_token}}
 
 - name: pivnet-cli
   type: github-release
   source:
     user: pivotal-cf
     repository: pivnet-cli
-    access_token: ((github_token))
+    access_token: {{github_token}}
 
 - name: govc
   type: github-release
   source:
     user: vmware
     repository: govmomi
-    access_token: ((github_token))
+    access_token: {{github_token}}
 
 - name: stemcell-downloader
   type: github-release
   source:
     user: pivotal-cf
     repository: pcf-product-stemcell-downloader
-    access_token: ((github_token))
+    access_token: {{github_token}}
 
 - name: steamroll
   type: github-release
   source:
     user: pivotal-cf
     repository: concourse-pipeline-steamroller
-    access_token: ((github_token))
+    access_token: {{github_token}}
 
 - name: terraform
-  type: curl
+  type: github-release
   source:
-    url: https://releases.hashicorp.com/terraform/0.11.0/terraform_0.11.0_linux_amd64.zip
-    filename: terraform.zip
+    user: hashicorp
+    repository: terraform
+    access_token: {{github_token}}
+
+- name: terraforming-azure
+  type: git
+  source:
+     uri: https://github.com/dtimm/terraforming-azure.git
+     branch: improve-configurability
 
 - name: jq
   type: curl
@@ -129,7 +137,6 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: om
       params: {globs: ["*linux*"]}
-    - get: cf-cli-tarball
     - get: cliaas
       params: {globs: ["*linux*"]}
     - get: pivnet-cli
@@ -141,6 +148,7 @@ jobs:
     - get: steamroll
       params: {globs: ["*linux*"]}
     - get: terraform
+    - get: terraforming-azure
     - get: jq
 
   - task: prepare-workspace
@@ -148,19 +156,21 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: czero/rootfs}
+        source:
+          repository: pcfnorm/rootfs
+
       inputs:
       - name: pcf-pipelines
       - name: om
       - name: yaml-patch
       - name: semver-cli
-      - name: cf-cli-tarball
       - name: cliaas
       - name: pivnet-cli
       - name: govc
       - name: stemcell-downloader
       - name: steamroll
       - name: terraform
+      - name: terraforming-azure
       - name: jq
       outputs:
       - name: workspace
@@ -181,14 +191,20 @@ jobs:
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           cp steamroll/steamroll_linux workspace/steamroll
 
-          tar -C workspace -xf cf-cli-tarball/*.tgz cf
+          terraform_version=$(cat terraform/tag | awk '{print substr($1,2);}')
+          wget -O /tmp/tf.zip "https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip"
+          unzip -d workspace /tmp/tf.zip
+
+          wget -O /tmp/cf.tgz 'https://packages.cloudfoundry.org/stable?release=linux64-binary&source=github-rel'
+          tar xzf /tmp/cf.tgz -C /tmp
+          cp /tmp/cf workspace/cf
 
           gunzip govc/govc_linux_amd64.gz
           cp govc/govc_linux_amd64 workspace/govc
 
-          unzip -d workspace terraform/terraform.zip
-
           chmod +x workspace/*
+
+          mv terraforming-azure workspace/terraforming-azure
 
           cp pcf-pipelines/ci/Dockerfile workspace
 
@@ -200,6 +216,8 @@ jobs:
 - name: test-pcf-pipelines-image
   serial_groups: [pcf-pipelines-image]
   plan:
+  - get: cliaas
+    passed: [build-pcf-pipelines-image]
   - get: pcf-pipelines-image-rc
     trigger: true
     passed: [build-pcf-pipelines-image]
@@ -211,7 +229,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
           tag: release-candidate
       run:
         path: sh
@@ -241,12 +259,20 @@ jobs:
 - name: promote-image
   serial_groups: [pcf-pipelines-image]
   plan:
+  - get: cliaas
+    passed: [test-pcf-pipelines-image]
   - get: pcf-pipelines-image-rc
     passed: [test-pcf-pipelines-image]
     trigger: true
     params:
       save: true
+  - get: version
+    params:
+      bump: patch
   - put: pcf-pipelines-image
     params:
       load: pcf-pipelines-image-rc
-      tag_as_latest: true
+      tag: version/version
+  - put: version
+    params:
+      file: version/version

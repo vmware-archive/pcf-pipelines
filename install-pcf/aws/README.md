@@ -1,14 +1,21 @@
 # PCF on AWS
 
-![Concourse Pipeline](embed.png)
-
 This pipeline uses Terraform to create the infrastructure required to run a
 3 AZ PCF deployment on AWS per the Customer[0] [reference
-architecture](http://docs.pivotal.io/pivotalcf/refarch/aws/aws_ref_arch.html).
+architecture](http://docs.pivotal.io/pivotalcf/refarch/aws/aws_ref_arch.html). It also assumes you are using Amazon Route 53 as your DNS web service. 
+
+## Prerequisites
+
+- [install a Concourse server](https://concourse-ci.org/installing.html)
+- download the [Fly CLI](https://concourse-ci.org/fly-cli.html) to interact with the Concourse server
+- depending on where you've installed Concourse, you may need to set up
+[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
+third-party sources of pipeline dependencies
+- ensure you have set up DNS and certs correctly, for example, our pipelines require that you have set up the Ops Manager url with `opsman` as a prefix.
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
+This pipeline downloads artifacts from DockerHub (pcfnorm/rootfs and custom
 docker-image resources) and the configured S3 bucket
 (terraform.tfstate file), and as such the Concourse instance must have access
 to those. Note that Terraform outputs a .tfstate file that contains plaintext
@@ -24,7 +31,7 @@ secrets.
 
 3. Change all of the CHANGEME values in params.yml with real values.
 
-4. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated params.yml:
+4. [Set the pipeline](http://concourse-ci.org/single-page.html#fly-set-pipeline), using your updated params.yml:
   ```
   fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml
   ```
@@ -45,6 +52,20 @@ that was created by `create-infrastructure`.
 If you want to bring the environment up again, run `create-infrastructure`.
 
 Do NOT use username `admin` for any of database credentials that you configure for this pipeline.
+
+## Known Issues
+
+#### Issue: #### 
+If you are using pcf-pipelines v23, the functionality for entering certs for `networking_poe_ssl_certs` does not currently work. Functionality does work if you choose to leave `networking_poe_ssl_certs` blank. The fix for the aforementioned issue will be released soon. 
+
+#### Issue: #### 
+`ert_errands_to_disable` does not function as expected; use caution when toggling the errands functionality. Currently the only functionality that works is it disables or enables errands; the functionality to choose which errand to disable does not function as expected. 
+
+#### Issue: #### 
+If the routers in the Pcf-Http-Elb show as `OutOfService`, and you have `routing_disable_http: true` in your params.yml, there is an issue with the terraform [paving](https://github.com/pivotal-cf/pcf-pipelines/blob/master/install-pcf/aws/terraform/load_balancers.tf#L21) whereby port `80` is being used for the health checks when the correct port is `8080`. (Affects those using pcf-pipelines v23 and earlier)
+
+#### Issue: #### 
+If you are using pcf-pipelines v23 and earlier, there is an issue with the `aws_elb` health check `interval` and `healthy_threashold` in that they are set too [high](https://github.com/pivotal-cf/pcf-pipelines/blob/v0.23.0/install-pcf/aws/terraform/load_balancers.tf#L23). Make sure to set these at [sensible](http://docs.cloudfoundry.org/adminguide/configure-lb-healthcheck.html#router_upgrade) defaults. 
 
 ## Troubleshooting
 

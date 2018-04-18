@@ -9,7 +9,7 @@ if [ -z $OPSMAN_FILE ]; then
   exit 1
 fi
 
-VERSION=$(echo $OPSMAN_FILE | perl -lane "print \$1 if (/pcf-openstack-(.*?).raw/)")
+VERSION=$(jq -r .Release.Version ops-manager/metadata.json)
 IMG_NAME="$OPSMAN_IMAGE-$VERSION"
 
 echo "Looking for $IMG_NAME in glance."

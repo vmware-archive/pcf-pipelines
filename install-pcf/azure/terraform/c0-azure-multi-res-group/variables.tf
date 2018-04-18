@@ -3,6 +3,8 @@
 //////// Set Azure Variables //////////////////
 ///////////////////////////////////////////////
 
+variable "azure_opsman_priv_ip" {}
+
 variable "env_name" {}
 
 variable "env_short_name" {
@@ -16,6 +18,8 @@ variable "tenant_id" {}
 variable "location" {}
 
 variable "pcf_ert_domain" {}
+variable "apps_domain" {}
+variable "system_domain" {}
 
 variable "pub_ip_pcf_lb" {}
 variable "pub_ip_id_pcf_lb" {}
@@ -27,7 +31,6 @@ variable "pub_ip_ssh_proxy_lb" {}
 variable "pub_ip_id_ssh_proxy_lb" {}
 
 variable "priv_ip_mysql_lb" {}
-variable "priv_ip_opsman_vm" {}
 
 variable "pub_ip_jumpbox_vm" {}
 variable "pub_ip_id_jumpbox_vm" {}

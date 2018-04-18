@@ -3,3 +3,5 @@ config
 *.iml
 .idea
 *.sw[po]
+azure-prepare-env/params.yml
+azure-prepare-env/creds.yml
