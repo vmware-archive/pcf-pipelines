@@ -55,6 +55,8 @@ terraform destroy \
   -var "opsman_allow_ssh_cidr_ranges=[]" \
   -var "opsman_allow_https=0" \
   -var "opsman_allow_https_cidr_ranges=[]" \
+  -var "opsman_allow_rdp=0" \
+  -var "opsman_allow_rdp_cidr_ranges=[]" \
   -var "aws_key_name=dontcare" \
   -var "aws_cert_arn=arn:a:a:aa-a-1:012345678912:a" \
   -var "amis_nat=dontcare" \

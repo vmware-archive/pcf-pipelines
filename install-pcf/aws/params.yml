@@ -126,6 +126,9 @@ opsman_allow_ssh_cidr_ranges:
 # CIDRs to allow HTTPS access to Operations Manager from
 opsman_allow_https_cidr_ranges:
 
+# CIDRs to allow RDP access to Operations Manager from
+opsman_allow_rdp_cidr_ranges:
+
 # Email address for sending mysql monitor notifications
 mysql_monitor_recipient_email:
 

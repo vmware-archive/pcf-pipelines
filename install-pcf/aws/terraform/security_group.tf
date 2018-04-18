@@ -54,6 +54,17 @@ resource "aws_security_group_rule" "allow_https" {
     security_group_id = "${aws_security_group.directorSG.id}"
 }
 
+resource "aws_security_group_rule" "allow_rdp" {
+    count           = "${var.opsman_allow_rdp}"
+    type            = "ingress"
+    from_port       = 3389
+    to_port         = 3389
+    protocol        = "tcp"
+    cidr_blocks     = "${var.opsman_allow_rdp_cidr_ranges}"
+
+    security_group_id = "${aws_security_group.directorSG.id}"
+}
+
 /*
   RDS Security group
 */
