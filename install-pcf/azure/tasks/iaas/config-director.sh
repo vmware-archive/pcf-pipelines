@@ -93,8 +93,8 @@ networks_configuration=$(
     --arg ert_subnet_gateway "${PAS_GATEWAY}" \
     --arg services_subnet_iaas "${VIRTUAL_NETWORK}/${SERVICES_SUBNET}" \
     --arg services_subnet_cidr "${SERVICES_CIDRS}" \
-    --arg services_subnet_reserved "${AZURE_TERRAFORM_SUBNET_SERVICES1_RESERVED}" \
-    --arg services_subnet_dns "${AZURE_TERRAFORM_SUBNET_SERVICES1_DNS}" \
+    --arg services_subnet_reserved "${AZURE_TERRAFORM_SUBNET_SERVICES_RESERVED}" \
+    --arg services_subnet_dns "${AZURE_TERRAFORM_SUBNET_SERVICES_DNS}" \
     --arg services_subnet_gateway "${SERVICES_GATEWAY}" \
     --arg dynamic_services_subnet_iaas "${VIRTUAL_NETWORK}/${DYNAMIC_SERVICES_SUBNET}" \
     --arg dynamic_services_subnet_cidr "${DYNAMIC_SERVICES_CIDRS}" \
