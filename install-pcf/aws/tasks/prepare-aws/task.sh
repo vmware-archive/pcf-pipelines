@@ -25,12 +25,6 @@ if [[ -n "${OPSMAN_ALLOW_RDP_CIDR_RANGES// }" ]]; then
   OPSMAN_ALLOW_RDP_CIDR_LIST='["'${OPSMAN_ALLOW_RDP_CIDR_RANGES//\,/\"\,\"}'"]'
 fi
 
-if [ ${ert_database_type} = "internal" ]; then
-    rds_count=0
-else
-    rds_count=1
-fi
-
 terraform init pcf-pipelines/install-pcf/aws/terraform
 
 terraform plan \
