@@ -5,6 +5,7 @@ image_resource:
   type: docker-image
   source:
     repository: pcfnorm/rootfs
+    tag: 1.0.5
 
 inputs:
   - name: pcf-pipelines
@@ -18,7 +19,6 @@ run:
   path: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.sh
 
 params:
-  AZURE_PCF_TERRAFORM_TEMPLATE:
   AZURE_SUBSCRIPTION_ID:
   AZURE_TENANT_ID:
   AZURE_CLIENT_ID:

@@ -6,35 +6,26 @@ authentication_mode: internal
 # If the azure_storage_account_name is empty "", ERT will use internal storage. If you want ERT to use Azure blob store, provide a valid storage account name.
 azure_storage_account_name:
 
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
-azure_buildpacks_container:
-
 azure_client_id: CHANGEME
 azure_client_secret: CHANGEME
-
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the droplets will be stored. It is similar to the S3 bucket in AWS.
-azure_droplets_container:
-
-# Required if using c0-azure-multi-res-group - An existing network for your Azure environment
-azure_multi_resgroup_network:
-
-# Required if using c0-azure-multi-res-group - The resource group name for your Azure environment
-azure_multi_resgroup_pcf:
 
 # Private IP for the Operations Manager VM
 azure_opsman_priv_ip: 192.168.0.4
 
-# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
-azure_packages_container:
-
-# The set of terraform templates and opsman configuration to use in the pipeline (c0-azure-base|c0-azure-multi-res-group)
-azure_pcf_terraform_template: c0-azure-base
-
 # a valid Azure region.
 azure_region: CHANGEME
 
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the packages will be stored. It is similar to the S3 bucket in AWS.
+azure_packages_container:
+
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
 azure_resources_container:
+
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the droplets will be stored. It is similar to the S3 bucket in AWS.
+azure_droplets_container:
+
+# Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the buildpacks will be stored. It is similar to the S3 bucket in AWS.
+azure_buildpacks_container:
 
 azure_subscription_id: CHANGEME
 azure_tenant_id: CHANGEME
@@ -44,27 +35,19 @@ azure_tenant_id: CHANGEME
 azure_terraform_prefix: CHANGEME
 
 # ERT-specific network configurations. Leave these as default unless you need to make changes to align with existing infrastructure.
+azure_terraform_vnet_cidr: "192.168.0.0/20"
 azure_terraform_subnet_dynamic_services_cidr: "192.168.12.0/22"
 azure_terraform_subnet_dynamic_services_dns: "168.63.129.16,8.8.8.8"
-azure_terraform_subnet_dynamic_services_gateway: "192.168.12.1"
 azure_terraform_subnet_dynamic_services_reserved: "192.168.12.1-192.168.12.9"
-azure_terraform_subnet_ert_cidr: "192.168.4.0/22"
-azure_terraform_subnet_ert_dns: "168.63.129.16,8.8.8.8"
-azure_terraform_subnet_ert_gateway: "192.168.4.1"
-azure_terraform_subnet_ert_reserved: "192.168.4.1-192.168.4.9"
+azure_terraform_subnet_pas_cidr: "192.168.4.0/22"
+azure_terraform_subnet_pas_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_pas_reserved: "192.168.4.1-192.168.4.9"
 azure_terraform_subnet_infra_cidr: "192.168.0.0/26"
 azure_terraform_subnet_infra_dns: "168.63.129.16,8.8.8.8"
-azure_terraform_subnet_infra_gateway: "192.168.0.1"
 azure_terraform_subnet_infra_reserved: "192.168.0.1-192.168.0.9"
-azure_terraform_subnet_services1_cidr: "192.168.8.0/22"
-azure_terraform_subnet_services1_dns: "168.63.129.16,8.8.8.8"
-azure_terraform_subnet_services1_gateway: "192.168.8.1"
-azure_terraform_subnet_services1_reserved: "192.168.8.1-192.168.8.9"
-azure_terraform_vnet_cidr: "192.168.0.0/20"
-
-# azure_vm_admin value should match with user ID used to create the certs pcf_ssh_key_pub.
-# The user ID will appear towards the end of the public key.
-azure_vm_admin: CHANGEME
+azure_terraform_subnet_services_cidr: "192.168.8.0/22"
+azure_terraform_subnet_services_dns: "168.63.129.16,8.8.8.8"
+azure_terraform_subnet_services_reserved: "192.168.8.1-192.168.8.9"
 
 # Ciphers
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
@@ -204,7 +187,8 @@ opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track 
 pcf_ert_saml_cert:
 pcf_ert_saml_key:
 
-pcf_opsman_disk_size_in_gb: 120
+# This field is not configurable, and is fixed to 150 to prevent problems caused by disk size too small when upgrading.
+#pcf_opsman_disk_size_in_gb: 150
 
 # SSH keys for Operations Manager director
 # More information can be found in these locations.

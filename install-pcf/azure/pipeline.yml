@@ -177,6 +177,17 @@ jobs:
       AZURE_CLIENT_SECRET: {{azure_client_secret}}
       AZURE_REGION: {{azure_region}}
       AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
+      AZURE_STORAGE_ACCOUNT_NAME: {{azure_storage_account_name}}
+      AZURE_BUILDPACKS_CONTAINER: {{azure_buildpacks_container}}
+      AZURE_RESOURCES_CONTAINER: {{azure_resources_container}}
+      AZURE_PACKAGES_CONTAINER: {{azure_packages_container}}
+      AZURE_DROPLETS_CONTAINER: {{azure_droplets_container}}
+      AZURE_TERRAFORM_VNET_CIDR: {{azure_terraform_vnet_cidr}}
+      AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
+      AZURE_TERRAFORM_SUBNET_PAS_CIDR: {{azure_terraform_subnet_pas_cidr}}
+      AZURE_TERRAFORM_SUBNET_INFRA_CIDR: {{azure_terraform_subnet_infra_cidr}}
+      AZURE_TERRAFORM_SUBNET_SERVICES_CIDR: {{azure_terraform_subnet_services_cidr}}
+      AZURE_OPSMAN_PRIV_IP: {{azure_opsman_priv_ip}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
 
 ###########################
@@ -206,7 +217,7 @@ jobs:
         type: docker-image
         source:
           repository: pcfnorm/rootfs
-          tag: 1.0.3
+          tag: 1.0.5
       inputs:
         - name: pcf-pipelines
         - name: terraform-state
@@ -222,22 +233,14 @@ jobs:
         AZURE_CLIENT_ID: {{azure_client_id}}
         AZURE_CLIENT_SECRET: {{azure_client_secret}}
         AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
-        AZURE_TERRAFORM_SUBNET_INFRA_CIDR: {{azure_terraform_subnet_infra_cidr}}
         AZURE_TERRAFORM_SUBNET_INFRA_RESERVED: {{azure_terraform_subnet_infra_reserved}}
         AZURE_TERRAFORM_SUBNET_INFRA_DNS: {{azure_terraform_subnet_infra_dns}}
-        AZURE_TERRAFORM_SUBNET_INFRA_GATEWAY: {{azure_terraform_subnet_infra_gateway}}
-        AZURE_TERRAFORM_SUBNET_ERT_CIDR: {{azure_terraform_subnet_ert_cidr}}
-        AZURE_TERRAFORM_SUBNET_ERT_RESERVED: {{azure_terraform_subnet_ert_reserved}}
-        AZURE_TERRAFORM_SUBNET_ERT_DNS: {{azure_terraform_subnet_ert_dns}}
-        AZURE_TERRAFORM_SUBNET_ERT_GATEWAY: {{azure_terraform_subnet_ert_gateway}}
-        AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR: {{azure_terraform_subnet_services1_cidr}}
-        AZURE_TERRAFORM_SUBNET_SERVICES1_RESERVED: {{azure_terraform_subnet_services1_reserved}}
-        AZURE_TERRAFORM_SUBNET_SERVICES1_DNS: {{azure_terraform_subnet_services1_dns}}
-        AZURE_TERRAFORM_SUBNET_SERVICES1_GATEWAY: {{azure_terraform_subnet_services1_gateway}}
-        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
+        AZURE_TERRAFORM_SUBNET_PAS_RESERVED: {{azure_terraform_subnet_pas_reserved}}
+        AZURE_TERRAFORM_SUBNET_PAS_DNS: {{azure_terraform_subnet_pas_dns}}
+        AZURE_TERRAFORM_SUBNET_SERVICES_RESERVED: {{azure_terraform_subnet_services_reserved}}
+        AZURE_TERRAFORM_SUBNET_SERVICES_DNS: {{azure_terraform_subnet_services_dns}}
         AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_RESERVED: {{azure_terraform_subnet_dynamic_services_reserved}}
         AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_DNS: {{azure_terraform_subnet_dynamic_services_dns}}
-        AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_GATEWAY: {{azure_terraform_subnet_dynamic_services_gateway}}
         PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
         PCF_SSH_KEY_PRIV: {{pcf_ssh_key_priv}}
         TRUSTED_CERTIFICATES: {{trusted_certificates}}
