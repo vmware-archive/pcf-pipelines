@@ -110,11 +110,10 @@ resources:
     access_token: {{github_token}}
 
 - name: terraforming-azure
-  type: github-release
+  type: git
   source:
-    user: pivotal-cf
-    repository: terraforming-azure
-    access_token: {{github_token}}
+     uri: https://github.com/dtimm/terraforming-azure.git
+     branch: improve-configurability
 
 - name: jq
   type: curl
@@ -150,7 +149,6 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: terraform
     - get: terraforming-azure
-      params: {include_source_tarball: true}
     - get: jq
 
   - task: prepare-workspace
@@ -206,8 +204,7 @@ jobs:
 
           chmod +x workspace/*
 
-          mkdir workspace/terraforming-azure
-          tar xf terraforming-azure/source.tar.gz -C workspace/terraforming-azure --strip-components=1
+          mv terraforming-azure workspace/terraforming-azure
 
           cp pcf-pipelines/ci/Dockerfile workspace
 
