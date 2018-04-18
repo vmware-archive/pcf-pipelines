@@ -1,0 +1,3 @@
+[submodule "install-pcf/azure/terraform"]
+	path = install-pcf/azure/terraform
+	url = git@github.com:pivotal-cf/terraforming-azure.git
