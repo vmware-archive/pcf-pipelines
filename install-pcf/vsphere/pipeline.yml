@@ -61,7 +61,6 @@ jobs:
       OM_IP: {{om_ip}}
       OM_VM_NETWORK: {{om_vm_network}}
       OM_VM_NAME: {{om_vm_name}}
-      OM_RESOURCE_POOL: {{om_resource_pool}}
       OPSMAN_DISK_TYPE: {{opsman_disk_type}}
       OM_VM_POWER_STATE: {{om_vm_power_state}}
 
@@ -292,7 +291,6 @@ jobs:
       DISABLE_INSECURE_COOKIES: {{disable_insecure_cookies}}
       ROUTER_STATIC_IPS: {{router_static_ips}}
       ROUTER_REQUEST_TIMEOUT_IN_SEC: {{router_request_timeout_in_seconds}}
-      GARDEN_NETWORK_MTU: {{garden_network_mtu}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
       MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
@@ -366,8 +364,6 @@ jobs:
       CREDHUB_PRIMARY_ENCRYPTION_NAME: {{credhub_primary_encryption_name}}
       HA_PROXY_LB_NAME: ""
       HAPROXY_FLOATING_IPS: ""
-      OPSMAN_CLIENT_ID: ""
-      OPSMAN_CLIENT_SECRET: ""
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
