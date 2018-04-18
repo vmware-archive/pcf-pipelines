@@ -6,7 +6,7 @@
     name: redis
     type: pivnet
     source:
-      api_token: {{pivnet_token}}
+      api_token: ((pivnet_token))
       product_slug: p-redis
       product_version: ^1\.9\..$
       sort_by: semver

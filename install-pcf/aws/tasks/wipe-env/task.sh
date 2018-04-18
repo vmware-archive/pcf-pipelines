@@ -12,8 +12,6 @@ if [[ $opsman_available == "available" ]]; then
   om-linux \
     --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
     --skip-ssl-validation \
-    --client-id "${OPSMAN_CLIENT_ID}" \
-    --client-secret "${OPSMAN_CLIENT_SECRET}" \
     --username "$OPSMAN_USERNAME" \
     --password "$OPSMAN_PASSWORD" \
     delete-installation
@@ -51,6 +49,9 @@ terraform destroy \
   -var "db_master_username=dontcare" \
   -var "db_master_password=dontcare" \
   -var "prefix=dontcare" \
+  -var "pcf_ert_domain=dontcare" \
+  -var "system_domain=dontcare" \
+  -var "apps_domain=dontcare" \
   -var "opsman_allow_ssh=0" \
   -var "opsman_allow_ssh_cidr_ranges=[]" \
   -var "opsman_allow_https=0" \

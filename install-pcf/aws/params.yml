@@ -1,14 +1,82 @@
-# Setting appropriate Application Security Groups is critical for a secure
-# deployment. Change the value of the param below to "X" to acknowledge that
-# once the Elastic Runtime deployment completes, you will review and set the
-# appropriate application security groups.
-# See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
-security_acknowledgement: CHANGEME
+# AMI to use for nat box
+# Update with the correct NAT AMI for your region. List of AMIs can be found
+# here: https://github.com/pivotal-cf/terraforming-aws/blob/master/nat.tf
+amis_nat: ami-303b1458
 
-pivnet_token: CHANGEME                  # Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
-opsman_major_minor_version: ^1\.12\..*$ # PCF Ops Manager minor version to track
-ert_major_minor_version: ^1\.12\..*$    # PCF Elastic Runtime minor version to track
-git_private_key:                        # Optional - if your git repo requires an SSH key.
+# This key must be a key with admin access
+aws_access_key_id: CHANGEME
+aws_secret_access_key: CHANGEME
+
+aws_az1: us-east-1a
+aws_az2: us-east-1b
+aws_az3: us-east-1d
+
+# ARN of the wildcard certificate to use; upload this in [AWS](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html#upload-server-certificate). This must be done prior to running the pipeline.
+aws_cert_arn: CHANGEME
+
+# Upload PEM to AWS as the below key pair name
+aws_key_name: CHANGEME
+
+aws_region: us-east-1
+
+# Ciphers
+# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
+# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
+# The recommended settings are filled in below, change as necessary.
+router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
+
+# C2C Networking network CIDR
+container_networking_nw_cidr: 10.255.0.0/16
+
+# For credhub integration, Set the number of credhub instances in resource config to 2
+# Primary Encryption Name MUST match one of the encryption key names provided
+# Encryption keys 2 and 3 are optional
+credhub_primary_encryption_name: dummy encryption key 1
+credhub_encryption_key_name1: dummy encryption key 1
+credhub_encryption_key_secret1: CHANGEME_CHANGEME_CHANGEME_CHANGEME
+credhub_encryption_key_name2: # Optional Name 2
+credhub_encryption_key_secret2: # Optional Secret 2
+credhub_encryption_key_name3: # Optional Name 3
+credhub_encryption_key_secret3: # Optional Secret 2
+
+# ERT Database Credentials - Required
+db_accountdb_password: CHANGEME
+db_accountdb_username: CHANGEME
+db_app_usage_service_password: CHANGEME
+db_app_usage_service_username: CHANGEME
+db_autoscale_password: CHANGEME
+db_autoscale_username: CHANGEME
+db_ccdb_password: CHANGEME
+db_ccdb_username: CHANGEME
+db_diego_password: CHANGEME
+db_diego_username: CHANGEME
+db_locket_password: CHANGEME
+db_locket_username: CHANGEME
+db_networkpolicyserverdb_password: CHANGEME
+db_networkpolicyserverdb_username: CHANGEME
+db_nfsvolumedb_password: CHANGEME
+db_nfsvolumedb_username: CHANGEME
+db_notifications_password: CHANGEME
+db_notifications_username: CHANGEME
+db_routing_password: CHANGEME
+db_routing_username: CHANGEME
+db_silk_password: CHANGEME
+db_silk_username: CHANGEME
+db_uaa_password: CHANGEME
+db_uaa_username: CHANGEME
+
+# RDS Master Credentials - Required
+db_master_password: CHANGEME
+db_master_username: CHANGEME
+
+# Optional PEM-encoded certificates to add to BOSH VMs
+director_certificates:
+
+# Domain Names for ERT
+pcf_ert_domain: CHANGEME # This is the domain you will access ERT with, for example: pcf.example.com.
+system_domain: CHANGEME # e.g. system.pcf.example.com
+apps_domain: CHANGEME   # e.g. apps.pcf.example.com
 
 # Errands to disable prior to deploying ERT
 # Valid values:
@@ -16,118 +84,31 @@ git_private_key:                        # Optional - if your git repo requires a
 #   none
 #   "" (empty string - equivalent to none)
 #   Any combination of the following, separated by comma:
-#     smoke-tests
+#     smoke_tests
+#     push-usage-service
 #     push-apps-manager
-#     notifications
-#     notifications-ui
+#     deploy-notifications
+#     deploy-notifications-ui
 #     push-pivotal-account
-#     autoscaling
-#     autoscaling-register-broker
+#     deploy-autoscaling
+#     register-broker
 #     nfsbrokerpush
 ert_errands_to_disable: none
 
-# RDS Master Credentials - Required
-db_master_username: CHANGEME
-db_master_password: CHANGEME
+# PCF Elastic Runtime minor version to track
+ert_major_minor_version: ^2\.0\.[0-9]+$ # ERT minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
 
-# ERT Database Credentials - Required
-db_app_usage_service_username: CHANGEME
-db_app_usage_service_password: CHANGEME
-db_autoscale_username: CHANGEME
-db_autoscale_password: CHANGEME
-db_diego_username: CHANGEME
-db_diego_password: CHANGEME
-db_notifications_username: CHANGEME
-db_notifications_password: CHANGEME
-db_routing_username: CHANGEME
-db_routing_password: CHANGEME
-db_uaa_username: CHANGEME
-db_uaa_password: CHANGEME
-db_ccdb_username: CHANGEME
-db_ccdb_password: CHANGEME
-db_accountdb_username: CHANGEME
-db_accountdb_password: CHANGEME
-db_networkpolicyserverdb_username: CHANGEME
-db_networkpolicyserverdb_password: CHANGEME
-db_nfsvolumedb_username: CHANGEME
-db_nfsvolumedb_password: CHANGEME
-db_silk_username: CHANGEME
-db_silk_password: CHANGEME
-db_locket_username: CHANGEME
-db_locket_password: CHANGEME
+# Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
+frontend_idle_timeout: 61
 
-# Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
-# Must be globally unique.
-terraform_prefix: CHANGEME
-
-# Optional PEM-encoded certificates to add to BOSH VMs
-director_certificates:
-
-# This key must be a key with admin access
-aws_access_key_id: CHANGEME
-aws_secret_access_key: CHANGEME
-
-# ARN of the wildcard certificate to use; upload this in [AWS](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html#upload-server-certificate). This must be done prior to running the pipeline.
-aws_cert_arn: CHANGEME
-
-# AMI to use for nat box
-amis_nat: ami-303b1458
-
-aws_region: us-east-1
-aws_az1: us-east-1a
-aws_az2: us-east-1b
-aws_az3: us-east-1d
-
-# For terraform state file (http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region)
-S3_ENDPOINT: https://s3.amazonaws.com
-S3_OUTPUT_BUCKET: CHANGEME
-
-# The ERT domain to use; *.cfapps.<ert-domain> and *.sys.<ert-domain> will be used
-ERT_DOMAIN: CHANGEME
-
-# Route53 zone to add records to
-ROUTE_53_ZONE_ID:
-
-# Cert will be generated if left empty
-ERT_SSL_CERT:
-ERT_SSL_KEY:
+# Optional - if your git repo requires an SSH key.
+git_private_key:
 
 haproxy_forward_tls: enable # If enabled HAProxy will forward all requests to the router over TLS (enable|disable)
 haproxy_backend_ca:         # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
 
-# Disable HTTP on gorouters (true|false)
-routing_disable_http: false
-
-# An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
-# Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.
-# The recommended settings are filled in below, change as necessary.
-router_tls_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-haproxy_tls_ciphers: "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384"
-
-# The domain to access Operations Manager; opsman.<ert-domain>
-opsman_domain_or_ip_address: CHANGEME
-
-# Operations Manager credentials
-# Either opsman_client_id/opsman_client_secret or opsman_admin_username/opsman_admin_password needs to be specified
-opsman_client_id: CHANGEME
-opsman_client_secret: CHANGEME
-opsman_admin_username: CHANGEME
-opsman_admin_password: CHANGEME
-
-# Private Key of the keypair uploaded to AWS to be used for Operations Manager, NAT VMs.
-PEM: CHANGEME
-
-# Upload PEM to AWS as the below key pair name
-aws_key_name: CHANGEME
-
-# CIDRs to allow SSH access to Operations Manager from; configure PEM as well with the private key
-opsman_allow_ssh_cidr_ranges:
-
-# CIDRs to allow HTTPS access to Operations Manager from
-opsman_allow_https_cidr_ranges:
-
-# CIDRs to allow RDP access to Operations Manager from
-opsman_allow_rdp_cidr_ranges:
+# Whether or not the ERT VMs are internet connected.
+internet_connected: false
 
 # Email address for sending mysql monitor notifications
 mysql_monitor_recipient_email:
@@ -136,20 +117,75 @@ mysql_monitor_recipient_email:
 mysql_backups: disable
 
 # SCP backup config params (leave empty values if you're not using scp
-mysql_backups_scp_server:
-mysql_backups_scp_port:
-mysql_backups_scp_user:
-mysql_backups_scp_key:
-mysql_backups_scp_destination:
 mysql_backups_scp_cron_schedule:
+mysql_backups_scp_destination:
+mysql_backups_scp_key:
+mysql_backups_scp_port:
+mysql_backups_scp_server:
+mysql_backups_scp_user:
 
 # S3 backup config params (leave empty values if you're not using s3)
-mysql_backups_s3_endpoint_url:
+mysql_backups_s3_access_key_id:
 mysql_backups_s3_bucket_name:
 mysql_backups_s3_bucket_path:
-mysql_backups_s3_access_key_id:
-mysql_backups_s3_secret_access_key:
 mysql_backups_s3_cron_schedule:
+mysql_backups_s3_endpoint_url:
+mysql_backups_s3_secret_access_key:
+
+# Operations Manager credentials
+# opsman_admin_username/opsman_admin_password needs to be specified
+opsman_admin_username: CHANGEME
+opsman_admin_password: CHANGEME
+
+# CIDRs to allow HTTPS access to Operations Manager from
+opsman_allow_https_cidr_ranges:
+
+# CIDRs to allow SSH access to Operations Manager from; configure PEM as well with the private key
+opsman_allow_ssh_cidr_ranges:
+
+# CIDRs to allow RDP access to Operations Manager from
+opsman_allow_rdp_cidr_ranges:
+
+# The domain to access Operations Manager;
+opsman_domain_or_ip_address: CHANGEME #This must be your pcf_ert_domain with "opsman." as a prefix. For example, opsman.pcf.example.com
+
+# PCF Ops Manager minor version to track
+opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
+
+# Private Key of the keypair uploaded to AWS to be used for Operations Manager, NAT VMs.
+PEM: CHANGEME
+
+# Pivnet token for downloading resources from Pivnet. Find this token at https://network.pivotal.io/users/dashboard/edit-profile
+pivnet_token: CHANGEME
+
+# Optional. If blank the cert(s) will be generated:
+poe_ssl_name1:
+poe_ssl_cert1:
+poe_ssl_key1:
+
+# Route53 zone to add records to
+ROUTE_53_ZONE_ID:
+
+# Optional - these certificates can be used to validate the certificates from incoming client requests.
+# All CA certificates should be appended together into a single collection of PEM-encoded entries.
+routing_custom_ca_certificates:
+
+# Disable HTTP on gorouters - do not set this param to anything other than `false`; ssl is terminated at the load balancer
+routing_disable_http: false
+
+# Support for the X-Forwarded-Client-Cert header. Possible values: (load_balancer|ha_proxy|router)
+routing_tls_termination: load_balancer
+
+# For terraform state file (http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region)
+S3_ENDPOINT: https://s3.amazonaws.com
+S3_OUTPUT_BUCKET: CHANGEME
+
+# Setting appropriate Application Security Groups is critical for a secure
+# deployment. Change the value of the param below to "X" to acknowledge that
+# once the Elastic Runtime deployment completes, you will review and set the
+# appropriate application security groups.
+# See https://docs.pivotal.io/pivotalcf/opsguide/app-sec-groups.html
+security_acknowledgement: CHANGEME
 
 # Subnets
 #   Pipeline uses six types of network: Public, Elastic Runtime, Services, Dynamic Services and RDS and Infrastructure networks
@@ -160,39 +196,38 @@ mysql_backups_s3_cron_schedule:
 #   * Dynamic Services network: Deploy dynamic services, **three subnets on three AZs to achieve HA**
 #   * RDS network: Deploy RDS databases, **three subnets on three AZs to achieve HA**
 #   * Infrastructure network: Deploy Bosh director
-vpc_cidr: 192.168.0.0/16
-public_subnet_cidr_az1: 192.168.0.0/24
-public_subnet_cidr_az2: 192.168.1.0/24
-public_subnet_cidr_az3: 192.168.2.0/24
-ert_subnet_cidr_az1: 192.168.16.0/20
-ert_subnet_reserved_ranges_z1: 192.168.16.0 - 192.168.16.10
-ert_subnet_cidr_az2: 192.168.32.0/20
-ert_subnet_reserved_ranges_z2: 192.168.32.0 - 192.168.32.10
-ert_subnet_cidr_az3: 192.168.48.0/20
-ert_subnet_reserved_ranges_z3: 192.168.48.0 - 192.168.48.10
-services_subnet_cidr_az1: 192.168.64.0/20
-services_subnet_reserved_ranges_z1: 192.168.64.0 - 192.168.64.10
-services_subnet_cidr_az2: 192.168.80.0/20
-services_subnet_reserved_ranges_z2: 192.168.80.0 - 192.168.80.10
-services_subnet_cidr_az3: 192.168.96.0/20
-services_subnet_reserved_ranges_z3: 192.168.96.0 - 192.168.96.10
 dynamic_services_subnet_cidr_az1: 192.168.112.0/22
-dynamic_services_subnet_reserved_ranges_z1: 192.168.112.0 - 192.168.112.10
 dynamic_services_subnet_cidr_az2: 192.168.128.0/22
-dynamic_services_subnet_reserved_ranges_z2: 192.168.128.0 - 192.168.128.10
 dynamic_services_subnet_cidr_az3: 192.168.144.0/22
+dynamic_services_subnet_reserved_ranges_z1: 192.168.112.0 - 192.168.112.10
+dynamic_services_subnet_reserved_ranges_z2: 192.168.128.0 - 192.168.128.10
 dynamic_services_subnet_reserved_ranges_z3: 192.168.144.0 - 192.168.144.10
+ert_subnet_cidr_az1: 192.168.16.0/20
+ert_subnet_cidr_az2: 192.168.32.0/20
+ert_subnet_cidr_az3: 192.168.48.0/20
+ert_subnet_reserved_ranges_z1: 192.168.16.0 - 192.168.16.10
+ert_subnet_reserved_ranges_z2: 192.168.32.0 - 192.168.32.10
+ert_subnet_reserved_ranges_z3: 192.168.48.0 - 192.168.48.10
 infra_subnet_cidr_az1: 192.168.6.0/24
 infra_subnet_reserved_ranges_z1: 192.168.6.0 - 192.168.6.10
-rds_subnet_cidr_az1: 192.168.3.0/24
-rds_subnet_cidr_az2: 192.168.4.0/24
-rds_subnet_cidr_az3: 192.168.5.0/24
-opsman_ip_az1: 192.168.0.7
 nat_ip_az1: 192.168.0.6
 nat_ip_az2: 192.168.1.6
 nat_ip_az3: 192.168.2.6
+opsman_ip_az1: 192.168.0.7
+public_subnet_cidr_az1: 192.168.0.0/24
+public_subnet_cidr_az2: 192.168.1.0/24
+public_subnet_cidr_az3: 192.168.2.0/24
+rds_subnet_cidr_az1: 192.168.3.0/24
+rds_subnet_cidr_az2: 192.168.4.0/24
+rds_subnet_cidr_az3: 192.168.5.0/24
+services_subnet_cidr_az1: 192.168.64.0/20
+services_subnet_cidr_az2: 192.168.80.0/20
+services_subnet_cidr_az3: 192.168.96.0/20
+services_subnet_reserved_ranges_z1: 192.168.64.0 - 192.168.64.10
+services_subnet_reserved_ranges_z2: 192.168.80.0 - 192.168.80.10
+services_subnet_reserved_ranges_z3: 192.168.96.0 - 192.168.96.10
+vpc_cidr: 192.168.0.0/16
 
-container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
-
-# Whether or not the ERT VMs are internet connected.
-internet_connected: false
+# Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
+# Must be globally unique.
+terraform_prefix: CHANGEME

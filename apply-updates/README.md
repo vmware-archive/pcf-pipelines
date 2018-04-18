@@ -107,3 +107,9 @@ cat pipeline.yml | yaml-patch -o remove-upload-stemcell-job.yml > new-pipeline.y
 ![Apply Updates pipeline](embed-apply-changes-only.png)
 
 ---
+
+## Known Issues
+
+Use this pipeline with caution, as it is still a relatively new and untested pipeline. Known issues, which can be mitigated by applying yaml-patches as described above, include:
+- In the event that there is not an updated stemcell available, the `upload-stemcell` job will state "No new stemcells available, skipping upload." and exit successfully - however, the apply-updates will still run which may not be desirable. 
+- before running this pipeline, make sure to check the default configuration to ensure it is not scheduled to run once per day, every day, whether there are updates or not.

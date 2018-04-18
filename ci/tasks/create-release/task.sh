@@ -49,8 +49,22 @@ read -r -d '' test_for_pcf_pipelines_git <<EOF
       branch: master
       private_key: "{{git_private_key}}"
 EOF
+
+
 set -e
 
+# Add a tag to the docker image in to enforce version
+files=$(
+  grep -lr "repository: pcfnorm\/rootfs" pcf-pipelines |
+  grep -v pcf-pipelines/ci
+)
+
+for f in ${files[@]}; do
+    echo "Setting docker version for ${f}"
+   sed -i -re "s/(\s+)repository: pcfnorm\/rootfs/\1repository: pcfnorm\/rootfs\n\1tag: $(cat rootfs-tag/tag)/g" "$f"
+done
+
+# Add a tag to each pipeline.yml to enforce version
 files=$(
   find pcf-pipelines \
   -type f \
@@ -59,20 +73,18 @@ files=$(
 )
 
 for f in ${files[@]}; do
-  if [[ $(cat $f | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git") 2>/dev/null ) ]]; then
+  if [[ $(cat "$f" | yaml_patch_linux -o <(echo "$test_for_pcf_pipelines_git") 2>/dev/null ) ]]; then
     echo "Using pivnet release for ${f}"
-    cat $f |
+    cat "$f" |
     yaml_patch_linux \
       -o pcf-pipelines/operations/use-pivnet-release.yml \
       -o <(echo "$hardcode_pivnet_version") \
-      > $f.bk
-    mv $f.bk $f
-
-    fly format-pipeline --write --config $f
+      > "$f".bk
+    mv "$f".bk "$f"
 
     # Remove git_private_key from params as it is no longer needed
-    params_file=$(dirname $f)/params.yml
-    sed -i -e '/git_private_key:/d' $params_file
+    params_file=$(dirname "$f")/params.yml
+    sed -i -e '/git_private_key:/d' "$params_file"
   fi
 done
 
@@ -85,8 +97,8 @@ EOF
 steamroll -p pcf-pipelines/install-pcf/vsphere/pipeline.yml -c steamroll_config.yml |
 yaml_patch_linux \
   -o pcf-pipelines/operations/create-install-pcf-vsphere-offline-pipeline.yml \
-  > vsphere-offline.yml
-fly format-pipeline -c vsphere-offline.yml > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
+  > pcf-pipelines/install-pcf/vsphere/offline/pipeline.yml
+
 
 echo "Creating install-pcf/vsphere/offline/params.yml"
 cp pcf-pipelines/install-pcf/vsphere{,/offline}/params.yml
@@ -126,14 +138,15 @@ release:
   - 64  #| Pivotal SI Partners Known and Potential Partners.
 EOF
 
-exclusions="--exclude .git* --exclude ci --exclude *.go --exclude run_bash_testsuite.sh"
-exclusions+=" --exclude pin-pcf-pipelines-git"
+exclusions=""
+exclusions+=" "
 
 echo "Creating release tarball, omitting the following globs:"
-echo "${exclusions}"
+set -x
 tar \
-  $exclusions \
+  --exclude .git* --exclude ci --exclude *.go --exclude run_bash_testsuite.sh \
+  --exclude pin-pcf-pipelines-git \
   --create \
   --gzip \
-  --file pcf-pipelines-release-tarball/pcf-pipelines-$version.tgz \
+  --file pcf-pipelines-release-tarball/pcf-pipelines-"$version".tgz \
   pcf-pipelines

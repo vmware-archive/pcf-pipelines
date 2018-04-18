@@ -94,7 +94,6 @@ networks_configuration=$(
               "reserved_ip_ranges": $infra_subnet_reserved,
               "dns": $infra_subnet_dns,
               "gateway": $infra_subnet_gateway,
-              "availability_zone_names": ["null-az"]
             }
           ]
         },
@@ -108,7 +107,6 @@ networks_configuration=$(
               "reserved_ip_ranges": $ert_subnet_reserved,
               "dns": $ert_subnet_dns,
               "gateway": $ert_subnet_gateway,
-              "availability_zone_names": ["null-az"]
             }
           ]
         },
@@ -122,7 +120,6 @@ networks_configuration=$(
               "reserved_ip_ranges": $services1_subnet_reserved,
               "dns": $services1_subnet_dns,
               "gateway": $services1_subnet_gateway,
-              "availability_zone_names": ["null-az"]
             }
           ]
         },
@@ -136,7 +133,6 @@ networks_configuration=$(
               "reserved_ip_ranges": $dynamic_services1_subnet_reserved,
               "dns": $dynamic_services1_subnet_dns,
               "gateway": $dynamic_services1_subnet_gateway,
-              "availability_zone_names": ["null-az"]
             }
           ]
         }
@@ -147,7 +143,9 @@ networks_configuration=$(
 network_assignment=$(
   jq -n \
     '{
-      "network": "infrastructure"
+      "network": {
+        "name": "infrastructure"
+      }
     }'
 )
 
@@ -163,11 +161,9 @@ security_configuration=$(
 om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
-  --client-id "${OPSMAN_CLIENT_ID}" \
-  --client-secret "${OPSMAN_CLIENT_SECRET}" \
   --username "$PCF_OPSMAN_ADMIN" \
   --password "$PCF_OPSMAN_ADMIN_PASSWORD" \
-  configure-bosh \
+  configure-director \
   --iaas-configuration "${iaas_configuration}" \
   --director-configuration "${director_configuration}" \
   --networks-configuration "${networks_configuration}" \

@@ -14,8 +14,6 @@ if [[ $opsman_available == "available" ]]; then
   om-linux \
     --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
     --skip-ssl-validation \
-    --client-id "${OPSMAN_CLIENT_ID}" \
-    --client-secret "${OPSMAN_CLIENT_SECRET}" \
     --username "$OPSMAN_USERNAME" \
     --password "$OPSMAN_PASSWORD" \
     delete-installation
@@ -66,6 +64,8 @@ terraform destroy -force \
   -var "prefix=dontcare" \
   -var "pcf_opsman_image_name=dontcare" \
   -var "pcf_ert_domain=dontcare" \
+  -var "system_domain=dontcare" \
+  -var "apps_domain=dontcare" \
   -var "pcf_ert_ssl_cert=dontcare" \
   -var "pcf_ert_ssl_key=dontcare" \
   -var "opsman_allow_cidr=dontcare" \
@@ -93,5 +93,35 @@ terraform destroy -force \
   -var "db_locket_password=dontcare" \
   -var "db_silk_username=dontcare" \
   -var "db_silk_password=dontcare" \
+  -var "droplets_bucket=dontcare" \
+  -var "http_lb_backend_name=dontcare" \
+  -var "ops_manager_public_ip=dontcare" \
+  -var "ert_cidr=dontcare" \
+  -var "pub_ip_ssh_tcp_lb=dontcare" \
+  -var "dynamic_svc_net_1_cidr=dontcare" \
+  -var "packages_bucket=dontcare" \
+  -var "ops_manager_cidr=dontcare" \
+  -var "resources_bucket=dontcare" \
+  -var "svc_net_1_subnet=dontcare" \
+  -var "ops_manager_subnet=dontcare" \
+  -var "svc_net_1_cidr=dontcare" \
+  -var "pub_ip_global_pcf=dontcare" \
+  -var "sql_instance_ip=dontcare" \
+  -var "ops_manager_dns=dontcare" \
+  -var "tcp_router_pool=dontcare" \
+  -var "pub_ip_ssh_and_doppler=dontcare" \
+  -var "dynamic_svc_net_1_gateway=dontcare" \
+  -var "ert_gateway=dontcare" \
+  -var "pub_ip_opsman=dontcare" \
+  -var "network_name=dontcare" \
+  -var "ops_manager_gateway=dontcare" \
+  -var "svc_net_1_gateway=dontcare" \
+  -var "dynamic_svc_net_1_subnet=dontcare" \
+  -var "ert_certificate=dontcare" \
+  -var "director_blobstore_bucket=dontcare" \
+  -var "ert_certificate_key=dontcare" \
+  -var "buildpacks_bucket=dontcare" \
+  -var "env_dns_zone_name_servers=dontcare" \
+  -var "ert_subnet=dontcare" \
   -state-out $root/wipe-output/terraform.tfstate \
   pcf-pipelines/install-pcf/gcp/terraform

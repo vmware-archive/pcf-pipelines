@@ -1,9 +1,0 @@
-cf_network: |
-  network:
-    name: DEPLOYMENT
-  other_availability_zones:
-  - name: AZ01
-  - name: AZ02
-  - name: AZ03
-  singleton_availability_zone:
-    name: AZ02

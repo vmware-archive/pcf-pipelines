@@ -18,7 +18,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
 
 inputs:
   - name: cliaas-config
@@ -26,6 +26,7 @@ inputs:
 
 params:
   VM_IDENTIFIER:
+  VM_DISK_SIZE_GB:
 
 run:
   path: pcf-pipelines/tasks/replace-vm/task.sh

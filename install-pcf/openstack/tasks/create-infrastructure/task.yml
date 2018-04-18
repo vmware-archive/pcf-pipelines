@@ -4,12 +4,12 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: pcfnorm/rootfs
 
 inputs:
 - name: pcf-pipelines
 - name: terraform-state
-- name: pivnet-opsmgr
+- name: ops-manager
 
 outputs:
 - name: create-infrastructure-output

@@ -47,8 +47,8 @@ resources:
 - name: terraform-state
   type: azure-blobstore
   source:
-    storage_account_name: {{terraform_azure_account_name}}
-    storage_account_key: {{terraform_azure_access_key}}
+    storage_account_name: {{terraform_azure_storage_account_name}}
+    storage_account_key: {{terraform_azure_storage_access_key}}
     container: {{azure_storage_container_name}}
     versioned_file: terraform.tfstate
 
@@ -87,8 +87,8 @@ jobs:
   - get: pcf-pipelines
   - task: create-terraform-state
     params:
-      AZURE_STORAGE_ACCOUNT: {{terraform_azure_account_name}}
-      AZURE_STORAGE_KEY: {{terraform_azure_access_key}}
+      AZURE_STORAGE_ACCOUNT: {{terraform_azure_storage_account_name}}
+      AZURE_STORAGE_KEY: {{terraform_azure_storage_access_key}}
       CONTAINER: {{azure_storage_container_name}}
     file: pcf-pipelines/install-pcf/azure/tasks/create-initial-terraform-state/task.yml
 
@@ -120,8 +120,6 @@ jobs:
       AZURE_REGION: {{azure_region}}
       AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
 
@@ -151,7 +149,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
         - name: pivnet-opsmgr
@@ -172,12 +170,14 @@ jobs:
       AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
       AZURE_VM_ADMIN: {{azure_vm_admin}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
+      SYSTEM_DOMAIN: {{system_domain}}
+      APPS_DOMAIN: {{apps_domain}}
       PCF_SSH_KEY_PUB: {{pcf_ssh_key_pub}}
+      AZURE_TERRAFORM_OPSMAN_PRIV_IP: {{azure_opsman_priv_ip}}
       AZURE_MULTI_RESGROUP_NETWORK: {{azure_multi_resgroup_network}}
       AZURE_MULTI_RESGROUP_PCF: {{azure_multi_resgroup_pcf}}
       AZURE_MULTI_RESGROUP_INFRA_SUBNET_NAME: {{azure_multi_resgroup_infra_subnet_name}}
       AZURE_MULTI_RESGROUP_INFRA_VNET_NAME: {{azure_multi_resgroup_infra_vnet_name}}
-      AZURE_ACCOUNT_NAME: {{azure_account_name}}
       AZURE_BUILDPACKS_CONTAINER: {{azure_buildpacks_container}}
       AZURE_DROPLETS_CONTAINER: {{azure_droplets_container}}
       AZURE_PACKAGES_CONTAINER: {{azure_packages_container}}
@@ -187,6 +187,7 @@ jobs:
       AZURE_TERRAFORM_SUBNET_ERT_CIDR: {{azure_terraform_subnet_ert_cidr}}
       AZURE_TERRAFORM_SUBNET_SERVICES1_CIDR: {{azure_terraform_subnet_services1_cidr}}
       AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
+      AZURE_STORAGE_ACCOUNT_NAME: {{azure_storage_account_name}}
       PCF_OPSMAN_DISK_SIZE_IN_GB: {{pcf_opsman_disk_size_in_gb}}
 
 ##############################
@@ -210,7 +211,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
@@ -241,18 +242,15 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/config-director.sh
       params:
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-        OPSMAN_CLIENT_ID: {{opsman_client_id}}
-        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
         PCF_OPSMAN_ADMIN: {{opsman_admin_username}}
         PCF_OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
-        AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
         AZURE_SUBSCRIPTION_ID: {{azure_subscription_id}}
         AZURE_TENANT_ID: {{azure_tenant_id}}
         AZURE_CLIENT_ID: {{azure_client_id}}
@@ -299,15 +297,13 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: czero/rootfs
+          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/deploy-director.sh
       params:
         OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-        OPSMAN_CLIENT_ID: {{opsman_client_id}}
-        OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
         PCF_OPSMAN_ADMIN: {{opsman_admin_username}}
         PCF_OPSMAN_ADMIN_PASSWORD: {{opsman_admin_password}}
 
@@ -333,8 +329,8 @@ jobs:
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
       PIVNET_API_TOKEN: {{pivnet_token}}
@@ -346,8 +342,8 @@ jobs:
     file: pcf-pipelines/tasks/stage-product/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
 
@@ -372,8 +368,6 @@ jobs:
     params:
       IAAS: azure
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{opsman_admin_username}}
       OPS_MGR_PWD: {{opsman_admin_password}}
       ERT_SINGLETON_JOB_AZ:
@@ -387,14 +381,13 @@ jobs:
       COMPANY_NAME: {{company_name}}
       AUTHENTICATION_MODE: {{authentication_mode}}
       LOGGREGATOR_ENDPOINT_PORT: {{loggregator_endpoint_port}}
-      SSL_CERT: {{pcf_ert_ssl_cert}}
-      SSL_PRIVATE_KEY: {{pcf_ert_ssl_key}}
       SAML_SSL_CERT: {{pcf_ert_saml_cert}}
       SAML_SSL_PRIVATE_KEY: {{pcf_ert_saml_key}}
       HAPROXY_FORWARD_TLS: {{haproxy_forward_tls}}
       HAPROXY_BACKEND_CA: {{haproxy_backend_ca}}
       ROUTER_TLS_CIPHERS: {{router_tls_ciphers}}
       HAPROXY_TLS_CIPHERS: {{haproxy_tls_ciphers}}
+      FRONTEND_IDLE_TIMEOUT: {{frontend_idle_timeout}}
       DISABLE_HTTP_PROXY: {{disable_http_proxy}}
       TCP_ROUTING: {{tcp_routing}}
       TCP_ROUTING_PORTS: {{tcp_routing_ports}}
@@ -427,8 +420,6 @@ jobs:
       DISABLE_INSECURE_COOKIES: {{disable_insecure_cookies}}
       ROUTER_STATIC_IPS: {{router_static_ips}}
       ROUTER_REQUEST_TIMEOUT_IN_SEC: {{router_request_timeout_in_seconds}}
-      GARDEN_NETWORK_POOL_CIDR: {{garden_network_pool_cidr}}
-      GARDEN_NETWORK_MTU: {{garden_network_mtu}}
       MYSQL_MONITOR_EMAIL: {{mysql_monitor_recipient_email}}
       MYSQL_BACKUPS: {{mysql_backups}}
       MYSQL_BACKUPS_SCP_SERVER: {{mysql_backups_scp_server}}
@@ -455,6 +446,7 @@ jobs:
       BACKUP_PREPARE_INSTANCES: {{backup_prepare_instances}}
       UAA_INSTANCES: {{uaa_instances}}
       CLOUD_CONTROLLER_INSTANCES: {{cloud_controller_instances}}
+      CREDHUB_INSTANCES: {{credhub_instances}}
       HA_PROXY_INSTANCES: {{ha_proxy_instances}}
       HA_PROXY_LB_NAME: {{ha_proxy_lb_name}}
       ROUTER_INSTANCES: {{router_instances}}
@@ -465,11 +457,30 @@ jobs:
       DIEGO_BRAIN_INSTANCES: {{diego_brain_instances}}
       DIEGO_CELL_INSTANCES: {{diego_cell_instances}}
       DOPPLER_INSTANCES: {{doppler_instances}}
-      LOGGREGATOR_TC_INSTANCES: {{loggregator_traffic_controller_instances}}
+      LOGGREGATOR_TRAFFICCONTROLLER_INSTANCES: {{loggregator_trafficcontroller_instances}}
       TCP_ROUTER_INSTANCES: {{tcp_router_instances}}
       SYSLOG_ADAPTER_INSTANCES: {{syslog_adapter_instances}}
+      SYSLOG_SCHEDULER_INSTANCES: {{syslog_scheduler_instances}}
       INTERNET_CONNECTED: {{internet_connected}}
       CONTAINER_NETWORKING_NW_CIDR: {{container_networking_nw_cidr}}
+      ROUTING_TLS_TERMINATION: {{routing_tls_termination}}
+      ROUTING_CUSTOM_CA_CERTIFICATES: {{routing_custom_ca_certificates}}
+      POE_SSL_NAME1: {{poe_ssl_name1}}
+      POE_SSL_CERT1: {{poe_ssl_cert1}}
+      POE_SSL_KEY1: {{poe_ssl_key1}}
+      POE_SSL_NAME2: {{poe_ssl_name2}}
+      POE_SSL_CERT2: {{poe_ssl_cert2}}
+      POE_SSL_KEY2: {{poe_ssl_key2}}
+      POE_SSL_NAME3: {{poe_ssl_name3}}
+      POE_SSL_CERT3: {{poe_ssl_cert3}}
+      POE_SSL_KEY3: {{poe_ssl_key3}}
+      CREDUB_ENCRYPTION_KEY_NAME1: {{credhub_encryption_key_name1}}
+      CREDUB_ENCRYPTION_KEY_SECRET1: {{credhub_encryption_key_secret1}}
+      CREDUB_ENCRYPTION_KEY_NAME2: {{credhub_encryption_key_name2}}
+      CREDUB_ENCRYPTION_KEY_SECRET2: {{credhub_encryption_key_secret2}}
+      CREDUB_ENCRYPTION_KEY_NAME3: {{credhub_encryption_key_name3}}
+      CREDUB_ENCRYPTION_KEY_SECRET3: {{credhub_encryption_key_secret3}}
+      CREDHUB_PRIMARY_ENCRYPTION_NAME: {{credhub_primary_encryption_name}}
       TCP_ROUTER_NSX_SECURITY_GROUP: ""
       TCP_ROUTER_NSX_LB_EDGE_NAME: ""
       TCP_ROUTER_NSX_LB_POOL_NAME: ""
@@ -511,7 +522,8 @@ jobs:
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_CLIENT_ID: ""
+      OPSMAN_CLIENT_SECRET: ""
+

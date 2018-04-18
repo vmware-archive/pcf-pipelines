@@ -91,8 +91,8 @@
           S3_ENDPOINT: {{s3_endpoint}}
           IAAS: vsphere
           OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
-          OPSMAN_CLIENT_ID: {{opsman_client_id}}
-          OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+          OPSMAN_CLIENT_ID: ""
+          OPSMAN_CLIENT_SECRET: ""
           OPS_MGR_USERNAME: {{opsman_admin_username}}
           OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:
@@ -193,8 +193,8 @@
         - name: pivnet-product
         params:
           OPS_MGR_DOMAIN: {{opsman_domain_or_ip_address}}
-          OPSMAN_CLIENT_ID: {{opsman_client_id}}
-          OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+          OPSMAN_CLIENT_ID: ""
+          OPSMAN_CLIENT_SECRET: ""
           OPS_MGR_USERNAME: {{opsman_admin_username}}
           OPS_MGR_PASSWORD: {{opsman_admin_password}}
         run:

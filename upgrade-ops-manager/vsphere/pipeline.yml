@@ -110,7 +110,7 @@ jobs:
       DNS: {{dns}}
       NTP: {{ntp}}
       OPSMAN_NETWORK: {{opsman_network}}
-      OPSMAN_VM_FOLDER: {{opsman_vm_folder}}
+      OPSMAN_VM_FOLDER: {{om_vm_folder}}
       OPSMAN_SSH_PASSWORD: {{opsman_ssh_password}}
       OPSMAN_DISK_TYPE: {{opsman_disk_type}}
 

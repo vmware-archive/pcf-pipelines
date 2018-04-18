@@ -13,7 +13,7 @@ resource "azurerm_network_interface" "ops_manager_nic" {
     name                          = "${var.env_name}-ops-manager-ip-config"
     subnet_id                     = "${azurerm_subnet.opsman_and_director_subnet.id}"
     private_ip_address_allocation = "static"
-    private_ip_address            = "192.168.0.4"
+    private_ip_address            = "${var.azure_opsman_priv_ip}"
     public_ip_address_id          = "${azurerm_public_ip.opsman-public-ip.id}"
   }
 }

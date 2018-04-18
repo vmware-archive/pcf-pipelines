@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e -u
+
+go get github.com/jteeuwen/go-bindata/...
+
+go-bindata \
+  -pkg migration \
+  -o db/migration/bindata.go \
+  -prefix db/migration/migrations/ \
+  -ignore 'db/migration/migrations/migrations.go' \
+  db/migration/migrations/*

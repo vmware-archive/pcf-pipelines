@@ -9,6 +9,11 @@ to be deployed on it.
 
 ## Prerequisites
 
+* [install a Concourse server](https://concourse-ci.org/installing.html)
+* download the [Fly CLI](https://concourse-ci.org/fly-cli.html) to interact with the Concourse server
+* depending on where you've installed Concourse, you may need to set up
+[additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
+third-party sources of pipeline dependencies
 * vSphere 6.x or greater
 * vSphere NSX 6.1 or greater
 * vCenter Account with the permissions as detailed in
@@ -48,7 +53,7 @@ to be deployed on it.
 
 ## Usage
 
-This pipeline downloads artifacts from DockerHub (czero/rootfs and custom
+This pipeline downloads artifacts from DockerHub (pcfnorm/rootfs and custom
 docker-image resources), and as such the Concourse instance must have access
 to those.
 
@@ -57,7 +62,7 @@ to those.
 
 2. Update all params in the `params.yml` with the proper values.
 
-3. [Set the pipeline](http://concourse.ci/single-page.html#fly-set-pipeline), using your updated `params.yml`:
+3. [Set the pipeline](http://concourse-ci.org/single-page.html#fly-set-pipeline), using your updated `params.yml`:
   ```
   fly -t lite set-pipeline -p deploy-pcf -c pipeline.yml -l params.yml
   ```
@@ -65,6 +70,12 @@ to those.
 4. Unpause the pipeline in Concourse.
 
 5. Trigger the `deploy-opsman` job.
+
+
+
+## Known Issues
+
+- `ert_errands_to_disable` does not function as expected; use caution when toggling the errands functionality. Currently the only functionality that works is it disables or enables errands; the functionality to choose which errand to disable does not function as expected. 
 
 ## Troubleshooting
 
@@ -89,3 +100,19 @@ to those.
   **Solution:** You are not using the PivNet resource, and are most likely using
   a different repository manager like Artifactory. For more information, and a
   possible workaround, see this github [issue](https://github.com/pivotal-cf/pcf-pipelines/issues/192).
+  
+  
+  #### Error message: ####
+
+    could not execute "configure-bosh": tile failed to configure: request failed: unexpected response:
+    HTTP/1.1 422 Unprocessable Entity
+    ...
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    ...
+
+
+
+  **Solution:** If you are using pcf-pipelines v23, there is an issue in the params.yml with inverted quotations. (For example, `bosh_disk_path: “pcf_disk”`.) To resolve this issue, remove all instances of inverted quotations from your params.yml, and add regular quotations (For example, `bosh_disk_path: "pcf_disk"`.).

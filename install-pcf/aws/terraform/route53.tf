@@ -8,7 +8,7 @@ resource "aws_route53_record" "opsman" {
 
 resource "aws_route53_record" "apps_wild_card" {
   zone_id = "${var.route53_zone_id}"
-  name = "*.cfapps"
+  name = "*.${element(split(".", var.apps_domain), 0)}"
   type = "CNAME"
   ttl = "900"
   records = ["${aws_elb.PcfHttpElb.dns_name}"]
@@ -16,7 +16,7 @@ resource "aws_route53_record" "apps_wild_card" {
 
 resource "aws_route53_record" "system_wild_card" {
   zone_id = "${var.route53_zone_id}"
-  name = "*.sys"
+  name = "*.${element(split(".", var.system_domain), 0)}"
   type = "CNAME"
   ttl = "900"
   records = ["${aws_elb.PcfHttpElb.dns_name}"]
@@ -24,7 +24,7 @@ resource "aws_route53_record" "system_wild_card" {
 
 resource "aws_route53_record" "ssh" {
   zone_id = "${var.route53_zone_id}"
-  name = "ssh.sys"
+  name = "ssh.${element(split(".", var.system_domain), 0)}"
   type = "CNAME"
   ttl = "900"
   records = ["${aws_elb.PcfSshElb.dns_name}"]

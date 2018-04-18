@@ -11,8 +11,6 @@ function delete-opsman-installation() {
     om-linux \
       --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
       --skip-ssl-validation \
-      --client-id "${OPSMAN_CLIENT_ID}" \
-      --client-secret "${OPSMAN_CLIENT_SECRET}" \
       --username "${OPSMAN_USERNAME}" \
       --password "${OPSMAN_PASSWORD}" \
       delete-installation
@@ -51,6 +49,8 @@ function delete-infrastructure() {
     -var "azure_terraform_subnet_dynamic_services_cidr=dontcare" \
     -var "ert_subnet_id=dontcare" \
     -var "pcf_ert_domain=dontcare" \
+    -var "system_domain=dontcare" \
+    -var "apps_domain=dontcare" \
     -var "pub_ip_pcf_lb=dontcare" \
     -var "pub_ip_id_pcf_lb=dontcare" \
     -var "pub_ip_tcp_lb=dontcare" \
@@ -68,8 +68,8 @@ function delete-infrastructure() {
     -var "vm_admin_public_key=dontcare" \
     -var "azure_multi_resgroup_network=dontcare" \
     -var "azure_multi_resgroup_pcf=dontcare" \
-    -var "priv_ip_opsman_vm=dontcare" \
-    -var "azure_account_name=dontcare" \
+    -var "azure_opsman_priv_ip=dontcare" \
+    -var "azure_storage_account_name=dontcare" \
     -var "azure_buildpacks_container=dontcare" \
     -var "azure_droplets_container=dontcare" \
     -var "azure_packages_container=dontcare" \

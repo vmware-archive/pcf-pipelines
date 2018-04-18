@@ -9,15 +9,15 @@ atc_basic_auth_username:
 atc_basic_auth_password:
 atc_team_name:
 # Name of the pipeline
-install_pcf_pipeline_name:
+rc_offline_pipeline_name:
 # Params for the install-pcf pipeline, appropriately indented, e.g.
 #
-# install_pcf_pipeline_params: |
+# rc_offline_vsphere_install_params: |
 #     pivnet_token: ...
 #     opsman_domain_or_ip_address: ...
 # ...
 #
-install_pcf_pipeline_params:
+rc_offline_vsphere_install_params:
 # Private key to decrypt the final tarball
 # https://help.github.com/articles/generating-a-new-gpg-key/
 gpg_private_key_contents:

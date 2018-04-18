@@ -4,7 +4,9 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: czero/rootfs}
+  source:
+    repository: pcfnorm/rootfs
+
 
 params:
   GOVC_INSECURE:
@@ -26,7 +28,6 @@ params:
   OM_IP:
   OM_VM_NETWORK:
   OM_VM_NAME:
-  OM_RESOURCE_POOL:
   OPSMAN_DISK_TYPE:
   OM_VM_POWER_STATE:
   OM_VM_FOLDER:

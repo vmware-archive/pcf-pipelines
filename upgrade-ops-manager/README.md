@@ -1,5 +1,19 @@
 # Upgrade Ops Manager
 
+**Compatibility Matrix**
+
+| IAAS | pipelines release | OM version | 
+| :--- | --- | --- | 
+| vSphere | v23.1 | 2.0.x  | 
+| Azure | v23.1 | 2.0.x | 
+| AWS | v23.1 | 2.0.x | 
+| GCP | v23.1 | 2.0.x  | 
+
+
+## Requirements:
+
+In order to use the upgrade-ops-manager pipeline, you must have first used the [install-pcf](https://github.com/pivotal-cf/pcf-pipelines/tree/master/install-pcf) pipelines to install PCF. The upgrade-ops-manager pipeline will not function as expected if you installed PCF manually.
+
 ## Structure / Purpose
 The subfolders of this directory are for specific IaaS impelementations. 
 Each pipeline is meant to serve the same purpose on it's given IaaS. That
@@ -24,9 +38,6 @@ Required Scopes and authorities are :
 - authorities (list):  opsman.admin
 
 ## Known Issues:
-
-### Ops Manager IP address swapping
-The vSphere upgrade-ops-mgr pipelines currently do not detach the IP adddress from the old Ops Manager instance, once the new Ops Manager is added. This will be fixed soon. Similarly, on other IaaSes, the private IP address is not necessarily kept and re-used on the new Ops Manager instance.
 
 ### Tiles with Stemcells not Available on PivNet
 For Ops Manager with tiles that require stemcells which are not available on PivNet, e.g. Apigee tiles, the setup of the pipeline requires an additional operations file that enables downloads from bosh.io.

@@ -12,7 +12,7 @@ resource "google_compute_http_health_check" "cf-gorouter" {
 // TCP Router Health check
 resource "google_compute_http_health_check" "cf-tcp" {
   name                = "${var.prefix}-tcp-lb"
-  host                = "tcp.sys.${google_dns_managed_zone.env_dns_zone.dns_name}"
+  host                = "tcp.${var.system_domain}."
   port                = 80
   request_path        = "/health"
   check_interval_sec  = 30

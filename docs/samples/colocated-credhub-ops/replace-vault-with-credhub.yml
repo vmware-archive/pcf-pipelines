@@ -1,0 +1,14 @@
+# remove existing vault configuration
+- type: remove
+  path: /instance_groups/name=web/jobs/name=atc/properties/vault
+
+# add credhub configuration
+- type: replace
+  path: /instance_groups/name=web/jobs/name=atc/properties/credhub?
+  value:
+    url: https://((concourse_host)):8844
+    tls:
+      ca_cert: {{concourse-ca}}
+      insecure_skip_verify: {{credhub_insecure_skip_verify}}
+    client_id: concourse_to_credhub
+    client_secret: {{concourse_to_credhub_secret}}
