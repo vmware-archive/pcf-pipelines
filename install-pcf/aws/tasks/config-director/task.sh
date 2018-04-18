@@ -4,7 +4,9 @@ set -eu
 
 aws_access_key_id=`terraform state show -state terraform-state/terraform.tfstate aws_iam_access_key.pcf_iam_user_access_key | grep ^id | awk '{print $3}'`
 aws_secret_access_key=`terraform state show -state terraform-state/terraform.tfstate aws_iam_access_key.pcf_iam_user_access_key | grep ^secret | awk '{print $3}'`
-rds_password=`terraform state show -state terraform-state/terraform.tfstate aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
+if [ ${ert_database_type} != "internal" ]; then
+    rds_password=`terraform state show -state terraform-state/terraform.tfstate aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
+fi
 
 while read -r line
 do
@@ -26,30 +28,50 @@ read -r -d '' iaas_configuration <<EOF
 }
 EOF
 
-read -r -d '' director_configuration <<EOF
-{
-  "ntp_servers_string": "0.amazon.pool.ntp.org,1.amazon.pool.ntp.org,2.amazon.pool.ntp.org,3.amazon.pool.ntp.org",
-  "resurrector_enabled": true,
-  "max_threads": 30,
-  "database_type": "external",
-  "external_database_options": {
-    "host": "$db_host",
-    "port": 3306,
-    "user": "$db_username",
-    "password": "$rds_password",
-    "database": "$db_database"
-  },
-  "blobstore_type": "s3",
-  "s3_blobstore_options": {
-    "endpoint": "$S3_ENDPOINT",
-    "bucket_name": "$s3_pcf_bosh",
-    "access_key": "$aws_access_key_id",
-    "secret_key": "$aws_secret_access_key",
-    "signature_version": "4",
-    "region": "$AWS_REGION"
-  }
-}
+if [ ${ert_database_type} != "internal" ]; then
+    read -r -d '' director_configuration <<EOF
+    {
+      "ntp_servers_string": "0.amazon.pool.ntp.org,1.amazon.pool.ntp.org,2.amazon.pool.ntp.org,3.amazon.pool.ntp.org",
+      "resurrector_enabled": true,
+      "max_threads": 30,
+      "database_type": "external",
+      "external_database_options": {
+        "host": "$db_host",
+        "port": 3306,
+        "user": "$db_username",
+        "password": "$rds_password",
+        "database": "$db_database"
+      },
+      "blobstore_type": "s3",
+      "s3_blobstore_options": {
+        "endpoint": "$S3_ENDPOINT",
+        "bucket_name": "$s3_pcf_bosh",
+        "access_key": "$aws_access_key_id",
+        "secret_key": "$aws_secret_access_key",
+        "signature_version": "4",
+        "region": "$AWS_REGION"
+      }
+    }
 EOF
+else
+    read -r -d '' director_configuration <<EOF
+    {
+      "ntp_servers_string": "0.amazon.pool.ntp.org,1.amazon.pool.ntp.org,2.amazon.pool.ntp.org,3.amazon.pool.ntp.org",
+      "resurrector_enabled": true,
+      "max_threads": 30,
+      "database_type": "internal",
+      "blobstore_type": "s3",
+      "s3_blobstore_options": {
+        "endpoint": "$S3_ENDPOINT",
+        "bucket_name": "$s3_pcf_bosh",
+        "access_key": "$aws_access_key_id",
+        "secret_key": "$aws_secret_access_key",
+        "signature_version": "4",
+        "region": "$AWS_REGION"
+      }
+    }
+EOF
+fi
 
 resource_configuration=$(cat <<-EOF
 {

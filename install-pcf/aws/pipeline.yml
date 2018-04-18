@@ -125,6 +125,7 @@ jobs:
       nat_ip_az3: {{nat_ip_az3}}
       OPSMAN_ALLOW_SSH_CIDR_RANGES: {{opsman_allow_ssh_cidr_ranges}}
       OPSMAN_ALLOW_HTTPS_CIDR_RANGES: {{opsman_allow_https_cidr_ranges}}
+      ert_database_type: {{ert_database_type}}
     ensure:
       put: terraform-state
       params:
@@ -159,6 +160,7 @@ jobs:
       DB_LOCKET_PASSWORD: {{db_locket_password}}
       DB_SILK_USERNAME: {{db_silk_username}}
       DB_SILK_PASSWORD: {{db_silk_password}}
+      ERT_DATABASE_TYPE: {{ert_database_type}}
 
 - name: configure-director
   serial_groups: [opsman]
@@ -335,6 +337,7 @@ jobs:
       azure_droplets_container:
       azure_packages_container:
       azure_resources_container:
+      ert_database_type: {{ert_database_type}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml

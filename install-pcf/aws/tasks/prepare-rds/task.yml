@@ -35,5 +35,6 @@ params:
   DB_LOCKET_PASSWORD:
   DB_SILK_USERNAME:
   DB_SILK_PASSWORD:
+  ERT_DATABASE_TYPE:
 run:
   path: pcf-pipelines/install-pcf/aws/tasks/prepare-rds/task.sh

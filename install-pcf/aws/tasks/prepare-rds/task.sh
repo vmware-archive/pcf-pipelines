@@ -1,6 +1,10 @@
 #!/bin/bash
 set -eu
 
+if [ ${ERT_DATABASE_TYPE} = "internal" ]; then
+    exit 0
+fi
+
 echo "$PEM" > pcf.pem
 chmod 0600 pcf.pem
 

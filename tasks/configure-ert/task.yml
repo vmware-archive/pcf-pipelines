@@ -88,3 +88,4 @@ params:
   db_silk_password:
   routing_disable_http:
   SECURITY_ACKNOWLEDGEMENT:
+  ert_database_type:

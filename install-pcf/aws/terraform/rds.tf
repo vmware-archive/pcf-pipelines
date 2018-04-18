@@ -1,4 +1,5 @@
 resource "aws_db_subnet_group" "rds_subnet_group" {
+    count = "${var.rds_count}"
     name = "${var.prefix}-rds_subnet_group"
     subnet_ids = ["${aws_subnet.PcfVpcRdsSubnet_az1.id}", "${aws_subnet.PcfVpcRdsSubnet_az2.id}", "${aws_subnet.PcfVpcRdsSubnet_az3.id}"]
     tags {
@@ -6,6 +7,7 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
     }
 }
 resource "aws_db_instance" "pcf_rds" {
+    count                   = "${var.rds_count}"
     identifier              = "${var.prefix}-pcf"
     allocated_storage       = 100
     engine                  = "mariadb"

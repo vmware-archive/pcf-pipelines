@@ -193,3 +193,6 @@ container_networking_nw_cidr: 10.255.0.0/16 # C2C Networking network CIDR
 
 # Whether or not the ERT VMs are internet connected.
 internet_connected: false
+
+ert_database_type: external
+

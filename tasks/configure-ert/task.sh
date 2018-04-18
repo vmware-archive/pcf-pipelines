@@ -70,29 +70,18 @@ cf_resources=$(
     --arg terraform_prefix $terraform_prefix \
     --arg iaas $pcf_iaas \
     --argjson internet_connected $INTERNET_CONNECTED \
+    --arg ert_database_type $ert_database_type \
     '
     {
       "consul_server": {"internet_connected": $internet_connected},
       "nats": {"internet_connected": $internet_connected},
       "nfs_server": {"internet_connected": $internet_connected},
-      "mysql_proxy": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
-      "mysql": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
       "backup-prepare": {"internet_connected": $internet_connected},
       "diego_database": {"internet_connected": $internet_connected},
       "uaa": {"internet_connected": $internet_connected},
       "cloud_controller": {"internet_connected": $internet_connected},
       "ha_proxy": {"internet_connected": $internet_connected},
       "router": {"internet_connected": $internet_connected},
-      "mysql_monitor": {
-        "instances": 0,
-        "internet_connected": $internet_connected
-      },
       "clock_global": {"internet_connected": $internet_connected},
       "cloud_controller_worker": {"internet_connected": $internet_connected},
       "diego_brain": {"internet_connected": $internet_connected},
@@ -113,6 +102,31 @@ cf_resources=$(
       "bootstrap": {"internet_connected": $internet_connected},
       "mysql-rejoin-unsafe": {"internet_connected": $internet_connected}
     }
+
+    +
+
+    if $ert_database_type == "internal" then
+    {
+      "mysql_proxy": {"internet_connected": $internet_connected},
+      "mysql": {"internet_connected": $internet_connected},
+      "mysql_monitor": {"internet_connected": $internet_connected}
+    }
+    else
+    {
+       "mysql_proxy": {
+        "instances": 0,
+        "internet_connected": $internet_connected
+      },
+      "mysql": {
+        "instances": 0,
+        "internet_connected": $internet_connected
+      },
+      "mysql_monitor": {
+        "instances": 0,
+        "internet_connected": $internet_connected
+      },
+    }
+    end
 
     |
 
@@ -193,6 +207,7 @@ cf_properties=$(
     --arg mysql_backups_s3_secret_access_key "$MYSQL_BACKUPS_S3_SECRET_ACCESS_KEY" \
     --arg mysql_backups_s3_cron_schedule "$MYSQL_BACKUPS_S3_CRON_SCHEDULE" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
+    --arg ert_database_type "$ert_database_type" \
     '
     {
       ".uaa.service_provider_key_credentials": {
@@ -207,36 +222,6 @@ cf_properties=$(
       ".properties.container_networking_network_cidr": { "value": $container_networking_nw_cidr },
       ".properties.route_services.enable.ignore_ssl_cert_verification": { "value": true },
       ".properties.security_acknowledgement": { "value": $security_acknowledgement },
-      ".properties.system_database": { "value": "external" },
-      ".properties.system_database.external.port": { "value": "3306" },
-      ".properties.system_database.external.host": { "value": $db_host },
-      ".properties.system_database.external.app_usage_service_username": { "value": $db_app_usage_service_username },
-      ".properties.system_database.external.app_usage_service_password": { "value": { "secret": $db_app_usage_service_password } },
-      ".properties.system_database.external.autoscale_username": { "value": $db_autoscale_username },
-      ".properties.system_database.external.autoscale_password": { "value": { "secret": $db_autoscale_password } },
-      ".properties.system_database.external.diego_username": { "value": $db_diego_username },
-      ".properties.system_database.external.diego_password": { "value": { "secret": $db_diego_password } },
-      ".properties.system_database.external.notifications_username": { "value": $db_notifications_username },
-      ".properties.system_database.external.notifications_password": { "value": { "secret": $db_notifications_password } },
-      ".properties.system_database.external.routing_username": { "value": $db_routing_username },
-      ".properties.system_database.external.routing_password": { "value": { "secret": $db_routing_password } },
-      ".properties.system_database.external.ccdb_username": { "value": $db_ccdb_username },
-      ".properties.system_database.external.ccdb_password": { "value": { "secret": $db_ccdb_password } },
-      ".properties.system_database.external.account_username": { "value": $db_accountdb_username },
-      ".properties.system_database.external.account_password": { "value": { "secret": $db_accountdb_password } },
-      ".properties.system_database.external.networkpolicyserver_username": { "value": $db_networkpolicyserverdb_username },
-      ".properties.system_database.external.networkpolicyserver_password": { "value": { "secret": $db_networkpolicyserverdb_password } },
-      ".properties.system_database.external.nfsvolume_username": { "value": $db_nfsvolumedb_username },
-      ".properties.system_database.external.nfsvolume_password": { "value": { "secret": $db_nfsvolumedb_password } },
-      ".properties.system_database.external.locket_username": { "value": $db_locket_username },
-      ".properties.system_database.external.locket_password": { "value": { "secret": $db_locket_password } },
-      ".properties.system_database.external.silk_username": { "value": $db_silk_username },
-      ".properties.system_database.external.silk_password": { "value": { "secret": $db_silk_password } },
-      ".properties.uaa_database": { "value": "external" },
-      ".properties.uaa_database.external.host": { "value": $db_host },
-      ".properties.uaa_database.external.port": { "value": "3306" },
-      ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
-      ".properties.uaa_database.external.uaa_password": { "value": { "secret": $db_uaa_password } },
       ".cloud_controller.system_domain": { "value": "sys.\($pcf_ert_domain)" },
       ".cloud_controller.apps_domain": { "value": "cfapps.\($pcf_ert_domain)" },
       ".cloud_controller.allow_app_ssh_access": { "value": true },
@@ -245,6 +230,48 @@ cf_properties=$(
       ".push-apps-manager.company_name": { "value": "pcf-\($iaas)" },
       ".mysql_monitor.recipient_email": { "value" : $mysql_monitor_recipient_email }
     }
+
+    +
+
+    if $ert_database_type == "internal" then
+      {
+        ".properties.system_database": { "value": "internal_mysql" },
+        ".properties.uaa_database": { "value": "internal_mysql" },
+      }
+    else
+      {
+        ".properties.system_database": { "value": "external" },
+        ".properties.system_database.external.port": { "value": "3306" },
+        ".properties.system_database.external.host": { "value": $db_host },
+        ".properties.system_database.external.app_usage_service_username": { "value": $db_app_usage_service_username },
+        ".properties.system_database.external.app_usage_service_password": { "value": { "secret": $db_app_usage_service_password } },
+        ".properties.system_database.external.autoscale_username": { "value": $db_autoscale_username },
+        ".properties.system_database.external.autoscale_password": { "value": { "secret": $db_autoscale_password } },
+        ".properties.system_database.external.diego_username": { "value": $db_diego_username },
+        ".properties.system_database.external.diego_password": { "value": { "secret": $db_diego_password } },
+        ".properties.system_database.external.notifications_username": { "value": $db_notifications_username },
+        ".properties.system_database.external.notifications_password": { "value": { "secret": $db_notifications_password } },
+        ".properties.system_database.external.routing_username": { "value": $db_routing_username },
+        ".properties.system_database.external.routing_password": { "value": { "secret": $db_routing_password } },
+        ".properties.system_database.external.ccdb_username": { "value": $db_ccdb_username },
+        ".properties.system_database.external.ccdb_password": { "value": { "secret": $db_ccdb_password } },
+        ".properties.system_database.external.account_username": { "value": $db_accountdb_username },
+        ".properties.system_database.external.account_password": { "value": { "secret": $db_accountdb_password } },
+        ".properties.system_database.external.networkpolicyserver_username": { "value": $db_networkpolicyserverdb_username },
+        ".properties.system_database.external.networkpolicyserver_password": { "value": { "secret": $db_networkpolicyserverdb_password } },
+        ".properties.system_database.external.nfsvolume_username": { "value": $db_nfsvolumedb_username },
+        ".properties.system_database.external.nfsvolume_password": { "value": { "secret": $db_nfsvolumedb_password } },
+        ".properties.system_database.external.locket_username": { "value": $db_locket_username },
+        ".properties.system_database.external.locket_password": { "value": { "secret": $db_locket_password } },
+        ".properties.system_database.external.silk_username": { "value": $db_silk_username },
+        ".properties.system_database.external.silk_password": { "value": { "secret": $db_silk_password } },
+        ".properties.uaa_database": { "value": "external" },
+        ".properties.uaa_database.external.host": { "value": $db_host },
+        ".properties.uaa_database.external.port": { "value": "3306" },
+        ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
+        ".properties.uaa_database.external.uaa_password": { "value": { "secret": $db_uaa_password } },
+      }
+    end
 
     +
 
