@@ -431,7 +431,7 @@ jobs:
   - task: destroy-rc-vsphere-install
     params:
       PIPELINE_NAME: rc-vsphere-install
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
     file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
 
 - name: set-rc-vsphere-install
@@ -455,12 +455,12 @@ jobs:
       PIPELINE_PARAMS: {{rc_vsphere_install_params}}
       PIPELINE_NAME: rc-vsphere-install
       PIPELINE_PATH: release/pcf-pipelines/install-pcf/vsphere/pipeline.yml
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
     file: pcf-pipelines/ci/tasks/set_pipeline.yml
   - task: unpause-rc-vsphere-install
     params:
       PIPELINE_NAME: rc-vsphere-install
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
     file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
 
 - name: wipe-vsphere
@@ -478,7 +478,7 @@ jobs:
   - task: trigger-vsphere-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
       JOBS: |
         rc-vsphere-install/wipe-env
   on_failure:
@@ -499,7 +499,7 @@ jobs:
   - task: trigger-vsphere-rc-deploy-opsman
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
       JOBS: |
         rc-vsphere-install/deploy-opsman
         rc-vsphere-install/deploy-ert
@@ -521,7 +521,7 @@ jobs:
   - task: trigger-vsphere-rc-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
       JOBS: |
         rc-vsphere-install/wipe-env
   - try:
@@ -1315,7 +1315,7 @@ jobs:
   - task: destroy-rc-vsphere-offline-install
     params:
       PIPELINE_NAME: {{rc_offline_pipeline_name}}
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
     file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
 
 - name: set-offline-pipelines
@@ -1341,7 +1341,7 @@ jobs:
       PIPELINE_PARAMS: {{create_offline_pinned_pipelines_params}}
       PIPELINE_NAME: create-offline-pinned-pipelines
       PIPELINE_PATH: release/pcf-pipelines/create-offline-pinned-pipelines/pipeline.yml
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
     file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
   - task: apply-unpack-pcf-pipelines-combined-patches
@@ -1358,7 +1358,7 @@ jobs:
       PIPELINE_PARAMS: {{unpack_pcf_pipelines_combined_params}}
       PIPELINE_NAME: unpack-pcf-pipelines-combined
       PIPELINE_PATH: release/pcf-pipelines/unpack-pcf-pipelines-combined/pipeline.yml
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
     file: pcf-pipelines/ci/tasks/set_pipeline.yml
 
 - name: trigger-create-offline-pinned-pipelines
@@ -1375,7 +1375,7 @@ jobs:
       passed: [ set-offline-pipelines ]
   - task: trigger-create-offline-pinned-pipelines
     params:
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
       JOBS: |
         create-offline-pinned-pipelines/collector
         create-offline-pinned-pipelines/create-pcf-pipelines-combined
@@ -1395,7 +1395,7 @@ jobs:
       passed: [ trigger-create-offline-pinned-pipelines ]
   - task: trigger-unpack-pipelines-combined
     params:
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
       JOBS: |
         unpack-pcf-pipelines-combined/unpack-tarball
         unpack-pcf-pipelines-combined/set-install-pcf-pipeline
@@ -1427,7 +1427,7 @@ jobs:
   - task: trigger-rc-vsphere-offline-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
       JOBS: |
         ((rc_offline_pipeline_name))/wipe-env
   on_failure:
@@ -1448,7 +1448,7 @@ jobs:
   - task: trigger-rc-vsphere-offline-deploy-opsman
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
     params:
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
       JOBS: |
         ((rc_offline_pipeline_name))/deploy-opsman
         ((rc_offline_pipeline_name))/deploy-ert
@@ -1464,6 +1464,12 @@ atc_creds: &atc_creds
   ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
   ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
   ATC_TEAM_NAME: {{atc_team_name}}
+
+vsphere_atc_creds: &vsphere_atc_creds
+  ATC_EXTERNAL_URL: {{atc_external_url}}
+  ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+  ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+  ATC_TEAM_NAME: vsphere
 
 notify_slack: &notify_slack
   put: slack
