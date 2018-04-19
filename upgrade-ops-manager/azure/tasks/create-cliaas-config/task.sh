@@ -17,6 +17,9 @@
 set -eu
 
 VHD_IMAGE_URL=$(grep ${AZURE_REGION} pivnet-opsmgr/*Azure.yml | awk '{split($0, a); print a[2]}')
+if [[ -z $VHD_IMAGE_URL ]]; then
+  VHD_IMAGE_URL=$(grep vhd pivnet-opsmgr/*Azure.yml | head -n1 | awk '{split($0, a); print a[2]}')
+fi
 
 cat > cliaas-config/config.yml <<EOF
 azure:
