@@ -139,6 +139,7 @@ data "aws_iam_policy_document" "pcf_iam_rds_role_policy_document" {
                 "ec2:DisassociateAddress",
                 "ec2:DescribeAvailabilityZones",
                 "ec2:DescribeImages",
+                "ec2:CopyImage",
                 "ec2:DescribeInstances",
                 "ec2:RunInstances",
                 "ec2:RebootInstances",
