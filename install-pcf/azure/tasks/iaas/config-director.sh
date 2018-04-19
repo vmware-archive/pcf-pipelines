@@ -153,7 +153,6 @@ networks_configuration=$(
               "reserved_ip_ranges": $dynamic_services_subnet_reserved,
               "dns": $dynamic_services_subnet_dns,
               "gateway": $dynamic_services_subnet_gateway,
-              "availability_zone_names": ["null-az"]
             }
           ]
         }
