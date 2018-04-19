@@ -202,17 +202,17 @@ output "dynamic_services_subnet_id_az3" {
 # RDS info
 
 output "db_host" {
-    value = "${aws_db_instance.pcf_rds.address}"
+    value = "${element(concat(aws_db_instance.pcf_rds.*.address, list("")), 0)}"
 }
 output "db_port" {
-    value = "${aws_db_instance.pcf_rds.port}"
+    value = "${element(concat(aws_db_instance.pcf_rds.*.port, list("")), 0)}"
 }
 output "db_username" {
-    value = "${aws_db_instance.pcf_rds.username}"
+    value = "${element(concat(aws_db_instance.pcf_rds.*.username, list("")), 0)}"
 }
 output "db_password" {
-    value = "${aws_db_instance.pcf_rds.password}"
+    value = "${element(concat(aws_db_instance.pcf_rds.*.password, list("")), 0)}"
 }
 output "db_database" {
-    value = "${aws_db_instance.pcf_rds.name}"
+    value = "${element(concat(aws_db_instance.pcf_rds.*.name, list("")), 0)}"
 }

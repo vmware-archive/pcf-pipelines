@@ -155,3 +155,8 @@ variable "nat_ip_az3" {
     default = "10.0.2.6"
 }
 
+
+variable "rds_count" {
+    description = "Create a RDS instance"
+    default = 1
+}

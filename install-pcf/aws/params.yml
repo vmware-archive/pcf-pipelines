@@ -228,3 +228,5 @@ vpc_cidr: 192.168.0.0/16
 # Prefix to use for Terraform-managed infrastructure, e.g. 'pcf-terraform'
 # Must be globally unique.
 terraform_prefix: CHANGEME
+
+ert_database_type: external
