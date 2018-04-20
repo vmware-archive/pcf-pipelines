@@ -21,6 +21,11 @@ ${GCP_SERVICE_ACCOUNT_KEY}
 EOF
 
 DISK_IMAGE_PATH=$(grep ${PIVNET_IMAGE_REGION} pivnet-opsmgr/*GCP.yml | awk '{split($0, a); print a[2]}')
+if [ -z "DISK_IMAGE_PATH" ]; then
+  echo Could not find disk image for region \"PIVNET_IMAGE_REGION\". Available choices are:
+  cat pivnet-opsmgr/*GCP.yml | cut -f1 -d':'
+  exit 1
+fi
 
 cat > cliaas-config/config.yml <<EOF
 gcp:
