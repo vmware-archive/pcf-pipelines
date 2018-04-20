@@ -233,6 +233,7 @@ jobs:
     - get: pcf-pipelines
     - get: pivnet-opsmgr
       passed: [config-opsman-auth]
+      trigger: true
       params:
         globs: []
 
