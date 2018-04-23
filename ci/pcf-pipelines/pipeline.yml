@@ -742,12 +742,33 @@ jobs:
       passed: [ trigger-rc-gcp-upgrade-pas-tile ]
     - get: rootfs-tag
       passed: [ trigger-rc-gcp-upgrade-pas-tile ]
-  - task: trigger-gcp-rc-wipe-env
-    file: pcf-pipelines/tasks/trigger-jobs/task.yml
-    params:
-      <<: *atc_creds
-      JOBS: |
-        rc-gcp-install/wipe-env
+  - do:
+    - task: trigger-gcp-rc-wipe-env
+      file: pcf-pipelines/tasks/trigger-jobs/task.yml
+      params:
+        <<: *atc_creds
+        JOBS: |
+          rc-gcp-install/wipe-env
+    - task: cleanup-upgraded-opsmanagers
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: google/cloud-sdk
+        params:
+          GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+#          gcp_resource_prefix
+        run:
+          path: bash
+          args:
+          - -c
+          - |
+            set -eu
+
+            gcloud compute instances delete --delete-disks=all \
+              $(gcloud compute instances list --filter=TERMINATED --filter=rc --filter=ops-man | awk 'NR > 1 {print $1}') --quiet
+
   - try:
       put: gcp-lock
       params: {release: gcp-lock}
