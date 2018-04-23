@@ -61,7 +61,6 @@ jobs:
       OM_IP: {{om_ip}}
       OM_VM_NETWORK: {{om_vm_network}}
       OM_VM_NAME: {{om_vm_name}}
-      OM_RESOURCE_POOL: {{om_resource_pool}}
       OPSMAN_DISK_TYPE: {{opsman_disk_type}}
       OM_VM_POWER_STATE: {{om_vm_power_state}}
 
