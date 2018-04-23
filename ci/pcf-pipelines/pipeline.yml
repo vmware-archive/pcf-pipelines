@@ -768,10 +768,11 @@ jobs:
             set -eu
 
             gcloud auth activate-service-account --key-file <(echo "$GCP_SERVICE_ACCOUNT_KEY")
-            instances=$(gcloud compute instances list --filter="rc AND ops-man AND TERMINATED" | awk 'NR > 1 {print $1}')
-            if [ "$instances" != "" ]; then
-              gcloud compute instances delete --delete-disks=all "$instances" --quiet
-            fi
+            gcloud compute instances list --filter="rc AND ops-man AND TERMINATED" | \
+              awk 'NR > 1
+                {
+                  system("gcloud compute instances delete --delete-disks=all " $1 " --quiet --zone " $2)
+                }'
 
   - try:
       put: gcp-lock
@@ -901,10 +902,11 @@ jobs:
           set -eu
 
           gcloud auth activate-service-account --key-file <(echo "$GCP_SERVICE_ACCOUNT_KEY")
-          instances=$(gcloud compute instances list --filter="lre AND ops-man AND TERMINATED" | awk 'NR > 1 {print $1}')
-          if [ "$instances" != "" ]; then
-            gcloud compute instances delete --delete-disks=all "$instances" --quiet
-          fi
+          gcloud compute instances list --filter="lre AND ops-man AND TERMINATED" | \
+            awk 'NR > 1
+              {
+                system("gcloud compute instances delete --delete-disks=all " $1 " --quiet --zone " $2)
+              }'
 
 
 ####### END GCP LRE
