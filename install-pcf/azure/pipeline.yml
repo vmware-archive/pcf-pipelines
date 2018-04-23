@@ -176,8 +176,6 @@ jobs:
       AZURE_TERRAFORM_OPSMAN_PRIV_IP: {{azure_opsman_priv_ip}}
       AZURE_MULTI_RESGROUP_NETWORK: {{azure_multi_resgroup_network}}
       AZURE_MULTI_RESGROUP_PCF: {{azure_multi_resgroup_pcf}}
-      AZURE_MULTI_RESGROUP_INFRA_SUBNET_NAME: {{azure_multi_resgroup_infra_subnet_name}}
-      AZURE_MULTI_RESGROUP_INFRA_VNET_NAME: {{azure_multi_resgroup_infra_vnet_name}}
       AZURE_BUILDPACKS_CONTAINER: {{azure_buildpacks_container}}
       AZURE_DROPLETS_CONTAINER: {{azure_droplets_container}}
       AZURE_PACKAGES_CONTAINER: {{azure_packages_container}}
