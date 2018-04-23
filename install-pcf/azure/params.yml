@@ -18,12 +18,6 @@ azure_client_secret: CHANGEME
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the droplets will be stored. It is similar to the S3 bucket in AWS.
 azure_droplets_container:
 
-# Required if using c0-azure-multi-res-group - The ERT infrastructure subnet name for your Azure environment
-azure_multi_resgroup_infra_subnet_name:
-
-# Required if using c0-azure-multi-res-group - The virutal network name for your Azure environment
-azure_multi_resgroup_infra_vnet_name:
-
 # Required if using c0-azure-multi-res-group - An existing network for your Azure environment
 azure_multi_resgroup_network:
 
@@ -122,8 +116,7 @@ ert_major_minor_version: ^2\.0\.[0-9]+$ # ERT minor version to track (e.g ^2\.0\
 # Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
 frontend_idle_timeout: 239
 
-# Applications Network Maximum Transmission Unit bytes
-garden_network_mtu: 1454
+
 
 # Optional - if your git repo requires an SSH key.
 git_private_key:
