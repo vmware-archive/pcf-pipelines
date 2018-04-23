@@ -116,8 +116,7 @@ ert_major_minor_version: ^2\.0\.[0-9]+$ # ERT minor version to track (e.g ^2\.0\
 # Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
 frontend_idle_timeout: 239
 
-# Applications Network Maximum Transmission Unit bytes
-garden_network_mtu: 1454
+
 
 # Optional - if your git repo requires an SSH key.
 git_private_key:

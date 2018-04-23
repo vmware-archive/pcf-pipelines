@@ -96,9 +96,6 @@ external_network_id: CHANGEME
 # Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
 frontend_idle_timeout:
 
-# Applications Network Maximum Transmission Unit bytes
-garden_network_mtu: 1454
-
 # HAProxy will use the CA provided to verify the certificates provided by the router.
 haproxy_backend_ca: CHANGEME
 

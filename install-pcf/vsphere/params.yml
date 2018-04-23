@@ -122,8 +122,7 @@ ert_singleton_job_az: CHANGEME
 # Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
 frontend_idle_timeout:
 
-# Applications Network Maximum Transmission Unit bytes
-garden_network_mtu: 1454
+
 
 # Optional - if your git repo requires an SSH key.
 git_private_key:
