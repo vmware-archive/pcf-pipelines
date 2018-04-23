@@ -46,9 +46,6 @@
       ".properties.security_acknowledgement": {
         "value": "X"
       },
-      ".properties.mysql_backups": {
-        "value": "disable"
-      },
       ".cloud_controller.system_domain": {
         "value": "{{system_domain}}"
       },

@@ -192,27 +192,8 @@ loggregator_endpoint_port:
 # Max threads count for deploying VMs
 max_threads: 30
 
-# Whether to enable MySQL backups. (disable|s3|scp)
-mysql_backups: disable
-
 # Email address to receive MySQL monitor notifications
 mysql_monitor_email:
-
-# S3 backup config params (leave empty values if you’re not using s3)
-mysql_backups_s3_access_key_id:
-mysql_backups_s3_bucket_name:
-mysql_backups_s3_bucket_path:
-mysql_backups_s3_cron_schedule:
-mysql_backups_s3_endpoint_url:
-mysql_backups_s3_secret_access_key:
-
-# SCP backup config params (leave empty values if you’re not using scp)
-mysql_backups_scp_cron_schedule:
-mysql_backups_scp_destination:
-mysql_backups_scp_key:
-mysql_backups_scp_port:
-mysql_backups_scp_server:
-mysql_backups_scp_user:
 
 #nsx configuration
 nsx_address:                      # address of nsx
