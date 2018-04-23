@@ -42,6 +42,7 @@ groups:
   - set-rc-gcp-upgrade-pas-tile
   - trigger-rc-gcp-upgrade-pas-tile
   - lock-gcp-lre
+  - cleanup-gcp-lre
   - force-unlock-vsphere-install-pcf
   - force-unlock-gcp-install-pcf
   - force-unlock-gcp-install-pcf
@@ -123,6 +124,7 @@ groups:
   - lock-gcp-lre
   - check-environments-complete
   - force-unlock-lre-gcp-upgrade-opsman
+  - cleanup-gcp-lre
 
 resource_types:
 - name: smuggler
@@ -758,7 +760,6 @@ jobs:
             repository: google/cloud-sdk
         params:
           GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
-#          gcp_resource_prefix
         run:
           path: bash
           args:
@@ -766,8 +767,11 @@ jobs:
           - |
             set -eu
 
-            gcloud compute instances delete --delete-disks=all \
-              $(gcloud compute instances list --filter=TERMINATED --filter=rc --filter=ops-man | awk 'NR > 1 {print $1}') --quiet
+            gcloud auth activate-service-account --key-file <(echo "$GCP_SERVICE_ACCOUNT_KEY")
+            instances=$(gcloud compute instances list --filter="rc AND ops-man AND TERMINATED" | awk 'NR > 1 {print $1}')
+            if [ "$instances" != "" ]; then
+              gcloud compute instances delete --delete-disks=all "$instances" --quiet
+            fi
 
   - try:
       put: gcp-lock
@@ -865,6 +869,43 @@ jobs:
         lre-gcp-upgrade-ops-manager/upgrade-opsmgr
   on_failure:
     <<: *notify_slack
+
+- name: cleanup-gcp-lre
+  plan:
+  - aggregate:
+    - get: pcf-pipelines
+      passed: [ trigger-lre-gcp-upgrade-ops-manager ]
+      trigger: true
+    - get: gcp-lock
+      passed: [ trigger-lre-gcp-upgrade-ops-manager ]
+    - get: pivnet-rc
+      passed: [ trigger-lre-gcp-upgrade-ops-manager ]
+    - get: rootfs-tag
+      passed: [ trigger-lre-gcp-upgrade-ops-manager ]
+
+
+  - task: cleanup-upgraded-opsmanagers
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: google/cloud-sdk
+      params:
+        GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set -eu
+
+          gcloud auth activate-service-account --key-file <(echo "$GCP_SERVICE_ACCOUNT_KEY")
+          instances=$(gcloud compute instances list --filter="lre AND ops-man AND TERMINATED" | awk 'NR > 1 {print $1}')
+          if [ "$instances" != "" ]; then
+            gcloud compute instances delete --delete-disks=all "$instances" --quiet
+          fi
+
 
 ####### END GCP LRE
 
