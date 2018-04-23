@@ -39,10 +39,6 @@ params:
   gcp_storage_secret_key:
   # aws specific
   S3_ENDPOINT:
-  # TODO: Can we remove these?
-  pcf_ert_saml_cert:
-  pcf_ert_saml_key:
-  pcf_ert_networking_pointofentry:
   # db credentials
   db_app_usage_service_username:
   db_app_usage_service_password:

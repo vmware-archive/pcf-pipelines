@@ -326,10 +326,6 @@ jobs:
       CREDHUB_PRIMARY_ENCRYPTION_NAME: {{credhub_primary_encryption_name}}
       # aws specific
       S3_ENDPOINT:
-      # TODO: Can we remove these?
-      pcf_ert_saml_cert:
-      pcf_ert_saml_key:
-      pcf_ert_networking_pointofentry:
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
 

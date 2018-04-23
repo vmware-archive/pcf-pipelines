@@ -336,10 +336,6 @@ jobs:
       db_silk_username: {{db_silk_username}}
       db_silk_password: {{db_silk_password}}
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
-      # TODO: Can we remove these?
-      pcf_ert_saml_cert:
-      pcf_ert_saml_key:
-      pcf_ert_networking_pointofentry:
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
 
