@@ -9,12 +9,13 @@ resources:
 - name: version
   type: semver
   source:
-    driver: git
-    initial_version: 1.0.0
-    uri: git@github.com:pivotal-cf/pcf-pipelines.git
-    private_key: {{git_private_key}}
-    branch: version
-    file: docker-version
+    driver: s3
+    initial_version: 1.0.6
+    bucket: {{version_bucket_name}}
+    key: docker-version
+    region_name: {{version_bucket_region}}
+    access_key_id: {{aws_access_key_id}}
+    secret_access_key: {{aws_secret_access_key}}
 
 - name: pcf-pipelines
   type: git
