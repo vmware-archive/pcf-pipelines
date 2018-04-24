@@ -1,5 +1,7 @@
 atc_external_url:
 atc_team_name:
+aws_access_key_id:
+aws_secret_access_key:
 azure_child_dns_resource_group:
 azure_child_dns_zone_name:
 azure_client_id:
@@ -29,3 +31,5 @@ rc_offline_pipeline_name:
 rc_vsphere_install_params:
 slack_webhook_url:
 unpack_pcf_pipelines_combined_params:
+version_bucket_region:
+version_bucket_name:
