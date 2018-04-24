@@ -206,9 +206,9 @@ jobs:
       params:
         globs: []
     - get: terraform-state
-      passed: [config-opsman-auth]
+      passed: [create-infrastructure]
     - get: terraform-vars
-      passed: [config-opsman-auth]
+      passed: [create-infrastructure]
 
   - task: config-director
     config:
