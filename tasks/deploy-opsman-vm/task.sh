@@ -86,6 +86,7 @@ EOF
 
       if [[ $OUTPUT == *"no such VM"* ]]; then
         echo "...VM is not running! $OUTPUT"
+        sleep 3
       else
         echo "...VM is running! $OUTPUT"
         timeout=$((SECONDS+OPSMAN_TIMEOUT))
