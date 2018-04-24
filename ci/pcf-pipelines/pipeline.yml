@@ -1259,7 +1259,7 @@ jobs:
           JOB: deploy-ert
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
-          <<: *atc_creds
+          <<: *vsphere_atc_creds
     - do:
       - task: check-azure
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
