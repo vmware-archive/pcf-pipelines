@@ -47,9 +47,12 @@ db_uaa_password: CHANGEME
 db_uaa_username: CHANGEME
 
 # Domain Names for ERT
-pcf_ert_domain: CHANGEME # This is the domain you will access ERT with, for example: pcf.example.com.
-system_domain: CHANGEME # e.g. system.pcf.example.com
-apps_domain: CHANGEME   # e.g. apps.pcf.example.com
+# This is the domain you will access ERT with, for example: pcf.example.com.  A hosted zone will be created for this domain.
+pcf_ert_domain: CHANGEME
+# e.g. system.pcf.example.com, this needs to be a subdomain of pcf_ert_domain
+system_domain: CHANGEME
+# e.g. apps.pcf.example.com, this needs to be a subdomain of pcf_ert_domain
+apps_domain: CHANGEME   
 
 # Errands to disable prior to deploying ERT
 # Valid values:
@@ -99,7 +102,7 @@ gcp_zone_1: us-central1-a
 gcp_zone_2: us-central1-b
 gcp_zone_3: us-central1-c
 
-# Optional - if your git repo requires an SSH key. You will need to comment out line 99 if you do not use the git_private_key.
+# Optional - if your git repo requires an SSH key.
 git_private_key:
 
 # Required if haproxy_forward_tls is enabled - HAProxy will use the CA provided to verify the certificates provided by the router.
