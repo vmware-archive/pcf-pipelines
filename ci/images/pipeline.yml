@@ -116,6 +116,12 @@ resources:
      uri: https://github.com/dtimm/terraforming-azure.git
      branch: improve-configurability
 
+- name: terraforming-azure
+  type: git
+  source:
+     uri: https://github.com/fredwangwang/terraforming-aws.git
+     branch: improve-configurability
+
 - name: jq
   type: curl
   source:
@@ -150,6 +156,7 @@ jobs:
       params: {globs: ["*linux*"]}
     - get: terraform
     - get: terraforming-azure
+    - get: terraforming-aws
     - get: jq
 
   - task: prepare-workspace
@@ -172,6 +179,7 @@ jobs:
       - name: steamroll
       - name: terraform
       - name: terraforming-azure
+      - name: terraforming-aws
       - name: jq
       outputs:
       - name: workspace
@@ -206,6 +214,7 @@ jobs:
           chmod +x workspace/*
 
           mv terraforming-azure workspace/terraforming-azure
+          mv terraforming-aws workspace/terraforming-aws
 
           cp pcf-pipelines/ci/Dockerfile workspace
 
