@@ -174,12 +174,6 @@ security_acknowledgement: CHANGEME
 #   * Dynamic Services network: Deploy dynamic services, **three subnets on three AZs to achieve HA**
 #   * RDS network: Deploy RDS databases, **three subnets on three AZs to achieve HA**
 #   * Infrastructure network: Deploy Bosh director
-dynamic_services_subnet_cidr_az1: 192.168.112.0/22
-dynamic_services_subnet_cidr_az2: 192.168.128.0/22
-dynamic_services_subnet_cidr_az3: 192.168.144.0/22
-dynamic_services_subnet_reserved_ranges_z1: 192.168.112.0 - 192.168.112.10
-dynamic_services_subnet_reserved_ranges_z2: 192.168.128.0 - 192.168.128.10
-dynamic_services_subnet_reserved_ranges_z3: 192.168.144.0 - 192.168.144.10
 ert_subnet_cidr_az1: 192.168.16.0/20
 ert_subnet_cidr_az2: 192.168.32.0/20
 ert_subnet_cidr_az3: 192.168.48.0/20
