@@ -37,6 +37,14 @@ These pipelines are found in the `install-pcf` directory, sorted by IaaS.
 
 | IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |
+| vSphere | v23.2 | 2.0.x  | 2.0.x  |
+| Azure | v23.2 | 2.0.x | 2.0.x |
+| AWS | v23.2 | 2.0.x | 2.0.x |
+| GCP | v23.2 | 2.0.x  | 2.0.x  |
+| OpenStack | v23 | 2.0.x  | 2.0.x  |
+
+| IAAS | pipelines release | OM version | ERT version |
+| :--- | --- | --- | --- |
 | vSphere | v23.1 | 2.0.x  | 2.0.x  |
 | Azure | v23.1 | 2.0.x | 2.0.x |
 | AWS | v23.1 | 2.0.x | 2.0.x |
