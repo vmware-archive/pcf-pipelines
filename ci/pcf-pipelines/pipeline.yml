@@ -1480,14 +1480,14 @@ jobs:
       passed: [ trigger-unpack-pipelines-combined ]
   - task: check-pipeline-exists
     params:
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
       PIPELINE_NAME: {{rc_offline_pipeline_name}}
       TIMEOUT_MINUTES: 5
     file: pcf-pipelines/ci/tasks/check-pipeline-exists/task.yml
   - task: unpause-rc-vsphere-offline-install
     params:
       PIPELINE_NAME: {{rc_offline_pipeline_name}}
-      <<: *atc_creds
+      <<: *vsphere_atc_creds
     file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
   - task: trigger-rc-vsphere-offline-wipe-env
     file: pcf-pipelines/tasks/trigger-jobs/task.yml
