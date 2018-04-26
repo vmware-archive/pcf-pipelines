@@ -60,15 +60,18 @@ apps_domain: CHANGEME
 #   none
 #   "" (empty string - equivalent to none)
 #   Any combination of the following, separated by comma:
-#     smoke_tests
-#     push-usage-service
-#     push-apps-manager
+#     bootstrap
+#     deploy-autoscaler
 #     deploy-notifications
 #     deploy-notifications-ui
-#     push-pivotal-account
-#     deploy-autoscaling
-#     register-broker
 #     nfsbrokerpush
+#     push-apps-manager
+#     push-pivotal-account
+#     push-usage-service
+#     rejoin-unsafe
+#     send-email
+#     smoke_tests
+#     test-autoscaling
 ert_errands_to_disable: none
 
 # PCF Elastic Runtime minor version to track
