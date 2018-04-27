@@ -22,8 +22,6 @@ if [[ -n "${OPSMAN_ALLOW_HTTPS_CIDR_RANGES// }" ]]; then
   OPSMAN_ALLOW_HTTPS_CIDR_LIST='["'${OPSMAN_ALLOW_HTTPS_CIDR_RANGES//\,/\"\,\"}'"]'
 fi
 
-aws acm get-certificate --certificate-arn arn:aws:acm:us-west-2:473893145203:certificate/3c762430-0ffc-4523-bba4-7b02dd9f9b2b | jq .Certificate
-
 echo "env_name=\"${TERRAFORM_PREFIX}\"" >> terraform-vars-output/terraform.tfvars
 echo "access_key=\"${aws_access_key_id}\"" >> terraform-vars-output/terraform.tfvars
 echo "secret_key=\"${aws_secret_access_key}\"" >> terraform-vars-output/terraform.tfvars
@@ -76,7 +74,7 @@ terraform init "/home/vcap/app/terraforming-aws"
 
 terraform plan \
   -var-file "terraform-vars-output/terraform.tfvars" \
-  -state "terraform-state/terraform.tfstate" \
+  -state "terraform-state-output/terraform.tfstate" \
   -out terraform.tfplan \
   "/home/vcap/app/terraforming-aws"
 

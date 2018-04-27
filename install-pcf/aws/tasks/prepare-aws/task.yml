@@ -11,6 +11,7 @@ inputs:
   - name: ami
 outputs:
   - name: terraform-state-output
+  - name: terraform-vars-output
 params:
   DB_MASTER_USERNAME:
   DB_MASTER_PASSWORD:
