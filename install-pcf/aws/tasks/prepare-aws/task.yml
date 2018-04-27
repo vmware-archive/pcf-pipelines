@@ -19,6 +19,9 @@ params:
   aws_secret_access_key:
   aws_key_name:
   aws_cert_arn:
+  ssl_ca_cert:
+  ssl_ca_private_key:
+  pcf_ert_domain:
   amis_nat:
   aws_region:
   aws_az1:
