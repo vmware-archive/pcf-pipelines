@@ -38,7 +38,7 @@ if [ -n "$opsman_instance_ids" ]; then
   aws ec2 terminate-instances --instance-ids $opsman_instance_ids
 fi
 
-terraform init
+terraform init "/home/vcap/app/terraforming-aws/"
 
 terraform destroy \
   -force \
