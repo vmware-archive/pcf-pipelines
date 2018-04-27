@@ -44,4 +44,5 @@ terraform destroy \
   -force \
   -var-file "${root}/terraform-vars/terraform.tfvars" \
   -state "${root}/terraform-state/terraform.tfstate" \
-  -state-out "${root}/terraform-state-output/terraform.tfstate"
+  -state-out "${root}/terraform-state-output/terraform.tfstate" \
+  "/home/vcap/app/terraforming-aws/"
