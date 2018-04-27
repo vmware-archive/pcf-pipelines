@@ -21,7 +21,7 @@ resources:
   type: git
   source:
     uri: git@github.com:pivotal-cf/pcf-pipelines.git
-    branch: master
+    branch: terraform-aws
     private_key: {{git_private_key}}
     paths: [ci/Dockerfile]
 
@@ -116,7 +116,7 @@ resources:
      uri: https://github.com/dtimm/terraforming-azure.git
      branch: improve-configurability
 
-- name: terraforming-azure
+- name: terraforming-aws
   type: git
   source:
      uri: https://github.com/fredwangwang/terraforming-aws.git
@@ -147,7 +147,7 @@ jobs:
     - get: cliaas
       params: {globs: ["*linux*"]}
     - get: pivnet-cli
-      params: {globs: ["*linux*"]}
+      params: {globs: ["*"]}
     - get: govc
       params: {globs: ["*linux_amd64*"]}
     - get: stemcell-downloader
@@ -213,8 +213,8 @@ jobs:
 
           chmod +x workspace/*
 
-          cp terraforming-azure workspace/terraforming-azure
-          cp terraforming-aws workspace/terraforming-aws
+          cp -r terraforming-azure workspace/terraforming-azure/
+          cp -r terraforming-aws workspace/terraforming-aws/
 
           cp pcf-pipelines/ci/Dockerfile workspace
 
