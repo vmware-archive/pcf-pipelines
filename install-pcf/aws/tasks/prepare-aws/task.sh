@@ -30,8 +30,14 @@ echo "availability_zones=\"[${aws_az1},${aws_az2},${aws_az3}]\"" >> terraform-va
 echo "ops_manager_ami=\"${ami}\"" >> terraform-vars-output/terraform.tfvars
 echo "dns_suffix=\"${pcf_ert_domain}\"" >> terraform-vars-output/terraform.tfvars
 echo "vpc_cidr=\"${vpc_cidr}\"" >> terraform-vars-output/terraform.tfvars
-echo "ssl_ca_cert=\"${ssl_ca_cert}\"" >> terraform-vars-output/terraform.tfvars
-echo "ssl_ca_private_key=\"${ssl_ca_private_key}\"" >> terraform-vars-output/terraform.tfvars
+
+echo "ssl_ca_cert = <<EOF" >> terraform-vars-output/terraform.tfvars
+echo ${ssl_ca_cert} >> terraform-vars-output/terraform.tfvars
+echo "EOF" >> terraform-vars-output/terraform.tfvars
+
+echo "ssl_ca_private_key = <<EOF" >> terraform-vars-output/terraform.tfvars
+echo ${ssl_ca_private_key} >> terraform-vars-output/terraform.tfvars
+echo "EOF" >> terraform-vars-output/terraform.tfvars
 
 #echo "db_master_username=\"${DB_MASTER_USERNAME}\"" >> terraform-vars-output/terraform.tfvars
 #echo "db_master_password=\"${DB_MASTER_PASSWORD}\"" >> terraform-vars-output/terraform.tfvars
