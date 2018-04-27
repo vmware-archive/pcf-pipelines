@@ -80,7 +80,7 @@ terraform init "/home/vcap/app/terraforming-aws"
 
 terraform plan \
   -var-file "terraform-vars-output/terraform.tfvars" \
-  -state "terraform-state-output/terraform.tfstate" \
+  -state "terraform-state/terraform.tfstate" \
   -out terraform.tfplan \
   "/home/vcap/app/terraforming-aws"
 
