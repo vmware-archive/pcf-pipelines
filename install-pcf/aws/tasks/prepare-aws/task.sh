@@ -32,11 +32,11 @@ echo "dns_suffix=\"${pcf_ert_domain}\"" >> terraform-vars-output/terraform.tfvar
 echo "vpc_cidr=\"${vpc_cidr}\"" >> terraform-vars-output/terraform.tfvars
 
 echo "ssl_ca_cert = <<EOF" >> terraform-vars-output/terraform.tfvars
-echo ${ssl_ca_cert} >> terraform-vars-output/terraform.tfvars
+echo "${ssl_ca_cert}" >> terraform-vars-output/terraform.tfvars
 echo "EOF" >> terraform-vars-output/terraform.tfvars
 
 echo "ssl_ca_private_key = <<EOF" >> terraform-vars-output/terraform.tfvars
-echo ${ssl_ca_private_key} >> terraform-vars-output/terraform.tfvars
+echo "${ssl_ca_private_key}" >> terraform-vars-output/terraform.tfvars
 echo "EOF" >> terraform-vars-output/terraform.tfvars
 
 #echo "db_master_username=\"${DB_MASTER_USERNAME}\"" >> terraform-vars-output/terraform.tfvars
