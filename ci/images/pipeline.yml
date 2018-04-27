@@ -213,8 +213,8 @@ jobs:
 
           chmod +x workspace/*
 
-          mv terraforming-azure workspace/terraforming-azure
-          mv terraforming-aws workspace/terraforming-aws
+          cp terraforming-azure workspace/terraforming-azure
+          cp terraforming-aws workspace/terraforming-aws
 
           cp pcf-pipelines/ci/Dockerfile workspace
 
