@@ -15,7 +15,7 @@ iaas_configuration=$(
   --arg bosh_template_folder "$BOSH_TEMPLATE_FOLDER" \
   --arg bosh_disk_path "$BOSH_DISK_PATH" \
   --argjson ssl_verification_enabled false \
-  --argjson nsx_networking_enabled $NSX_NETWORKING_ENABLED \
+  --argjson nsx_networking_enabled "$NSX_NETWORKING_ENABLED" \
   --arg nsx_address "$NSX_ADDRESS" \
   --arg nsx_username "$NSX_USERNAME" \
   --arg nsx_password "$NSX_PASSWORD" \
@@ -34,11 +34,22 @@ iaas_configuration=$(
     "bosh_disk_path": $bosh_disk_path,
     "ssl_verification_enabled": $ssl_verification_enabled,
     "nsx_networking_enabled": $nsx_networking_enabled,
-    "nsx_address": $nsx_address,
-    "nsx_username": $nsx_username,
-    "nsx_password": $nsx_password,
-    "nsx_ca_certificate": $nsx_ca_certificate
-  }'
+  }
+
+  +
+
+  # NSX networking. If not enabled, the following section is not required
+  if $nsx_networking_enabled then
+    {
+      "nsx_address": $nsx_address,
+      "nsx_username": $nsx_username,
+      "nsx_password": $nsx_password,
+      "nsx_ca_certificate": $nsx_ca_certificate
+    }
+  else
+    .
+  end
+  '
 )
 
 az_configuration=$(cat <<-EOF
