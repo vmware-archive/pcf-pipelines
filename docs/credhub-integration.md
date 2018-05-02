@@ -70,7 +70,7 @@ This integration approach provides a CredHub server that is dedicated to the Con
   - [**Cloud Config**](https://bosh.io/docs/update-cloud-config.html) set to the Bosh Director to define network, disk and VM settings.
 
 
-1. Create and update your **Concourse deployment YML file** containing the CredHub jobs defined as part of the Concourse's `web` VM. See this [deployment file](samples/concourse-with-credhub.yml) as an example for a starting point, or use the [operations files](samples/colocated-credhub/ops) provided in this repo to transform an existing manifest.
+1. Create and update your **Concourse deployment YML file** containing the CredHub jobs defined as part of the Concourse's `web` VM. See this [deployment file](samples/concourse-with-credhub.yml) as an example for a starting point, or use the [operations files](samples/colocated-credhub-ops) provided in this repo to transform an existing manifest.
 
 2. Configure [concourse-with-credhub-params.yml](samples/concourse-with-credhub-params.yml) with the corresponding values for your deployment.
 
@@ -83,7 +83,7 @@ This integration approach provides a CredHub server that is dedicated to the Con
 
 4. Deploy Concourse and CredHub with the [Bosh CLI](https://bosh.io/docs/cli-v2.html):  
    Example:  
-   `bosh -e <bosh-alias> -d concourse deploy concourse-with-credhub.yml -l concourse-with-credhub-params.yml --vars-store=./concourse-gen-bars.yml`
+   `bosh -e <bosh-alias> -d concourse deploy concourse-with-credhub.yml -l concourse-with-credhub-params.yml --vars-store=./concourse-gen-vars.yml`
 
    The sample deployment manifest uses the feature of automatic generation of variables, certificates and keys from Bosh (see `variables` section of the file). Bosh will will add the values of the newly crated variables to a local file (defined by `--vars-store`) for future reference purposes.
 
