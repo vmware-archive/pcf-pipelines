@@ -45,7 +45,7 @@ db_silk_password: CHANGEME
 db_silk_username: CHANGEME
 db_uaa_password: CHANGEME
 db_uaa_username: CHANGEME
-db_cloudsqldb_tier: # default db-f1-micro
+db_cloudsqldb_tier: db-f1-micro
 
 # Domain Names for ERT
 # This is the domain you will access ERT with, for example: pcf.example.com.  A hosted zone will be created for this domain.
