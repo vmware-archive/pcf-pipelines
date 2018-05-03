@@ -53,6 +53,7 @@ params:
   DB_LOCKET_PASSWORD:
   DB_SILK_USERNAME:
   DB_SILK_PASSWORD:
+  DB_CLOUDSQLDB_TIER:
 
 run:
   path: pcf-pipelines/install-pcf/gcp/tasks/create-infrastructure/task.sh

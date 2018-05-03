@@ -65,6 +65,7 @@ terraform plan \
   -var "db_locket_password=${DB_LOCKET_PASSWORD}" \
   -var "db_silk_username=${DB_SILK_USERNAME}" \
   -var "db_silk_password=${DB_SILK_PASSWORD}" \
+  -var "db_cloudsqldb_tier=${DB_CLOUDSQLDB_TIER}" \
   -out terraform.tfplan \
   -state terraform-state/terraform.tfstate \
   pcf-pipelines/install-pcf/gcp/terraform

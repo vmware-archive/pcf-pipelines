@@ -8,7 +8,7 @@ resource "google_sql_database_instance" "master" {
   name             = "${var.prefix}-${random_pet.sql_db.id}"
 
   settings {
-    tier = "db-f1-micro"
+    tier = "${var.db_cloudsqldb_tier}"
 
     ip_configuration = {
       ipv4_enabled = true

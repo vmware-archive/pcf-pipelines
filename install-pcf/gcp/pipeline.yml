@@ -147,6 +147,7 @@ jobs:
       DB_LOCKET_PASSWORD: {{db_locket_password}}
       DB_SILK_USERNAME: {{db_silk_username}}
       DB_SILK_PASSWORD: {{db_silk_password}}
+      DB_CLOUDSQLDB_TIER: {{db_cloudsqldb_tier}}
 
 - name: configure-director
   serial_groups: [opsman]
