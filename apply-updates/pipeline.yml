@@ -78,7 +78,7 @@ jobs:
             for stemcell in $(ls ${download_dir}/*.tgz); do
               echo "Uploading ${stemcell} to https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}"
               om \
-                upload-stemcell --stemcell "${stemcell}"
+                upload-stemcell --stemcell "${stemcell}" --floating "false"
             done
           }
 

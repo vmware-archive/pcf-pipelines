@@ -34,7 +34,8 @@ function main() {
         --username "${OPSMAN_USERNAME}" \
         --password "${OPSMAN_PASSWORD}" \
         upload-stemcell \
-        --stemcell "${stemcell}"
+        --stemcell "${stemcell}" \
+        --floating "false"
   done
 }
 

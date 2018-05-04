@@ -172,7 +172,8 @@
                   --password "$OPS_MGR_PASSWORD" \
                   --skip-ssl-validation \
                   upload-stemcell \
-                  --stemcell "./${stemcell_to_download}"
+                  --stemcell "./${stemcell_to_download}" \
+                  --floating "false"
               fi
             fi
 

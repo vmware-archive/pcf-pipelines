@@ -74,6 +74,7 @@ if [ -n "$STEMCELL_VERSION" ]; then
       -p "$OPS_MGR_PWD" \
       -k \
       upload-stemcell \
+      --floating "false"
       -s $SC_FILE_PATH
   fi
 fi
