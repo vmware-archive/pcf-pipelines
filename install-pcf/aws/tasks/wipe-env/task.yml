@@ -17,5 +17,8 @@ params:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
   AWS_REGION:
+  AWS_ALTERNATE_ACCESS_KEY_ID:
+  AWS_ALTERNATE_SECRET_ACCESS_KEY:
+  AWS_ALTERNATE_REGION:
 run:
   path: pcf-pipelines/install-pcf/aws/tasks/wipe-env/task.sh

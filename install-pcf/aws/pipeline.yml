@@ -93,11 +93,14 @@ jobs:
       DB_MASTER_PASSWORD: {{db_master_password}}
       TERRAFORM_PREFIX: {{terraform_prefix}}
       aws_access_key_id: {{aws_access_key_id}}
+      aws_alternate_access_key_id: {{aws_alternate_access_key_id}}
       aws_secret_access_key: {{aws_secret_access_key}}
+      aws_alternate_secret_access_key: {{aws_alternate_secret_access_key}}
       aws_key_name: {{aws_key_name}}
       aws_cert_arn: {{aws_cert_arn}}
       amis_nat: {{amis_nat}}
       aws_region: {{aws_region}}
+      aws_alternate_region: {{aws_alternate_region}}
       aws_az1: {{aws_az1}}
       aws_az2: {{aws_az2}}
       aws_az3: {{aws_az3}}
@@ -365,3 +368,6 @@ jobs:
       AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
       AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
       AWS_REGION: {{aws_region}}
+      AWS_ALTERNATE_ACCESS_KEY_ID: {{aws_alternate_access_key_id}}
+      AWS_ALTERNATE_SECRET_ACCESS_KEY: {{aws_alternate_secret_access_key}}
+      AWS_ALTERNATE_REGION: {{aws_alternate_region}}

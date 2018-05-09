@@ -16,11 +16,14 @@ params:
   DB_MASTER_PASSWORD:
   TERRAFORM_PREFIX:
   aws_access_key_id:
+  aws_alternate_access_key_id:
   aws_secret_access_key:
+  aws_alternate_secret_access_key:
   aws_key_name:
   aws_cert_arn:
   amis_nat:
   aws_region:
+  aws_alternate_region:
   aws_az1:
   aws_az2:
   aws_az3:
