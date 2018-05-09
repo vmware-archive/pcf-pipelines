@@ -10,9 +10,7 @@ resource "aws_instance" "opsman_az1" {
     root_block_device {
         volume_size = 100
     }
-    tags {
-        Name = "${var.prefix}-OpsMan az1"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-OpsMan az1", var.prefix)))}"
 }
 
 resource "aws_eip" "opsman" {

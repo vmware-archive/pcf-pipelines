@@ -3,10 +3,7 @@ resource "aws_s3_bucket" "bosh" {
     acl = "private"
     force_destroy= true
 
-    tags {
-        Name = "${var.prefix}-bosh"
-        Environment = "${var.prefix}"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-bosh", var.prefix), "Environment", format("%s", var.prefix)))}"
 }
 
 resource "aws_s3_bucket" "buildpacks" {
@@ -14,10 +11,7 @@ resource "aws_s3_bucket" "buildpacks" {
     acl = "private"
     force_destroy= true
 
-    tags {
-        Name = "${var.prefix}-buildpacks"
-        Environment = "${var.prefix}"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-buildpacks", var.prefix), "Environment", format("%s", var.prefix)))}"
 }
 
 resource "aws_s3_bucket" "droplets" {
@@ -25,10 +19,7 @@ resource "aws_s3_bucket" "droplets" {
     acl = "private"
     force_destroy= true
 
-    tags {
-        Name = "${var.prefix}-droplets"
-        Environment = "${var.prefix}"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-droplets", var.prefix), "Environment", format("%s", var.prefix)))}"
 }
 
 resource "aws_s3_bucket" "packages" {
@@ -36,10 +27,7 @@ resource "aws_s3_bucket" "packages" {
     acl = "private"
     force_destroy= true
 
-    tags {
-        Name = "${var.prefix}-packages"
-        Environment = "${var.prefix}"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-packages", var.prefix), "Environment", format("%s", var.prefix)))}"
 }
 
 resource "aws_s3_bucket" "resources" {
@@ -47,8 +35,5 @@ resource "aws_s3_bucket" "resources" {
     acl = "private"
     force_destroy= true
 
-    tags {
-        Name = "${var.prefix}-resources"
-        Environment = "${var.prefix}"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-resources", var.prefix), "Environment", format("%s", var.prefix)))}"
 }

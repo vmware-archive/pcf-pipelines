@@ -9,9 +9,8 @@ resource "aws_security_group" "PcfHttpElbSg" {
     name = "${var.prefix}-pcf_PcfHttpElb_sg"
     description = "Allow incoming connections for PcfHttpElb Elb."
     vpc_id = "${aws_vpc.PcfVpc.id}"
-    tags {
-        Name = "${var.prefix}-PcfHttpElb Security Group"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-PcfHttpElb Security Group", var.prefix)))}"
+
     ingress {
         from_port = 80
         to_port = 80
@@ -42,9 +41,8 @@ resource "aws_security_group" "PcfSshElbSg" {
     name = "${var.prefix}-pcf_PcfSshElb_sg"
     description = "Allow incoming connections for PcfSshElb Elb."
     vpc_id = "${aws_vpc.PcfVpc.id}"
-    tags {
-        Name = "${var.prefix}-PcfSshElb Security Group"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-PcfSshElb Security Group", var.prefix)))}"
+
     ingress {
         from_port = 2222
         to_port = 2222
@@ -62,9 +60,8 @@ resource "aws_security_group" "PcfTcpElbSg" {
     name = "${var.prefix}-pcf_PcfTcoElb_sg"
     description = "Allow incoming connections for PcfTcpElb Elb."
     vpc_id = "${aws_vpc.PcfVpc.id}"
-    tags {
-        Name = "${var.prefix}-PcfTcpElb Security Group"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-PcfTcpElb Security Group", var.prefix)))}"
+
     ingress {
         from_port = 1024
         to_port = 1123
