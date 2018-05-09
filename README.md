@@ -8,7 +8,7 @@ Other pipelines which may be of interest are listed at the end of this README.
 
 ### Downloading PCF Pipelines
 
-**Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability. Tracking master is considered unstable, and is likely to result in breaking the pipelines that consume it.  If you are an internal Pivotal person (or partner), please contact the pcf-norm team to gain access to this release.**
+**Please use the [Pivotal Network release](https://network.pivotal.io/products/pcf-automation/) of `pcf-pipelines` for stability.  This link will result in 404 if you do not have access, to get access contact your Pivotal Support/Sales team.  Tracking master is considered unstable, and is likely to result in breaking the pipelines that consume it.**
 
 If you do not have access to the Pivotal Network release, and you are using the GitHub release, for stability, please ensure you are tagging the pipeline.yml:
 
