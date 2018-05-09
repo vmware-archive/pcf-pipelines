@@ -18,6 +18,13 @@ if [[ -n "${OPSMAN_ALLOW_HTTPS_CIDR_RANGES// }" ]]; then
   OPSMAN_ALLOW_HTTPS_CIDR_LIST='["'${OPSMAN_ALLOW_HTTPS_CIDR_RANGES//\,/\"\,\"}'"]'
 fi
 
+OPSMAN_ALLOW_RDP=0
+OPSMAN_ALLOW_RDP_CIDR_LIST='["0.0.0.0/32"]'
+if [[ -n "${OPSMAN_ALLOW_RDP_CIDR_RANGES// }" ]]; then
+  OPSMAN_ALLOW_RDP=1
+  OPSMAN_ALLOW_RDP_CIDR_LIST='["'${OPSMAN_ALLOW_RDP_CIDR_RANGES//\,/\"\,\"}'"]'
+fi
+
 terraform init pcf-pipelines/install-pcf/aws/terraform
 
 terraform plan \
@@ -30,6 +37,8 @@ terraform plan \
   -var "opsman_allow_ssh_cidr_ranges=${OPSMAN_ALLOW_SSH_CIDR_LIST}" \
   -var "opsman_allow_https=${OPSMAN_ALLOW_HTTPS}" \
   -var "opsman_allow_https_cidr_ranges=${OPSMAN_ALLOW_HTTPS_CIDR_LIST}" \
+  -var "opsman_allow_rdp=${OPSMAN_ALLOW_RDP}" \
+  -var "opsman_allow_rdp_cidr_ranges=${OPSMAN_ALLOW_RDP_CIDR_LIST}" \
   -var "aws_access_key_id=${aws_access_key_id}" \
   -var "aws_secret_access_key=${aws_secret_access_key}" \
   -var "aws_key_name=${aws_key_name}" \

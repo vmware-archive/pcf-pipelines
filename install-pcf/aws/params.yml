@@ -127,6 +127,9 @@ opsman_allow_https_cidr_ranges:
 # CIDRs to allow SSH access to Operations Manager from; configure PEM as well with the private key
 opsman_allow_ssh_cidr_ranges:
 
+# CIDRs to allow RDP access to Operations Manager from
+opsman_allow_rdp_cidr_ranges:
+
 # The domain to access Operations Manager;
 opsman_domain_or_ip_address: CHANGEME #This must be your pcf_ert_domain with "opsman." as a prefix. For example, opsman.pcf.example.com
 

@@ -18,6 +18,7 @@ variable "route53_zone_id" {}
 */
 variable "opsman_allow_ssh" {default = false}
 variable "opsman_allow_https" {default = false}
+variable "opsman_allow_rdp" {default = false}
 variable "opsman_allow_ssh_cidr_ranges" {
     type = "list"
     default = ["0.0.0.0/32"]
@@ -26,7 +27,10 @@ variable "opsman_allow_https_cidr_ranges" {
     type = "list"
     default = ["0.0.0.0/32"]
 }
-
+variable "opsman_allow_rdp_cidr_ranges" {
+    type = "list"
+    default = ["0.0.0.0/32"]
+}
 
 variable "opsman_instance_type" {
     description = "Instance Type for OpsMan"
