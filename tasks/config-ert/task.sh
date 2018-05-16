@@ -641,13 +641,23 @@ cf_resources=$(
     '
 )
 
-om-linux \
-  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
-  --username "$OPS_MGR_USR" \
-  --password "$OPS_MGR_PWD" \
-  --skip-ssl-validation \
-  configure-product \
-  --product-name cf \
-  --product-properties "$cf_properties" \
-  --product-network "$cf_network" \
-  --product-resources "$cf_resources"
+#om-linux \
+#  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
+#  --username "$OPS_MGR_USR" \
+#  --password "$OPS_MGR_PWD" \
+#  --skip-ssl-validation \
+#  configure-product \
+#  --product-name cf \
+#  --product-properties "$cf_properties" \
+#  --product-network "$cf_network" \
+#  --product-resources "$cf_resources"
+
+echo "properties"
+echo "$cf_properties"
+
+echo "\n\n"
+
+echo "networks"
+echo "$cf_network"
+
+echo "\n\n"
