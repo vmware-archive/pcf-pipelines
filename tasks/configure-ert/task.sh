@@ -102,7 +102,7 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
   cd -
 elif [[ "${pcf_iaas}" == "gcp" ]]; then
   cd terraform-state
-    db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.sql_instance_ip.value')
+    db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.sql_db_ip.value')
     pcf_ert_ssl_cert="$(terraform output -json ert_certificate | jq .value)"
     pcf_ert_ssl_key="$(terraform output -json ert_certificate_key | jq .value)"
   cd -
@@ -179,8 +179,8 @@ cf_resources=$(
       .router |= . + { "elb_names": ["\($terraform_prefix)-Pcf-Http-Elb"] }
       | .diego_brain |= . + { "elb_names": ["\($terraform_prefix)-Pcf-Ssh-Elb"] }
     elif $iaas == "gcp" then
-      .router |= . + { "elb_names": ["http:\($terraform_prefix)-http-lb-backend","tcp:\($terraform_prefix)-wss-logs"] }
-      | .diego_brain |= . + { "elb_names": ["tcp:\($terraform_prefix)-ssh-proxy"] }
+      .router |= . + { "elb_names": ["http:\($terraform_prefix)-httpslb","tcp:\($terraform_prefix)-cf-ws"] }
+      | .diego_brain |= . + { "elb_names": ["tcp:\($terraform_prefix)-cf-ssh"] }
     else
       .
     end
@@ -429,12 +429,19 @@ cf_properties=$(
 #  --product-network "$cf_network" \
 #  --product-resources "$cf_resources"
 
-echo "properties"
+echo "{\"product-properties\": {"
 echo "$cf_properties"
+echo "},"
 
 echo "\n\n"
 
-echo "networks"
+echo "\"network-properties\": {"
 echo "$cf_network"
+echo "},"
 
 echo "\n\n"
+
+echo "\"resource-config\": {"
+echo "$cf_resources"
+echo "}"
+echo "}"
