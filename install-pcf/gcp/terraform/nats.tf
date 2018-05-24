@@ -22,7 +22,8 @@ resource "google_compute_instance" "nat-gateway-pri" {
 
   metadata_startup_script = <<EOF
 #! /bin/bash
-sudo sh -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo sh -c 'echo net.ipv4.ip_forward=1 | sudo tee -a /etc/sysctl.conf > /dev/null'
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 EOF
 }
