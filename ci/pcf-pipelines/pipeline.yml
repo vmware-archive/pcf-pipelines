@@ -504,7 +504,6 @@ jobs:
     params:
       <<: *vsphere_atc_creds
       JOBS: |
-        rc-vsphere-install/deploy-opsman
         rc-vsphere-install/deploy-ert
   on_failure:
     <<: *notify_slack
@@ -654,7 +653,6 @@ jobs:
     params:
       <<: *atc_creds
       JOBS: |
-        rc-gcp-install/configure-director
         rc-gcp-install/deploy-ert
   on_failure:
     <<: *notify_slack
@@ -1208,14 +1206,14 @@ jobs:
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
-      - trigger-rc-gcp-upgrade-pas-tile
+      - trigger-install-pcf-gcp
       - trigger-lre-gcp-upgrade-ops-manager
     - get: pivnet-rc
       passed:
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
-      - trigger-rc-gcp-upgrade-pas-tile
+      - trigger-install-pcf-gcp
       - trigger-lre-gcp-upgrade-ops-manager
       trigger: true
     - get: rootfs-tag
@@ -1223,7 +1221,7 @@ jobs:
       - trigger-install-pcf-vsphere
       - trigger-install-pcf-azure
       - trigger-install-pcf-aws
-      - trigger-rc-gcp-upgrade-pas-tile
+      - trigger-install-pcf-gcp
       - trigger-lre-gcp-upgrade-ops-manager
   - aggregate:
     - do:
