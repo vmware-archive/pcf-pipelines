@@ -1241,11 +1241,11 @@ jobs:
           resource: gcp-lock
           params: {release: lre-gcp-lock}
     - do:
-      - task: check-rc-gcp-upgrade-pas-tile
+      - task: check-gcp
         file: pcf-pipelines/ci/tasks/check-environments/task.yml
         params:
-          PIPELINE: rc-gcp-upgrade-pas-tile
-          JOB: apply-changes
+          PIPELINE: rc-gcp-install
+          JOB: deploy-ert
           TIMEOUT_MINUTES: 240
           DISABLE_PIVNET_VERSION_CHECK: false
           <<: *atc_creds
