@@ -504,6 +504,7 @@ jobs:
     params:
       <<: *vsphere_atc_creds
       JOBS: |
+        rc-vsphere-install/deploy-opsman
         rc-vsphere-install/deploy-ert
   on_failure:
     <<: *notify_slack
