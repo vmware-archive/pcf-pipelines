@@ -16,8 +16,6 @@ set -eu
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-desired_version=$(jq --raw-output '.Release.Version' < ./pivnet-product/metadata.json)
-
 AVAILABLE=$(om-linux \
   --skip-ssl-validation \
   --client-id "${OPSMAN_CLIENT_ID}" \
@@ -40,6 +38,7 @@ FILE_PATH=`find ./pivnet-product -name *.pivotal | sort | head -1`
 unzip $FILE_PATH metadata/*
 
 PRODUCT_NAME="$(cat metadata/*.yml | grep '^name' | cut -d' ' -f 2)"
+desired_version="$(cat metadata/*.yml | grep '^product_version' | cut -d' ' -f 2)"
 
 # Figure out which products are unstaged.
 UNSTAGED_ALL=$(jq -n --argjson available "$AVAILABLE" --argjson staged "$STAGED" \
