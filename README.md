@@ -1,3 +1,11 @@
+### Planned Deprecation
+Please note that this repository will be officially deprecated soon.
+New and better tools to replace this repo are under development.
+While you are welcome to raise issues and pull requests,
+not every issue will be prioritized.
+
+### Description
+
 This is a collection of [Concourse](https://concourse-ci.org) pipelines for
 installing and upgrading [Pivotal Cloud Foundry](https://pivotal.io/platform).
 
@@ -12,7 +20,7 @@ Other pipelines which may be of interest are listed at the end of this README.
 
 If you do not have access to the Pivotal Network release, and you are using the GitHub release, for stability, please ensure you are tagging the pipeline.yml:
 
-```
+```yaml
  resources:
   - name: pcf-pipelines
   type: git
