@@ -57,12 +57,11 @@ function main() {
         exit 1
       fi
 
-      grep "action" changes-status.txt
-      ACTION_STATUS=$?
+      ACTION_STATUS=$(jq -r '[ .product_changes[] | select(.action != "unchanged") ] | length' changes-status.txt)
       jq -e -r '.installations[0] | select(.status=="running")' running-status.txt >/dev/null
       RUNNING_STATUS=$?
 
-      if [[ ${ACTION_STATUS} -ne 0 && ${RUNNING_STATUS} -ne 0 ]]; then
+      if [[ ${ACTION_STATUS} -eq 0 && ${RUNNING_STATUS} -ne 0 ]]; then
           echo "No pending changes or running installs detected. Proceeding"
           exit 0
       fi
