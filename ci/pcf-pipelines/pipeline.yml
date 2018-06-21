@@ -33,7 +33,6 @@ groups:
   - set-rc-aws-install
   - wipe-aws
   - trigger-install-pcf-aws
-  - check-environments-complete
   - publish-release
   - destroy-lre-gcp-upgrade-ops-manager
   - set-lre-gcp-upgrade-ops-manager
@@ -72,7 +71,6 @@ groups:
   - wipe-vsphere
   - trigger-install-pcf-vsphere
   - final-wipe-vsphere
-  - check-environments-complete
 - name: offline
   jobs:
   - force-unlock-vsphere-offline-install-pcf
@@ -95,7 +93,6 @@ groups:
   - set-rc-gcp-upgrade-pas-tile
   - trigger-rc-gcp-upgrade-pas-tile
   - final-wipe-gcp
-  - check-environments-complete
 - name: azure
   jobs:
   - force-unlock-azure-install-pcf
@@ -105,7 +102,6 @@ groups:
   - wipe-azure
   - trigger-install-pcf-azure
   - final-wipe-azure
-  - check-environments-complete
 - name: aws
   jobs:
   - force-unlock-aws-install-pcf
@@ -115,14 +111,12 @@ groups:
   - wipe-aws
   - trigger-install-pcf-aws
   - final-wipe-aws
-  - check-environments-complete
 - name: upgrade-lre-gcp
   jobs:
   - set-lre-gcp-upgrade-ops-manager
   - destroy-lre-gcp-upgrade-ops-manager
   - trigger-lre-gcp-upgrade-ops-manager
   - lock-gcp-lre
-  - check-environments-complete
   - force-unlock-lre-gcp-upgrade-opsman
   - cleanup-gcp-lre
 
@@ -1199,98 +1193,34 @@ jobs:
 
 ####### END AWS
 
-- name: check-environments-complete
-  serial: true
-  plan:
-  - aggregate:
-    - get: pcf-pipelines
-      passed:
-      - trigger-install-pcf-vsphere
-      - trigger-install-pcf-azure
-      - trigger-install-pcf-aws
-      - trigger-install-pcf-gcp
-      - trigger-lre-gcp-upgrade-ops-manager
-    - get: pivnet-rc
-      passed:
-      - trigger-install-pcf-vsphere
-      - trigger-install-pcf-azure
-      - trigger-install-pcf-aws
-      - trigger-install-pcf-gcp
-      - trigger-lre-gcp-upgrade-ops-manager
-      trigger: true
-    - get: rootfs-tag
-      passed:
-      - trigger-install-pcf-vsphere
-      - trigger-install-pcf-azure
-      - trigger-install-pcf-aws
-      - trigger-install-pcf-gcp
-      - trigger-lre-gcp-upgrade-ops-manager
-  - aggregate:
-    - do:
-      - task: check-lre-gcp-upgrade-ops-manager
-        file: pcf-pipelines/ci/tasks/check-environments/task.yml
-        params:
-          PIPELINE: lre-gcp-upgrade-ops-manager
-          JOB: upgrade-opsmgr
-          TIMEOUT_MINUTES: 240
-          DISABLE_PIVNET_VERSION_CHECK: false
-          <<: *atc_creds
-      - get: lre-gcp-lock
-        resource: gcp-lock
-        passed: [trigger-lre-gcp-upgrade-ops-manager]
-      - try:
-          put: lre-gcp-lock
-          resource: gcp-lock
-          params: {release: lre-gcp-lock}
-    - do:
-      - task: check-gcp
-        file: pcf-pipelines/ci/tasks/check-environments/task.yml
-        params:
-          PIPELINE: rc-gcp-install
-          JOB: deploy-ert
-          TIMEOUT_MINUTES: 240
-          DISABLE_PIVNET_VERSION_CHECK: false
-          <<: *atc_creds
-    - do:
-      - task: check-vsphere
-        file: pcf-pipelines/ci/tasks/check-environments/task.yml
-        params:
-          PIPELINE: rc-vsphere-install
-          JOB: deploy-ert
-          TIMEOUT_MINUTES: 240
-          DISABLE_PIVNET_VERSION_CHECK: false
-          <<: *vsphere_atc_creds
-    - do:
-      - task: check-azure
-        file: pcf-pipelines/ci/tasks/check-environments/task.yml
-        params:
-          PIPELINE: rc-azure-install
-          JOB: deploy-ert
-          TIMEOUT_MINUTES: 240
-          DISABLE_PIVNET_VERSION_CHECK: false
-          <<: *atc_creds
-    - do:
-      - task: check-aws
-        file: pcf-pipelines/ci/tasks/check-environments/task.yml
-        params:
-          PIPELINE: rc-aws-install
-          JOB: deploy-ert
-          TIMEOUT_MINUTES: 240
-          DISABLE_PIVNET_VERSION_CHECK: false
-          <<: *atc_creds
-
 - name: publish-release
   serial_groups: [version]
   plan:
   - aggregate:
+    - get: fly
     - get: version
       params: {bump: final}
     - get: pcf-pipelines
-      passed: [check-environments-complete]
+      passed:
+      - trigger-install-pcf-vsphere
+      - trigger-install-pcf-azure
+      - trigger-install-pcf-aws
+      - trigger-install-pcf-gcp
+      - trigger-lre-gcp-upgrade-ops-manager
     - get: pivnet-rc
-      passed: [check-environments-complete]
-    - get: fly
+      passed:
+      - trigger-install-pcf-vsphere
+      - trigger-install-pcf-azure
+      - trigger-install-pcf-aws
+      - trigger-install-pcf-gcp
+      - trigger-lre-gcp-upgrade-ops-manager
     - get: rootfs-tag
+      passed:
+      - trigger-install-pcf-vsphere
+      - trigger-install-pcf-azure
+      - trigger-install-pcf-aws
+      - trigger-install-pcf-gcp
+      - trigger-lre-gcp-upgrade-ops-manager
   - task: create-release
     file: pcf-pipelines/ci/tasks/create-release/task.yml
     params:
