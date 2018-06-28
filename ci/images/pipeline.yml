@@ -117,10 +117,11 @@ resources:
      branch: improve-configurability
 
 - name: jq
-  type: curl
+  type: github-release
   source:
-    url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-    filename: jq
+    user: stedolan
+    repository: jq
+    access_token: {{github_token}}
 
 jobs:
 - name: build-pcf-pipelines-image
@@ -151,6 +152,7 @@ jobs:
     - get: terraform
     - get: terraforming-azure
     - get: jq
+      params: {globs: ["*linux64*"]}
 
   - task: prepare-workspace
     config:
@@ -185,9 +187,9 @@ jobs:
             om/om-linux \
             yaml-patch/yaml_patch_linux \
             cliaas/cliaas-linux \
-            jq/jq \
             workspace
 
+          cp jq/jq-* workspace/jq
           cp pivnet-cli/pivnet-linux-* workspace/pivnet-cli
           cp stemcell-downloader/stemcell-downloader-linux workspace/stemcell-downloader
           cp steamroll/steamroll_linux workspace/steamroll
