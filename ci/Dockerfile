@@ -45,7 +45,7 @@ apt-get -y update && \
 apt-get -y install curl build-essential && \
 apt-get -y install python python-dev python-pip software-properties-common && \
 pip install --upgrade pip setuptools wheel && \
-pip install python-openstackclient python-neutron && \
+pip install python-openstackclient python-neutronclient && \
 
 # Azure Client
 echo "deb https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && \
