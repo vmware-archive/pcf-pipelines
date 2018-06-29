@@ -160,7 +160,7 @@ resources:
   source:
     commands:
       check: |
-        curl https://registry.hub.docker.com/v1/repositories/pcfnorm/rootfs/tags | jq -r .[].name | grep "^v" | sort -V > ${SMUGGLER_OUTPUT_DIR}/versions
+        curl https://registry.hub.docker.com/v1/repositories/pcfnorm/rootfs/tags | jq -r .[].name | grep "^[0-9]" | sort -V > ${SMUGGLER_OUTPUT_DIR}/versions
       in: |
         echo "${SMUGGLER_VERSION_ID}" > ${SMUGGLER_DESTINATION_DIR}/${SMUGGLER_target_file}
     target_file: tag
