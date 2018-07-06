@@ -1,8 +1,4 @@
 Thanks for submitting an pull request to pcf-pipelines.
-Please note that this repository will be officially deprecated soon.
-New and better tools to replace this repo are under development.
-While you are welcome to raise pull requests,
-not every issue will be prioritized.
 
 To speed up the process of reviewing your pull request please provide us with:
 

@@ -1,8 +1,5 @@
 ### Planned Deprecation
 Please note that this repository will be officially deprecated soon.
-New and better tools to replace this repo are under development.
-While you are welcome to raise issues and pull requests,
-not every issue will be prioritized.
 
 ### Description
 
