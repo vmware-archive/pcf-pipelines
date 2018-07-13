@@ -31,8 +31,8 @@ file.close
 fly_cmd = "fly -t ci sp -p pcf-pipelines-master -c ci/pcf-pipelines/pipeline.yml \
   -l #{file.path} \
   -l ~/workspace/secrets/pcf-pipelines-params \
-  -l ~/workspace/secrets/pcf-norm-github \
-  -l ~/workspace/secrets/norm-pivnet"
+  -l ~/workspace/secrets/platform-automation-github \
+  -l ~/workspace/secrets/pcf-pipelines-pivnet"
 
 puts fly_cmd
 system(fly_cmd)
