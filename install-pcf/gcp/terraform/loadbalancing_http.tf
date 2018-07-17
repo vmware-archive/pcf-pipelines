@@ -14,7 +14,7 @@ resource "google_compute_backend_service" "ert_http_lb_backend_service" {
   name        = "${var.prefix}-http-lb-backend"
   port_name   = "http"
   protocol    = "HTTP"
-  timeout_sec = 30
+  timeout_sec = 60
   enable_cdn  = false
 
   backend {
