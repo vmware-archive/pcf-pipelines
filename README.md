@@ -39,20 +39,21 @@ These pipelines are found in the `install-pcf` directory, sorted by IaaS.
 
 
 **Compatibility Matrix** 
+
 | IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |
-| vSphere | v23.5 | 2.1.x  | 2.2.x  |
-| Azure | v23.5 | 2.1.x | 2.2.x |
-| AWS | v23.5 | 2.1.x | 2.2.x |
-| GCP | v23.5 | 2.1.x  | 2.2.x  |
+| vSphere | v23.5 | 2.2.x  | 2.2.x  |
+| Azure | v23.5 | 2.2.x | 2.2.x |
+| AWS | v23.5 | 2.2.x | 2.2.x |
+| GCP | v23.5 | 2.2.x  | 2.2.x  |
 | OpenStack | v23 | 2.0.x  | 2.0.x  |
 
 | IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |
-| vSphere | v23.3 | 2.0.x  | 2.1.x  |
-| Azure | v23.3 | 2.0.x | 2.1.x |
-| AWS | v23.3 | 2.0.x | 2.1.x |
-| GCP | v23.3 | 2.0.x  | 2.1.x  |
+| vSphere | v23.3 | 2.1.x  | 2.1.x  |
+| Azure | v23.3 | 2.1.x | 2.1.x |
+| AWS | v23.3 | 2.1.x | 2.1.x |
+| GCP | v23.3 | 2.1.x  | 2.1.x  |
 | OpenStack | v23 | 2.0.x  | 2.0.x  |
 
 | IAAS | pipelines release | OM version | ERT version |
