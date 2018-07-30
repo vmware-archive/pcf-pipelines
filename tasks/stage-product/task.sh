@@ -51,10 +51,15 @@ UNSTAGED_PRODUCT=$(echo "$UNSTAGED_ALL" | jq \
 )
 
 # There should be only one such unstaged product.
-if [ "$(echo $UNSTAGED_PRODUCT | jq '. | length')" -ne "1" ]; then
-  echo "Need exactly one unstaged build for $PRODUCT_NAME version $desired_version"
+if [[ "$(echo $UNSTAGED_PRODUCT | jq '. | length')" -ne "1" ]]; then
+  echo "Need exactly one unstaged build for staging $PRODUCT_NAME version $desired_version"
   jq -n "$UNSTAGED_PRODUCT"
-  exit 1
+  if echo "$SKIP_IF_ALREADY_STAGED" | egrep -iq '(true|yes|y|t|1)' ; then
+    echo "Skipping staging for $PRODUCT_NAME version $desired_version"
+    exit 0
+  else
+    exit 1
+  fi
 fi
 
 full_version=$(echo "$UNSTAGED_PRODUCT" | jq -r '.[].product_version')

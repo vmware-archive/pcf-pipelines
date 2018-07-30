@@ -31,6 +31,7 @@ params:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  SKIP_IF_ALREADY_STAGED:
 
 run:
   path: pcf-pipelines/tasks/stage-product/task.sh
