@@ -96,6 +96,7 @@ jobs:
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      SKIP_IF_ALREADY_STAGED: no
 
   - task: toggle-errands
     file: pcf-pipelines/tasks/toggle-errands/task.yml

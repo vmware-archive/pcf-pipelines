@@ -249,6 +249,7 @@ jobs:
       OPSMAN_CLIENT_SECRET: ""
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      SKIP_IF_ALREADY_STAGED: no
 
 - name: deploy-ert
   serial_groups: [opsman]

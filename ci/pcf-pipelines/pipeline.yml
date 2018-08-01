@@ -193,7 +193,11 @@ resources:
   type: pool
   source:
     pool: vsphere
-    <<: *norm-ci-locks-params
+    <<: &norm-ci-locks-params
+      uri: git@github.com:pivotal-cf/norm-ci-locks.git
+      branch: master
+      private_key: {{locks_git_ssh_key}}
+      retry_delay: 1m
 
 - name: vsphere-offline-lock
   type: pool
@@ -312,7 +316,10 @@ jobs:
 
 - name: test
   on_failure:
-    <<: *notify_slack
+    <<: &notify_slack
+      put: slack
+      params:
+        text: "$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME failed: $ATC_EXTERNAL_URL/builds/$BUILD_ID"
   plan:
   - get: pcf-pipelines
     trigger: true
@@ -428,7 +435,11 @@ jobs:
   - task: destroy-rc-vsphere-install
     params:
       PIPELINE_NAME: rc-vsphere-install
-      <<: *vsphere_atc_creds
+      <<: &vsphere_atc_creds
+        ATC_EXTERNAL_URL: {{atc_external_url}}
+        ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+        ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+        ATC_TEAM_NAME: vsphere
     file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
 
 - name: set-rc-vsphere-install
@@ -560,7 +571,11 @@ jobs:
   - task: destroy-rc-gcp-install
     params:
       PIPELINE_NAME: rc-gcp-install
-      <<: *atc_creds
+      <<: &atc_creds
+        ATC_EXTERNAL_URL: {{atc_external_url}}
+        ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
+        ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
+        ATC_TEAM_NAME: {{atc_team_name}}
     file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
 
 - name: set-rc-gcp-install
@@ -1453,26 +1468,3 @@ jobs:
   on_failure:
     <<: *notify_slack
 ####### END VSPHERE OFFLINE
-
-atc_creds: &atc_creds
-  ATC_EXTERNAL_URL: {{atc_external_url}}
-  ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
-  ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
-  ATC_TEAM_NAME: {{atc_team_name}}
-
-vsphere_atc_creds: &vsphere_atc_creds
-  ATC_EXTERNAL_URL: {{atc_external_url}}
-  ATC_BASIC_AUTH_USERNAME: {{fly_basic_auth_username}}
-  ATC_BASIC_AUTH_PASSWORD: {{fly_basic_auth_password}}
-  ATC_TEAM_NAME: vsphere
-
-notify_slack: &notify_slack
-  put: slack
-  params:
-    text: "$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME failed: $ATC_EXTERNAL_URL/builds/$BUILD_ID"
-
-norm-ci-locks-params: &norm-ci-locks-params
-  uri: git@github.com:pivotal-cf/norm-ci-locks.git
-  branch: master
-  private_key: {{locks_git_ssh_key}}
-  retry_delay: 1m
