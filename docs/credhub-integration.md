@@ -103,7 +103,7 @@ Once the deployment is finished, all servers will be available from the `concour
 
   For the server deployed in the example above, you can use Bosh 2's interpolate command to retrieve generated certificates and variables:  
 
-  `credhub api https://https://<concourse_host>:8844:8844 --ca-cert <(bosh int ./concourse-gen-vars.yml --path /concourse-tls/ca)`  
+  `credhub api https://<concourse_host>:8844:8844 --ca-cert <(bosh int ./concourse-gen-vars.yml --path /concourse-tls/ca)`  
 
 - Set CREDHUB_PASSWORD environment variable  
 
