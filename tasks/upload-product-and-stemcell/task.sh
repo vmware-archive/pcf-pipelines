@@ -11,7 +11,7 @@ STEMCELL_VERSION=$(
   jq --raw-output \
     '
     [
-      .Dependencies[]
+      (.Dependencies // [])[]
       | select(.Release.Product.Name | contains("Stemcells"))
       | .Release.Version
     ]
