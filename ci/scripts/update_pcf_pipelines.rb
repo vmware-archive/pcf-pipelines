@@ -28,7 +28,7 @@ file = Tempfile.new('pipeline_params')
 file.write(params.to_yaml)
 file.close
 
-fly_cmd = "fly -t ci sp -p pcf-pipelines-master -c ci/pcf-pipelines/pipeline.yml \
+fly_cmd = "fly -t #{ENV.fetch('FLY_TARGET')} sp -p pcf-pipelines-master -c ci/pcf-pipelines/pipeline.yml \
   -l #{file.path} \
   -l ~/workspace/secrets/pcf-pipelines-params \
   -l ~/workspace/secrets/platform-automation-github \
