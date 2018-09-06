@@ -12,12 +12,9 @@ run:
   - |-
     #!/usr/bin/env bash
     omen toggle-errands --action disable
-    omen toggle-errands --action enable --products ${PRODUCT_NAME}
+    omen toggle-errands --action enable --products $(omen list-tiles | grep "${PRODUCT_NAME}" | awk '{print $2}')
 params:
   OPSMAN_HOSTNAME:
   OPSMAN_PASSWORD:
   OPSMAN_USER:
   PRODUCT_NAME:
-
-inputs:
-- name: pivnet-product
