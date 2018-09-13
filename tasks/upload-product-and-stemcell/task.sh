@@ -51,7 +51,7 @@ if [ -n "$STEMCELL_VERSION" ]; then
         '
         if any(.Dependencies[]; select(.Release.Product.Name | contains("Stemcells for PCF (Windows)"))) then
           "stemcells-windows-server"
-        else if any(.Dependencies[]; select(.Release.Product.Name | contains("Xenial"))) then
+        elif any(.Dependencies[]; select(.Release.Product.Name | contains("Xenial"))) then
           "stemcells-ubuntu-xenial"
         else
           "stemcells"
