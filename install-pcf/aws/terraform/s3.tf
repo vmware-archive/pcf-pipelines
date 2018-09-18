@@ -7,6 +7,10 @@ resource "aws_s3_bucket" "bosh" {
         Name = "${var.prefix}-bosh"
         Environment = "${var.prefix}"
     }
+
+    versioning {
+      enabled = "${var.enable_s3_versioning}"
+    }
 }
 
 resource "aws_s3_bucket" "buildpacks" {
@@ -17,6 +21,10 @@ resource "aws_s3_bucket" "buildpacks" {
     tags {
         Name = "${var.prefix}-buildpacks"
         Environment = "${var.prefix}"
+    }
+
+    versioning {
+      enabled = "${var.enable_s3_versioning}"
     }
 }
 
@@ -29,6 +37,10 @@ resource "aws_s3_bucket" "droplets" {
         Name = "${var.prefix}-droplets"
         Environment = "${var.prefix}"
     }
+
+    versioning {
+      enabled = "${var.enable_s3_versioning}"
+    }
 }
 
 resource "aws_s3_bucket" "packages" {
@@ -40,6 +52,10 @@ resource "aws_s3_bucket" "packages" {
         Name = "${var.prefix}-packages"
         Environment = "${var.prefix}"
     }
+
+    versioning {
+      enabled = "${var.enable_s3_versioning}"
+    }
 }
 
 resource "aws_s3_bucket" "resources" {
@@ -50,5 +66,9 @@ resource "aws_s3_bucket" "resources" {
     tags {
         Name = "${var.prefix}-resources"
         Environment = "${var.prefix}"
+    }
+
+    versioning {
+      enabled = "${var.enable_s3_versioning}"
     }
 }

@@ -19,6 +19,9 @@ aws_key_name: CHANGEME
 
 aws_region: us-east-1
 
+# Enable or disable s3 versioning, once enabled versioning can't be disabled
+enable_s3_versioning: false
+
 # Ciphers
 # An ordered, colon-delimited list of Golang supported TLS cipher suites in OpenSSL format.
 # Operators should verify that these are supported by any clients or downstream components that will initiate TLS handshakes with the Router/HAProxy.

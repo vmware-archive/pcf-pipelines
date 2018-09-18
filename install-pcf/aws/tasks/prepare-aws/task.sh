@@ -63,6 +63,7 @@ terraform plan \
   -var "nat_ip_az1=${nat_ip_az1}" \
   -var "nat_ip_az2=${nat_ip_az2}" \
   -var "nat_ip_az3=${nat_ip_az3}" \
+  -var "enable_s3_versioning=${enable_s3_versioning}" \
   -out terraform.tfplan \
   pcf-pipelines/install-pcf/aws/terraform
 

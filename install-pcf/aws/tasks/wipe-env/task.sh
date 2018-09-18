@@ -84,5 +84,6 @@ terraform destroy \
   -var "nat_ip_az1=dontcare" \
   -var "nat_ip_az2=dontcare" \
   -var "nat_ip_az3=dontcare" \
+  -var "enable_s3_versioning=true" \
   -state "${root}/terraform-state/terraform.tfstate" \
   -state-out "${root}/terraform-state-output/terraform.tfstate"

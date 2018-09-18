@@ -12,6 +12,7 @@ variable "aws_az1" {}
 variable "aws_az2" {}
 variable "aws_az3" {}
 variable "route53_zone_id" {}
+variable "enable_s3_versioning" {}
 
 /*
 * used for configuring ingress rules to ops manager vm
@@ -45,6 +46,7 @@ variable "vpc_cidr" {
     description = "CIDR for the whole VPC"
     default = "10.0.0.0/16"
 }
+
 /*
   Availability Zone 1
 */
@@ -154,4 +156,3 @@ variable "infra_subnet_cidr_az1" {
 variable "nat_ip_az3" {
     default = "10.0.2.6"
 }
-

@@ -6,7 +6,7 @@ image_resource:
   source:
     repository: pcfnorm/rootfs
 inputs:
-  - name: pcf-pipelines 
+  - name: pcf-pipelines
   - name: terraform-state
   - name: ami
 outputs:
@@ -50,5 +50,7 @@ params:
   nat_ip_az3:
   OPSMAN_ALLOW_SSH_CIDR_RANGES:
   OPSMAN_ALLOW_HTTPS_CIDR_RANGES:
+  enable_s3_versioning:
+
 run:
   path: pcf-pipelines/install-pcf/aws/tasks/prepare-aws/task.sh
