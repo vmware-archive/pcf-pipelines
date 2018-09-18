@@ -246,8 +246,9 @@ jobs:
 - name: force-unlock-vsphere-offline-install-pcf
   serial: true
   plan:
-  - get: vsphere-offline-lock
-    passed: [ lock-vsphere-offline ]
+  - try:
+      get: vsphere-offline-lock
+      passed: [ lock-vsphere-offline ]
   - try:
       put: vsphere-offline-lock
       params: {release: vsphere-offline-lock}
@@ -255,8 +256,9 @@ jobs:
 - name: force-unlock-vsphere-install-pcf
   serial: true
   plan:
-  - get: vsphere-lock
-    passed: [ lock-vsphere ]
+  - try:
+      get: vsphere-lock
+      passed: [ lock-vsphere ]
   - try:
       put: vsphere-lock
       params: {release: vsphere-lock}
@@ -264,8 +266,9 @@ jobs:
 - name: force-unlock-gcp-install-pcf
   serial: true
   plan:
-  - get: gcp-lock
-    passed: [ lock-gcp ]
+  - try:
+      get: gcp-lock
+      passed: [ lock-gcp ]
   - try:
       put: gcp-lock
       params: {release: gcp-lock}
@@ -273,8 +276,9 @@ jobs:
 - name: force-unlock-azure-install-pcf
   serial: true
   plan:
-  - get: azure-lock
-    passed: [ lock-azure ]
+  - try:
+      get: azure-lock
+      passed: [ lock-azure ]
   - try:
       put: azure-lock
       params: {release: azure-lock}
@@ -282,8 +286,9 @@ jobs:
 - name: force-unlock-aws-install-pcf
   serial: true
   plan:
-  - get: aws-lock
-    passed: [ lock-aws ]
+  - try:
+      get: aws-lock
+      passed: [ lock-aws ]
   - try:
       put: aws-lock
       params: {release: aws-lock}
@@ -291,8 +296,9 @@ jobs:
 - name: force-unlock-lre-gcp-upgrade-opsman
   serial: true
   plan:
-  - get: gcp-lock
-    passed: [ lock-gcp-lre ]
+  - try:
+      get: gcp-lock
+      passed: [ lock-gcp-lre ]
   - try:
       put: gcp-lock
       params: {release: gcp-lock}

@@ -31,7 +31,7 @@ file.close
 fly_cmd = "fly -t #{ENV.fetch('FLY_TARGET')} sp -p pcf-pipelines-master -c ci/pcf-pipelines/pipeline.yml \
   -l #{file.path} \
   -l ~/workspace/secrets/pcf-pipelines-params \
-  -l ~/workspace/secrets/platform-automation-github \
+  -l ~/workspace/platform-automation-deployments/platform-automation/ci/github-secrets \
   -l ~/workspace/secrets/pcf-pipelines-pivnet"
 
 puts fly_cmd

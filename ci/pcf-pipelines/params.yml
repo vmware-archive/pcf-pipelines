@@ -16,7 +16,6 @@ gcp_child_dns_zone:
 gcp_parent_dns_zone:
 gcp_service_account_key:
 git_private_key:
-git_private_key:
 locks_git_ssh_key:
 pivnet_aws_access_key:
 pivnet_aws_secret_key:
