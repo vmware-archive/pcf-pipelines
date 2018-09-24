@@ -233,6 +233,8 @@ cf_properties=$(
     --arg db_networkpolicyserverdb_password "$db_networkpolicyserverdb_password" \
     --arg db_nfsvolumedb_username "$db_nfsvolumedb_username" \
     --arg db_nfsvolumedb_password "$db_nfsvolumedb_password" \
+    --arg db_credhub_username "$db_credhub_username" \
+    --arg db_credhub_password "$db_credhub_password" \
     --arg s3_endpoint "$S3_ENDPOINT" \
     --arg aws_access_key "${aws_access_key:-''}" \
     --arg aws_secret_key "${aws_secret_key:-''}" \
@@ -242,6 +244,7 @@ cf_properties=$(
     --argjson credhub_encryption_keys "$credhub_encryption_keys_json" \
     --argjson networking_poe_ssl_certs "$networking_poe_ssl_certs_json" \
     --arg container_networking_nw_cidr "$CONTAINER_NETWORKING_NW_CIDR" \
+    --arg RDS_CA_CERT "$RDS_CA_CERT" \
     '
     {
       ".uaa.service_provider_key_credentials": {
@@ -295,6 +298,22 @@ cf_properties=$(
       ".router.frontend_idle_timeout": { "value": $frontend_idle_timeout },
       ".mysql_monitor.recipient_email": { "value" : $mysql_monitor_recipient_email }
     }
+
+    +
+
+    # Credhub database configuration
+    if $iaas == "aws" then
+      {
+        ".properties.credhub_database": {"value": "external"},
+        ".properties.credhub_database.external.host": { "value": $db_host },
+        ".properties.credhub_database.external.port": { "value": "3306" },
+        ".properties.credhub_database.external.username": { "value": $db_credhub_username },
+        ".properties.credhub_database.external.password": { "value": { "secret": $db_credhub_password } },
+        ".properties.credhub_database.external.tls_ca": {"value": $RDS_CA_CERT }
+      }
+    else
+      .
+    end
 
     +
 

@@ -49,6 +49,8 @@ db_autoscale_password: CHANGEME
 db_autoscale_username: CHANGEME
 db_ccdb_password: CHANGEME
 db_ccdb_username: CHANGEME
+db_credhub_username: CHANGEME
+db_credhub_password: CHANGEME
 db_diego_password: CHANGEME
 db_diego_username: CHANGEME
 db_locket_password: CHANGEME
@@ -66,9 +68,13 @@ db_silk_username: CHANGEME
 db_uaa_password: CHANGEME
 db_uaa_username: CHANGEME
 
+
 # RDS Master Credentials - Required
 db_master_password: CHANGEME
 db_master_username: CHANGEME
+
+# RDS CA cert for credhub database configuration, can be downloaded from https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
+RDS_CA_CERT: CHANGEME
 
 # Optional PEM-encoded certificates to add to BOSH VMs
 director_certificates:

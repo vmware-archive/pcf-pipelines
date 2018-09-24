@@ -39,6 +39,7 @@ params:
   gcp_storage_secret_key:
   # aws specific
   S3_ENDPOINT:
+  RDS_CA_CERT:
   # db credentials
   db_app_usage_service_username:
   db_app_usage_service_password:
@@ -65,6 +66,8 @@ params:
   db_locket_password:
   db_silk_username:
   db_silk_password:
+  db_credhub_username:
+  db_credhub_password:
   routing_disable_http:
   ROUTING_CUSTOM_CA_CERTIFICATES:
   ROUTING_TLS_TERMINATION:

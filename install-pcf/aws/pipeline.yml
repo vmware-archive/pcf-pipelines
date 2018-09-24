@@ -161,6 +161,8 @@ jobs:
       DB_LOCKET_PASSWORD: {{db_locket_password}}
       DB_SILK_USERNAME: {{db_silk_username}}
       DB_SILK_PASSWORD: {{db_silk_password}}
+      DB_CREDHUB_USERNAME: {{db_credhub_username}}
+      DB_CREDHUB_PASSWORD: {{db_credhub_password}}
 
 - name: configure-director
   serial_groups: [opsman]
@@ -322,9 +324,12 @@ jobs:
       db_locket_password: {{db_locket_password}}
       db_silk_username: {{db_silk_username}}
       db_silk_password: {{db_silk_password}}
+      db_credhub_username: {{db_credhub_username}}
+      db_credhub_password: {{db_credhub_password}}
       SECURITY_ACKNOWLEDGEMENT: {{security_acknowledgement}}
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
+      RDS_CA_CERT: {{RDS_CA_CERT}}
 
   - task: disable-errands
     file: pcf-pipelines/tasks/disable-errands/task.yml
