@@ -23,7 +23,6 @@ pivnet_s3_filepath_prefix:
 pivnet_token:
 rc_aws_install_params:
 rc_azure_install_params:
-rc_lre_gcp_upgrade_ops_manager_params:
 rc_gcp_upgrade_pas_tile_params:
 rc_gcp_install_params:
 rc_offline_pipeline_name:
