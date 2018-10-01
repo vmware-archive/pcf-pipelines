@@ -122,21 +122,6 @@ jobs:
       OPSMAN_SETTINGS_FILENAME: installation.zip
       OPSMAN_PASSPHRASE: {{opsman_passphrase}}
 
-  - task: download-stemcells
-    file: pcf-pipelines/tasks/download-pivnet-stemcells/task.yml
-    params:
-      API_TOKEN: {{pivnet_token}}
-      IAAS_TYPE: azure
-
-  - task: restore-stemcells
-    file: pcf-pipelines/tasks/restore-stemcells/task.yml
-    params:
-      OPSMAN_CLIENT_ID: {{opsman_client_id}}
-      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
-      OPSMAN_USERNAME: {{opsman_admin_username}}
-      OPSMAN_PASSWORD: {{opsman_admin_password}}
-      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
-
   - task: apply-changes
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
