@@ -39,14 +39,14 @@ resources:
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
-    product_version: .NET*
+    product_version: \.NET*
 
 - name: go-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
     product_slug: buildpacks
-    product_version: Go*
+    product_version: ^Go.*
 
 - name: java-buildpack
   type: pivnet
