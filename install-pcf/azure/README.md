@@ -76,19 +76,28 @@ the `Contributor` Role on the target Azure Project.
 
 4. Log into concourse and create the pipeline.
 
-   ```
-   fly -t lite set-pipeline -p install-pcf-azure \
-     -c pcf-pipelines/install-pcf/azure/pipeline.yml \
-     -l pcf-pipelines/install-pcf/azure/params.yml
-   ```
+    ```shell
+    fly -t lite login -c <YourConcourseURL>
+    fly -t lite set-pipeline -p install-pcf-azure \
+      -c pcf-pipelines/install-pcf/azure/pipeline.yml \
+      -l pcf-pipelines/install-pcf/azure/params.yml
+    ```
 
-5. Un-pause the pipeline.
+5. Un-pause the pipeline:  `fly up -t lite -p install-pcf-azure`
 
 6. Run the `bootstrap-terraform-state` job. This will create a `terraform.tfstate` in your storage
 container to be used by the pipeline.
 
+```shell
+fly tj -t lite -j install-pcf-azure/bootstrap-terraform-state
+```
+
 8. Run the `create-infrastructure` job. This will create all the infrastructure necessary for your
 PCF installation.
+
+```shell
+fly tj -t lite -j install-pcf-azure/create-infrastructure
+```
 
 9. Create an NS record within the delegating zone with the name servers from the newly created zone. To retrieve the nameservers that should be used for delegating to the new zone, run the following:
    ```
