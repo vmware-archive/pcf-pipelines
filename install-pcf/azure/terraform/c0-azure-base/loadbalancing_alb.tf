@@ -51,7 +51,6 @@ resource "azurerm_lb" "ssh-proxy" {
 // API&APPS
 resource "azurerm_lb_backend_address_pool" "web-backend-pool" {
   name                = "web-backend-pool"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.web.id}"
 }
@@ -59,7 +58,6 @@ resource "azurerm_lb_backend_address_pool" "web-backend-pool" {
 // TCP Load Balancer
 resource "azurerm_lb_backend_address_pool" "tcp-backend-pool" {
   name                = "tcp-backend-pool"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.tcp.id}"
 }
@@ -67,7 +65,6 @@ resource "azurerm_lb_backend_address_pool" "tcp-backend-pool" {
 // SSH Proxy
 resource "azurerm_lb_backend_address_pool" "ssh-backend-pool" {
   name                = "ssh-backend-pool"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.ssh-proxy.id}"
 }
@@ -79,7 +76,6 @@ resource "azurerm_lb_backend_address_pool" "ssh-backend-pool" {
 // Go Router HTTPS
 resource "azurerm_lb_probe" "web-https-probe" {
   name                = "web-https-probe"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.web.id}"
   protocol            = "TCP"
@@ -90,7 +86,6 @@ resource "azurerm_lb_probe" "web-https-probe" {
 // Go Router HTTP
 resource "azurerm_lb_probe" "web-http-probe" {
   name                = "web-http-probe"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.web.id}"
   protocol            = "TCP"
@@ -101,7 +96,6 @@ resource "azurerm_lb_probe" "web-http-probe" {
 // TCP LB 80
 resource "azurerm_lb_probe" "tcp-probe" {
   name                = "tcp-probe"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.tcp.id}"
   protocol            = "TCP"
@@ -111,7 +105,6 @@ resource "azurerm_lb_probe" "tcp-probe" {
 // Diego Brain 2222
 resource "azurerm_lb_probe" "ssh-proxy-probe" {
   name                = "ssh-proxy-probe"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.ssh-proxy.id}"
   protocol            = "TCP"
@@ -126,7 +119,6 @@ resource "azurerm_lb_probe" "ssh-proxy-probe" {
 // API&APPS HTTPS
 resource "azurerm_lb_rule" "web-https-rule" {
   name                = "web-https-rule"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.web.id}"
 
@@ -143,7 +135,6 @@ resource "azurerm_lb_rule" "web-https-rule" {
 // API&APPS HTTP
 resource "azurerm_lb_rule" "web-http-rule" {
   name                = "web-http-rule"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.web.id}"
 
@@ -162,7 +153,6 @@ resource "azurerm_lb_rule" "web-http-rule" {
 resource "azurerm_lb_rule" "tcp-rule" {
   count               = 150
   name                = "tcp-rule-${count.index + 1024}"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.tcp.id}"
 
@@ -179,7 +169,6 @@ resource "azurerm_lb_rule" "tcp-rule" {
 // SSH Proxy
 resource "azurerm_lb_rule" "ssh-proxy-rule" {
   name                = "ssh-proxy-rule"
-  location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
   loadbalancer_id     = "${azurerm_lb.ssh-proxy.id}"
 
