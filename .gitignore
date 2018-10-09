@@ -10,3 +10,5 @@ logs/
 *.tfvars
 *.tfstate
 *.tfstate.backup
+params.yml
+install-pcf/azure/params.yml
