@@ -65,14 +65,25 @@ the `Contributor` Role on the target Azure Project.
     --account-name $STORAGE_NAME
     ```
 
-3. From this GitHub repository, copy the `pcf-pipelines/install-pcf/azure/params.yml` file and replace all variables/parameters.
+3. From this GitHub repository, copy the `pcf-pipelines/install-pcf/azure/params.yml` file. Search for *CHANGEME* and replace the value for the variables/parameters.
 
     - The sample pipeline params file includes 2 params that set the major/minor versions of OpsMan and ERT that will be pulled.  They will typically default to the latest available tiles.
 
       ```yaml
-      opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
-      ert_major_minor_version: ^2\.0\.[0-9]+$ # ERT minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
+      opsman_major_minor_version: ^2\.3\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.3\.[0-9]+$ will track 2.3.x versions)
+      ert_major_minor_version: ^2\.3\.[0-9]+$ # ERT minor version to track (e.g ^2\.3\.[0-9]+$ will track 2.3.x versions)
       ```
+
+    - The params file includes a parameter for git private key named *git_private_key*. It will be used by the pipeline yml in the git resource named pcf-pipelines. Note that this parameter is required if using a git ssh clone. If using https clone the parameter is not used. In that can replace the uri in the pipeline with the https clone uri
+
+    ```yaml
+    name: pcf-pipelines
+        type: git
+            source:
+            uri: git@github.com:pivotal-cf/pcf-pipelines.git
+            branch: master
+            private_key: {{git_private_key}}
+    ```
 
 4. Log into concourse and create the pipeline.
 
