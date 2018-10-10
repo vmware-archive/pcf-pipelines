@@ -5,3 +5,10 @@ config
 *.sw[po]
 azure-prepare-env/params.yml
 azure-prepare-env/creds.yml
+.terraform/
+logs/
+*.tfvars
+*.tfstate
+*.tfstate.backup
+params.yml
+install-pcf/azure/params.yml

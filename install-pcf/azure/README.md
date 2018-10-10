@@ -30,69 +30,74 @@ the `Contributor` Role on the target Azure Project.
 
    Set your Subscription ID to the subscription that will be used by the install-pcf pipeline:
 
-   ```
+   ```shell
    export SUBSCRIPTION_ID=<YOUR-SUBSCRIPTION-ID>
-   export SERVICE_PRINCIPAL_PASSWORD=<SOME-PASSWORD>
    ```
 
+   ```shell
+   az ad sp create-for-rbac --name "pcfserviceaccount" --role="Contributor" \
+   --scopes="/subscriptions/${SUBSCRIPTION_ID}" | tee app_create.json
    ```
-   az ad app create --display-name "PCFServiceAccount" \
-     --homepage "http://pcfserviceaccount" \
-     --identifier-uris "http://pcfserviceaccount" \
-     --password "$SERVICE_PRINCIPAL_PASSWORD" | tee app_create.json
 
-   export APP_ID="$(jq -r .appId app_create.json)"
-
-   az ad sp create --id "$APP_ID"
-
-   az role assignment create --assignee "http://pcfserviceaccount" \
-     --role "Contributor" \
-     --scope "/subscriptions/$SUBSCRIPTION_ID"
-   ```
+   > Note: The service principal password will output on the console as well as saved in the `app_create.json` file.
 
 2. Create an Azure Storage Account and Container to store terraform.tfstate
 
-   ```
-   az group create --name "pcfci" \
-     --location "WestUS"
+   Set an azure storage account name which is globally unique per datacenter region and change the desired datacenter location.
+  
+    ```shell
+    export STORAGE_NAME="pcfterraform"
+    export REGION="WestUS2"
+    ```
 
-   az storage account create --name "pcfci" \
-     --resource-group "pcfci" \
-     --location "WestUS" \
-     --sku "Standard_LRS"
+    ```shell
+    az group create --name "pcfci" \
+        --location $REGION
 
-   AZURE_STORAGE_ACCOUNT_KEY=$(az storage account keys list --account-name pcfci --resource-group pcfci | jq -r .[0].value)
+    az storage account create --name $STORAGE_NAME \
+        --resource-group "pcfci" \
+        --kind "StorageV2" \
+        --sku "Standard_LRS"
 
-   az storage container create --name terraformstate \
-     --account-name pcfci
-   ```
+    AZURE_STORAGE_ACCOUNT_KEY=$(az storage account keys list --account-name $STORAGE_NAME --resource-group pcfci | jq -r .[0].value)
 
-3. Download `pcf-pipelines` from [Pivotal Networks](https://network.pivotal.io/products/pcf-automation)
+    az storage container create --name terraformstate \
+    --account-name $STORAGE_NAME
+    ```
 
-4. Update `pcf-pipelines/install-pcf/azure/params.yml` and replace all variables/parameters.
+3. From this GitHub repository, copy the `pcf-pipelines/install-pcf/azure/params.yml` file and replace all variables/parameters.
 
-    - The sample pipeline params file includes 2 params that set the major/minor versions of
-      OpsMan and ERT that will be pulled.  They will typically default to the latest available tiles.
-      ```
+    - The sample pipeline params file includes 2 params that set the major/minor versions of OpsMan and ERT that will be pulled.  They will typically default to the latest available tiles.
+
+      ```yaml
       opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
       ert_major_minor_version: ^2\.0\.[0-9]+$ # ERT minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
       ```
 
-5. Log into concourse and create the pipeline.
+4. Log into concourse and create the pipeline.
 
-   ```
-   fly -t lite set-pipeline -p install-pcf-azure \
-     -c pcf-pipelines/install-pcf/azure/pipeline.yml \
-     -l pcf-pipelines/install-pcf/azure/params.yml
-   ```
+    ```shell
+    fly -t lite login -c <YourConcourseURL>
+    fly -t lite set-pipeline -p install-pcf-azure \
+      -c pcf-pipelines/install-pcf/azure/pipeline.yml \
+      -l pcf-pipelines/install-pcf/azure/params.yml
+    ```
 
-6. Un-pause the pipeline.
+5. Un-pause the pipeline:  `fly up -t lite -p install-pcf-azure`
 
-7. Run the `bootstrap-terraform-state` job. This will create a `terraform.tfstate` in your storage
+6. Run the `bootstrap-terraform-state` job. This will create a `terraform.tfstate` in your storage
 container to be used by the pipeline.
+
+```shell
+fly tj -t lite -j install-pcf-azure/bootstrap-terraform-state
+```
 
 8. Run the `create-infrastructure` job. This will create all the infrastructure necessary for your
 PCF installation.
+
+```shell
+fly tj -t lite -j install-pcf-azure/create-infrastructure
+```
 
 9. Create an NS record within the delegating zone with the name servers from the newly created zone. To retrieve the nameservers that should be used for delegating to the new zone, run the following:
    ```
