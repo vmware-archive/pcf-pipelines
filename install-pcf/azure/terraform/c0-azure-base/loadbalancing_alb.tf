@@ -11,7 +11,7 @@
 resource "azurerm_lb" "web" {
   name                = "${var.env_name}-web-lb"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
-
+  sku                 = "${var.azure_lb_sku}" 
   frontend_ip_configuration = {
     name                 = "frontendip"
     public_ip_address_id = "${azurerm_public_ip.web-lb-public-ip.id}"

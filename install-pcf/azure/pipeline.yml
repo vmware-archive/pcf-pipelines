@@ -189,6 +189,7 @@ jobs:
       AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
       AZURE_STORAGE_ACCOUNT_NAME: {{azure_storage_account_name}}
       PCF_OPSMAN_DISK_SIZE_IN_GB: {{pcf_opsman_disk_size_in_gb}}
+      AZURE_LB_SKU: {{azure_lb_sku}}
 
 ##############################
 ## Job - Config OpsMan Auth ##

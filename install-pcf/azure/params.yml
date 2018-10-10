@@ -132,6 +132,9 @@ haproxy_forward_tls: enable
 # The lb value can be obtained by prepending "web-lb" with "azure_terraform_prefix". For example, if your "azure_terraform_prefix" is "test", then the "ha_proxy_lb_name" is "test-web-lb".
 ha_proxy_lb_name: CHANGEME 
 
+# Choose between "Basic" and "Standard"
+azure_lb_sku: "Standard"
+
 # Instances
 ## These resources can take any parameter made available in
 ## the ops manager API ( https://your-ops-man/docs#configuring-resources-for-a-job)

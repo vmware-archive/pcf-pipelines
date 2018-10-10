@@ -12,7 +12,7 @@ resource "azurerm_lb" "web" {
   name                = "${var.env_name}-web-lb"
   location            = "${var.location}"
   resource_group_name = "${var.azure_multi_resgroup_pcf}"
-
+  sku                 = "${var.lb_sku}"
   frontend_ip_configuration = {
     name                 = "frontendip"
     public_ip_address_id = "${var.pub_ip_id_pcf_lb}"

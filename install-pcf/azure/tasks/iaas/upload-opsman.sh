@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ue
+set -e
 
 current_dir=$(dirname "${BASH_SOURCE[0]}")
 source "${current_dir}/parse_opsman_region_url.sh"
