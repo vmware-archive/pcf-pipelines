@@ -22,7 +22,7 @@ resource "azurerm_lb" "web" {
 resource "azurerm_lb" "tcp" {
   name                = "${var.env_name}-tcp-lb"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
-
+  sku                 = "${var.azure_lb_sku}" 
   frontend_ip_configuration = {
     name                 = "frontendip"
     public_ip_address_id = "${azurerm_public_ip.tcp-lb-public-ip.id}"
@@ -34,7 +34,7 @@ resource "azurerm_lb" "tcp" {
 resource "azurerm_lb" "ssh-proxy" {
   name                = "${var.env_name}-ssh-proxy-lb"
   resource_group_name = "${azurerm_resource_group.pcf_resource_group.name}"
-
+  sku                 = "${var.azure_lb_sku}"
   frontend_ip_configuration = {
     name                 = "frontendip"
     public_ip_address_id = "${azurerm_public_ip.ssh-proxy-lb-public-ip.id}"
