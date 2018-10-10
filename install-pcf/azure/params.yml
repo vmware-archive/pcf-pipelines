@@ -33,8 +33,10 @@ azure_packages_container:
 # The set of terraform templates and opsman configuration to use in the pipeline (c0-azure-base|c0-azure-multi-res-group)
 azure_pcf_terraform_template: c0-azure-base
 
-# a valid Azure region.
+# a valid Azure region
 azure_region: CHANGEME
+# Choose one of these regions to deploy the opsman image from: "west_us", "east_us", "west_europe", "southeast_asia"
+image_source_region: "east_us"
 
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
 azure_resources_container:

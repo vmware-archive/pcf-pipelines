@@ -157,6 +157,8 @@ jobs:
         - name: opsman-metadata
       run:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/upload-opsman.sh
+      params:
+        AZURE_IMAGE_SOURCE_REGION: {{image_source_region}}
 
   - task: create-infrastructure
     file: pcf-pipelines/install-pcf/azure/tasks/create-infrastructure/task.yml
