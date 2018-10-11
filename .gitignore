@@ -3,5 +3,13 @@ config
 *.iml
 .idea
 *.sw[po]
+params.yml
 azure-prepare-env/params.yml
+install-pcf/azure/params.yml
 azure-prepare-env/creds.yml
+.terraform/
+logs/
+*.tfvars
+*.tfstate
+*.tfstate.backup
+*.tfplan
