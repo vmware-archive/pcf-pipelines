@@ -1,6 +1,6 @@
 # AMI to use for nat box
 # Update with the correct NAT AMI for your region. List of AMIs can be found
-# here: https://github.com/pivotal-cf/terraforming-aws/blob/master/nat.tf
+# here: https://github.com/pivotal-cf/terraforming-aws/blob/master/infra/variables.tf
 amis_nat: ami-303b1458
 
 # This key must be a key with admin access
