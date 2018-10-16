@@ -36,7 +36,7 @@ opsman_passphrase: CHANGEME
 # Ops Manager Url - FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
 opsman_domain_or_ip_address: CHANGEME
 
-opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
+opsman_major_minor_version: ^2\.1\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.1\.[0-9]+$ will track 2.0.x versions)
 
 # Optional
 # Overwrite the existing VM disk size for Ops Manager

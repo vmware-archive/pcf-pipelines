@@ -23,7 +23,7 @@ opsman_admin_username: CHANGEME
 opsman_admin_password: CHANGEME
 
 opsman_ssh_password: CHANGEME   # ubuntu user ssh password
-opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)   # Ops Manager minor version to track
+opsman_major_minor_version: ^2\.1\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.1\.[0-9]+$ will track 2.0.x versions)   # Ops Manager minor version to track
 opsman_domain_or_ip_address: CHANGEME #FQDN to access Ops Manager without protocol (will use https), ex: opsmgr.example.com
 opsman_passphrase: CHANGEME
 pivnet_token: CHANGEME # value must be a Pivotal Network legacy token; UAA API tokens do not work currently work

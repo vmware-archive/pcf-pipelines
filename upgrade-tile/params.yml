@@ -57,5 +57,5 @@ product_globs: "*pivotal"
 # product slug is 'pivotal-rabbitmq-service'.
 product_slug: CHANGEME
 
-# The minor product version to track, as a regexp. To track 1.11.x of a product, this would be "^2\.0\.[0-9]+$", as shown below.
+# The minor product version to track, as a regexp. To track 1.11.x of a product, this would be "^2\.1\.[0-9]+$", as shown below.
 product_version_regex: CHANGEME
