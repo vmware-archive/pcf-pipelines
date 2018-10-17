@@ -26,11 +26,6 @@ groups:
   - deploy-ert
 
 resource_types:
-- name: azure-blobstore
-  type: docker-image
-  source:
-    repository: czero/azure-blobstore-resource
-
 - name: pivnet
   type: docker-image
   source:
@@ -44,14 +39,6 @@ resource_types:
     tag: latest
 
 resources:
-- name: terraform-state
-  type: azure-blobstore
-  source:
-    storage_account_name: {{terraform_azure_storage_account_name}}
-    storage_account_key: {{terraform_azure_storage_access_key}}
-    container: {{azure_storage_container_name}}
-    versioned_file: terraform.tfstate
-
 - name: pcf-pipelines
   type: git
   source:
@@ -77,6 +64,13 @@ resources:
     product_version: {{ert_major_minor_version}}
     sort_by: semver
 
+- name: rootfs-image
+  type: docker-image
+  check_every: 4h
+  source:
+    repository: pcfnorm/rootfs
+    tag: {{rootfs_image_tag}}
+
 jobs:
 ####################################
 ## Job - Boostrap Terraform State ##
@@ -85,12 +79,16 @@ jobs:
   serial_groups: [terraform]
   plan:
   - get: pcf-pipelines
-  - task: create-terraform-state
+  - get: rootfs-image
+
+  - task: check-terraform-state
+    image: rootfs-image
+    file: pcf-pipelines/install-pcf/azure/tasks/check-terraform-state/task.yml
     params:
-      AZURE_STORAGE_ACCOUNT: {{terraform_azure_storage_account_name}}
-      AZURE_STORAGE_KEY: {{terraform_azure_storage_access_key}}
-      CONTAINER: {{azure_storage_container_name}}
-    file: pcf-pipelines/install-pcf/azure/tasks/create-initial-terraform-state/task.yml
+      TERRAFORM_AZURE_STORAGE_ACCOUNT_NAME: {{terraform_azure_storage_account_name}}
+      TERRAFORM_AZURE_STORAGE_ACCESS_KEY: {{terraform_azure_storage_access_key}}
+      TERRAFORM_AZURE_STORAGE_CONTAINER_NAME: {{terraform_azure_storage_container_name}}
+      TERRAFORM_AZURE_STATEFILE_NAME: {{terraform_azure_statefile_name}}
 
 #####################
 ## Job - Wipe Env  ##
@@ -99,16 +97,13 @@ jobs:
   serial: true
   max_in_flight: 1
   serial_groups: [full]
-  ensure:
-    put: terraform-state
-    params:
-      file: terraform-state-output/terraform.tfstate
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: terraform-state
+    - get: rootfs-image
 
   - task: wipe-env
+    image: rootfs-image
     file: pcf-pipelines/install-pcf/azure/tasks/wipe-env/task.yml
     params:
       ARG_WIPE: {{arg_wipe}}
@@ -122,6 +117,10 @@ jobs:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_USERNAME: {{opsman_admin_username}}
       OPSMAN_PASSWORD: {{opsman_admin_password}}
+      TERRAFORM_AZURE_STORAGE_ACCOUNT_NAME:  {{terraform_azure_storage_account_name}}
+      TERRAFORM_AZURE_STORAGE_ACCESS_KEY: {{terraform_azure_storage_access_key}}
+      TERRAFORM_AZURE_STORAGE_CONTAINER_NAME: {{terraform_azure_storage_container_name}}
+      TERRAFORM_AZURE_STATEFILE_NAME: {{terraform_azure_statefile_name}}
 
 #################################
 ## Job - Create Infrastructure ##
@@ -130,26 +129,19 @@ jobs:
   serial: true
   max_in_flight: 1
   serial_groups: [full]
-  ensure:
-    put: terraform-state
-    params:
-      file: terraform-state-output/terraform.tfstate
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: terraform-state
     - get: pivnet-opsmgr
+    - get: rootfs-image
       params:
         globs:
         - "*Azure.yml"
 
   - task: upload-opsman
+    image: rootfs-image
     config:
       platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
         - name: pivnet-opsmgr
@@ -159,6 +151,7 @@ jobs:
         path: pcf-pipelines/install-pcf/azure/tasks/iaas/upload-opsman.sh
 
   - task: create-infrastructure
+    image: rootfs-image
     file: pcf-pipelines/install-pcf/azure/tasks/create-infrastructure/task.yml
     params:
       AZURE_PCF_TERRAFORM_TEMPLATE: {{azure_pcf_terraform_template}}
@@ -187,6 +180,10 @@ jobs:
       AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR: {{azure_terraform_subnet_dynamic_services_cidr}}
       AZURE_STORAGE_ACCOUNT_NAME: {{azure_storage_account_name}}
       PCF_OPSMAN_DISK_SIZE_IN_GB: {{pcf_opsman_disk_size_in_gb}}
+      TERRAFORM_AZURE_STORAGE_ACCOUNT_NAME:  {{terraform_azure_storage_account_name}}
+      TERRAFORM_AZURE_STORAGE_ACCESS_KEY: {{terraform_azure_storage_access_key}}
+      TERRAFORM_AZURE_STORAGE_CONTAINER_NAME: {{terraform_azure_storage_container_name}}
+      TERRAFORM_AZURE_STATEFILE_NAME: {{terraform_azure_statefile_name}}
 
 ##############################
 ## Job - Config OpsMan Auth ##
@@ -198,18 +195,15 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsmgr
+    - get: rootfs-image
       passed: [create-infrastructure]
       params:
         globs: []
 
   - task: config-opsman
+    image: rootfs-image
     config:
       platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
@@ -229,19 +223,16 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsmgr
+    - get: rootfs-image
       passed: [config-opsman-auth]
       trigger: true
       params:
         globs: []
 
   - task: config-director
+    image: rootfs-image
     config:
       platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
@@ -285,18 +276,15 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsmgr
+    - get: rootfs-image
       passed: [config-director]
       trigger: true
       params: {globs: []}
 
   - task: deploy-director
+    image: rootfs-image
     config:
       platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: pcfnorm/rootfs
       inputs:
         - name: pcf-pipelines
       run:
@@ -314,7 +302,7 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsmgr
+    - get: rootfs-image
       passed: [deploy-director]
       trigger: true
       params: {globs: []}
@@ -325,6 +313,7 @@ jobs:
         - "cf*.pivotal"
 
   - task: upload-tile
+    image: rootfs-image
     file: pcf-pipelines/tasks/upload-product-and-stemcell/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
@@ -356,13 +345,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: terraform-state
-    - get: pivnet-opsmgr
+    - get: rootfs-image
       passed: [upload-ert]
       trigger: true
       params: {globs: []}
 
   - task: configure-ert
+    image: rootfs-image
     file: pcf-pipelines/tasks/config-ert/task.yml
     params:
       IAAS: azure
@@ -501,12 +490,13 @@ jobs:
   plan:
   - aggregate:
     - get: pcf-pipelines
-    - get: pivnet-opsmgr
+    - get: rootfs-image    
       passed: [configure-ert]
       trigger: true
       params: {globs: []}
 
   - task: deploy-ert
+    image: rootfs-image
     file: pcf-pipelines/tasks/apply-changes/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}

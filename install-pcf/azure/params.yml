@@ -36,6 +36,9 @@ azure_pcf_terraform_template: c0-azure-base
 # a valid Azure region.
 azure_region: CHANGEME
 
+# https://hub.docker.com/r/pcfnorm/rootfs/tags/
+rootfs_image_tag: latest
+
 # Required if Azure blob storage is used as external storage by ERT, which is determined by azure_storage_account_name being not null. This setting is used to specify the container where the resources will be stored. It is similar to the S3 bucket in AWS.
 azure_resources_container:
 
@@ -247,9 +250,10 @@ smtp_pwd:
 smtp_user:
 
 # Storage account and container that will be used for your terraform state
-azure_storage_container_name: CHANGEME
+terraform_azure_storage_container_name: CHANGEME
 terraform_azure_storage_access_key: CHANGEME
 terraform_azure_storage_account_name: CHANGEME
+terraform_azure_statefile_name: terraform.tfstate
 
 ## Syslog endpoint configuration goes here
 # Optional. If syslog_host is specified, syslog_port, syslog_protocol,

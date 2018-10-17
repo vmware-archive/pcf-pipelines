@@ -1,19 +1,9 @@
 ---
 platform: linux
 
-image_resource:
-  type: docker-image
-  source:
-    repository: pcfnorm/rootfs
-
 inputs:
   - name: pcf-pipelines
   - name: opsman-metadata
-  - name: terraform-state
-
-outputs:
-  - name: terraform-state-output
-
 run:
   path: pcf-pipelines/install-pcf/azure/tasks/create-infrastructure/task.sh
 
@@ -44,4 +34,7 @@ params:
   AZURE_TERRAFORM_SUBNET_DYNAMIC_SERVICES_CIDR:
   AZURE_TERRAFORM_OPSMAN_PRIV_IP:
   PCF_OPSMAN_DISK_SIZE_IN_GB:
-
+  TERRAFORM_AZURE_STORAGE_ACCOUNT_NAME:
+  TERRAFORM_AZURE_STORAGE_ACCESS_KEY:
+  TERRAFORM_AZURE_STORAGE_CONTAINER_NAME:
+  TERRAFORM_AZURE_STATEFILE_NAME:
