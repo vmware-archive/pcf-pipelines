@@ -76,7 +76,7 @@ apps_domain: CHANGEME
 ert_errands_to_disable: none
 
 # PCF Elastic Runtime minor version to track
-ert_major_minor_version: ^2\.0\.[0-9]+$ # ERT minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
+ert_major_minor_version: ^2\.1\.[0-9]+$ # ERT minor version to track (e.g ^2\.1\.[0-9]+$ will track 2.0.x versions)
 
 # Optional. Duration in seconds to maintain an open connection when client supports keep-alive.
 frontend_idle_timeout: 601
@@ -130,7 +130,7 @@ opsman_admin_password: CHANGEME
 opsman_domain_or_ip_address: CHANGEME #This must be your pcf_ert_domain with "opsman." as a prefix. For example, opsman.pcf.example.com
 
 # PCF Ops Manager minor version to track
-opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
+opsman_major_minor_version: ^2\.1\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.1\.[0-9]+$ will track 2.0.x versions)
 
 # Optional PEM-encoded certificates to add to BOSH director
 opsman_trusted_certs: |

@@ -16,45 +16,38 @@ COPY \
 
 COPY terraforming-azure/ /home/vcap/app/terraforming-azure
 
-RUN \
-cp /usr/local/bin/yaml_patch_linux /usr/local/bin/yaml-patch && \
-\
+RUN cp /usr/local/bin/yaml_patch_linux /usr/local/bin/yaml-patch
 # gcloud SDK
-export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
+RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
 echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list && \
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-apt-get -y update && sudo apt-get -y install --no-install-recommends google-cloud-sdk && \
-\
+apt-get -y update && sudo apt-get -y install --no-install-recommends google-cloud-sdk
+
 # pip
-apt-get install -y --no-install-recommends python-pip python-dev software-properties-common python-software-properties && \
-\
+RUN apt-get install -y --no-install-recommends libffi-dev python-cffi python-pip python-dev software-properties-common python-software-properties
 # vim
-ln -s /usr/bin/vim.tiny /usr/local/bin/vim && \
-\
+RUN ln -s /usr/bin/vim.tiny /usr/local/bin/vim
 # UAA Client
-gem install cf-uaac --no-ri --no-rdoc && \
-\
+RUN gem install cf-uaac --no-ri --no-rdoc
 # Ensure latest version of six
-pip install six --upgrade && \
-\
+RUN pip install six --upgrade
 # AWS Client
-pip install awscli && \
-\
+RUN pip install awscli
 # Openstack Client
-apt-get -y update && \
+RUN apt-get -y update && \
 apt-get -y install curl build-essential && \
 apt-get -y install python python-dev python-pip software-properties-common && \
 pip install --upgrade pip setuptools wheel && \
-pip install python-openstackclient python-neutronclient && \
+pip install python-openstackclient python-neutronclient
 
 # Azure Client
-echo "deb https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && \
+RUN echo "deb https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && \
 curl -L https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add - && \
 sudo apt-get -y install --no-install-recommends apt-transport-https && \
-sudo apt-get -y update && sudo apt-get -y install --no-install-recommends azure-cli && \
-\
+sudo apt-get -y update && sudo apt-get -y install --no-install-recommends azure-cli
+
 # Clean up
-apt-get remove -y python-dev apt-transport-https && \
+RUN apt-get remove -y python-dev apt-transport-https && \
 apt-get -y clean && apt-get -y autoremove --purge && rm -rf /etc/apt/ && \
 rm -rf /tmp/* && \
 find /var/lib/apt/lists -type f | xargs rm -f && \

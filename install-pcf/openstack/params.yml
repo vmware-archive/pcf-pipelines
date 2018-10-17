@@ -73,7 +73,7 @@ dynamic_services_reserved_ip_ranges: 10.4.0.0-10.4.0.9
 dynamic_services_subnet_cidr: 10.4.0.0/24
 
 # PCF Elastic Runtime minor version to track
-ert_major_minor_version: ^2\.0\.[0-9]+$ # ERT minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
+ert_major_minor_version: ^2\.1\.[0-9]+$ # ERT minor version to track (e.g ^2\.1\.[0-9]+$ will track 2.0.x versions)
 
 # AZ to use for deployment of ERT Singleton jobs
 ert_singleton_job_az: CHANGEME
@@ -189,7 +189,7 @@ opsman_flavor: m1.xlarge                  # Ops man VM flavor
 opsman_image: ops-manager                 # Prefix for the ops man glance image
 
 # PCF Ops Manager minor version to track
-opsman_major_minor_version: ^2\.0\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.0\.[0-9]+$ will track 2.0.x versions)
+opsman_major_minor_version: ^2\.1\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.1\.[0-9]+$ will track 2.0.x versions)
 
 # The public key of your opsman key
 opsman_public_key: CHANGEME

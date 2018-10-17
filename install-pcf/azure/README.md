@@ -67,8 +67,9 @@ the `Contributor` Role on the target Azure Project.
 
 3. From this GitHub repository, copy the `pcf-pipelines/install-pcf/azure/params.yml` file. Search for *CHANGEME* and replace the value for the variables/parameters.
 
-    - The sample pipeline params file includes 2 params that set the major/minor versions of OpsMan and ERT that will be pulled.  They will typically default to the latest available tiles.
-
+    - The sample pipeline params file includes 2 params that set the major/minor versions of
+      OpsMan and ERT that will be pulled.  They will typically default to the latest available tiles.
+      
       ```yaml
       opsman_major_minor_version: ^2\.3\.[0-9]+$ # Ops Manager minor version to track (e.g ^2\.3\.[0-9]+$ will track 2.3.x versions)
       ert_major_minor_version: ^2\.3\.[0-9]+$ # ERT minor version to track (e.g ^2\.3\.[0-9]+$ will track 2.3.x versions)
