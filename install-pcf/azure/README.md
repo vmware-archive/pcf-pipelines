@@ -97,20 +97,20 @@ the `Contributor` Role on the target Azure Project.
 
 5. Un-pause the pipeline:  
 
-    `fly up -t lite -p install-pcf-azure`
+    `fly unpause-pipeline -t lite -p install-pcf-azure`
 
 6. Run the `bootstrap-terraform-state` job. This will create a `terraform.tfstate` in your storage
 container to be used by the pipeline.
 
     ```shell
-    fly tj -t lite -j install-pcf-azure/bootstrap-terraform-state
+    fly trigger-job -t lite -j install-pcf-azure/bootstrap-terraform-state
     ```
 
 8. Run the `create-infrastructure` job. This will create all the infrastructure necessary for your
 PCF installation.
 
     ```shell
-    fly tj -t lite -j install-pcf-azure/create-infrastructure
+    fly trigger-job -t lite -j install-pcf-azure/create-infrastructure
     ```
 
 9. Create an NS record within the delegating zone with the name servers from the newly created zone. To retrieve the nameservers that should be used for delegating to the new zone, run the following:
@@ -157,5 +157,3 @@ is resolvable, run the following:
 - If you are using pcf-pipelines v23 or older, Terraform [hardcodes](https://github.com/pivotal-cf/pcf-pipelines/blob/v0.23.0/install-pcf/azure/terraform/c0-azure-base/dns.tf#L19) the apps domain name to `cfapps`. The workaround for this is by adding `*.apps` to your Azure DNS Zone.
 
 - If you are using pcf-pipelines v17 (PCF 1.11), and you are using TCP and Spring Cloud Services with keepalives enabled, if your ALBs are not set with a timeout of 30 minutes, you could run into a situation whereby the ALB will close the idle connection prematurely. If you are on PCF 1.12 or later, the workaround for this is to go into ERT/PAS ---> Networking and set the Frontend Idle Timeout for GoRouter and HAProxy to a sensible [number](https://docs.pivotal.io/pivotalcf/2-0/customizing/azure-er-config.html#networking). 
-
-
