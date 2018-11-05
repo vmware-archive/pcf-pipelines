@@ -106,9 +106,12 @@
               cat ./pivnet-product/metadata.json |
               jq \
               --raw-output \
-              '.Dependencies[]
-              | select(.Release.Product.Name | contains("Stemcells"))
-              | .Release.Version
+             '
+              [
+                .Dependencies[]
+                | select(.Release.Product.Name | contains("Stemcells"))
+                | .Release.Version
+              ] | sort | last // empty
               '
             )
 
