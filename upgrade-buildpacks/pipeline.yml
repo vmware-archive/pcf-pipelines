@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+cf_api_params: &cf_api_params
+  CF_API_URI: {{cf_api_uri}}
+  CF_USERNAME: {{cf_user}}
+  CF_PASSWORD: {{cf_password}}
+
 resource_types:
 - name: pivnet
   type: docker-image
@@ -459,8 +464,3 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: tc_buildpack_latest
       TARGET_BUILDPACK_NAME: tc_buildpack
-
-cf_api_params: &cf_api_params
-  CF_API_URI: {{cf_api_uri}}
-  CF_USERNAME: {{cf_user}}
-  CF_PASSWORD: {{cf_password}}
