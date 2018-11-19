@@ -19,6 +19,7 @@ image_resource:
   type: docker-image
   source:
     repository: pcfnorm/rootfs
+    tag: 1.0.28
 
 
 inputs:
