@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+cf_api_params: &cf_api_params
+  CF_API_URI: {{cf_api_uri}}
+  CF_USERNAME: {{cf_user}}
+  CF_PASSWORD: {{cf_password}}
+
 resource_types:
 - name: pivnet
   type: docker-image
@@ -31,71 +36,71 @@ resources:
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: Binary*
+    product_slug: binary-buildpack
+    product_version: \d+\.\d+\.\d+
 
 - name: dotnet-core-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: \.NET*
+    product_slug: dotnet-core-buildpack
+    product_version: \d+\.\d+\.\d+
 
 - name: go-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: ^Go.*
+    product_slug: go-buildpack
+    product_version: \d+\.\d+\.\d+
 
 - name: java-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: Java*
+    product_slug: java-buildpack
+    product_version: \d+\.\d+(\.\d+)?
 
 - name: nodejs-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: NodeJS*
+    product_slug: nodejs-buildpack
+    product_version: \d+\.\d+\.\d+
 
 - name: php-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: PHP*
+    product_slug: php-buildpack
+    product_version: \d+\.\d+\.\d+
 
 - name: python-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: Python*
+    product_slug: python-buildpack
+    product_version: \d+\.\d+\.\d+
 
 - name: ruby-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: Ruby*
+    product_slug: ruby-buildpack
+    product_version: \d+\.\d+\.\d+
 
 - name: staticfile-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: Staticfile*
+    product_slug: staticfile-buildpack
+    product_version: \d+\.\d+\.\d+
 
 - name: tc-buildpack
   type: pivnet
   source:
     api_token: {{pivnet_token}}
-    product_slug: buildpacks
-    product_version: "tc Server*"
+    product_slug: tc-server-buildpack
+    product_version: \d+\.\d+(\.\d+)?
 
 - name: schedule
   type: time
@@ -148,6 +153,7 @@ jobs:
     params:
       <<: *cf_api_params
       BUILDPACK_NAME: binary_buildpack_latest
+      STACKS: "cflinuxfs2 cflinuxfs3 windows2012R2 windows2016"
 
 - name: promote-binary-buildpack
   serial_groups: [cc-api]
@@ -164,6 +170,7 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: binary_buildpack_latest
       TARGET_BUILDPACK_NAME: binary_buildpack
+      STACKS: "cflinuxfs2 cflinuxfs3 windows2012R2 windows2016"
 
 - name: stage-dotnet-buildpack
   serial_groups: [cc-api]
@@ -180,6 +187,7 @@ jobs:
     params:
       <<: *cf_api_params
       BUILDPACK_NAME: dotnet_core_buildpack_offline_latest
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: promote-dotnet-buildpack
   serial_groups: [cc-api]
@@ -196,6 +204,7 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: dotnet_core_buildpack_offline_latest
       TARGET_BUILDPACK_NAME: dotnet_core_buildpack_offline
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: stage-go-buildpack
   serial_groups: [cc-api]
@@ -212,6 +221,7 @@ jobs:
     params:
       <<: *cf_api_params
       BUILDPACK_NAME: go_buildpack_latest
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: promote-go-buildpack
   serial_groups: [cc-api]
@@ -228,41 +238,27 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: go_buildpack_latest
       TARGET_BUILDPACK_NAME: go_buildpack
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
-- name: stage-java-buildpack
+- name: upgrade-java-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
     - get: pcf-pipelines
     - get: buildpack
-      passed: [regulator]
       resource: java-buildpack
+      passed: [regulator]
       trigger: true
       params:
         globs:
         - "*offline*"
 
-  - task: stage
-    file: pcf-pipelines/tasks/stage-buildpack/task.yml
+  - task: upgrade
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       <<: *cf_api_params
-      BUILDPACK_NAME: java_buildpack_offline_latest
-
-- name: promote-java-buildpack
-  serial_groups: [cc-api]
-  plan:
-  - aggregate:
-    - get: java-buildpack
-      passed: [stage-java-buildpack]
-      trigger: true
-      params: {globs: []}
-    - get: pcf-pipelines
-  - task: promote
-    file: pcf-pipelines/tasks/promote-buildpack/task.yml
-    params:
-      <<: *cf_api_params
-      SOURCE_BUILDPACK_NAME: java_buildpack_offline_latest
       TARGET_BUILDPACK_NAME: java_buildpack_offline
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: stage-nodejs-buildpack
   serial_groups: [cc-api]
@@ -279,6 +275,7 @@ jobs:
     params:
       <<: *cf_api_params
       BUILDPACK_NAME: nodejs_buildpack_latest
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: promote-nodejs-buildpack
   serial_groups: [cc-api]
@@ -295,6 +292,7 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: nodejs_buildpack_latest
       TARGET_BUILDPACK_NAME: nodejs_buildpack
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: stage-php-buildpack
   serial_groups: [cc-api]
@@ -311,6 +309,7 @@ jobs:
     params:
       <<: *cf_api_params
       BUILDPACK_NAME: php_buildpack_latest
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: promote-php-buildpack
   serial_groups: [cc-api]
@@ -327,6 +326,7 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: php_buildpack_latest
       TARGET_BUILDPACK_NAME: php_buildpack
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: stage-python-buildpack
   serial_groups: [cc-api]
@@ -343,6 +343,7 @@ jobs:
     params:
       <<: *cf_api_params
       BUILDPACK_NAME: python_buildpack_latest
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: promote-python-buildpack
   serial_groups: [cc-api]
@@ -359,6 +360,7 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: python_buildpack_latest
       TARGET_BUILDPACK_NAME: python_buildpack
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: stage-ruby-buildpack
   serial_groups: [cc-api]
@@ -375,6 +377,7 @@ jobs:
     params:
       <<: *cf_api_params
       BUILDPACK_NAME: ruby_buildpack_latest
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: promote-ruby-buildpack
   serial_groups: [cc-api]
@@ -391,6 +394,7 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: ruby_buildpack_latest
       TARGET_BUILDPACK_NAME: ruby_buildpack
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: stage-staticfile-buildpack
   serial_groups: [cc-api]
@@ -407,6 +411,7 @@ jobs:
     params:
       <<: *cf_api_params
       BUILDPACK_NAME: staticfile_buildpack_latest
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
 - name: promote-staticfile-buildpack
   serial_groups: [cc-api]
@@ -423,44 +428,24 @@ jobs:
       <<: *cf_api_params
       SOURCE_BUILDPACK_NAME: staticfile_buildpack_latest
       TARGET_BUILDPACK_NAME: staticfile_buildpack
+      STACKS: "cflinuxfs2 cflinuxfs3"
 
-- name: stage-tcserver-buildpack
+- name: upgrade-tcserver-buildpack
   serial_groups: [cc-api]
   plan:
   - aggregate:
     - get: pcf-pipelines
     - get: buildpack
-      passed: [regulator]
       resource: tc-buildpack
+      passed: [regulator]
       trigger: true
       params:
         globs:
         - "*offline*"
 
-  - task: stage
-    file: pcf-pipelines/tasks/stage-buildpack/task.yml
+  - task: upgrade
+    file: pcf-pipelines/tasks/upgrade-buildpack/task.yml
     params:
       <<: *cf_api_params
-      BUILDPACK_NAME: tc_buildpack_latest
-
-- name: promote-tcserver-buildpack
-  serial_groups: [cc-api]
-  plan:
-  - aggregate:
-    - get: tc-buildpack
-      passed: [stage-tcserver-buildpack]
-      trigger: true
-      params: {globs: []}
-    - get: pcf-pipelines
-
-  - task: promote
-    file: pcf-pipelines/tasks/promote-buildpack/task.yml
-    params:
-      <<: *cf_api_params
-      SOURCE_BUILDPACK_NAME: tc_buildpack_latest
       TARGET_BUILDPACK_NAME: tc_buildpack
-
-cf_api_params: &cf_api_params
-  CF_API_URI: {{cf_api_uri}}
-  CF_USERNAME: {{cf_user}}
-  CF_PASSWORD: {{cf_password}}
+      STACKS: "cflinuxfs2 cflinuxfs3"

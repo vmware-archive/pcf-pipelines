@@ -23,15 +23,15 @@ image_resource:
 
 
 inputs:
+- name: buildpack
 - name: pcf-pipelines
 
 params:
   CF_API_URI:
   CF_USERNAME:
   CF_PASSWORD:
-  SOURCE_BUILDPACK_NAME:
   TARGET_BUILDPACK_NAME:
   STACKS:
 
 run:
-  path: pcf-pipelines/tasks/promote-buildpack/task.sh
+  path: pcf-pipelines/tasks/upgrade-buildpack/task.sh
