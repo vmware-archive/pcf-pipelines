@@ -30,9 +30,9 @@ function main() {
   om-linux --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
       --skip-ssl-validation \
       --request-timeout 86400 \
+      --decryption-passphrase "${OPSMAN_PASSPHRASE}" \
       import-installation \
-      --installation "${cwd}/opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}" \
-      --decryption-passphrase "${OPSMAN_PASSPHRASE}"
+      --installation "${cwd}/opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}"
  }
 
  main "${PWD}"
