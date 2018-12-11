@@ -132,7 +132,6 @@ backup_prepare_instances: 0
 clock_global_instances: 1
 cloud_controller_instances: 1
 cloud_controller_worker_instances: 1
-consul_server_instances: 1
 credhub_instances: 0
 diego_brain_instances: 1
 diego_cell_instances: 3
