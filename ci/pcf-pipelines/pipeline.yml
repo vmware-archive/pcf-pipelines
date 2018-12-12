@@ -316,8 +316,6 @@ jobs:
     params: {bump: minor}
 
 - name: test
-  on_failure:
-    <<: *notify_slack
   plan:
   - get: pcf-pipelines
     trigger: true
@@ -327,8 +325,6 @@ jobs:
 
 - name: publish-rc
   serial_groups: [version]
-  on_failure:
-    <<: *notify_slack
   plan:
   - aggregate:
     - get: pcf-pipelines
@@ -358,8 +354,6 @@ jobs:
       only_tag: true
 
 - name: test-rc
-  on_failure:
-    <<: *notify_slack
   plan:
   - aggregate:
     - get: version
@@ -483,8 +477,6 @@ jobs:
       <<: *vsphere_atc_creds
       JOBS: |
         rc-vsphere-install/wipe-env
-  on_failure:
-    <<: *notify_slack
 
 - name: trigger-install-pcf-vsphere
   plan:
@@ -505,8 +497,6 @@ jobs:
       JOBS: |
         rc-vsphere-install/deploy-opsman
         rc-vsphere-install/deploy-ert
-  on_failure:
-    <<: *notify_slack
 
 - name: final-wipe-vsphere
   plan:
@@ -529,8 +519,6 @@ jobs:
   - try:
       put: vsphere-lock
       params: {release: vsphere-lock}
-  on_failure:
-    <<: *notify_slack
 
 ####### END VSPHERE
 ########### GCP
@@ -615,8 +603,6 @@ jobs:
       <<: *atc_creds
       JOBS: |
         rc-gcp-install/wipe-env
-  on_failure:
-    <<: *notify_slack
 
 - name: trigger-install-pcf-gcp
   plan:
@@ -655,8 +641,6 @@ jobs:
       JOBS: |
         rc-gcp-install/configure-director
         rc-gcp-install/deploy-ert
-  on_failure:
-    <<: *notify_slack
 
 ####### GCP upgrade tile
 - name: destroy-rc-gcp-upgrade-pas-tile
@@ -676,8 +660,6 @@ jobs:
       PIPELINE_NAME: rc-gcp-upgrade-pas-tile
       <<: *atc_creds
     file: pcf-pipelines/ci/tasks/destroy_pipeline.yml
-  on_failure:
-    <<: *notify_slack
 
 - name: set-rc-gcp-upgrade-pas-tile
   plan:
@@ -707,8 +689,6 @@ jobs:
       PIPELINE_NAME: rc-gcp-upgrade-pas-tile
       <<: *atc_creds
     file: pcf-pipelines/ci/tasks/unpause_pipeline.yml
-  on_failure:
-    <<: *notify_slack
 
 - name: trigger-rc-gcp-upgrade-pas-tile
   plan:
@@ -729,8 +709,6 @@ jobs:
       JOBS: |
         rc-gcp-upgrade-pas-tile/upload-and-stage-tile
         rc-gcp-upgrade-pas-tile/apply-changes
-  on_failure:
-    <<: *notify_slack
 
 - name: final-wipe-gcp
   plan:
@@ -777,8 +755,6 @@ jobs:
   - try:
       put: gcp-lock
       params: {release: gcp-lock}
-  on_failure:
-    <<: *notify_slack
 
 ####### END GCP upgrade tile
 ####### END GCP
@@ -865,8 +841,6 @@ jobs:
       <<: *atc_creds
       JOBS: |
         rc-azure-install/wipe-env
-  on_failure:
-    <<: *notify_slack
 
 - name: trigger-install-pcf-azure
   plan:
@@ -909,8 +883,6 @@ jobs:
       JOBS: |
         rc-azure-install/config-director
         rc-azure-install/deploy-ert
-  on_failure:
-    <<: *notify_slack
 
 - name: final-wipe-azure
   plan:
@@ -933,8 +905,6 @@ jobs:
   - try:
       put: azure-lock
       params: {release: azure-lock}
-  on_failure:
-    <<: *notify_slack
 
 ####### END Azure
 ####### AWS
@@ -1019,8 +989,6 @@ jobs:
       <<: *atc_creds
       JOBS: |
         rc-aws-install/wipe-env
-  on_failure:
-    <<: *notify_slack
 
 - name: trigger-install-pcf-aws
   plan:
@@ -1040,8 +1008,6 @@ jobs:
       <<: *atc_creds
       JOBS: |
         rc-aws-install/deploy-ert
-  on_failure:
-    <<: *notify_slack
 
 - name: final-wipe-aws
   plan:
@@ -1064,8 +1030,6 @@ jobs:
   - try:
       put: aws-lock
       params: {release: aws-lock}
-  on_failure:
-    <<: *notify_slack
 
 ####### END AWS
 
@@ -1112,8 +1076,6 @@ jobs:
       tag_prefix: v
       only_tag: true
 
-  on_failure:
-    <<: *notify_slack
   on_success:
     do:
     - task: create-slack-notification
@@ -1298,8 +1260,6 @@ jobs:
       <<: *vsphere_atc_creds
       JOBS: |
         ((rc_offline_pipeline_name))/wipe-env
-  on_failure:
-    <<: *notify_slack
 
 - name: trigger-install-pcf-vsphere-offline
   plan:
@@ -1323,6 +1283,4 @@ jobs:
   - try:
       put: vsphere-offline-lock
       params: {release: vsphere-offline-lock}
-  on_failure:
-    <<: *notify_slack
 ####### END VSPHERE OFFLINE
