@@ -1039,7 +1039,6 @@ jobs:
     params:
       <<: *atc_creds
       JOBS: |
-        rc-aws-install/create-infrastructure
         rc-aws-install/deploy-ert
   on_failure:
     <<: *notify_slack
@@ -1242,13 +1241,13 @@ jobs:
       passed: [ set-offline-pipelines ]
     - get: rootfs-tag
       passed: [ set-offline-pipelines ]
-  - task: trigger-create-offline-pinned-pipelines
-    params:
-      <<: *vsphere_atc_creds
-      JOBS: |
-        create-offline-pinned-pipelines/collector
-        create-offline-pinned-pipelines/create-pcf-pipelines-combined
-    file: pcf-pipelines/tasks/trigger-jobs/task.yml
+#  - task: trigger-create-offline-pinned-pipelines
+#    params:
+#      <<: *vsphere_atc_creds
+#      JOBS: |
+#        create-offline-pinned-pipelines/collector
+#        create-offline-pinned-pipelines/create-pcf-pipelines-combined
+#    file: pcf-pipelines/tasks/trigger-jobs/task.yml
 
 - name: trigger-unpack-pipelines-combined
   plan:
