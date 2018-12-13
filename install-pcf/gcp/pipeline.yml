@@ -129,7 +129,7 @@ jobs:
       DB_AUTOSCALE_PASSWORD: {{db_autoscale_password}}
       DB_CREDHUB_USERNAME: {{db_credhub_username}}
       DB_CREDHUB_PASSWORD: {{db_credhub_password}}
-      DB_DIEGO_UCREDHUBSERNAME: {{db_diego_username}}
+      DB_DIEGO_USERNAME: {{db_diego_username}}
       DB_DIEGO_PASSWORD: {{db_diego_password}}
       DB_NOTIFICATIONS_USERNAME: {{db_notifications_username}}
       DB_NOTIFICATIONS_PASSWORD: {{db_notifications_password}}
