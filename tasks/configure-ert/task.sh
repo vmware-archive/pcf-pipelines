@@ -256,7 +256,7 @@ cf_properties=$(
       ".cloud_controller.security_event_logging_enabled": { "value": true },
       ".cloud_controller.system_domain": { "value": $system_domain },
       ".ha_proxy.skip_cert_verify": { "value": true },
-      ".mysql_monitor.recipient_email": { "value" : $mysql_monitor_recipient_email }
+      ".mysql_monitor.recipient_email": { "value" : $mysql_monitor_recipient_email },
       ".properties.container_networking_interface_plugin.silk.network_cidr": { "value": $container_networking_nw_cidr },
       ".properties.push_apps_manager_company_name": { "value": "pcf-\($iaas)" },
       ".properties.route_services": { "value": "enable" },
@@ -298,7 +298,7 @@ cf_properties=$(
       ".properties.uaa_database.external.uaa_password": { "value": { "secret": $db_uaa_password } },
       ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
       ".router.disable_insecure_cookies": { "value": false },
-      ".router.frontend_idle_timeout": { "value": $frontend_idle_timeout },
+      ".router.frontend_idle_timeout": { "value": $frontend_idle_timeout }
     }
 
     +
