@@ -1007,6 +1007,7 @@ jobs:
     params:
       <<: *atc_creds
       JOBS: |
+        rc-aws-install/create-infrastructure
         rc-aws-install/deploy-ert
 
 - name: final-wipe-aws
