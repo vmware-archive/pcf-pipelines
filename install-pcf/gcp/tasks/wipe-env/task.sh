@@ -123,5 +123,7 @@ terraform destroy -force \
   -var "buildpacks_bucket=dontcare" \
   -var "env_dns_zone_name_servers=dontcare" \
   -var "ert_subnet=dontcare" \
+  -var "db_credhub_username=dontcare" \
+  -var "db_credhub_password=dontcare" \
   -state-out $root/wipe-output/terraform.tfstate \
   pcf-pipelines/install-pcf/gcp/terraform
