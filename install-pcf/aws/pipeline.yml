@@ -153,6 +153,8 @@ jobs:
       DB_CCDB_PASSWORD: {{db_ccdb_password}}
       DB_ACCOUNTDB_USERNAME: {{db_accountdb_username}}
       DB_ACCOUNTDB_PASSWORD: {{db_accountdb_password}}
+      DB_CREDHUB_USERNAME: {{db_credhub_username}}
+      DB_CREDHUB_PASSWORD: {{db_credhub_password}}
       DB_NETWORKPOLICYSERVERDB_USERNAME: {{db_networkpolicyserverdb_username}}
       DB_NETWORKPOLICYSERVERDB_PASSWORD: {{db_networkpolicyserverdb_password}}
       DB_NFSVOLUMEDB_USERNAME: {{db_nfsvolumedb_username}}
@@ -314,6 +316,8 @@ jobs:
       db_ccdb_password: {{db_ccdb_password}}
       db_accountdb_username: {{db_accountdb_username}}
       db_accountdb_password: {{db_accountdb_password}}
+      db_credhub_username: {{db_credhub_username}}
+      db_credhub_password: {{db_credhub_password}}
       db_networkpolicyserverdb_username: {{db_networkpolicyserverdb_username}}
       db_networkpolicyserverdb_password: {{db_networkpolicyserverdb_password}}
       db_nfsvolumedb_username: {{db_nfsvolumedb_username}}

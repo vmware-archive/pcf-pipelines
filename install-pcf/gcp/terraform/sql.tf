@@ -110,10 +110,24 @@ resource "google_sql_database" "locket" {
   instance   = "${google_sql_database_instance.master.name}"
 }
 
+resource "google_sql_database" "credhub" {
+  name       = "credhub"
+  depends_on = ["google_sql_database.networkpolicyserver"]
+  instance   = "${google_sql_database_instance.master.name}"
+}
+
 resource "google_sql_database" "silk" {
   name       = "silk"
   depends_on = ["google_sql_database.locket"]
   instance   = "${google_sql_database_instance.master.name}"
+}
+
+resource "google_sql_user" "credhub" {
+  name       = "${var.db_credhub_username}"
+  password   = "${var.db_credhub_password}"
+  instance   = "${google_sql_database_instance.master.name}"
+  host       = "%"
+  depends_on = ["google_sql_database.credhub"]
 }
 
 resource "google_sql_user" "diego" {

@@ -57,6 +57,8 @@ params:
   mysql_monitor_recipient_email:
   db_accountdb_username:
   db_accountdb_password:
+  db_credhub_username:
+  db_credhub_password:
   db_networkpolicyserverdb_username:
   db_networkpolicyserverdb_password:
   db_nfsvolumedb_username:

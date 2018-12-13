@@ -224,6 +224,8 @@ cf_properties=$(
     --arg db_routing_password "$db_routing_password" \
     --arg db_uaa_username "$db_uaa_username" \
     --arg db_uaa_password "$db_uaa_password" \
+    --arg db_credhub_username "$db_credhub_username" \
+    --arg db_credhub_password "$db_credhub_password" \
     --arg db_ccdb_username "$db_ccdb_username" \
     --arg db_ccdb_password "$db_ccdb_password" \
     --arg db_accountdb_username "$db_accountdb_username" \
@@ -269,6 +271,8 @@ cf_properties=$(
       ".properties.system_database.external.autoscale_username": { "value": $db_autoscale_username },
       ".properties.system_database.external.ccdb_password": { "value": { "secret": $db_ccdb_password } },
       ".properties.system_database.external.ccdb_username": { "value": $db_ccdb_username },
+      ".properties.system_database.external.credhub_username": { "value": $db_credhub_username },
+      ".properties.system_database.external.credhub_password": { "value": $db_credhub_password },
       ".properties.system_database.external.diego_password": { "value": { "secret": $db_diego_password } },
       ".properties.system_database.external.diego_username": { "value": $db_diego_username },
       ".properties.system_database.external.host": { "value": $db_host },

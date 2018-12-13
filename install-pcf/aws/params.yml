@@ -52,6 +52,8 @@ db_autoscale_password: CHANGEME
 db_autoscale_username: CHANGEME
 db_ccdb_password: CHANGEME
 db_ccdb_username: CHANGEME
+db_credhub_password: CHANGEME
+db_credhub_username: CHANGEME
 db_diego_password: CHANGEME
 db_diego_username: CHANGEME
 db_locket_password: CHANGEME
