@@ -272,7 +272,7 @@ cf_properties=$(
       ".properties.system_database.external.ccdb_password": { "value": { "secret": $db_ccdb_password } },
       ".properties.system_database.external.ccdb_username": { "value": $db_ccdb_username },
       ".properties.system_database.external.credhub_username": { "value": $db_credhub_username },
-      ".properties.system_database.external.credhub_password": { "value": $db_credhub_password },
+      ".properties.system_database.external.credhub_password": { "value": { "secret": $db_credhub_password } },
       ".properties.system_database.external.diego_password": { "value": { "secret": $db_diego_password } },
       ".properties.system_database.external.diego_username": { "value": $db_diego_username },
       ".properties.system_database.external.host": { "value": $db_host },
