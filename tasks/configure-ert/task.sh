@@ -112,8 +112,8 @@ elif [[ "${pcf_iaas}" == "gcp" ]]; then
   echo $GCP_SERVICE_ACCOUNT_KEY > app.json
   gcloud auth activate-service-account --key-file=app.json
   gcloud config set project $project
-  gcloud sql instances list | grep $db_host | awk '{print $1}'
-  db_tls_ca=$(gcloud beta sql ssl server-ca-certs list --format='value(cert)' -i pcf21-penguin)
+  db_name=$(gcloud sql instances list | grep $db_host | awk '{print $1}')
+  db_tls_ca=$(gcloud beta sql ssl server-ca-certs list --format='value(cert)' -i $db_name)
 
   if [ -z "$db_host" ]; then
     echo Failed to get SQL instance IP from Terraform state file
@@ -216,6 +216,7 @@ cf_properties=$(
     --arg apps_domain "$APPS_DOMAIN" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
     --arg db_host "$db_host" \
+    --arg db_tls_ca "$db_tls_ca" \
     --arg db_locket_username "$db_locket_username" \
     --arg db_locket_password "$db_locket_password" \
     --arg db_silk_username "$db_silk_username" \
