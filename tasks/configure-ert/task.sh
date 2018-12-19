@@ -284,7 +284,7 @@ cf_properties=$(
       ".properties.credhub_database.external.port": { "value": "3306" },
       ".properties.credhub_database.external.username": { "value": $db_credhub_username },
       ".properties.credhub_database.external.password": { "value": { "secret": $db_credhub_password } },
-      ".properties.credhub_database.external.tls_ca": { "value" $db_tls_ca },
+      ".properties.credhub_database.external.tls_ca": { "value": $db_tls_ca },
       ".properties.system_database.external.diego_password": { "value": { "secret": $db_diego_password } },
       ".properties.system_database.external.diego_username": { "value": $db_diego_username },
       ".properties.system_database.external.host": { "value": $db_host },
