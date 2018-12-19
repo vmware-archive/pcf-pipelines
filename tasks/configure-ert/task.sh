@@ -103,9 +103,17 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
 elif [[ "${pcf_iaas}" == "gcp" ]]; then
   cd terraform-state
     db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.sql_instance_ip.value')
+    project=$(terraform output --json -state *.tfstate | jq --raw-output '.project.value')
     pcf_ert_ssl_cert="$(terraform output -json ert_certificate | jq .value)"
     pcf_ert_ssl_key="$(terraform output -json ert_certificate_key | jq .value)"
   cd -
+
+  # getting db ca_cert from cloudsql
+  echo $GCP_SERVICE_ACCOUNT_KEY > app.json
+  gcloud auth activate-service-account --key-file=app.json
+  gcloud config set project $project
+  gcloud sql instances list | grep $db_host | awk '{print $1}'
+  db_tls_ca=$(gcloud beta sql ssl server-ca-certs list --format='value(cert)' -i pcf21-penguin)
 
   if [ -z "$db_host" ]; then
     echo Failed to get SQL instance IP from Terraform state file
@@ -271,8 +279,12 @@ cf_properties=$(
       ".properties.system_database.external.autoscale_username": { "value": $db_autoscale_username },
       ".properties.system_database.external.ccdb_password": { "value": { "secret": $db_ccdb_password } },
       ".properties.system_database.external.ccdb_username": { "value": $db_ccdb_username },
+      ".properties.credhub_database": { "value": "external" },
+      ".properties.credhub_database.external.host": { "value": $db_host },
+      ".properties.credhub_database.external.port": { "value": "3306" },
       ".properties.credhub_database.external.username": { "value": $db_credhub_username },
       ".properties.credhub_database.external.password": { "value": { "secret": $db_credhub_password } },
+      ".properties.credhub_database.external.tls_ca": { "value" $db_tls_ca },
       ".properties.system_database.external.diego_password": { "value": { "secret": $db_diego_password } },
       ".properties.system_database.external.diego_username": { "value": $db_diego_username },
       ".properties.system_database.external.host": { "value": $db_host },
