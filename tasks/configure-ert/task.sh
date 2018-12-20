@@ -156,6 +156,9 @@ cf_resources=$(
     '
     {
 #      "backup_restore": {"internet_connected": $internet_connected}, #temporarily remove it, does not work in pcf 2.1
+      "backup-prepare": {"internet_connected": $internet_connected}, # pas 2.1.18
+      "consul_server": {"internet_connected": $internet_connected}, # pas 2.1.18
+      "service-discovery-controller": {"internet_connected": $internet_connected}, # pas 2.1.18
       "clock_global": {"internet_connected": $internet_connected},
       "cloud_controller": {"internet_connected": $internet_connected},
       "cloud_controller_worker": {"internet_connected": $internet_connected},
