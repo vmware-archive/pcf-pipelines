@@ -155,7 +155,7 @@ cf_resources=$(
     --argjson internet_connected $INTERNET_CONNECTED \
     '
     {
-      "backup_restore": {"internet_connected": $internet_connected},
+#      "backup_restore": {"internet_connected": $internet_connected}, #temporarily remove it, does not work in pcf 2.1
       "clock_global": {"internet_connected": $internet_connected},
       "cloud_controller": {"internet_connected": $internet_connected},
       "cloud_controller_worker": {"internet_connected": $internet_connected},
