@@ -148,17 +148,28 @@ cf_network=$(
     '
 )
 
+# getting PAS version and depending on it - configure jobs
+pas_version=$(om-linux \
+  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
+  --username "$OPS_MGR_USR" \
+  --password "$OPS_MGR_PWD" \
+  --skip-ssl-validation \
+  staged-products | grep cf | awk '{print $4}')
+
+# not the best solution to get pas version family
+[[ $pas_version =~ ^2\.1 ]] && pas="2.1"
+[[ $pas_version =~ ^2\.2 ]] && pas="2.2"
+[[ $pas_version =~ ^2\.3 ]] && pas="2.3"
+
+
 cf_resources=$(
   jq -n \
     --arg terraform_prefix $terraform_prefix \
     --arg iaas $pcf_iaas \
+    --arg pas $pas \
     --argjson internet_connected $INTERNET_CONNECTED \
     '
     {
-#      "backup_restore": {"internet_connected": $internet_connected}, #temporarily remove it, does not work in pcf 2.1
-      "backup-prepare": {"internet_connected": $internet_connected}, # pas 2.1.18
-      "consul_server": {"internet_connected": $internet_connected}, # pas 2.1.18
-      "service-discovery-controller": {"internet_connected": $internet_connected}, # pas 2.1.18
       "clock_global": {"internet_connected": $internet_connected},
       "cloud_controller": {"internet_connected": $internet_connected},
       "cloud_controller_worker": {"internet_connected": $internet_connected},
@@ -180,6 +191,18 @@ cf_resources=$(
       "tcp_router": {"internet_connected": $internet_connected},
       "uaa": {"internet_connected": $internet_connected}
     }
+
+    |
+
+    if $pas == "2.1" then
+      . |= . + { "backup-prepare": {"internet_connected": $internet_connected} }
+      | . |= . + { "consul_server": {"internet_connected": $internet_connected} }
+      | . |= . + { "service-discovery-controller": {"internet_connected": $internet_connected} }
+    elif $pas == "2.3" then
+      . |= . + { "backup_restore": {"internet_connected": $internet_connected} }
+    else
+      .
+    end
 
     |
 
