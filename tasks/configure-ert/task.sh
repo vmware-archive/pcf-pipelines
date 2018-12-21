@@ -154,12 +154,13 @@ pas_version=$(om-linux \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
   --skip-ssl-validation \
-  staged-products | grep cf | awk '{print $4}')
+  staged-products -f json | jq -r '.[] | select(.name=="cf") | .version')
 
-# not the best solution to get pas version family
+# not the best solution to get pas version family, need to be improved
 [[ $pas_version =~ ^2\.1 ]] && pas="2.1"
 [[ $pas_version =~ ^2\.2 ]] && pas="2.2"
 [[ $pas_version =~ ^2\.3 ]] && pas="2.3"
+[[ $pas_version =~ ^2\.4 ]] && pas="2.4"
 
 
 cf_resources=$(
@@ -194,7 +195,7 @@ cf_resources=$(
 
     |
 
-    if $pas == "2.1" then
+    if ( $pas == "2.1" or $pas == "2.2" ) then
       . |= . + { "backup-prepare": {"internet_connected": $internet_connected} }
       | . |= . + { "consul_server": {"internet_connected": $internet_connected} }
       | . |= . + { "service-discovery-controller": {"internet_connected": $internet_connected} }
