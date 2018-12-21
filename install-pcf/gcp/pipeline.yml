@@ -265,6 +265,7 @@ jobs:
       POE_SSL_KEY1: {{poe_ssl_key1}}
       gcp_storage_access_key: {{gcp_storage_access_key}}
       gcp_storage_secret_key: {{gcp_storage_secret_key}}
+      GCP_SERVICE_ACCOUNT_KEY: {{gcp_service_account_key}}
       PCF_ERT_DOMAIN: {{pcf_ert_domain}}
       SYSTEM_DOMAIN: {{system_domain}}
       APPS_DOMAIN: {{apps_domain}}
