@@ -3,9 +3,13 @@
 set -euo pipefail
 
 # install gcloud sdk, its actually should be bundled in pcfnorm/rootfs image
-wget -c https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-228.0.0-linux-x86_64.tar.gz
-tar -zxvf google-cloud-sdk-228.0.0-linux-x86_64.tar.gz
-./google-cloud-sdk/install.sh -q
+mkdir -p /etc/apt/sources.list.d/
+mkdir -p /etc/apt/apt.conf.d/
+mkdir -p /etc/apt/preferences.d/
+export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+apt-get update && apt-get install google-cloud-sdk
 
 export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$PCF_ERT_DOMAIN"
 
