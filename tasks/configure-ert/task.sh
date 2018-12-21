@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+# install gcloud sdk, its actually should be bundled in pcfnorm/rootfs image
+wget -c https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-228.0.0-linux-x86_64.tar.gz
+tar -zxvf google-cloud-sdk-228.0.0-linux-x86_64.tar.gz
+./google-cloud-sdk/install.sh -q
+
 export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$PCF_ERT_DOMAIN"
 
 source pcf-pipelines/functions/generate_cert.sh
