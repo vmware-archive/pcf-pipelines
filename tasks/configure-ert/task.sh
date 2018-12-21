@@ -149,12 +149,11 @@ cf_network=$(
 )
 
 # getting PAS version and depending on it - configure jobs
-pas_version=$(om-linux \
+pas_version=$(om-linux -f json \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
-  --skip-ssl-validation \
-  staged-products -f json | jq -r '.[] | select(.name=="cf") | .version')
+  --skip-ssl-validation staged-products | jq -r '.[] | select(.name=="cf") | .version')
 
 # not the best solution to get pas version family, need to be improved
 [[ $pas_version =~ ^2\.1 ]] && pas="2.1"
