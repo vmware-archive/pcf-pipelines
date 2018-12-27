@@ -19,6 +19,7 @@ image_resource:
   type: docker-image
   source:
     repository: pcfnorm/rootfs
+    tag: 1.0.28
 
 
 inputs:
@@ -29,6 +30,8 @@ params:
   OPSMAN_CLIENT_SECRET:
   OPSMAN_USERNAME:
   OPSMAN_PASSWORD:
+  OPSMAN_CONNECT_TIMEOUT: 5
+  OPSMAN_REQUEST_TIMEOUT: 1800
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
 
 run:
