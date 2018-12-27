@@ -123,7 +123,7 @@ director_config=$(cat <<-EOF
 {
   "ntp_servers_string": "0.pool.ntp.org",
   "resurrector_enabled": true,
-  "retry_bosh_deploys": true,
+  "retry_bosh_deploys": false,
   "database_type": "internal",
   "blobstore_type": "local"
 }
