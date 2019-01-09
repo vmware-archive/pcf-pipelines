@@ -488,6 +488,7 @@ jobs:
       HAPROXY_FLOATING_IPS: ""
       OPSMAN_CLIENT_ID: ""
       OPSMAN_CLIENT_SECRET: ""
+      AZURE_TERRAFORM_PREFIX: {{azure_terraform_prefix}}
 ###########################
 ## Job - Deploy    ERT   ##
 ###########################

@@ -560,6 +560,15 @@ cf_resources=$(
 
     |
 
+    if $iaas == "azure" then
+      .router |= . + { "elb_names": ["\($AZURE_TERRAFORM_PREFIX)-web-lb"] }
+      | .diego_brain |= . + { "elb_names": ["\($AZURE_TERRAFORM_PREFIX)-ssh-proxy-lb"] }
+    else
+      .
+    end
+
+    |
+
     # NSX LBs
 
     if $tcp_router_nsx_lb_edge_name != "" then
