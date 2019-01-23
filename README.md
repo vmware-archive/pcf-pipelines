@@ -1,5 +1,6 @@
-### Planned Deprecation
-Please note that this repository will be officially deprecated soon.
+# Deprecated
+Please note that there will not be updates made to this repository for future PAS or OM releases. 
+2.4 is the last supported version.
 
 ### Description
 
