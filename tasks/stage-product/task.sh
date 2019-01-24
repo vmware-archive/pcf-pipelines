@@ -37,8 +37,10 @@ STAGED=$(om-linux \
 FILE_PATH=`find ./pivnet-product -name *.pivotal | sort | head -1`
 unzip $FILE_PATH metadata/*
 
-PRODUCT_NAME="$(cat metadata/*.yml | grep '^name' | cut -d' ' -f 2)"
-desired_version="$(cat metadata/*.yml | grep '^product_version' | cut -d' ' -f 2)"
+metadata_json=$(ruby -ryaml -rjson -e 'puts YAML.load_file(Dir["metadata/*.yml"].first).to_json')
+
+PRODUCT_NAME="$(echo "$metadata_json" | jq -r .name)"
+desired_version="$(echo "$metadata_json" | jq -r .product_version)"
 
 # Figure out which products are unstaged.
 UNSTAGED_ALL=$(jq -n --argjson available "$AVAILABLE" --argjson staged "$STAGED" \
