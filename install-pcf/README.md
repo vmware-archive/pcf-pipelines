@@ -6,8 +6,8 @@ The desired output of these install pipelines is a PCF deployment that matches t
 
 ## Prerequisites
 
-- [install a Concourse server](https://concourse-ci.org/installing.html)
-- download the [Fly CLI](https://concourse-ci.org/fly-cli.html) to interact with the Concourse server
+- [install a Concourse server](https://concourse-ci.org/install.html)
+- download the [Fly CLI](https://concourse-ci.org/fly.html) to interact with the Concourse server
 - depending on where you've installed Concourse, you may need to set up
 [additional firewall rules](FIREWALL.md "Firewall") to allow Concourse to reach
 third-party sources of pipeline dependencies
