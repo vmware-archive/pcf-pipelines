@@ -3,6 +3,10 @@ Please note that there will not be updates made to this repository for future PA
 
 2.4 is the last supported version.
 
+**This product will be replaced by [Platform Automation](docs.pivotal.io/platform-automation)** before the end of April 2019.
+
+Please familiarize yourself with how the new product will work. It will be publicly released on [Pivotal Network](network.pivotal.io/platform-automation) when it is available for use.
+
 ### Description
 
 This is a collection of [Concourse](https://concourse-ci.org) pipelines for
