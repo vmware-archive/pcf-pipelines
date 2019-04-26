@@ -208,7 +208,7 @@ cf_resources=$(
       . |= . + { "backup-prepare": {"internet_connected": $internet_connected} }
       | . |= . + { "consul_server": {"internet_connected": $internet_connected} }
       | . |= . + { "service-discovery-controller": {"internet_connected": $internet_connected} }
-    elif [ $pas == "2.3" ] || ( [ $pas == "2.4" ] || [ $pas == "2.5" ]) then
+    elif ( $pas >= "2.3" ) then
       . |= . + { "backup_restore": {"internet_connected": $internet_connected} }
     else
       .
