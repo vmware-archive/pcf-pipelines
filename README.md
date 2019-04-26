@@ -1,5 +1,11 @@
-### Planned Deprecation
-Please note that this repository will be officially deprecated soon.
+# Deprecated
+Please note that there will not be updates made to this repository for future PAS or OM releases.
+
+2.4 is the last supported version.
+
+**This product will be replaced by [Platform Automation](https://docs.pivotal.io/platform-automation)** before the end of April 2019.
+
+Please familiarize yourself with how the new product will work. It will be publicly released on [Pivotal Network](https://network.pivotal.io/platform-automation) when it is available for use.
 
 ### Description
 
