@@ -169,6 +169,7 @@ pas_version=$(om-linux -f json \
 [[ $pas_version =~ ^2\.2 ]] && pas="2.2"
 [[ $pas_version =~ ^2\.3 ]] && pas="2.3"
 [[ $pas_version =~ ^2\.4 ]] && pas="2.4"
+[[ $pas_version =~ ^2\.5 ]] && pas="2.5"
 
 
 cf_resources=$(
@@ -207,7 +208,7 @@ cf_resources=$(
       . |= . + { "backup-prepare": {"internet_connected": $internet_connected} }
       | . |= . + { "consul_server": {"internet_connected": $internet_connected} }
       | . |= . + { "service-discovery-controller": {"internet_connected": $internet_connected} }
-    elif ( $pas == "2.3" or $pas == "2.4" ) then
+    elif [ $pas == "2.3" ] || ( [ $pas == "2.4" ] || [ $pas == "2.5" ]) then
       . |= . + { "backup_restore": {"internet_connected": $internet_connected} }
     else
       .
