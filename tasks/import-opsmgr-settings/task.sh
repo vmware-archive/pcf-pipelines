@@ -31,8 +31,8 @@ function main() {
       --skip-ssl-validation \
       --request-timeout 86400 \
       import-installation \
-      --installation "${cwd}/opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}" \
-      --decryption-passphrase "${OPSMAN_PASSPHRASE}"
+      --decryption-passphrase "${OPSMAN_PASSPHRASE}" \
+      --installation "${cwd}/opsmgr-settings/${OPSMAN_SETTINGS_FILENAME}"
  }
 
  main "${PWD}"
