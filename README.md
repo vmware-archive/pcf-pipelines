@@ -1,7 +1,7 @@
 # End of Availability
 **PCF Platform Automation with Concourse (PCF Pipelines) has reached its End of Availability (“EoA”) and is no longer available.**
 
-[Platform Automation for PCF](https://network.pivotal.io/platform-automation) has replaced PCF Pipelines. Platform Automation for PCF is available for download on Pivotal Network.
+[Platform Automation for PCF](https://network.pivotal.io/products/platform-automation) has replaced PCF Pipelines. Platform Automation for PCF is available for download on Pivotal Network.
 
 You can find documentation for this new product in [Pivotal Documentation](https://docs.pivotal.io/platform-automation)
 
