@@ -1,0 +1,21 @@
+subscription_id = ""
+client_id = ""
+client_secret = ""
+tenant_id = ""
+location = "" 
+env_name = ""
+# 10 characters truncated version of env_name
+env_short_name = ""
+terraform_azure_storage_account_name = ""
+azure_ert_storage_account_name = ""
+terraform_azure_storage_access_key = ""
+pcf_ert_domain = "yoursubdomain.yourrootdomain.com"
+system_domain = "system.yoursubdomain.yourrootdomain.com"
+apps_domain = "apps.yoursubdomain.yourrootdomain.com"
+ops_manager_image_uri = "https://opsmanagereastus.blob.core.windows.net/images/ops-manager-1.11.5.vhd"
+# https://opsmanagerwestus.blob.core.windows.net/images/ops-manager-1.11.5.vhd
+# https://opsmanagerwesteurope.blob.core.windows.net/images/ops-manager-1.11.5.vhd
+# https://opsmanagersoutheastasia.blob.core.windows.net/images/ops-manager-1.11.5.vhd
+
+vm_admin_username = "opsadmin"
+vm_admin_public_key = "ssh-rsa AAAA.."
