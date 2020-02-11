@@ -36,3 +36,9 @@ variable "azure_packages_container" {}
 variable "azure_resources_container" {}
 variable "om_disk_size_in_gb" {}
 variable "azure_opsman_priv_ip" {}
+
+variable "terraform_azure_storage_access_key" {}
+variable "terraform_azure_storage_account_name" {}
+variable "terraform_azure_storage_container_name" {
+  default = "terraformstate"
+}

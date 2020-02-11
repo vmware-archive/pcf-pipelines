@@ -48,3 +48,9 @@ variable "ert_subnet_id" {}
 variable "azure_multi_resgroup_network" {}
 variable "azure_multi_resgroup_pcf" {}
 variable "om_disk_size_in_gb" {}
+
+variable "terraform_azure_storage_access_key" {}
+variable "terraform_azure_storage_account_name" {}
+variable "terraform_azure_storage_container_name" {
+  default = "terraformstate"
+}
