@@ -8,6 +8,7 @@ resource "azurerm_storage_account" "bosh_root_storage_account" {
   resource_group_name      = "${azurerm_resource_group.pcf_resource_group.name}"
   location                 = "${var.location}"
   account_tier             = "Standard"
+  account_kind             = "StorageV2"
   account_replication_type = "LRS"
 }
 
@@ -16,6 +17,7 @@ resource "azurerm_storage_account" "ops_manager_storage_account" {
   resource_group_name      = "${azurerm_resource_group.pcf_resource_group.name}"
   location                 = "${var.location}"
   account_tier             = "Standard"
+  account_kind             = "StorageV2"
   account_replication_type = "LRS"
 }
 
@@ -62,6 +64,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_1" {
   resource_group_name      = "${azurerm_resource_group.pcf_resource_group.name}"
   location                 = "${var.location}"
   account_tier             = "Premium"
+  account_kind             = "StorageV2"
   account_replication_type = "LRS"
 }
 
@@ -86,6 +89,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_2" {
   resource_group_name      = "${azurerm_resource_group.pcf_resource_group.name}"
   location                 = "${var.location}"
   account_tier             = "Premium"
+  account_kind             = "StorageV2"
   account_replication_type = "LRS"
 }
 
@@ -110,6 +114,7 @@ resource "azurerm_storage_account" "bosh_vms_storage_account_3" {
   resource_group_name      = "${azurerm_resource_group.pcf_resource_group.name}"
   location                 = "${var.location}"
   account_tier             = "Premium"
+  account_kind             = "StorageV2"
   account_replication_type = "LRS"
 }
 
@@ -134,6 +139,7 @@ resource "azurerm_storage_account" "ert_storage_account" {
   resource_group_name      = "${azurerm_resource_group.pcf_resource_group.name}"
   location                 = "${var.location}"
   account_tier             = "Standard"
+  account_kind             = "StorageV2"
   account_replication_type = "LRS"
 
   tags {
