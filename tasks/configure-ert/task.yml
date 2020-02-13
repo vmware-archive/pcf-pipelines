@@ -37,6 +37,7 @@ params:
   # IaaS Specific for GCP only
   gcp_storage_access_key:
   gcp_storage_secret_key:
+  GCP_SERVICE_ACCOUNT_KEY:
   # aws specific
   S3_ENDPOINT:
   # db credentials

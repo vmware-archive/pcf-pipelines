@@ -2,6 +2,15 @@
 
 set -euo pipefail
 
+# install gcloud sdk, its actually should be bundled in pcfnorm/rootfs image
+mkdir -p /etc/apt/sources.list.d/
+mkdir -p /etc/apt/apt.conf.d/
+mkdir -p /etc/apt/preferences.d/
+export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+apt-get update && apt-get install google-cloud-sdk
+
 export OPSMAN_DOMAIN_OR_IP_ADDRESS="opsman.$PCF_ERT_DOMAIN"
 
 source pcf-pipelines/functions/generate_cert.sh
@@ -103,9 +112,17 @@ if [[ "${pcf_iaas}" == "aws" ]]; then
 elif [[ "${pcf_iaas}" == "gcp" ]]; then
   cd terraform-state
     db_host=$(terraform output --json -state *.tfstate | jq --raw-output '.sql_instance_ip.value')
+    project=$(terraform output --json -state *.tfstate | jq --raw-output '.project.value')
     pcf_ert_ssl_cert="$(terraform output -json ert_certificate | jq .value)"
     pcf_ert_ssl_key="$(terraform output -json ert_certificate_key | jq .value)"
   cd -
+
+  # getting db ca_cert from cloudsql
+  echo $GCP_SERVICE_ACCOUNT_KEY > app.json
+  gcloud auth activate-service-account --key-file=app.json
+  gcloud config set project $project
+  db_name=$(gcloud sql instances list | grep $db_host | awk '{print $1}')
+  db_tls_ca=$(gcloud beta sql ssl server-ca-certs list --format='value(cert)' -i $db_name)
 
   if [ -z "$db_host" ]; then
     echo Failed to get SQL instance IP from Terraform state file
@@ -140,14 +157,29 @@ cf_network=$(
     '
 )
 
+# getting PAS version and depending on it - configure jobs
+pas_version=$(om-linux -f json \
+  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
+  --username "$OPS_MGR_USR" \
+  --password "$OPS_MGR_PWD" \
+  --skip-ssl-validation staged-products | jq -r '.[] | select(.name=="cf") | .version')
+
+# not the best solution to get pas version family, need to be improved
+[[ $pas_version =~ ^2\.1 ]] && pas="2.1"
+[[ $pas_version =~ ^2\.2 ]] && pas="2.2"
+[[ $pas_version =~ ^2\.3 ]] && pas="2.3"
+[[ $pas_version =~ ^2\.4 ]] && pas="2.4"
+[[ $pas_version =~ ^2\.5 ]] && pas="2.5"
+
+
 cf_resources=$(
   jq -n \
     --arg terraform_prefix $terraform_prefix \
     --arg iaas $pcf_iaas \
+    --arg pas $pas \
     --argjson internet_connected $INTERNET_CONNECTED \
     '
     {
-      "backup_restore": {"internet_connected": $internet_connected},
       "clock_global": {"internet_connected": $internet_connected},
       "cloud_controller": {"internet_connected": $internet_connected},
       "cloud_controller_worker": {"internet_connected": $internet_connected},
@@ -169,6 +201,18 @@ cf_resources=$(
       "tcp_router": {"internet_connected": $internet_connected},
       "uaa": {"internet_connected": $internet_connected}
     }
+
+    |
+
+    if ( $pas == "2.1" or $pas == "2.2" ) then
+      . |= . + { "backup-prepare": {"internet_connected": $internet_connected} }
+      | . |= . + { "consul_server": {"internet_connected": $internet_connected} }
+      | . |= . + { "service-discovery-controller": {"internet_connected": $internet_connected} }
+    elif ( $pas >= "2.3" ) then
+      . |= . + { "backup_restore": {"internet_connected": $internet_connected} }
+    else
+      .
+    end
 
     |
 
@@ -208,6 +252,7 @@ cf_properties=$(
     --arg apps_domain "$APPS_DOMAIN" \
     --arg mysql_monitor_recipient_email "$mysql_monitor_recipient_email" \
     --arg db_host "$db_host" \
+    --arg db_tls_ca "$db_tls_ca" \
     --arg db_locket_username "$db_locket_username" \
     --arg db_locket_password "$db_locket_password" \
     --arg db_silk_username "$db_silk_username" \
@@ -271,8 +316,12 @@ cf_properties=$(
       ".properties.system_database.external.autoscale_username": { "value": $db_autoscale_username },
       ".properties.system_database.external.ccdb_password": { "value": { "secret": $db_ccdb_password } },
       ".properties.system_database.external.ccdb_username": { "value": $db_ccdb_username },
-      ".properties.system_database.external.credhub_username": { "value": $db_credhub_username },
-      ".properties.system_database.external.credhub_password": { "value": { "secret": $db_credhub_password } },
+      ".properties.credhub_database": { "value": "external" },
+      ".properties.credhub_database.external.host": { "value": $db_host },
+      ".properties.credhub_database.external.port": { "value": "3306" },
+      ".properties.credhub_database.external.username": { "value": $db_credhub_username },
+      ".properties.credhub_database.external.password": { "value": { "secret": $db_credhub_password } },
+      ".properties.credhub_database.external.tls_ca": { "value": $db_tls_ca },
       ".properties.system_database.external.diego_password": { "value": { "secret": $db_diego_password } },
       ".properties.system_database.external.diego_username": { "value": $db_diego_username },
       ".properties.system_database.external.host": { "value": $db_host },
@@ -289,8 +338,8 @@ cf_properties=$(
       ".properties.system_database.external.routing_username": { "value": $db_routing_username },
       ".properties.system_database.external.silk_password": { "value": { "secret": $db_silk_password } },
       ".properties.system_database.external.silk_username": { "value": $db_silk_username },
-      ".properties.system_database.external.uaa_password": { "value": {"secret" : $db_uaa_password } },
-      ".properties.system_database.external.uaa_username": { "value": $db_uaa_username },
+      ".properties.uaa_database.external.uaa_password": { "value": {"secret" : $db_uaa_password } },
+      ".properties.uaa_database.external.uaa_username": { "value": $db_uaa_username },
       ".properties.tcp_routing": { "value": "disable" },
       ".properties.uaa_database": { "value": "external" },
       ".properties.uaa_database.external.host": { "value": $db_host },

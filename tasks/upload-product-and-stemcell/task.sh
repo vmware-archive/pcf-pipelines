@@ -6,6 +6,8 @@ if [[ -n "$NO_PROXY" ]]; then
   echo "$OM_IP $OPSMAN_DOMAIN_OR_IP_ADDRESS" >> /etc/hosts
 fi
 
+curl -o /usr/local/bin/pivnet-cli -L https://github.com/pivotal-cf/pivnet-cli/releases/download/v0.0.57/pivnet-linux-amd64-0.0.57
+
 STEMCELL_VERSION=$(
   cat ./pivnet-product/metadata.json |
   jq --raw-output \
