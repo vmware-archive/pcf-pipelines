@@ -25,5 +25,7 @@ om-linux \
   --client-secret "${OPSMAN_CLIENT_SECRET}" \
   --username "${OPSMAN_USERNAME}" \
   --password "${OPSMAN_PASSWORD}" \
+  --connect-timeout ${OPSMAN_CONNECT_TIMEOUT} \
+  --request-timeout ${OPSMAN_REQUEST_TIMEOUT} \
   apply-changes \
   --ignore-warnings
