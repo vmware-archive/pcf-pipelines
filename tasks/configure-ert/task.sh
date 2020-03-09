@@ -147,7 +147,7 @@ cf_resources=$(
     --argjson internet_connected $INTERNET_CONNECTED \
     '
     {
-      "backup_restore": {"internet_connected": $internet_connected},
+      "backup-prepare": {"internet_connected": $internet_connected},
       "clock_global": {"internet_connected": $internet_connected},
       "cloud_controller": {"internet_connected": $internet_connected},
       "cloud_controller_worker": {"internet_connected": $internet_connected},
