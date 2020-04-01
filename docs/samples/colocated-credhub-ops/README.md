@@ -14,18 +14,38 @@ UAA, and load CredHub with secrets prior to disabling the Vault integration.
 
 ## Usage
 
-Upload the [CredHub](http://bosh.io/releases/github.com/pivotal-cf/credhub-release?all=1)
-and [UAA](http://bosh.io/releases/github.com/cloudfoundry/uaa-release?all=1) releases
-to your BOSH director.
+These ops files were written with [`concourse-bosh-deployment`](https://github.com/concourse/concourse-bosh-deployment)
+in mind.
 
 Then simply define the required variables and apply the operations files with `-o <file>`
 as part of the `bosh deploy` command (CLI v2 only).  Variables can be defined in a YAML
 file along with the `-l` flag, or specified inline on the command line with `-v VAR=VALUE`.
 
-You may also use `bosh int` to view the interpolated manifest:
+For example, your command may look something like the following.
+
+Note: this is a representative example, you will want to consult the
+full gamut of operations files provided by `concourse-bosh-deployment`
+to determine which options are suitable for your deployment.
 
 ```
-$ bosh int concourse.yml -o add-credhub-to-atc.yml -o replace-vault-with-credhub.yml
+$ bosh deploy -d concourse ~/concourse-bosh-deployment/cluster/concourse.yml \
+   -l ~/concourse-bosh-deployment/versions.yml \
+   -o concourse-bosh-deployment/cluster/operations/tls.yml \
+   -o concourse-bosh-deployment/cluster/operations/tls-vars.yml \
+   -o add-credhub-to-atcs.yml \
+   -o replace-vault-with-credhub.yml \
+   -v deployment_name=concourse \
+   -v network_name=default \
+   -v worker_vm_type=medium \
+   -v web_vm_type=medium \
+   -v db_vm_type=medium \
+   -v uaa_release_version=60 \
+   -v uaa_sha=a7c14357ae484e89e547f4f207fb8de36d2b0966 \
+   -v credhub_release_version=1.9.3 \
+   -v credhub_sha=648658efdef2ff18a69914d958bcd7ebfa88027a \
+   -v db_persistent_disk_type=100GB \
+   -v external_url=http://concourse.example.com \
+   -v external_hostname=concourse.example.com
 ```
 
 **Note:** CredHub integration requires Concourse 3.5.0 or later.
