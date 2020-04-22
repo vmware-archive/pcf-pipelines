@@ -29,8 +29,5 @@ inputs:
 outputs:
   - name: stemcells
 
-params:
-  API_TOKEN:
-
 run:
   path: pcf-pipelines/tasks/download-boshio-stemcells/task.sh
