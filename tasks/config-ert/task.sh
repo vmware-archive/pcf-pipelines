@@ -538,6 +538,7 @@ cf_resources=$(
     --arg mysql_nsx_lb_pool_name "${MYSQL_NSX_LB_POOL_NAME}" \
     --arg mysql_nsx_lb_security_group "${MYSQL_NSX_LB_SECURITY_GROUP}" \
     --arg mysql_nsx_lb_port "${MYSQL_NSX_LB_PORT}" \
+    --arg azure_terraform_prefix "${AZURE_TERRAFORM_PREFIX}" \
     --argjson job_resource_config "${JOB_RESOURCE_CONFIG}" \
     '
     $job_resource_config
@@ -554,6 +555,16 @@ cf_resources=$(
 
     if $ha_proxy_floating_ips != "" then
       .ha_proxy |= . + { "floating_ips": $ha_proxy_floating_ips }
+    else
+      .
+    end
+
+    |
+
+    if $iaas == "azure" then
+      .router |= . + { "elb_names": ["\($azure_terraform_prefix)-web-lb"] }
+      | .diego_brain |= . + { "elb_names": ["\($azure_terraform_prefix)-ssh-proxy-lb"] }
+      | .tcp_router |= . + { "elb_names": ["\($azure_terraform_prefix)-tcp-lb"] }
     else
       .
     end

@@ -131,6 +131,7 @@ params:
   POE_SSL_KEY3:
   OPSMAN_CLIENT_ID:
   OPSMAN_CLIENT_SECRET:
+  AZURE_TERRAFORM_PREFIX:
 
 inputs:
   - name: pcf-pipelines
