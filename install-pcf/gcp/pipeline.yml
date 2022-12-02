@@ -127,6 +127,8 @@ jobs:
       DB_APP_USAGE_SERVICE_PASSWORD: {{db_app_usage_service_password}}
       DB_AUTOSCALE_USERNAME: {{db_autoscale_username}}
       DB_AUTOSCALE_PASSWORD: {{db_autoscale_password}}
+      DB_CREDHUB_USERNAME: {{db_credhub_username}}
+      DB_CREDHUB_PASSWORD: {{db_credhub_password}}
       DB_DIEGO_USERNAME: {{db_diego_username}}
       DB_DIEGO_PASSWORD: {{db_diego_password}}
       DB_NOTIFICATIONS_USERNAME: {{db_notifications_username}}
@@ -291,6 +293,8 @@ jobs:
       db_nfsvolumedb_password: {{db_nfsvolumedb_password}}
       db_silk_username: {{db_silk_username}}
       db_silk_password: {{db_silk_password}}
+      db_credhub_username: {{db_credhub_username}}
+      db_credhub_password: {{db_credhub_password}}
       db_locket_username: {{db_locket_username}}
       db_locket_password: {{db_locket_password}}
       mysql_monitor_recipient_email: {{mysql_monitor_recipient_email}}

@@ -1,5 +1,9 @@
-### Planned Deprecation
-Please note that this repository will be officially deprecated soon.
+# End of Availability
+**PCF Platform Automation with Concourse (PCF Pipelines) has reached its End of Availability (“EoA”) and is no longer available.**
+
+[Platform Automation for PCF](https://network.pivotal.io/products/platform-automation) has replaced PCF Pipelines. Platform Automation for PCF is available for download on Pivotal Network.
+
+You can find documentation for this new product in [Pivotal Documentation](https://docs.pivotal.io/platform-automation)
 
 ### Description
 
@@ -39,6 +43,22 @@ These pipelines are found in the `install-pcf` directory, sorted by IaaS.
 
 
 **Compatibility Matrix** 
+
+| IAAS | pipelines release | OM version | ERT version |
+| :--- | --- | --- | --- |
+| vSphere | v23.12 | 2.4.x  | 2.4.x  |
+| Azure | v23.12 | 2.4.x | 2.4.x |
+| AWS | v23.12 | 2.4.x | 2.4.x |
+| GCP | v23.12 | 2.4.x  | 2.4.x  |
+| OpenStack | v23 | 2.0.x  | 2.0.x  |
+
+| IAAS | pipelines release | OM version | ERT version |
+| :--- | --- | --- | --- |
+| vSphere | v23.11 | 2.3.x  | 2.3.x  |
+| Azure | v23.11 | 2.3.x | 2.3.x |
+| AWS | v23.11 | 2.3.x | 2.3.x |
+| GCP | v23.11 | 2.3.x  | 2.3.x  |
+| OpenStack | v23 | 2.0.x  | 2.0.x  |
 
 | IAAS | pipelines release | OM version | ERT version |
 | :--- | --- | --- | --- |

@@ -347,8 +347,6 @@ jobs:
       ALLOW_APP_SSH_ACCESS: {{allow_app_ssh_access}}
       TCP_ROUTER_STATIC_IPS: {{tcp_router_static_ips}}
       SSH_STATIC_IPS: {{ssh_static_ips}}
-      MYSQL_STATIC_IPS: {{mysql_static_ips}}
-      CONSUL_SERVER_INSTANCES: {{consul_server_instances}}
       CREDHUB_INSTANCES: {{credhub_instances}}
       NATS_INSTANCES: {{nats_instances}}
       NFS_SERVER_INSTANCES: {{nfs_server_instances}}

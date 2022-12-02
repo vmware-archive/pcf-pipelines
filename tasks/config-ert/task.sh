@@ -129,7 +129,6 @@ cf_properties=$(
     --arg tcp_router_static_ips "$TCP_ROUTER_STATIC_IPS" \
     --arg company_name "$COMPANY_NAME" \
     --arg ssh_static_ips "$SSH_STATIC_IPS" \
-    --arg mysql_static_ips "$MYSQL_STATIC_IPS" \
     --arg haproxy_forward_tls "$HAPROXY_FORWARD_TLS" \
     --arg haproxy_backend_ca "$HAPROXY_BACKEND_CA" \
     --arg router_tls_ciphers "$ROUTER_TLS_CIPHERS" \
@@ -224,9 +223,6 @@ cf_properties=$(
       },
       ".diego_brain.static_ips": {
         "value": $ssh_static_ips
-      },
-      ".mysql_proxy.static_ips": {
-        "value": $mysql_static_ips
       }
     }
 
@@ -490,7 +486,6 @@ JOB_RESOURCE_CONFIG="{
   \"clock_global\": { \"instances\": $CLOCK_GLOBAL_INSTANCES },
   \"cloud_controller\": { \"instances\": $CLOUD_CONTROLLER_INSTANCES },
   \"cloud_controller_worker\": { \"instances\": $CLOUD_CONTROLLER_WORKER_INSTANCES },
-  \"consul_server\": { \"instances\": $CONSUL_SERVER_INSTANCES },
   \"credhub\": { \"instances\": $CREDHUB_INSTANCES },
   \"diego_brain\": { \"instances\": $DIEGO_BRAIN_INSTANCES },
   \"diego_cell\": { \"instances\": $DIEGO_CELL_INSTANCES },

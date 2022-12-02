@@ -1,6 +1,9 @@
 # AMI to use for nat box
 # Update with the correct NAT AMI for your region. List of AMIs can be found
-# here: https://github.com/pivotal-cf/terraforming-aws/blob/master/infra/variables.tf
+# here: https://github.com/pivotal-cf/terraforming-aws/blob/master/modules/infra/variables.tf
+# If the above has moved, please go to https://github.com/pivotal-cf/terraforming-aws and search
+# for "nat_ami_map"
+
 amis_nat: ami-303b1458
 
 # This key must be a key with admin access
@@ -49,6 +52,8 @@ db_autoscale_password: CHANGEME
 db_autoscale_username: CHANGEME
 db_ccdb_password: CHANGEME
 db_ccdb_username: CHANGEME
+db_credhub_password: CHANGEME
+db_credhub_username: CHANGEME
 db_diego_password: CHANGEME
 db_diego_username: CHANGEME
 db_locket_password: CHANGEME

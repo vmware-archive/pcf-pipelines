@@ -153,7 +153,6 @@ infra_vsphere_network: CHANGEME        # vCenter Infrastructure network name
 
 # IPs
 ha_proxy_ips:           # Comma-separated list of static IPs
-mysql_static_ips:       # Comma-separated list of static IPs
 router_static_ips:      # Comma-separated list of static IPs
 ssh_static_ips:         # Comma-separated list of static IPs
 tcp_router_static_ips:  # Comma-separated list of static IPs
@@ -166,7 +165,6 @@ backup_prepare_instances: 0
 clock_global_instances: 1
 cloud_controller_instances: 2
 cloud_controller_worker_instances: 2
-consul_server_instances: 3
 credhub_instances: 0
 diego_brain_instances: 3
 diego_cell_instances: 3

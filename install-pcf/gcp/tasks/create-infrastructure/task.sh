@@ -45,6 +45,8 @@ terraform plan \
   -var "db_app_usage_service_password=${DB_APP_USAGE_SERVICE_PASSWORD}" \
   -var "db_autoscale_username=${DB_AUTOSCALE_USERNAME}" \
   -var "db_autoscale_password=${DB_AUTOSCALE_PASSWORD}" \
+  -var "db_credhub_username=${DB_CREDHUB_USERNAME}" \
+  -var "db_credhub_password=${DB_CREDHUB_PASSWORD}" \
   -var "db_diego_username=${DB_DIEGO_USERNAME}" \
   -var "db_diego_password=${DB_DIEGO_PASSWORD}" \
   -var "db_notifications_username=${DB_NOTIFICATIONS_USERNAME}" \

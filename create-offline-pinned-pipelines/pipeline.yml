@@ -218,9 +218,22 @@ jobs:
             exit 1
           fi
 
+          stemcell_slug=$(
+            jq --raw-output \
+              '
+              if any(.Dependencies[]; select(.Release.Product.Name | contains("Stemcells for PCF (Windows)"))) then
+                "stemcells-windows-server"
+              elif any(.Dependencies[]; select(.Release.Product.Name | contains("Stemcells for PCF (Ubuntu Xenial)"))) then
+                "stemcells-ubuntu-xenial"
+              else
+                "stemcells"
+              end
+              ' < elastic-runtime/metadata.json
+          )
+
           echo "Downloading stemcell $stemcell_version"
           pivnet-cli login --api-token="$PIVNET_API_TOKEN"
-          pivnet-cli download-product-files -p stemcells -r $stemcell_version -g "*vsphere*" --accept-eula
+          pivnet-cli download-product-files -p "$stemcell_slug" -r $stemcell_version -g "*vsphere*" --accept-eula
 
           stemcell_path=$(find . -name *bosh-stemcell-*.tgz)
 
